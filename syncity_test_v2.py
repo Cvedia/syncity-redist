@@ -574,7 +574,7 @@ tonemappings = [ 'Filmic', 'Reinhard', 'LumaReinhard', 'Photographic' ]
 ground_lst = [ 'Intersection', 'Grass', 'Asphalt', 'RoadSection2', 'DirtBrown', 'ForestFloor', 'Concrete', 'RoadSection3', 'RoadSection' ]
 cars_lst = [ 'auditts','audi_a2','audi_q7','audi_s3','bentley_arnage','bmw','bmw6_series_650i','bmw_760li','bmw_m3','bmw_m5','bmw_m_limousine','cadillac_escalade_ext','caterpillar_bulldozer_d9','chevrolet_cruze_2011','chevrolet_s10','chevrolet_tornado','fiat500_new','fiat_131','fiat_500','ford_crown_victoria_taxi','ford_fiesta','ford_fire_department','ford_focus','ford_mustang_gt_eleanor','ford_shelby_cobra','ford_transit_jumbo','freightliner_aerodyne','honda_civic_sedan','hummer_h2','international_ambulance_fdny','international_school_bus','kenworth_t600','lamborghini_gallardo','lancia_delta','mack_dumper','mercedes_class_g_500','mercedes_slk','mercedes_vario_brinks','mini_coopers','nissan_elgrand','nissan_murano','peugeot_406','rangerover','renault_420','renault_g210','renault_megane','renault_trm_2000','scania_400_concretemixer','scania_450_dumpster_hauler','truck_v010_008','volvo_th5','vw_caravelle','vw_golf_v','vw_touareg','vw_touran_2007','vw_transporter' ]
 weather_lst = [ 'Clear Sky', 'Cloudy 1', 'Cloudy 2', 'Cloudy 3', 'Foggy', 'Heavy Rain', 'Light Rain', 'Storm' ]
-clouds_lst = [ 'Volume' ] # [ 'None', 'Both', 'Volume', 'Flat' ]
+clouds_lst = [ 'None', 'Both', 'Volume', 'Flat' ]
 
 print ('Syncity Telnet Tester / Demo tool - v2.1.7\nCopyright (c) 2017 CVEDIA B.V.\n')
 
@@ -1188,23 +1188,6 @@ else:
 			global_disk_setup()
 			
 			add_disk_output(mycams)
-			
-			# setup camera postprocessing options
-			# playerCamera = 'cameras/cameraRGB'
-			# send_data([
-			#	'{} SET ScionEngine.ScionPostProcess bloomIntensity 0.563'.format(playerCamera),
-			#	'{} SET ScionEngine.ScionPostProcess bloomThreshold 0'.format(playerCamera),
-			#	'{} SET ScionEngine.ScionPostProcess bloomBrightness 2.66'.format(playerCamera),
-			#	'{} SET ScionEngine.ScionPostProcess bloomDownsamples 9'.format(playerCamera),
-			#	'{} SET ScionEngine.ScionPostProcess bloomDistanceMultiplier 0.455'.format(playerCamera),
-			#	'{} SET ScionEngine.ScionPostProcess chromaticAberration true'.format(playerCamera),
-			#	'{} SET ScionEngine.ScionPostProcess chromaticAberrationDistortion 0.754'.format(playerCamera),
-			#	'{} SET ScionEngine.ScionPostProcess chromaticAberrationIntensity 20'.format(playerCamera),
-			#	'{} SET ScionEngine.ScionPostProcess vignette true'.format(playerCamera),
-			#	'{} SET ScionEngine.ScionPostProcess vignetteIntensity 0.268'.format(playerCamera),
-			#	'{} SET ScionEngine.ScionPostProcess vignetteScale 0.614'.format(playerCamera),
-			# ])
-			
 			spawn_drone_objs()
 		
 		# reset camera
@@ -1272,24 +1255,8 @@ else:
 			# add_light()
 			global_disk_setup()
 			
-			add_disk_output(mycams)
-			
-			# setup camera postprocessing options
-			playerCamera = 'cameras/cameraRGB'
-			# send_data([
-			#	'{} SET ScionEngine.ScionPostProcess bloomIntensity 0.563'.format(playerCamera),
-			#	'{} SET ScionEngine.ScionPostProcess bloomThreshold 0'.format(playerCamera),
-			#	'{} SET ScionEngine.ScionPostProcess bloomBrightness 2.66'.format(playerCamera),
-			#	'{} SET ScionEngine.ScionPostProcess bloomDownsamples 9'.format(playerCamera),
-			#	'{} SET ScionEngine.ScionPostProcess bloomDistanceMultiplier 0.455'.format(playerCamera),
-			#	'{} SET ScionEngine.ScionPostProcess chromaticAberration true'.format(playerCamera),
-			#	'{} SET ScionEngine.ScionPostProcess chromaticAberrationDistortion 0.754'.format(playerCamera),
-			#	'{} SET ScionEngine.ScionPostProcess chromaticAberrationIntensity 20'.format(playerCamera),
-			#	'{} SET ScionEngine.ScionPostProcess vignette true'.format(playerCamera),
-			#	'{} SET ScionEngine.ScionPostProcess vignetteIntensity 0.268'.format(playerCamera),
-			#	'{} SET ScionEngine.ScionPostProcess vignetteScale 0.614'.format(playerCamera),
-			#])
-			
+			# add_disk_output(mycams)
+			add_disk_output([mycams[0]])
 			spawn_drone_objs(p_x=-500, dist_lim=500, p_z=-500)
 		
 		send_data(['Canvas SET active false'])
@@ -1347,7 +1314,7 @@ else:
 						# 		'spawner/drones SET Transform position ({} {} {})'.format(0, random.randint(5, 30), 0)
 						# 	])
 						
-						set_disk_texture(mycams)
+						set_disk_texture([mycams[0]])
 						take_snapshot(mycams, True)
 						# take_seg_snapshot([ 'cameras/segmentation' ])
 						
@@ -1378,23 +1345,6 @@ else:
 			global_disk_setup()
 			
 			add_disk_output(mycams)
-			
-			# setup camera postprocessing options
-			playerCamera = 'cameras/cameraRGB'
-			# send_data([
-			#	'{} SET ScionEngine.ScionPostProcess bloomIntensity 0.563'.format(playerCamera),
-			#	'{} SET ScionEngine.ScionPostProcess bloomThreshold 0'.format(playerCamera),
-			#	'{} SET ScionEngine.ScionPostProcess bloomBrightness 2.66'.format(playerCamera),
-			#	'{} SET ScionEngine.ScionPostProcess bloomDownsamples 9'.format(playerCamera),
-			#	'{} SET ScionEngine.ScionPostProcess bloomDistanceMultiplier 0.455'.format(playerCamera),
-			#	'{} SET ScionEngine.ScionPostProcess chromaticAberration true'.format(playerCamera),
-			#	'{} SET ScionEngine.ScionPostProcess chromaticAberrationDistortion 0.754'.format(playerCamera),
-			#	'{} SET ScionEngine.ScionPostProcess chromaticAberrationIntensity 20'.format(playerCamera),
-			#	'{} SET ScionEngine.ScionPostProcess vignette true'.format(playerCamera),
-			#	'{} SET ScionEngine.ScionPostProcess vignetteIntensity 0.268'.format(playerCamera),
-			#	'{} SET ScionEngine.ScionPostProcess vignetteScale 0.614'.format(playerCamera),
-			#])
-			
 			spawn_drone_objs_alt(p_x=-500, dist_lim=500, p_z=-500)
 		
 		# reset camera
@@ -1521,6 +1471,93 @@ else:
 		do_render(mycams)
 		
 		print ("Ready!")
+	
+	elif demo == 10:
+		keep = True
+		mycams = ['cameras/cameraRGB', 'cameras/segmentation']
+		
+		if skip_setup == False:
+			global_camera_setup()
+			# add_camera_rgb(width=4096, height=3072, audio=True, envirosky=True)
+			# add_camera_rgb_pp('EnviroFX', scion=False)
+			add_camera_rgb(width=4096, height=3072, audio=True, envirosky=False)
+			
+			send_data([
+				'cameras/cameraRGB SET Camera enabled true',
+				'cameras SET Transform position ({} {} {})'.format(6, 33, -50),
+				'cameras SET Transform eulerAngles ({} {} {})'.format(40, 8, 0)
+				# 'cameras/cameraRGB ADD EnviroCamera',
+				# 'EnviroSky EXECUTE EnviroSky ChangeWeather "{}"'.format(weather_lst[0]),
+				# 'EnviroSky SET EnviroSky cloudsMode {}'.format(random.choice(clouds_lst)),
+			], read=False)
+		
+		x = -50
+		z = -7
+		a_y = 90
+		
+		send_data([
+			'HENCOCK SET Transform eulerAngles ({} {} {})'.format(0, a_y, 0)
+		])
+		
+		force_sync = True
+		loop = 0
+		stepping = 16
+		
+		while loop < 5:
+			while x < 10:
+				x = x + stepping
+				send_data([
+					'HENCOCK SET Transform position ({} {} {})'.format(x, 0 , z)
+				])
+			
+			while a_y < 180:
+				a_y = a_y + stepping
+				send_data([
+					'HENCOCK SET Transform eulerAngles ({} {} {})'.format(0, a_y, 0)
+				])
+			
+			i = 0
+			while i < 12:
+				z = z - stepping
+				i = i + stepping
+				send_data([
+					'HENCOCK SET Transform position ({} {} {})'.format(x, 0 , z)
+				])
+			
+			while a_y < 270:
+				a_y = a_y + stepping
+				send_data([
+					'HENCOCK SET Transform eulerAngles ({} {} {})'.format(0, a_y, 0)
+				])
+			
+			while x > -50:
+				x = x - stepping
+				send_data([
+					'HENCOCK SET Transform position ({} {} {})'.format(x, 0 , z)
+				])
+			
+			while a_y > 180:
+				a_y = a_y - stepping
+				send_data([
+					'HENCOCK SET Transform eulerAngles ({} {} {})'.format(0, a_y, 0)
+				])
+			
+			i = 0
+			while i < 12:
+				z = z - stepping
+				i = i + stepping
+				send_data([
+					'HENCOCK SET Transform position ({} {} {})'.format(x, 0 , z)
+				])
+			
+			while a_y > 90:
+				a_y = a_y - stepping
+				send_data([
+					'HENCOCK SET Transform eulerAngles ({} {} {})'.format(0, a_y, 0)
+				])
+			
+			loop = loop + 1
+			
 	else:
 		output('Invalid demo option')
 
