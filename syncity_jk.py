@@ -252,15 +252,11 @@ def take_snapshot( lst, auto_segment=False ):
 		r = send_data('{} GET Segmentation.Segmentation boundingBoxes'.format(lst[1]), read=True)
 		
 		if (len(r) > 1):
-			#send_data('disk1 EXECUTE Sensors.Disk Snapshot', read=True)
+			send_data('disk1 EXECUTE Sensors.Disk Snapshot', read=True)
 			r = send_data('{} GET Segmentation.Segmentation boundingBoxes'.format(lst[1]), read=True)
 			seq_save('bbox', ''.join(r[1:]))
-			scene_filter('bbox', 3, 100)
-			# if scene_filter('bbox') > 0:
-			# 	send_data('disk1 EXECUTE Sensors.Disk Snapshot', read=True)
-			# else:
-			# 	globals()['seq_save_i'] = globals()['seq_save_i'] - 1
-			# 	os.remove('{}{}_{}.json'.format(local_path, 'bbox', globals()['seq_save_i']))
+			print 'data:', ''.join(r[1:])
+			#scene_filter('bbox', 3, 100)
  	else:
 		send_data('disk1 EXECUTE Sensors.Disk Snapshot')
 	time.sleep(cooldown)
