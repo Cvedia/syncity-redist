@@ -69,7 +69,7 @@ def run():
 			motionblur = 'true'
 		else:
 			motionblur = 'false'
-		motionblur = 'true'
+		
 		p_x = p_x + (random.uniform(.5, 2.5) * p_x_d)
 		p_y = p_y + (random.uniform(.1, 1.5) * p_y_d)
 		p_z = p_z + (random.uniform(.1, 1.5) * p_z_d)

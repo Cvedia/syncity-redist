@@ -61,7 +61,9 @@ def run():
 			'cameras SET Transform eulerAngles ({} {} {})'.format(-20, y, 0),
 			'city SET Transform eulerAngles ({} {} {})'.format(0, random.randint(0, 359), 0),
 			'EnviroSky SET EnviroSky GameTime.Hours {}'.format(random.randint(8, 18)),
-			'cameras/cameraRGB SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled {}'.format(motionblur)
+			'cameras/cameraRGB SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled {}'.format(motionblur),
+			'cameras/cameraRGB SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1',
+			'cameras/cameraRGB SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004'
 		])
 		
 		helpers.take_snapshot(mycams, True)
