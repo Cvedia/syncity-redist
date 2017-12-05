@@ -44,9 +44,13 @@ def init():
 def output (s):
 	print ('[{}] {}'.format(datetime.now().strftime("%H:%M:%S.%f"), s))
 
-def send_data(v, read=True):
-	if settings.force_sync:
-		read = True
+def send_data(v, read=None):
+	if read == None:
+		if settings.async == True:
+			read = False
+		else:
+			read = True
+	
 	if type(v) != list:
 		v = [ v ]
 	
@@ -110,9 +114,6 @@ def gracefull_shutdown():
 	# sys.exit(0)
 
 def flush_buffer():
-	if settings.force_sync:
-		return
-	
 	send_data('NOOP', read=True)
 
 def scripts_help():

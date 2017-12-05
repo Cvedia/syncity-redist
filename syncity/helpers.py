@@ -23,7 +23,7 @@ def global_camera_setup(player='cameras', canvas_width=1024, canvas_height=768, 
 	if canvas == True:
 		canvas = 'true'
 	else:
-		output('Warning: Canvas has been disabled, you will not see output on simulator')
+		common.output('Warning: Canvas has been disabled, you will not see output on simulator')
 		canvas = 'false'
 	
 	common.send_data([
@@ -273,7 +273,7 @@ def seq_save(pref, data):
 	common.output('Wrote: {}{}_{}.json'.format(settings.local_path, pref, settings.seq_save_i))
 	settings.seq_save_i = settings.seq_save_i + 1
 
-def add_disk_output( lst ):
+def add_disk_output(lst):
 	if settings.skip_disk:
 		return
 	common.send_data('disk1 SET active false')
@@ -282,7 +282,7 @@ def add_disk_output( lst ):
 		common.send_data([
 			'CREATE disk1/{}'.format(l.capitalize()),
 			'disk1/{} ADD Sensors.RenderCameraLink'.format(l.capitalize()),
-			'disk1/{} SET Sensors.RenderCameraLink target {}'.format(l.capitalize(),l)
+			'disk1/{} SET Sensors.RenderCameraLink target {}'.format(l.capitalize(), l)
 		], read=False)
 	
 	common.send_data('disk1 SET active true')
@@ -421,7 +421,7 @@ def spawn_misc_objs(destroy=False):
 	# spawn_radius_generic(['city/ground'], suffix='_0', limit=random.randint(3, 10), radius=75, innerradius=0, scale=[2,2,2], position=[0,0,0], collision_check=False)
 	spawn_radius_generic(['city/ground'], suffix='_0', limit=3, radius=75, innerradius=0, scale=[1,1,1], position=[0,0,0], collision_check=False)
 
-def spawn_drone_objs(destroy=False, ground_limit=204, dist_h=120, dist_v=120, dist_lim=1000, p_x=-20, p_z=-1000, p_y=0):
+def spawn_drone_objs(destroy=False, ground_limit=204, dist_h=120, dist_v=120, dist_lim=1000, p_x=-20, p_z=-1000, p_y=0, trees_limit=[50,200], buildings_limit=[50,150], birds_limit=[25,100], cars_limit=[5,25], drones_limit=[80,200]):
 	if destroy == True:
 		common.send_data([
 			'DELETE spawner/city/nature/trees',
@@ -451,11 +451,12 @@ def spawn_drone_objs(destroy=False, ground_limit=204, dist_h=120, dist_v=120, di
 		# for i in range(0,2):
 		# 	spawn_radius_generic(['city/ground'], suffix='_{}'.format(i), limit=5, radius=100, innerradius=0, scale=[2,2,2], position=[0,i,0], collision_check=False)
 	
-	spawn_radius_generic(['city/nature/trees'], collision_check=False, limit=random.randint(50,200), radius=80, innerradius=20, position=[0,0,0])
-	spawn_radius_generic(['city/buildings'], limit=random.randint(50,150), radius=335, innerradius=100, position=[0,0,0])
-	spawn_radius_generic(['animals/birds'], limit=random.randint(25,100), radius=random.randint(80,110), innerradius=0, position=[0,random.randint(15,95),0])
-	spawn_radius_generic(['cars'], limit=random.randint(5, 25), radius=50, innerradius=5, position=[0,0,0])
-	spawn_radius_generic(['drones'], limit=random.randint(80,200), radius=random.randint(30,50), innerradius=0, position=[0,0,0], segmentation_class="Drone")
+	spawn_radius_generic(['city/nature/trees'], collision_check=False, limit=random.randint(trees_limit[0], trees_limit[1]), radius=80, innerradius=20, position=[0,0,0])
+	spawn_radius_generic(['city/buildings'], limit=random.randint(buildings_limit[0], buildings_limit[1]), radius=335, innerradius=100, position=[0,0,0])
+	spawn_radius_generic(['animals/birds'], limit=random.randint(birds_limit[0], birds_limit[1]), radius=random.randint(80,110), innerradius=0, position=[0,random.randint(15,95),0])
+	spawn_radius_generic(['cars'], limit=random.randint(cars_limit[0], cars_limit[1]), radius=50, innerradius=5, position=[0,0,0])
+	if drones_limit[1] > 0:
+		spawn_radius_generic(['drones'], limit=random.randint(drones_limit[0], drones_limit[1]), radius=random.randint(30,50), innerradius=0, position=[0,0,0], segmentation_class="Drone")
 	# spawn_radius_generic(['drones/white'], limit=random.randint(10,50), radius=random.randint(30,50), innerradius=0, position=[0,0,0], segmentation_class="Car")
 	
 	common.flush_buffer()

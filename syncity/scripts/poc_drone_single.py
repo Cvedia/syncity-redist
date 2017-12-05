@@ -5,7 +5,7 @@ settings = settings_manager.Singleton()
 
 def help():
 	return '''\
-POC Drone scene
+POC Drone single scene
 	- Creates a RGB camera
 	- Creates a Segmentation camera
 	- Creates a random flat tile ground
@@ -27,15 +27,22 @@ def run():
 		helpers.global_disk_setup()
 		
 		helpers.add_disk_output(mycams)
-		helpers.spawn_drone_objs()
-	
+		helpers.spawn_drone_objs(drones_limit=[0,0])
+		
+		common.send_data([
+			'CREATE drone drones/?',
+			'drone SET Transform position ({} {} {})'.format(0, 1, 0),
+			'drone SET Transform localScale ({} {} {})'.format(1, 1, 1)
+		])
+		
 	# reset camera
 	common.send_data([
 		'cameras/cameraRGB SET Camera enabled true',
 		'cameras SET Transform position ({} {} {})'.format(0, 1, 0),
 		'cameras SET Transform eulerAngles ({} {} {})'.format(-20, -45, 0),
-		'EnviroSky EXECUTE EnviroSky ChangeWeather "{}"'.format(random.choice(helpers.weather_lst)),
-		'EnviroSky SET EnviroSky cloudsMode {}'.format(random.choice(helpers.clouds_lst))
+		'EnviroSky EXECUTE EnviroSky ChangeWeather "{}"'.format(helpers.weather_lst[1]),
+		'EnviroSky SET EnviroSky cloudsMode {}'.format(helpers.clouds_lst[2]),
+		'EnviroSky SET EnviroSky cloudsSettings.globalCloudCoverage {}'.format(-0.04)
 	])
 	
 	y = 24
@@ -49,10 +56,6 @@ def run():
 			motionblur = 'false'
 		
 		common.send_data([
-			'spawner/drones SET Transform position ({} {} {})'.format(0, random.randint(2, 25), 0),
-			'spawner/drones SET Transform eulerAngles ({} {} {})'.format(random.randint(-15, 15), random.randint(0, 359), random.randint(-2, 2)),
-			# 'spawner/drones/white SET Transform position ({} {} {})'.format(0, random.randint(2, 25), 0),
-			# 'spawner/drones/white SET Transform eulerAngles ({} {} {})'.format(random.randint(-15, 15), random.randint(0, 359), random.randint(-2, 2)),
 			'spawner/animals/birds SET Transform position ({} {} {})'.format(0, random.randint(5, 75), 0),
 			'spawner/animals/birds SET Transform eulerAngles ({} {} {})'.format(0, random.randint(0, 359), 0),
 			'spawner/cars SET Transform eulerAngles ({} {} {})'.format(0, random.randint(0, 359), 0),
@@ -69,14 +72,3 @@ def run():
 		
 		y = y + 1
 		loop = loop + 1
-		
-		if loop % 10 == 0:
-			common.send_data([
-				'EnviroSky EXECUTE EnviroSky ChangeWeather "{}"'.format(random.choice(helpers.weather_lst)),
-				'EnviroSky SET EnviroSky cloudsMode {}'.format(random.choice(helpers.clouds_lst)),
-				'EnviroSky SET EnviroSky cloudsSettings.globalCloudCoverage {}'.format(random.uniform(-0.4, 0.1))
-			])
-		
-		if loop == reroll:
-			helpers.spawn_drone_objs(True)
-			loop = 0
