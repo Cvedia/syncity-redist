@@ -1,8 +1,21 @@
 # What is this?
 
-This is a compilation of demo scripts and helper functions for syncity simulator
+This is a compilation of sample scripts and helper functions for syncity simulator
 intended to show case some test scenarios programatically built and at the same
 time allow familiarizing with the command line interface.
+
+As you learn how the system works, you can simply get one of the provided scripts
+as base, place it under syncity/scripts/ folder to make it visible to the
+controller script.
+
+## Structure
+
+- `syncity.py`: Main controller / spawner
+- `syncity/`
+  - `scripts/`: Scripts repository, check `template.py` as main reference
+  - `helpers.py`: Generic helpers for spawning objects and cameras
+  - `common.py`: Telnet controller, output functions and other
+  - `settings_manager.py`: Singleton for cross-module shared variables
 
 # How to install?
 
@@ -33,14 +46,14 @@ a command prompt, go to the folder where you have syncity scripts and run:
 
 # Running
 
-python syncity_test_v2.py --help
+python syncity.py --help
 
 Shows you a list of options, switches and so on. What you want to do first is
-run a simple demo, keep in mind that you can run this script from a different
+run a simple script, keep in mind that you can run this script from a different
 machine, as long it has access to the machine running the simulator.
 
 We recommend you running the --help page so you can see a detailed description
-of all demos currently available.
+of all scripts currently available.
 
 ### Warning
 
@@ -52,24 +65,24 @@ specific paths are set.
 
 ### Examples
 
-python syncity_test_v2.py --demo 0 --cooldown 0 --verbose -i 192.168.1.75 -p 10200 --record
+python syncity_test_v2.py --script basic --cooldown 0 -i 192.168.1.75 -p 10200 --record
 
-This will run demo 0, with no cooldown time, showing all commands sent and
-received (verbose), on the machine with ip 192.168.1.75 port 10200 (default)
+This will run script basic (syncity/scripts/basic.py), with no cooldown time,
+on the machine with ip 192.168.1.75 port 10200 (default)
 and will record all commands sent to a file.
 
-Depending on the demo you run it will also export files, those files will be
+Depending on the script you run it will also export files, those files will be
 saved on the machine running the simulator, with the option -o you can configure
 the path to write those files, this defaults to E:\tmp\
 
-python syncity_test_v2.py --demo 0 --cooldown 0 --keep
+python syncity.py --script basic --cooldown 0 --keep
 
-By default, once the demo script is completed, it will delete all objects on
+By default, once the script script is completed, it will delete all objects on
 the scene, effectively reseting it, with --keep all objects will be kept so you
-can interact with them after the demo is completed; This is ideal if you want
+can interact with them after the script is completed; This is ideal if you want
 to experiment with different settings without bothering creating a full scenario.
 
-python syncity_test_v2.py -r file.txt
+python syncity.py -r file.txt
 
-Instead of running a demo, this will just run the commands on file.txt
+Instead of running a script, this will just run the commands on file.txt
 

@@ -1344,10 +1344,10 @@ else:
 		if skip_setup == False:
 			global_camera_setup()
 			add_camera_rgb(width=1024, height=768, audio=True, envirosky=True)
-			add_camera_rgb_pp()
+			# add_camera_rgb_pp()
 			# add_light(position=[-684.8,532.5,262.466])
 
-			add_camera_rgb_pp('EnviroFX', scion=False)
+			add_camera_rgb_pp('Savannah', scion=False)
 			add_camera_seg(segment='Drone')
 
 			global_disk_setup()
@@ -1360,6 +1360,7 @@ else:
 			send_data([
 				'cameras SET Transform position ({} {} {})'.format(0, random.randint(2, 10), -30),
 				'CREATE test Terrains/Savannah/Savannah',
+				'cameras/cameraRGB ADD EnviroCamera',
 				'test SET Transform position ({} {} {})'.format(-5000,-180,-5000),
 				'test SET Terrain basemapDistance 2000',
 				'test SET TerrainCollider enabled true',
