@@ -41,9 +41,9 @@ def run():
 					'cameras SET Transform position ({} {} {})'.format(0, random.randint(5, 15), -30),
 					#'cameras SET Transform eulerAngles ({} {} {})'.format(random.randint(-15, 20), random.randint(-15, 15), 0),
 					#'cameras/cameraRGB ADD EnviroCamera',
-					'EnviroSky EXECUTE EnviroSky ChangeWeather "{}"'.format(weather_lst[0]),
+					'EnviroSky EXECUTE EnviroSky ChangeWeather "{}"'.format(helpers.weather_lst[0]),
 					'EnviroSky SET EnviroSky cloudsMode {}'.format('None'),
-					#'EnviroSky SET EnviroSky cloudsMode {}'.format(random.choice(clouds_lst))
+					#'EnviroSky SET EnviroSky cloudsMode {}'.format(random.choice(helpers.clouds_lst))
 					'cameras ADD OrbitAroundRandomChild',
 					'cameras SET OrbitAroundRandomChild parentTarget spawner/drones',
 					'cameras EXECUTE OrbitAroundRandomChild SelectRandomChild',
@@ -93,9 +93,9 @@ def run():
 					
 					if loop % 10 == 0:
 						common.send_data([
-							'EnviroSky EXECUTE EnviroSky ChangeWeather "{}"'.format(weather_lst[w]),
-							'EnviroSky SET EnviroSky cloudsMode {}'.format(clouds_lst[c])
-							#'EnviroSky SET EnviroSky cloudsMode {}'.format(random.choice(clouds_lst))
+							'EnviroSky EXECUTE EnviroSky ChangeWeather "{}"'.format(helpers.weather_lst[w]),
+							'EnviroSky SET EnviroSky cloudsMode {}'.format(helpers.clouds_lst[c])
+							#'EnviroSky SET EnviroSky cloudsMode {}'.format(random.choice(helpers.clouds_lst))
 						])
 					
 					if loop == reroll:
