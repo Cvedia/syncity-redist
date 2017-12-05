@@ -34,7 +34,7 @@ else:
 parser.add_argument('-q', '--quiet', action='store_true', help='Quiet mode')
 parser.add_argument('--keep', default=False, action='store_true', help='Keep created assets on scene')
 parser.add_argument('--record', action='store_true', help='Record commands sent to API')
-parser.add_argument('--force_sync', action='store_true', help='Forces read on every command sent')
+parser.add_argument('--async', action='store_true', help='Send some telnet commands asyncronously -- EXPERIMENTAL')
 parser.add_argument('--skip_disk', action='store_true', help='Disables disk export completly')
 parser.add_argument('--skip_setup', action='store_true', help='Skip script setup and go straight to data extraction')
 parser.add_argument('--disable_envirosky', action='store_true', help='Disables Envirosky -- NOT RECOMMENDED')
@@ -54,6 +54,11 @@ settings = syncity.settings_manager.Singleton()
 
 for k in args.__dict__:
 	settings[k] = args.__dict__[k]
+
+if settings.async == True:
+	settings.force_sync = False
+else:
+	settings.force_sync = True
 
 if platform.system() == 'Windows':
 	if settings.output_path[-1:] != '\\':
