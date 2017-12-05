@@ -506,6 +506,6 @@ def spawn_animals_objs(destroy=False):
 		], read=False)
 	
 	spawn_radius_generic(['city/nature/trees'], collision_check=True, stick_to_ground=True, limit=random.randint(150, 400), radius=80, innerradius=random.randint(30, 50), position=[0,5,0])
-	spawn_radius_generic(['animals'], collision_check=True, stick_to_ground=True, limit=random.randint(200, 350), radius=random.randint(40, 80), innerradius=0, position=[0,5,0], orbit=True)
+	spawn_radius_generic(['animals'], collision_check=True, stick_to_ground=True, limit=random.randint(20, 35), radius=random.randint(40, 80), innerradius=0, position=[0,5,0], orbit=True)
 	
 	common.flush_buffer()
