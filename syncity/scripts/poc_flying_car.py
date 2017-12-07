@@ -41,7 +41,7 @@ def run():
 		for i in cbuildings:
 			buf.append('CREATE buildings/buildings_{} "{}"'.format(k, i))
 			buf.append('buildings/buildings_{} ADD Segmentation.ClassGroup'.format(k))
-			buf.append('buildings/buildings_{} SET Segmentation.ClassGroup itemsClasses Car'.format(k))
+			buf.append('buildings/buildings_{} SET Segmentation.ClassGroup itemsClassName Car'.format(k))
 			buf.append('buildings/buildings_{} SET Transform position ({} {} {})'.format(k, p_x, p_y, p_z))
 			k = k + 1
 			col = col + 1

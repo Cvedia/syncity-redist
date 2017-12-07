@@ -23,17 +23,40 @@ def run():
 	if settings.skip_setup == False:
 		helpers.global_camera_setup()
 		helpers.add_camera_rgb(width=4096, height=3072, pp='EnviroFX')
-		helpers.add_camera_seg(segment='Car')
+		helpers.add_camera_seg(output_type='ClassIds')
 		helpers.global_disk_setup()
 		
 		helpers.add_disk_output(mycams)
 		helpers.spawn_drone_objs(drones_limit=[0,0],trees_innerradius=60, trees_radius=100)
 		
+		# single drone
+		'''
+		helpers.add_camera_seg_filter(['drone'])
 		common.send_data([
 			'CREATE drone "{}"'.format(random.choice(helpers.drones_lst)),
 			'drone ADD Segmentation.ClassGroup',
-			'drone SET Segmentation.ClassGroup itemsClasses Car'
-		])
+			'drone SET Segmentation.ClassGroup itemsClassName Drone'
+		], read=False)
+		'''
+		
+		# multiple individually segmented drones stacked
+		helpers.add_camera_seg_filter(['drone0','drone1', 'drone2'])
+		common.send_data([
+			'CREATE drone/drone0 "{}"'.format(random.choice(helpers.drones_lst)),
+			'drone/drone0 ADD Segmentation.ClassGroup',
+			'drone/drone0 SET Segmentation.ClassGroup itemsClassName drone0',
+			'drone/drone0 SET Transform position ({} {} {})'.format(0, 1, 0),
+			
+			'CREATE drone/drone1 "{}"'.format(random.choice(helpers.drones_lst)),
+			'drone/drone1 ADD Segmentation.ClassGroup',
+			'drone/drone1 SET Segmentation.ClassGroup itemsClassName drone1',
+			'drone/drone1 SET Transform position ({} {} {})'.format(0, 1.5, 0),
+			
+			'CREATE drone/drone2 "{}"'.format(random.choice(helpers.drones_lst)),
+			'drone/drone2 ADD Segmentation.ClassGroup',
+			'drone/drone2 SET Segmentation.ClassGroup itemsClassName drone2'
+			'drone/drone2 SET Transform position ({} {} {})'.format(0, 2, 0),
+		], read=False)
 	
 	# p_x_r = [-17, 13]
 	# p_y_r = [1.5, 17]

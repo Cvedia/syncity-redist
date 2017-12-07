@@ -39,7 +39,7 @@ def global_camera_setup(player='cameras', canvas_width=1024, canvas_height=768, 
 	
 	settings.obj.append(player)
 
-def add_camera_rgb(width=2048, height=1536, audio=True, envirosky=None, flycam=False, player='cameras', playerCamera='cameras/cameraRGB', pp=None):
+def add_camera_rgb(width=2048, height=1536, audio=True, envirosky=None, flycam=False, player='cameras', playerCamera='cameras/cameraRGB', pp=None, envirosky_cloudTransitionSpeed=100, envirosky_effectTransitionSpeed=100, envirosky_fogTransitionSpeed=100, envirosky_progressTime='None'):
 	if envirosky == None:
 		if settings.disable_envirosky:
 			envirosky = False
@@ -71,13 +71,13 @@ def add_camera_rgb(width=2048, height=1536, audio=True, envirosky=None, flycam=F
 			'EnviroSky SET EnviroSky Player {}'.format(player),
 			'EnviroSky SET EnviroSky PlayerCamera {}'.format(playerCamera),
 			
-			# disable time progression
-			'EnviroSky SET EnviroSky GameTime.ProgressTime None',
+			# time progression
+			'EnviroSky SET EnviroSky GameTime.ProgressTime {}'.format(envirosky_progressTime),
 			
 			# skip weather transitions
-			'EnviroSky SET EnviroSky weatherSettings.cloudTransitionSpeed 100',
-			'EnviroSky SET EnviroSky weatherSettings.effectTransitionSpeed 100',
-			'EnviroSky SET EnviroSky weatherSettings.fogTransitionSpeed 100',
+			'EnviroSky SET EnviroSky weatherSettings.cloudTransitionSpeed {}'.format(envirosky_cloudTransitionSpeed),
+			'EnviroSky SET EnviroSky weatherSettings.effectTransitionSpeed {}'.format(envirosky_effectTransitionSpeed),
+			'EnviroSky SET EnviroSky weatherSettings.fogTransitionSpeed {}'.format(envirosky_fogTransitionSpeed),
 			
 			'{} ADD EnviroCamera'.format(playerCamera)
 		], read=False)
@@ -89,6 +89,7 @@ def add_camera_rgb(width=2048, height=1536, audio=True, envirosky=None, flycam=F
 	
 	settings.obj.append(playerCamera)
 
+# WARNING: It's not recommended to use Scion with Envirosky
 def add_camera_rgb_pp(profile='Profile2', scion=False, playerCamera='cameras/cameraRGB'):
 	common.send_data([
 		# 'cameras/cameraRGB SET active false',
@@ -97,6 +98,8 @@ def add_camera_rgb_pp(profile='Profile2', scion=False, playerCamera='cameras/cam
 	], read=False)
 	
 	if scion:
+		if not settings.disable_envirosky:
+			common.output('WARNING: Using scion with envirosky is not recommended')
 		common.send_data([
 			'{} ADD ScionEngine.ScionPostProcess'.format(playerCamera),
 			'{} SET ScionEngine.ScionPostProcess bloom true'.format(playerCamera),
@@ -178,68 +181,76 @@ def camera_rgb_pp_random(playerCamera='cameras/cameraRGB'):
 	common.send_data(['{} SET ScionEngine.ScionPostProcess tonemappingMode {}'.format(playerCamera, random.choice(tonemappings))], read=False)
 	common.flush_buffer()
 
-def set_disk_texture( lst ):
+def set_disk_texture(lst, label='disk1'):
 	if settings.skip_disk:
 		return
 	
 	for l in lst:
 		common.send_data([
-			'disk1/{} SET Sensors.RenderCameraLink target {}'.format(l.capitalize(),l)
+			'{}/{} SET Sensors.RenderCameraLink target {}'.format(label, l.capitalize(),l)
 		], read=False)
 
-def add_camera_seg(width=1024, height=768, segment="Car"):
+def add_camera_seg_filter(segments=['Car'], label='cameras/segmentation'):
+	for s in segments:
+		common.send_data([
+			'{} PUSH Segmentation.Segmentation boundingBoxesFilter {}'.format(label, s),
+			'{} PUSH Segmentation.Segmentation unoccludedClasses {}'.format(label, s)
+		], read=False)
+
+# output_type options: Auto, ClassIds, InstanceIds, ClassColors, Raw
+def add_camera_seg(width=1024, height=768, segments=None, output_type='Auto', label='cameras/segmentation'):
 	common.send_data([
-		'CREATE cameras/segmentation',
-		# 'cameras/segmentation SET active false',
-		'cameras/segmentation ADD Camera',
-		'cameras/segmentation ADD Sensors.RenderCamera',
-		'cameras/segmentation SET Sensors.RenderCamera sRGB false',
-		'cameras/segmentation SET Sensors.RenderCamera resolution ({} {})'.format(width, height),
-		'cameras/segmentation SET Camera targetTexture.filterMode Point',
-		'cameras/segmentation ADD Segmentation.Segmentation',
-		'cameras/segmentation PUSH Segmentation.Segmentation boundingBoxesFilter {}'.format(segment),
-		'cameras/segmentation PUSH Segmentation.Segmentation unoccludedClasses {}'.format(segment),
-		
-		# 'cameras/segmentation SET Camera targetTexture.antiAliasing 8',
-		# 'cameras/segmentation SET active true'
+		'CREATE {}'.format(label),
+		# '{} SET active false'.format(label),
+		'{} ADD Camera'.format(label),
+		'{} ADD Sensors.RenderCamera'.format(label),
+		'{} SET Sensors.RenderCamera sRGB false'.format(label),
+		'{} SET Sensors.RenderCamera resolution ({} {})'.format(label, width, height),
+		'{} SET Camera targetTexture.filterMode Point'.format(label),
+		'{} ADD Segmentation.Segmentation'.format(label),
+		'{} SET Segmentation.Segmentation OutputType {}'.format(label, output_type),
+		# '{} SET Camera targetTexture.antiAliasing 8'.format(label),
+		# '{} SET active true'.format(label)
 	], read=False)
 	
+	if segments != None:
+		add_camera_seg_filter(segments, label=label)
 	common.flush_buffer()
-	settings.obj.append('cameras/segmentation')
+	settings.obj.append(label)
 
-def add_light(position=[34,-22.53,0], intensity=1.7):
+def add_light(position=[34,-22.53,0], intensity=1.7, label='light'):
 	common.send_data([
-		'CREATE light',
-		'light ADD Light',
-		'light SET Light type Directional',
-		'light SET Transform eulerAngles ({} {} {})'.format(position[0], position[1], position[2]),
-		'light SET Light intensity {}'.format(intensity),
-		# 'light SET Light color #',
-		'light SET Light shadows Soft'
+		'CREATE {}'.format(label),
+		'{} ADD Light'.format(label),
+		'{} SET Light type Directional'.format(label),
+		'{} SET Transform eulerAngles ({} {} {})'.format(label, position[0], position[1], position[2]),
+		'{} SET Light intensity {}'.format(label, intensity),
+		# '{} SET Light color #'.format(label),
+		'{} SET Light shadows Soft'.format(label)
 	], read=False)
 	common.flush_buffer()
-	settings.obj.append('light')
+	settings.obj.append(label)
 
-def global_disk_setup():
+def global_disk_setup(label='disk1'):
 	if settings.skip_disk:
 		return
 	
 	common.send_data([
-		'CREATE disk1',
-		'disk1 SET active false',
-		'disk1 ADD Sensors.Disk',
-		'disk1 SET Sensors.Disk path "{}"'.format(settings.output_path),
-		'disk1 SET active true'
+		'CREATE {}'.format(label),
+		'{} SET active false'.format(label),
+		'{} ADD Sensors.Disk'.format(label),
+		'{} SET Sensors.Disk path "{}"'.format(label, settings.output_path),
+		'{} SET active true'.format(label)
 	], read=False)
 	
 	common.flush_buffer()
-	settings.obj.append('disk1')
+	settings.obj.append(label)
 
-def do_render( lst ):
+def do_render(lst):
 	for l in lst:
 		common.send_data('{} EXECUTE Sensors.RenderCamera RenderFrame'.format(l))
 
-def take_snapshot( lst, auto_segment=False ):
+def take_snapshot(lst, auto_segment=False, label='disk1'):
 	if settings.skip_disk and auto_segment == False:
 		do_render(lst)
 		return
@@ -249,15 +260,15 @@ def take_snapshot( lst, auto_segment=False ):
 		r = common.send_data('{} GET Segmentation.Segmentation boundingBoxes'.format(lst[1]), read=True)
 		
 		if (len(r) > 1):
-			common.send_data('disk1 EXECUTE Sensors.Disk Snapshot', read=True)
+			common.send_data('{} EXECUTE Sensors.Disk Snapshot'.format(label), read=True)
 			r = common.send_data('{} GET Segmentation.Segmentation boundingBoxes'.format(lst[1]), read=True)
 			seq_save('bbox', ''.join(r[1:]))
 	else:
-		common.send_data('disk1 EXECUTE Sensors.Disk Snapshot')
+		common.send_data('{} EXECUTE Sensors.Disk Snapshot'.format(label))
 	
 	time.sleep(settings.cooldown)
 
-def take_seg_snapshot( lst ):
+def take_seg_snapshot(lst):
 	for l in lst:
 		r = common.send_data('{} GET Segmentation.Segmentation boundingBoxes'.format(l), read=True)
 		if (len(r) > 1):
@@ -274,21 +285,21 @@ def seq_save(pref, data):
 	common.output('Wrote: {}{}_{}.json'.format(settings.local_path, pref, settings.seq_save_i))
 	settings.seq_save_i = settings.seq_save_i + 1
 
-def add_disk_output(lst):
+def add_disk_output(lst, label='disk1'):
 	if settings.skip_disk:
 		return
-	common.send_data('disk1 SET active false')
+	common.send_data('{} SET active false'.format(label))
 	
 	for l in lst:
 		common.send_data([
-			'CREATE disk1/{}'.format(l.capitalize()),
-			'disk1/{} ADD Sensors.RenderCameraLink'.format(l.capitalize()),
-			'disk1/{} SET Sensors.RenderCameraLink target {}'.format(l.capitalize(), l)
+			'CREATE {}/{}'.format(label, l.capitalize()),
+			'{}/{} ADD Sensors.RenderCameraLink'.format(label, l.capitalize()),
+			'{}/{} SET Sensors.RenderCameraLink target {}'.format(label, l.capitalize(), l)
 		], read=False)
 	
-	common.send_data('disk1 SET active true')
+	common.send_data('{} SET active true'.format(label))
 
-def spawn_radius_generic(types=[], scale=[1,1,1], innerradius=0, radius=500, position=[0,0,0], rotation=[0,0,0], limit=50, segmentation_class="None", orbit=False, stick_to_ground=False, collision_check=True, suffix="", flush=False):
+def spawn_radius_generic(types=[], scale=[1,1,1], innerradius=0, radius=500, position=[0,0,0], rotation=[0,0,0], limit=50, segmentation_class=None, orbit=False, stick_to_ground=False, collision_check=True, suffix="", flush=False, prefix='spawner'):
 	# convert bool to strings
 	if collision_check == True:
 		collision_check = 'true'
@@ -305,63 +316,63 @@ def spawn_radius_generic(types=[], scale=[1,1,1], innerradius=0, radius=500, pos
 		n = t.replace(' ', '_') + suffix
 		
 		common.send_data([
-			'CREATE spawner/{}'.format(n),
-			'spawner/{} SET active false'.format(n),
+			'CREATE {}/{}'.format(prefix, n),
+			'{}/{} SET active false'.format(prefix, n),
 			
-			'spawner/{} ADD RandomProps.Torus'.format(n),
-			'spawner/{} ADD RandomProps.PropArea'.format(n),
+			'{}/{} ADD RandomProps.Torus'.format(prefix, n),
+			'{}/{} ADD RandomProps.PropArea'.format(prefix, n),
 			
-			'spawner/{} SET RandomProps.PropArea async false'.format(n),
-			'spawner/{} SET RandomProps.PropArea folder "{}"'.format(n, t),
-			'spawner/{} SET RandomProps.PropArea numberOfProps {}'.format(n, limit),
+			'{}/{} SET RandomProps.PropArea async false'.format(prefix, n),
+			'{}/{} SET RandomProps.PropArea folder "{}"'.format(prefix, n, t),
+			'{}/{} SET RandomProps.PropArea numberOfProps {}'.format(prefix, n, limit),
 			
-			'spawner/{} SET RandomProps.PropArea collisioncheck {}'.format(n, collision_check),
-			'spawner/{} SET RandomProps.PropArea stickToGround {}'.format(n, stick_to_ground),
+			'{}/{} SET RandomProps.PropArea collisioncheck {}'.format(prefix, n, collision_check),
+			'{}/{} SET RandomProps.PropArea stickToGround {}'.format(prefix, n, stick_to_ground),
 			
-			'spawner/{} SET RandomProps.Torus radius {}'.format(n, radius),
-			'spawner/{} SET RandomProps.Torus innerRadius {}'.format(n, innerradius),
+			'{}/{} SET RandomProps.Torus radius {}'.format(prefix, n, radius),
+			'{}/{} SET RandomProps.Torus innerRadius {}'.format(prefix, n, innerradius),
 			
-			'spawner/{} SET Transform position ({} {} {})'.format(n, position[0], position[1], position[2]),
-			'spawner/{} SET Transform eulerAngles ({} {} {})'.format(n, rotation[0], rotation[1], rotation[2]),
+			'{}/{} SET Transform position ({} {} {})'.format(prefix, n, position[0], position[1], position[2]),
+			'{}/{} SET Transform eulerAngles ({} {} {})'.format(prefix, n, rotation[0], rotation[1], rotation[2]),
 			
-			'spawner/{} SET active true'.format(n),
-			'spawner/{} SET Transform localScale ({} {} {})'.format(n, scale[0], scale[1], scale[2])
+			'{}/{} SET active true'.format(prefix, n),
+			'{}/{} SET Transform localScale ({} {} {})'.format(prefix, n, scale[0], scale[1], scale[2])
 		], read=False)
 		
-		if segmentation_class != "None":
+		if segmentation_class != None:
 			common.send_data([
-				'spawner/{} ADD Segmentation.ClassGroup'.format(n),
-				'spawner/{} SET Segmentation.ClassGroup itemsClasses {}'.format(n, segmentation_class)
+				'{}/{} ADD Segmentation.ClassGroup'.format(prefix, n),
+				'{}/{} SET Segmentation.ClassGroup itemsClassName {}'.format(prefix, n, segmentation_class)
 			], read=False)
 		
 		if orbit == True:
-			common.send_data('cameras SET Orbit target spawner/{}'.format(n), read=False)
+			common.send_data('cameras SET Orbit target {}/{}'.format(prefix, n), read=False)
 		
-		settings.obj.append('spawner/{}'.format(t))
+		settings.obj.append('{}/{}'.format(prefix, t))
 	
 	if flush:
 		common.flush_buffer()
 
-def spawn_flat_grid(types=[], size=[1000,1000], position=[0,0,0], scale=[1,1,1]):
+def spawn_flat_grid(types=[], size=[1000,1000], position=[0,0,0], scale=[1,1,1], prefix='spawner'):
 	for t in types:
 		n = t.replace(' ', '_')
 		
 		common.send_data([
-			'CREATE spawner/{}'.format(n),
-			'spawner/{} SET active false'.format(n),
-			'spawner/{} ADD RandomProps.FillGrid'.format(n),
-			'spawner/{} SET Transform position ({} {} {})'.format(n, position[0], position[1], position[2]),
-			'spawner/{} SET RandomProps.FillGrid folder {}'.format(n, n),
-			'spawner/{} SET RandomProps.FillGrid size ({} {})'.format(n, size[0], size[1]),
-			'spawner/{} SET active true'.format(n),
-			'spawner/{} SET Transform localScale ({} {} {})'.format(n, scale[0], scale[1], scale[2])
+			'CREATE {}/{}'.format(prefix, n),
+			'{}/{} SET active false'.format(prefix, n),
+			'{}/{} ADD RandomProps.FillGrid'.format(prefix, n),
+			'{}/{} SET Transform position ({} {} {})'.format(prefix, n, position[0], position[1], position[2]),
+			'{}/{} SET RandomProps.FillGrid folder {}'.format(prefix, n, n),
+			'{}/{} SET RandomProps.FillGrid size ({} {})'.format(prefix, n, size[0], size[1]),
+			'{}/{} SET active true'.format(prefix, n),
+			'{}/{} SET Transform localScale ({} {} {})'.format(prefix, n, scale[0], scale[1], scale[2])
 		], read=False)
 		
-		settings.obj.append('spawner/{}'.format(t))
+		settings.obj.append('{}/{}'.format(prefix, t))
 	
 	common.flush_buffer()
 
-def spawn_parking_lot( limit, fixed=False, dist_h=8, dist_v=3, dist_lim=30, p_x=-15, p_z=-30, p_y=-5 ):
+def spawn_parking_lot(limit, fixed=False, dist_h=8, dist_v=3, dist_lim=30, p_x=-15, p_z=-30, p_y=-5, prefix='cars', segment='Car'):
 	k = 0
 	idx = 0
 	j = len(cars_lst)
@@ -381,13 +392,13 @@ def spawn_parking_lot( limit, fixed=False, dist_h=8, dist_v=3, dist_lim=30, p_x=
 			carID = '?'
 		
 		common.send_data([
-			'CREATE cars/car_{} Cars/{}'.format(k, carID),
-			'cars/car_{} ADD Segmentation.ClassGroup'.format(k),
-			'cars/car_{} SET Segmentation.ClassGroup itemsClasses Car'.format(k),
-			'cars/car_{} SET Transform position ({} {} {})'.format(k, p_x + settings.X_COMP, p_y, p_z + settings.Z_COMP)
+			'CREATE {}/car_{} Cars/{}'.format(prefix, k, carID),
+			'{}/car_{} ADD Segmentation.ClassGroup'.format(prefix, k),
+			'{}/car_{} SET Segmentation.ClassGroup itemsClassName {}'.format(prefix, k, segment),
+			'{}/car_{} SET Transform position ({} {} {})'.format(prefix, k, p_x + settings.X_COMP, p_y, p_z + settings.Z_COMP)
 		], read=False)
 		
-		settings.obj.append('cars/mycar_{}'.format(k))
+		settings.obj.append('{}/car_{}'.format(prefix, k))
 		k += 1
 		p_z += dist_h
 		
@@ -397,12 +408,12 @@ def spawn_parking_lot( limit, fixed=False, dist_h=8, dist_v=3, dist_lim=30, p_x=
 	
 	common.flush_buffer()
 
-def spawn_misc_objs(destroy=False):
+def spawn_misc_objs(destroy=False, prefix='spawner'):
 	if destroy == True:
 		common.send_data([
-			'DELETE spawner/city',
-			'DELETE spawner/animals',
-			'DELETE spawner/cars'
+			'DELETE {}/city'.format(prefix),
+			'DELETE {}/animals'.format(prefix),
+			'DELETE {}/cars'.format(prefix)
 		], read=False)
 		
 		common.flush_buffer()
@@ -411,25 +422,25 @@ def spawn_misc_objs(destroy=False):
 	# spawn_radius_generic(['city/decals'], limit=350, radius=50, innerradius=0, collision_check=False, position=[0,10,0])
 	# spawn_radius_generic(['city/trafficlight'], limit=100, radius=50, innerradius=30)
 	
-	spawn_radius_generic(['city/nature/trees'], collision_check=False, limit=random.randint(100, 350), radius=80, innerradius=random.randint(30, 50), position=[0,10,0])
-	spawn_radius_generic(['city/signs'], limit=random.randint(80, 250), radius=random.randint(15, 40), innerradius=0, position=[0,10,0])
-	spawn_radius_generic(['animals'], limit=random.randint(150, 250), radius=random.randint(40, 80), innerradius=0, position=[0,10,0])
-	spawn_radius_generic(['city/buildings'], limit=random.randint(50, 150), radius=335, innerradius=random.randint(80, 100), position=[0,10,0])
-	spawn_radius_generic(['cars'], limit=random.randint(50, 150), radius=50, innerradius=0, segmentation_class="Car", orbit=True, position=[0,10,0])
+	spawn_radius_generic(['city/nature/trees'], collision_check=False, limit=random.randint(100, 350), radius=80, innerradius=random.randint(30, 50), position=[0,10,0], prefix=prefix)
+	spawn_radius_generic(['city/signs'], limit=random.randint(80, 250), radius=random.randint(15, 40), innerradius=0, position=[0,10,0], prefix=prefix)
+	spawn_radius_generic(['animals'], limit=random.randint(150, 250), radius=random.randint(40, 80), innerradius=0, position=[0,10,0], prefix=prefix)
+	spawn_radius_generic(['city/buildings'], limit=random.randint(50, 150), radius=335, innerradius=random.randint(80, 100), position=[0,10,0], prefix=prefix)
+	spawn_radius_generic(['cars'], limit=random.randint(50, 150), radius=50, innerradius=0, segmentation_class="Car", orbit=True, position=[0,10,0], prefix=prefix)
 
 	# for i in range(0,9):
-	# 	spawn_radius_generic(['city/ground'], suffix='_{}'.format(i), limit=random.randint(50, 100), radius=75, innerradius=0, scale=[2,2,2], position=[0,i,0], collision_check=False)
-	# spawn_radius_generic(['city/ground'], suffix='_0', limit=random.randint(3, 10), radius=75, innerradius=0, scale=[2,2,2], position=[0,0,0], collision_check=False)
-	spawn_radius_generic(['city/ground'], suffix='_0', limit=3, radius=75, innerradius=0, scale=[1,1,1], position=[0,0,0], collision_check=False)
+	# 	spawn_radius_generic(['city/ground'], suffix='_{}'.format(i), limit=random.randint(50, 100), radius=75, innerradius=0, scale=[2,2,2], position=[0,i,0], collision_check=False, prefix=prefix)
+	# spawn_radius_generic(['city/ground'], suffix='_0', limit=random.randint(3, 10), radius=75, innerradius=0, scale=[2,2,2], position=[0,0,0], collision_check=False, prefix=prefix)
+	spawn_radius_generic(['city/ground'], suffix='_0', limit=3, radius=75, innerradius=0, scale=[1,1,1], position=[0,0,0], collision_check=False, prefix=prefix)
 
-def spawn_drone_objs(destroy=False, ground_limit=204, dist_h=120, dist_v=120, dist_lim=1000, p_x=-20, p_z=-1000, p_y=0, birds_radius=90, birds_innerradius=0, cars_radius=50, cars_innerradius=5, trees_limit=[50,200], buildings_radius=335, buildings_innerradius=100, trees_radius=80, trees_innerradius=20, buildings_limit=[50,150], birds_limit=[25,100], cars_limit=[5,25], drones_limit=[80,200]):
+def spawn_drone_objs(destroy=False, ground_limit=204, dist_h=120, dist_v=120, dist_lim=1000, p_x=-20, p_z=-1000, p_y=0, birds_radius=90, birds_innerradius=0, cars_radius=50, cars_innerradius=5, trees_limit=[50,200], buildings_radius=335, buildings_innerradius=100, trees_radius=80, trees_innerradius=20, buildings_limit=[50,150], birds_limit=[25,100], cars_limit=[5,25], drones_limit=[80,200], prefix='spawner'):
 	if destroy == True:
 		common.send_data([
-			'DELETE spawner/city/nature/trees',
-			'DELETE spawner/city/buildings',
-			'DELETE spawner/animals/birds',
-			'DELETE spawner/drones',
-			'DELETE spawner/cars'
+			'DELETE {}/city/nature/trees'.format(prefix),
+			'DELETE {}/city/buildings'.format(prefix),
+			'DELETE {}/animals/birds'.format(prefix),
+			'DELETE {}/drones'.format(prefix),
+			'DELETE {}/cars'.format(prefix)
 		], read=False)
 	else:
 		k = 0
@@ -452,25 +463,25 @@ def spawn_drone_objs(destroy=False, ground_limit=204, dist_h=120, dist_v=120, di
 		# for i in range(0,2):
 		# 	spawn_radius_generic(['city/ground'], suffix='_{}'.format(i), limit=5, radius=100, innerradius=0, scale=[2,2,2], position=[0,i,0], collision_check=False)
 	
-	spawn_radius_generic(['city/nature/trees'], collision_check=False, limit=random.randint(trees_limit[0], trees_limit[1]), radius=trees_radius, innerradius=trees_innerradius, position=[0,0,0])
-	spawn_radius_generic(['city/buildings'], limit=random.randint(buildings_limit[0], buildings_limit[1]), radius=buildings_radius, innerradius=buildings_innerradius, position=[0,0,0])
-	spawn_radius_generic(['animals/birds'], limit=random.randint(birds_limit[0], birds_limit[1]), radius=birds_radius, innerradius=birds_innerradius, position=[0,random.randint(15,95),0])
-	spawn_radius_generic(['cars'], limit=random.randint(cars_limit[0], cars_limit[1]), radius=cars_radius, innerradius=cars_innerradius, position=[0,0,0])
+	spawn_radius_generic(['city/nature/trees'], collision_check=False, limit=random.randint(trees_limit[0], trees_limit[1]), radius=trees_radius, innerradius=trees_innerradius, position=[0,0,0], prefix=prefix)
+	spawn_radius_generic(['city/buildings'], limit=random.randint(buildings_limit[0], buildings_limit[1]), radius=buildings_radius, innerradius=buildings_innerradius, position=[0,0,0], prefix=prefix)
+	spawn_radius_generic(['animals/birds'], limit=random.randint(birds_limit[0], birds_limit[1]), radius=birds_radius, innerradius=birds_innerradius, position=[0,random.randint(15,95),0], prefix=prefix)
+	spawn_radius_generic(['cars'], limit=random.randint(cars_limit[0], cars_limit[1]), radius=cars_radius, innerradius=cars_innerradius, position=[0,0,0], prefix=prefix)
 	
 	if drones_limit[1] > 0:
-		spawn_radius_generic(['drones'], limit=random.randint(drones_limit[0], drones_limit[1]), radius=random.randint(30,50), innerradius=0, position=[0,0,0], segmentation_class="Drone")
+		spawn_radius_generic(['drones'], limit=random.randint(drones_limit[0], drones_limit[1]), radius=random.randint(30,50), innerradius=0, position=[0,0,0], segmentation_class="Drone", prefix=prefix)
 	# spawn_radius_generic(['drones/white'], limit=random.randint(10,50), radius=random.randint(30,50), innerradius=0, position=[0,0,0], segmentation_class="Car")
 	
 	common.flush_buffer()
 
-def spawn_drone_objs_alt(destroy=False, ground_limit=204, dist_h=120, dist_v=120, dist_lim=1000, p_x=-20, p_z=-1000, p_y=0):
+def spawn_drone_objs_alt(destroy=False, ground_limit=204, dist_h=120, dist_v=120, dist_lim=1000, p_x=-20, p_z=-1000, p_y=0, prefix='spawner'):
 	if destroy == True:
 		common.send_data([
-			'DELETE spawner/city/nature/trees',
-			'DELETE spawner/city/buildings',
-			'DELETE spawner/animals/birds',
-			'DELETE spawner/drones',
-			'DELETE spawner/cars'
+			'DELETE {}/city/nature/trees'.format(prefix),
+			'DELETE {}/city/buildings'.format(prefix),
+			'DELETE {}/animals/birds'.format(prefix),
+			'DELETE {}/drones'.format(prefix),
+			'DELETE {}/cars'.format(prefix)
 		], read=False)
 	else:
 		k = 0
@@ -493,22 +504,22 @@ def spawn_drone_objs_alt(destroy=False, ground_limit=204, dist_h=120, dist_v=120
 		# for i in range(0,2):
 		# 	spawn_radius_generic(['city/ground'], suffix='_{}'.format(i), limit=5, radius=100, innerradius=0, scale=[2,2,2], position=[0,i,0], collision_check=False)
 	
-	spawn_radius_generic(['city/nature/trees'], limit=random.randint(600,600), radius=80, innerradius=30, position=[0,0,0], collision_check=False)
-	spawn_radius_generic(['city/buildings'], limit=random.randint(10,10), radius=335, innerradius=100, position=[0,0,0], collision_check=False)
-	spawn_radius_generic(['animals/birds'], limit=random.randint(10,10), radius=random.randint(80,110), innerradius=0, position=[0,random.randint(15,95),0])
-	spawn_radius_generic(['cars'], limit=random.randint(5, 10), radius=50, innerradius=5, position=[0,0,0])
-	spawn_radius_generic(['drones/white'], limit=random.randint(80,80), radius=random.randint(80,110), innerradius=0, position=[0,random.randint(15,65),0], segmentation_class="Car")
+	spawn_radius_generic(['city/nature/trees'], limit=random.randint(600,600), radius=80, innerradius=30, position=[0,0,0], collision_check=False, prefix=prefix)
+	spawn_radius_generic(['city/buildings'], limit=random.randint(10,10), radius=335, innerradius=100, position=[0,0,0], collision_check=False, prefix=prefix)
+	spawn_radius_generic(['animals/birds'], limit=random.randint(10,10), radius=random.randint(80,110), innerradius=0, position=[0,random.randint(15,95),0], prefix=prefix)
+	spawn_radius_generic(['cars'], limit=random.randint(5, 10), radius=50, innerradius=5, position=[0,0,0], prefix=prefix)
+	spawn_radius_generic(['drones/white'], limit=random.randint(80,80), radius=random.randint(80,110), innerradius=0, position=[0,random.randint(15,65),0], segmentation_class="Car", prefix=prefix)
 	
 	common.flush_buffer()
 
-def spawn_animals_objs(destroy=False):
+def spawn_animals_objs(destroy=False, prefix='spawner'):
 	if destroy == True:
 		common.send_data([
-			'DELETE spawner/city',
-			'DELETE spawner/animals',
+			'DELETE {}/city'.format(prefix),
+			'DELETE {}/animals'.format(prefix)
 		], read=False)
 	
-	spawn_radius_generic(['city/nature/trees'], collision_check=True, stick_to_ground=True, limit=random.randint(150, 400), radius=80, innerradius=random.randint(30, 50), position=[0,5,0])
-	spawn_radius_generic(['animals'], collision_check=True, stick_to_ground=True, limit=random.randint(20, 35), radius=random.randint(40, 80), innerradius=0, position=[0,5,0], orbit=True)
+	spawn_radius_generic(['city/nature/trees'], collision_check=True, stick_to_ground=True, limit=random.randint(150, 400), radius=80, innerradius=random.randint(30, 50), position=[0,5,0], prefix=prefix)
+	spawn_radius_generic(['animals'], collision_check=True, stick_to_ground=True, limit=random.randint(200, 350), radius=random.randint(40, 80), innerradius=0, position=[0,5,0], orbit=True, prefix=prefix)
 	
 	common.flush_buffer()

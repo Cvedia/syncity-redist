@@ -21,7 +21,7 @@ def run():
 	if settings.skip_setup == False:
 		helpers.global_camera_setup()
 		helpers.add_camera_rgb(flycam=settings.flycam, pp='EnviroFX')
-		helpers.add_camera_seg()
+		helpers.add_camera_seg(segments=['Car'])
 		if settings.envirosky == False:
 			helpers.add_light()
 		helpers.global_disk_setup()
@@ -48,7 +48,7 @@ def run():
 		common.send_data([
 			'CREATE mycar_{} Cars/?'.format(k),
 			'mycar_{} ADD Segmentation.ClassGroup'.format(k),
-			'mycar_{} SET Segmentation.ClassGroup itemsClasses Car'.format(k),
+			'mycar_{} SET Segmentation.ClassGroup itemsClassName Car'.format(k),
 			'mycar_{} SET Transform position ({} {} {})'.format(k, p_x + settings.X_COMP, 5 + settings.Y_COMP, p_z + settings.Z_COMP)
 		])
 		

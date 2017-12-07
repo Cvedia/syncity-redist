@@ -10,7 +10,7 @@ def run():
 	if settings.skip_setup == False:
 		helpers.global_camera_setup()
 		helpers.add_camera_rgb(width=1024, height=768, pp='Savannah')
-		helpers.add_camera_seg(segment='Drone')
+		helpers.add_camera_seg(segments=['Drone'])
 		helpers.global_disk_setup()
 		helpers.add_disk_output(mycams)
 

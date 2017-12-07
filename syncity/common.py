@@ -66,7 +66,7 @@ def send_data(v, read=None, flush=None):
 		s = s.encode('ascii') + b"\n"
 		
 		if settings.record:
-			settings.fh.write(s)
+			settings.fh.write(str(s))
 		
 		tn.write(s)
 		

@@ -19,6 +19,11 @@ def help():
 	- Runs a batch of 360 against yolo
 	- Saves detections
 	- Exits leaving all objects exposed
+
+WARNING: In order to run this you need to have syncity custom yolo version, you
+can find this on a specific branch under our repository, for both windows and
+linux.
+
 '''
 
 def clean_trash():
@@ -50,13 +55,13 @@ def run():
 	if settings.skip_setup == False:
 		helpers.global_camera_setup()
 		helpers.add_camera_rgb(width=4096, height=3072, pp='EnviroFX')
-		# helpers.add_camera_seg(segment='Car')
+		# helpers.add_camera_seg(segments=['Car'])
 		helpers.global_disk_setup()
 		helpers.add_disk_output(mycams)
 		common.send_data([
 			'CREATE obj {}'.format(obj),
 			# 'obj ADD Segmentation.ClassGroup',
-			# 'obj SET Segmentation.ClassGroup itemsClasses Car',
+			# 'obj SET Segmentation.ClassGroup itemsClassName Car',
 			'obj SET Transform position ({} {} {})'.format(-6, 0, -9),
 			'obj SET Transform eulerAngles ({} {} {})'.format(0, 0, 0)
 		], read=False)

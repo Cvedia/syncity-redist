@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 import sys
+import time
 import argparse
 import textwrap
 import platform
@@ -8,7 +9,7 @@ import syncity
 
 from syncity import common, settings_manager
 
-print ('Syncity toolbox - v3.0.0\nCopyright (c) 2017 CVEDIA B.V.\n')
+print ('Syncity toolbox - v3.1.0\nCopyright (c) 2017 CVEDIA B.V.\n')
 
 parser = argparse.ArgumentParser(
 	formatter_class=argparse.RawDescriptionHelpFormatter,
@@ -33,7 +34,7 @@ else:
 
 parser.add_argument('-q', '--quiet', action='store_true', help='Quiet mode')
 parser.add_argument('--keep', default=False, action='store_true', help='Keep created assets on scene')
-parser.add_argument('--record', action='store_true', help='Record commands sent to API')
+parser.add_argument('--record', action='store_true', help='Record commands sent to API using --local_path as output path')
 parser.add_argument('--async', action='store_true', help='Send some telnet commands asyncronously -- EXPERIMENTAL')
 parser.add_argument('--skip_disk', action='store_true', help='Disables disk export completly')
 parser.add_argument('--skip_setup', action='store_true', help='Skip script setup and go straight to data extraction')

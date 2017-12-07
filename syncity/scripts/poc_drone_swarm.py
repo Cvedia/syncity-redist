@@ -23,7 +23,7 @@ def run():
 	if settings.skip_setup == False:
 		helpers.global_camera_setup()
 		helpers.add_camera_rgb(width=4096, height=3072, pp='EnviroFX')
-		helpers.add_camera_seg(segment='Car')
+		helpers.add_camera_seg(segments=['Car'])
 		helpers.global_disk_setup()
 		
 		helpers.add_disk_output(mycams)
@@ -34,7 +34,7 @@ def run():
 			common.send_data([
 				'CREATE drone/dr_{} {}'.format(i, d),
 				'drone/dr_{} ADD Segmentation.ClassGroup'.format(i),
-				'drone/dr_{} SET Segmentation.ClassGroup itemsClasses Car'.format(i),
+				'drone/dr_{} SET Segmentation.ClassGroup itemsClassName Car'.format(i),
 				'drone/dr_{} SET Transform position ({} {} {})'.format(i, i, 1, 0)
 			], read=False)
 			i = i + 1
@@ -59,7 +59,6 @@ def run():
 	common.send_data([
 		'cameras/cameraRGB SET Camera enabled true',
 		'cameras SET Transform position ({} {} {})'.format(0, 1, 0),
-		# 'cameras SET Transform eulerAngles ({} {} {})'.format(-20, -45, 0),
 		'cameras SET Transform eulerAngles ({} {} {})'.format(-20, 0, 0),
 		'EnviroSky EXECUTE EnviroSky ChangeWeather "{}"'.format(helpers.weather_lst[1]),
 		'EnviroSky SET EnviroSky cloudsMode {}'.format(helpers.clouds_lst[2]),
@@ -114,6 +113,5 @@ def run():
 		
 		common.flush_buffer()
 		helpers.take_snapshot(mycams, True)
-		helpers.take_seg_snapshot([ 'cameras/segmentation' ])
 		
 		loop = loop + 1

@@ -13,7 +13,7 @@ def run():
 		# helpers.add_camera_rgb(width=4096, height=3072, audio=True, envirosky=True)
 		helpers.add_camera_rgb(width=1024, height=768, audio=True, envirosky=True)
 		helpers.add_camera_rgb_pp('EnviroFX', scion=False)
-		helpers.add_camera_seg(segment='Drone')
+		helpers.add_camera_seg(segments=['Drone'])
 		# helpers.add_light()
 		helpers.global_disk_setup()
 		

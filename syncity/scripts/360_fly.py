@@ -22,13 +22,13 @@ def run():
 	if settings.skip_setup == False:
 		helpers.global_camera_setup()
 		helpers.add_camera_rgb(width=4096, height=3072, pp='EnviroFX')
-		helpers.add_camera_seg(segment='Car')
+		helpers.add_camera_seg(segments=['Car'])
 		helpers.global_disk_setup()
 		helpers.add_disk_output(mycams)
 		common.send_data([
 			'CREATE obj {}'.format(obj),
 			'obj ADD Segmentation.ClassGroup',
-			'obj SET Segmentation.ClassGroup itemsClasses Car',
+			'obj SET Segmentation.ClassGroup itemsClassName Car',
 			'obj SET Transform position ({} {} {})'.format(-6, 0, -9),
 			'obj SET Transform eulerAngles ({} {} {})'.format(0, 0, 0),
 			
