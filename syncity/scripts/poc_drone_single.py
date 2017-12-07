@@ -83,7 +83,7 @@ def run():
 		'EnviroSky SET EnviroSky cloudsSettings.globalCloudCoverage {}'.format(-0.04),
 		'drone SET Transform position ({} {} {})'.format(p_x, p_y, p_z),
 		'drone SET Transform eulerAngles ({} {} {})'.format(0, 0, 0)
-	])
+	], read=False)
 	
 	loop = 0
 	
