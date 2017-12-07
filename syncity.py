@@ -19,8 +19,8 @@ different specific features of the api.
 '''),
 	epilog=textwrap.dedent(common.scripts_help()))
 parser.add_argument('-p', '--port', type=int, default=10200, help='Port to connect, defaults to 10200')
-parser.add_argument('-i', '--ip', required=True, help='IP of syncity simulator')
-parser.add_argument('--script', default="simple", help='When a --run is not set, defines a script loop to play, defaults to simple')
+parser.add_argument('-i', '--ip', default='127.0.0.1', help='IP of syncity simulator')
+parser.add_argument('-s', '--script', default="simple", help='When a --run is not set, defines a script loop to play, defaults to simple')
 parser.add_argument('--cooldown', type=int, default=0, help='Cooldown after snapshot')
 parser.add_argument('-r', '--run', type=argparse.FileType('r'), help='Run script')
 
@@ -56,8 +56,10 @@ for k in args.__dict__:
 	settings[k] = args.__dict__[k]
 
 if settings.async == True:
+	common.output('Telnet mode set to ASYNCRONOUS')
 	settings.force_sync = False
 else:
+	common.output('Telnet mode set to SYNCRONOUS')
 	settings.force_sync = True
 
 if platform.system() == 'Windows':

@@ -10,6 +10,7 @@ ground_lst = [ 'Intersection', 'Grass', 'Asphalt', 'RoadSection2', 'DirtBrown', 
 cars_lst = [ 'auditts','audi_a2','audi_q7','audi_s3','bentley_arnage','bmw','bmw6_series_650i','bmw_760li','bmw_m3','bmw_m5','bmw_m_limousine','cadillac_escalade_ext','caterpillar_bulldozer_d9','chevrolet_cruze_2011','chevrolet_s10','chevrolet_tornado','fiat500_new','fiat_131','fiat_500','ford_crown_victoria_taxi','ford_fiesta','ford_fire_department','ford_focus','ford_mustang_gt_eleanor','ford_shelby_cobra','ford_transit_jumbo','freightliner_aerodyne','honda_civic_sedan','hummer_h2','international_ambulance_fdny','international_school_bus','kenworth_t600','lamborghini_gallardo','lancia_delta','mack_dumper','mercedes_class_g_500','mercedes_slk','mercedes_vario_brinks','mini_coopers','nissan_elgrand','nissan_murano','peugeot_406','rangerover','renault_420','renault_g210','renault_megane','renault_trm_2000','scania_400_concretemixer','scania_450_dumpster_hauler','truck_v010_008','volvo_th5','vw_caravelle','vw_golf_v','vw_touareg','vw_touran_2007','vw_transporter' ]
 weather_lst = [ 'Clear Sky', 'Cloudy 1', 'Cloudy 2', 'Cloudy 3', 'Foggy', 'Heavy Rain', 'Light Rain', 'Storm' ]
 clouds_lst = [ 'None', 'Both', 'Volume', 'Flat' ]
+drones_lst = [ 'Drones/splinter/splinter', 'Drones/DJI Inspire 2/DJI_Inspire_2', 'Drones/DJI Mavic Pro/DJI_Mavic_Pro', 'Drones/red/red', 'Drones/DJI S1000/DJI S1000', 'Drones/white/white', 'Drones/DJI Phantom 4 Pro/DJI_Phantom_4_Pro', 'Drones/Parrot Disco/Parrot Disco' ]
 
 settings = settings_manager.Singleton()
 
@@ -421,7 +422,7 @@ def spawn_misc_objs(destroy=False):
 	# spawn_radius_generic(['city/ground'], suffix='_0', limit=random.randint(3, 10), radius=75, innerradius=0, scale=[2,2,2], position=[0,0,0], collision_check=False)
 	spawn_radius_generic(['city/ground'], suffix='_0', limit=3, radius=75, innerradius=0, scale=[1,1,1], position=[0,0,0], collision_check=False)
 
-def spawn_drone_objs(destroy=False, ground_limit=204, dist_h=120, dist_v=120, dist_lim=1000, p_x=-20, p_z=-1000, p_y=0, trees_limit=[50,200], buildings_limit=[50,150], birds_limit=[25,100], cars_limit=[5,25], drones_limit=[80,200]):
+def spawn_drone_objs(destroy=False, ground_limit=204, dist_h=120, dist_v=120, dist_lim=1000, p_x=-20, p_z=-1000, p_y=0, birds_radius=90, birds_innerradius=0, cars_radius=50, cars_innerradius=5, trees_limit=[50,200], buildings_radius=335, buildings_innerradius=100, trees_radius=80, trees_innerradius=20, buildings_limit=[50,150], birds_limit=[25,100], cars_limit=[5,25], drones_limit=[80,200]):
 	if destroy == True:
 		common.send_data([
 			'DELETE spawner/city/nature/trees',
@@ -451,10 +452,11 @@ def spawn_drone_objs(destroy=False, ground_limit=204, dist_h=120, dist_v=120, di
 		# for i in range(0,2):
 		# 	spawn_radius_generic(['city/ground'], suffix='_{}'.format(i), limit=5, radius=100, innerradius=0, scale=[2,2,2], position=[0,i,0], collision_check=False)
 	
-	spawn_radius_generic(['city/nature/trees'], collision_check=False, limit=random.randint(trees_limit[0], trees_limit[1]), radius=80, innerradius=20, position=[0,0,0])
-	spawn_radius_generic(['city/buildings'], limit=random.randint(buildings_limit[0], buildings_limit[1]), radius=335, innerradius=100, position=[0,0,0])
-	spawn_radius_generic(['animals/birds'], limit=random.randint(birds_limit[0], birds_limit[1]), radius=random.randint(80,110), innerradius=0, position=[0,random.randint(15,95),0])
-	spawn_radius_generic(['cars'], limit=random.randint(cars_limit[0], cars_limit[1]), radius=50, innerradius=5, position=[0,0,0])
+	spawn_radius_generic(['city/nature/trees'], collision_check=False, limit=random.randint(trees_limit[0], trees_limit[1]), radius=trees_radius, innerradius=trees_innerradius, position=[0,0,0])
+	spawn_radius_generic(['city/buildings'], limit=random.randint(buildings_limit[0], buildings_limit[1]), radius=buildings_radius, innerradius=buildings_innerradius, position=[0,0,0])
+	spawn_radius_generic(['animals/birds'], limit=random.randint(birds_limit[0], birds_limit[1]), radius=birds_radius, innerradius=birds_innerradius, position=[0,random.randint(15,95),0])
+	spawn_radius_generic(['cars'], limit=random.randint(cars_limit[0], cars_limit[1]), radius=cars_radius, innerradius=cars_innerradius, position=[0,0,0])
+	
 	if drones_limit[1] > 0:
 		spawn_radius_generic(['drones'], limit=random.randint(drones_limit[0], drones_limit[1]), radius=random.randint(30,50), innerradius=0, position=[0,0,0], segmentation_class="Drone")
 	# spawn_radius_generic(['drones/white'], limit=random.randint(10,50), radius=random.randint(30,50), innerradius=0, position=[0,0,0], segmentation_class="Car")

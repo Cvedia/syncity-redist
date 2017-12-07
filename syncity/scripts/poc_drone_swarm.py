@@ -27,20 +27,21 @@ def run():
 		helpers.global_disk_setup()
 		
 		helpers.add_disk_output(mycams)
-		helpers.spawn_drone_objs(drones_limit=[0,0],trees_innerradius=60, trees_radius=100)
+		helpers.spawn_drone_objs(drones_limit=[0,0])
 		
-		common.send_data([
-			'CREATE drone "{}"'.format(random.choice(helpers.drones_lst)),
-			'drone ADD Segmentation.ClassGroup',
-			'drone SET Segmentation.ClassGroup itemsClasses Car'
-		])
+		i = 0
+		for d in helpers.drones_lst:
+			common.send_data([
+				'CREATE drone/dr_{} {}'.format(i, d),
+				'drone/dr_{} ADD Segmentation.ClassGroup'.format(i),
+				'drone/dr_{} SET Segmentation.ClassGroup itemsClasses Car'.format(i),
+				'drone/dr_{} SET Transform position ({} {} {})'.format(i, i, 1, 0)
+			], read=False)
+			i = i + 1
 	
-	# p_x_r = [-17, 13]
-	# p_y_r = [1.5, 17]
-	# p_z_r = [24, 42]
-	p_x_r = [-3, 3]
-	p_y_r = [1.5, 8]
-	p_z_r = [3, 9]
+	p_x_r = [-17, 13]
+	p_y_r = [0.5, 17]
+	p_z_r = [24, 42]
 	
 	p_x = p_x_r[0]
 	p_y = p_y_r[0]
@@ -50,19 +51,25 @@ def run():
 	p_y_d = 1
 	p_z_d = 1
 	
+	a_x = 0
+	a_y = 0
+	a_z = 0
+	
 	# reset camera
 	common.send_data([
 		'cameras/cameraRGB SET Camera enabled true',
 		'cameras SET Transform position ({} {} {})'.format(0, 1, 0),
+		# 'cameras SET Transform eulerAngles ({} {} {})'.format(-20, -45, 0),
 		'cameras SET Transform eulerAngles ({} {} {})'.format(-20, 0, 0),
 		'EnviroSky EXECUTE EnviroSky ChangeWeather "{}"'.format(helpers.weather_lst[1]),
 		'EnviroSky SET EnviroSky cloudsMode {}'.format(helpers.clouds_lst[2]),
 		'EnviroSky SET EnviroSky cloudsSettings.globalCloudCoverage {}'.format(-0.04),
 		'drone SET Transform position ({} {} {})'.format(p_x, p_y, p_z),
-		'drone SET Transform eulerAngles ({} {} {})'.format(0, 0, 0)
-	])
+		'drone SET Transform eulerAngles ({} {} {})'.format(a_x, a_y, a_z)
+	], read=False)
 	
 	loop = 0
+	common.flush_buffer()
 	
 	while loop < 100:
 		if random.uniform(0,1) > .8:
@@ -70,9 +77,9 @@ def run():
 		else:
 			motionblur = 'false'
 		
-		p_x = p_x + (random.uniform(.05, .75) * p_x_d)
-		p_y = p_y + (random.uniform(.01, .95) * p_y_d)
-		p_z = p_z + (random.uniform(.25, .75) * p_z_d)
+		p_x = p_x + (random.uniform(.5, 2.5) * p_x_d)
+		p_y = p_y + (random.uniform(.1, 1.5) * p_y_d)
+		p_z = p_z + (random.uniform(.1, 1.5) * p_z_d)
 		
 		if p_x_d == 1 and p_x > p_x_r[1]:
 			p_x_d = -1
@@ -99,7 +106,7 @@ def run():
 			'city SET Transform eulerAngles ({} {} {})'.format(0, random.randint(0, 359), 0),
 			'EnviroSky SET EnviroSky GameTime.Hours {}'.format(random.randint(8, 18)),
 			'drone SET Transform position ({} {} {})'.format(p_x, p_y, p_z),
-			'drone SET Transform eulerAngles ({} {} {})'.format(random.randint(0, 359), random.randint(0, 359), random.randint(0, 359)),
+			'drone SET Transform eulerAngles ({} {} {})'.format(a_x, a_y, a_z),
 			'cameras/cameraRGB SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled {}'.format(motionblur),
 			'cameras/cameraRGB SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1',
 			'cameras/cameraRGB SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004'
@@ -107,6 +114,6 @@ def run():
 		
 		common.flush_buffer()
 		helpers.take_snapshot(mycams, True)
-		# helpers.take_seg_snapshot([ 'cameras/segmentation' ])
+		helpers.take_seg_snapshot([ 'cameras/segmentation' ])
 		
 		loop = loop + 1

@@ -44,12 +44,15 @@ def init():
 def output (s):
 	print ('[{}] {}'.format(datetime.now().strftime("%H:%M:%S.%f"), s))
 
-def send_data(v, read=None):
-	if read == None:
-		if settings.async == True:
-			read = False
-		else:
-			read = True
+def send_data(v, read=None, flush=None):
+	if settings.force_sync:
+		read = True
+	else:
+		if read == None:
+			if settings.async == True:
+				read = False
+			else:
+				read = True
 	
 	if type(v) != list:
 		v = [ v ]
@@ -76,16 +79,27 @@ def send_data(v, read=None):
 			while True:
 				l = shape_data(tn.read_eager())
 				
-				if l == '':
+				if l is '' or not l:
 					break
 				
 				r.append(l)
+			
+			"""
+			if flush:
+				time.sleep(.5)
+				l = tn.read_until(b"\r\n", 1)
+				l = shape_data(l)
+				
+				if l != '':
+					send_data('NOOP', read=True, flush=True)
+			"""
 	
 	return r
 
 def shape_data(l):
 	try:
-		l = str(l).rstrip()
+		# l = str(l).rstrip()
+		l = str(l.decode('utf-8')).rstrip()
 	except TypeError as e:
 		output('Error {} decoding: {}'.format(e, l))
 	
@@ -114,7 +128,7 @@ def gracefull_shutdown():
 	# sys.exit(0)
 
 def flush_buffer():
-	send_data('NOOP', read=True)
+	send_data('NOOP', read=True, flush=True)
 
 def scripts_help():
 	scripts = os.listdir('syncity/scripts/')
