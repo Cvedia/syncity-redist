@@ -340,7 +340,7 @@ def add_disk_output(lst, label='disk1'):
 	
 	common.send_data('{} SET active true'.format(label))
 
-def spawn_radius_generic(types=[], scale=[1,1,1], innerradius=0, radius=500, position=[0,0,0], rotation=[0,0,0], limit=50, segmentation_class=None, orbit=False, stick_to_ground=False, collision_check=True, suffix="", flush=False, prefix='spawner'):
+def spawn_radius_generic(types=[], tags=None, scale=[1,1,1], innerradius=0, radius=500, position=[0,0,0], rotation=[0,0,0], limit=50, segmentation_class=None, orbit=False, stick_to_ground=False, collision_check=True, suffix="", flush=False, prefix='spawner'):
 	# convert bool to strings
 	if collision_check == True:
 		collision_check = 'true'
@@ -353,6 +353,7 @@ def spawn_radius_generic(types=[], scale=[1,1,1], innerradius=0, radius=500, pos
 		stick_to_ground = 'false'
 	
 	# loop each of the types
+	i = 0
 	for t in types:
 		n = t.replace(' ', '_') + suffix
 		
@@ -362,7 +363,15 @@ def spawn_radius_generic(types=[], scale=[1,1,1], innerradius=0, radius=500, pos
 			
 			'{}/{} ADD RandomProps.Torus'.format(prefix, n),
 			'{}/{} ADD RandomProps.PropArea'.format(prefix, n),
-			
+		], read=False)
+		
+		if tags != None:
+			try:
+				common.send_data(['{}/{} SET RandomProps.PropArea tags {}'.format(prefix, n, tags[i])], read=False)
+			except:
+				pass
+		
+		common.send_data([
 			'{}/{} SET RandomProps.PropArea async false'.format(prefix, n),
 			'{}/{} SET RandomProps.PropArea folder "{}"'.format(prefix, n, t),
 			'{}/{} SET RandomProps.PropArea numberOfProps {}'.format(prefix, n, limit),
@@ -390,6 +399,7 @@ def spawn_radius_generic(types=[], scale=[1,1,1], innerradius=0, radius=500, pos
 			common.send_data('cameras SET Orbit target {}/{}'.format(prefix, n), read=False)
 		
 		settings.obj.append('{}/{}'.format(prefix, t))
+		i = i + 1
 	
 	if flush:
 		common.flush_buffer()
@@ -504,10 +514,10 @@ def spawn_drone_objs(destroy=False, ground_limit=204, dist_h=120, dist_v=120, di
 		# for i in range(0,2):
 		# 	spawn_radius_generic(['city/ground'], suffix='_{}'.format(i), limit=5, radius=100, innerradius=0, scale=[2,2,2], position=[0,i,0], collision_check=False)
 	
-	spawn_radius_generic(['city/nature/trees'], collision_check=False, limit=random.randint(trees_limit[0], trees_limit[1]), radius=trees_radius, innerradius=trees_innerradius, position=[0,0,0], prefix=prefix)
-	spawn_radius_generic(['city/buildings'], limit=random.randint(buildings_limit[0], buildings_limit[1]), radius=buildings_radius, innerradius=buildings_innerradius, position=[0,0,0], prefix=prefix)
-	spawn_radius_generic(['animals/birds'], limit=random.randint(birds_limit[0], birds_limit[1]), radius=birds_radius, innerradius=birds_innerradius, position=[0,random.randint(15,95),0], prefix=prefix)
-	spawn_radius_generic(['cars'], limit=random.randint(cars_limit[0], cars_limit[1]), radius=cars_radius, innerradius=cars_innerradius, position=[0,0,0], prefix=prefix)
+	spawn_radius_generic(['city/nature/trees'], tags=['tree'], collision_check=False, limit=random.randint(trees_limit[0], trees_limit[1]), radius=trees_radius, innerradius=trees_innerradius, position=[0,0,0], prefix=prefix)
+	# spawn_radius_generic(['city/buildings'], limit=random.randint(buildings_limit[0], buildings_limit[1]), radius=buildings_radius, innerradius=buildings_innerradius, position=[0,0,0], prefix=prefix)
+	spawn_radius_generic(['animals/birds'], tags=['bird'], limit=random.randint(birds_limit[0], birds_limit[1]), radius=birds_radius, innerradius=birds_innerradius, position=[0,random.randint(15,95),0], prefix=prefix)
+	spawn_radius_generic(['cars'], tags=['car'], limit=random.randint(cars_limit[0], cars_limit[1]), radius=cars_radius, innerradius=cars_innerradius, position=[0,0,0], prefix=prefix)
 	
 	if drones_limit[1] > 0:
 		spawn_radius_generic(['drones'], limit=random.randint(drones_limit[0], drones_limit[1]), radius=random.randint(30,50), innerradius=0, position=[0,0,0], segmentation_class="Drone", prefix=prefix)
