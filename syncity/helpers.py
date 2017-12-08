@@ -242,7 +242,7 @@ def add_camera_seg_filter(segments=['Car'], label='cameras/segmentation'):
 def add_camera_seg(width=1024, height=768, segments=None, output_type='Auto', label='cameras/segmentation'):
 	common.send_data([
 		'CREATE {}'.format(label),
-		# '{} SET active false'.format(label),
+		'{} SET active false'.format(label),
 		'{} ADD Camera'.format(label),
 		'{} ADD Sensors.RenderCamera'.format(label),
 		'{} SET Sensors.RenderCamera sRGB false'.format(label),
@@ -251,7 +251,7 @@ def add_camera_seg(width=1024, height=768, segments=None, output_type='Auto', la
 		'{} ADD Segmentation.Segmentation'.format(label),
 		'{} SET Segmentation.Segmentation OutputType {}'.format(label, output_type),
 		# '{} SET Camera targetTexture.antiAliasing 8'.format(label),
-		# '{} SET active true'.format(label)
+		'{} SET active true'.format(label)
 	], read=False)
 	
 	if segments != None:
