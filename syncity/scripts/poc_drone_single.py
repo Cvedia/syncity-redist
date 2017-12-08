@@ -31,7 +31,7 @@ def run():
 		helpers.global_disk_setup()
 		
 		helpers.add_disk_output(mycams)
-		helpers.spawn_drone_objs(drones_limit=[0,0],trees_innerradius=60, trees_radius=100)
+		helpers.spawn_drone_objs(drones_limit=[0,0], buildings_innerradius=300, trees_innerradius=60, trees_radius=100, buildings_limit=[10,15])
 		
 		# single drone
 		'''
@@ -53,7 +53,7 @@ def run():
 			'drone/drone0 ADD Segmentation.ClassGroup',
 			'drone/drone0 SET active false',
 			'drone/drone0 SET Segmentation.ClassGroup itemsClassName drone0',
-			'drone/drone0 SET Transform position ({} {} {})'.format(0, 1, 0),
+			'drone/drone0/drone0 SET Transform position ({} {} {})'.format(0, 1, 0),
 			'drone/drone0 SET active true',
 			
 			# 'CREATE drone/drone1/drone1 "{}"'.format(random.choice(helpers.drones_lst)),
@@ -61,7 +61,7 @@ def run():
 			'drone/drone1 ADD Segmentation.ClassGroup',
 			'drone/drone1 SET active false',
 			'drone/drone1 SET Segmentation.ClassGroup itemsClassName drone1',
-			'drone/drone1 SET Transform position ({} {} {})'.format(0, 1.5, 0),
+			'drone/drone1/drone1 SET Transform position ({} {} {})'.format(0, 1.5, 0),
 			'drone/drone1 SET active true',
 			
 			# 'CREATE drone/drone2/drone2 "{}"'.format(random.choice(helpers.drones_lst)),
@@ -69,7 +69,7 @@ def run():
 			'drone/drone2 ADD Segmentation.ClassGroup',
 			'drone/drone2 SET active false',
 			'drone/drone2 SET Segmentation.ClassGroup itemsClassName drone2',
-			'drone/drone2 SET Transform position ({} {} {})'.format(0, 2, 0),
+			'drone/drone2/drone2 SET Transform position ({} {} {})'.format(0, 2, 0),
 			'drone/drone2 SET active true',
 		], read=False)
 	
