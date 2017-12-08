@@ -11,6 +11,8 @@ cars_lst = [ 'auditts','audi_a2','audi_q7','audi_s3','bentley_arnage','bmw','bmw
 weather_lst = [ 'Clear Sky', 'Cloudy 1', 'Cloudy 2', 'Cloudy 3', 'Foggy', 'Heavy Rain', 'Light Rain', 'Storm' ]
 clouds_lst = [ 'None', 'Both', 'Volume', 'Flat' ]
 drones_lst = [ 'Drones/splinter/splinter', 'Drones/DJI Inspire 2/DJI_Inspire_2', 'Drones/DJI Mavic Pro/DJI_Mavic_Pro', 'Drones/red/red', 'Drones/DJI S1000/DJI S1000', 'Drones/white/white', 'Drones/DJI Phantom 4 Pro/DJI_Phantom_4_Pro', 'Drones/Parrot Disco/Parrot Disco' ]
+
+# lite asset package
 drones_lite_lst = [ 'Drones/buzz/buzz', 'Drones/splinter/splinter', 'Drones/red/red', 'Drones/white/white' ]
 
 settings = settings_manager.Singleton()
@@ -40,7 +42,7 @@ def global_camera_setup(player='cameras', canvas_width=1024, canvas_height=768, 
 	
 	settings.obj.append(player)
 
-def add_camera_rgb(width=2048, height=1536, audio=True, envirosky=None, flycam=False, player='cameras', playerCamera='cameras/cameraRGB', pp=None, envirosky_cloudTransitionSpeed=100, envirosky_effectTransitionSpeed=100, envirosky_fogTransitionSpeed=100, envirosky_progressTime='None'):
+def add_camera_rgb(width=2048, height=1536, audio=True, envirosky=None, flycam=False, player='cameras', playerCamera='cameras/cameraRGB', pp=None, envirosky_cloudTransitionSpeed=100, envirosky_effectTransitionSpeed=100, envirosky_fogTransitionSpeed=100, envirosky_progressTime='None', renderingPath='UsePlayerSettings'):
 	if envirosky == None:
 		if settings.disable_envirosky:
 			envirosky = False
@@ -57,6 +59,16 @@ def add_camera_rgb(width=2048, height=1536, audio=True, envirosky=None, flycam=F
 		
 		# set camera resolution
 		'{} SET Sensors.RenderCamera resolution ({} {})'.format(playerCamera, width, height),
+		
+		# https://docs.unity3d.com/ScriptReference/RenderingPath.html
+		# valid options:
+		#
+		# DeferredShading
+		# DeferredLighting (deprecated)
+		# VertexLit
+		# Forward
+		# UsePlayerSettings
+		'{} SET Camera renderingPath {}'.format(playerCamera, renderingPath),
 		
 		# 'cameras/cameraRGB SET Camera targetTexture.antiAliasing 8',
 		# 'cameras/cameraRGB SET active true',
@@ -117,8 +129,36 @@ def add_camera_rgb_pp(profile='Profile2', scion=False, playerCamera='cameras/cam
 	common.flush_buffer()
 	settings.obj.append(playerCamera)
 
+def camera_rgb_pp_enviro_random(playerCamera='cameras/cameraRGB'):
+	# blooming effects
+	if bool(random.getrandbits(1)):
+		common.send_data([
+			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.bloom.enabled true'.format(playerCamera),
+			'{} UnityEngine.PostProcessing.PostProcessingBehaviour profile.bloom.settings.bloom.intensity {}'.format(playerCamera, random.randint(0, 100)),
+			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.bloom.settings.bloom.threshold {}'.format(playerCamera, random.uniform(0, 2)),
+			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.bloom.settings.bloom.softKnee {}'.format(playerCamera, random.uniform(0, 1)),
+			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.bloom.settings.bloom.radius {}'.format(playerCamera, random.uniform(1, 7)),
+			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.bloom.settings.bloom.antiFlicker {}'.format(playerCamera, 'true'),
+			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.bloom.settings.lensDirt.intensity {}'.format(playerCamera, random.randint(0, 10)),
+		], read=False)
+	else:
+		common.send_data(['{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.bloom.enabled false'.format(playerCamera)], read=False)
+	
+	# motion blur effects
+	if bool(random.getrandbits(1)):
+		common.send_data([
+			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled true'.format(playerCamera),
+			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.shutterAngle {}'.format(playerCamera, random.randint(0, 360)),
+			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount {}'.format(playerCamera, random.randint(1, 32)),
+			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending {}'.format(playerCamera, random.uniform(0, 1))
+		], read=False)
+	else:
+		common.send_data(['{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false'.format(playerCamera)], read=False)
+	
+	common.flush_buffer()
+
 # scion camera postprocessing effects
-def camera_rgb_pp_random(playerCamera='cameras/cameraRGB'):
+def camera_rgb_pp_scion_random(playerCamera='cameras/cameraRGB'):
 	# grain effect
 	if bool(random.getrandbits(1)):
 		common.send_data([

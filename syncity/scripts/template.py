@@ -24,7 +24,7 @@ def run():
 		# creates a camera with envirofx postprocessing
 		helpers.add_camera_rgb(flycam=flycam, pp='EnviroFX')
 		# creates a segmentation camera
-		helpers.add_camera_seg()
+		helpers.add_camera_seg(segments=['Car'])
 		# disk output setup
 		helpers.global_disk_setup()
 		# binds cameras to disk output
