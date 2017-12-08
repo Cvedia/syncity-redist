@@ -515,7 +515,7 @@ def spawn_drone_objs(destroy=False, ground_limit=204, dist_h=120, dist_v=120, di
 		# 	spawn_radius_generic(['city/ground'], suffix='_{}'.format(i), limit=5, radius=100, innerradius=0, scale=[2,2,2], position=[0,i,0], collision_check=False)
 	
 	spawn_radius_generic(['city/nature/trees'], tags=['tree'], collision_check=False, limit=random.randint(trees_limit[0], trees_limit[1]), radius=trees_radius, innerradius=trees_innerradius, position=[0,0,0], prefix=prefix)
-	# spawn_radius_generic(['city/buildings'], limit=random.randint(buildings_limit[0], buildings_limit[1]), radius=buildings_radius, innerradius=buildings_innerradius, position=[0,0,0], prefix=prefix)
+	spawn_radius_generic(['city/buildings'], tags=['building'], collision_check=False, stick_to_ground=False, limit=random.randint(buildings_limit[0], buildings_limit[1]), radius=buildings_radius, innerradius=buildings_innerradius, position=[0,0,0], prefix=prefix)
 	spawn_radius_generic(['animals/birds'], tags=['bird'], limit=random.randint(birds_limit[0], birds_limit[1]), radius=birds_radius, innerradius=birds_innerradius, position=[0,random.randint(15,95),0], prefix=prefix)
 	spawn_radius_generic(['cars'], tags=['car'], limit=random.randint(cars_limit[0], cars_limit[1]), radius=cars_radius, innerradius=cars_innerradius, position=[0,0,0], prefix=prefix)
 	

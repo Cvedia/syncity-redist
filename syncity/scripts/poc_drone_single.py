@@ -31,7 +31,7 @@ def run():
 		helpers.global_disk_setup()
 		
 		helpers.add_disk_output(mycams)
-		helpers.spawn_drone_objs(drones_limit=[0,0], buildings_innerradius=300, trees_innerradius=60, trees_radius=100, buildings_limit=[10,15])
+		helpers.spawn_drone_objs(drones_limit=[0,0], buildings_innerradius=300, trees_innerradius=60, trees_radius=100, buildings_limit=[50,80])
 		
 		# single drone
 		'''
