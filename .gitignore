@@ -1,2 +1,5 @@
 _debug/*
 *.pyc
+__pycache__
+assets-*
+_*.sh

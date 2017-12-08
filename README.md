@@ -46,7 +46,7 @@ a command prompt, go to the folder where you have syncity scripts and run:
 
 # Running
 
-python syncity.py --help
+`python syncity.py --help`
 
 Shows you a list of options, switches and so on. What you want to do first is
 run a simple script, keep in mind that you can run this script from a different
@@ -65,7 +65,7 @@ specific paths are set.
 
 ### Examples
 
-python syncity_test_v2.py --script basic --cooldown 0 -i 192.168.1.75 -p 10200 --record
+`python syncity.py --script basic --cooldown 0 -i 192.168.1.75 -p 10200 --record`
 
 This will run script basic (syncity/scripts/basic.py), with no cooldown time,
 on the machine with ip 192.168.1.75 port 10200 (default)
@@ -75,14 +75,14 @@ Depending on the script you run it will also export files, those files will be
 saved on the machine running the simulator, with the option -o you can configure
 the path to write those files, this defaults to E:\tmp\
 
-python syncity.py --script basic --cooldown 0 --keep
+`python syncity.py --script basic --cooldown 0 --keep`
 
 By default, once the script script is completed, it will delete all objects on
 the scene, effectively reseting it, with --keep all objects will be kept so you
 can interact with them after the script is completed; This is ideal if you want
 to experiment with different settings without bothering creating a full scenario.
 
-python syncity.py -r file.txt
+`python syncity.py -r file.txt`
 
 Instead of running a script, this will just run the commands on file.txt
 

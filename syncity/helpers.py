@@ -11,6 +11,7 @@ cars_lst = [ 'auditts','audi_a2','audi_q7','audi_s3','bentley_arnage','bmw','bmw
 weather_lst = [ 'Clear Sky', 'Cloudy 1', 'Cloudy 2', 'Cloudy 3', 'Foggy', 'Heavy Rain', 'Light Rain', 'Storm' ]
 clouds_lst = [ 'None', 'Both', 'Volume', 'Flat' ]
 drones_lst = [ 'Drones/splinter/splinter', 'Drones/DJI Inspire 2/DJI_Inspire_2', 'Drones/DJI Mavic Pro/DJI_Mavic_Pro', 'Drones/red/red', 'Drones/DJI S1000/DJI S1000', 'Drones/white/white', 'Drones/DJI Phantom 4 Pro/DJI_Phantom_4_Pro', 'Drones/Parrot Disco/Parrot Disco' ]
+drones_lite_lst = [ 'Drones/buzz/buzz', 'Drones/splinter/splinter', 'Drones/red/red', 'Drones/white/white' ]
 
 settings = settings_manager.Singleton()
 

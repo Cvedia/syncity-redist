@@ -54,8 +54,8 @@ def run():
 			
 			'CREATE drone/drone2 "{}"'.format(random.choice(helpers.drones_lst)),
 			'drone/drone2 ADD Segmentation.ClassGroup',
-			'drone/drone2 SET Segmentation.ClassGroup itemsClassName drone2'
-			'drone/drone2 SET Transform position ({} {} {})'.format(0, 2, 0),
+			'drone/drone2 SET Segmentation.ClassGroup itemsClassName drone2',
+			'drone/drone2 SET Transform position ({} {} {})'.format(0, 2, 0)
 		], read=False)
 	
 	# p_x_r = [-17, 13]
@@ -82,7 +82,9 @@ def run():
 		'EnviroSky SET EnviroSky cloudsMode {}'.format(helpers.clouds_lst[2]),
 		'EnviroSky SET EnviroSky cloudsSettings.globalCloudCoverage {}'.format(-0.04),
 		'drone SET Transform position ({} {} {})'.format(p_x, p_y, p_z),
-		'drone SET Transform eulerAngles ({} {} {})'.format(0, 0, 0)
+		'drone SET Transform eulerAngles ({} {} {})'.format(0, 0, 0),
+		# disable blooming effects
+		'cameras/cameraRGB SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.bloom.enabled false'
 	], read=False)
 	
 	loop = 0
