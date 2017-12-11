@@ -1,10 +1,14 @@
+'''
+Spawn a single drone per image with bbox then merge into a single dataset
+'''
+
 import random
 from .. import common, helpers, settings_manager
 
 settings = settings_manager.Singleton()
 
 # use lite drone packages
-helpers.drones_lst = helpers.drones_lite_lst
+# helpers.drones_lst = helpers.drones_lite_lst
 
 def help():
 	return '''\
@@ -26,12 +30,11 @@ def run():
 	if settings.skip_setup == False:
 		helpers.global_camera_setup()
 		helpers.add_camera_rgb(width=4096, height=3072, pp='EnviroFX')
-		# helpers.add_camera_seg(output_type='InstanceIds')
-		helpers.add_camera_seg()
+		helpers.add_camera_seg(output_type='ClassIds')
 		helpers.global_disk_setup()
 		
 		helpers.add_disk_output(mycams)
-		helpers.spawn_drone_objs(drones_limit=[0,0], buildings_innerradius=300, trees_innerradius=60, trees_radius=100, buildings_limit=[50,80])
+		helpers.spawn_drone_objs(drones_limit=[0,0],trees_innerradius=60, trees_radius=100)
 		
 		# single drone
 		'''
@@ -44,34 +47,25 @@ def run():
 		'''
 		
 		# multiple individually segmented drones stacked
-		# each of itemsClassName are unique, they will be added to the system with
-		# auto increment classIds that you will see on the json output
-		helpers.add_camera_seg_filter(['drone/drone0','drone/drone1', 'drone/drone2'])
+		helpers.add_camera_seg_filter(['drone0','drone1', 'drone2'])
 		common.send_data([
-
 			# #'CREATE drone/drone0/drone0 "{}"'.format(random.choice(helpers.drones_lst)),
-			'CREATE drone/drone0/drone0 "{}"'.format(helpers.drones_lst[6]), # Drones/DJI Phantom 4 Pro/DJI_Phantom_4_Pro
-			'drone/drone0 ADD Segmentation.ClassGroup',
-			'drone/drone0 SET active false',
-			'drone/drone0 SET Segmentation.ClassGroup itemsClassName drone0',
-			'drone/drone0/drone0 SET Transform position ({} {} {})'.format(0, 1, 0),
-			'drone/drone0 SET active true',
+			# 'CREATE drone/drone0/drone0 "{}"'.format(helpers.drones_lst[4]), # Drones/DJI S1000/DJI S1000
+			# 'drone/drone0 ADD Segmentation.ClassGroup',
+			# 'drone/drone0 SET Segmentation.ClassGroup itemsClassName drone0',
+			# 'drone/drone0 SET Transform position ({} {} {})'.format(0, 1, 0),
 			
 			# #'CREATE drone/drone1/drone1 "{}"'.format(random.choice(helpers.drones_lst)),
-			'CREATE drone/drone1/drone1 "{}"'.format(helpers.drones_lst[4]), # Drones/DJI S1000/DJI S1000
+			'CREATE drone/drone1/drone1 "{}"'.format(helpers.drones_lst[7]), # Drones/Parrot Disco/Parrot Disco
 			'drone/drone1 ADD Segmentation.ClassGroup',
-			'drone/drone1 SET active false',
 			'drone/drone1 SET Segmentation.ClassGroup itemsClassName drone1',
-			'drone/drone1/drone1 SET Transform position ({} {} {})'.format(0, 1.5, 0),
-			'drone/drone1 SET active true',
-
+			'drone/drone1 SET Transform position ({} {} {})'.format(0, 1.5, 0),
+			
 			# #'CREATE drone/drone2/drone2 "{}"'.format(random.choice(helpers.drones_lst)),
-			'CREATE drone/drone2/drone2 "{}"'.format(helpers.drones_lst[7]), # Drones/Parrot Disco/Parrot Disco
-			'drone/drone2 ADD Segmentation.ClassGroup',
-			'drone/drone2 SET active false',
-			'drone/drone2 SET Segmentation.ClassGroup itemsClassName drone2',
-			'drone/drone2/drone2 SET Transform position ({} {} {})'.format(0, 2, 0),
-			'drone/drone2 SET active true',
+			# 'CREATE drone/drone2/drone2 "{}"'.format(helpers.drones_lst[6]), # Drones/DJI Phantom 4 Pro/DJI_Phantom_4_Pro
+			# 'drone/drone2 ADD Segmentation.ClassGroup',
+			# 'drone/drone2 SET Segmentation.ClassGroup itemsClassName drone2',
+			# 'drone/drone2 SET Transform position ({} {} {})'.format(0, 2, 0)
 		], read=False)
 	
 	# p_x_r = [-17, 13]
@@ -100,15 +94,12 @@ def run():
 		'drone SET Transform position ({} {} {})'.format(p_x, p_y, p_z),
 		'drone SET Transform eulerAngles ({} {} {})'.format(0, 0, 0),
 		# disable blooming effects
-		'cameras/cameraRGB SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.bloom.enabled false',
-		# HACK: change output type to get multiple segmentation classIds working
-		'cameras/segmentation SET Segmentation.Segmentation OutputType InstanceIds'
+		'cameras/cameraRGB SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.bloom.enabled false'
 	], read=False)
 	
-	common.flush_buffer()
 	loop = 0
 	
-	while loop < 100:
+	while loop < 3000:
 		if random.uniform(0,1) > .9:
 			motionblur = 'true'
 		else:
