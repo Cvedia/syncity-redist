@@ -78,7 +78,7 @@ syncity.common.init()
 syncity.common.init_telnet(settings.ip, settings.port)
 
 if settings.record == True:
-	settings.fh = open('{}record_{}.txt'.format(settings.local_path, time.time()), 'w+')
+	settings.fh = open('{}record_{}.txt'.format(settings.local_path, time.time()), 'wb+')
 
 syncity.common.flush_buffer()
 
