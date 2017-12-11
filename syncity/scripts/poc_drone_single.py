@@ -45,17 +45,20 @@ def run():
 		# multiple individually segmented drones stacked
 		helpers.add_camera_seg_filter(['drone0','drone1', 'drone2'])
 		common.send_data([
-			'CREATE drone/drone0/drone0 "{}"'.format(random.choice(helpers.drones_lst)),
+			# #'CREATE drone/drone0/drone0 "{}"'.format(random.choice(helpers.drones_lst)),
+			'CREATE drone/drone0/drone0 "{}"'.format(helpers.drones_lst[6]), # Drones/DJI Phantom 4 Pro/DJI_Phantom_4_Pro
 			'drone/drone0 ADD Segmentation.ClassGroup',
 			'drone/drone0 SET Segmentation.ClassGroup itemsClassName drone0',
 			'drone/drone0 SET Transform position ({} {} {})'.format(0, 1, 0),
 			
-			'CREATE drone/drone1/drone1 "{}"'.format(random.choice(helpers.drones_lst)),
+			# #'CREATE drone/drone1/drone1 "{}"'.format(random.choice(helpers.drones_lst)),
+			'CREATE drone/drone1/drone1 "{}"'.format(helpers.drones_lst[4]), # Drones/DJI S1000/DJI S1000
 			'drone/drone1 ADD Segmentation.ClassGroup',
 			'drone/drone1 SET Segmentation.ClassGroup itemsClassName drone1',
 			'drone/drone1 SET Transform position ({} {} {})'.format(0, 1.5, 0),
 			
-			'CREATE drone/drone2/drone2 "{}"'.format(random.choice(helpers.drones_lst)),
+			# #'CREATE drone/drone2/drone2 "{}"'.format(random.choice(helpers.drones_lst)),
+			'CREATE drone/drone2/drone2 "{}"'.format(helpers.drones_lst[7]), # Drones/Parrot Disco/Parrot Disco
 			'drone/drone2 ADD Segmentation.ClassGroup',
 			'drone/drone2 SET Segmentation.ClassGroup itemsClassName drone2',
 			'drone/drone2 SET Transform position ({} {} {})'.format(0, 2, 0)
@@ -93,7 +96,7 @@ def run():
 	loop = 0
 	
 	while loop < 100:
-		if random.uniform(0,1) > .8:
+		if random.uniform(0,1) > .9:
 			motionblur = 'true'
 		else:
 			motionblur = 'false'
@@ -125,7 +128,7 @@ def run():
 			'spawner/city/buildings SET Transform eulerAngles ({} {} {})'.format(0, random.randint(0, 359), 0),
 			# 'cameras SET Transform eulerAngles ({} {} {})'.format(-20, y, 0),
 			'city SET Transform eulerAngles ({} {} {})'.format(0, random.randint(0, 359), 0),
-			'EnviroSky SET EnviroSky GameTime.Hours {}'.format(random.randint(8, 18)),
+			'EnviroSky SET EnviroSky GameTime.Hours {}'.format(random.randint(8, 12)),
 			'drone SET Transform position ({} {} {})'.format(p_x, p_y, p_z),
 			'drone SET Transform eulerAngles ({} {} {})'.format(random.randint(0, 359), random.randint(0, 359), random.randint(0, 359)),
 			'cameras/cameraRGB SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled {}'.format(motionblur),
