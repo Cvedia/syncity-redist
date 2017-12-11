@@ -10,6 +10,7 @@ import signal
 import textwrap
 import types
 import json
+import hashlib
 
 from . import settings_manager
 from datetime import datetime
@@ -42,7 +43,11 @@ def init():
 	atexit.register(gracefull_shutdown)
 
 def output (s):
-	print ('[{}] {}'.format(datetime.now().strftime("%H:%M:%S.%f"), s))
+	x = '[{}] {}'.format(datetime.now().strftime("%H:%M:%S.%f"), s)
+	print (x)
+	
+	if settings.log:
+		settings.lfh.write(x.encode('ascii') + b"\n")
 
 def send_data(v, read=None, flush=None):
 	if settings.force_sync:
@@ -96,6 +101,13 @@ def send_data(v, read=None, flush=None):
 	
 	return r
 
+def md5(fname):
+	hash_md5 = hashlib.md5()
+	with open(fname, "rb") as f:
+			for chunk in iter(lambda: f.read(4096), b""):
+					hash_md5.update(chunk)
+	return hash_md5.hexdigest()
+
 def shape_data(l):
 	try:
 		# l = str(l).rstrip()
@@ -125,6 +137,18 @@ def gracefull_shutdown():
 		tn.close()
 	
 	output('Completed, wasted {}s ... BYE'.format(time.time() - _start))
+	
+	try:
+		if settings.record:
+			settings.fh.close()
+	except:
+		pass
+	
+	try:
+		if settings.log:
+			settings.lfh.close()
+	except:
+		pass
 	# sys.exit(0)
 
 def flush_buffer():

@@ -68,6 +68,7 @@ def add_camera_rgb(width=2048, height=1536, audio=True, envirosky=None, flycam=F
 		# VertexLit
 		# Forward
 		# UsePlayerSettings
+		#
 		'{} SET Camera renderingPath {}'.format(playerCamera, renderingPath),
 		
 		# 'cameras/cameraRGB SET Camera targetTexture.antiAliasing 8',

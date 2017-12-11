@@ -35,6 +35,7 @@ else:
 parser.add_argument('-q', '--quiet', action='store_true', help='Quiet mode')
 parser.add_argument('--keep', default=False, action='store_true', help='Keep created assets on scene')
 parser.add_argument('--record', action='store_true', help='Record commands sent to API using --local_path as output path')
+parser.add_argument('--log', action='store_true', help='Log all IOs')
 parser.add_argument('--async', action='store_true', help='Send some telnet commands asyncronously -- EXPERIMENTAL')
 parser.add_argument('--skip_disk', action='store_true', help='Disables disk export completly')
 parser.add_argument('--skip_setup', action='store_true', help='Skip script setup and go straight to data extraction')
@@ -54,14 +55,8 @@ args = parser.parse_args()
 settings = syncity.settings_manager.Singleton()
 
 for k in args.__dict__:
+	# print ('Setting: {} value: {}'.format(k, args.__dict__[k]))
 	settings[k] = args.__dict__[k]
-
-if settings.async == True:
-	common.output('Telnet mode set to ASYNCRONOUS')
-	settings.force_sync = False
-else:
-	common.output('Telnet mode set to SYNCRONOUS')
-	settings.force_sync = True
 
 if platform.system() == 'Windows':
 	if settings.output_path[-1:] != '\\':
@@ -74,21 +69,32 @@ else:
 	if settings.local_path[-1:] != '/':
 		settings.local_path = settings.local_path + '/'
 
+stime = time.time()
+if settings.log == True:
+	settings.lfh = open('{}log_{}.txt'.format(settings.local_path, stime), 'wb+')
+
 syncity.common.init()
 syncity.common.init_telnet(settings.ip, settings.port)
 
+if settings.async == True:
+	common.output('Telnet mode set to ASYNCRONOUS')
+	settings.force_sync = False
+else:
+	common.output('Telnet mode set to SYNCRONOUS')
+	settings.force_sync = True
+
 if settings.record == True:
-	settings.fh = open('{}record_{}.txt'.format(settings.local_path, time.time()), 'wb+')
+	settings.fh = open('{}record_{}.txt'.format(settings.local_path, stime), 'wb+')
 
 syncity.common.flush_buffer()
 
 if settings.run:
-	syncity.common.output('Running script {} ...'.format(settings.run))
+	syncity.common.output('Running script {} {}...'.format(settings.run, syncity.common.md5(settings.run)))
 	with open(settings.run) as fp:
 		for line in fp:
 			syncity.common.send_data(line)
 else:
-	syncity.common.output('Using script: {}'.format(settings.script))
+	syncity.common.output('Using script: {} {}'.format(settings.script, syncity.common.md5('syncity/scripts/{}.py'.format(settings.script))))
 	syncity.common.output('Press CTRL+C to abort')
 	
 	# track objects created by script to remove them from scene later on
