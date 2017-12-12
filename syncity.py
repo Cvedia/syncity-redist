@@ -1,6 +1,9 @@
 #!/usr/bin/python
 
+SYNCITY_VERSION = '3.1.5'
+
 import sys
+import os
 import time
 import argparse
 import textwrap
@@ -9,7 +12,7 @@ import syncity
 
 from syncity import common, settings_manager
 
-print ('Syncity toolbox - v3.1.0\nCopyright (c) 2017 CVEDIA B.V.\n')
+print ('Syncity toolbox - v{}\nCopyright (c) 2017 CVEDIA B.V.\n'.format(SYNCITY_VERSION))
 
 parser = argparse.ArgumentParser(
 	formatter_class=argparse.RawDescriptionHelpFormatter,
@@ -18,10 +21,11 @@ This script allows experimentation, recording and playback of scripted events
 using syncity simulator telnet api. We also added some demos that show case
 different specific features of the api.
 '''),
-	epilog=textwrap.dedent(common.scripts_help()))
+	epilog=textwrap.dedent('Scripts available:\n\n{}\n\nTools available:\n\n{}'.format(common.modules_help('scripts'), common.modules_help('tools'))))
 parser.add_argument('-p', '--port', type=int, default=10200, help='Port to connect, defaults to 10200')
 parser.add_argument('-i', '--ip', default='127.0.0.1', help='IP of syncity simulator')
 parser.add_argument('-s', '--script', default="simple", help='When a --run is not set, defines a script loop to play, defaults to simple')
+parser.add_argument('-t', '--tool', default=None, help='Run a tool from repository')
 parser.add_argument('--cooldown', type=int, default=0, help='Cooldown after snapshot')
 parser.add_argument('-r', '--run', type=argparse.FileType('r'), help='Run script')
 
@@ -51,8 +55,15 @@ parser.add_argument('--X_COMP', type=float, default=0, help='Spawner X Compensat
 parser.add_argument('--Y_COMP', type=float, default=1, help='Spawner Y Compensation, defaults to 1')
 parser.add_argument('--Z_COMP', type=float, default=0, help='Spawner Z Compensation, defaults to 0')
 
+tools_parser = parser.add_argument_group('Tool specific options')
+common.modules_args('tools', parser=tools_parser)
+
 args = parser.parse_args()
 settings = syncity.settings_manager.Singleton()
+
+settings._start = time.time()
+settings._version = SYNCITY_VERSION
+settings._root = os.path.dirname(os.path.realpath(__file__))
 
 for k in args.__dict__:
 	# print ('Setting: {} value: {}'.format(k, args.__dict__[k]))
@@ -69,38 +80,48 @@ else:
 	if settings.local_path[-1:] != '/':
 		settings.local_path = settings.local_path + '/'
 
-stime = time.time()
 if settings.log == True:
-	settings.lfh = open('{}log_{}.txt'.format(settings.local_path, stime), 'wb+')
+	settings.lfh = open('{}log_{}.txt'.format(settings.local_path, settings._start), 'wb+')
 
 syncity.common.init()
-syncity.common.init_telnet(settings.ip, settings.port)
 
-if settings.async == True:
-	common.output('Telnet mode set to ASYNCRONOUS')
-	settings.force_sync = False
-else:
-	common.output('Telnet mode set to SYNCRONOUS')
-	settings.force_sync = True
-
-if settings.record == True:
-	settings.fh = open('{}record_{}.txt'.format(settings.local_path, stime), 'wb+')
-
-syncity.common.flush_buffer()
-
-if settings.run:
-	syncity.common.output('Running script {} {}...'.format(settings.run, syncity.common.md5(settings.run)))
-	with open(settings.run) as fp:
-		for line in fp:
-			syncity.common.send_data(line)
-else:
-	syncity.common.output('Using script: {} {}'.format(settings.script, syncity.common.md5('syncity/scripts/{}.py'.format(settings.script))))
+if settings.tool != None:
+	
+	syncity.common.output('Running tool: {} {}'.format(settings.tool, syncity.common.md5('syncity/tools/{}.py'.format(settings.tool))))
 	syncity.common.output('Press CTRL+C to abort')
 	
-	# track objects created by script to remove them from scene later on
-	settings.obj = []
-	settings.seq_save_i = 0
+	import_tool = __import__('syncity.tools.{}'.format(settings.tool), fromlist=['syncity.tools'])
+	import_tool.run()
 	
-	# this should work with both python 2.7 and 3+
-	import_script = __import__('syncity.scripts.{}'.format(settings.script), fromlist=['syncity.scripts'])
-	import_script.run()
+else:
+	
+	syncity.common.init_telnet(settings.ip, settings.port)
+	
+	if settings.async == True:
+		common.output('Telnet mode set to ASYNCRONOUS')
+		settings.force_sync = False
+	else:
+		common.output('Telnet mode set to SYNCRONOUS')
+		settings.force_sync = True
+	
+	if settings.record == True:
+		settings.fh = open('{}record_{}.txt'.format(settings.local_path, settings._start), 'wb+')
+	
+	syncity.common.flush_buffer()
+	
+	if settings.run:
+		syncity.common.output('Running script {} {}...'.format(settings.run, syncity.common.md5(settings.run)))
+		with open(settings.run) as fp:
+			for line in fp:
+				syncity.common.send_data(line)
+	else:
+		syncity.common.output('Using script: {} {}'.format(settings.script, syncity.common.md5('syncity/scripts/{}.py'.format(settings.script))))
+		syncity.common.output('Press CTRL+C to abort')
+		
+		# track objects created by script to remove them from scene later on
+		settings.obj = []
+		settings.seq_save_i = 0
+		
+		# this should work with both python 2.7 and 3+
+		import_script = __import__('syncity.scripts.{}'.format(settings.script), fromlist=['syncity.scripts'])
+		import_script.run()

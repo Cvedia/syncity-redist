@@ -10,13 +10,13 @@ import signal
 import textwrap
 import types
 import json
+import re
 import hashlib
 
 from . import settings_manager
 from datetime import datetime
 from subprocess import PIPE, Popen, STDOUT
 
-_start = False
 _telnet = False
 settings = False
 
@@ -35,9 +35,8 @@ def init_telnet(ip, port):
 	output('Connected')
 
 def init():
-	global settings, _start
+	global settings
 	
-	_start = time.time()
 	settings = settings_manager.Singleton()
 	signal.signal(signal.SIGINT, gracefull_shutdown)
 	atexit.register(gracefull_shutdown)
@@ -104,9 +103,12 @@ def send_data(v, read=None, flush=None):
 def md5(fname):
 	hash_md5 = hashlib.md5()
 	with open(fname, "rb") as f:
-			for chunk in iter(lambda: f.read(4096), b""):
-					hash_md5.update(chunk)
+		for chunk in iter(lambda: f.read(4096), b""):
+			hash_md5.update(chunk)
 	return hash_md5.hexdigest()
+
+def ts_write(fh, x):
+	fh.write('[{}] {}'.format(datetime.now().strftime("%H:%M:%S.%f"), x).encode('ascii') + b"\n")
 
 def shape_data(l):
 	try:
@@ -136,7 +138,7 @@ def gracefull_shutdown():
 		
 		tn.close()
 	
-	output('Completed, wasted {}s ... BYE'.format(time.time() - _start))
+	output('Completed, wasted {}s ... BYE'.format(time.time() - settings._start))
 	
 	try:
 		if settings.record:
@@ -149,26 +151,74 @@ def gracefull_shutdown():
 			settings.lfh.close()
 	except:
 		pass
-	# sys.exit(0)
 
 def flush_buffer():
 	send_data('NOOP', read=True, flush=True)
 
-def scripts_help():
-	scripts = os.listdir('syncity/scripts/')
+def modules_help(module):
+	scripts = os.listdir('syncity/{}/'.format(module))
 	output = []
 	
 	for s in scripts:
-		if s != '__init__.py' and s != 'template.py' and s[-3:] != 'pyc':
-			output.append('{}:'.format(s[:-3]))
+		if s[:2] != '__' and s != 'template.py' and s[-3:] != 'pyc':
+			output.append('\t{}:'.format(s[:-3]))
 			
 			try:
-				import_script = __import__('syncity.scripts.{}'.format(s[:-3]), fromlist=['syncity.scripts'])
-				output.append(import_script.help())
+				import_script = __import__('syncity.{}.{}'.format(module,s[:-3]), fromlist=['syncity.{}'.format(module)])
+				hl = import_script.help()
+				hl = re.sub(r'^', '\t\t', hl).replace('\n', '\n\t')
+				output.append(hl)
 			except:
 				output.append('\tNo description')
 	
-	return '\nTo create a new script simply place it under syncity/scripts, follow the template.py for reference.\n\nScripts available:\n\n{}'.format('\n'.join(output))
+	return '\n'.join(output)
+
+def modules_args(module, parser):
+	scripts = os.listdir('syncity/{}/'.format(module))
+	
+	for s in scripts:
+		if s[:2] != '__' and s != 'template.py' and s[-3:] != 'pyc':
+			try:
+				import_script = __import__('syncity.{}.{}'.format(module,s[:-3]), fromlist=['syncity.{}'.format(module)])
+				import_script.args(parser)
+			except:
+				pass
+
+def local_time_offset(t=None):
+	if t is None:
+		t = time.time()
+	
+	if time.localtime(t).tm_isdst and time.daylight:
+		return -time.altzone
+	else:
+		return -time.timezone
+
+def get_all_files(base, ignore_path=['.git', '__pycache__'], ignore_ext=['.md', 'pyc']):
+	if type(base) != list:
+		base = [ base ]
+	fns = []
+	
+	for path in base:
+		if os.path.isfile(path):
+			if path not in fns:
+				fns.append(path)
+		else:
+			for folder, subdirs, files in os.walk(path):
+				if os.path.basename(folder) in ignore_path:
+					break
+				
+				for fn in files:
+					if fn[-3:] not in ignore_ext:
+						jp = os.path.join(folder, fn)
+						if jp not in fns:
+							fns.append(os.path.join(folder, fn))
+				
+				for subdir in subdirs:
+					jp = os.path.join(folder, subdir)
+					if jp not in base:
+						base.append(jp)
+	
+	return fns
 
 class readable_dir(argparse.Action):
 	def __call__(self, parser, namespace, values, option_string=None):

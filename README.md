@@ -13,6 +13,7 @@ controller script.
 - `syncity.py`: Main controller / spawner
 - `syncity/`
   - `scripts/`: Scripts repository, check `template.py` as main reference
+  - `tools/`: Tools repository, check `template.py` as main reference
   - `helpers.py`: Generic helpers for spawning objects and cameras
   - `common.py`: Telnet controller, output functions and other
   - `settings_manager.py`: Singleton for cross-module shared variables
@@ -86,3 +87,23 @@ to experiment with different settings without bothering creating a full scenario
 
 Instead of running a script, this will just run the commands on file.txt
 
+# Reporting issues
+
+We developed a special tool to generate meaningfull reports by collecting all
+existing logs, initialization files, hashes, etc. If you happen to have a issue
+with the simulator running the report tool will probably generate all information
+required for us to debug the problem.
+
+### Running report tool
+
+`python syncity.py --tool report --binary <path to binary> --assets <path to assets>`
+
+#### Example:
+
+`python syncity.py --tool report --binary E:\syncity\windows-171211 --assets E:\syncity\assets-windows-171211`
+
+#### Notes:
+
+- If you happen to have a large collection of assets you can run this without the `assets` parameter.
+- This script will save a `report_XXX.txt` on your `local_path` (defaults to tmp) that you should submit to our support
+- No sensitive data will be collected using this tool, keep in mind that all syncity related logs will be sent
