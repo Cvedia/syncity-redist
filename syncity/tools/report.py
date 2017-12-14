@@ -15,7 +15,6 @@ def help():
 
 def args(parser):
 	parser.add_argument('--binary', action=common.readable_dir, help='Defines binary folder name')
-	parser.add_argument('--assets', action=common.readable_dir, help='Defines assets folder name')
 
 def run():
 	if not settings.binary:

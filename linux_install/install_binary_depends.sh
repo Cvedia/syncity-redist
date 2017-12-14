@@ -11,7 +11,7 @@ Press any key to continue or CTRL+C to abort..."
 
 echo "Installing dependencies..."
 
-apt-get update && apt-get install build-essential libxmu-dev libxi-dev libgl-dev libosmesa-dev libopencv-dev wget -y
+apt-get update && apt-get install build-essential libxmu-dev libxi-dev libgl-dev libosmesa-dev libopencv-dev wget sqlite3 -y
 RT=$?
 if [ "$RT" -ne "0" ] ; then
 	echo "Failed, aborting!"

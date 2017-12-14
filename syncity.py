@@ -37,6 +37,7 @@ else:
 	parser.add_argument('-l', '--local_path', default='/tmp/', action=syncity.common.readable_dir, help='Defines local output path for recordings, json exports, etc; This path is relative to the machine running this script, defaults to /tmp/', dest='local_path')
 
 parser.add_argument('-q', '--quiet', action='store_true', help='Quiet mode')
+parser.add_argument('--assets', help='Defines assets folder name')
 parser.add_argument('--keep', default=False, action='store_true', help='Keep created assets on scene')
 parser.add_argument('--record', action='store_true', help='Record commands sent to API using --local_path as output path')
 parser.add_argument('--log', action='store_true', help='Log all IOs')
@@ -69,6 +70,7 @@ for k in args.__dict__:
 	# print ('Setting: {} value: {}'.format(k, args.__dict__[k]))
 	settings[k] = args.__dict__[k]
 
+'''
 if platform.system() == 'Windows':
 	if settings.output_path[-1:] != '\\':
 		settings.output_path = settings.output_path + '\\'
@@ -79,6 +81,7 @@ else:
 		settings.output_path = settings.output_path + '/'
 	if settings.local_path[-1:] != '/':
 		settings.local_path = settings.local_path + '/'
+'''
 
 if settings.log == True:
 	settings.lfh = open('{}log_{}.txt'.format(settings.local_path, settings._start), 'wb+')

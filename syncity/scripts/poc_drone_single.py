@@ -25,6 +25,7 @@ def run():
 	
 	if settings.skip_setup == False:
 		helpers.global_camera_setup()
+		# helpers.add_camera_rgb(width=4096, height=3072, pp='EnviroFX', textureFormat=14)
 		helpers.add_camera_rgb(width=4096, height=3072, pp='EnviroFX')
 		# helpers.add_camera_seg(output_type='InstanceIds')
 		helpers.add_camera_seg()

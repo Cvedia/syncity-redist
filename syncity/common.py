@@ -28,6 +28,11 @@ def init_telnet(ip, port):
 	try:
 		tn = telnetlib.Telnet(ip, port)
 		_telnet = True
+		
+		send_data('NOOP', read=True)
+		
+		if settings.assets:
+			send_data('API SET API.Manager assetsFolder "{}"'.format(settings.assets))
 	except Exception as e:
 		output('Error connecting: {}'.format(e))
 		sys.exit(1)
