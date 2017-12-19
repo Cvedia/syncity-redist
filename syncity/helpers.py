@@ -25,7 +25,7 @@ drones_lite_lst = [ 'Drones/buzz/buzz', 'Drones/splinter/splinter', 'Drones/red/
 
 settings = settings_manager.Singleton()
 
-def global_camera_setup(label_root='cameras', canvas_width=1024, canvas_height=768, canvas=None):
+def global_camera_setup(label_root='cameras', canvas_width=1024, canvas_height=768, canvas=None, orbit=True):
 	if canvas == None:
 		if settings.disable_canvas:
 			canvas = False
@@ -42,11 +42,16 @@ def global_camera_setup(label_root='cameras', canvas_width=1024, canvas_height=7
 		'CREATE {}'.format(label_root),
 		'{} SET Transform position ({} {} {})'.format(label_root, settings.X_COMP -6, settings.Y_COMP, settings.Z_COMP -50),
 		'{} SET Transform eulerAngles ({} {} {})'.format(label_root, 0, 0, 0),
-		'{} ADD Orbit'.format(label_root),
+	], read=False)
+	
+	if orbit:
+		common.send_data(['{} ADD Orbit'.format(label_root)], read=False)
+	
+	common.send_data([
 		# resize camera display on app, this is relative to the size of the window
 		'Canvas/Cameras/Viewport/Content SET UI.GridLayoutGroup cellSize ({} {})'.format(canvas_width, canvas_height),
 		'Canvas SET active {}'.format(canvas)
-	])
+	], read=False)
 	
 	settings.obj.append(label_root)
 

@@ -98,6 +98,9 @@ if settings.tool != None:
 	
 else:
 	
+	if settings.record == True:
+		settings.fh = open('{}record_{}.txt'.format(settings.local_path, settings._start), 'wb+')
+	
 	syncity.common.init_telnet(settings.ip, settings.port)
 	
 	if settings.async == True:
@@ -106,9 +109,6 @@ else:
 	else:
 		common.output('Telnet mode set to SYNCRONOUS')
 		settings.force_sync = True
-	
-	if settings.record == True:
-		settings.fh = open('{}record_{}.txt'.format(settings.local_path, settings._start), 'wb+')
 	
 	syncity.common.flush_buffer()
 	
