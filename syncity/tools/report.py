@@ -1,6 +1,7 @@
 import sys
 import os
 import time
+import sqlite3
 
 from .. import common, helpers, settings_manager
 from datetime import datetime
@@ -56,7 +57,9 @@ def run():
 	i = 0
 	size = 0
 	init_cl = False
+	main_db = False
 	logs = []
+	existing_assets = []
 	log_ext = [ 'txt', 'log' ]
 	
 	for fn in fns:
@@ -71,7 +74,9 @@ def run():
 		md5 = common.md5(fn)
 		common.ts_write(fh, '{} {} {} {}'.format(md5, int(st.st_mtime), st.st_size, fn))
 		
-		if os.path.basename(fn) == 'init.cl':
+		if os.path.basename(fn) == 'main.db':
+			main_db = fn
+		elif os.path.basename(fn) == 'init.cl':
 			init_cl = fn
 		elif fn[-3:] in log_ext:
 			logs.append(fn)
@@ -93,6 +98,9 @@ def run():
 			st = os.stat(fn)
 			size = size + st.st_size
 			
+			if main_db == False and os.path.basename(fn) == 'main.db':
+				main_db = fn
+			
 			if st.st_size > SIZE_THRESH:
 				common.output('Scanning: {}'.format(fn))
 			
@@ -109,10 +117,47 @@ def run():
 			
 			f = open(manifest)
 			for line in f.readlines():
+				if main_db != False and '- Assets/' in line and '.prefab' in line:
+					existing_assets.append(line.replace('.prefab', '').replace('- Assets/', '').replace('\n', '').replace('\r', '').lower())
 				fh.write(line.encode())
 			f.close()
 			
 			common.ts_write(fh, '-- manifest dump @ {} ends --'.format(manifest))
+	
+	if main_db != False:
+		common.ts_write(fh, '-- Database check direction: assets -> database --')
+		common.output('Matching assets with database...')
+		
+		conn = sqlite3.connect(main_db)
+		i = 0
+		m = 0
+		
+		for asset in existing_assets:
+			cur = conn.cursor()
+			cur.execute('SELECT * FROM objects where prefabPath = ?', (asset,))
+			
+			if len(cur.fetchall()) == 0:
+				common.ts_write(fh, 'Asset `{}` has no object entry on database'.format(asset))
+				m = m + 1
+			
+			i = i + 1
+		
+		common.ts_write(fh, '-- Completed database check direction: assets -> database, {} assets, {} missing. --'.format(i, m))
+		
+		i = 0
+		m = 0
+		common.ts_write(fh, '-- Database check direction: database -> assets --')
+		cur = conn.cursor()
+		cur.execute('SELECT prefabPath FROM objects')
+		for row in cur.fetchall():
+			if row[0] not in existing_assets:
+				common.ts_write(fh, 'Database entry `{}` contains no asset.'.format(row[0]))
+				m = m + 1
+			
+			i = i + 1
+		
+		common.ts_write(fh, '-- Completed database check direction: database -> assets, {} assets, {} missing. --'.format(i, m))
+		conn.close()
 	
 	common.output('Collecting logs and config...')
 	

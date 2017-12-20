@@ -113,7 +113,7 @@ def md5(fname):
 	return hash_md5.hexdigest()
 
 def ts_write(fh, x):
-	fh.write('[{}] {}'.format(datetime.now().strftime("%H:%M:%S.%f"), x).encode('ascii') + b"\n")
+	fh.write('[{}] {}'.format(datetime.now().strftime("%H:%M:%S.%f"), x).encode('utf-8') + b"\n")
 
 def shape_data(l):
 	try:
