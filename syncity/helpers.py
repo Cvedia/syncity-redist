@@ -65,7 +65,9 @@ def add_camera_rgb(
 	
 	thermal=False, thermal_ambientTemperature = 10, thermal_minimumTemperature = 10,
 	thermal_maximumTemperature = 30, thermal_maxDistanceForProbeUpdate = 500,
-	thermal_maxFramesPerFaceForProbeUpdate = 60
+	thermal_maxFramesPerFaceForProbeUpdate = 60,
+	
+	renderCamera=True
 ):
 	if envirosky == None:
 		if settings.disable_envirosky:
@@ -76,17 +78,21 @@ def add_camera_rgb(
 	common.send_data([
 		'CREATE {}'.format(label),
 		# 'cameras/cameraRGB SET active false',
-		'{} ADD Camera'.format(label),
-		'{} ADD Sensors.RenderCamera'.format(label),
-		
-		# '{} SET Sensors.RenderCamera sRGB true'.format(label),
-		'{} SET Sensors.RenderCamera format {}'.format(label, unity_vars.textureFormat[textureFormat]),
-		'{} SET Sensors.RenderCamera resolution ({} {})'.format(label, width, height),
-		'{} SET Camera renderingPath {}'.format(label, unity_vars.renderingPath[renderingPath]),
-		
-		# 'cameras/cameraRGB SET Camera targetTexture.antiAliasing 8',
-		# 'cameras/cameraRGB SET active true',
+		'{} ADD Camera'.format(label)
 	], read=False)
+	
+	if renderCamera:
+		common.send_data([
+			'{} ADD Sensors.RenderCamera'.format(label),
+			
+			# '{} SET Sensors.RenderCamera sRGB true'.format(label),
+			'{} SET Sensors.RenderCamera format {}'.format(label, unity_vars.textureFormat[textureFormat]),
+			'{} SET Sensors.RenderCamera resolution ({} {})'.format(label, width, height),
+			'{} SET Camera renderingPath {}'.format(label, unity_vars.renderingPath[renderingPath]),
+			
+			# 'cameras/cameraRGB SET Camera targetTexture.antiAliasing 8',
+			# 'cameras/cameraRGB SET active true',
+		], read=False)
 	
 	if audio:
 		common.send_data(['{} ADD AudioListener'.format(label)], read=False)
@@ -132,12 +138,12 @@ def camera_pp_thermal(label='cameras/cameraRGB'):
 		'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.ambientOcclusion.enabled false'.format(label),
 		
 		'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.bloom.enabled true'.format(label),
-		'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.bloom.settings.bloom.intensity {}'.format(label, random.randint(0, 100)),
-		'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.bloom.settings.bloom.threshold {}'.format(label, random.uniform(0, 2)),
-		'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.bloom.settings.bloom.softKnee {}'.format(label, random.uniform(0, 1)),
-		'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.bloom.settings.bloom.radius {}'.format(label, random.uniform(1, 7)),
+		'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.bloom.settings.bloom.intensity {}'.format(label, 2),
+		'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.bloom.settings.bloom.threshold {}'.format(label, 1.1),
+		'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.bloom.settings.bloom.softKnee {}'.format(label, .6),
+		'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.bloom.settings.bloom.radius {}'.format(label, 4.36),
 		'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.bloom.settings.bloom.antiFlicker {}'.format(label, 'true'),
-		'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.bloom.settings.lensDirt.intensity {}'.format(label, random.randint(0, 10)),
+		'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.bloom.settings.lensDirt.intensity {}'.format(label, 3),
 		
 		'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.enabled false'.format(label),
 		
@@ -898,7 +904,7 @@ def spawn_misc_objs(destroy=False, prefix='spawner'):
 	# spawn_radius_generic(['city/ground'], suffix='_0', limit=random.randint(3, 10), radius=75, innerradius=0, scale=[2,2,2], position=[0,0,0], collision_check=False, prefix=prefix)
 	spawn_radius_generic(['city/ground'], tags=['ground'], suffix='_0', limit=3, radius=75, innerradius=0, scale=[1,1,1], position=[0,0,0], collision_check=False, prefix=prefix)
 
-def spawn_drone_objs(destroy=False, ground_limit=204, dist_h=120, dist_v=120, dist_lim=1000, p_x=-20, p_z=-1000, p_y=0, birds_radius=90, birds_innerradius=0, cars_radius=50, cars_innerradius=5, trees_limit=[50,200], buildings_radius=335, buildings_innerradius=100, trees_radius=80, trees_innerradius=20, buildings_limit=[50,150], birds_limit=[25,100], cars_limit=[5,25], drones_limit=[80,200], prefix='spawner'):
+def spawn_drone_objs(destroy=False, ground_position=[0,0,0], ground_limit=204, dist_h=120, dist_v=120, dist_lim=1000, p_x=-20, p_z=-1000, p_y=0, birds_radius=90, birds_innerradius=0, cars_radius=50, cars_innerradius=5, trees_limit=[50,200], buildings_radius=335, buildings_innerradius=100, trees_radius=80, trees_innerradius=20, buildings_limit=[50,150], birds_limit=[25,100], cars_limit=[5,25], drones_limit=[80,200], prefix='spawner'):
 	if destroy == True:
 		common.send_data([
 			'DELETE {}/city/nature/trees'.format(prefix),
@@ -910,6 +916,11 @@ def spawn_drone_objs(destroy=False, ground_limit=204, dist_h=120, dist_v=120, di
 	else:
 		k = 0
 		idx = 0
+		
+		common.send_data([
+			'CREATE city',
+			'city SET Transform position ({} {} {})'.format(ground_position[0], ground_position[1], ground_position[2])
+		], read=False)
 		
 		while k < ground_limit:
 			common.send_data([

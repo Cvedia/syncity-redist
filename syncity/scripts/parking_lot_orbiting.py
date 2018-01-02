@@ -25,8 +25,8 @@ def run():
 			helpers.add_light()
 		helpers.global_disk_setup()
 		helpers.add_disk_output(mycams)
-	
-		helpers.spawn_parking_lot(cars_limit)
+		
+		helpers.spawn_parking_lot(settings.cars_limit)
 	
 	# force a render to visualize on the ui
 	helpers.do_render(mycams)

@@ -103,6 +103,13 @@ def run():
 		'EnviroSky SET EnviroSky cloudsSettings.globalCloudCoverage {}'.format(-0.04),
 		'drone SET Transform position ({} {} {})'.format(p_x, p_y, p_z),
 		'drone SET Transform eulerAngles ({} {} {})'.format(0, 0, 0),
+		
+		'spawner/cars SET active False',
+		'spawner/cars ADD RandomProps.SpawnerRandomizers.RandomColor',
+		'spawner/cars PUSH RandomProps.SpawnerRandomizers.RandomColor availableColors Red',
+		'spawner/cars PUSH RandomProps.SpawnerRandomizers.RandomColor availableColors Yellow',
+		'spawner/cars SET active True',
+		
 		# disable blooming effects
 		'cameras/cameraRGB SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.bloom.enabled false',
 		# HACK: change output type to get multiple segmentation classIds working
