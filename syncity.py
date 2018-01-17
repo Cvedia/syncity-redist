@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-SYNCITY_VERSION = '3.1.6'
+SYNCITY_VERSION = '3.1.7'
 
 import sys
 import os

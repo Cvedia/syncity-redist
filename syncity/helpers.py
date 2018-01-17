@@ -63,9 +63,9 @@ def add_camera_rgb(
 	envirosky_cloudTransitionSpeed=100, envirosky_effectTransitionSpeed=100,
 	envirosky_fogTransitionSpeed=100, envirosky_progressTime='None',
 	
-	thermal=False, thermal_ambientTemperature = 10, thermal_minimumTemperature = 10,
-	thermal_maximumTemperature = 30, thermal_maxDistanceForProbeUpdate = 500,
-	thermal_maxFramesPerFaceForProbeUpdate = 60,
+	thermal=False, thermal_ambientTemperature=16, thermal_minimumTemperature=10,
+	thermal_maximumTemperature=30, thermal_maxDistanceForProbeUpdate=100,
+	thermal_useAGC='true',
 	
 	renderCamera=True
 ):
@@ -114,15 +114,17 @@ def add_camera_rgb(
 			
 			'{} ADD EnviroCamera'.format(label)
 		], read=False)
+	
 	if thermal:
 		common.send_data([
 			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile Thermal'.format(label),
-			'{} ADD Thermal.Thermal'.format(label),
-			'{} SET Thermal.Thermal AmbientTemperature {}'.format(label, thermal_ambientTemperature),
-			'{} SET Thermal.Thermal MinimumTemperature {}'.format(label, thermal_minimumTemperature),
-			'{} SET Thermal.Thermal MaximumTemperature {}'.format(label, thermal_maximumTemperature),
-			'{} SET Thermal.Thermal MaxDistanceForProbeUpdate {}'.format(label, thermal_maxDistanceForProbeUpdate),
-			'{} SET Thermal.Thermal MaxFramesPerFaceForProbeUpdate {}'.format(label, thermal_maxFramesPerFaceForProbeUpdate)
+			'{} ADD Thermal.ThermalCamera'.format(label),
+			
+			'{} SET Thermal.ThermalCamera ambientTemperature {}'.format(label, thermal_ambientTemperature),
+			'{} SET Thermal.ThermalCamera temperatureRange ({} {})'.format(label, thermal_minimumTemperature, thermal_maximumTemperature),
+			
+			'{} SET Thermal.ThermalCamera maxDistanceForProbeUpdate {}'.format(label, thermal_maxDistanceForProbeUpdate),
+			'{} SET Thermal.ThermalCamera useAGC {}'.format(label, thermal_useAGC)
 		], read=False)
 	
 	common.flush_buffer()
@@ -801,10 +803,11 @@ def spawn_radius_generic(types=[], tags=None, scale=[1,1,1], innerradius=0, radi
 			'{}/{} SET RandomProps.Torus radius {}'.format(prefix, n, radius),
 			'{}/{} SET RandomProps.Torus innerRadius {}'.format(prefix, n, innerradius),
 			
+			'{}/{} SET active true'.format(prefix, n),
+			
 			'{}/{} SET Transform position ({} {} {})'.format(prefix, n, position[0], position[1], position[2]),
 			'{}/{} SET Transform eulerAngles ({} {} {})'.format(prefix, n, rotation[0], rotation[1], rotation[2]),
 			
-			'{}/{} SET active true'.format(prefix, n),
 			'{}/{} SET Transform localScale ({} {} {})'.format(prefix, n, scale[0], scale[1], scale[2])
 		], read=False)
 		
