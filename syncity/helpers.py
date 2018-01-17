@@ -25,7 +25,7 @@ drones_lite_lst = [ 'Drones/buzz/buzz', 'Drones/splinter/splinter', 'Drones/red/
 
 settings = settings_manager.Singleton()
 
-def global_camera_setup(label_root='cameras', canvas_width=1024, canvas_height=768, canvas=None, orbit=True):
+def global_camera_setup(label_root='cameras', canvas_width=1024, canvas_height=768, canvas=None, orbit=True, orbitOffset=None):
 	if canvas == None:
 		if settings.disable_canvas:
 			canvas = False
@@ -40,12 +40,16 @@ def global_camera_setup(label_root='cameras', canvas_width=1024, canvas_height=7
 	
 	common.send_data([
 		'CREATE {}'.format(label_root),
+		'{} SET active false'.format(label_root),
 		'{} SET Transform position ({} {} {})'.format(label_root, settings.X_COMP -6, settings.Y_COMP, settings.Z_COMP -50),
 		'{} SET Transform eulerAngles ({} {} {})'.format(label_root, 0, 0, 0),
 	], read=False)
 	
 	if orbit:
 		common.send_data(['{} ADD Orbit'.format(label_root)], read=False)
+		
+		if orbitOffset != None:
+			common.send_data(['{} SET Orbit targetOffset ({} {} {})'.format(label_root, orbitOffset[0], orbitOffset[1], orbitOffset[2])], read=False)
 	
 	common.send_data([
 		# resize camera display on app, this is relative to the size of the window
@@ -55,10 +59,40 @@ def global_camera_setup(label_root='cameras', canvas_width=1024, canvas_height=7
 	
 	settings.obj.append(label_root)
 
+def add_camera_depth(
+	width=2048, height=1536,
+	label='cameras/cameraDepth',
+	fov=60,
+	clipping_near=0.3,
+	clipping_far=1000
+):
+	common.send_data([
+		'CREATE {}'.format(label),
+		'{} SET active false'.format(label),
+		'{} ADD Camera'.format(label),
+		'{} SET Camera near {}'.format(label, clipping_near),
+		'{} SET Camera far {}'.format(label, clipping_far),
+		'{} SET Camera fov {}'.format(label, fov),
+		'{} ADD Sensors.RenderCamera'.format(label),
+		'{} SET Sensors.RenderCamera format RFloat'.format(label),
+		'{} SET Sensors.RenderCamera resolution ({} {})'.format(label, width, height),
+		'{} SET Camera renderingPath DeferredShading'.format(label),
+		# '{} ADD AudioListener'.format(label),
+		'{} ADD Sensors.Lidar_Internal.RenderDepthBuffer'.format(label),
+		'{} SET active true'.format(label)
+	], read=False)
+	
+	common.flush_buffer()
+	settings.obj.append(label)
+
 def add_camera_rgb(
 	width=2048, height=1536, audio=True, envirosky=None, flycam=False,
 	label_root='cameras', label='cameras/cameraRGB', pp=None,
 	renderingPath=4, textureFormat=4,
+	
+	fov=60,
+	clipping_near=0.3,
+	clipping_far=1000,
 	
 	envirosky_cloudTransitionSpeed=100, envirosky_effectTransitionSpeed=100,
 	envirosky_fogTransitionSpeed=100, envirosky_progressTime='None',
@@ -66,6 +100,17 @@ def add_camera_rgb(
 	thermal=False, thermal_ambientTemperature=16, thermal_minimumTemperature=10,
 	thermal_maximumTemperature=30, thermal_maxDistanceForProbeUpdate=100,
 	thermal_useAGC='true',
+	
+	thermal_patchyness=True, 
+	thermal_patchyness_fixDistance=10.6, thermal_patchyness_distance=0.06,
+	thermal_patchyness_size=0.481, thermal_patchyness_intensity=1.47,
+	
+	thermal_trees=False,
+	thermal_trees_base=10, thermal_trees_bandwidth=3, thermal_trees_median=0.5,
+	thermal_trees_leafs_variance=4,
+	
+	thermal_blur=True,
+	thermal_blur_noise=[2, 1],
 	
 	renderCamera=True
 ):
@@ -77,8 +122,11 @@ def add_camera_rgb(
 	
 	common.send_data([
 		'CREATE {}'.format(label),
-		# 'cameras/cameraRGB SET active false',
-		'{} ADD Camera'.format(label)
+		'{} SET active false'.format(label),
+		'{} ADD Camera'.format(label),
+		'{} SET Camera near {}'.format(label, clipping_near),
+		'{} SET Camera far {}'.format(label, clipping_far),
+		'{} SET Camera fov {}'.format(label, fov)
 	], read=False)
 	
 	if renderCamera:
@@ -112,7 +160,8 @@ def add_camera_rgb(
 			'EnviroSky SET EnviroSky weatherSettings.effectTransitionSpeed {}'.format(envirosky_effectTransitionSpeed),
 			'EnviroSky SET EnviroSky weatherSettings.fogTransitionSpeed {}'.format(envirosky_fogTransitionSpeed),
 			
-			'{} ADD EnviroCamera'.format(label)
+			'{} ADD EnviroCamera'.format(label),
+			'EnviroSky SET active true'.format(label)
 		], read=False)
 	
 	if thermal:
@@ -126,6 +175,36 @@ def add_camera_rgb(
 			'{} SET Thermal.ThermalCamera maxDistanceForProbeUpdate {}'.format(label, thermal_maxDistanceForProbeUpdate),
 			'{} SET Thermal.ThermalCamera useAGC {}'.format(label, thermal_useAGC)
 		], read=False)
+		
+		if thermal_patchyness:
+			common.send_data([
+				'{} ADD CameraFilterPack_Pixelisation_DeepOilPaintHQ'.format(label),
+				'{} SET CameraFilterPack_Pixelisation_DeepOilPaintHQ _FixDistance {}'.format(label, thermal_patchyness_fixDistance),
+				'{} SET CameraFilterPack_Pixelisation_DeepOilPaintHQ _Distance {}'.format(label, thermal_patchyness_distance),
+				'{} SET CameraFilterPack_Pixelisation_DeepOilPaintHQ _Size {}'.format(label, thermal_patchyness_size),
+				'{} SET CameraFilterPack_Pixelisation_DeepOilPaintHQ Intensity {}'.format(label, thermal_patchyness_intensity)
+			], read=False)
+		
+		if thermal_blur:
+			common.send_data([
+				'{} ADD CameraFilterPack_Blur_Noise'.format(label),
+				'{} SET CameraFilterPack_Blur_Noise Distance ({} {})'.format(label, thermal_blur_noise[0], thermal_blur_noise[1])
+			], read=False)
+		
+		if thermal_trees:
+			common.send_data([
+				'{} ADD Thermal.GlobalTreeSettings'.format(label),
+				'{} SET Thermal.GlobalTreeSettings enabled false'.format(label),
+				'{} SET Thermal.GlobalTreeSettings temperature {}'.format(label, thermal_trees_base),
+				'{} SET Thermal.GlobalTreeSettings temperatureBandwidth {}'.format(label, thermal_trees_bandwidth),
+				'{} SET Thermal.GlobalTreeSettings temperatureMedian {}'.format(label, thermal_trees_median),
+				'{} SET Thermal.GlobalTreeSettings treeLeafsHeatVariance {}'.format(label, thermal_trees_leafs_variance)
+			], read=False);
+	
+	common.send_data([
+		'{} SET active true'.format(label_root),
+		'{} SET active true'.format(label)
+	], read=False)
 	
 	common.flush_buffer()
 	
@@ -680,7 +759,8 @@ def add_light(position=[34,-22.53,0], intensity=1.7, label='light'):
 		'{} SET Transform eulerAngles ({} {} {})'.format(label, position[0], position[1], position[2]),
 		'{} SET Light intensity {}'.format(label, intensity),
 		# '{} SET Light color #'.format(label),
-		'{} SET Light shadows Soft'.format(label)
+		'{} SET Light shadows Soft'.format(label),
+		'{} SET active true'.format(label)
 	], read=False)
 	
 	common.flush_buffer()
@@ -749,7 +829,8 @@ def add_disk_output(lst, label='disk1'):
 		common.send_data([
 			'CREATE {}/{}'.format(label, l.capitalize()),
 			'{}/{} ADD Sensors.RenderCameraLink'.format(label, l.capitalize()),
-			'{}/{} SET Sensors.RenderCameraLink target {}'.format(label, l.capitalize(), l)
+			'{}/{} SET Sensors.RenderCameraLink target {}'.format(label, l.capitalize(), l),
+			'{}/{} SET active true'.format(label, l.capitalize())
 		], read=False)
 	
 	common.send_data('{} SET active true'.format(label))
@@ -869,7 +950,8 @@ def spawn_parking_lot(limit, fixed=False, dist_h=8, dist_v=3, dist_lim=30, p_x=-
 			'CREATE {}/car_{} Cars/{}'.format(prefix, k, carID),
 			'{}/car_{} ADD Segmentation.ClassGroup'.format(prefix, k),
 			'{}/car_{} SET Segmentation.ClassGroup itemsClassName {}'.format(prefix, k, segment),
-			'{}/car_{} SET Transform position ({} {} {})'.format(prefix, k, p_x + settings.X_COMP, p_y, p_z + settings.Z_COMP)
+			'{}/car_{} SET Transform position ({} {} {})'.format(prefix, k, p_x + settings.X_COMP, p_y, p_z + settings.Z_COMP),
+			'{}/car_{} SET active true'.format(prefix, k)
 		], read=False)
 		
 		settings.obj.append('{}/car_{}'.format(prefix, k))
@@ -922,14 +1004,16 @@ def spawn_drone_objs(destroy=False, ground_position=[0,0,0], ground_limit=204, d
 		
 		common.send_data([
 			'CREATE city',
-			'city SET Transform position ({} {} {})'.format(ground_position[0], ground_position[1], ground_position[2])
+			'city SET Transform position ({} {} {})'.format(ground_position[0], ground_position[1], ground_position[2]),
+			'city SET active true'
 		], read=False)
 		
 		while k < ground_limit:
 			common.send_data([
 				'CREATE city/ground_{} city/ground/{}'.format(k, random.choice(ground_lst)),
 				'city/ground_{} SET Transform position ({} {} {})'.format(k, p_x + settings.X_COMP, p_y, p_z + settings.Z_COMP),
-				'city/ground_{} SET Transform localScale ({} {} {})'.format(k, 12, 12, 12)
+				'city/ground_{} SET Transform localScale ({} {} {})'.format(k, 12, 12, 12),
+				'city/ground_{} SET active true'.format(k)
 			], read=False)
 			settings.obj.append('city/ground_{}'.format(k))
 			k += 1
@@ -970,7 +1054,8 @@ def spawn_drone_objs_alt(destroy=False, ground_limit=204, dist_h=120, dist_v=120
 			common.send_data([
 				'CREATE city/ground_{} city/ground/{}'.format(k, random.choice(ground_lst)),
 				'city/ground_{} SET Transform position ({} {} {})'.format(k, p_x + settings.X_COMP, p_y, p_z + settings.Z_COMP),
-				'city/ground_{} SET Transform localScale ({} {} {})'.format(k, 12, 12, 12)
+				'city/ground_{} SET Transform localScale ({} {} {})'.format(k, 12, 12, 12),
+				'city/ground_{} SET active true'.format(k)
 			], read=False)
 			settings.obj.append('city/ground_{}'.format(k))
 			k += 1

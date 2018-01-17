@@ -58,6 +58,7 @@ def run():
 			'drone/drone0 SET Segmentation.ClassGroup itemsClassName drone0',
 			'drone/drone0/drone0 SET Transform position ({} {} {})'.format(0, 1, 0),
 			'drone/drone0 SET active true',
+			'drone/drone0/drone0 SET active true',
 			
 			# 'CREATE drone/drone1/drone1 "{}"'.format(random.choice(helpers.drones_lst)),
 			'CREATE drone/drone1/drone1 "{}"'.format(helpers.drones_lst[4]), # Drones/DJI S1000/DJI S1000
@@ -67,6 +68,7 @@ def run():
 			'drone/drone1 SET Segmentation.ClassGroup itemsClassName drone1',
 			'drone/drone1/drone1 SET Transform position ({} {} {})'.format(0, 1.5, 0),
 			'drone/drone1 SET active true',
+			'drone/drone1/drone1 SET active true',
 
 			# 'CREATE drone/drone2/drone2 "{}"'.format(random.choice(helpers.drones_lst)),
 			'CREATE drone/drone2/drone2 "{}"'.format(helpers.drones_lst[7]), # Drones/Parrot Disco/Parrot Disco
@@ -76,6 +78,7 @@ def run():
 			'drone/drone2 SET Segmentation.ClassGroup itemsClassName drone2',
 			'drone/drone2/drone2 SET Transform position ({} {} {})'.format(0, 2, 0),
 			'drone/drone2 SET active true',
+			'drone/drone2/drone2 SET active true',
 		], read=False)
 	
 	# p_x_r = [-17, 13]
