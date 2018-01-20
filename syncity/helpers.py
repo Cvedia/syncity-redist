@@ -25,7 +25,7 @@ drones_lite_lst = [ 'Drones/buzz/buzz', 'Drones/splinter/splinter', 'Drones/red/
 
 settings = settings_manager.Singleton()
 
-def global_camera_setup(label_root='cameras', canvas_width=1024, canvas_height=768, canvas=None, orbit=True, orbitOffset=None):
+def global_camera_setup(label_root='cameras', canvas_width=1024, canvas_height=768, canvas=None, orbit=True, orbitOffset=None, orbitGround=None, orbitSnap=None):
 	if canvas == None:
 		if settings.disable_canvas:
 			canvas = False
@@ -48,8 +48,12 @@ def global_camera_setup(label_root='cameras', canvas_width=1024, canvas_height=7
 	if orbit:
 		common.send_data(['{} ADD Orbit'.format(label_root)], read=False)
 		
+		if orbitGround != None:
+			common.send_data('{} SET Orbit groundObj "{}"'.format(label_root, orbitGround), read=False)
 		if orbitOffset != None:
-			common.send_data(['{} SET Orbit targetOffset ({} {} {})'.format(label_root, orbitOffset[0], orbitOffset[1], orbitOffset[2])], read=False)
+			common.send_data('{} SET Orbit targetOffset ({} {} {})'.format(label_root, orbitOffset[0], orbitOffset[1], orbitOffset[2]), read=False)
+		if orbitSnap != None:
+			common.send_data('{} SET Orbit snapOffset {}'.format(label_root, orbitSnap), read=False)
 	
 	common.send_data([
 		# resize camera display on app, this is relative to the size of the window
@@ -101,9 +105,9 @@ def add_camera_rgb(
 	thermal_maximumTemperature=30, thermal_maxDistanceForProbeUpdate=100,
 	thermal_useAGC='true',
 	
-	thermal_patchyness=True, 
+	thermal_patchyness=True,
 	thermal_patchyness_fixDistance=10.6, thermal_patchyness_distance=0.06,
-	thermal_patchyness_size=0.481, thermal_patchyness_intensity=1.47,
+	thermal_patchyness_size=0.481, thermal_patchyness_intensity=0.60,
 	
 	thermal_trees=False,
 	thermal_trees_base=10, thermal_trees_bandwidth=3, thermal_trees_median=0.5,
@@ -166,29 +170,27 @@ def add_camera_rgb(
 	
 	if thermal:
 		common.send_data([
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile Thermal'.format(label),
 			'{} ADD Thermal.ThermalCamera'.format(label),
-			
-			'{} SET Thermal.ThermalCamera ambientTemperature {}'.format(label, thermal_ambientTemperature),
-			'{} SET Thermal.ThermalCamera temperatureRange ({} {})'.format(label, thermal_minimumTemperature, thermal_maximumTemperature),
-			
-			'{} SET Thermal.ThermalCamera maxDistanceForProbeUpdate {}'.format(label, thermal_maxDistanceForProbeUpdate),
-			'{} SET Thermal.ThermalCamera useAGC {}'.format(label, thermal_useAGC)
+			'{} SET Thermal.ThermalCamera active false'.format(label)
 		], read=False)
 		
 		if thermal_patchyness:
 			common.send_data([
 				'{} ADD CameraFilterPack_Pixelisation_DeepOilPaintHQ'.format(label),
+				'{} SET CameraFilterPack_Pixelisation_DeepOilPaintHQ enabled false'.format(label),
 				'{} SET CameraFilterPack_Pixelisation_DeepOilPaintHQ _FixDistance {}'.format(label, thermal_patchyness_fixDistance),
 				'{} SET CameraFilterPack_Pixelisation_DeepOilPaintHQ _Distance {}'.format(label, thermal_patchyness_distance),
 				'{} SET CameraFilterPack_Pixelisation_DeepOilPaintHQ _Size {}'.format(label, thermal_patchyness_size),
-				'{} SET CameraFilterPack_Pixelisation_DeepOilPaintHQ Intensity {}'.format(label, thermal_patchyness_intensity)
+				'{} SET CameraFilterPack_Pixelisation_DeepOilPaintHQ Intensity {}'.format(label, thermal_patchyness_intensity),
+				'{} SET CameraFilterPack_Pixelisation_DeepOilPaintHQ enabled true'.format(label)
 			], read=False)
 		
 		if thermal_blur:
 			common.send_data([
 				'{} ADD CameraFilterPack_Blur_Noise'.format(label),
-				'{} SET CameraFilterPack_Blur_Noise Distance ({} {})'.format(label, thermal_blur_noise[0], thermal_blur_noise[1])
+				'{} SET CameraFilterPack_Blur_Noise enabled false'.format(label),
+				'{} SET CameraFilterPack_Blur_Noise Distance ({} {})'.format(label, thermal_blur_noise[0], thermal_blur_noise[1]),
+				'{} SET CameraFilterPack_Blur_Noise enabled true'.format(label)
 			], read=False)
 		
 		if thermal_trees:
@@ -198,9 +200,22 @@ def add_camera_rgb(
 				'{} SET Thermal.GlobalTreeSettings temperature {}'.format(label, thermal_trees_base),
 				'{} SET Thermal.GlobalTreeSettings temperatureBandwidth {}'.format(label, thermal_trees_bandwidth),
 				'{} SET Thermal.GlobalTreeSettings temperatureMedian {}'.format(label, thermal_trees_median),
-				'{} SET Thermal.GlobalTreeSettings treeLeafsHeatVariance {}'.format(label, thermal_trees_leafs_variance)
+				'{} SET Thermal.GlobalTreeSettings treeLeafsHeatVariance {}'.format(label, thermal_trees_leafs_variance),
+				'{} SET Thermal.GlobalTreeSettings enabled true'.format(label)
 			], read=False);
 	
+		common.send_data([
+			'{} ADD UnityEngine.PostProcessing.PostProcessingBehaviour'.format(label),
+			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile Thermal'.format(label),
+			
+			'{} SET Thermal.ThermalCamera ambientTemperature {}'.format(label, thermal_ambientTemperature),
+			'{} SET Thermal.ThermalCamera temperatureRange ({} {})'.format(label, thermal_minimumTemperature, thermal_maximumTemperature),
+			
+			'{} SET Thermal.ThermalCamera maxDistanceForProbeUpdate {}'.format(label, thermal_maxDistanceForProbeUpdate),
+			'{} SET Thermal.ThermalCamera useAGC {}'.format(label, thermal_useAGC),
+			'{} SET Thermal.ThermalCamera active true'.format(label)
+		], read=False)
+		
 	common.send_data([
 		'{} SET active true'.format(label_root),
 		'{} SET active true'.format(label)
@@ -725,6 +740,9 @@ def add_camera_seg_filter(segments=['Car'], label='cameras/segmentation'):
 # output_type options: Auto, ClassIds, InstanceIds, ClassColors, Raw
 def add_camera_seg(
 	width=1024, height=768, segments=None, output_type='Auto', label='cameras/segmentation',
+	fov=60,
+	clipping_near=0.3,
+	clipping_far=1000,
 	boundingBoxesExtensionAmount=0,
 	renderingPath=4, textureFormat=4
 ):
@@ -732,6 +750,9 @@ def add_camera_seg(
 		'CREATE {}'.format(label),
 		'{} SET active false'.format(label),
 		'{} ADD Camera'.format(label),
+		'{} SET Camera near {}'.format(label, clipping_near),
+		'{} SET Camera far {}'.format(label, clipping_far),
+		'{} SET Camera fov {}'.format(label, fov),
 		'{} ADD Sensors.RenderCamera'.format(label),
 		# '{} SET Sensors.RenderCamera sRGB false'.format(label),
 		'{} SET Sensors.RenderCamera format {}'.format(label, unity_vars.textureFormat[textureFormat]),
@@ -785,20 +806,27 @@ def do_render(lst):
 	for l in lst:
 		common.send_data('{} EXECUTE Sensors.RenderCamera RenderFrame'.format(l))
 
-def take_snapshot(lst, auto_segment=False, label='disk1'):
+def take_snapshot(lst, auto_segment=False, label='disk1', force_noop=False):
 	if settings.skip_disk and auto_segment == False:
+		if force_noop:
+			common.send_data('NOOP', read=True);
 		do_render(lst)
 		return
 	
 	if auto_segment:
 		do_render(lst)
 		r = common.send_data('{} GET Segmentation.Segmentation boundingBoxes'.format(lst[1]), read=True)
+		if force_noop:
+			common.send_data('NOOP', read=True);
 		
 		if (len(r) > 1):
 			common.send_data('{} EXECUTE Sensors.Disk Snapshot'.format(label), read=True)
 			r = common.send_data('{} GET Segmentation.Segmentation boundingBoxes'.format(lst[1]), read=True)
 			seq_save('bbox', ''.join(r[1:]))
 	else:
+		if force_noop:
+			common.send_data('NOOP', read=True);
+		
 		common.send_data('{} EXECUTE Sensors.Disk Snapshot'.format(label))
 	
 	time.sleep(settings.cooldown)
@@ -843,7 +871,12 @@ def ugly_tag_fix(tag):
 	
 	return x
 
-def spawn_radius_generic(types=[], tags=None, scale=[1,1,1], innerradius=0, radius=500, position=[0,0,0], rotation=[0,0,0], limit=50, segmentation_class=None, orbit=False, stick_to_ground=False, collision_check=True, suffix="", flush=False, prefix='spawner'):
+def spawn_radius_generic(
+	types=[], tags=None, scale=[1,1,1], innerradius=0, radius=500, position=[0,0,0],
+	rotation=[0,0,0], limit=50, segmentation_class=None, orbit=False,
+	stick_to_ground=False, collision_check=True, suffix="", flush=False, prefix='spawner',
+	names=None
+):
 	# convert bool to strings
 	if collision_check == True:
 		collision_check = 'true'
@@ -858,14 +891,17 @@ def spawn_radius_generic(types=[], tags=None, scale=[1,1,1], innerradius=0, radi
 	# loop each of the types
 	i = 0
 	for t in types:
-		n = t.replace(' ', '_').replace('+', '_').replace('-', '_').replace(',', '_') + suffix
+		if names == None:
+			n = t.replace(' ', '_').replace('+', '_').replace('-', '_').replace(',', '_') + suffix
+		else:
+			n = names[i]
 		
 		common.send_data([
 			'CREATE {}/{}'.format(prefix, n),
 			'{}/{} SET active false'.format(prefix, n),
 			
 			'{}/{} ADD RandomProps.Torus'.format(prefix, n),
-			'{}/{} ADD RandomProps.PropArea'.format(prefix, n),
+			'{}/{} ADD RandomProps.PropArea'.format(prefix, n)
 		], read=False)
 		
 		try:
@@ -884,7 +920,76 @@ def spawn_radius_generic(types=[], tags=None, scale=[1,1,1], innerradius=0, radi
 			'{}/{} SET RandomProps.Torus radius {}'.format(prefix, n, radius),
 			'{}/{} SET RandomProps.Torus innerRadius {}'.format(prefix, n, innerradius),
 			
-			'{}/{} SET active true'.format(prefix, n),
+			'{}/{} SET Transform position ({} {} {})'.format(prefix, n, position[0], position[1], position[2]),
+			'{}/{} SET Transform eulerAngles ({} {} {})'.format(prefix, n, rotation[0], rotation[1], rotation[2]),
+			
+			'{}/{} SET Transform localScale ({} {} {})'.format(prefix, n, scale[0], scale[1], scale[2])
+		], read=False)
+		
+		if segmentation_class != None:
+			common.send_data([
+				'{}/{} ADD Segmentation.ClassGroup'.format(prefix, n),
+				'{}/{} SET Segmentation.ClassGroup itemsClassName {}'.format(prefix, n, segmentation_class)
+			], read=False)
+		
+		if orbit == True:
+			common.send_data('cameras SET Orbit target {}/{}'.format(prefix, n), read=False)
+		
+		common.send_data('{}/{} SET active true'.format(prefix, n))
+		settings.obj.append('{}/{}'.format(prefix, t))
+		i = i + 1
+	
+	if flush:
+		common.flush_buffer()
+
+def spawn_rectangle_generic(
+	types=[], tags=None, scale=[1,1,1], a=0, b=500, position=[0,0,0],
+	rotation=[0,0,0], limit=50, segmentation_class=None, orbit=False,
+	stick_to_ground=False, collision_check=True, suffix="", flush=False, prefix='spawner',
+	names=None
+):
+	# convert bool to strings
+	if collision_check == True:
+		collision_check = 'true'
+	else:
+		collision_check = 'false'
+	
+	if stick_to_ground == True:
+		stick_to_ground = 'true'
+	else:
+		stick_to_ground = 'false'
+	
+	# loop each of the types
+	i = 0
+	for t in types:
+		if names == None:
+			n = t.replace(' ', '_').replace('+', '_').replace('-', '_').replace(',', '_') + suffix
+		else:
+			n = names[i]
+		
+		common.send_data([
+			'CREATE {}/{}'.format(prefix, n),
+			'{}/{} SET active false'.format(prefix, n),
+			
+			'{}/{} ADD RandomProps.Rectangle'.format(prefix, n),
+			'{}/{} ADD RandomProps.PropArea'.format(prefix, n)
+		], read=False)
+		
+		try:
+			common.send_data(['{}/{} SET RandomProps.PropArea tags "{}"'.format(prefix, n, ugly_tag_fix(tags[i]))], read=False)
+		except:
+			common.send_data(['{}/{} SET RandomProps.PropArea tags "{}"'.format(prefix, n, ugly_tag_fix(t))], read=False)
+		
+		common.send_data([
+			'{}/{} SET RandomProps.PropArea async false'.format(prefix, n),
+			# '{}/{} SET RandomProps.PropArea tags "{}"'.format(prefix, n, t),
+			'{}/{} SET RandomProps.PropArea numberOfProps {}'.format(prefix, n, limit),
+			
+			'{}/{} SET RandomProps.PropArea collisioncheck {}'.format(prefix, n, collision_check),
+			'{}/{} SET RandomProps.PropArea stickToGround {}'.format(prefix, n, stick_to_ground),
+			
+			'{}/{} SET RandomProps.Rectangle a {}'.format(prefix, n, a),
+			'{}/{} SET RandomProps.Rectangle b {}'.format(prefix, n, b),
 			
 			'{}/{} SET Transform position ({} {} {})'.format(prefix, n, position[0], position[1], position[2]),
 			'{}/{} SET Transform eulerAngles ({} {} {})'.format(prefix, n, rotation[0], rotation[1], rotation[2]),
@@ -901,6 +1006,7 @@ def spawn_radius_generic(types=[], tags=None, scale=[1,1,1], innerradius=0, radi
 		if orbit == True:
 			common.send_data('cameras SET Orbit target {}/{}'.format(prefix, n), read=False)
 		
+		common.send_data('{}/{} SET active true'.format(prefix, n))
 		settings.obj.append('{}/{}'.format(prefix, t))
 		i = i + 1
 	

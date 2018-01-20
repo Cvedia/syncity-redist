@@ -24,7 +24,8 @@ def run():
 	mycams = ['cameras/cameraRGB', 'cameras/segmentation', 'cameras/cameraDepth']
 	# mycams = ['cameras/cameraRGB', 'cameras/cameraDepth']
 	
-	dist = 8900
+	# dist = 8900
+	dist = 7000
 	azimuth = 0
 	elevation = 72
 	y_rot = 0
@@ -74,26 +75,16 @@ def run():
 		
 		# 500 animals per pool * 16 = ~10G RAM
 		helpers.spawn_rectangle_generic(
-			# ['+carthermal', '+animal, +thermal, +savannah', '+animal, +thermal, +savannah', '+animal, +thermal, +savannah' ,'+animal, +thermal, +savannah', '+animal, +thermal, +savannah', '+animal, +thermal, +savannah', '+animal, +thermal, +savannah' ,'+animal, +thermal, +savannah', '+animal, +thermal, +savannah', '+animal, +thermal, +savannah', '+animal, +thermal, +savannah' ,'+animal, +thermal, +savannah', '+animal, +thermal, +savannah', '+animal, +thermal, +savannah', '+animal, +thermal, +savannah' ],
-			# names=['cars0', 'animals0', 'animals1', 'animals2', 'animals3', 'animals4', 'animals5', 'animals6', 'animals7', 'animals8', 'animals9', 'animalsA', 'animalsB', 'animalsC', 'animalsD', 'animalsE'],
-			['+carthermal', '+animal, +thermal, +savannah', '+animal, +thermal, +savannah', '+animal, +thermal, +savannah' ,'+animal, +thermal, +savannah'],
-			names=['cars0', 'animals0', 'animals1', 'animals2', 'animals3'],
-			limit=50, a=5000, b=625, position=[2519, 591, 9630],
+			['+animal, +thermal, +savannah', '+carthermal' ],
+			names=['animals0', 'cars0'],
+			# limit=50, a=100, b=100, position=[1685, 591, 9856],
+			# limit=50, a=1000, b=1000, position=[1685, 591, 9419],
+			limit=50, a=1000, b=1000, position=[1685, 591, 7894],
 			
 			collision_check=True,
 			
-			segmentation_class="animals",
-			stick_to_ground=True
-		)
-		
-		helpers.spawn_rectangle_generic(
-			['+animal, +thermal, +savannah' ],
-			names=['animalsF'],
-			limit=50, a=100, b=100, position=[1685, 591, 9856],
-			
-			collision_check=True,
-			
-			segmentation_class="animals",
+			# segmentation_class="animals",
+			segmentation_class=None,
 			stick_to_ground=True
 		)
 		
@@ -116,32 +107,21 @@ def run():
 			# respawn them to update profiles properly
 			'spawner SET active false',
 			
-			'spawner/animals1 SET Transform position (2519 591 9005)',
-			'spawner/animals2 SET Transform position (2519 591 8380)',
-			'spawner/animals3 SET Transform position (2519 591 7755)',
-			'spawner/animals4 SET Transform position (2519 591 7130)',
-			'spawner/animals5 SET Transform position (2519 591 6505)',
-			'spawner/animals6 SET Transform position (2519 591 5880)',
-			'spawner/animals7 SET Transform position (2519 591 5255)',
-			'spawner/animals8 SET Transform position (2519 591 4630)',
-			'spawner/animals9 SET Transform position (2519 591 4005)',
-			'spawner/animalsA SET Transform position (2519 591 3380)',
-			'spawner/animalsB SET Transform position (2519 591 2755)',
-			'spawner/animalsC SET Transform position (2519 591 2130)',
-			'spawner/animalsD SET Transform position (2519 591 1505)',
-			'spawner/animalsE SET Transform position (2519 591 880)',
-			# 'spawner/animalsF SET Transform position (2519 591 255)',
-			
 			'cameras/segmentation SET Segmentation.Segmentation OutputType InstanceIds',
-			
+			'spawner/cars0 ADD Segmentation.ClassGroup',
+			'spawner/animals0 ADD Segmentation.ClassGroup',
+			'spawner/cars0 SET Segmentation.ClassGroup itemsClassName CARS',
+			'spawner/animals0 SET Segmentation.ClassGroup itemsClassName ANIMALS',
+			'spawner/animals0 SET RandomProps.PropArea numberOfProps 250',
+			'spawner/cars0 SET RandomProps.PropArea numberOfProps 50',
 			'spawner SET active true'
-			
 		], read=False)
 	
 	# warm up
 	helpers.do_render(mycams)
+	loop = 0
 	
-	while dist > 0:
+	while loop < 500:
 		common.send_data([
 			'cameras/cameraRGB SET Thermal.ThermalCamera temperatureRange ({} {})'.format(min_agc, max_agc),
 			'cameras SET Orbit distance {}'.format(dist),
@@ -150,20 +130,24 @@ def run():
 			'cameras SET Orbit snapOffset {}'.format(snapOffset)
 		], read=False)
 		
-		helpers.take_snapshot(mycams, True)
+		helpers.take_snapshot(mycams, auto_segment=True, force_noop=True)
 		
 		# random agc values
-		min_agc = randint(-9, 2)
-		max_agc = randint(25, 35)
+		min_agc = randint(-3, 5)
+		max_agc = randint(30, 35)
 		
 		snapOffset = snapOffset + incr_s
 		elevation = elevation + incr_e
 		azimuth += incr_a
 		dist += incr_d
-		
+		# if dist <= 8688 or dist >= 8980:
+		if dist <= 6500 or dist >= 7000:
+			incr_d = incr_d * -1
 		if elevation >= elevation_range[1] or elevation <= elevation_range[0]:
 			incr_e = incr_e * -1
 		if snapOffset >= snapOffset_range[1] or snapOffset <= snapOffset_range[0]:
 			incr_s = incr_s * -1
 		if azimuth >= 360:
 			azimuth = 0
+		
+		loop = loop + 1
