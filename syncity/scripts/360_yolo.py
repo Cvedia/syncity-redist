@@ -68,6 +68,7 @@ def run():
 	
 	# reset camera
 	common.send_data([
+		'obj SET active true',
 		'cameras/cameraRGB SET Camera enabled true',
 		'cameras SET Transform position ({} {} {})'.format(0, 1, -16),
 		'cameras SET Transform eulerAngles ({} {} {})'.format(0, -40, 0),

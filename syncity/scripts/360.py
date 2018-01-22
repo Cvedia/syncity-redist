@@ -26,11 +26,16 @@ def run():
 		helpers.global_disk_setup()
 		helpers.add_disk_output(mycams)
 		common.send_data([
-			'CREATE obj {}'.format(obj),
+			'CREATE obj/subject {}'.format(obj),
+			'obj/subject SET Transform position ({} {} {})'.format(0, 0, 0),
+			'obj/subject SET Transform eulerAngles ({} {} {})'.format(0, 0, 0),
+			
 			'obj ADD Segmentation.ClassGroup',
 			'obj SET Segmentation.ClassGroup itemsClassName Car',
 			'obj SET Transform position ({} {} {})'.format(-6, 0, -9),
-			'obj SET Transform eulerAngles ({} {} {})'.format(0, 0, 0)
+			'obj SET Transform eulerAngles ({} {} {})'.format(0, 0, 0),
+			
+			'cameras/segmentation SET Segmentation.Segmentation OutputType InstanceIds',
 			
 			# 'CREATE city/ground_0 city/ground/Grass',
 			# 'city/ground_0 SET Transform position (0 0 0)',
@@ -39,6 +44,8 @@ def run():
 	
 	# reset camera
 	common.send_data([
+		'obj SET active true',
+		'obj/subject SET active true',
 		'cameras/cameraRGB SET Camera enabled true',
 		'cameras SET Transform position ({} {} {})'.format(0, 1, -16),
 		'cameras SET Transform eulerAngles ({} {} {})'.format(0, -40, 0),
@@ -62,7 +69,7 @@ def run():
 				'obj SET Transform eulerAngles ({} {} {})'.format(a_x, a_y, 0)
 			])
 			a_y = a_y + displ_y
-			helpers.take_snapshot(mycams, False)
+			helpers.take_snapshot(mycams, True)
 		
 		# next
 		a_x = a_x + displ_x
