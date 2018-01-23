@@ -25,7 +25,10 @@ drones_lite_lst = [ 'Drones/buzz/buzz', 'Drones/splinter/splinter', 'Drones/red/
 
 settings = settings_manager.Singleton()
 
-def global_camera_setup(label_root='cameras', canvas_width=1024, canvas_height=768, canvas=None, orbit=True, orbitOffset=None, orbitGround=None, orbitSnap=None):
+def global_camera_setup(
+	label_root='cameras', canvas_width=1024, canvas_height=768, canvas=None,
+	orbit=True, orbitOffset=None, orbitGround=None, orbitSnap=None
+):
 	if canvas == None:
 		if settings.disable_canvas:
 			canvas = False
@@ -65,7 +68,7 @@ def global_camera_setup(label_root='cameras', canvas_width=1024, canvas_height=7
 
 def add_camera_depth(
 	width=2048, height=1536,
-	label='cameras/cameraDepth',
+	label='cameras/depth',
 	fov=60,
 	clipping_near=0.3,
 	clipping_far=1000
@@ -100,22 +103,6 @@ def add_camera_rgb(
 	
 	envirosky_cloudTransitionSpeed=100, envirosky_effectTransitionSpeed=100,
 	envirosky_fogTransitionSpeed=100, envirosky_progressTime='None',
-	
-	thermal=False, thermal_ambientTemperature=16, thermal_minimumTemperature=10,
-	thermal_maximumTemperature=30, thermal_maxDistanceForProbeUpdate=100,
-	thermal_useAGC='true',
-	
-	thermal_patchyness=True,
-	thermal_patchyness_fixDistance=10.6, thermal_patchyness_distance=0.06,
-	thermal_patchyness_size=0.481, thermal_patchyness_intensity=0.60,
-	
-	thermal_trees=False,
-	thermal_trees_base=10, thermal_trees_bandwidth=3, thermal_trees_median=0.5,
-	thermal_trees_leafs_variance=4,
-	
-	thermal_blur=True,
-	thermal_blur_noise=[2, 1],
-	
 	renderCamera=True
 ):
 	if envirosky == None:
@@ -168,54 +155,6 @@ def add_camera_rgb(
 			'EnviroSky SET active true'.format(label)
 		], read=False)
 	
-	if thermal:
-		common.send_data([
-			'{} ADD Thermal.ThermalCamera'.format(label),
-			'{} SET Thermal.ThermalCamera active false'.format(label)
-		], read=False)
-		
-		if thermal_patchyness:
-			common.send_data([
-				'{} ADD CameraFilterPack_Pixelisation_DeepOilPaintHQ'.format(label),
-				'{} SET CameraFilterPack_Pixelisation_DeepOilPaintHQ enabled false'.format(label),
-				'{} SET CameraFilterPack_Pixelisation_DeepOilPaintHQ _FixDistance {}'.format(label, thermal_patchyness_fixDistance),
-				'{} SET CameraFilterPack_Pixelisation_DeepOilPaintHQ _Distance {}'.format(label, thermal_patchyness_distance),
-				'{} SET CameraFilterPack_Pixelisation_DeepOilPaintHQ _Size {}'.format(label, thermal_patchyness_size),
-				'{} SET CameraFilterPack_Pixelisation_DeepOilPaintHQ Intensity {}'.format(label, thermal_patchyness_intensity),
-				'{} SET CameraFilterPack_Pixelisation_DeepOilPaintHQ enabled true'.format(label)
-			], read=False)
-		
-		if thermal_blur:
-			common.send_data([
-				'{} ADD CameraFilterPack_Blur_Noise'.format(label),
-				'{} SET CameraFilterPack_Blur_Noise enabled false'.format(label),
-				'{} SET CameraFilterPack_Blur_Noise Distance ({} {})'.format(label, thermal_blur_noise[0], thermal_blur_noise[1]),
-				'{} SET CameraFilterPack_Blur_Noise enabled true'.format(label)
-			], read=False)
-		
-		if thermal_trees:
-			common.send_data([
-				'{} ADD Thermal.GlobalTreeSettings'.format(label),
-				'{} SET Thermal.GlobalTreeSettings enabled false'.format(label),
-				'{} SET Thermal.GlobalTreeSettings temperature {}'.format(label, thermal_trees_base),
-				'{} SET Thermal.GlobalTreeSettings temperatureBandwidth {}'.format(label, thermal_trees_bandwidth),
-				'{} SET Thermal.GlobalTreeSettings temperatureMedian {}'.format(label, thermal_trees_median),
-				'{} SET Thermal.GlobalTreeSettings treeLeafsHeatVariance {}'.format(label, thermal_trees_leafs_variance),
-				'{} SET Thermal.GlobalTreeSettings enabled true'.format(label)
-			], read=False);
-	
-		common.send_data([
-			'{} ADD UnityEngine.PostProcessing.PostProcessingBehaviour'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile Thermal'.format(label),
-			
-			'{} SET Thermal.ThermalCamera ambientTemperature {}'.format(label, thermal_ambientTemperature),
-			'{} SET Thermal.ThermalCamera temperatureRange ({} {})'.format(label, thermal_minimumTemperature, thermal_maximumTemperature),
-			
-			'{} SET Thermal.ThermalCamera maxDistanceForProbeUpdate {}'.format(label, thermal_maxDistanceForProbeUpdate),
-			'{} SET Thermal.ThermalCamera useAGC {}'.format(label, thermal_useAGC),
-			'{} SET Thermal.ThermalCamera active true'.format(label)
-		], read=False)
-		
 	common.send_data([
 		'{} SET active true'.format(label_root),
 		'{} SET active true'.format(label)
@@ -225,6 +164,108 @@ def add_camera_rgb(
 	
 	if pp != None:
 		add_camera_rgb_pp(profile=pp, label=label)
+	
+	settings.obj.append(label)
+
+def add_camera_thermal(
+	width=2048, height=1536, audio=False,
+	label='cameras/thermal',
+	renderingPath=4, textureFormat=4,
+	
+	fov=60,
+	clipping_near=0.3,
+	clipping_far=1000,
+	
+	ambientTemperature=16, minimumTemperature=10,
+	maximumTemperature=30, maxDistanceForProbeUpdate=100,
+	useAGC='true',
+	
+	patchyness=True,
+	patchyness_fixDistance=10.6, patchyness_distance=0.06,
+	patchyness_size=0.481, patchyness_intensity=0.60,
+	
+	trees=False,
+	trees_base=10, trees_bandwidth=3, trees_median=0.5,
+	trees_leafs_variance=4,
+	
+	blur=True,
+	blur_noise=[2, 1],
+	
+	renderCamera=True
+):
+	common.send_data([
+		'CREATE {}'.format(label),
+		'{} SET active false'.format(label),
+		'{} ADD Camera'.format(label),
+		'{} SET Camera near {}'.format(label, clipping_near),
+		'{} SET Camera far {}'.format(label, clipping_far),
+		'{} SET Camera fov {}'.format(label, fov)
+	], read=False)
+	
+	if renderCamera:
+		common.send_data([
+			'{} ADD Sensors.RenderCamera'.format(label),
+			
+			'{} SET Sensors.RenderCamera format {}'.format(label, unity_vars.textureFormat[textureFormat]),
+			'{} SET Sensors.RenderCamera resolution ({} {})'.format(label, width, height),
+			'{} SET Camera renderingPath {}'.format(label, unity_vars.renderingPath[renderingPath])
+		], read=False)
+	
+	if audio:
+		common.send_data(['{} ADD AudioListener'.format(label)], read=False)
+	
+	common.send_data([
+		'{} ADD Thermal.ThermalCamera'.format(label),
+		'{} SET Thermal.ThermalCamera active false'.format(label)
+	], read=False)
+	
+	if patchyness:
+		common.send_data([
+			'{} ADD CameraFilterPack_Pixelisation_DeepOilPaintHQ'.format(label),
+			'{} SET CameraFilterPack_Pixelisation_DeepOilPaintHQ enabled false'.format(label),
+			'{} SET CameraFilterPack_Pixelisation_DeepOilPaintHQ _FixDistance {}'.format(label, patchyness_fixDistance),
+			'{} SET CameraFilterPack_Pixelisation_DeepOilPaintHQ _Distance {}'.format(label, patchyness_distance),
+			'{} SET CameraFilterPack_Pixelisation_DeepOilPaintHQ _Size {}'.format(label, patchyness_size),
+			'{} SET CameraFilterPack_Pixelisation_DeepOilPaintHQ Intensity {}'.format(label, patchyness_intensity),
+			'{} SET CameraFilterPack_Pixelisation_DeepOilPaintHQ enabled true'.format(label)
+		], read=False)
+	
+	if blur:
+		common.send_data([
+			'{} ADD CameraFilterPack_Blur_Noise'.format(label),
+			'{} SET CameraFilterPack_Blur_Noise enabled false'.format(label),
+			'{} SET CameraFilterPack_Blur_Noise Distance ({} {})'.format(label, blur_noise[0], blur_noise[1]),
+			'{} SET CameraFilterPack_Blur_Noise enabled true'.format(label)
+		], read=False)
+	
+	if trees:
+		common.send_data([
+			'{} ADD Thermal.GlobalTreeSettings'.format(label),
+			'{} SET Thermal.GlobalTreeSettings enabled false'.format(label),
+			'{} SET Thermal.GlobalTreeSettings temperature {}'.format(label, trees_base),
+			'{} SET Thermal.GlobalTreeSettings temperatureBandwidth {}'.format(label, trees_bandwidth),
+			'{} SET Thermal.GlobalTreeSettings temperatureMedian {}'.format(label, trees_median),
+			'{} SET Thermal.GlobalTreeSettings treeLeafsHeatVariance {}'.format(label, trees_leafs_variance),
+			'{} SET Thermal.GlobalTreeSettings enabled true'.format(label)
+		], read=False);
+
+	common.send_data([
+		'{} ADD UnityEngine.PostProcessing.PostProcessingBehaviour'.format(label),
+		'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile Thermal'.format(label),
+		
+		'{} SET Thermal.ThermalCamera ambientTemperature {}'.format(label, ambientTemperature),
+		'{} SET Thermal.ThermalCamera temperatureRange ({} {})'.format(label, minimumTemperature, maximumTemperature),
+		
+		'{} SET Thermal.ThermalCamera maxDistanceForProbeUpdate {}'.format(label, maxDistanceForProbeUpdate),
+		'{} SET Thermal.ThermalCamera useAGC {}'.format(label, useAGC),
+		'{} SET Thermal.ThermalCamera active true'.format(label)
+	], read=False)
+		
+	common.send_data([
+		'{} SET active true'.format(label)
+	], read=False)
+	
+	common.flush_buffer()
 	
 	settings.obj.append(label)
 
@@ -744,7 +785,9 @@ def add_camera_seg(
 	clipping_near=0.3,
 	clipping_far=1000,
 	boundingBoxesExtensionAmount=0,
-	renderingPath=4, textureFormat=4
+	renderingPath=4, textureFormat=4,
+	# WARNING: lookupTable is an array of arrays with 2 elements, like [ [ Car , red ] , [ Person, blue ] .. ]
+	lookupTable=None
 ):
 	common.send_data([
 		'CREATE {}'.format(label),
@@ -754,7 +797,6 @@ def add_camera_seg(
 		'{} SET Camera far {}'.format(label, clipping_far),
 		'{} SET Camera fov {}'.format(label, fov),
 		'{} ADD Sensors.RenderCamera'.format(label),
-		# '{} SET Sensors.RenderCamera sRGB false'.format(label),
 		'{} SET Sensors.RenderCamera format {}'.format(label, unity_vars.textureFormat[textureFormat]),
 		'{} SET Sensors.RenderCamera resolution ({} {})'.format(label, width, height),
 		'{} SET Camera renderingPath {}'.format(label, unity_vars.renderingPath[renderingPath]),
@@ -762,12 +804,30 @@ def add_camera_seg(
 		'{} ADD Segmentation.Segmentation'.format(label),
 		'{} SET Segmentation.Segmentation OutputType {}'.format(label, output_type),
 		'{} SET Segmentation.Segmentation BoundingBoxesExtensionAmount {}'.format(label, boundingBoxesExtensionAmount),
-		# '{} SET Camera targetTexture.antiAliasing 8'.format(label),
-		'{} SET active true'.format(label)
+		'{} EXECUTE Segmentation.Segmentation DefineClass Void'.format(label),
+		'{} EXECUTE Segmentation.Segmentation DefineClass Car'.format(label)
 	], read=False)
 	
 	if segments != None:
 		add_camera_seg_filter(segments, label=label)
+	
+	common.send_data([
+		'{} ADD Segmentation.LookUpTable'.format(label),
+		'{} PUSH Segmentation.LookUpTable classes Void'.format(label),
+		'{} PUSH Segmentation.LookUpTable colors black'.format(label)
+	], read=False)
+	
+	if lookupTable != None:
+		for i in lookupTable:
+			common.send_data([
+				'{} PUSH Segmentation.LookUpTable classes {}'.format(label, i[0]),
+				'{} PUSH Segmentation.LookUpTable colors {}'.format(label, i[1])
+			], read=False)
+	
+	common.send_data([
+		'{} EXECUTE Segmentation.LookUpTable MarkTextureDirty'.format(label),
+		'{} SET active true'.format(label)
+	], read=False)
 	common.flush_buffer()
 	settings.obj.append(label)
 

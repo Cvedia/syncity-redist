@@ -11,11 +11,14 @@ settings = settings_manager.Singleton()
 def help():
 	return '''\
 360 thermal
+	- Creates a RGB camera
 	- Creates a Thermal camera
 	- Creates a Segmentation camera
 	- Spawns a single object and rotates around it
 	- Exports RGB images
 	- Exports segmentation maps
+	- Exports Thermal images
+	- Exports bounding boxes
 	- Saves detections
 	- Exits leaving all objects exposed
 
@@ -37,35 +40,38 @@ def write_filtered(line):
 
 def run():
 	settings.keep = True
-	mycams = ['cameras/cameraRGB', 'cameras/segmentation']
-	# obj = 'Cars/BMW6_Series_650i/BMW6_Series_650i'
-	obj = 'Cars/VW_Golf_V/VW_Golf_V'
+	mycams = ['cameras/cameraRGB', 'cameras/segmentation', 'cameras/thermal']
+	obj = 'Cars/BMW6_Series_650i/BMW6_Series_650i'
+	# obj = 'Cars/VW_Golf_V/VW_Golf_V'
 	
 	if settings.skip_setup == False:
 		helpers.global_camera_setup()
-		helpers.add_camera_rgb(
-			width=4096, height=3072, pp=None,
-			thermal=True, thermal_ambientTemperature=3
-		)
-		helpers.add_camera_seg(segments=['Car'])
+		
+		helpers.add_camera_rgb(pp='EnviroFX')
+		helpers.add_camera_seg(segments=['Car'], lookupTable=[['Car', 'red']])
+		helpers.add_camera_thermal(ambientTemperature=3)
+		
 		helpers.global_disk_setup()
 		helpers.add_disk_output(mycams)
 		common.send_data([
+			# bind object to segmentation Car
+			'CREATE obj',
+			'obj ADD Segmentation.ClassGroup',
+			'obj SET Segmentation.ClassGroup itemsClassName Car',
+			
 			'CREATE obj/subject {}'.format(obj),
 			'obj/subject SET Transform position ({} {} {})'.format(0, 0, 0),
 			'obj/subject SET Transform eulerAngles ({} {} {})'.format(0, 0, 0),
 			'obj/subject ADD Thermal.ThermalObjectBehaviour',
+			# TODO: Loading profiles is not yet supported
 			'obj/subject SET Thermal.ThermalObjectBehaviour profile DefaultAnimalThermalProfile',
-			
-			'obj ADD Segmentation.ClassGroup',
-			'obj SET Segmentation.ClassGroup itemsClassName Car',
 			
 			'obj SET Transform position ({} {} {})'.format(-6, 0, -9),
 			'obj SET Transform eulerAngles ({} {} {})'.format(0, 0, 0),
 			
-			'cameras/segmentation SET Segmentation.Segmentation OutputType InstanceIds',
+			# 'cameras/segmentation SET Segmentation.Segmentation OutputType InstanceIds',
 			
-		], read=False)
+	], read=False)
 	
 	# reset camera
 	common.send_data([
@@ -75,6 +81,9 @@ def run():
 		'cameras SET Transform position ({} {} {})'.format(0, 1, -16),
 		'cameras SET Transform eulerAngles ({} {} {})'.format(0, -40, 0)
 	], read=False)
+	
+	if settings.setup_only == True:
+		return
 	
 	displ_x = 45
 	displ_y = 2

@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-SYNCITY_VERSION = '3.1.7'
+SYNCITY_VERSION = '3.1.8'
 
 import sys
 import os
@@ -44,6 +44,7 @@ parser.add_argument('--log', action='store_true', help='Log all IOs')
 parser.add_argument('--async', action='store_true', help='Send some telnet commands asyncronously -- EXPERIMENTAL')
 parser.add_argument('--skip_disk', action='store_true', help='Disables disk export completly')
 parser.add_argument('--skip_setup', action='store_true', help='Skip script setup and go straight to data extraction')
+parser.add_argument('--setup_only', action='store_true', help='Runs script setup and exits')
 parser.add_argument('--disable_envirosky', action='store_true', help='Disables Envirosky -- NOT RECOMMENDED')
 parser.add_argument('--disable_canvas', action='store_true', help='Disables client rendering visualization, better for performance, but you will only see outputs written to disk.')
 parser.add_argument('--flycam', action='store_true', help='Spawns fly cam, controllable via simulator')
