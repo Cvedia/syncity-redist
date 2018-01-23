@@ -24,7 +24,6 @@ def run():
 	settings.keep = True
 	mycams = ['cameras/cameraRGB', 'cameras/thermal', 'cameras/segmentation', 'cameras/depth']
 	
-	# dist = 8900
 	dist = 7000
 	azimuth = 0
 	elevation = 72
@@ -47,12 +46,14 @@ def run():
 	terrain_ambient_median = 0
 	
 	if settings.skip_setup == False:
+		# scenario goes first as it's the base for all objects to be placed upon
 		common.send_data([
 			'CREATE savannah tiles Savannah',
 			'savannah ADD WindZone',
 			'savannah SET active true'
 		])
 		
+		# camera setup
 		helpers.global_camera_setup(
 			orbitOffset=[1667.05, 32.37876, 1000],
 			orbitSnap=snapOffset,
@@ -61,7 +62,7 @@ def run():
 		
 		helpers.add_camera_seg(
 			width=1024, height=768, fov=90, clipping_far=10000,
-			segments=['Car', 'Animal'], lookupTable=[['Car', 'red'], ['Animal', 'blue']]
+			segments=['Car', 'Animal', 'Human'], lookupTable=[['Car', 'red'], ['Animal', 'blue'], ['Human', 'green']]
 		)
 		
 		helpers.add_camera_rgb(
@@ -84,28 +85,25 @@ def run():
 		helpers.global_disk_setup()
 		helpers.add_disk_output(mycams)
 		
-		# 500 animals per pool * 16 = ~10G RAM
+		# spawn objects in a rectangular shape
 		helpers.spawn_rectangle_generic(
-			['+animal, +thermal, +savannah', '+carthermal' ],
-			names=['animals0', 'cars0'],
-			# limit=50, a=100, b=100, position=[1685, 591, 9856],
-			# limit=50, a=1000, b=1000, position=[1685, 591, 9419],
+			['+animal, +thermal, +savannah', '+carthermal', '+humans' ],
+			names=['animals0', 'cars0', 'humans0'],
+			segmentation_class=['Animal', 'Car', 'Human'],
 			limit=50, a=1000, b=1000, position=[1685, 591, 7894],
-			
 			collision_check=True,
-			
-			# segmentation_class="animals",
-			segmentation_class=None,
 			stick_to_ground=True
 		)
 		
+		# fine tune specifics
 		common.send_data([
 			'"savannah/Main Terrain" SET Thermal.ThermalTerrain ambientOffset {}'.format(terrain_ambient_offset),
 			'"savannah/Main Terrain" SET Thermal.ThermalTerrain bandwidth {}'.format(terrain_ambient_bandwidth),
 			'"savannah/Main Terrain" SET Thermal.ThermalTerrain median {}'.format(terrain_ambient_median),
 			
-			# set profiles heatiness
+			# HACK: set profiles heatiness to high values so objects are visible
 			'"spawner/cars0/RangeRover(Clone)" SET Thermal.ThermalObjectBehaviour profile.heatiness.value 50',
+			
 			'"spawner/animals0/Rino(Clone)" SET Thermal.ThermalObjectBehaviour profile.heatiness.value 50',
 			'"spawner/animals0/giraffe(Clone)" SET Thermal.ThermalObjectBehaviour profile.heatiness.value 35',
 			'"spawner/animals0/Buffalo(Clone)" SET Thermal.ThermalObjectBehaviour profile.heatiness.value 50',
@@ -115,15 +113,14 @@ def run():
 			'"spawner/animals0/Vulture_White(Clone)" SET Thermal.ThermalObjectBehaviour profile.heatiness.value 50',
 			'"spawner/animals0/Elef(Clone)" SET Thermal.ThermalObjectBehaviour profile.heatiness.value 40',
 			
-			# respawn them to update profiles properly
+			# respawn assets to update thermal profiles properly
 			'spawner SET active false',
 			
-			'spawner/cars0 ADD Segmentation.ClassGroup',
-			'spawner/animals0 ADD Segmentation.ClassGroup',
-			'spawner/cars0 SET Segmentation.ClassGroup itemsClassName Car',
-			'spawner/animals0 SET Segmentation.ClassGroup itemsClassName Animal',
-			'spawner/animals0 SET RandomProps.PropArea numberOfProps 250',
+			# add more props
 			'spawner/cars0 SET RandomProps.PropArea numberOfProps 50',
+			'spawner/animals0 SET RandomProps.PropArea numberOfProps 250',
+			'spawner/humans0 SET RandomProps.PropArea numberOfProps 250',
+			
 			'spawner SET active true'
 		], read=False)
 	
@@ -135,7 +132,8 @@ def run():
 	
 	loop = 0
 	
-	while loop < 1000:
+	# loop changing camera positions with random agc bounduaries
+	while loop < 500:
 		common.send_data([
 			'cameras/thermal SET Thermal.ThermalCamera temperatureRange ({} {})'.format(min_agc, max_agc),
 			'cameras SET Orbit distance {}'.format(dist),
@@ -154,7 +152,7 @@ def run():
 		elevation = elevation + incr_e
 		azimuth += incr_a
 		dist += incr_d
-		# if dist <= 8688 or dist >= 8980:
+		
 		if dist <= 6500 or dist >= 7000:
 			incr_d = incr_d * -1
 		if elevation >= elevation_range[1] or elevation <= elevation_range[0]:
@@ -165,3 +163,4 @@ def run():
 			azimuth = 0
 		
 		loop = loop + 1
+		common.output('Loop {}'.format(loop))

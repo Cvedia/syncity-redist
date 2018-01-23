@@ -41,8 +41,9 @@ def write_filtered(line):
 def run():
 	settings.keep = True
 	mycams = ['cameras/cameraRGB', 'cameras/segmentation', 'cameras/thermal']
-	obj = 'Cars/BMW6_Series_650i/BMW6_Series_650i'
+	# obj = 'Cars/BMW6_Series_650i/BMW6_Series_650i'
 	# obj = 'Cars/VW_Golf_V/VW_Golf_V'
+	obj = 'humans Human/Runfast'
 	
 	if settings.skip_setup == False:
 		helpers.global_camera_setup()
@@ -62,9 +63,11 @@ def run():
 			'CREATE obj/subject {}'.format(obj),
 			'obj/subject SET Transform position ({} {} {})'.format(0, 0, 0),
 			'obj/subject SET Transform eulerAngles ({} {} {})'.format(0, 0, 0),
-			'obj/subject ADD Thermal.ThermalObjectBehaviour',
+			
+			# NOTE: if the object doesn't contain a thermal profile we need to add one to be visible on the camera
+			# 'obj/subject ADD Thermal.ThermalObjectBehaviour',
 			# TODO: Loading profiles is not yet supported
-			'obj/subject SET Thermal.ThermalObjectBehaviour profile DefaultAnimalThermalProfile',
+			# 'obj/subject SET Thermal.ThermalObjectBehaviour profile DefaultAnimalThermalProfile',
 			
 			'obj SET Transform position ({} {} {})'.format(-6, 0, -9),
 			'obj SET Transform eulerAngles ({} {} {})'.format(0, 0, 0),

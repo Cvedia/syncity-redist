@@ -804,8 +804,7 @@ def add_camera_seg(
 		'{} ADD Segmentation.Segmentation'.format(label),
 		'{} SET Segmentation.Segmentation OutputType {}'.format(label, output_type),
 		'{} SET Segmentation.Segmentation BoundingBoxesExtensionAmount {}'.format(label, boundingBoxesExtensionAmount),
-		'{} EXECUTE Segmentation.Segmentation DefineClass Void'.format(label),
-		'{} EXECUTE Segmentation.Segmentation DefineClass Car'.format(label)
+		'{} EXECUTE Segmentation.Segmentation DefineClass Void'.format(label)
 	], read=False)
 	
 	if segments != None:
@@ -820,6 +819,7 @@ def add_camera_seg(
 	if lookupTable != None:
 		for i in lookupTable:
 			common.send_data([
+				'{} EXECUTE Segmentation.Segmentation DefineClass {}'.format(label, i[0]),
 				'{} PUSH Segmentation.LookUpTable classes {}'.format(label, i[0]),
 				'{} PUSH Segmentation.LookUpTable colors {}'.format(label, i[1])
 			], read=False)
@@ -874,15 +874,21 @@ def take_snapshot(lst, auto_segment=False, label='disk1', force_noop=False):
 		return
 	
 	if auto_segment:
-		do_render(lst)
-		r = common.send_data('{} GET Segmentation.Segmentation boundingBoxes'.format(lst[1]), read=True)
-		if force_noop:
-			common.send_data('NOOP', read=True);
+		idx = [i for i, s in enumerate(lst) if 'segmentation' in s]
 		
-		if (len(r) > 1):
-			common.send_data('{} EXECUTE Sensors.Disk Snapshot'.format(label), read=True)
-			r = common.send_data('{} GET Segmentation.Segmentation boundingBoxes'.format(lst[1]), read=True)
-			seq_save('bbox', ''.join(r[1:]))
+		if len(idx) == 0:
+			common.output('WARNING: No camera with segmentation name found, skipping auto_segment')
+		else:
+			do_render(lst)
+			r = common.send_data('{} GET Segmentation.Segmentation boundingBoxes'.format(lst[idx[0]]), read=True)
+			
+			if force_noop:
+				common.send_data('NOOP', read=True);
+			
+			if (len(r) > 1):
+				common.send_data('{} EXECUTE Sensors.Disk Snapshot'.format(label), read=True)
+				r = common.send_data('{} GET Segmentation.Segmentation boundingBoxes'.format(lst[idx[0]]), read=True)
+				seq_save('bbox', ''.join(r[1:]))
 	else:
 		if force_noop:
 			common.send_data('NOOP', read=True);
@@ -987,10 +993,16 @@ def spawn_radius_generic(
 		], read=False)
 		
 		if segmentation_class != None:
-			common.send_data([
-				'{}/{} ADD Segmentation.ClassGroup'.format(prefix, n),
-				'{}/{} SET Segmentation.ClassGroup itemsClassName {}'.format(prefix, n, segmentation_class)
-			], read=False)
+			if isinstance(segmentation_class, list):
+				common.send_data([
+					'{}/{} ADD Segmentation.ClassGroup'.format(prefix, n),
+					'{}/{} SET Segmentation.ClassGroup itemsClassName {}'.format(prefix, n, segmentation_class[i])
+				], read=False)
+			else:
+				common.send_data([
+					'{}/{} ADD Segmentation.ClassGroup'.format(prefix, n),
+					'{}/{} SET Segmentation.ClassGroup itemsClassName {}'.format(prefix, n, segmentation_class)
+				], read=False)
 		
 		if orbit == True:
 			common.send_data('cameras SET Orbit target {}/{}'.format(prefix, n), read=False)
@@ -1058,10 +1070,16 @@ def spawn_rectangle_generic(
 		], read=False)
 		
 		if segmentation_class != None:
-			common.send_data([
-				'{}/{} ADD Segmentation.ClassGroup'.format(prefix, n),
-				'{}/{} SET Segmentation.ClassGroup itemsClassName {}'.format(prefix, n, segmentation_class)
-			], read=False)
+			if isinstance(segmentation_class, list):
+				common.send_data([
+					'{}/{} ADD Segmentation.ClassGroup'.format(prefix, n),
+					'{}/{} SET Segmentation.ClassGroup itemsClassName {}'.format(prefix, n, segmentation_class[i])
+				], read=False)
+			else:
+				common.send_data([
+					'{}/{} ADD Segmentation.ClassGroup'.format(prefix, n),
+					'{}/{} SET Segmentation.ClassGroup itemsClassName {}'.format(prefix, n, segmentation_class)
+				], read=False)
 		
 		if orbit == True:
 			common.send_data('cameras SET Orbit target {}/{}'.format(prefix, n), read=False)
