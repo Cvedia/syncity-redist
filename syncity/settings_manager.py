@@ -1,7 +1,17 @@
 class Singleton:
-	''' simple singleton for shared variables '''
+	"""
+	Singleton settings class controller
+	
+	This class allow for global shared variables across different modules
+	
+	A generic GET and SET function set allows for any type of variable to work
+	as a global confined to a instance of this object.
+	"""
 	__instance = None
 	__data = {}
+	
+	def __init__(self):
+		pass
 	
 	def __new__(cls, *args, **kwargs):
 		if not cls.__instance:

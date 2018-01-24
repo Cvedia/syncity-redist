@@ -1,3 +1,8 @@
+"""
+A collection of helper functions tailored in a generic fashion for asset, scenario, camera setup
+
+This functions are accessible from scripts / tools via `helpers.<function>`
+"""
 import sys
 import time
 import random
@@ -29,6 +34,21 @@ def global_camera_setup(
 	label_root='cameras', canvas_width=1024, canvas_height=768, canvas=None,
 	orbit=True, orbitOffset=None, orbitGround=None, orbitSnap=None
 ):
+	"""
+	Sets up camera root object
+	
+	# Arguments
+	
+	label_root (string): Root game object name/path, defaults to `cameras`
+	canvas (bool): Canvas switch, defaults to `False`
+	canvas_width (int): Display canvas width, defaults to `1024`
+	canvas_height (int): Display canvas height, defaults to `768`
+	orbit (bool): Adds orbiting component, defaults to `True`
+	orbitOffset (list): Defines offset x,y,z coordinates from orbiting object target, defaults to `None`
+	orbitGround (string): Defines a object to orbit ground position from, defaults to `None`
+	orbitSnap (int): Defines a Y snap position from orbited object, defaults to `None`
+	
+	"""
 	if canvas == None:
 		if settings.disable_canvas:
 			canvas = False
@@ -73,6 +93,19 @@ def add_camera_depth(
 	clipping_near=0.3,
 	clipping_far=1000
 ):
+	"""
+	Creates a depth camera
+	
+	# Arguments
+	
+	width (int): Resolution width, defaults to `2048`
+	height (int): Resolution height, defaults to `1536`
+	label (string): Game object path, defaults to `cameras/depth` - This should follow `label_root` from `global_camera_setup`
+	fov (int): Field of view, defaults to `60`
+	clipping_near (float): Near clipping distance, defaults to `0.3` - Objects closer than this distance won't appear
+	clipping_far (float): Far clipping distance, defaults to `1000` - Objects further from this distance won't appear
+	
+	"""
 	common.send_data([
 		'CREATE {}'.format(label),
 		'{} SET active false'.format(label),
@@ -105,6 +138,32 @@ def add_camera_rgb(
 	envirosky_fogTransitionSpeed=100, envirosky_progressTime='None',
 	renderCamera=True
 ):
+	"""
+	Creates a RGB camera with optional postprocessing options
+	
+	# Arguments
+	
+	width (int): Resolution width, defaults to `2048`
+	height (int): Resolution height, defaults to `1536`
+	audio (bool): Audio listener, defaults to `True` - You must have at one audio listener on the scene
+	envirosky (bool): Enables envirosky stack, defaults to `None`
+	flycam (bool): Enables wasd interactive controllable fly cam, defaults to `False`
+	label_root (string): Root game object name/path, defaults to `cameras`
+	label (string): Game object path, defaults to `cameras/cameraRGB` - This should follow `label_root` from `global_camera_setup`
+	pp (string): Defines a postprocessing stack, defaults to `None`
+	renderingPath (int): Defines rendering path, defaults to `4` - This is defined on unity_vars lookup table
+	textureFormat (int): Defines texture format, defaults to `4` - This is defined on unity_vars lookup table
+	fov (int): Field of view, defaults to `60`
+	clipping_near (float): Near clipping distance, defaults to `0.3` - Objects closer than this distance won't appear
+	clipping_far (float): Far clipping distance, defaults to `1000` - Objects further from this distance won't appear
+	envirosky_cloudTransitionSpeed (int): Defines cloud transition speed, defaults to `100` which is instant
+	envirosky_effectTransitionSpeed (int): Defines weather transition speed, defaults to `100` which is instant
+	envirosky_fogTransitionSpeed (int): Defines fog deposition speed, defaults to `100` which is instant
+	envirosky_progressTime (string): Defines time progression, defaults to `None` avoiding time to change
+	renderCamera (bool): Binds a renderCamera component allowing for disk exports, defaults to `True`
+	
+	
+	"""
 	if envirosky == None:
 		if settings.disable_envirosky:
 			envirosky = False
@@ -193,6 +252,50 @@ def add_camera_thermal(
 	
 	renderCamera=True
 ):
+	"""
+	Creates a Thermal camera with special postprocessing features
+	
+	# Arguments
+	
+	width (int): Resolution width, defaults to `2048`
+	height (int): Resolution height, defaults to `1536`
+	audio (bool): Audio listener, defaults to `False` - You must have at one audio listener on the scene
+	label (string): Game object path, defaults to `cameras/cameraRGB` - This should follow `label_root` from `global_camera_setup`
+	renderingPath (int): Defines rendering path, defaults to `4` - This is defined on unity_vars lookup table
+	textureFormat (int): Defines texture format, defaults to `4` - This is defined on unity_vars lookup table
+	fov (int): Field of view, defaults to `60`
+	clipping_near (float): Near clipping distance, defaults to `0.3` - Objects closer than this distance won't appear
+	clipping_far (float): Far clipping distance, defaults to `1000` - Objects further from this distance won't appear
+	
+	ambientTemperature (float): Defines a global ambient temperature, defaults to `16`
+	minimumTemperature (float): Minimum AGC temperature, defaults to `10`
+	maximumTemperature (float): Maximum AGC temperature, defaults to `30`
+	maxDistanceForProbeUpdate (float): Defines a maximum render distance for reflection probes on shiny surfaces, defaults to `100`
+	useAGC (bool): Enables / disables AGC, defaults to `True`
+	
+	patchyness (bool): Enables / disables patchyness feature, defaults to `True`
+	patchyness_fixDistance (float): Defines focal fixed distance for patchyness rendering, defaults to `10.6`
+	patchyness_distance (float): Defines distance between patches, defaults to `0.06`
+	patchyness_size (float): Defines size of patch brush, defaults to `0.481`
+	patchyness_intensity (float): Defines how much detail is preserved from the original when patch is applied in reverse, defaults to `0.6`
+	
+	trees (bool): Enables / disable trees / bushes heat signature, defaults to `False`
+	trees_base (float): Tree base temperature, defaults to `10`
+	trees_bandwidth (float): Heat pattern bandwidth, defaults to `3`
+	trees_median (float): Heat pattern median, defaults to `0.5`
+	trees_leafs_variance (int): Define how much diffuse heat will be applied to tree leafs, defaults to `4`
+	
+	blur (bool): Enables / disable blur effect, defaults to `True`
+	blur_noise (list of min / max): Defines noise blur distance, defaults to `[2, 1]`
+	
+	renderCamera (bool): Binds a renderCamera component allowing for disk exports, defaults to `True`
+	
+	# Notes
+	
+	- patchyness effects mimic thermal cameras averaging feature from mid / long distance focal points
+	- blur effects mimics noise around object edges, more visible when close by
+	
+	"""
 	common.send_data([
 		'CREATE {}'.format(label),
 		'{} SET active false'.format(label),
@@ -270,6 +373,9 @@ def add_camera_thermal(
 	settings.obj.append(label)
 
 def camera_pp_thermal(label='cameras/cameraRGB'):
+	"""
+	This is a dummy function that demonstrates all possible configurable values on a camera profile, in this case we're showing off all parameters tuned to a thermal profile
+	"""
 	common.send_data([
 		'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.antialiasing.enabled false'.format(label),
 		'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.ambientOcclusion.enabled false'.format(label),
@@ -329,19 +435,23 @@ def add_camera_rgb_pp(profile='Profile2', scion=False, label='cameras/cameraRGB'
 	common.flush_buffer()
 	settings.obj.append(label)
 
-'''
-This function randomizes all available paramters for native postprocessing.
-Parameters that contain random statements will randomize between the acceptable
-range of values for the specific property.
-
-Parameters that don't have a random statement are defaults for EnviroFX profile
-
-Specific effects will be turned on / off at random as well.
-
-Note: Not all those values currently work, depending on depth / type they might
-return errors, if you happen to need to change one of those values contact support.
-'''
 def camera_rgb_pp_random(label='cameras/cameraRGB'):
+	""""
+	This function randomizes all available parameters for native postprocessing.
+	Parameters that contain random statements will randomize between the acceptable
+	range of values for the specific property.
+
+	Parameters that don't have a random statement are defaults for EnviroFX profile
+
+	Specific effects will be turned on / off at random as well.
+
+	Note: Not all those values currently work, depending on depth / type they might
+	return errors, if you happen to need to change one of those values contact support.
+
+	# Arguments
+
+	label (string): Defines a existing camera to apply postprocessing to, defaults to `cameras/cameraRGB`
+	"""
 	# antialiasing
 	if bool(random.getrandbits(1)):
 		common.send_data([
@@ -697,8 +807,14 @@ def camera_rgb_pp_random(label='cameras/cameraRGB'):
 	
 	common.flush_buffer()
 
-# scion camera postprocessing effects
 def camera_rgb_pp_scion_random(label='cameras/cameraRGB'):
+	"""
+	Show case for scion camera postprocessing effects
+	
+	Different from Envirosky, Scion offers a different type of postprocessing stack
+	we do not recommend using this, unless you need something in specific from it
+	that Envirosky cannot provide.
+	"""
 	# grain effect
 	if bool(random.getrandbits(1)):
 		common.send_data([
@@ -763,6 +879,18 @@ def camera_rgb_pp_scion_random(label='cameras/cameraRGB'):
 	common.flush_buffer()
 
 def set_disk_texture(lst, label='disk1'):
+	"""
+	Links a texture to a disk output
+	
+	This is essential when writing images to disk, after creating a camera and
+	adding RenderCamera component to it, you bind it to the disk component to 
+	generate an output.
+	
+	# Arguments
+	
+	lst (list): List of cameras containing RenderCamera component to bind to
+	label (string): Name of the disk object, defaults to `disk1`
+	"""
 	if settings.skip_disk:
 		return
 	
@@ -772,6 +900,15 @@ def set_disk_texture(lst, label='disk1'):
 		], read=False)
 
 def add_camera_seg_filter(segments=['Car'], label='cameras/segmentation'):
+	"""
+	Creates a filterable bounding boxes with unoccluded option enabled by default.
+	This allows you to export json objects containig segmented classes.
+	
+	# Arguments
+	
+	segments (list): Defines one or more classes, defaults to `['Car']`
+	label (string): Defines a segmentation camera as source, defaults to `cameras/segmentation`
+	"""
 	for s in segments:
 		common.send_data([
 			'{} PUSH Segmentation.Segmentation boundingBoxesFilter {}'.format(label, s),
@@ -786,9 +923,32 @@ def add_camera_seg(
 	clipping_far=1000,
 	boundingBoxesExtensionAmount=0,
 	renderingPath=4, textureFormat=4,
-	# WARNING: lookupTable is an array of arrays with 2 elements, like [ [ Car , red ] , [ Person, blue ] .. ]
+	renderCamera=True,
 	lookupTable=None
 ):
+	"""
+	Creates a Segmentation camera
+	
+	# Arguments
+	
+	width (int): Resolution width, defaults to `2048`
+	height (int): Resolution height, defaults to `1536`
+	segments (list|string): Defines one or more classes this camera will see, defaults to `None`
+	label (string): Game object path, defaults to `cameras/segmentation` - This should follow `label_root` from `global_camera_setup`
+	renderingPath (int): Defines rendering path, defaults to `4` - This is defined on unity_vars lookup table
+	textureFormat (int): Defines texture format, defaults to `4` - This is defined on unity_vars lookup table
+	fov (int): Field of view, defaults to `60`
+	clipping_near (float): Near clipping distance, defaults to `0.3` - Objects closer than this distance won't appear
+	clipping_far (float): Far clipping distance, defaults to `1000` - Objects further from this distance won't appear
+	renderCamera (bool): Binds a renderCamera component allowing for disk exports, defaults to `True`
+	lookupTable (list): Binds a color to a class, this is essential for outputting pixel dense images, this is an array of arrays like `[ [ Car , red ] , [ Person, blue ] .. ]`
+	
+	# Notes
+	
+	- patchyness effects mimic thermal cameras averaging feature from mid / long distance focal points
+	- blur effects mimics noise around object edges, more visible when close by
+	
+	"""
 	common.send_data([
 		'CREATE {}'.format(label),
 		'{} SET active false'.format(label),
@@ -796,9 +956,16 @@ def add_camera_seg(
 		'{} SET Camera near {}'.format(label, clipping_near),
 		'{} SET Camera far {}'.format(label, clipping_far),
 		'{} SET Camera fov {}'.format(label, fov),
-		'{} ADD Sensors.RenderCamera'.format(label),
-		'{} SET Sensors.RenderCamera format {}'.format(label, unity_vars.textureFormat[textureFormat]),
-		'{} SET Sensors.RenderCamera resolution ({} {})'.format(label, width, height),
+	], read=False)
+	
+	if renderCamera:
+		common.send_data([
+			'{} ADD Sensors.RenderCamera'.format(label),
+			'{} SET Sensors.RenderCamera format {}'.format(label, unity_vars.textureFormat[textureFormat]),
+			'{} SET Sensors.RenderCamera resolution ({} {})'.format(label, width, height),
+		], read=False)
+	
+	common.send_data([
 		'{} SET Camera renderingPath {}'.format(label, unity_vars.renderingPath[renderingPath]),
 		'{} SET Camera targetTexture.filterMode Point'.format(label),
 		'{} ADD Segmentation.Segmentation'.format(label),
@@ -831,8 +998,20 @@ def add_camera_seg(
 	common.flush_buffer()
 	settings.obj.append(label)
 
-# not recommended when using envirosky
 def add_light(position=[34,-22.53,0], intensity=1.7, label='light'):
+	"""
+	Creates a light object
+	
+	This is not recommened when you have envirosky enabled, as it will swamp the
+	rgb rendering with light, but it depends on the application.
+	
+	# Arguments
+	
+	position (list): X,Y,Z position, defaults to `[32,-22.53,0]`
+	intensity (float): Light intensity, defaults to `1.7`
+	label (string): Game object name, defaults to `light`
+	
+	"""
 	common.send_data([
 		'CREATE {}'.format(label),
 		'{} ADD Light'.format(label),
@@ -847,15 +1026,25 @@ def add_light(position=[34,-22.53,0], intensity=1.7, label='light'):
 	common.flush_buffer()
 	settings.obj.append(label)
 
-def global_disk_setup(label='disk1'):
+def global_disk_setup(label='disk1', output_path=None):
+	"""
+	Setups the disk output module root component
+	
+	# Arguments
+	
+	label (string): Game object name, defaults to `disk1`
+	output_path (string): Image output path, when not set, defaults to settings.output_path (set by the syncity inialization script)
+	
+	"""
 	if settings.skip_disk:
 		return
-	
+	if output_path == None:
+		output_path = settings.output_path
 	common.send_data([
 		'CREATE {}'.format(label),
 		'{} SET active false'.format(label),
 		'{} ADD Sensors.Disk'.format(label),
-		'{} SET Sensors.Disk path "{}"'.format(label, settings.output_path),
+		'{} SET Sensors.Disk path "{}"'.format(label, output_path),
 		'{} SET active true'.format(label)
 	], read=False)
 	
@@ -863,10 +1052,31 @@ def global_disk_setup(label='disk1'):
 	settings.obj.append(label)
 
 def do_render(lst):
+	"""
+	By default syncity simulator doesn't render anything unless it's necessary, this method allows you to render one frame.
+	This funcionality works with renderCamera component and is intended for outputting data.
+	When you trigger a RenderFrame the object that contain a renderCamera will render ONE frame and disable the Camera object.
+	
+	# Arguments
+	
+	lst (list): List of cameras to call RenderFrame
+	
+	"""
 	for l in lst:
 		common.send_data('{} EXECUTE Sensors.RenderCamera RenderFrame'.format(l))
 
 def take_snapshot(lst, auto_segment=False, label='disk1', force_noop=False):
+	"""
+	Creates a image snapshot from a set of cameras using a disk component
+	
+	# Arguments
+	
+	lst (list): List of cameras
+	auto_segment (bool): Automatic guess which cameras are segmentation and export json objects among with the pixel dense image, defaults to `None`
+	label (string): Game object name, defaults to `disk1`
+	force_noop (bool): Force a buffer flush before snapshot happens, this ensures that any queued commands are executed before doing the render. Defaults to `False`
+	
+	"""
 	if settings.skip_disk and auto_segment == False:
 		if force_noop:
 			common.send_data('NOOP', read=True);
@@ -898,6 +1108,14 @@ def take_snapshot(lst, auto_segment=False, label='disk1', force_noop=False):
 	time.sleep(settings.cooldown)
 
 def take_seg_snapshot(lst):
+	"""
+	Creates a segmentation snapshot with json output from a list of cameras
+	
+	# Attributes
+	
+	lst (list): List of cameras with segmentation component
+	
+	"""
 	for l in lst:
 		r = common.send_data('{} GET Segmentation.Segmentation boundingBoxes'.format(l), read=True)
 		if (len(r) > 1):
@@ -908,6 +1126,15 @@ def take_seg_snapshot(lst):
 		#	seq_save('bbox_filtered', ''.join(r[1:]))
 
 def seq_save(pref, data):
+	"""
+	Helper function to mutate raw telnet outputs into json objects
+	
+	# Attributes
+	
+	pref (string): Output file prefix
+	data (string): Data to write
+	
+	"""
 	f = open('{}{}_{}.json'.format(settings.local_path, pref, settings.seq_save_i), 'w')
 	f.write(data)
 	f.close()
@@ -915,6 +1142,20 @@ def seq_save(pref, data):
 	settings.seq_save_i = settings.seq_save_i + 1
 
 def add_disk_output(lst, label='disk1'):
+	"""
+	Creates a image output from a existing disk component
+	
+	# Attributes
+	
+	lst (list): List of cameras
+	label (string): Existing disk component game object name
+	
+	# Note
+	
+	Any camera with a renderCamera component is able to export images, this method
+	creates a link between the texture this camera is rendering and a disk output.
+	
+	"""
 	if settings.skip_disk:
 		return
 	common.send_data('{} SET active false'.format(label))
@@ -943,6 +1184,29 @@ def spawn_radius_generic(
 	stick_to_ground=False, collision_check=True, suffix="", flush=False, prefix='spawner',
 	names=None
 ):
+	"""
+	Creates a torus shaped object spawner
+	
+	# Arguments
+	
+	types (list): List of names for spawned objects
+	tags (list): List of object tags to be spawned, this should align with the number of arguments on types
+	scale (list): X,Y,Z scale factor, defaults to `[1,1,1]`
+	innerradius (float): Defines a innerradius exclusion area, defaults to `0`
+	radius (float): Defines torus radius, defaults to `500`
+	position (list): X,Y,Z position of radius spawner
+	rotation (list): X,Y,Z rotation position of radius spawner
+	limit (int): Number of objects to spawn in each of the `types`
+	segmentation_class (list): Defines segmentation classes to be bound to the spawner, this must align with the number of arguments on types, defaults to `None`
+	orbit (bool): Adds orbiting component to spawner
+	stick_to_ground (bool): Forces spawned objects to stick to ground, ideal for irregular ground. defaults to `False`
+	collision_check (bool): Avoids objects from being spawned overlapping eachother and other objects in the scene, defaults to `True`
+	suffix (string): Adds a suffix string on types
+	flush (bool): Forces a telnet queue flush after spawning, defaults to `False`
+	prefix (string): Defines a root game object to nest types into, defaults to `spawner`
+	names (list): Overrides type caption, must be aligned with the number of arguments on types, defaults to `None`
+	
+	"""
 	# convert bool to strings
 	if collision_check == True:
 		collision_check = 'true'
@@ -1015,11 +1279,34 @@ def spawn_radius_generic(
 		common.flush_buffer()
 
 def spawn_rectangle_generic(
-	types=[], tags=None, scale=[1,1,1], a=0, b=500, position=[0,0,0],
+	types=[], tags=None, scale=[1,1,1], a=1, b=500, position=[0,0,0],
 	rotation=[0,0,0], limit=50, segmentation_class=None, orbit=False,
 	stick_to_ground=False, collision_check=True, suffix="", flush=False, prefix='spawner',
 	names=None
 ):
+	"""
+	Creates a rectangle shaped object spawner
+	
+	# Arguments
+	
+	types (list): List of names for spawned objects
+	tags (list): List of object tags to be spawned, this should align with the number of arguments on types
+	scale (list): X,Y,Z scale factor, defaults to `[1,1,1]`
+	a (float): Side A size, defaults to `1`
+	b (float): Side B size, defaults to `500`
+	position (list): X,Y,Z position of rectangle spawner
+	rotation (list): X,Y,Z rotation position of rectangle spawner
+	limit (int): Number of objects to spawn in each of the `types`
+	segmentation_class (list): Defines segmentation classes to be bound to the spawner, this must align with the number of arguments on types, defaults to `None`
+	orbit (bool): Adds orbiting component to spawner
+	stick_to_ground (bool): Forces spawned objects to stick to ground, ideal for irregular ground. defaults to `False`
+	collision_check (bool): Avoids objects from being spawned overlapping eachother and other objects in the scene, defaults to `True`
+	suffix (string): Adds a suffix string on types
+	flush (bool): Forces a telnet queue flush after spawning, defaults to `False`
+	prefix (string): Defines a root game object to nest types into, defaults to `spawner`
+	names (list): Overrides type caption, must be aligned with the number of arguments on types, defaults to `None`
+	
+	"""
 	# convert bool to strings
 	if collision_check == True:
 		collision_check = 'true'
@@ -1092,6 +1379,19 @@ def spawn_rectangle_generic(
 		common.flush_buffer()
 
 def spawn_flat_grid(types=[], size=[1000,1000], position=[0,0,0], scale=[1,1,1], prefix='spawner'):
+	"""
+	Creates a flat grid shaped object spawner
+	
+	# Arguments
+	
+	types (list): List of names for spawned objects
+	size (list): X,Y size of grid, defaults to `[1000, 1000]`
+	scale (list): X,Y,Z scale factor, defaults to `[1,1,1]`
+	position (list): X,Y,Z position of rectangle spawner
+	rotation (list): X,Y,Z rotation position of rectangle spawner
+	prefix (string): Defines a root game object to nest types into, defaults to `spawner`
+	
+	"""
 	for t in types:
 		n = t.replace(' ', '_')
 		
@@ -1111,7 +1411,29 @@ def spawn_flat_grid(types=[], size=[1000,1000], position=[0,0,0], scale=[1,1,1],
 	
 	common.flush_buffer()
 
-def spawn_parking_lot(limit, fixed=False, dist_h=8, dist_v=3, dist_lim=30, p_x=-15, p_z=-30, p_y=-5, prefix='cars', segment='Car'):
+def spawn_parking_lot(
+	limit, fixed=False, dist_h=8, dist_v=3, dist_lim=30,
+	p_x=-15, p_z=-30, p_y=-5, prefix='cars', segment='Car'
+):
+	"""
+	Creates a parking lot using a list of cars
+	
+	# Arguments
+	
+	limit (int): Number of objects to spawn in each of the `types`
+	fixed
+	dist_h (int): Horizontal distance, defaults to `8`
+	dist_v (int): Vertical distance, defaults to `3`
+	dist_lim (int): Distance limit, defaults to `30`
+	
+	p_x (float): Starting X coordintate, defaults to `-15`
+	p_y (float): Starting Y coordintate, defaults to `-5`
+	p_z (float): Starting Z coordintate, defaults to `-30`
+	
+	prefix (string): Defines a root game object to nest types into, defaults to `cars`
+	segment (string): Defines a segmentation class, defaults to `Car`
+	
+	"""
 	k = 0
 	idx = 0
 	j = len(cars_lst)
@@ -1149,6 +1471,14 @@ def spawn_parking_lot(limit, fixed=False, dist_h=8, dist_v=3, dist_lim=30, p_x=-
 	common.flush_buffer()
 
 def spawn_misc_objs(destroy=False, prefix='spawner'):
+	"""
+	Spawns city / animals / cars objects
+	
+	# Attributes
+	
+	destroy (bool): Destroy objects before creating them, defaults to `False`
+	prefix (string): Spawner root object where spawned objects will be nested within, defaults to `spawner`
+	"""
 	if destroy == True:
 		common.send_data([
 			'DELETE {}/city'.format(prefix),
@@ -1173,7 +1503,21 @@ def spawn_misc_objs(destroy=False, prefix='spawner'):
 	# spawn_radius_generic(['city/ground'], suffix='_0', limit=random.randint(3, 10), radius=75, innerradius=0, scale=[2,2,2], position=[0,0,0], collision_check=False, prefix=prefix)
 	spawn_radius_generic(['city/ground'], tags=['ground'], suffix='_0', limit=3, radius=75, innerradius=0, scale=[1,1,1], position=[0,0,0], collision_check=False, prefix=prefix)
 
-def spawn_drone_objs(destroy=False, ground_position=[0,0,0], ground_limit=204, dist_h=120, dist_v=120, dist_lim=1000, p_x=-20, p_z=-1000, p_y=0, birds_radius=90, birds_innerradius=0, cars_radius=50, cars_innerradius=5, trees_limit=[50,200], buildings_radius=335, buildings_innerradius=100, trees_radius=80, trees_innerradius=20, buildings_limit=[50,150], birds_limit=[25,100], cars_limit=[5,25], drones_limit=[80,200], prefix='spawner'):
+def spawn_drone_objs(
+	destroy=False, ground_position=[0,0,0], ground_limit=204,
+	dist_h=120, dist_v=120, dist_lim=1000, p_x=-20, p_z=-1000, p_y=0,
+	birds_radius=90, birds_innerradius=0, cars_radius=50, cars_innerradius=5,
+	trees_limit=[50,200], buildings_radius=335, buildings_innerradius=100, trees_radius=80, trees_innerradius=20,
+	buildings_limit=[50,150], birds_limit=[25,100], cars_limit=[5,25], drones_limit=[80,200], prefix='spawner'
+):
+	"""
+	Spawns trees / buildings / birds / donres and cars objects
+	
+	# Attributes
+	
+	destroy (bool): Destroy objects before creating them, defaults to `False`
+	prefix (string): Spawner root object where spawned objects will be nested within, defaults to `spawner`
+	"""
 	if destroy == True:
 		common.send_data([
 			'DELETE {}/city/nature/trees'.format(prefix),
@@ -1221,7 +1565,11 @@ def spawn_drone_objs(destroy=False, ground_position=[0,0,0], ground_limit=204, d
 	
 	common.flush_buffer()
 
-def spawn_drone_objs_alt(destroy=False, ground_limit=204, dist_h=120, dist_v=120, dist_lim=1000, p_x=-20, p_z=-1000, p_y=0, prefix='spawner'):
+def spawn_drone_objs_alt(
+	destroy=False, ground_limit=204,
+	dist_h=120, dist_v=120, dist_lim=1000,
+	p_x=-20, p_z=-1000, p_y=0, prefix='spawner'
+):
 	if destroy == True:
 		common.send_data([
 			'DELETE {}/city/nature/trees'.format(prefix),
@@ -1261,6 +1609,14 @@ def spawn_drone_objs_alt(destroy=False, ground_limit=204, dist_h=120, dist_v=120
 	common.flush_buffer()
 
 def spawn_animals_objs(destroy=False, prefix='spawner'):
+	"""
+	Spawns trees and animals
+	
+	# Attributes
+	
+	destroy (bool): Destroy objects before creating them, defaults to `False`
+	prefix (string): Spawner root object where spawned objects will be nested within, defaults to `spawner`
+	"""
 	if destroy == True:
 		common.send_data([
 			'DELETE {}/city'.format(prefix),

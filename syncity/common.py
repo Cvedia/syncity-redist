@@ -1,3 +1,8 @@
+"""
+Common static function repository for several internal functions to manage, connect and output data from the low level telnet procotol syncity api works on.
+
+This functions are accessible from scripts / tools via `common.<function>`
+"""
 import sys
 import os
 import telnetlib
@@ -21,6 +26,19 @@ _telnet = False
 settings = False
 
 def init_telnet(ip, port):
+	"""
+	Telnet initalizator
+	
+	# Arguments
+	ip (string): Ip address of target machine
+	port (int): Port of target machine, usually 10200
+	
+	# Globals
+	
+	tn: Telnet instance
+	_telnet (bool): Connection flag
+	
+	"""
 	global tn, _telnet
 	
 	output('Connecting to {}:{}...'.format(ip, port))
@@ -40,6 +58,13 @@ def init_telnet(ip, port):
 	output('Connected')
 
 def init():
+	"""
+	Initialize settings manager and gracefull shutdown functions
+	
+	# Globals
+	
+	settings: Instance of settings_manager singleton
+	"""
 	global settings
 	
 	settings = settings_manager.Singleton()
@@ -47,6 +72,13 @@ def init():
 	atexit.register(gracefull_shutdown)
 
 def output (s):
+	"""
+	Prints data to terminal with fancy formatting and ascii assurance.
+	
+	# Arguments
+	s (string): output string
+	"""
+	
 	x = '[{}] {}'.format(datetime.now().strftime("%H:%M:%S.%f"), s)
 	print (x)
 	
@@ -54,6 +86,18 @@ def output (s):
 		settings.lfh.write(x.encode('ascii') + b"\n")
 
 def send_data(v, read=None, flush=None):
+	"""
+	Sends data via telnet to the server
+	
+	# Arguments
+	
+	v (list|string): Command or multiple commands to be sent to the server
+	read (bool): Waits for a confirmation from server for each command been executed/queued (this greatly slows down execution)
+	
+	# Returns
+	
+	string: Reply from server or raw data
+	"""
 	if settings.force_sync:
 		read = True
 	else:
@@ -106,6 +150,18 @@ def send_data(v, read=None, flush=None):
 	return r
 
 def md5(fname):
+	"""
+	Creates a md5 hash from a file name
+	
+	# Attributes
+	
+	fname (string): Path to file
+	
+	# Returns
+	
+	string: md5 hash
+	"""
+	
 	hash_md5 = hashlib.md5()
 	with open(fname, "rb") as f:
 		for chunk in iter(lambda: f.read(4096), b""):
@@ -113,9 +169,33 @@ def md5(fname):
 	return hash_md5.hexdigest()
 
 def ts_write(fh, x):
+	"""
+	Prepends timestamp a string and appends it to a file pointer
+	
+	# Attributes
+	
+	fh (file handle): File handle of a previously open file to write to
+	x (string): Data to be written
+	
+	"""
 	fh.write('[{}] {}'.format(datetime.now().strftime("%H:%M:%S.%f"), x).encode('utf-8') + b"\n")
 
 def shape_data(l):
+	"""
+	Properly shapes raw data returned from low level telnet protocol into strings or json objects
+	
+	# Attributes
+	
+	l (string|buffer): Raw data
+	
+	# Raises
+	
+	TypeError: If invalid data type sent
+	
+	# Returns
+	
+	string: UTF-8 Data
+	"""
 	try:
 		# l = str(l).rstrip()
 		l = str(l.decode('utf-8')).rstrip()
@@ -128,6 +208,14 @@ def shape_data(l):
 	return l
 
 def gracefull_shutdown():
+	"""
+	Gracefully shutdown script execution:
+		- Deletes all created objects (if enabled)
+		- Waits for command buffer to flush
+		- Gracefully closes telnet connection with server
+		- Close any file pointers
+		- Exits
+	"""
 	output('Shutdown sequence...')
 	
 	if _telnet == True:
@@ -158,9 +246,23 @@ def gracefull_shutdown():
 		pass
 
 def flush_buffer():
+	"""
+	Forces a telnet command read by sending NOOP
+	"""
 	send_data('NOOP', read=True, flush=True)
 
 def modules_help(module):
+	"""
+	Transverses existing modules searching for help sections
+	
+	# Attributes
+	
+	module (string): Module name (must match the filename from module path)
+	
+	# Returns
+	
+	string: Shaped string with help method outpus from module
+	"""
 	scripts = os.listdir('syncity/{}/'.format(module))
 	output = []
 	
@@ -179,6 +281,17 @@ def modules_help(module):
 	return '\n'.join(output)
 
 def modules_args(module, parser):
+	"""
+	Transverses existing modules searching for command line arguments
+	
+	# Attributes
+	
+	module (string): Module name (must match the filename from module path)
+	
+	# Returns
+	
+	string: Shaped string with help method outpus from module
+	"""
 	scripts = os.listdir('syncity/{}/'.format(module))
 	
 	for s in scripts:
@@ -190,6 +303,9 @@ def modules_args(module, parser):
 				pass
 
 def local_time_offset(t=None):
+	"""
+	Figures out local timezone
+	"""
 	if t is None:
 		t = time.time()
 	
@@ -199,6 +315,20 @@ def local_time_offset(t=None):
 		return -time.timezone
 
 def get_all_files(base, ignore_path=['.git', '__pycache__'], ignore_ext=['.md', 'pyc']):
+	"""
+	Recursively lists all files from a folder
+	
+	# Arguments
+	
+	base (string): Base path
+	ignore_path (list): Paths to ignore
+	ignore_ext (list): Extensions to ignore
+	
+	# Returns
+	
+	list: All files found filtered by specified criteria
+	
+	"""
 	if type(base) != list:
 		base = [ base ]
 	fns = []

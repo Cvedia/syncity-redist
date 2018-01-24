@@ -1,3 +1,7 @@
+"""
+A collection of unity constants used as a lookup table for several scripts.
+"""
+
 tonemappings = [ 'Filmic', 'Reinhard', 'LumaReinhard', 'Photographic' ]
 
 # https://docs.unity3d.com/ScriptReference/RenderingPath.html
@@ -8,6 +12,7 @@ renderingPath = [
 	'Forward',					# 3
 	'UsePlayerSettings'	# 4 (default)
 ]
+
 
 # https://docs.unity3d.com/ScriptReference/TextureFormat.html
 textureFormat = [
