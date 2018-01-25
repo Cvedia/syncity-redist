@@ -27,11 +27,9 @@ def run():
 	
 	if settings.skip_setup == False:
 		helpers.global_camera_setup()
-		# helpers.add_camera_rgb(width=4096, height=3072, pp='EnviroFX', textureFormat=14)
 		helpers.add_camera_rgb(width=4096, height=3072, pp='EnviroFX')
 		helpers.add_camera_depth(width=1024, height=768)
-		# helpers.add_camera_seg(output_type='InstanceIds')
-		helpers.add_camera_seg()
+		helpers.add_camera_seg(width=4096, height=3072, segments=['drone0', 'drone1', 'drone2'], lookupTable=[['drone0', 'red'], ['drone1','blue'], ['drone2', 'green']])
 		helpers.global_disk_setup()
 		
 		helpers.add_disk_output(mycams)
@@ -47,39 +45,38 @@ def run():
 		], read=False)
 		'''
 		
-		# multiple individually segmented drones stacked
-		# each of itemsClassName are unique, they will be added to the system with
-		# auto increment classIds that you will see on the json output
-		helpers.add_camera_seg_filter(['drone/drone0','drone/drone1', 'drone/drone2'])
 		common.send_data([
 
 			# 'CREATE drone/drone0/drone0 "{}"'.format(random.choice(helpers.drones_lst)),
 			'CREATE drone/drone0/drone0 "{}"'.format(helpers.drones_lst[6]), # Drones/DJI Phantom 4 Pro/DJI_Phantom_4_Pro
 			# 'CREATE drone/drone0/drone0 "{}"'.format(helpers.drones_lst[0]),
-			'drone/drone0 ADD Segmentation.ClassGroup',
 			'drone/drone0 SET active false',
+			'drone/drone0 ADD Segmentation.ClassGroup',
 			'drone/drone0 SET Segmentation.ClassGroup itemsClassName drone0',
 			'drone/drone0/drone0 SET Transform position ({} {} {})'.format(0, 1, 0),
+			'drone/drone0/drone0 SET Transform eulerAngles ({} {} {})'.format(0, 0, 0),
 			'drone/drone0 SET active true',
 			'drone/drone0/drone0 SET active true',
 			
 			# 'CREATE drone/drone1/drone1 "{}"'.format(random.choice(helpers.drones_lst)),
 			'CREATE drone/drone1/drone1 "{}"'.format(helpers.drones_lst[4]), # Drones/DJI S1000/DJI S1000
 			# 'CREATE drone/drone1/drone1 "{}"'.format(helpers.drones_lst[1]),
-			'drone/drone1 ADD Segmentation.ClassGroup',
 			'drone/drone1 SET active false',
+			'drone/drone1 ADD Segmentation.ClassGroup',
 			'drone/drone1 SET Segmentation.ClassGroup itemsClassName drone1',
-			'drone/drone1/drone1 SET Transform position ({} {} {})'.format(0, 1.5, 0),
+			'drone/drone1/drone1 SET Transform position ({} {} {})'.format(0, 2, 0),
+			'drone/drone1/drone1 SET Transform eulerAngles ({} {} {})'.format(0, 0, 0),
 			'drone/drone1 SET active true',
 			'drone/drone1/drone1 SET active true',
 
 			# 'CREATE drone/drone2/drone2 "{}"'.format(random.choice(helpers.drones_lst)),
 			'CREATE drone/drone2/drone2 "{}"'.format(helpers.drones_lst[7]), # Drones/Parrot Disco/Parrot Disco
 			# 'CREATE drone/drone2/drone2 "{}"'.format(helpers.drones_lst[2]),
-			'drone/drone2 ADD Segmentation.ClassGroup',
 			'drone/drone2 SET active false',
+			'drone/drone2 ADD Segmentation.ClassGroup',
 			'drone/drone2 SET Segmentation.ClassGroup itemsClassName drone2',
-			'drone/drone2/drone2 SET Transform position ({} {} {})'.format(0, 2, 0),
+			'drone/drone2/drone2 SET Transform position ({} {} {})'.format(0, 3, 0),
+			'drone/drone2/drone2 SET Transform eulerAngles ({} {} {})'.format(0, 0, 0),
 			'drone/drone2 SET active true',
 			'drone/drone2/drone2 SET active true',
 		], read=False)
@@ -118,8 +115,6 @@ def run():
 		
 		# disable blooming effects
 		'cameras/cameraRGB SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.bloom.enabled false',
-		# HACK: change output type to get multiple segmentation classIds working
-		'cameras/segmentation SET Segmentation.Segmentation OutputType InstanceIds'
 	], read=False)
 	
 	common.flush_buffer()

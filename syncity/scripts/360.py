@@ -35,8 +35,6 @@ def run():
 			'obj SET Transform position ({} {} {})'.format(-6, 0, -9),
 			'obj SET Transform eulerAngles ({} {} {})'.format(0, 0, 0),
 			
-			'cameras/segmentation SET Segmentation.Segmentation OutputType InstanceIds',
-			
 			# 'CREATE city/ground_0 city/ground/Grass',
 			# 'city/ground_0 SET Transform position (0 0 0)',
 			# 'city/ground_0 SET Transform localScale (5 5 5)'

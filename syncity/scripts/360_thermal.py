@@ -70,9 +70,7 @@ def run():
 			# 'obj/subject SET Thermal.ThermalObjectBehaviour profile DefaultAnimalThermalProfile',
 			
 			'obj SET Transform position ({} {} {})'.format(-6, 0, -9),
-			'obj SET Transform eulerAngles ({} {} {})'.format(0, 0, 0),
-			
-			# 'cameras/segmentation SET Segmentation.Segmentation OutputType InstanceIds',
+			'obj SET Transform eulerAngles ({} {} {})'.format(0, 0, 0)
 			
 	], read=False)
 	

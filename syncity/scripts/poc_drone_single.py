@@ -28,7 +28,7 @@ def run():
 		# helpers.add_camera_rgb(width=4096, height=3072, pp='EnviroFX', textureFormat=14)
 		helpers.add_camera_rgb(width=4096, height=3072, pp='EnviroFX')
 		# helpers.add_camera_seg(output_type='InstanceIds')
-		helpers.add_camera_seg()
+		helpers.add_camera_seg(lookupTable=[['drone0', 'red'], ['drone1','blue'], ['drone2', 'green']])
 		helpers.global_disk_setup()
 		
 		helpers.add_disk_output(mycams)
@@ -115,8 +115,6 @@ def run():
 		
 		# disable blooming effects
 		'cameras/cameraRGB SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.bloom.enabled false',
-		# HACK: change output type to get multiple segmentation classIds working
-		'cameras/segmentation SET Segmentation.Segmentation OutputType InstanceIds'
 	], read=False)
 	
 	common.flush_buffer()

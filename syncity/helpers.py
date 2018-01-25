@@ -22,7 +22,7 @@ drones_lst = [
 	'Drones/DJI Spreading Wings S1000 Professional Octocopter/Spreading_Wings_S1000',
 	'Drones/white/white',
 	'Drones/DJI_Phantom_4_Pro/DJI_Phantom_4_Pro',
-	'Drones/Parrot Disco/Parrot Disco'
+	'Drones/Parrot Disco Drone/Parrot_Disco'
 ]
 
 # lite asset package
@@ -923,6 +923,7 @@ def add_camera_seg(
 	clipping_far=1000,
 	boundingBoxesExtensionAmount=0,
 	renderingPath=4, textureFormat=4,
+	minimum_visibility=0,
 	renderCamera=True,
 	lookupTable=None
 ):
@@ -942,6 +943,7 @@ def add_camera_seg(
 	clipping_far (float): Far clipping distance, defaults to `1000` - Objects further from this distance won't appear
 	renderCamera (bool): Binds a renderCamera component allowing for disk exports, defaults to `True`
 	lookupTable (list): Binds a color to a class, this is essential for outputting pixel dense images, this is an array of arrays like `[ [ Car , red ] , [ Person, blue ] .. ]`
+	minimum_visibility (float): Defines minimum visibility of object in % (0 - 1), objects with less than % of it's total size visible won't appear on the segmentation maps neither yeild bounding boxes, defaults to `0`
 	
 	# Notes
 	
@@ -969,6 +971,7 @@ def add_camera_seg(
 		'{} SET Camera renderingPath {}'.format(label, unity_vars.renderingPath[renderingPath]),
 		'{} SET Camera targetTexture.filterMode Point'.format(label),
 		'{} ADD Segmentation.Segmentation'.format(label),
+		'{} SET Segmentation.Segmentation MinimumObjectVisibility {}'.format(label, minimum_visibility),
 		'{} SET Segmentation.Segmentation OutputType {}'.format(label, output_type),
 		'{} SET Segmentation.Segmentation BoundingBoxesExtensionAmount {}'.format(label, boundingBoxesExtensionAmount),
 		'{} EXECUTE Segmentation.Segmentation DefineClass Void'.format(label)
