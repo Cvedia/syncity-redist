@@ -46,10 +46,7 @@ def run():
 		'''
 		
 		common.send_data([
-
-			# 'CREATE drone/drone0/drone0 "{}"'.format(random.choice(helpers.drones_lst)),
 			'CREATE drone/drone0/drone0 "{}"'.format(helpers.drones_lst[6]), # Drones/DJI Phantom 4 Pro/DJI_Phantom_4_Pro
-			# 'CREATE drone/drone0/drone0 "{}"'.format(helpers.drones_lst[0]),
 			'drone/drone0 SET active false',
 			'drone/drone0 ADD Segmentation.ClassGroup',
 			'drone/drone0 SET Segmentation.ClassGroup itemsClassName drone0',
@@ -58,9 +55,7 @@ def run():
 			'drone/drone0 SET active true',
 			'drone/drone0/drone0 SET active true',
 			
-			# 'CREATE drone/drone1/drone1 "{}"'.format(random.choice(helpers.drones_lst)),
 			'CREATE drone/drone1/drone1 "{}"'.format(helpers.drones_lst[4]), # Drones/DJI S1000/DJI S1000
-			# 'CREATE drone/drone1/drone1 "{}"'.format(helpers.drones_lst[1]),
 			'drone/drone1 SET active false',
 			'drone/drone1 ADD Segmentation.ClassGroup',
 			'drone/drone1 SET Segmentation.ClassGroup itemsClassName drone1',
@@ -68,10 +63,8 @@ def run():
 			'drone/drone1/drone1 SET Transform eulerAngles ({} {} {})'.format(0, 0, 0),
 			'drone/drone1 SET active true',
 			'drone/drone1/drone1 SET active true',
-
-			# 'CREATE drone/drone2/drone2 "{}"'.format(random.choice(helpers.drones_lst)),
+			
 			'CREATE drone/drone2/drone2 "{}"'.format(helpers.drones_lst[7]), # Drones/Parrot Disco/Parrot Disco
-			# 'CREATE drone/drone2/drone2 "{}"'.format(helpers.drones_lst[2]),
 			'drone/drone2 SET active false',
 			'drone/drone2 ADD Segmentation.ClassGroup',
 			'drone/drone2 SET Segmentation.ClassGroup itemsClassName drone2',
@@ -81,9 +74,6 @@ def run():
 			'drone/drone2/drone2 SET active true',
 		], read=False)
 	
-	# p_x_r = [-17, 13]
-	# p_y_r = [1.5, 17]
-	# p_z_r = [24, 42]
 	p_x_r = [-3, 3]
 	p_y_r = [1.5, 8]
 	p_z_r = [3, 9]
@@ -151,7 +141,6 @@ def run():
 			'spawner/cars SET Transform eulerAngles ({} {} {})'.format(0, random.randint(0, 359), 0),
 			'spawner/city/nature SET Transform eulerAngles ({} {} {})'.format(0, random.randint(0, 359), 0),
 			'spawner/city/buildings SET Transform eulerAngles ({} {} {})'.format(0, random.randint(0, 359), 0),
-			# 'cameras SET Transform eulerAngles ({} {} {})'.format(-20, y, 0),
 			'city SET Transform eulerAngles ({} {} {})'.format(0, random.randint(0, 359), 0),
 			'EnviroSky SET EnviroSky GameTime.Hours {}'.format(random.randint(8, 12)),
 			'drone SET Transform position ({} {} {})'.format(p_x, p_y, p_z),
@@ -163,6 +152,5 @@ def run():
 		
 		common.flush_buffer()
 		helpers.take_snapshot(mycams, True)
-		# helpers.take_seg_snapshot([ 'cameras/segmentation' ])
 		
 		loop = loop + 1

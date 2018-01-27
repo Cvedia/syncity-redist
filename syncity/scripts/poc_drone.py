@@ -51,8 +51,6 @@ def run():
 		common.send_data([
 			'spawner/drones SET Transform position ({} {} {})'.format(0, random.randint(2, 25), 0),
 			'spawner/drones SET Transform eulerAngles ({} {} {})'.format(random.randint(-15, 15), random.randint(0, 359), random.randint(-2, 2)),
-			# 'spawner/drones/white SET Transform position ({} {} {})'.format(0, random.randint(2, 25), 0),
-			# 'spawner/drones/white SET Transform eulerAngles ({} {} {})'.format(random.randint(-15, 15), random.randint(0, 359), random.randint(-2, 2)),
 			'spawner/animals/birds SET Transform position ({} {} {})'.format(0, random.randint(5, 75), 0),
 			'spawner/animals/birds SET Transform eulerAngles ({} {} {})'.format(0, random.randint(0, 359), 0),
 			'spawner/cars SET Transform eulerAngles ({} {} {})'.format(0, random.randint(0, 359), 0),
@@ -67,7 +65,6 @@ def run():
 		])
 		
 		helpers.take_snapshot(mycams, True)
-		# helpers.take_seg_snapshot([ 'cameras/segmentation' ])
 		
 		y = y + 1
 		loop = loop + 1

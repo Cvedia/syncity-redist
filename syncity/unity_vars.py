@@ -1,7 +1,3 @@
-"""
-A collection of unity constants used as a lookup table for several scripts.
-"""
-
 tonemappings = [ 'Filmic', 'Reinhard', 'LumaReinhard', 'Photographic' ]
 
 # https://docs.unity3d.com/ScriptReference/RenderingPath.html
@@ -12,7 +8,6 @@ renderingPath = [
 	'Forward',					# 3
 	'UsePlayerSettings'	# 4 (default)
 ]
-
 
 # https://docs.unity3d.com/ScriptReference/TextureFormat.html
 textureFormat = [
@@ -72,3 +67,5 @@ textureFormat = [
 	'RG16',							# 53 Two color (RG) texture format, 8-bits per channel.
 	'R8'								# 54 Scalar (R) render texture format, 8 bit fixed point.
 ]
+
+colors = [ 'blue', 'cyan', 'gray', 'green', 'magenta', 'red', 'white', 'yellow' ]

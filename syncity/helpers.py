@@ -899,7 +899,7 @@ def set_disk_texture(lst, label='disk1'):
 			'{}/{} SET Sensors.RenderCameraLink target {}'.format(label, l.capitalize(), l)
 		], read=False)
 
-def add_camera_seg_filter(segments=['Car'], label='cameras/segmentation'):
+def add_camera_seg_filter(segments=['Car'], label='cameras/segmentation', unoccluded=None):
 	"""
 	Creates a filterable bounding boxes with unoccluded option enabled by default.
 	This allows you to export json objects containig segmented classes.
@@ -908,12 +908,19 @@ def add_camera_seg_filter(segments=['Car'], label='cameras/segmentation'):
 	
 	segments (list): Defines one or more classes, defaults to `['Car']`
 	label (string): Defines a segmentation camera as source, defaults to `cameras/segmentation`
+	unoccluded (list): Defines one or more classes to be unoccluded, defaults to `None`
 	"""
+	
 	for s in segments:
 		common.send_data([
-			'{} PUSH Segmentation.Segmentation boundingBoxesFilter {}'.format(label, s),
-			'{} PUSH Segmentation.Segmentation unoccludedClasses {}'.format(label, s)
+			'{} PUSH Segmentation.Segmentation boundingBoxesFilter {}'.format(label, s)
 		], read=False)
+	
+	if unoccluded != None:
+		for s in segments:
+			common.send_data([
+				'{} PUSH Segmentation.Segmentation unoccludedClasses {}'.format(label, s)
+			], read=False)
 
 # output_type options: Auto, ClassIds, InstanceIds, ClassColors, Raw
 def add_camera_seg(
@@ -925,7 +932,7 @@ def add_camera_seg(
 	renderingPath=4, textureFormat=4,
 	minimum_visibility=0,
 	renderCamera=True,
-	lookupTable=None
+	lookupTable=True
 ):
 	"""
 	Creates a Segmentation camera
@@ -942,7 +949,7 @@ def add_camera_seg(
 	clipping_near (float): Near clipping distance, defaults to `0.3` - Objects closer than this distance won't appear
 	clipping_far (float): Far clipping distance, defaults to `1000` - Objects further from this distance won't appear
 	renderCamera (bool): Binds a renderCamera component allowing for disk exports, defaults to `True`
-	lookupTable (list): Binds a color to a class, this is essential for outputting pixel dense images, this is an array of arrays like `[ [ Car , red ] , [ Person, blue ] .. ]`
+	lookupTable (list): Binds a color to a class, this is essential for outputting pixel dense images, this is an array of arrays like `[ [ Car , red ] , [ Person, blue ] .. ]`; Defaults to `True` which will automatically populate the segmentation lookup table based on the segments sent.
 	minimum_visibility (float): Defines minimum visibility of object in % (0 - 1), objects with less than % of it's total size visible won't appear on the segmentation maps neither yeild bounding boxes, defaults to `0`
 	
 	# Notes
@@ -986,7 +993,20 @@ def add_camera_seg(
 		'{} PUSH Segmentation.LookUpTable colors black'.format(label)
 	], read=False)
 	
-	if lookupTable != None:
+	if lookupTable == True and segments != None:
+		idx = 0
+		for i in segments:
+			if idx > len(unity_vars.colors):
+				color = '"{}"'.format(get_random_color())
+			else:
+				color = unity_vars.colors[idx]
+			common.send_data([
+				'{} EXECUTE Segmentation.Segmentation DefineClass {}'.format(label, i),
+				'{} PUSH Segmentation.LookUpTable classes {}'.format(label, i),
+				'{} PUSH Segmentation.LookUpTable colors {}'.format(label, color)
+			], read=False)
+			idx += 1
+	elif isinstance(lookupTable, list):
 		for i in lookupTable:
 			common.send_data([
 				'{} EXECUTE Segmentation.Segmentation DefineClass {}'.format(label, i[0]),
@@ -1181,11 +1201,30 @@ def ugly_tag_fix(tag):
 	
 	return x
 
+def get_random_color(alpha='FF'):
+	"""
+	Generates a random color with configurable alpha channel value
+	
+	# Arguments
+	
+	alpha (hex string): Defines a alpha channel value (hex), defaults to `FF` (opaque)
+	
+	# Returns
+	
+	string
+	"""
+	s = '0123456789ABCDEF'
+	o = ''
+	for i in range(0,5):
+		o += random.choice(s)
+	
+	return '#' + o + alpha
+
 def spawn_radius_generic(
 	types=[], tags=None, scale=[1,1,1], innerradius=0, radius=500, position=[0,0,0],
 	rotation=[0,0,0], limit=50, segmentation_class=None, orbit=False,
 	stick_to_ground=False, collision_check=True, suffix="", flush=False, prefix='spawner',
-	names=None
+	names=None, ugly_fix=True
 ):
 	"""
 	Creates a torus shaped object spawner
@@ -1208,7 +1247,7 @@ def spawn_radius_generic(
 	flush (bool): Forces a telnet queue flush after spawning, defaults to `False`
 	prefix (string): Defines a root game object to nest types into, defaults to `spawner`
 	names (list): Overrides type caption, must be aligned with the number of arguments on types, defaults to `None`
-	
+	ugly_fix (bool): Ugly fix for asset naming, defaults to `True`
 	"""
 	# convert bool to strings
 	if collision_check == True:
@@ -1237,11 +1276,13 @@ def spawn_radius_generic(
 			'{}/{} ADD RandomProps.PropArea'.format(prefix, n)
 		], read=False)
 		
-		try:
-			common.send_data(['{}/{} SET RandomProps.PropArea tags "{}"'.format(prefix, n, ugly_tag_fix(tags[i]))], read=False)
-		except:
-			common.send_data(['{}/{} SET RandomProps.PropArea tags "{}"'.format(prefix, n, ugly_tag_fix(t))], read=False)
-		
+		if ugly_fix == True:
+			try:
+				common.send_data(['{}/{} SET RandomProps.PropArea tags "{}"'.format(prefix, n, ugly_tag_fix(tags[i]))], read=False)
+			except:
+				common.send_data(['{}/{} SET RandomProps.PropArea tags "{}"'.format(prefix, n, ugly_tag_fix(t))], read=False)
+		else:
+			common.send_data(['{}/{} SET RandomProps.PropArea tags "{}"'.format(prefix, n, tags[i])], read=False)
 		common.send_data([
 			'{}/{} SET RandomProps.PropArea async false'.format(prefix, n),
 			# '{}/{} SET RandomProps.PropArea tags "{}"'.format(prefix, n, t),
@@ -1563,7 +1604,7 @@ def spawn_drone_objs(
 	spawn_radius_generic(['cars'], tags=['car'], limit=random.randint(cars_limit[0], cars_limit[1]), radius=cars_radius, innerradius=cars_innerradius, position=[0,0,0], prefix=prefix)
 	
 	if drones_limit[1] > 0:
-		spawn_radius_generic(['drones'], limit=random.randint(drones_limit[0], drones_limit[1]), radius=random.randint(30,50), innerradius=0, position=[0,0,0], segmentation_class="Drone", prefix=prefix)
+		spawn_radius_generic(['drones'], tags=['drones'], ugly_fix=False, limit=random.randint(drones_limit[0], drones_limit[1]), radius=random.randint(30,50), innerradius=0, position=[0,0,0], segmentation_class="Drone", prefix=prefix)
 	# spawn_radius_generic(['drones/white'], limit=random.randint(10,50), radius=random.randint(30,50), innerradius=0, position=[0,0,0], segmentation_class="Car")
 	
 	common.flush_buffer()

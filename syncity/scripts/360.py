@@ -22,11 +22,12 @@ def run():
 	if settings.skip_setup == False:
 		helpers.global_camera_setup()
 		helpers.add_camera_rgb(width=4096, height=3072, pp='EnviroFX')
-		helpers.add_camera_seg(segments=['Car'])
+		helpers.add_camera_seg(segments=['Car'], lookupTable=[['Car', 'red']])
 		helpers.global_disk_setup()
 		helpers.add_disk_output(mycams)
 		common.send_data([
 			'CREATE obj/subject {}'.format(obj),
+			'obj SET active false',
 			'obj/subject SET Transform position ({} {} {})'.format(0, 0, 0),
 			'obj/subject SET Transform eulerAngles ({} {} {})'.format(0, 0, 0),
 			
@@ -44,13 +45,19 @@ def run():
 	common.send_data([
 		'obj SET active true',
 		'obj/subject SET active true',
+		
 		'cameras/cameraRGB SET Camera enabled true',
+		'cameras/segmentation SET Camera enabled true',
+		
 		'cameras SET Transform position ({} {} {})'.format(0, 1, -16),
 		'cameras SET Transform eulerAngles ({} {} {})'.format(0, -40, 0),
 		'EnviroSky SET EnviroSky cloudsMode {}'.format('Volume'),
 		'EnviroSky SET EnviroSky cloudsSettings.globalCloudCoverage {}'.format(-0.04),
 		'EnviroSky EXECUTE EnviroSky ChangeWeather "{}"'.format(helpers.weather_lst[1])
 	], read=False)
+	
+	if settings.setup_only == True:
+		return
 	
 	common.flush_buffer()
 	

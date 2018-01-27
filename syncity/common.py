@@ -314,7 +314,12 @@ def local_time_offset(t=None):
 	else:
 		return -time.timezone
 
-def get_all_files(base, ignore_path=['.git', '__pycache__'], ignore_ext=['.md', 'pyc']):
+def read_all(fn):
+	with open(fn, "r") as fh:
+		data = fh.read()
+	return data
+
+def get_all_files(base, ignore_path=['.git', '__pycache__'], ignore_ext=['.md', 'pyc'], recursive=True):
 	"""
 	Recursively lists all files from a folder
 	
@@ -323,6 +328,7 @@ def get_all_files(base, ignore_path=['.git', '__pycache__'], ignore_ext=['.md', 
 	base (string): Base path
 	ignore_path (list): Paths to ignore
 	ignore_ext (list): Extensions to ignore
+	recursive (bool): Disables / enables recursion for subfolders, defaults to `True`
 	
 	# Returns
 	
@@ -348,10 +354,11 @@ def get_all_files(base, ignore_path=['.git', '__pycache__'], ignore_ext=['.md', 
 						if jp not in fns:
 							fns.append(os.path.join(folder, fn))
 				
-				for subdir in subdirs:
-					jp = os.path.join(folder, subdir)
-					if jp not in base:
-						base.append(jp)
+				if recursive == True:
+					for subdir in subdirs:
+						jp = os.path.join(folder, subdir)
+						if jp not in base:
+							base.append(jp)
 	
 	return fns
 
