@@ -21,8 +21,7 @@ Animals thermal in Savannah scene
 
 def run():
 	settings.keep = True
-	mycams = ['cameras/cameraRGB', 'cameras/segmentation', 'cameras/cameraDepth']
-	# mycams = ['cameras/cameraRGB', 'cameras/cameraDepth']
+	mycams = ['cameras/cameraRGB', 'cameras/segmentation', 'cameras/depth']
 	
 	dist = 8900
 	azimuth = 0
@@ -58,42 +57,47 @@ def run():
 			orbitGround='savannah/Main Terrain'
 		)
 		
-		helpers.add_camera_seg(width=1024, height=768, fov=90, clipping_far=10000)
+		helpers.add_camera_seg(
+			width=1024, height=768, fov=90, clipping_far=10000,
+			segments=['Car', 'Animal'], lookupTable=[['Car', 'red'], ['Animal', 'blue']]
+		)
 		
 		helpers.add_camera_rgb(
-			width=1024, height=768, pp=None, thermal=True, envirosky=False, thermal_trees=True,
-			thermal_ambientTemperature=15, thermal_minimumTemperature=9, thermal_maximumTemperature=35,
-			thermal_trees_base=8, thermal_trees_bandwidth=50, thermal_trees_median=0, thermal_trees_leafs_variance=10,
+			width=1024, height=768, pp='EnviroFX',
 			fov=90,
 			clipping_far=10000
+		)
+		
+		helpers.add_camera_thermal(
+			fov=90,
+			clipping_far=10000,
+			
+			trees=True,
+			ambientTemperature=15, minimumTemperature=9, maximumTemperature=35,
+			trees_base=8, trees_bandwidth=50, trees_median=0, trees_leafs_variance=10,
 		)
 		
 		helpers.add_camera_depth(width=1024, height=768, fov=90)
 		helpers.global_disk_setup()
 		helpers.add_disk_output(mycams)
 		
-		# 500 animals per pool * 16 = ~10G RAM
 		helpers.spawn_rectangle_generic(
-			# ['+carthermal', '+animal, +thermal, +savannah', '+animal, +thermal, +savannah', '+animal, +thermal, +savannah' ,'+animal, +thermal, +savannah', '+animal, +thermal, +savannah', '+animal, +thermal, +savannah', '+animal, +thermal, +savannah' ,'+animal, +thermal, +savannah', '+animal, +thermal, +savannah', '+animal, +thermal, +savannah', '+animal, +thermal, +savannah' ,'+animal, +thermal, +savannah', '+animal, +thermal, +savannah', '+animal, +thermal, +savannah', '+animal, +thermal, +savannah' ],
-			# names=['cars0', 'animals0', 'animals1', 'animals2', 'animals3', 'animals4', 'animals5', 'animals6', 'animals7', 'animals8', 'animals9', 'animalsA', 'animalsB', 'animalsC', 'animalsD', 'animalsE'],
 			['+carthermal', '+animal, +thermal, +savannah', '+animal, +thermal, +savannah', '+animal, +thermal, +savannah' ,'+animal, +thermal, +savannah'],
 			names=['cars0', 'animals0', 'animals1', 'animals2', 'animals3'],
+			segmentation_class=['Car', 'Animal', 'Animal', 'Animal', 'Animal'],
 			limit=50, a=5000, b=625, position=[2519, 591, 9630],
 			
 			collision_check=True,
-			
-			segmentation_class="animals",
 			stick_to_ground=True
 		)
 		
 		helpers.spawn_rectangle_generic(
 			['+animal, +thermal, +savannah' ],
 			names=['animalsF'],
+			segmentation_class=['Animal'],
 			limit=50, a=100, b=100, position=[1685, 591, 9856],
 			
 			collision_check=True,
-			
-			segmentation_class="animals",
 			stick_to_ground=True
 		)
 		
@@ -119,20 +123,6 @@ def run():
 			'spawner/animals1 SET Transform position (2519 591 9005)',
 			'spawner/animals2 SET Transform position (2519 591 8380)',
 			'spawner/animals3 SET Transform position (2519 591 7755)',
-			'spawner/animals4 SET Transform position (2519 591 7130)',
-			'spawner/animals5 SET Transform position (2519 591 6505)',
-			'spawner/animals6 SET Transform position (2519 591 5880)',
-			'spawner/animals7 SET Transform position (2519 591 5255)',
-			'spawner/animals8 SET Transform position (2519 591 4630)',
-			'spawner/animals9 SET Transform position (2519 591 4005)',
-			'spawner/animalsA SET Transform position (2519 591 3380)',
-			'spawner/animalsB SET Transform position (2519 591 2755)',
-			'spawner/animalsC SET Transform position (2519 591 2130)',
-			'spawner/animalsD SET Transform position (2519 591 1505)',
-			'spawner/animalsE SET Transform position (2519 591 880)',
-			# 'spawner/animalsF SET Transform position (2519 591 255)',
-			
-			'cameras/segmentation SET Segmentation.Segmentation OutputType InstanceIds',
 			
 			'spawner SET active true'
 			

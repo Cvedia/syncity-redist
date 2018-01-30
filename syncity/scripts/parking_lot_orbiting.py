@@ -19,10 +19,12 @@ def run():
 	
 	if settings.skip_setup == False:
 		helpers.global_camera_setup()
-		helpers.add_camera_rgb(envirosky=settings.envirosky, flycam=settings.flycam)
+		helpers.add_camera_rgb(pp='EnviroFX')
 		helpers.add_camera_seg(segments=['Car'])
-		if settings.envirosky == False:
-			helpers.add_light()
+		
+		# if settings.envirosky == False:
+		# 	helpers.add_light()
+		
 		helpers.global_disk_setup()
 		helpers.add_disk_output(mycams)
 		

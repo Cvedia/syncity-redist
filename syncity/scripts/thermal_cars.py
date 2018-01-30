@@ -1,5 +1,6 @@
 import random
 import json
+import sys
 from .. import common, helpers, settings_manager
 
 settings = settings_manager.Singleton()
@@ -16,18 +17,21 @@ Simple car thermal show off
 
 def run():
 	settings.keep = True
-	mycams = ['cameras/cameraRGB']
+	mycams = ['cameras/cameraRGB', 'cameras/thermal']
 
 	if settings.skip_setup == False:
 		helpers.global_camera_setup()
-		helpers.add_camera_rgb(width=4096, height=3072, audio=True, envirosky=True, thermal=True, thermal_ambientTemperature=3)
-		helpers.add_camera_rgb_pp('EnviroFX', False)
+		helpers.add_camera_rgb(width=4096, height=3072, pp='EnviroFX')
+		helpers.add_camera_thermal(
+			clipping_far=10000,
+			
+			trees=True,
+			ambientTemperature=15, minimumTemperature=9, maximumTemperature=35,
+			trees_base=8, trees_bandwidth=50, trees_median=0, trees_leafs_variance=10,
+		)
+		
 		helpers.global_disk_setup()
 		helpers.add_disk_output(mycams)
-		
-		# helpers.spawn_radius_generic(['tree'], collision_check=False, limit=50, radius=80, innerradius=30, position=[0,10,0])
-		# helpers.spawn_radius_generic(['sign'], limit=10, radius=35, innerradius=0, position=[0,10,0])
-		# helpers.spawn_radius_generic(['building'], limit=10, radius=335, innerradius=80, position=[0,10,0])
 		
 		helpers.spawn_radius_generic(
 			['car, +thermal'], limit=15, radius=25, innerradius=0,
@@ -51,6 +55,10 @@ def run():
 	
 	# get spanwed objects - this returns an array
 	spawned_cars = json.loads(''.join(common.send_data('{} GET CHILDREN'.format('spawner/car___thermal'))[1:]))
+	
+	if len(spawned_cars) == 0:
+		common.output('No thermal cars spawned, maybe your asset package doesn\'t include any. Aborting!');
+		sys.exit(0)
 	
 	r_y = 0
 	r_y_displacement = 5

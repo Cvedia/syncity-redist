@@ -21,7 +21,7 @@ Animals thermal in Savannah scene
 
 def run():
 	settings.keep = True
-	mycams = ['cameras/cameraRGB', 'cameras/segmentation', 'cameras/cameraDepth']
+	mycams = ['cameras/cameraRGB', 'cameras/segmentation', 'cameras/depth']
 	
 	# dist = 8900
 	# azimuth = 0
@@ -52,30 +52,39 @@ def run():
 			'savannah SET active true'
 		])
 		
+		helpers.global_camera_setup()
+		
+		helpers.add_camera_seg(
+			width=1024, height=768, fov=90, clipping_far=10000,
+			segments=['Animal'], lookupTable=[['Animal', 'blue']]
+		)
+		
+		helpers.add_camera_rgb(
+			width=1024, height=768, pp='EnviroFX',
+			fov=90,
+			clipping_far=10000
+		)
+
+		helpers.add_camera_thermal(
+			fov=90,
+			clipping_far=10000,
+			
+			trees=True,
+			ambientTemperature=15, minimumTemperature=9, maximumTemperature=35,
+			trees_base=8, trees_bandwidth=50, trees_median=0, trees_leafs_variance=10,
+		)
+		
+		helpers.add_camera_depth(width=1024, height=768, fov=90)
 		helpers.spawn_rectangle_generic(
 			['+animal, +thermal, +savannah', '+animal, +thermal, +savannah', '+animal, +thermal, +savannah'],
 			names=['animals0', 'animals1', 'animals2'],
 			
 			collision_check=True,
 			limit=100, a=100, b=100, position=[3193, 374.7158, 8161],
-			
-			segmentation_class="animals",
+			segmentation_class=['Animal', 'Animal', 'Animal'],
 			stick_to_ground=True
 		)
 		
-		helpers.global_camera_setup()
-		
-		helpers.add_camera_seg(width=1024, height=768)
-		
-		helpers.add_camera_rgb(
-			width=1024, height=768, pp=None, thermal=True, envirosky=False, thermal_trees=True,
-			thermal_ambientTemperature=15, thermal_minimumTemperature=9, thermal_maximumTemperature=35,
-			thermal_trees_base=8, thermal_trees_bandwidth=50, thermal_trees_median=0, thermal_trees_leafs_variance=10,
-			fov=90,
-			clipping_far=10000
-		)
-		
-		helpers.add_camera_depth(width=1024, height=768, fov=90, clipping_far=10000)
 		helpers.global_disk_setup()
 		helpers.add_disk_output(mycams)
 	

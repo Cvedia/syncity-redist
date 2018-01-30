@@ -1456,7 +1456,7 @@ def spawn_flat_grid(types=[], size=[1000,1000], position=[0,0,0], scale=[1,1,1],
 	common.flush_buffer()
 
 def spawn_parking_lot(
-	limit, fixed=False, dist_h=8, dist_v=3, dist_lim=30,
+	limit, fixed=True, dist_h=8, dist_v=3, dist_lim=30,
 	p_x=-15, p_z=-30, p_y=-5, prefix='cars', segment='Car'
 ):
 	"""

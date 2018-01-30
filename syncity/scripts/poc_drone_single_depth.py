@@ -23,7 +23,7 @@ POC Drone single scene
 
 def run():
 	settings.keep = True
-	mycams = ['cameras/cameraRGB', 'cameras/segmentation', 'cameras/cameraDepth']
+	mycams = ['cameras/cameraRGB', 'cameras/segmentation', 'cameras/depth']
 	
 	if settings.skip_setup == False:
 		helpers.global_camera_setup()
