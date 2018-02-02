@@ -15,11 +15,11 @@ def help():
 	- Creates a Thermal camera
 	- Creates a Segmentation camera
 	- Spawns a single object and rotates around it
+	- Randomize thermal parameters
 	- Exports RGB images
 	- Exports segmentation maps
 	- Exports Thermal images
 	- Exports bounding boxes
-	- Saves detections
 	- Exits leaving all objects exposed
 
 WARNING: In order to run this you need to have syncity custom yolo version, you
@@ -42,8 +42,8 @@ def run():
 	settings.keep = True
 	mycams = ['cameras/cameraRGB', 'cameras/segmentation', 'cameras/thermal']
 	# obj = 'Cars/BMW6_Series_650i/BMW6_Series_650i'
-	# obj = 'Cars/VW_Golf_V/VW_Golf_V'
-	obj = 'humans Human/Runfast'
+	obj = 'Cars/VW_Golf_V/VW_Golf_V'
+	# obj = 'humans Human/Runfast'
 	
 	if settings.skip_setup == False:
 		helpers.global_camera_setup()
@@ -64,10 +64,10 @@ def run():
 			'obj/subject SET Transform position ({} {} {})'.format(0, 0, 0),
 			'obj/subject SET Transform eulerAngles ({} {} {})'.format(0, 0, 0),
 			
-			# NOTE: if the object doesn't contain a thermal profile we need to add one to be visible on the camera
-			# 'obj/subject ADD Thermal.ThermalObjectBehaviour',
-			# TODO: Loading profiles is not yet supported
-			# 'obj/subject SET Thermal.ThermalObjectBehaviour profile DefaultAnimalThermalProfile',
+			'obj/subject ADD Thermal.ThermalObjectOverride',
+			
+			'obj/subject ADD Thermal.ThermalObjectBehaviour',
+			'obj/subject SET Thermal.ThermalObjectBehaviour profile DefaultThermalProfile',
 			
 			'obj SET Transform position ({} {} {})'.format(-6, 0, -9),
 			'obj SET Transform eulerAngles ({} {} {})'.format(0, 0, 0)
@@ -97,10 +97,23 @@ def run():
 		
 		# do a 360 around object
 		while a_y < 360:
+			# random agc values
+			min_agc = random.randint(-10, 5)
+			max_agc = random.randint(30, 150)
+			
+			helpers.set_thermal_props(
+				'obj/subject',
+				heatiness=random.uniform(0, 50), reflectivity=random.uniform(0, 1), ambientOffset=random.uniform(-25, 25),
+				temperatureValue=random.uniform(-20, 50), temperatureBandwidth=random.uniform(0, 20), temperatureMedian=random.uniform(0, 1),
+				variance=random.uniform(0, 50)
+			)
+			
 			common.send_data([
+				'cameras/thermal SET Thermal.ThermalCamera temperatureRange ({} {})'.format(min_agc, max_agc),
 				'obj SET Transform eulerAngles ({} {} {})'.format(a_x, a_y, 0),
 				'obj SET Transform position ({} {} {})'.format(random.randint(-23, -3) , 0, 0)
 			])
+			
 			a_y = a_y + displ_y
 			helpers.take_snapshot(mycams, True)
 			output_fn.append('{}{}_Cameras_camerargb.jpg'.format(settings.output_path, exp))

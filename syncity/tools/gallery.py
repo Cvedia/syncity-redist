@@ -1,3 +1,8 @@
+"""
+This script generates a static gallery in html, that work locally straight from
+disk without any server. This allows visualization of exported data, from several
+cameras at the same time overlaying bounding boxes and other meta data.
+"""
 import json
 import sys
 import os
@@ -42,8 +47,12 @@ def run():
 	
 	os.stat_float_times(True)
 	for fn in fns:
-		lnm = fn.lower()
+		lnm = os.path.basename(fn).lower()
 		fty = None
+		fts = os.path.getmtime(fn)
+		
+		if settings.log:
+			common.output('Processing: {}'.format(lnm))
 		
 		if "camerargb" in lnm:
 			fty = "rgb"
@@ -54,7 +63,9 @@ def run():
 		elif "thermal" in lnm:
 			fty = "thermal"
 		elif ".json" in lnm:
-			fm[os.path.getmtime(fn)] = json.loads(common.read_all(fn))
+			while has_attribute(fm, fts):
+				fts += .000001
+			fm[fts] = json.loads(common.read_all(fn))
 		
 		if fty == None:
 			continue
@@ -62,14 +73,20 @@ def run():
 			features.append(fty)
 		if not has_attribute(fc, fty):
 			fc[fty] = {}
+		while has_attribute(fc[fty], fts):
+			fts += .000001
 		
 		fc[fty][os.path.getmtime(fn)] = os.path.basename(fn)
 	
 	if len(fm) > 0:
 		features.append('bbox')
+	
+	total_images = 0
 	for i in fc:
-		total_images = len(fc[i])
-		break
+		if total_images > 0:
+			total_images = min(total_images, len(fc[i]))
+		else:
+			total_images = len(fc[i])
 	
 	common.output('Generating html...')
 	html = Template(common.read_all('{}index.tpl'.format(tpl_path)))
@@ -81,8 +98,6 @@ def run():
 	css_static = ''
 	for i in static_assets['css']:
 		css_static += common.read_all('{}css/{}'.format(tpl_path, i))
-	
-	# html = html.replace('#fc#', json.dumps(fc, sort_keys=True)).replace('#fm#', json.dumps(fm, sort_keys=True))
 	
 	fh.write(
 		html.render(

@@ -24,7 +24,6 @@ POC Satellite
 '''
 
 def run():
-	
 	elevation = 120
 	dist = 50 # 125
 	dist_e = 2.5

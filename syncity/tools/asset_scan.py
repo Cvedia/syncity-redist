@@ -1,3 +1,8 @@
+"""
+Transverses unity asset files and save their flattened properties, this is not
+always accurate but most of the time will allow one to directly use those
+properties on api, as long a prefix is provided.
+"""
 import sys
 import os
 import time

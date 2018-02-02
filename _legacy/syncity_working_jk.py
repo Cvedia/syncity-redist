@@ -450,7 +450,7 @@ def spawn_misc_objs(destroy=False):
 	# spawn_radius_generic(['city/ground'], suffix='_0', limit=random.randint(3, 10), radius=75, innerradius=0, scale=[2,2,2], position=[0,0,0], collision_check=False)
 	spawn_radius_generic(['city/ground'], suffix='_0', limit=3, radius=75, innerradius=0, scale=[1,1,1], position=[0,0,0], collision_check=False)
 
-def spawn_drone_objs(destroy=False, ground_limit=204, dist_h=120, dist_v=120, dist_lim=1000, p_x=-20, p_z=-1000, p_y=0):
+def spawn_drone_objs(type=0, destroy=False, ground_limit=204, dist_h=120, dist_v=120, dist_lim=1000, p_x=-20, p_z=-1000, p_y=0):
 	if destroy == True:
 		send_data([
 			'DELETE spawner/city/nature/trees',
@@ -484,8 +484,13 @@ def spawn_drone_objs(destroy=False, ground_limit=204, dist_h=120, dist_v=120, di
 	spawn_radius_generic(['city/buildings'], limit=random.randint(50,150), radius=335, innerradius=100, position=[0,0,0])
 	spawn_radius_generic(['animals/birds'], limit=random.randint(25,100), radius=random.randint(80,110), innerradius=0, position=[0,random.randint(15,95),0])
 	spawn_radius_generic(['cars'], limit=random.randint(5, 25), radius=50, innerradius=5, position=[0,0,0])
-	spawn_radius_generic(['drones/white'], limit=random.randint(30,50), radius=random.randint(20,35), innerradius=5, position=[0,0,0], segmentation_class="Drone")
-	# spawn_radius_generic(['drones/white'], limit=random.randint(10,50), radius=random.randint(30,50), innerradius=0, position=[0,0,0], segmentation_class="Car")
+	#spawn_radius_generic(['drones/white'], limit=random.randint(30,50), radius=random.randint(20,35), innerradius=5, position=[0,0,0], segmentation_class="Drone")
+	if type == 0:
+		spawn_radius_generic(['drones/DJI S1000/'], limit=random.randint(10,50), radius=random.randint(30,50), innerradius=0, position=[0,0,0], segmentation_class="Car")
+	elif type == 1:
+		spawn_radius_generic(['drones/Parrot Disco/'], limit=random.randint(10,50), radius=random.randint(30,50), innerradius=0, position=[0,0,0], segmentation_class="Car")
+	elif type == 2:
+		spawn_radius_generic(['drones/white'], limit=random.randint(10,50), radius=random.randint(30,50), innerradius=0, position=[0,0,0], segmentation_class="Car")
 
 def spawn_drone_objs_alt(destroy=False, ground_limit=204, dist_h=120, dist_v=120, dist_lim=1000, p_x=-20, p_z=-1000, p_y=0):
 	if destroy == True:
@@ -531,7 +536,7 @@ def spawn_animals_objs(destroy=False):
 		])
 	
 	spawn_radius_generic(['city/nature/trees'], collision_check=False, stick_to_ground=False, limit=random.randint(150, 400), radius=80, innerradius=random.randint(30, 50), position=[0,5,0])
-	spawn_radius_generic(['animals'], stick_to_ground=False, limit=random.randint(20, 100), radius=random.randint(30, 50), innerradius=0, position=[0,5,0], orbit=True)
+	spawn_radius_generic(['animals'], stick_to_ground=False, limit=random.randint(20, 50), radius=random.randint(30, 50), innerradius=0, position=[0,5,0], orbit=True)
 
 # MAIN #########################################################################
 
@@ -542,7 +547,7 @@ tonemappings = [ 'Filmic', 'Reinhard', 'LumaReinhard', 'Photographic' ]
 ground_lst = [ 'Intersection', 'Grass', 'Asphalt', 'RoadSection2', 'DirtBrown', 'ForestFloor', 'Concrete', 'RoadSection3', 'RoadSection' ]
 cars_lst = [ 'auditts','audi_a2','audi_q7','audi_s3','bentley_arnage','bmw','bmw6_series_650i','bmw_760li','bmw_m3','bmw_m5','bmw_m_limousine','cadillac_escalade_ext','caterpillar_bulldozer_d9','chevrolet_cruze_2011','chevrolet_s10','chevrolet_tornado','fiat500_new','fiat_131','fiat_500','ford_crown_victoria_taxi','ford_fiesta','ford_fire_department','ford_focus','ford_mustang_gt_eleanor','ford_shelby_cobra','ford_transit_jumbo','freightliner_aerodyne','honda_civic_sedan','hummer_h2','international_ambulance_fdny','international_school_bus','kenworth_t600','lamborghini_gallardo','lancia_delta','mack_dumper','mercedes_class_g_500','mercedes_slk','mercedes_vario_brinks','mini_coopers','nissan_elgrand','nissan_murano','peugeot_406','rangerover','renault_420','renault_g210','renault_megane','renault_trm_2000','scania_400_concretemixer','scania_450_dumpster_hauler','truck_v010_008','volvo_th5','vw_caravelle','vw_golf_v','vw_touareg','vw_touran_2007','vw_transporter' ]
 weather_lst = [ 'Clear Sky', 'Cloudy 1', 'Cloudy 2', 'Cloudy 3', 'Foggy', 'Heavy Rain', 'Light Rain', 'Storm' ]
-clouds_lst = [ 'None', 'Volume' ]#, 'Both', 'Volume', 'Flat' ]
+clouds_lst = [ 'None', 'Both', 'Volume', 'Flat' ]
 
 print ('Syncity Telnet Tester / Demo tool - v2.1.7\nCopyright (c) 2017 CVEDIA B.V.\n')
 
@@ -1263,9 +1268,9 @@ else:
 		
 		send_data(['Canvas SET active false'])
 		
-		for c in range(4):
-			for w in range(8):
-				for fov in range(100, 9, -10):
+		for c in range(len(clouds_lst)):
+			for w in range(len(weather_lst)):
+				for fov in [90, 70, 30]:
 				#fov = 30
 					#print('FOV: {}.'.format(fov))
 					# reset camera
@@ -1344,10 +1349,10 @@ else:
 		if skip_setup == False:
 			global_camera_setup()
 			add_camera_rgb(width=1024, height=768, audio=True, envirosky=True)
-			# add_camera_rgb_pp()
+			#add_camera_rgb_pp()
 			# add_light(position=[-684.8,532.5,262.466])
 
-			add_camera_rgb_pp('Savannah', scion=False)
+			add_camera_rgb_pp('EnviroFX', scion=False)
 			add_camera_seg(segment='Drone')
 
 			global_disk_setup()
@@ -1360,7 +1365,7 @@ else:
 			send_data([
 				'cameras SET Transform position ({} {} {})'.format(0, random.randint(2, 10), -30),
 				'CREATE test Terrains/Savannah/Savannah',
-				'cameras/cameraRGB ADD EnviroCamera',
+				#'cameras/cameraRGB ADD EnviroCamera',
 				'test SET Transform position ({} {} {})'.format(-5000,-180,-5000),
 				'test SET Terrain basemapDistance 2000',
 				'test SET TerrainCollider enabled true',
@@ -1372,89 +1377,208 @@ else:
 			# spawn_radius_generic(['prefabs/terrains/desert'], orbit=True, limit=1, radius=65, innerradius=0, position=[0,0,0], collision_check=False)
 		
 		spawn_animals_objs()
-		spawn_radius_generic(['drones/Parrot Disco/'], limit=random.randint(30,50), radius=random.randint(20,35), innerradius=5, position=[0,0,0], segmentation_class="Drone")
+		spawn_radius_generic(['drones/DJI S1000/'], limit=random.randint(30,50), radius=random.randint(10,25), innerradius=5, position=[0,0,0], segmentation_class="Drone")
 
-		for c in range(2):
-			for w in range(8):
-				for fov in range(100, 9, -20):
-				#fov = 30
-					#print('FOV: {}.'.format(fov))
-					# reset camera
-					send_data([
+		for t in range(3):
+			for c in range(len(clouds_lst)):
+				for w in range(len(weather_lst)):
+					for fov in [90, 50]:
+					#fov = 30
+						#print('FOV: {}.'.format(fov))
+						# reset camera
+						send_data([
+							'cameras/cameraRGB SET Camera enabled true',
+							'cameras/cameraRGB SET Camera fieldOfView ' + str(fov),
+							'cameras/segmentation SET Camera fieldOfView ' + str(fov),
+							'cameras SET Transform position ({} {} {})'.format(0, random.randint(5, 15), -30),
+							#'cameras SET Transform eulerAngles ({} {} {})'.format(random.randint(-15, 20), random.randint(-15, 15), 0),
+							#'cameras/cameraRGB ADD EnviroCamera',
+							'EnviroSky EXECUTE EnviroSky ChangeWeather "{}"'.format(weather_lst[0]),
+							'EnviroSky SET EnviroSky cloudsMode {}'.format('None'),
+							#'EnviroSky SET EnviroSky cloudsMode {}'.format(random.choice(clouds_lst))
+							'cameras ADD OrbitAroundRandomChild',
+							'cameras SET OrbitAroundRandomChild parentTarget spawner/drones',
+							'cameras EXECUTE OrbitAroundRandomChild SelectRandomChild',
+							'cameras/cameraRGB SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.vignette.enabled false'
+						])
+					
+						#for h_dr in range(4, 36, 2):
+						y = 50
+						loop = 0
+						reroll = 100
+						
+						while y < 150:
+							if random.uniform(0,1) > .95:
+								motionblur = 'true'
+							else:
+								motionblur = 'false'
+							
+							send_data([
+								'spawner/drones SET Transform position ({} {} {})'.format(0, random.randint(15, 25), 0),
+								#'spawner/drones SET Transform position ({} {} {})'.format(0, h_dr, 0),
+								'spawner/drones SET Transform eulerAngles ({} {} {})'.format(random.randint(-15, -15), random.randint(0, 359), random.randint(-10, 10)),
+								#'spawner/animals/birds SET Transform position ({} {} {})'.format(0, random.randint(5, 75), 0),
+								#'spawner/animals/birds SET Transform eulerAngles ({} {} {})'.format(0, random.randint(0, 359), 0),
+								#'spawner/cars SET Transform eulerAngles ({} {} {})'.format(0, random.randint(0, 359), 0),
+								#'spawner/city/nature SET Transform eulerAngles ({} {} {})'.format(0, random.randint(0, 359), 0),
+								#'spawner/city/buildings SET Transform eulerAngles ({} {} {})'.format(0, random.randint(0, 359), 0),
+								'cameras SET Transform position ({} {} {})'.format(0, random.randint(10, 15), -30),
+								#'cameras SET Transform eulerAngles ({} {} {})'.format(random.randint(-15, 20), y, 0),
+								'cameras EXECUTE OrbitAroundRandomChild SelectRandomChild',
+								'city SET Transform eulerAngles ({} {} {})'.format(0, random.randint(0, 359), 0),
+								'EnviroSky SET EnviroSky GameTime.Hours {}'.format(random.randint(8, 18)),
+								'cameras/cameraRGB SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled {}'.format(motionblur)
+							])
+							
+							# for i in range(3):
+							# 	spawn_radius_generic(['drones/white'], limit=random.randint(50,100), radius=random.randint(50,100), innerradius=0, position=[0,0,0], segmentation_class="Car")
+							# 	send_data([
+							# 		'spawner/drones SET Transform position ({} {} {})'.format(0, random.randint(5, 30), 0)
+							# 	])
+							
+							set_disk_texture(mycams)
+							take_snapshot(mycams, True)
+							# take_seg_snapshot([ 'cameras/segmentation' ])
+							
+							y = y + 1
+							loop = loop + 1
+							
+							if loop % 10 == 0:
+								send_data([
+									'EnviroSky EXECUTE EnviroSky ChangeWeather "{}"'.format(weather_lst[w]),
+									'EnviroSky SET EnviroSky cloudsMode {}'.format(clouds_lst[c])
+									#'EnviroSky SET EnviroSky cloudsMode {}'.format(random.choice(clouds_lst))
+								])
+							
+							if loop == reroll:
+								spawn_animals_objs(True)
+								send_data([
+									'DELETE spawner/drones'
+								])
+
+								if t == 0:
+									spawn_radius_generic(['drones/DJI S1000/'], limit=random.randint(30,50), radius=random.randint(10,25), innerradius=5, position=[0,0,0], segmentation_class="Drone")
+								elif t == 1:
+									spawn_radius_generic(['drones/Parrot Disco/'], limit=random.randint(30,50), radius=random.randint(10,25), innerradius=5, position=[0,0,0], segmentation_class="Drone")
+								elif t == 2:
+									spawn_radius_generic(['drones/white'], limit=random.randint(30,50), radius=random.randint(10,25), innerradius=5, position=[0,0,0], segmentation_class="Drone")
+								loop = 0
+
+	elif demo == 833:
+		keep = True
+		mycams = ['cameras/cameraRGB', 'cameras/segmentation']
+		
+		if skip_setup == False:
+			global_camera_setup()
+			# add_camera_rgb(width=4096, height=3072, audio=True, envirosky=True)
+			add_camera_rgb(width=1024, height=768, audio=True, envirosky=True)
+			add_camera_rgb_pp('EnviroFX', scion=False)
+			#add_camera_rgb_pp('EnviroFX')
+			add_camera_seg(segment='Drone')
+			# add_light()
+			global_disk_setup()
+			
+			add_disk_output(mycams)
+			
+			# setup camera postprocessing options
+			playerCamera = 'cameras/cameraRGB'
+			# send_data([
+			#	'{} SET ScionEngine.ScionPostProcess bloomIntensity 0.563'.format(playerCamera),
+			#	'{} SET ScionEngine.ScionPostProcess bloomThreshold 0'.format(playerCamera),
+			#	'{} SET ScionEngine.ScionPostProcess bloomBrightness 2.66'.format(playerCamera),
+			#	'{} SET ScionEngine.ScionPostProcess bloomDownsamples 9'.format(playerCamera),
+			#	'{} SET ScionEngine.ScionPostProcess bloomDistanceMultiplier 0.455'.format(playerCamera),
+			#	'{} SET ScionEngine.ScionPostProcess chromaticAberration true'.format(playerCamera),
+			#	'{} SET ScionEngine.ScionPostProcess chromaticAberrationDistortion 0.754'.format(playerCamera),
+			#	'{} SET ScionEngine.ScionPostProcess chromaticAberrationIntensity 20'.format(playerCamera),
+			#	'{} SET ScionEngine.ScionPostProcess vignette true'.format(playerCamera),
+			#	'{} SET ScionEngine.ScionPostProcess vignetteIntensity 0.268'.format(playerCamera),
+			#	'{} SET ScionEngine.ScionPostProcess vignetteScale 0.614'.format(playerCamera),
+			#])
+			
+			spawn_drone_objs(type=0, p_x=-500, dist_lim=500, p_z=-500)
+		
+		send_data(['Canvas SET active false'])
+		
+		for t in range(3):
+			#for c in range(len(clouds_lst)):
+			for c in [2]:	
+				#for w in range(len(weather_lst)):
+				for w in [1, 2, 3]:
+					for fov in [90, 60, 30]:
+					#fov = 30
+						#print('FOV: {}.'.format(fov))
+						# reset camera
+						send_data([
 						'cameras/cameraRGB SET Camera enabled true',
 						'cameras/cameraRGB SET Camera fieldOfView ' + str(fov),
 						'cameras/segmentation SET Camera fieldOfView ' + str(fov),
-						'cameras SET Transform position ({} {} {})'.format(0, random.randint(5, 15), -30),
+						'cameras SET Transform position ({} {} {})'.format(0, random.randint(2, 10), -30),
 						#'cameras SET Transform eulerAngles ({} {} {})'.format(random.randint(-15, 20), random.randint(-15, 15), 0),
 						#'cameras/cameraRGB ADD EnviroCamera',
-						'EnviroSky EXECUTE EnviroSky ChangeWeather "{}"'.format(weather_lst[0]),
-						'EnviroSky SET EnviroSky cloudsMode {}'.format('None'),
+						'EnviroSky EXECUTE EnviroSky ChangeWeather "{}"'.format(weather_lst[w]),
+						'EnviroSky SET EnviroSky cloudsMode {}'.format(clouds_lst[c]),
 						#'EnviroSky SET EnviroSky cloudsMode {}'.format(random.choice(clouds_lst))
+						'EnviroSky SET EnviroSky cloudsSettings.globalCloudCoverage {}'.format(-0.04),
 						'cameras ADD OrbitAroundRandomChild',
 						'cameras SET OrbitAroundRandomChild parentTarget spawner/drones',
 						'cameras EXECUTE OrbitAroundRandomChild SelectRandomChild',
 						'cameras/cameraRGB SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.vignette.enabled false'
-					])
-				
-					#for h_dr in range(4, 36, 2):
-					y = 15
-					loop = 0
-					reroll = 100
-					
-					while y < 160:
-						if random.uniform(0,1) > .95:
-							motionblur = 'true'
-						else:
-							motionblur = 'false'
-						
-						send_data([
-							'spawner/drones SET Transform position ({} {} {})'.format(0, random.randint(15, 25), 0),
-							#'spawner/drones SET Transform position ({} {} {})'.format(0, h_dr, 0),
-							'spawner/drones SET Transform eulerAngles ({} {} {})'.format(random.randint(-15, -15), random.randint(0, 359), random.randint(-10, 10)),
-							#'spawner/animals/birds SET Transform position ({} {} {})'.format(0, random.randint(5, 75), 0),
-							#'spawner/animals/birds SET Transform eulerAngles ({} {} {})'.format(0, random.randint(0, 359), 0),
-							#'spawner/cars SET Transform eulerAngles ({} {} {})'.format(0, random.randint(0, 359), 0),
-							#'spawner/city/nature SET Transform eulerAngles ({} {} {})'.format(0, random.randint(0, 359), 0),
-							#'spawner/city/buildings SET Transform eulerAngles ({} {} {})'.format(0, random.randint(0, 359), 0),
-							'cameras SET Transform position ({} {} {})'.format(0, random.randint(10, 15), -30),
-							#'cameras SET Transform eulerAngles ({} {} {})'.format(random.randint(-15, 20), y, 0),
-							'cameras EXECUTE OrbitAroundRandomChild SelectRandomChild',
-							'city SET Transform eulerAngles ({} {} {})'.format(0, random.randint(0, 359), 0),
-							'EnviroSky SET EnviroSky GameTime.Hours {}'.format(random.randint(8, 18)),
-							'cameras/cameraRGB SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled {}'.format(motionblur)
 						])
 						
-						# for i in range(3):
-						# 	spawn_radius_generic(['drones/white'], limit=random.randint(50,100), radius=random.randint(50,100), innerradius=0, position=[0,0,0], segmentation_class="Car")
-						# 	send_data([
-						# 		'spawner/drones SET Transform position ({} {} {})'.format(0, random.randint(5, 30), 0)
-						# 	])
+						#for h_dr in range(4, 36, 2):
+						y = 50
+						loop = 0
+						reroll = 100
 						
-						set_disk_texture(mycams)
-						take_snapshot(mycams, True)
-						# take_seg_snapshot([ 'cameras/segmentation' ])
-						
-						y = y + 1
-						loop = loop + 1
-						
-						if loop % 10 == 0:
+						while y < 150:
+							if random.uniform(0,1) > .95:
+								motionblur = 'true'
+							else:
+								motionblur = 'false'
+							
 							send_data([
-								'EnviroSky EXECUTE EnviroSky ChangeWeather "{}"'.format(weather_lst[w]),
-								'EnviroSky SET EnviroSky cloudsMode {}'.format(clouds_lst[c])
-								#'EnviroSky SET EnviroSky cloudsMode {}'.format(random.choice(clouds_lst))
+								'spawner/drones SET Transform position ({} {} {})'.format(0, random.randint(10, 25), 0),
+								#'spawner/drones SET Transform position ({} {} {})'.format(0, h_dr, 0),
+								'spawner/drones SET Transform eulerAngles ({} {} {})'.format(random.randint(-15, -15), random.randint(0, 359), random.randint(-10, 10)),
+								#'spawner/animals/birds SET Transform position ({} {} {})'.format(0, random.randint(5, 75), 0),
+								'spawner/animals/birds SET Transform eulerAngles ({} {} {})'.format(0, random.randint(0, 359), 0),
+								'spawner/cars SET Transform eulerAngles ({} {} {})'.format(0, random.randint(0, 359), 0),
+								'spawner/city/nature SET Transform eulerAngles ({} {} {})'.format(0, random.randint(0, 359), 0),
+								'spawner/city/buildings SET Transform eulerAngles ({} {} {})'.format(0, random.randint(0, 359), 0),
+								'cameras SET Transform position ({} {} {})'.format(0, random.randint(2, 10), -30),
+								#'cameras SET Transform eulerAngles ({} {} {})'.format(random.randint(-15, 20), y, 0),
+								'cameras EXECUTE OrbitAroundRandomChild SelectRandomChild',
+								'city SET Transform eulerAngles ({} {} {})'.format(0, random.randint(0, 359), 0),
+								'EnviroSky SET EnviroSky GameTime.Hours {}'.format(random.randint(8, 18)),
+								'cameras/cameraRGB SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled {}'.format(motionblur),
+								'cameras/cameraRGB SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1',
+								'cameras/cameraRGB SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004'
 							])
-						
-						if loop == reroll:
-							spawn_animals_objs(True)
-							send_data([
-								'DELETE spawner/drones'
-							])
-							spawn_radius_generic(['drones/Parrot Disco/'], limit=random.randint(30,50), radius=random.randint(20,35), innerradius=5, position=[0,0,0], segmentation_class="Drone")
-							loop = 0
-
-
-
-
+							
+							# for i in range(3):
+							# 	spawn_radius_generic(['drones/white'], limit=random.randint(50,100), radius=random.randint(50,100), innerradius=0, position=[0,0,0], segmentation_class="Car")
+							# 	send_data([
+							# 		'spawner/drones SET Transform position ({} {} {})'.format(0, random.randint(5, 30), 0)
+							# 	])
+							
+							set_disk_texture(mycams)
+							take_snapshot(mycams, True)
+							# take_seg_snapshot([ 'cameras/segmentation' ])
+							
+							y = y + 1
+							loop = loop + 1
+							
+							if loop % 10 == 0:
+								send_data([
+									'EnviroSky EXECUTE EnviroSky ChangeWeather "{}"'.format(weather_lst[w]),
+									'EnviroSky SET EnviroSky cloudsMode {}'.format(clouds_lst[c])
+									#'EnviroSky SET EnviroSky cloudsMode {}'.format(random.choice(clouds_lst))
+								])
+							
+							if loop == reroll:
+								spawn_drone_objs(type=t, destroy=True, p_x=-500, dist_lim=500, p_z=-500)
+								loop = 0
 
 
 

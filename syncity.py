@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-SYNCITY_VERSION = '3.1.81'
+SYNCITY_VERSION = '3.2.0'
 
 import sys
 import os
@@ -58,6 +58,9 @@ parser.add_argument('--X_COMP', type=float, default=0, help='Spawner X Compensat
 parser.add_argument('--Y_COMP', type=float, default=1, help='Spawner Y Compensation, defaults to 1')
 parser.add_argument('--Z_COMP', type=float, default=0, help='Spawner Z Compensation, defaults to 0')
 
+scripts_parser = parser.add_argument_group('Scripts specific options')
+common.modules_args('scripts', parser=scripts_parser)
+
 tools_parser = parser.add_argument_group('Tool specific options')
 common.modules_args('tools', parser=tools_parser)
 
@@ -90,16 +93,7 @@ if settings.log == True:
 
 syncity.common.init()
 
-if settings.tool != None:
-	
-	syncity.common.output('Running tool: {} {}'.format(settings.tool, syncity.common.md5('syncity/tools/{}.py'.format(settings.tool))))
-	syncity.common.output('Press CTRL+C to abort')
-	
-	import_tool = __import__('syncity.tools.{}'.format(settings.tool), fromlist=['syncity.tools'])
-	import_tool.run()
-	
-else:
-	
+if settings.run or settings.script:
 	if settings.record == True:
 		settings.fh = open('{}record_{}.txt'.format(settings.local_path, settings._start), 'wb+')
 	
@@ -130,3 +124,10 @@ else:
 		# this should work with both python 2.7 and 3+
 		import_script = __import__('syncity.scripts.{}'.format(settings.script), fromlist=['syncity.scripts'])
 		import_script.run()
+
+if settings.tool != None:
+	syncity.common.output('Running tool: {} {}'.format(settings.tool, syncity.common.md5('syncity/tools/{}.py'.format(settings.tool))))
+	syncity.common.output('Press CTRL+C to abort')
+	
+	import_tool = __import__('syncity.tools.{}'.format(settings.tool), fromlist=['syncity.tools'])
+	import_tool.run()

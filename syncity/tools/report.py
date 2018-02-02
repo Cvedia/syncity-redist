@@ -1,3 +1,20 @@
+"""
+We developed a special tool to generate meaningfull reports by collecting all existing logs, initialization files, hashes, etc. If you happen to have a issue with the simulator running the report tool will probably generate all information required for us to debug the problem.
+
+## Running report tool
+
+`python syncity.py --tool report --binary <path to binary> --assets <path to assets>`
+
+### Example:
+
+`python syncity.py --tool report --binary E:\syncity\windows-171211 --assets E:\syncity\assets-windows-171211`
+
+### Notes:
+
+- If you happen to have a large collection of assets you can run this without the `assets` parameter.
+- This script will save a `report_XXX.txt` on your `local_path` (defaults to tmp) that you should submit to our support
+- No sensitive data will be collected using this tool, keep in mind that all syncity related logs will be sent
+"""
 import sys
 import os
 import time

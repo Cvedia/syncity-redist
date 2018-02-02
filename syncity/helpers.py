@@ -9,7 +9,8 @@ import random
 import json
 from . import common, settings_manager, unity_vars
 
-# some hardcoded values, this depends on the asset packages you've been given
+# some hardcoded values, this depends on the asset packages you've been given,
+# this should be used only for the examples
 ground_lst = [ 'Intersection', 'Grass', 'Asphalt', 'RoadSection2', 'DirtBrown', 'ForestFloor', 'Concrete', 'RoadSection3', 'RoadSection' ]
 cars_lst = [ 'auditts','audi_a2','audi_q7','audi_s3','bentley_arnage','bmw','bmw6_series_650i','bmw_760li','bmw_m3','bmw_m5','bmw_m_limousine','cadillac_escalade_ext','caterpillar_bulldozer_d9','chevrolet_cruze_2011','chevrolet_s10','chevrolet_tornado','fiat500_new','fiat_131','fiat_500','ford_crown_victoria_taxi','ford_fiesta','ford_fire_department','ford_focus','ford_mustang_gt_eleanor','ford_shelby_cobra','ford_transit_jumbo','freightliner_aerodyne','honda_civic_sedan','hummer_h2','international_ambulance_fdny','international_school_bus','kenworth_t600','lamborghini_gallardo','lancia_delta','mack_dumper','mercedes_class_g_500','mercedes_slk','mercedes_vario_brinks','mini_coopers','nissan_elgrand','nissan_murano','peugeot_406','rangerover','renault_420','renault_g210','renault_megane','renault_trm_2000','scania_400_concretemixer','scania_450_dumpster_hauler','truck_v010_008','volvo_th5','vw_caravelle','vw_golf_v','vw_touareg','vw_touran_2007','vw_transporter' ]
 weather_lst = [ 'Clear Sky', 'Cloudy 1', 'Cloudy 2', 'Cloudy 3', 'Foggy', 'Heavy Rain', 'Light Rain', 'Storm' ]
@@ -195,7 +196,10 @@ def add_camera_rgb(
 	if audio:
 		common.send_data(['{} ADD AudioListener'.format(label)], read=False)
 	if flycam:
-		common.send_data(['{} ADD FlyCamera'.format(label)], read=False)
+		common.send_data([
+			'{} ADD FlyCamera'.format(label),
+			'{} SET FlyCamera enabled true'.format(label)
+		], read=False)
 	if envirosky:
 		common.send_data([
 			'CREATE EnviroSky EnviroSky',
@@ -319,7 +323,7 @@ def add_camera_thermal(
 	
 	common.send_data([
 		'{} ADD Thermal.ThermalCamera'.format(label),
-		'{} SET Thermal.ThermalCamera active false'.format(label)
+		'{} SET Thermal.ThermalCamera enabled false'.format(label)
 	], read=False)
 	
 	if patchyness:
@@ -361,7 +365,7 @@ def add_camera_thermal(
 		
 		'{} SET Thermal.ThermalCamera maxDistanceForProbeUpdate {}'.format(label, maxDistanceForProbeUpdate),
 		'{} SET Thermal.ThermalCamera useAGC {}'.format(label, useAGC),
-		'{} SET Thermal.ThermalCamera active true'.format(label)
+		'{} SET Thermal.ThermalCamera enabled true'.format(label)
 	], read=False)
 		
 	common.send_data([
@@ -1143,10 +1147,6 @@ def take_seg_snapshot(lst):
 		r = common.send_data('{} GET Segmentation.Segmentation boundingBoxes'.format(l), read=True)
 		if (len(r) > 1):
 			seq_save('bbox', ''.join(r[1:]))
-		
-		# r = common.send_data('{} GET Segmentation.Segmentation boundingBoxesFiltered'.format(l))
-		# if (len(r) > 1):
-		#	seq_save('bbox_filtered', ''.join(r[1:]))
 
 def seq_save(pref, data):
 	"""
@@ -1201,6 +1201,35 @@ def ugly_tag_fix(tag):
 	
 	return x
 
+def add_random_color(objs, colors=16, colors_weights=14, spawner=False):
+	"""
+	Adds random color component to a object or spawner
+	
+	# Arguments
+	
+	objs (list|string): Object or objects to add random color component
+	colors (int): Number of random colors to be assigned, defaults to `16`
+	colors_weights (int): Color changing weight, defaults to `14`
+	spawner (bool): Defines if the object(s) is/are spawner or regular objects, defaults to `False`
+	
+	"""
+	
+	if spawner:
+		component = 'RandomProps.SpawnerRandomizers.RandomColor'
+	else:
+		component = 'RandomProps.RandomColor'
+	
+	if type(objs) != list:
+		objs = [ objs ]
+	
+	for obj in objs:
+		common.send_data('{} ADD {}'.format(obj, component))
+		
+		for i in range(0, colors):
+			common.send_data('{} PUSH {} availableColors "{}"'.format(obj, component, get_random_color()))
+		
+		common.send_data('{} PUSH {} colorsWeights {}'.format(obj, component, colors_weights))
+
 def get_random_color(alpha='FF'):
 	"""
 	Generates a random color with configurable alpha channel value
@@ -1215,16 +1244,100 @@ def get_random_color(alpha='FF'):
 	"""
 	s = '0123456789ABCDEF'
 	o = ''
-	for i in range(0,5):
-		o += random.choice(s)
+	for i in range(0,6):
+		o += str(random.choice(s))
 	
 	return '#' + o + alpha
+
+def set_thermal_props(
+	objs,
+	heatiness=None, reflectivity=None, ambientOffset=None,
+	temperatureValue=None, temperatureBandwidth=None, temperatureMedian=None,
+	variance=None
+):
+	"""
+	
+	Changes parameters on a existing thermal profile override from a arbitrary object
+	
+	# Arguments
+	
+	objs (list|string): Object or list of objects path(s) containing a thermal profile
+	heatiness (float): Controls how much heat emission object is generating
+	reflectivity (float): How reflective the object is for other infrared emissions; ranges from 0 - 1
+	ambientOffset (float): Temperature offset in relation to ambient (from camera watching); ranges from -25 to 25
+	temperatureValue (float): Object absolute temperature, defaults to 30
+	temperatureBandwidth (float): Affects how much the temperature affects the object body overall
+	temperatureMedian (float): Affects how wide the temperature spread goes; ranges from 0 - 1
+	variance (float): Defines the fuzzyness of temperature variance across texturized objects
+	
+	"""
+	if type(objs) != list:
+		objs = [ objs ]
+	
+	for obj in objs:
+		common.send_data(['{} SET active false'.format(obj)], read=False)
+		
+		if heatiness != None:
+			common.send_data([
+				'{} SET Thermal.ThermalObjectOverride overrideHeatiness true'.format(obj),
+				'{} SET Thermal.ThermalObjectOverride heatiness.value {}'.format(obj, heatiness)
+			], read=False)
+		else:
+			common.send_data([
+				'{} SET Thermal.ThermalObjectOverride overrideHeatiness false'.format(obj)
+			], read=False)
+		
+		if reflectivity != None:
+			common.send_data([
+				'{} SET Thermal.ThermalObjectOverride overrideReflectivity true'.format(obj),
+				'{} SET Thermal.ThermalObjectOverride reflectivity.value {}'.format(obj, reflectivity)
+			], read=False)
+		else:
+			common.send_data([
+				'{} SET Thermal.ThermalObjectOverride overrideReflectivity false'.format(obj)
+			], read=False)
+		
+		if ambientOffset != None:
+			common.send_data([
+				'{} SET Thermal.ThermalObjectOverride overrideAmbientOffset true'.format(obj),
+				'{} SET Thermal.ThermalObjectOverride ambientOffset.value {}'.format(obj, ambientOffset)
+			], read=False)
+		else:
+			common.send_data([
+				'{} SET Thermal.ThermalObjectOverride overrideAmbientOffset false'.format(obj)
+			], read=False)
+		
+		if temperatureValue != None or temperatureBandwidth != None or temperatureMedian != None:
+			common.send_data(['{} SET Thermal.ThermalObjectOverride overrideTemperature true'.format(obj)], read=False)
+			
+			if temperatureValue != None:
+				common.send_data(['{} SET Thermal.ThermalObjectOverride temperature.value {}'.format(obj, temperatureValue)], read=False)
+			if temperatureBandwidth != None:
+				common.send_data(['{} SET Thermal.ThermalObjectOverride temperature.bandwidth {}'.format(obj, temperatureBandwidth)], read=False)
+			if temperatureMedian != None:
+				common.send_data(['{} SET Thermal.ThermalObjectOverride temperature.median {}'.format(obj, temperatureMedian)], read=False)
+		else:
+			common.send_data(['{} SET Thermal.ThermalObjectOverride overrideTemperature false'.format(obj)], read=False)
+		
+		if variance != None:
+			common.send_data([
+				'{} SET Thermal.ThermalObjectOverride overrideVariance true'.format(obj),
+				'{} SET Thermal.ThermalObjectOverride variance.value {}'.format(obj, variance)
+			], read=False)
+		else:
+			common.send_data([
+				'{} SET Thermal.ThermalObjectOverride overrideVariance false'.format(obj)
+			], read=False)
+		
+		common.send_data(['{} SET active true'.format(obj)], read=False)
+	
+	common.flush_buffer()
 
 def spawn_radius_generic(
 	types=[], tags=None, scale=[1,1,1], innerradius=0, radius=500, position=[0,0,0],
 	rotation=[0,0,0], limit=50, segmentation_class=None, orbit=False,
 	stick_to_ground=False, collision_check=True, suffix="", flush=False, prefix='spawner',
-	names=None, ugly_fix=True
+	names=None, ugly_fix=True, seed=None, random_colors=None, random_colors_weights=14
 ):
 	"""
 	Creates a torus shaped object spawner
@@ -1248,6 +1361,10 @@ def spawn_radius_generic(
 	prefix (string): Defines a root game object to nest types into, defaults to `spawner`
 	names (list): Overrides type caption, must be aligned with the number of arguments on types, defaults to `None`
 	ugly_fix (bool): Ugly fix for asset naming, defaults to `True`
+	seed (int): Defines a seed number, this forces random values to be equal on different instances, defaults to `None`
+	random_colors (int): Defines a number of random colors to assign to spawner, when set to None disables feature, defaults to `None`
+	random_colors_weights (int): Defines a weight for color switching, defaults to `14`
+	
 	"""
 	# convert bool to strings
 	if collision_check == True:
@@ -1276,6 +1393,9 @@ def spawn_radius_generic(
 			'{}/{} ADD RandomProps.PropArea'.format(prefix, n)
 		], read=False)
 		
+		if seed != None:
+			common.send_data(['{}/{} SET RandomProps.PropArea seed {}'.format(prefix, n, seed)], read=False)
+		
 		if ugly_fix == True:
 			try:
 				common.send_data(['{}/{} SET RandomProps.PropArea tags "{}"'.format(prefix, n, ugly_tag_fix(tags[i]))], read=False)
@@ -1283,9 +1403,9 @@ def spawn_radius_generic(
 				common.send_data(['{}/{} SET RandomProps.PropArea tags "{}"'.format(prefix, n, ugly_tag_fix(t))], read=False)
 		else:
 			common.send_data(['{}/{} SET RandomProps.PropArea tags "{}"'.format(prefix, n, tags[i])], read=False)
+		
 		common.send_data([
 			'{}/{} SET RandomProps.PropArea async false'.format(prefix, n),
-			# '{}/{} SET RandomProps.PropArea tags "{}"'.format(prefix, n, t),
 			'{}/{} SET RandomProps.PropArea numberOfProps {}'.format(prefix, n, limit),
 			
 			'{}/{} SET RandomProps.PropArea collisioncheck {}'.format(prefix, n, collision_check),
@@ -1315,6 +1435,9 @@ def spawn_radius_generic(
 		if orbit == True:
 			common.send_data('cameras SET Orbit target {}/{}'.format(prefix, n), read=False)
 		
+		if random_colors != None and random_colors > 0:
+			add_random_color(objs='{}/{}'.format(prefix, n), colors=random_colors, colors_weights=random_colors_weights, spawner=True)
+		
 		common.send_data('{}/{} SET active true'.format(prefix, n))
 		settings.obj.append('{}/{}'.format(prefix, t))
 		i = i + 1
@@ -1326,7 +1449,7 @@ def spawn_rectangle_generic(
 	types=[], tags=None, scale=[1,1,1], a=1, b=500, position=[0,0,0],
 	rotation=[0,0,0], limit=50, segmentation_class=None, orbit=False,
 	stick_to_ground=False, collision_check=True, suffix="", flush=False, prefix='spawner',
-	names=None
+	names=None, seed=None, random_colors=None, random_colors_weights=14
 ):
 	"""
 	Creates a rectangle shaped object spawner
@@ -1349,6 +1472,9 @@ def spawn_rectangle_generic(
 	flush (bool): Forces a telnet queue flush after spawning, defaults to `False`
 	prefix (string): Defines a root game object to nest types into, defaults to `spawner`
 	names (list): Overrides type caption, must be aligned with the number of arguments on types, defaults to `None`
+	seed (int): Defines a seed number, this forces random values to be equal on different instances, defaults to `None`
+	random_colors (int): Defines a number of random colors to assign to spawner, when set to None disables feature, defaults to `None`
+	random_colors_weights (int): Defines a weight for color switching, defaults to `14`
 	
 	"""
 	# convert bool to strings
@@ -1378,6 +1504,9 @@ def spawn_rectangle_generic(
 			'{}/{} ADD RandomProps.PropArea'.format(prefix, n)
 		], read=False)
 		
+		if seed != None:
+			common.send_data(['{}/{} SET RandomProps.PropArea seed {}'.format(prefix, n, seed)], read=False)
+		
 		try:
 			common.send_data(['{}/{} SET RandomProps.PropArea tags "{}"'.format(prefix, n, ugly_tag_fix(tags[i]))], read=False)
 		except:
@@ -1385,7 +1514,6 @@ def spawn_rectangle_generic(
 		
 		common.send_data([
 			'{}/{} SET RandomProps.PropArea async false'.format(prefix, n),
-			# '{}/{} SET RandomProps.PropArea tags "{}"'.format(prefix, n, t),
 			'{}/{} SET RandomProps.PropArea numberOfProps {}'.format(prefix, n, limit),
 			
 			'{}/{} SET RandomProps.PropArea collisioncheck {}'.format(prefix, n, collision_check),
@@ -1414,6 +1542,9 @@ def spawn_rectangle_generic(
 		
 		if orbit == True:
 			common.send_data('cameras SET Orbit target {}/{}'.format(prefix, n), read=False)
+		
+		if random_colors != None and random_colors > 0:
+			add_random_color(objs='{}/{}'.format(prefix, n), colors=random_colors, colors_weights=random_colors_weights, spawner=True)
 		
 		common.send_data('{}/{} SET active true'.format(prefix, n))
 		settings.obj.append('{}/{}'.format(prefix, t))
@@ -1444,7 +1575,6 @@ def spawn_flat_grid(types=[], size=[1000,1000], position=[0,0,0], scale=[1,1,1],
 			'{}/{} SET active false'.format(prefix, n),
 			'{}/{} ADD RandomProps.FillGrid'.format(prefix, n),
 			'{}/{} SET Transform position ({} {} {})'.format(prefix, n, position[0], position[1], position[2]),
-			# '{}/{} SET RandomProps.FillGrid folder {}'.format(prefix, n, n),
 			'{}/{} SET RandomProps.FillGrid tags "{}"'.format(prefix, n, ugly_tag_fix(n)),
 			'{}/{} SET RandomProps.FillGrid size ({} {})'.format(prefix, n, size[0], size[1]),
 			'{}/{} SET active true'.format(prefix, n),
@@ -1514,7 +1644,7 @@ def spawn_parking_lot(
 	
 	common.flush_buffer()
 
-def spawn_misc_objs(destroy=False, prefix='spawner'):
+def spawn_misc_objs(destroy=False, prefix='spawner', seed=None):
 	"""
 	Spawns city / animals / cars objects
 	
@@ -1522,6 +1652,8 @@ def spawn_misc_objs(destroy=False, prefix='spawner'):
 	
 	destroy (bool): Destroy objects before creating them, defaults to `False`
 	prefix (string): Spawner root object where spawned objects will be nested within, defaults to `spawner`
+	seed (int): Defines a seed number, this forces random values to be equal on different instances, defaults to `None`
+	
 	"""
 	if destroy == True:
 		common.send_data([
@@ -1532,27 +1664,23 @@ def spawn_misc_objs(destroy=False, prefix='spawner'):
 		
 		common.flush_buffer()
 	
-	# spawn_flat_grid(['city/ground'], scale=[3,3,3], position=[0,0,-.5])
-	# spawn_radius_generic(['city/decals'], limit=350, radius=50, innerradius=0, collision_check=False, position=[0,10,0])
-	# spawn_radius_generic(['city/trafficlight'], limit=100, radius=50, innerradius=30)
-	
-	spawn_radius_generic(['city/nature/trees'], tags=['tree'], collision_check=False, limit=random.randint(100, 350), radius=80, innerradius=random.randint(30, 50), position=[0,10,0], prefix=prefix)
-	spawn_radius_generic(['city/signs'], tags=['sign'], limit=random.randint(80, 250), radius=random.randint(15, 40), innerradius=0, position=[0,10,0], prefix=prefix)
-	spawn_radius_generic(['animals'], tags=['animals'], limit=random.randint(150, 250), radius=random.randint(40, 80), innerradius=0, position=[0,10,0], prefix=prefix)
-	spawn_radius_generic(['city/buildings'], tags=['building'], limit=random.randint(50, 150), radius=335, innerradius=random.randint(80, 100), position=[0,10,0], prefix=prefix)
-	spawn_radius_generic(['cars'], tags=['car'], limit=random.randint(50, 150), radius=50, innerradius=0, segmentation_class="Car", orbit=True, position=[0,10,0], prefix=prefix)
+	spawn_radius_generic(['city/nature/trees'], tags=['tree'], collision_check=False, limit=random.randint(100, 350), radius=80, innerradius=random.randint(30, 50), position=[0,10,0], prefix=prefix, seed=seed)
+	spawn_radius_generic(['city/signs'], tags=['sign'], limit=random.randint(80, 250), radius=random.randint(15, 40), innerradius=0, position=[0,10,0], prefix=prefix, seed=seed)
+	spawn_radius_generic(['animals'], tags=['animals'], limit=random.randint(150, 250), radius=random.randint(40, 80), innerradius=0, position=[0,10,0], prefix=prefix, seed=seed)
+	spawn_radius_generic(['city/buildings'], tags=['building'], limit=random.randint(50, 150), radius=335, innerradius=random.randint(80, 100), position=[0,10,0], prefix=prefix, seed=seed)
+	spawn_radius_generic(['cars'], tags=['car'], limit=random.randint(50, 150), radius=50, innerradius=0, segmentation_class="Car", orbit=True, position=[0,10,0], prefix=prefix, seed=seed)
 
-	# for i in range(0,9):
-	# 	spawn_radius_generic(['city/ground'], suffix='_{}'.format(i), limit=random.randint(50, 100), radius=75, innerradius=0, scale=[2,2,2], position=[0,i,0], collision_check=False, prefix=prefix)
-	# spawn_radius_generic(['city/ground'], suffix='_0', limit=random.randint(3, 10), radius=75, innerradius=0, scale=[2,2,2], position=[0,0,0], collision_check=False, prefix=prefix)
-	spawn_radius_generic(['city/ground'], tags=['ground'], suffix='_0', limit=3, radius=75, innerradius=0, scale=[1,1,1], position=[0,0,0], collision_check=False, prefix=prefix)
+	spawn_radius_generic(['city/ground'], tags=['ground'], suffix='_0', limit=3, radius=75, innerradius=0, scale=[1,1,1], position=[0,0,0], collision_check=False, prefix=prefix, seed=seed)
 
 def spawn_drone_objs(
 	destroy=False, ground_position=[0,0,0], ground_limit=204,
 	dist_h=120, dist_v=120, dist_lim=1000, p_x=-20, p_z=-1000, p_y=0,
 	birds_radius=90, birds_innerradius=0, cars_radius=50, cars_innerradius=5,
 	trees_limit=[50,200], buildings_radius=335, buildings_innerradius=100, trees_radius=80, trees_innerradius=20,
-	buildings_limit=[50,150], birds_limit=[25,100], cars_limit=[5,25], drones_limit=[80,200], prefix='spawner'
+	buildings_limit=[50,150], birds_limit=[25,100], cars_limit=[5,25], drones_limit=[80,200], prefix='spawner',
+	trees_tags=['tree'], buildings_tags=['building'], birds_tags=['bird'], cars_tags=['car'], drones_tags=['drones'],
+	trees_colors=None, buildings_colors=None, birds_colors=None, cars_colors=None, drones_colors=None,
+	thermal=None, seed=None
 ):
 	"""
 	Spawns trees / buildings / birds / donres and cars objects
@@ -1561,6 +1689,7 @@ def spawn_drone_objs(
 	
 	destroy (bool): Destroy objects before creating them, defaults to `False`
 	prefix (string): Spawner root object where spawned objects will be nested within, defaults to `spawner`
+	seed (int): Defines a seed number, this forces random values to be equal on different instances, defaults to `None`
 	"""
 	if destroy == True:
 		common.send_data([
@@ -1577,7 +1706,7 @@ def spawn_drone_objs(
 		common.send_data([
 			'CREATE city',
 			'city SET Transform position ({} {} {})'.format(ground_position[0], ground_position[1], ground_position[2]),
-			'city SET active true'
+			'city SET active false'
 		], read=False)
 		
 		while k < ground_limit:
@@ -1594,25 +1723,52 @@ def spawn_drone_objs(
 			if p_z > dist_lim:
 				p_z = -dist_lim
 				p_x += dist_v
-		
-		# for i in range(0,2):
-		# 	spawn_radius_generic(['city/ground'], suffix='_{}'.format(i), limit=5, radius=100, innerradius=0, scale=[2,2,2], position=[0,i,0], collision_check=False)
 	
-	spawn_radius_generic(['city/nature/trees'], tags=['tree'], collision_check=False, limit=random.randint(trees_limit[0], trees_limit[1]), radius=trees_radius, innerradius=trees_innerradius, position=[0,0,0], prefix=prefix)
-	spawn_radius_generic(['city/buildings'], tags=['building'], collision_check=False, stick_to_ground=False, limit=random.randint(buildings_limit[0], buildings_limit[1]), radius=buildings_radius, innerradius=buildings_innerradius, position=[0,0,0], prefix=prefix)
-	spawn_radius_generic(['animals/birds'], tags=['bird'], limit=random.randint(birds_limit[0], birds_limit[1]), radius=birds_radius, innerradius=birds_innerradius, position=[0,random.randint(15,95),0], prefix=prefix)
-	spawn_radius_generic(['cars'], tags=['car'], limit=random.randint(cars_limit[0], cars_limit[1]), radius=cars_radius, innerradius=cars_innerradius, position=[0,0,0], prefix=prefix)
+	spawn_radius_generic(['city/nature/trees'], random_colors=trees_colors, tags=trees_tags, collision_check=False, limit=random.randint(trees_limit[0], trees_limit[1]), radius=trees_radius, innerradius=trees_innerradius, position=[0,0,0], prefix=prefix, seed=seed)
+	spawn_radius_generic(['city/buildings'], random_colors=buildings_colors, tags=buildings_tags, stick_to_ground=False, collision_check=False, limit=random.randint(buildings_limit[0], buildings_limit[1]), radius=buildings_radius, innerradius=buildings_innerradius, position=[0,0,0], prefix=prefix, seed=seed)
+	spawn_radius_generic(['animals/birds'], random_colors=birds_colors, tags=birds_tags, limit=random.randint(birds_limit[0], birds_limit[1]), radius=birds_radius, innerradius=birds_innerradius, position=[0,random.randint(15,95),0], prefix=prefix, seed=seed)
+	spawn_radius_generic(['cars'], random_colors=cars_colors, tags=cars_tags, limit=random.randint(cars_limit[0], cars_limit[1]), radius=cars_radius, innerradius=cars_innerradius, position=[0,0,0], prefix=prefix, seed=seed)
 	
 	if drones_limit[1] > 0:
-		spawn_radius_generic(['drones'], tags=['drones'], ugly_fix=False, limit=random.randint(drones_limit[0], drones_limit[1]), radius=random.randint(30,50), innerradius=0, position=[0,0,0], segmentation_class="Drone", prefix=prefix)
-	# spawn_radius_generic(['drones/white'], limit=random.randint(10,50), radius=random.randint(30,50), innerradius=0, position=[0,0,0], segmentation_class="Car")
+		spawn_radius_generic(['drones'], random_colors=drones_colors, tags=drones_tags, ugly_fix=False, limit=random.randint(drones_limit[0], drones_limit[1]), radius=random.randint(30,50), innerradius=0, position=[0,0,0], segmentation_class="Drone", prefix=prefix, seed=seed)
 	
-	common.flush_buffer()
+	if thermal != None:
+		common.send_data([
+			'city ADD Thermal.ThermalObjectOverride',
+			'city ADD Thermal.ThermalObjectBehaviour',
+			'city SET Thermal.ThermalObjectBehaviour profile {}'.format(thermal)
+		])
+		
+		if not any('thermal' in s for s in birds_tags) and birds_limit[1] > 0:
+			common.send_data([
+				'{}/animals ADD Thermal.ThermalObjectOverride'.format(prefix),
+				'{}/animals ADD Thermal.ThermalObjectBehaviour'.format(prefix),
+				'{}/animals SET Thermal.ThermalObjectBehaviour profile {}'.format(prefix, thermal)
+			], read=False)
+		
+		if not any('thermal' in s for s in cars_tags) and cars_limit[1] > 0:
+			common.send_data([
+				'{}/cars ADD Thermal.ThermalObjectOverride'.format(prefix),
+				'{}/cars ADD Thermal.ThermalObjectBehaviour'.format(prefix),
+				'{}/cars SET Thermal.ThermalObjectBehaviour profile {}'.format(prefix, thermal)
+			], read=False)
+		
+		if not any('thermal' in s for s in drones_tags) and drones_limit[1] > 0:
+			common.send_data([
+				'{}/drones ADD Thermal.ThermalObjectOverride'.format(prefix),
+				'{}/drones ADD Thermal.ThermalObjectBehaviour'.format(prefix),
+				'{}/drones SET Thermal.ThermalObjectBehaviour profile {}'.format(prefix, thermal)
+			], read=False)
+	
+	common.send_data([
+		'city SET active true'
+	], read=True)
 
 def spawn_drone_objs_alt(
 	destroy=False, ground_limit=204,
 	dist_h=120, dist_v=120, dist_lim=1000,
-	p_x=-20, p_z=-1000, p_y=0, prefix='spawner'
+	p_x=-20, p_z=-1000, p_y=0, prefix='spawner',
+	seed=None
 ):
 	if destroy == True:
 		common.send_data([
@@ -1641,18 +1797,16 @@ def spawn_drone_objs_alt(
 				p_z = -dist_lim
 				p_x += dist_v
 		
-		# for i in range(0,2):
-		# 	spawn_radius_generic(['city/ground'], suffix='_{}'.format(i), limit=5, radius=100, innerradius=0, scale=[2,2,2], position=[0,i,0], collision_check=False)
 	
-	spawn_radius_generic(['city/nature/trees'], tags=['tree'], limit=random.randint(600,600), radius=80, innerradius=30, position=[0,0,0], collision_check=False, prefix=prefix)
-	spawn_radius_generic(['city/buildings'], tags=['building'], limit=random.randint(10,10), radius=335, innerradius=100, position=[0,0,0], collision_check=False, prefix=prefix)
-	spawn_radius_generic(['animals/birds'], tags=['bird'], limit=random.randint(10,10), radius=random.randint(80,110), innerradius=0, position=[0,random.randint(15,95),0], prefix=prefix)
-	spawn_radius_generic(['cars'], tags=['car'], limit=random.randint(5, 10), radius=50, innerradius=5, position=[0,0,0], prefix=prefix)
-	spawn_radius_generic(['drones/white'], limit=random.randint(80,80), radius=random.randint(80,110), innerradius=0, position=[0,random.randint(15,65),0], segmentation_class="Car", prefix=prefix)
+	spawn_radius_generic(['city/nature/trees'], tags=['tree'], limit=random.randint(600,600), radius=80, innerradius=30, position=[0,0,0], collision_check=False, prefix=prefix, seed=seed)
+	spawn_radius_generic(['city/buildings'], tags=['building'], limit=random.randint(10,10), radius=335, innerradius=100, position=[0,0,0], collision_check=False, prefix=prefix, seed=seed)
+	spawn_radius_generic(['animals/birds'], tags=['bird'], limit=random.randint(10,10), radius=random.randint(80,110), innerradius=0, position=[0,random.randint(15,95),0], prefix=prefix, seed=seed)
+	spawn_radius_generic(['cars'], tags=['car'], limit=random.randint(5, 10), radius=50, innerradius=5, position=[0,0,0], prefix=prefix, seed=seed)
+	spawn_radius_generic(['drones/white'], limit=random.randint(80,80), radius=random.randint(80,110), innerradius=0, position=[0,random.randint(15,65),0], segmentation_class="Car", prefix=prefix, seed=seed)
 	
 	common.flush_buffer()
 
-def spawn_animals_objs(destroy=False, prefix='spawner'):
+def spawn_animals_objs(destroy=False, prefix='spawner', seed=None):
 	"""
 	Spawns trees and animals
 	
@@ -1660,6 +1814,7 @@ def spawn_animals_objs(destroy=False, prefix='spawner'):
 	
 	destroy (bool): Destroy objects before creating them, defaults to `False`
 	prefix (string): Spawner root object where spawned objects will be nested within, defaults to `spawner`
+	seed (int): Defines a seed number, this forces random values to be equal on different instances, defaults to `None`
 	"""
 	if destroy == True:
 		common.send_data([
@@ -1667,7 +1822,7 @@ def spawn_animals_objs(destroy=False, prefix='spawner'):
 			'DELETE {}/animals'.format(prefix)
 		], read=False)
 	
-	spawn_radius_generic(['city/nature/trees'], tags=['tree'], collision_check=True, stick_to_ground=True, limit=random.randint(150, 400), radius=80, innerradius=random.randint(30, 50), position=[0,5,0], prefix=prefix)
-	spawn_radius_generic(['animals'], tags=['animal'], collision_check=True, stick_to_ground=True, limit=random.randint(200, 350), radius=random.randint(40, 80), innerradius=0, position=[0,5,0], orbit=True, prefix=prefix)
+	spawn_radius_generic(['city/nature/trees'], tags=['tree'], collision_check=True, stick_to_ground=True, limit=random.randint(150, 400), radius=80, innerradius=random.randint(30, 50), position=[0,5,0], prefix=prefix, seed=seed)
+	spawn_radius_generic(['animals'], tags=['animal'], collision_check=True, stick_to_ground=True, limit=random.randint(200, 350), radius=random.randint(40, 80), innerradius=0, position=[0,5,0], orbit=True, prefix=prefix, seed=seed)
 	
 	common.flush_buffer()

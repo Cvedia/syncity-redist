@@ -1,3 +1,6 @@
+"""
+Creates a SQL dump of a existing sqlite3 database from assets folder
+"""
 import sys
 import os
 import time

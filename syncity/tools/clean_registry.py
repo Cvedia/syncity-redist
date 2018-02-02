@@ -1,3 +1,7 @@
+"""
+Cleans any registry settings for the simulator.
+Windows only.
+"""
 import subprocess
 
 from .. import common, settings_manager
