@@ -32,7 +32,7 @@ that installed, to make sure just run:
 After that you might need to install some python libraries, just go to the folder
 where you have the syncity scripts and run:
 
-`pip install`
+`pip install -r requeriments.txt`
 
 ### Windows install
 
@@ -43,7 +43,7 @@ Download python 2.7 (python 3 will also work) here:
 After install you will have python and pip added to your PATH, then just open
 a command prompt, go to the folder where you have syncity scripts and run:
 
-`pip install`
+`pip install -r requeriments.txt`
 
 # Running
 
