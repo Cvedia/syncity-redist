@@ -29,6 +29,7 @@ POC Drone single scene
 
 def args(parser):
 	parser.add_argument('--loop_limit', type=int, default=100, help='Defines a limit of iterations for exporting')
+	parser.add_argument('--segment_all', action='store_true', default=False, help='Defines a segmentation class for all spawned objects')
 
 def run():
 	settings.keep = True
@@ -38,7 +39,25 @@ def run():
 		helpers.global_camera_setup()
 		helpers.add_camera_rgb(width=4096, height=3072, pp='EnviroFX')
 		helpers.add_camera_depth(width=1024, height=768)
-		helpers.add_camera_seg(width=4096, height=3072, segments=['drone0', 'drone1', 'drone2'], lookupTable=[['drone0', 'red'], ['drone1','blue'], ['drone2', 'green']])
+		
+		# Note on bbox output:
+		# classId aligns with the order you define the segments, for example:
+		# segments=['drone0', 'drone1', 'drone2']
+		# classId:     1         2         3       ....
+		
+		if settings.segment_all:
+			helpers.add_camera_seg(
+				width=4096, height=3072,
+				segments=['drone0', 'drone1', 'drone2'],
+				lookupTable=[['drone0', 'red'], ['drone1','blue'], ['drone2', 'green'], ['ground', '#C0CBE6FF'], ['tree', '#CFD83AFF'], ['building', '#7E0E62FF'], ['bird', '#33D45EFF'], ['car', '#00FD26FF']]
+			)
+		else:
+			helpers.add_camera_seg(
+				width=4096, height=3072,
+				segments=['drone0', 'drone1', 'drone2'],
+				lookupTable=[['drone0', 'red'], ['drone1','blue'], ['drone2', 'green']]
+			)
+		
 		helpers.add_camera_thermal(
 			trees=True,
 			ambientTemperature=15, minimumTemperature=9, maximumTemperature=35,
@@ -48,23 +67,35 @@ def run():
 		helpers.global_disk_setup()
 		
 		helpers.add_disk_output(mycams)
-		helpers.spawn_drone_objs(
-			drones_limit=[0,0], buildings_innerradius=300,
-			trees_limit=[300,600], trees_innerradius=30, trees_radius=50, buildings_limit=[50,80],
-			thermal='DefaultThermalProfile',
-			cars_colors=16,
-			#
-			# NOTE:
-			#
-			# use only 'car' to spawn cars without thermal signature, that will be then
-			# linked to a default profile, note that this will not show full detail, but
-			# it's pretty much the same from a distance.
-			#
-			# use 'car, +thermal' to spawn only cars with thermal profiles
-			#
-			cars_tags=['car, +thermal'],
-			seed=666
-		)
+		#
+		# NOTE for cars_tags:
+		#
+		# use only 'car' to spawn cars without thermal signature, that will be then
+		# linked to a default profile, note that this will not show full detail, but
+		# it's pretty much the same from a distance.
+		#
+		# use 'car, +thermal' to spawn only cars with thermal profiles
+		#
+		
+		if settings.segment_all:
+			helpers.spawn_drone_objs(
+				drones_limit=[0,0], buildings_innerradius=300,
+				trees_limit=[300,600], trees_innerradius=30, trees_radius=50, buildings_limit=[50,80],
+				thermal='DefaultThermalProfile',
+				cars_colors=16,
+				cars_tags=['car, +thermal'],
+				seed=666,
+				ground_segment='ground', trees_segment='tree', buildings_segment='building', birds_segment='bird', cars_segment='car'
+			)
+		else:
+			helpers.spawn_drone_objs(
+				drones_limit=[0,0], buildings_innerradius=300,
+				trees_limit=[300,600], trees_innerradius=30, trees_radius=50, buildings_limit=[50,80],
+				thermal='DefaultThermalProfile',
+				cars_colors=16,
+				cars_tags=['car, +thermal'],
+				seed=666
+			)
 		
 		common.send_data([
 			'CREATE drone/drone0/drone0 "{}"'.format(helpers.drones_lst[6]), # Drones/DJI Phantom 4 Pro/DJI_Phantom_4_Pro

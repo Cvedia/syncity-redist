@@ -991,6 +991,7 @@ def add_camera_seg(
 	if segments != None:
 		add_camera_seg_filter(segments, label=label)
 	
+	# add default class
 	common.send_data([
 		'{} ADD Segmentation.LookUpTable'.format(label),
 		'{} PUSH Segmentation.LookUpTable classes Void'.format(label),
@@ -1005,17 +1006,17 @@ def add_camera_seg(
 			else:
 				color = unity_vars.colors[idx]
 			common.send_data([
-				'{} EXECUTE Segmentation.Segmentation DefineClass {}'.format(label, i),
-				'{} PUSH Segmentation.LookUpTable classes {}'.format(label, i),
-				'{} PUSH Segmentation.LookUpTable colors {}'.format(label, color)
+				'{} EXECUTE Segmentation.Segmentation DefineClass "{}"'.format(label, i),
+				'{} PUSH Segmentation.LookUpTable classes "{}"'.format(label, i),
+				'{} PUSH Segmentation.LookUpTable colors "{}"'.format(label, color)
 			], read=False)
 			idx += 1
 	elif isinstance(lookupTable, list):
 		for i in lookupTable:
 			common.send_data([
-				'{} EXECUTE Segmentation.Segmentation DefineClass {}'.format(label, i[0]),
-				'{} PUSH Segmentation.LookUpTable classes {}'.format(label, i[0]),
-				'{} PUSH Segmentation.LookUpTable colors {}'.format(label, i[1])
+				'{} EXECUTE Segmentation.Segmentation DefineClass "{}"'.format(label, i[0]),
+				'{} PUSH Segmentation.LookUpTable classes "{}"'.format(label, i[0]),
+				'{} PUSH Segmentation.LookUpTable colors "{}"'.format(label, i[1])
 			], read=False)
 	
 	common.send_data([
@@ -1424,12 +1425,12 @@ def spawn_radius_generic(
 			if isinstance(segmentation_class, list):
 				common.send_data([
 					'{}/{} ADD Segmentation.ClassGroup'.format(prefix, n),
-					'{}/{} SET Segmentation.ClassGroup itemsClassName {}'.format(prefix, n, segmentation_class[i])
+					'{}/{} SET Segmentation.ClassGroup itemsClassName "{}"'.format(prefix, n, segmentation_class[i])
 				], read=False)
 			else:
 				common.send_data([
 					'{}/{} ADD Segmentation.ClassGroup'.format(prefix, n),
-					'{}/{} SET Segmentation.ClassGroup itemsClassName {}'.format(prefix, n, segmentation_class)
+					'{}/{} SET Segmentation.ClassGroup itemsClassName "{}"'.format(prefix, n, segmentation_class)
 				], read=False)
 		
 		if orbit == True:
@@ -1532,12 +1533,12 @@ def spawn_rectangle_generic(
 			if isinstance(segmentation_class, list):
 				common.send_data([
 					'{}/{} ADD Segmentation.ClassGroup'.format(prefix, n),
-					'{}/{} SET Segmentation.ClassGroup itemsClassName {}'.format(prefix, n, segmentation_class[i])
+					'{}/{} SET Segmentation.ClassGroup itemsClassName "{}"'.format(prefix, n, segmentation_class[i])
 				], read=False)
 			else:
 				common.send_data([
 					'{}/{} ADD Segmentation.ClassGroup'.format(prefix, n),
-					'{}/{} SET Segmentation.ClassGroup itemsClassName {}'.format(prefix, n, segmentation_class)
+					'{}/{} SET Segmentation.ClassGroup itemsClassName "{}"'.format(prefix, n, segmentation_class)
 				], read=False)
 		
 		if orbit == True:
@@ -1629,7 +1630,7 @@ def spawn_parking_lot(
 		common.send_data([
 			'CREATE {}/car_{} Cars/{}'.format(prefix, k, carID),
 			'{}/car_{} ADD Segmentation.ClassGroup'.format(prefix, k),
-			'{}/car_{} SET Segmentation.ClassGroup itemsClassName {}'.format(prefix, k, segment),
+			'{}/car_{} SET Segmentation.ClassGroup itemsClassName "{}"'.format(prefix, k, segment),
 			'{}/car_{} SET Transform position ({} {} {})'.format(prefix, k, p_x + settings.X_COMP, p_y, p_z + settings.Z_COMP),
 			'{}/car_{} SET active true'.format(prefix, k)
 		], read=False)
@@ -1680,6 +1681,7 @@ def spawn_drone_objs(
 	buildings_limit=[50,150], birds_limit=[25,100], cars_limit=[5,25], drones_limit=[80,200], prefix='spawner',
 	trees_tags=['tree'], buildings_tags=['building'], birds_tags=['bird'], cars_tags=['car'], drones_tags=['drones'],
 	trees_colors=None, buildings_colors=None, birds_colors=None, cars_colors=None, drones_colors=None,
+	ground_segment='VOID', trees_segment='VOID', buildings_segment='VOID', birds_segment='VOID', cars_segment='VOID', drones_segment='DRONE',
 	thermal=None, seed=None
 ):
 	"""
@@ -1724,13 +1726,19 @@ def spawn_drone_objs(
 				p_z = -dist_lim
 				p_x += dist_v
 	
-	spawn_radius_generic(['city/nature/trees'], random_colors=trees_colors, tags=trees_tags, collision_check=False, limit=random.randint(trees_limit[0], trees_limit[1]), radius=trees_radius, innerradius=trees_innerradius, position=[0,0,0], prefix=prefix, seed=seed)
-	spawn_radius_generic(['city/buildings'], random_colors=buildings_colors, tags=buildings_tags, stick_to_ground=False, collision_check=False, limit=random.randint(buildings_limit[0], buildings_limit[1]), radius=buildings_radius, innerradius=buildings_innerradius, position=[0,0,0], prefix=prefix, seed=seed)
-	spawn_radius_generic(['animals/birds'], random_colors=birds_colors, tags=birds_tags, limit=random.randint(birds_limit[0], birds_limit[1]), radius=birds_radius, innerradius=birds_innerradius, position=[0,random.randint(15,95),0], prefix=prefix, seed=seed)
-	spawn_radius_generic(['cars'], random_colors=cars_colors, tags=cars_tags, limit=random.randint(cars_limit[0], cars_limit[1]), radius=cars_radius, innerradius=cars_innerradius, position=[0,0,0], prefix=prefix, seed=seed)
+	if ground_segment != None:
+		common.send_data([
+			'{} ADD Segmentation.ClassGroup'.format('city'),
+			'{} SET Segmentation.ClassGroup itemsClassName "{}"'.format('city', ground_segment)
+		])
+	
+	spawn_radius_generic(['city/nature/trees'], segmentation_class=trees_segment, random_colors=trees_colors, tags=trees_tags, collision_check=False, limit=random.randint(trees_limit[0], trees_limit[1]), radius=trees_radius, innerradius=trees_innerradius, position=[0,0,0], prefix=prefix, seed=seed)
+	spawn_radius_generic(['city/buildings'], segmentation_class=buildings_segment, random_colors=buildings_colors, tags=buildings_tags, stick_to_ground=False, collision_check=False, limit=random.randint(buildings_limit[0], buildings_limit[1]), radius=buildings_radius, innerradius=buildings_innerradius, position=[0,0,0], prefix=prefix, seed=seed)
+	spawn_radius_generic(['animals/birds'], segmentation_class=birds_segment, random_colors=birds_colors, tags=birds_tags, limit=random.randint(birds_limit[0], birds_limit[1]), radius=birds_radius, innerradius=birds_innerradius, position=[0,random.randint(15,95),0], prefix=prefix, seed=seed)
+	spawn_radius_generic(['cars'], segmentation_class=cars_segment, random_colors=cars_colors, tags=cars_tags, limit=random.randint(cars_limit[0], cars_limit[1]), radius=cars_radius, innerradius=cars_innerradius, position=[0,0,0], prefix=prefix, seed=seed)
 	
 	if drones_limit[1] > 0:
-		spawn_radius_generic(['drones'], random_colors=drones_colors, tags=drones_tags, ugly_fix=False, limit=random.randint(drones_limit[0], drones_limit[1]), radius=random.randint(30,50), innerradius=0, position=[0,0,0], segmentation_class="Drone", prefix=prefix, seed=seed)
+		spawn_radius_generic(['drones'], segmentation_class=drones_segment, random_colors=drones_colors, tags=drones_tags, ugly_fix=False, limit=random.randint(drones_limit[0], drones_limit[1]), radius=random.randint(30,50), innerradius=0, position=[0,0,0], prefix=prefix, seed=seed)
 	
 	if thermal != None:
 		common.send_data([

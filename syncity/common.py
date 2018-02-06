@@ -347,12 +347,16 @@ def get_all_files(base, ignore_path=['.git', '__pycache__'], ignore_ext=['.md', 
 			for folder, subdirs, files in os.walk(path):
 				if os.path.basename(folder) in ignore_path:
 					break
+				if recursive == False and folder != path:
+					continue
 				
 				for fn in files:
 					if fn[-3:] not in ignore_ext:
 						jp = os.path.join(folder, fn)
-						if jp not in fns:
-							fns.append(os.path.join(folder, fn))
+						if recursive == True and jp not in fns:
+							fns.append(jp)
+						elif os.path.isfile(jp) and jp not in fns:
+							fns.append(jp)
 				
 				if recursive == True:
 					for subdir in subdirs:
