@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-SYNCITY_VERSION = '3.2.0'
+SYNCITY_VERSION = '3.2.1'
 
 import sys
 import os
@@ -25,10 +25,10 @@ different specific features of the api.
 	epilog=textwrap.dedent('Scripts available:\n\n{}\n\nTools available:\n\n{}'.format(common.modules_help('scripts'), common.modules_help('tools'))))
 parser.add_argument('-p', '--port', type=int, default=10200, help='Port to connect, defaults to 10200')
 parser.add_argument('-i', '--ip', default='127.0.0.1', help='IP of syncity simulator')
-parser.add_argument('-s', '--script', default="simple", help='When a --run is not set, defines a script loop to play, defaults to simple')
+parser.add_argument('-s', '--script', default=None, help='When a --run is not set, defines a script loop to play')
 parser.add_argument('-t', '--tool', default=None, help='Run a tool from repository')
 parser.add_argument('--cooldown', type=int, default=0, help='Cooldown after snapshot')
-parser.add_argument('-r', '--run', type=argparse.FileType('r'), help='Run script')
+parser.add_argument('-r', '--run', type=argparse.FileType('r'), help='Run command line (.cl) script')
 
 if platform.system() == 'Windows':
 	parser.add_argument('-o', '--output', default='E:\\tmp\\', help='Defines output path for snapshots, note that this path is relative to the machine running the simulator, defaults to E:\\tmp\\', dest='output_path')
@@ -114,6 +114,9 @@ if settings.run or settings.script:
 			for line in fp:
 				syncity.common.send_data(line)
 	else:
+		if settings.script[-3:] == '.py':
+			settings.script = settings.script[:-3]
+		
 		syncity.common.output('Using script: {} {}'.format(settings.script, syncity.common.md5('syncity/scripts/{}.py'.format(settings.script))))
 		syncity.common.output('Press CTRL+C to abort')
 		
@@ -126,6 +129,9 @@ if settings.run or settings.script:
 		import_script.run()
 
 if settings.tool != None:
+	if settings.tool[-3:] == '.py':
+		settings.tool = settings.tool[:-3]
+	
 	syncity.common.output('Running tool: {} {}'.format(settings.tool, syncity.common.md5('syncity/tools/{}.py'.format(settings.tool))))
 	syncity.common.output('Press CTRL+C to abort')
 	
