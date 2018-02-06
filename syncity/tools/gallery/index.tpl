@@ -40,8 +40,9 @@
 				{% endif %}
 			</div>
 			<div class="galImage">
-				<img src="">
-				<div class="galBoxes"></div>
+				<div class="galBoxes">
+					<img src="">
+				</div>
 			</div>
 			<div class="galBottom">
 				<div class="galBotLeft"></div>

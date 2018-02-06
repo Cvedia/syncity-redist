@@ -3,7 +3,8 @@ body {color: #222; font-size: 13px;}
 .galTop {width: 100%; height: 60px; background: #eee; border-bottom: 1px solid #bbb;}
 .galTopLeft, .galBotLeft {padding: 15px;}
 .galImage {width: 100%; height: calc( 100% - 122px ); background: #fff; display: flex; justify-content: center; align-items: center; overflow: hidden;}
-.galBoxes {position: absolute;}
+.galImage img {object-fit: none;}
+.galBoxes {position: relative;}
 .galTopMid {position: absolute; top: 22px; margin-left: 50%; left: -58px; z-index: 1;}
 .galTopMid input {width: 40px; color: #222;}
 .galTopRight {padding: 15px; right: 0; top: 0; position: absolute;}
