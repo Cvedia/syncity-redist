@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-SYNCITY_VERSION = '3.2.1'
+SYNCITY_VERSION = '3.2.11'
 
 import sys
 import os
@@ -13,7 +13,7 @@ import syncity
 
 from syncity import common, settings_manager
 
-print ('SynCity toolbox - v{}\nCopyright (c) {} CVEDIA B.V.\n'.format(SYNCITY_VERSION, datetime.date.today().year))
+print ('SynCity toolbox - v{}\nCopyright (c) {} CVEDIA PVE Ltd\n'.format(SYNCITY_VERSION, datetime.date.today().year))
 
 parser = argparse.ArgumentParser(
 	formatter_class=argparse.RawDescriptionHelpFormatter,
