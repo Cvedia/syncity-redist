@@ -1,5 +1,5 @@
 /*===============================
-* Images Gallery v 1.0.1
+* Images Gallery v 1.0.2
 * Copyright: Cvedia (C) 2018
 *================================*/
 
@@ -90,7 +90,7 @@ function ImagesGallery() {
 	
 	function updateImage() {
 		var url = images[curType][images2idx[curType][curImage-1]];
-		name.text(url);
+		name.html('<a href="'+url+'" target="_blank">'+url+'</a>');
 		image.attr('src', url);
 		drawBoxes();
 	}
@@ -147,8 +147,12 @@ function ImagesGallery() {
 			r = arr[i].boxMax[0]*100;
 			b = arr[i].boxMax[1]*100;
 			c = classColors[arr[i].classId];
-			boxes.append('<div class="bbox" style="bottom: '+t+'%; left: '+l+'%; width: '+(r-l)+
-				'%; height: '+(b-t)+'%; border-color: '+c+';"></div>');
+			boxes.append(
+				'<div class="bbox tooltip" data-tooltip="id: '+arr[i].id+', classId: '+
+				arr[i].classId+', numPoints: '+arr[i].numPoints+
+				'" style="bottom: '+t+'%; left: '+l+'%; width: '+(r-l)+
+				'%; height: '+(b-t)+'%; border-color: '+c+';"></div>'
+			);
 		}
 	}
 
