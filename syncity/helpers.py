@@ -33,7 +33,7 @@ settings = settings_manager.Singleton()
 
 def global_camera_setup(
 	label_root='cameras', canvas_width=1024, canvas_height=768, canvas=None,
-	orbit=True, orbitOffset=None, orbitGround=None, orbitSnap=None
+	orbit=True, orbitOffset=None, orbitGround=None, orbitSnap=None, position=None
 ):
 	"""
 	Sets up camera root object
@@ -48,6 +48,7 @@ def global_camera_setup(
 	orbitOffset (list): Defines offset x,y,z coordinates from orbiting object target, defaults to `None`
 	orbitGround (string): Defines a object to orbit ground position from, defaults to `None`
 	orbitSnap (int): Defines a Y snap position from orbited object, defaults to `None`
+	position (list): Defines a position, if not set defaults to X,Y,Z compensation values
 	
 	"""
 	if canvas == None:
@@ -65,7 +66,7 @@ def global_camera_setup(
 	common.send_data([
 		'CREATE {}'.format(label_root),
 		'{} SET active false'.format(label_root),
-		'{} SET Transform position ({} {} {})'.format(label_root, settings.X_COMP -6, settings.Y_COMP, settings.Z_COMP -50),
+		'{} SET Transform position ({} {} {})'.format(label_root, settings.X_COMP -6, settings.Y_COMP, settings.Z_COMP -50) if position == None else '{} SET Transform position ({} {} {})'.format(label_root, position[0], position[1], position[2]),
 		'{} SET Transform eulerAngles ({} {} {})'.format(label_root, 0, 0, 0),
 	], read=False)
 	
@@ -675,7 +676,7 @@ def camera_rgb_pp_random(label='cameras/cameraRGB'):
 			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.tonemapping.neutralWhiteIn 15'.format(label),
 			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.tonemapping.neutralWhiteLevel 5.62'.format(label),
 			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.tonemapping.neutralWhiteOut 15.49'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.tonemapping.tonemapper 2'.format(label),
+			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.tonemapping.tonemapper "2"'.format(label),
 		], read=False)
 	else:
 		common.send_data([
@@ -1231,6 +1232,107 @@ def add_random_color(objs, colors=16, colors_weights=14, spawner=False):
 		
 		common.send_data('{} PUSH {} colorsWeights {}'.format(obj, component, colors_weights))
 
+def add_lidar(
+	label='Lidar', virtualCamera=None, model='VLP_16',
+	minAz=-180, maxAz=180, minEl=-30, maxEl=30, rpm=900, targetFps=50, pclRenderFps=30,
+	dataType=None, colorLUT=None, colorTo='Red', colorFrom='Blue',
+	timingAccuracy='MEDIUM', accuracy='HIGH', disableUDPBroadcast=False,
+	enableVisualizer=False, fullScreenOutputTexture=False,
+	minimumIntensity=0, ipAddressOverride=None,
+	position=[0, 0, 0], rotation=[0, 0, 0]
+):
+	"""
+	Creates a LiDAR Sensors
+	
+	# Arguments
+	
+	target (string): Defines an existing game object to bind lidar to, this must contain a camera component, if it doesn't the system will add one.
+	model (string): Defines a model to use, this will depend on what libraries you have on the system, some models: VLP_16, HDL_32E, HDL_64E_S3, M8
+	accuracy (string): Defines lidar CPU burn accuracy, options: LOW, MEDIUM, HIGH, ULTRA
+	minAz (int): Minimum azimuth, defaults to -180
+	maxAz (int): Maximum azimuth, defaults to 180
+	minEl (int): Minimum elevation, defaults to -30
+	maxEl (int): Maximum elevation, defaults to 30
+	rpm (int): Device RPM, defaults to 900
+	
+	"""
+	common.send_data([
+		'CREATE {}'.format(label),
+		
+		'{} SET Transform position ({} {} {})'.format(label, position[0], position[1], position[2]),
+		'{} SET Transform eulerAngles ({} {} {})'.format(label, rotation[0], rotation[1], rotation[2]),
+		
+		'{} ADD Lidar'.format(label),
+		'{} SET Lidar model "{}"'.format(label, model),
+		
+		'{} SET Lidar minAz {}'.format(label, minAz),
+		'{} SET Lidar maxAz {}'.format(label, maxAz),
+		'{} SET Lidar minEl {}'.format(label, minEl),
+		'{} SET Lidar maxEl {}'.format(label, maxEl),
+		
+		'{} SET Lidar rpm {}'.format(label, rpm),
+		
+		'{} SET Lidar targetFps {}'.format(label, targetFps),
+		'{} SET Lidar pclRenderFps {}'.format(label, pclRenderFps),
+		'{} SET Lidar dataType {}'.format(label, dataType) if dataType != None else '',
+		'{} SET Lidar colorLUT {}'.format(label, colorLUT) if colorLUT != None else '',
+		'{} SET Lidar colorTo {}'.format(label, colorTo) if colorTo != None else '',
+		'{} SET Lidar colorFrom {}'.format(label, colorFrom) if colorFrom != None else '',
+		
+		'{} SET Lidar MinimumIntensity {}'.format(label, minimumIntensity),
+		'{} SET Lidar ipAddressOverride "{}"'.format(label, ipAddressOverride) if ipAddressOverride != None else '',
+		
+		'{} SET active true'.format(label),
+		
+		'{} SET Lidar accuracy {}'.format(label, accuracy),
+		'{} SET Lidar virtualCamera {}'.format(label, virtualCamera) if virtualCamera != None else '',
+		'{} SET Lidar disableUDPBroadcast {}'.format(label, 'True' if disableUDPBroadcast == True else 'False'),
+		'{} SET Lidar enableVisualizer {}'.format(label, 'True' if enableVisualizer == True else 'False'),
+		'{} SET Lidar FullScreenOutputTexture {}'.format(label, 'True' if fullScreenOutputTexture == True else 'False'),
+		
+		'{} SET Lidar timingAccuracy {}'.format(label, timingAccuracy),
+		
+		'{} ADD LidarNoLights'
+	])
+
+def setup_ros_topics(label_root='ROS2', writeLinks=None, readLinks=[]):
+	common.send_data([
+		'CREATE {}'.format(label_root),
+		'{} SET active false'.format(label_root),
+		'{} ADD Sensors.ROS2'.format(label_root)
+	], read=False)
+	
+	if writeLinks != None:
+		for lnk in writeLinks:
+			common.send_data([
+					'CREATE {}/{}'.format(label_root, lnk['label']),
+					'{}/{} ADD Sensors.WriteFieldLink'.format(label_root, lnk['label']),
+					'{}/{} SET Sensors.WriteFieldLink topicName {}'.format(label_root, lnk['label'], lnk['topic']),
+					'{}/{} SET Sensors.WriteFieldLink target {}'.format(label_root, lnk['label'], lnk['target']),
+					'{}/{} SET Sensors.WriteFieldLink componentName {}'.format(label_root, lnk['label'], lnk['component']),
+					'{}/{} SET Sensors.WriteFieldLink fieldName {}'.format(label_root, lnk['label'], lnk['field']),
+					'{}/{} SET Sensors.WriteFieldLink intervalSeconds {}'.format(label_root, lnk['label'], lnk['interval']),
+					'{}/{} SET active true'.format(label_root, lnk['label'])
+				], read=False)
+	
+	if readLinks != None:
+		for lnk in readLinks:
+			common.send_data([
+					'CREATE {}/{}'.format(label_root, lnk['label']),
+					'{}/{} ADD Sensors.ReadFieldLink'.format(label_root, lnk['label']),
+					'{}/{} SET Sensors.ReadFieldLink topicName {}'.format(label_root, lnk['label'], lnk['topic']),
+					'{}/{} SET Sensors.ReadFieldLink target {}'.format(label_root, lnk['label'], lnk['target']),
+					'{}/{} SET Sensors.ReadFieldLink componentName {}'.format(label_root, lnk['label'], lnk['component']),
+					'{}/{} SET Sensors.ReadFieldLink fieldName {}'.format(label_root, lnk['label'], lnk['field']),
+					'{}/{} SET Sensors.ReadFieldLink onChange true'.format(label_root, lnk['label']),
+					'{}/{} SET Sensors.ReadFieldLink intervalSeconds {}'.format(label_root, lnk['label'], lnk['interval']),
+					'{}/{} SET active true'.format(label_root, lnk['label'])
+				], read=False)
+	
+	common.send_data([
+		'{} SET active true'.format(label_root)
+	], read=True)
+	
 def get_random_color(alpha='FF'):
 	"""
 	Generates a random color with configurable alpha channel value

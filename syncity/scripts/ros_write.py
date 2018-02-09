@@ -52,47 +52,44 @@ def run():
 		'EnviroSky SET EnviroSky cloudsMode {}'.format('Volume'),
 		'EnviroSky SET EnviroSky cloudsSettings.globalCloudCoverage {}'.format(-0.04),
 		'EnviroSky EXECUTE EnviroSky ChangeWeather "{}"'.format(helpers.weather_lst[1]),
-		
-		'CREATE ROS2',
-		'ROS2 SET active false',
-		'ROS2 ADD Sensors.ROS2',
-		
-		# vector3
-		'CREATE ROS2/angles',
-		'ROS2/angles ADD Sensors.WriteFieldLink',
-		'ROS2/angles SET Sensors.WriteFieldLink topicName {}'.format('obj/eulerAngles'),
-		'ROS2/angles SET Sensors.WriteFieldLink target obj/subject',
-		'ROS2/angles SET Sensors.WriteFieldLink componentName Transform',
-		'ROS2/angles SET Sensors.WriteFieldLink fieldName eulerAngles',
-		'ROS2/angles SET Sensors.WriteFieldLink intervalSeconds 0.5',
-		'ROS2/angles SET active true',
-		
-		# float
-		'CREATE ROS2/mass',
-		'ROS2/mass ADD Sensors.WriteFieldLink',
-		'ROS2/mass SET Sensors.WriteFieldLink topicName {}'.format('obj/rigidbody/mass'),
-		'ROS2/mass SET Sensors.WriteFieldLink target obj/subject',
-		'ROS2/mass SET Sensors.WriteFieldLink componentName Rigidbody',
-		'ROS2/mass SET Sensors.WriteFieldLink fieldName mass',
-		'ROS2/mass SET Sensors.WriteFieldLink intervalSeconds 0.5',
-		'ROS2/mass SET active true',
-		
-		# float
-		'CREATE ROS2/drag',
-		'ROS2/drag ADD Sensors.WriteFieldLink',
-		'ROS2/drag SET Sensors.WriteFieldLink topicName {}'.format('obj/rigidbody/drag'),
-		'ROS2/drag SET Sensors.WriteFieldLink target obj/subject',
-		'ROS2/drag SET Sensors.WriteFieldLink componentName Rigidbody',
-		'ROS2/drag SET Sensors.WriteFieldLink fieldName drag',
-		'ROS2/drag SET Sensors.WriteFieldLink intervalSeconds 0.5',
-		'ROS2/drag SET active true',
-		
-		'ROS2 SET active true'
-		
-		# get field type:
-		# <obj> GET Sensors.WriteFieldLink fieldType
-		
-	], read=False)
+	])
+	
+	helpers.setup_ros_topics(
+		writeLinks=[
+			{
+				"label": "eulerAngles",
+				"topic": "obj/w/eulerAngles",
+				"target": "obj/subject",
+				"component": "Transform",
+				"field": "eulerAngles",
+				"interval": .5
+			},
+			{
+				"label": "position",
+				"topic": "obj/w/position",
+				"target": "obj/subject",
+				"component": "Transform",
+				"field": "position",
+				"interval": .5
+			},
+			{
+				"label": "mass",
+				"topic": "obj/w/mass",
+				"target": "obj/subject",
+				"component": "Rigidbody",
+				"field": "mass",
+				"interval": .5
+			},
+			{
+				"label": "drag",
+				"topic": "obj/w/drag",
+				"target": "obj/subject",
+				"component": "Rigidbody",
+				"field": "drag",
+				"interval": .5
+			}
+		]
+	)
 	
 	if settings.setup_only == True:
 		return

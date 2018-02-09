@@ -20,6 +20,9 @@ Animals thermal in Savannah scene
 	- Exports depth maps, rgb images, thermal images, segmentation images and bounding boxes
 '''
 
+def args(parser):
+	parser.add_argument('--loop_limit', type=int, default=500, help='Defines a limit of iterations for exporting')
+
 def run():
 	settings.keep = True
 	mycams = ['cameras/cameraRGB', 'cameras/thermal', 'cameras/segmentation', 'cameras/depth']
@@ -49,8 +52,7 @@ def run():
 		# scenario goes first as it's the base for all objects to be placed upon
 		common.send_data([
 			'CREATE savannah tiles Savannah',
-			'savannah ADD WindZone',
-			'savannah SET active true'
+			'savannah ADD WindZone'
 		])
 		
 		# camera setup
@@ -62,7 +64,8 @@ def run():
 		
 		helpers.add_camera_seg(
 			width=1024, height=768, fov=90, clipping_far=10000,
-			segments=['Car', 'Animal', 'Human'], lookupTable=[['Car', 'red'], ['Animal', 'blue'], ['Human', 'green']]
+			segments=['Car', 'Animal', 'Human'],
+			lookupTable=[['Car', 'red'], ['Animal', 'blue'], ['Human', 'green'], ['ground', '#807C00FF']]
 		)
 		
 		helpers.add_camera_rgb(
@@ -72,6 +75,17 @@ def run():
 		)
 		
 		helpers.add_camera_depth(width=1024, height=768, fov=90)
+		
+		common.send_data([
+			'savannah SET active true',
+			'savannah ADD Segmentation.ClassGroup',
+			'savannah SET Segmentation.ClassGroup itemsClassName "{}"'.format('ground'),
+			'savannah SET active false',
+			'"savannah/Main Terrain" SET Segmentation.ClassInfo itemClass "ground"',
+			'"savannah/Main Terrain/SubMeshes" ADD Segmentation.ClassInfo',
+			'"savannah/Main Terrain/SubMeshes" SET Segmentation.ClassInfo itemClass "ground"',
+			'savannah SET active true'
+		])
 		
 		helpers.add_camera_thermal(
 			fov=90,
@@ -133,7 +147,7 @@ def run():
 	loop = 0
 	
 	# loop changing camera positions with random agc bounduaries
-	while loop < 500:
+	while loop < settings.loop_limit:
 		common.send_data([
 			'cameras/thermal SET Thermal.ThermalCamera temperatureRange ({} {})'.format(min_agc, max_agc),
 			'cameras SET Orbit distance {}'.format(dist),
@@ -163,4 +177,4 @@ def run():
 			azimuth = 0
 		
 		loop = loop + 1
-		common.output('Loop {}'.format(loop))
+		common.output('Loop {} ({}%)'.format(loop, round(100 * (settings.loop_limit / loop),2)))

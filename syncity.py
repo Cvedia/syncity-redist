@@ -122,7 +122,7 @@ if settings.run or settings.script:
 		
 		# track objects created by script to remove them from scene later on
 		settings.obj = []
-		settings.seq_save_i = 0
+		settings.seq_save_i = 1
 		
 		# this should work with both python 2.7 and 3+
 		import_script = __import__('syncity.scripts.{}'.format(settings.script), fromlist=['syncity.scripts'])

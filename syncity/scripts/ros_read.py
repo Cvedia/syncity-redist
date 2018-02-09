@@ -52,50 +52,44 @@ def run():
 		'EnviroSky SET EnviroSky cloudsMode {}'.format('Volume'),
 		'EnviroSky SET EnviroSky cloudsSettings.globalCloudCoverage {}'.format(-0.04),
 		'EnviroSky EXECUTE EnviroSky ChangeWeather "{}"'.format(helpers.weather_lst[1]),
-		
-		'CREATE ROS2',
-		'ROS2 SET active false',
-		'ROS2 ADD Sensors.ROS2',
-		
-		# vector3
-		'CREATE ROS2/position',
-		'ROS2/position ADD Sensors.ReadFieldLink',
-		'ROS2/position SET Sensors.ReadFieldLink topicName {}'.format('obj/position'),
-		'ROS2/position SET Sensors.ReadFieldLink target obj/subject',
-		'ROS2/position SET Sensors.ReadFieldLink componentName Transform',
-		'ROS2/position SET Sensors.ReadFieldLink fieldName position',
-		'ROS2/position SET Sensors.ReadFieldLink onChange true',
-		'ROS2/position SET Sensors.ReadFieldLink intervalSeconds 0.5',
-		'ROS2/position SET active true',
-		
-		# float
-		'CREATE ROS2/mass',
-		'ROS2/mass ADD Sensors.ReadFieldLink',
-		'ROS2/mass SET Sensors.ReadFieldLink topicName {}'.format('obj/rigidbody/mass'),
-		'ROS2/mass SET Sensors.ReadFieldLink target obj/subject',
-		'ROS2/mass SET Sensors.ReadFieldLink componentName Rigidbody',
-		'ROS2/mass SET Sensors.ReadFieldLink fieldName mass',
-		'ROS2/mass SET Sensors.ReadFieldLink onChange true',
-		'ROS2/mass SET Sensors.ReadFieldLink intervalSeconds 0.5',
-		'ROS2/mass SET active true',
-		
-		# float
-		'CREATE ROS2/drag',
-		'ROS2/drag ADD Sensors.ReadFieldLink',
-		'ROS2/drag SET Sensors.ReadFieldLink topicName {}'.format('obj/rigidbody/drag'),
-		'ROS2/drag SET Sensors.ReadFieldLink target obj/subject',
-		'ROS2/drag SET Sensors.ReadFieldLink componentName Rigidbody',
-		'ROS2/drag SET Sensors.ReadFieldLink fieldName drag',
-		'ROS2/drag SET Sensors.ReadFieldLink onChange true',
-		'ROS2/drag SET Sensors.ReadFieldLink intervalSeconds 0.5',
-		'ROS2/drag SET active true',
-		
-		'ROS2 SET active true'
-		
-		# get field type:
-		# <obj> GET Sensors.ReadFieldLink fieldType
-		
 	], read=False)
+	
+	helpers.setup_ros_topics(
+		readLinks=[
+			{
+				"label": "eulerAngles",
+				"topic": "obj/r/eulerAngles",
+				"target": "obj/subject",
+				"component": "Transform",
+				"field": "eulerAngles",
+				"interval": .5
+			},
+			{
+				"label": "position",
+				"topic": "obj/r/position",
+				"target": "obj/subject",
+				"component": "Transform",
+				"field": "position",
+				"interval": .5
+			},
+			{
+				"label": "mass",
+				"topic": "obj/r/mass",
+				"target": "obj/subject",
+				"component": "Rigidbody",
+				"field": "mass",
+				"interval": .5
+			},
+			{
+				"label": "drag",
+				"topic": "obj/r/drag",
+				"target": "obj/subject",
+				"component": "Rigidbody",
+				"field": "drag",
+				"interval": .5
+			}
+		]
+	)
 	
 	if settings.setup_only == True:
 		return
