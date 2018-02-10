@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-SYNCITY_VERSION = '3.2.11'
+from __future__ import division
 
 import sys
 import os
@@ -13,22 +13,30 @@ import syncity
 
 from syncity import common, settings_manager
 
+SYNCITY_VERSION = '3.2.2'
+
 print ('SynCity toolbox - v{}\nCopyright (c) {} CVEDIA PVE Ltd\n'.format(SYNCITY_VERSION, datetime.date.today().year))
 
 parser = argparse.ArgumentParser(
 	formatter_class=argparse.RawDescriptionHelpFormatter,
 	description=textwrap.dedent('''\
-This script allows experimentation, recording and playback of scripted events
-using syncity simulator telnet api. We also added some demos that show case
-different specific features of the api.
+This script allows experimentation, recording and playback of scripted events using syncity simulator telnet api. We also added some demos that show case different specific features of the api.
+
+You can pipe multiple scripts, tools and command line (-r , --run) files on the same run, this script will respect the order of the arguments even if they are interleaved with each other, this allows for very flexible pipelines, for example:
+
+`syncity.py -r path/to/my.cl -s 360 -t gallery -s something something_else -r other.cl -s 360 -t gallery`
 '''),
-	epilog=textwrap.dedent('Scripts available:\n\n{}\n\nTools available:\n\n{}'.format(common.modules_help('scripts'), common.modules_help('tools'))))
+	epilog=textwrap.dedent('Scripts available:\n\n{}\n\nTools available:\n\n{}\n\nFull documentation available in: https://docs.syncity.com'.format(common.modules_help('scripts'), common.modules_help('tools'))))
+
 parser.add_argument('-p', '--port', type=int, default=10200, help='Port to connect, defaults to 10200')
 parser.add_argument('-i', '--ip', default='127.0.0.1', help='IP of syncity simulator')
-parser.add_argument('-s', '--script', default=None, help='When a --run is not set, defines a script loop to play')
-parser.add_argument('-t', '--tool', default=None, help='Run a tool from repository')
+
+# pipeable arguments
+parser.add_argument('-s', '--script', default=None, action='append', nargs='+', help='Defines one or more python scripts to run')
+parser.add_argument('-t', '--tool', default=None, action='append', nargs='+', help='Defines one or more tools to run')
+parser.add_argument('-r', '--run', type=argparse.FileType('r'), action='append', nargs='+', help='Defines one or more command line (.cl) script to run')
+
 parser.add_argument('--cooldown', type=int, default=0, help='Cooldown after snapshot')
-parser.add_argument('-r', '--run', type=argparse.FileType('r'), help='Run command line (.cl) script')
 
 if platform.system() == 'Windows':
 	parser.add_argument('-o', '--output', default='E:\\tmp\\', help='Defines output path for snapshots, note that this path is relative to the machine running the simulator, defaults to E:\\tmp\\', dest='output_path')
@@ -65,6 +73,17 @@ tools_parser = parser.add_argument_group('Tool specific options')
 common.modules_args('tools', parser=tools_parser)
 
 args = parser.parse_args()
+stack = common.find_arg_order([
+	{'id': 'run', 'args': ['-r', '--run']},
+	{'id': 'script', 'args': ['-s', '--script']},
+	{'id': 'tool', 'args': ['-t', '--tool']}
+])
+stack_size = len(stack)
+
+if stack_size == 0:
+	common.output('Nothing to run, aborting!')
+	sys.exit(0)
+
 settings = syncity.settings_manager.Singleton()
 
 settings._start = time.time()
@@ -72,28 +91,25 @@ settings._version = SYNCITY_VERSION
 settings._root = os.path.dirname(os.path.realpath(__file__))
 
 for k in args.__dict__:
-	# print ('Setting: {} value: {}'.format(k, args.__dict__[k]))
 	settings[k] = args.__dict__[k]
 
-'''
 if platform.system() == 'Windows':
-	if settings.output_path[-1:] != '\\':
-		settings.output_path = settings.output_path + '\\'
-	if settings.local_path[-1:] != '\\':
+	if settings.find('/') != -1:
+		if settings.local_path[-1:] != '/':
+			settings.local_path = settings.local_path + '/'
+	elif settings.local_path[-1:] != '\\':
 		settings.local_path = settings.local_path + '\\'
 else:
-	if settings.output_path[-1:] != '/':
-		settings.output_path = settings.output_path + '/'
 	if settings.local_path[-1:] != '/':
 		settings.local_path = settings.local_path + '/'
-'''
 
 if settings.log == True:
 	settings.lfh = open('{}log_{}.txt'.format(settings.local_path, settings._start), 'wb+')
 
 syncity.common.init()
 
-if settings.run or settings.script:
+# setup telnet connection
+if settings.run != None or settings.script != None:
 	if settings.record == True:
 		settings.fh = open('{}record_{}.txt'.format(settings.local_path, settings._start), 'wb+')
 	
@@ -107,33 +123,49 @@ if settings.run or settings.script:
 		settings.force_sync = True
 	
 	syncity.common.flush_buffer()
-	
-	if settings.run:
-		syncity.common.output('Running script {} {}...'.format(settings.run, syncity.common.md5(settings.run)))
-		with open(settings.run) as fp:
-			for line in fp:
-				syncity.common.send_data(line)
-	else:
-		if settings.script[-3:] == '.py':
-			settings.script = settings.script[:-3]
-		
-		syncity.common.output('Using script: {} {}'.format(settings.script, syncity.common.md5('syncity/scripts/{}.py'.format(settings.script))))
-		syncity.common.output('Press CTRL+C to abort')
-		
-		# track objects created by script to remove them from scene later on
-		settings.obj = []
-		settings.seq_save_i = 1
-		
-		# this should work with both python 2.7 and 3+
-		import_script = __import__('syncity.scripts.{}'.format(settings.script), fromlist=['syncity.scripts'])
-		import_script.run()
 
-if settings.tool != None:
-	if settings.tool[-3:] == '.py':
-		settings.tool = settings.tool[:-3]
+idx = { 'run': 0, 'script': 0, 'tool': 0 }
+ran = 1
+
+for s in stack:
+	common.output('[{}% {}/{}] Running stack: {}'.format(round(100 * (ran / stack_size), 2), ran, stack_size, s))
 	
-	syncity.common.output('Running tool: {} {}'.format(settings.tool, syncity.common.md5('syncity/tools/{}.py'.format(settings.tool))))
-	syncity.common.output('Press CTRL+C to abort')
+	if s == 'run':
+		for subject in settings.run[idx['run']]:
+			syncity.common.output('Running command line script {} {}...'.format(subject, syncity.common.md5(subject)))
+			with open(subjectr) as fp:
+				for line in fp:
+					syncity.common.send_data(line)
+		
+		idx['run'] += 1
 	
-	import_tool = __import__('syncity.tools.{}'.format(settings.tool), fromlist=['syncity.tools'])
-	import_tool.run()
+	elif s == 'script':
+		for subject in settings.script[idx['script']]:
+			if subject[-3:] == '.py':
+				subject = subject[:-3]
+			
+			syncity.common.output('Running python script: {} {}'.format(subject, syncity.common.md5('syncity/scripts/{}.py'.format(subject))))
+			
+			# track objects created by script to remove them from scene later on
+			settings.obj = []
+			settings.seq_save_i = 1
+			
+			# this should work with both python 2.7 and 3+
+			import_script = __import__('syncity.scripts.{}'.format(subject), fromlist=['syncity.scripts'])
+			import_script.run()
+		
+		idx['script'] += 1
+	
+	elif s == 'tool':
+		for subject in settings.tool[idx['tool']]:
+			if subject[-3:] == '.py':
+				subject = subject[:-3]
+			
+			syncity.common.output('Running tool: {} {}'.format(subject, syncity.common.md5('syncity/tools/{}.py'.format(subject))))
+			
+			import_tool = __import__('syncity.tools.{}'.format(subject), fromlist=['syncity.tools'])
+			import_tool.run()
+		
+		idx['tool'] += 1
+	
+	ran += 1

@@ -68,19 +68,13 @@ def global_camera_setup(
 		'{} SET active false'.format(label_root),
 		'{} SET Transform position ({} {} {})'.format(label_root, settings.X_COMP -6, settings.Y_COMP, settings.Z_COMP -50) if position == None else '{} SET Transform position ({} {} {})'.format(label_root, position[0], position[1], position[2]),
 		'{} SET Transform eulerAngles ({} {} {})'.format(label_root, 0, 0, 0),
-	], read=False)
-	
-	if orbit:
-		common.send_data(['{} ADD Orbit'.format(label_root)], read=False)
 		
-		if orbitGround != None:
-			common.send_data('{} SET Orbit groundObj "{}"'.format(label_root, orbitGround), read=False)
-		if orbitOffset != None:
-			common.send_data('{} SET Orbit targetOffset ({} {} {})'.format(label_root, orbitOffset[0], orbitOffset[1], orbitOffset[2]), read=False)
-		if orbitSnap != None:
-			common.send_data('{} SET Orbit snapOffset {}'.format(label_root, orbitSnap), read=False)
-	
-	common.send_data([
+		# orbit
+		'{} ADD Orbit'.format(label_root) if orbit == True else '',
+		'{} SET Orbit groundObj "{}"'.format(label_root, orbitGround) if orbitGround != None else '',
+		'{} SET Orbit targetOffset ({} {} {})'.format(label_root, orbitOffset[0], orbitOffset[1], orbitOffset[2]) if orbitOffset != None else '',
+		'{} SET Orbit snapOffset {}'.format(label_root, orbitSnap) if orbitSnap != None else '',
+		
 		# resize camera display on app, this is relative to the size of the window
 		'Canvas/Cameras/Viewport/Content SET UI.GridLayoutGroup cellSize ({} {})'.format(canvas_width, canvas_height),
 		'Canvas SET active {}'.format(canvas)
@@ -1907,7 +1901,6 @@ def spawn_drone_objs_alt(
 			if p_z > dist_lim:
 				p_z = -dist_lim
 				p_x += dist_v
-		
 	
 	spawn_radius_generic(['city/nature/trees'], tags=['tree'], limit=random.randint(600,600), radius=80, innerradius=30, position=[0,0,0], collision_check=False, prefix=prefix, seed=seed)
 	spawn_radius_generic(['city/buildings'], tags=['building'], limit=random.randint(10,10), radius=335, innerradius=100, position=[0,0,0], collision_check=False, prefix=prefix, seed=seed)

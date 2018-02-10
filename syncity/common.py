@@ -17,6 +17,7 @@ import types
 import json
 import re
 import hashlib
+import errno
 
 from . import settings_manager
 from datetime import datetime
@@ -25,13 +26,15 @@ from subprocess import PIPE, Popen, STDOUT
 _telnet = False
 settings = False
 
-def init_telnet(ip, port):
+def init_telnet(ip, port, retries=3, wait=.5):
 	"""
 	Telnet initalizator
 	
 	# Arguments
 	ip (string): Ip address of target machine
 	port (int): Port of target machine, usually 10200
+	retries (int): Retry connection if failed, defaults to 3
+	wait (float): Time in seconds to wait between retries
 	
 	# Globals
 	
@@ -41,19 +44,31 @@ def init_telnet(ip, port):
 	"""
 	global tn, _telnet
 	
-	output('Connecting to {}:{}...'.format(ip, port))
+	retry = 0
 	
-	try:
-		tn = telnetlib.Telnet(ip, port)
-		_telnet = True
+	while retry < retries:
+		output('Connecting to {}:{}...'.format(ip, port))
 		
-		send_data('NOOP', read=True)
-		
-		if settings.assets:
-			send_data('API SET API.Manager assetsFolder "{}"'.format(settings.assets))
-	except Exception as e:
-		output('Error connecting: {}'.format(e))
-		sys.exit(1)
+		try:
+			tn = telnetlib.Telnet(ip, port)
+			_telnet = True
+			
+			send_data('NOOP', read=True)
+			
+			if settings.assets:
+				send_data('API SET API.Manager assetsFolder "{}"'.format(settings.assets))
+			
+			break
+		except Exception as e:
+			output('Error connecting: {}'.format(e))
+			retry += 1
+			
+			if retry >= retries:
+				output('Ran out of retries, unable to connect. Aborting!')
+				sys.exit(1)
+			else:
+				output('Waiting for retry #{} ...'.format(retry))
+				time.sleep(wait)
 	
 	output('Connected')
 
@@ -70,6 +85,7 @@ def init():
 	settings = settings_manager.Singleton()
 	signal.signal(signal.SIGINT, gracefull_shutdown)
 	atexit.register(gracefull_shutdown)
+	mkdir_p(settings.local_path)
 
 def output (s):
 	"""
@@ -318,6 +334,27 @@ def read_all(fn):
 	with open(fn, "r") as fh:
 		data = fh.read()
 	return data
+
+def find_arg_order(aargs, argv=sys.argv):
+	order = []
+	
+	for i in argv:
+		if i[0:1] != '-':
+			continue
+		for j in aargs:
+			if i in j['args']:
+				order.append(j['id'])
+	
+	return order
+
+def mkdir_p(path):
+	try:
+		os.makedirs(path)
+	except OSError as exc:
+		if exc.errno == errno.EEXIST and os.path.isdir(path):
+			pass
+		else:
+			raise
 
 def get_all_files(base, ignore_path=['.git', '__pycache__'], ignore_ext=['.md', 'pyc'], recursive=True):
 	"""
