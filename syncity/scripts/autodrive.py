@@ -15,6 +15,7 @@ Autodrive
 
 def args(parser):
 	parser.add_argument('--disable_ros', action='store_true', default=False, help='Disables ROS')
+	parser.add_argument('--lidar_ip', default="192.168.1.100", help='Defines a IP for lidar devices')
 
 def run():
 	settings.keep = True
@@ -41,6 +42,7 @@ def run():
 			# WARNING: When VPCustomInput is enabled, you won't be able to drive using the keys
 			'SyncityJPickup ADD VPCustomInput',
 			'SyncityJPickup SET VPCustomInput enabled true',
+			# 'SyncityJPickup SET VPCustomInput enabled false',
 			
 			'"autodrive/Road/Autodrive Road" SET UnityEngine.MeshCollider enabled true',
 			
@@ -64,6 +66,10 @@ def run():
 			'SyncityJPickup/Lidar SET Transform localPosition (0 2 0)',
 			'SyncityJPickup/Lidar SET Transform localEulerAngles (0 0 0)',
 			
+			# flycam
+			# 'SyncityJPickup/Front ADD FlyCamera',
+			# 'SyncityJPickup/Front SET FlyCamera enabled true',
+			
 			# lidar specs
 			'SyncityJPickup/Lidar SET Lidar model "VLP_16"',
 			
@@ -75,7 +81,7 @@ def run():
 			'SyncityJPickup/Lidar SET Lidar rpm 900',
 			
 			'SyncityJPickup/Lidar SET Lidar MinimumIntensity 0',
-			# 'SyncityJPickup/Lidar SET Lidar ipAddressOverride "127.0.0.1"',
+			'SyncityJPickup/Lidar SET Lidar ipAddressOverride "{}"'.format(settings.lidar_ip),
 			
 			'SyncityJPickup/Lidar SET Lidar accuracy HIGH',
 			'SyncityJPickup/Lidar SET Lidar timingAccuracy ULTRA',
