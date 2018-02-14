@@ -25,6 +25,7 @@ from subprocess import PIPE, Popen, STDOUT
 
 _telnet = False
 settings = False
+counters = { 'send': 0, 'recv': 0, 'flush': 0 }
 
 def init_telnet(ip, port, retries=3, wait=.5):
 	"""
@@ -87,7 +88,7 @@ def init():
 	atexit.register(gracefull_shutdown)
 	mkdir_p(settings.local_path)
 
-def output (s):
+def output (s, prefix=''):
 	"""
 	Prints data to terminal with fancy formatting and ascii assurance.
 	
@@ -95,7 +96,7 @@ def output (s):
 	s (string): output string
 	"""
 	
-	x = '[{}] {}'.format(datetime.now().strftime("%H:%M:%S.%f"), s)
+	x = '[{}] {}{}'.format(datetime.now().strftime("%H:%M:%S.%f"), '[{}] '.format(prefix) if prefix != '' else '', s)
 	print (x)
 	
 	if settings.log:
@@ -126,6 +127,10 @@ def send_data(v, read=None, flush=None):
 	if type(v) != list:
 		v = [ v ]
 	
+	if settings.debug:
+		counters['send'] += 1
+		output('[{}] Telnet send_data v: {} read: {} flush: {}'.format(counters['send'], v, 'True' if read == True else 'False', 'True' if flush != None else 'False'))
+	
 	r = []
 	
 	for s in v:
@@ -137,15 +142,24 @@ def send_data(v, read=None, flush=None):
 		if settings.record:
 			settings.fh.write(s)
 		
+		if settings.debug:
+			output('Telnet Writing: {}'.format(s), 'DEBUG')
+		
 		tn.write(s)
 		
 		if read:
+			if settings.debug:
+				counters['recv'] += 1
+				output('[{}] Telnet Reading...'.format(counters['recv']), 'DEBUG')
+			
 			l = tn.read_until(b"\r\n", 600)
 			l = shape_data(l)
 			r.append(l)
 			
 			# multi return hack, ideally first response would have a line count attached to it
 			while True:
+				if settings.debug:
+					output('Telnet Read Loop... buffer: {}'.format(r), 'DEBUG')
 				l = shape_data(tn.read_eager())
 				
 				if l is '' or not l:
@@ -162,6 +176,9 @@ def send_data(v, read=None, flush=None):
 				if l != '':
 					send_data('NOOP', read=True, flush=True)
 			"""
+	
+	if settings.debug:
+		output('Telnet Read Completed: {}'.format(r), 'DEBUG')
 	
 	return r
 
@@ -182,6 +199,7 @@ def md5(fname):
 	with open(fname, "rb") as f:
 		for chunk in iter(lambda: f.read(4096), b""):
 			hash_md5.update(chunk)
+	
 	return hash_md5.hexdigest()
 
 def ts_write(fh, x):
@@ -247,6 +265,9 @@ def gracefull_shutdown():
 		
 		tn.close()
 	
+	if settings.debug:
+		output('Telnet sent: {} recv: {} flush: {}'.format(counters['send'], counters['recv'], counters['flush']), 'DEBUG')
+	
 	output('Completed, wasted {}s ... BYE'.format(time.time() - settings._start))
 	
 	try:
@@ -265,6 +286,9 @@ def flush_buffer():
 	"""
 	Forces a telnet command read by sending NOOP
 	"""
+	if settings.debug:
+		counters['flush'] += 1
+	
 	send_data('NOOP', read=True, flush=True)
 
 def modules_help(module):
