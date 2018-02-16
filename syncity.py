@@ -95,7 +95,7 @@ for k in args.__dict__:
 	settings[k] = args.__dict__[k]
 
 if platform.system() == 'Windows':
-	if settings.find('/') != -1:
+	if settings.local_path.find('/') != -1:
 		if settings.local_path[-1:] != '/':
 			settings.local_path = settings.local_path + '/'
 	elif settings.local_path[-1:] != '\\':
