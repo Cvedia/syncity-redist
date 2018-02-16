@@ -6,91 +6,136 @@ settings = settings_manager.Singleton()
 def help():
 	return '''\
 Strawberry field runner
-	- Runs henkock tractor around the strawberry fields
+	- Runs harvester around the strawberry fields
 '''
 
 def run():
-	settings.keep = True
-	mycams = ['cameras/cameraRGB', 'cameras/segmentation']
-	
-	if settings.skip_setup == False:
-		helpers.global_camera_setup()
-		# helpers.add_camera_rgb(width=4096, height=3072, audio=True, envirosky=True)
-		# helpers.add_camera_rgb_pp('EnviroFX', scion=False)
-		helpers.add_camera_rgb(width=4096, height=3072, envirosky=False)
-		
-		common.send_data([
-			'cameras/cameraRGB SET Camera enabled true',
-			'cameras SET Transform position ({} {} {})'.format(6, 33, -50),
-			'cameras SET Transform eulerAngles ({} {} {})'.format(40, 8, 0)
-			# 'cameras/cameraRGB ADD EnviroCamera',
-			# 'EnviroSky EXECUTE EnviroSky ChangeWeather "{}"'.format(helpers.weather_lst[0]),
-			# 'EnviroSky SET EnviroSky cloudsMode {}'.format(random.choice(helpers.clouds_lst)),
-		], read=False)
-	
-	x = -50
-	z = -7
-	a_y = 90
+	obj = 'Harvester'
+	s_x = x = -35.65
+	s_z = z = 33.56
+	displ_z = -8.44
+	displ_x = 45.789
 	
 	common.send_data([
-		'HENCOCK SET Transform eulerAngles ({} {} {})'.format(0, a_y, 0)
+		'{} SET Transform eulerAngles ({} {} {})'.format(obj, 0, 0, 0),
+		'{} SET Transform position ({} {} {})'.format(obj, x, 0, z)
 	])
 	
 	force_sync = True
 	loop = 0
-	stepping = 16
 	
-	while loop < 5:
-		while x < 10:
-			x = x + stepping
+	stepping = {
+		"x": 1,
+		"z": 1,
+		"a_y": 5
+	}
+	
+	loop = 0
+	
+	while loop < 4:
+		c_x = 0
+		c_z = 0
+		a_y = 0
+		
+		# move forward
+		while c_x < displ_x:
+			c_x += stepping['x']
 			common.send_data([
-				'HENCOCK SET Transform position ({} {} {})'.format(x, 0 , z)
+				'{} SET Transform position ({} {} {})'.format(obj, x + c_x, 0, z + c_z)
 			])
 		
+		# turn 90 degrees
+		while a_y < 90:
+			a_y += stepping['a_y']
+			common.send_data([
+				'{} SET Transform eulerAngles ({} {} {})'.format(obj, 0, a_y, 0),
+			])
+		
+		# move to the next step field
+		while c_z > displ_z:
+			c_z -= stepping['z']
+			common.send_data([
+				'{} SET Transform position ({} {} {})'.format(obj, x + c_x, 0, z + c_z)
+			])
+		
+		# turn 90 degrees
 		while a_y < 180:
-			a_y = a_y + stepping
+			a_y += stepping['a_y']
 			common.send_data([
-				'HENCOCK SET Transform eulerAngles ({} {} {})'.format(0, a_y, 0)
+				'{} SET Transform eulerAngles ({} {} {})'.format(obj, 0, a_y, 0),
 			])
 		
-		i = 0
-		while i < 12:
-			z = z - stepping
-			i = i + stepping
+		# move back
+		while c_x > 0:
+			c_x -= stepping['x']
 			common.send_data([
-				'HENCOCK SET Transform position ({} {} {})'.format(x, 0 , z)
+				'{} SET Transform position ({} {} {})'.format(obj, x + c_x, 0, z + c_z)
 			])
 		
-		while a_y < 270:
-			a_y = a_y + stepping
-			common.send_data([
-				'HENCOCK SET Transform eulerAngles ({} {} {})'.format(0, a_y, 0)
-			])
-		
-		while x > -50:
-			x = x - stepping
-			common.send_data([
-				'HENCOCK SET Transform position ({} {} {})'.format(x, 0 , z)
-			])
-		
-		while a_y > 180:
-			a_y = a_y - stepping
-			common.send_data([
-				'HENCOCK SET Transform eulerAngles ({} {} {})'.format(0, a_y, 0)
-			])
-		
-		i = 0
-		while i < 12:
-			z = z - stepping
-			i = i + stepping
-			common.send_data([
-				'HENCOCK SET Transform position ({} {} {})'.format(x, 0 , z)
-			])
-		
+		# turn back 90 degrees
 		while a_y > 90:
-			a_y = a_y - stepping
+			a_y -= stepping['a_y']
 			common.send_data([
-				'HENCOCK SET Transform eulerAngles ({} {} {})'.format(0, a_y, 0)
+				'{} SET Transform eulerAngles ({} {} {})'.format(obj, 0, a_y, 0),
 			])
 		
-		loop = loop + 1
+		# move to the next step field
+		while c_z > displ_z*2:
+			c_z -= stepping['z']
+			common.send_data([
+				'{} SET Transform position ({} {} {})'.format(obj, x + c_x, 0, z + c_z)
+			])
+		
+		# turn back 90 degrees
+		while a_y > 0:
+			a_y -= stepping['a_y']
+			common.send_data([
+				'{} SET Transform eulerAngles ({} {} {})'.format(obj, 0, a_y, 0),
+			])
+		
+		# move forward
+		while c_x < displ_x:
+			c_x += stepping['x']
+			common.send_data([
+				'{} SET Transform position ({} {} {})'.format(obj, x + c_x, 0, z + c_z)
+			])
+		
+		# turn 90 degrees
+		while a_y < 90:
+			a_y += stepping['a_y']
+			common.send_data([
+				'{} SET Transform eulerAngles ({} {} {})'.format(obj, 0, a_y, 0),
+			])
+		
+		# move to the next step field
+		while c_z > displ_z*3:
+			c_z -= stepping['z']
+			common.send_data([
+				'{} SET Transform position ({} {} {})'.format(obj, x + c_x, 0, z + c_z)
+			])
+		
+		# turn 90 degrees
+		while a_y < 180:
+			a_y += stepping['a_y']
+			common.send_data([
+				'{} SET Transform eulerAngles ({} {} {})'.format(obj, 0, a_y, 0),
+			])
+		
+		# move back
+		while c_x > 0:
+			c_x -= stepping['x']
+			common.send_data([
+				'{} SET Transform position ({} {} {})'.format(obj, x + c_x, 0, z + c_z)
+			])
+		
+		if loop == 0:
+			x = s_x + displ_x
+			z = s_z
+		elif loop == 1:
+			x = s_x
+			z = s_z + (displ_z * 5)
+		elif loop == 2:
+			x = s_x + displ_x
+			z = s_z + (displ_z * 5)
+		
+		loop += 1
