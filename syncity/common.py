@@ -5,7 +5,6 @@ This functions are accessible from scripts / tools via `common.<function>`
 """
 import sys
 import os
-import telnetlib
 import time
 import atexit
 import argparse
@@ -18,6 +17,7 @@ import json
 import re
 import hashlib
 import errno
+import telnetlib
 
 from . import settings_manager
 from datetime import datetime
@@ -86,7 +86,9 @@ def init():
 	settings = settings_manager.Singleton()
 	signal.signal(signal.SIGINT, gracefull_shutdown)
 	atexit.register(gracefull_shutdown)
-	mkdir_p(settings.local_path)
+	
+	if settings.local_path:
+		mkdir_p(settings.local_path)
 
 def output (s, prefix=''):
 	"""
@@ -134,16 +136,18 @@ def send_data(v, read=None, flush=None):
 	r = []
 	
 	for s in v:
+		if len(s) == 0 or len(s.strip('\n\r ')) == 0:
+			continue
 		if settings.quiet == False:
 			output('>> {}'.format(s))
 		
-		s = s.encode('ascii') + b"\n"
+		s = s.encode('ascii') + b"\r\n"
 		
 		if settings.record:
 			settings.fh.write(s)
 		
 		if settings.debug:
-			output('Telnet Writing: {}'.format(s), 'DEBUG')
+			output('Telnet Writing: `{}` {} bytes'.format(s, len(s)), 'DEBUG')
 		
 		tn.write(s)
 		
@@ -263,6 +267,7 @@ def gracefull_shutdown():
 		else:
 			output('Keeping objects in scene')
 		
+		output('queueCount: {}'.format(send_data('API GET API.Manager queueCount', read=True)))
 		tn.close()
 	
 	if settings.debug:

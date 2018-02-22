@@ -8,6 +8,7 @@ def help():
 360 object
 	- Creates a RGB camera
 	- Creates a Segmentation camera
+	- Creates a Depth camera
 	- Spawns a single object and rotates around it
 	- Exports RGB images
 	- Exports segmentation maps
@@ -16,13 +17,14 @@ def help():
 
 def run():
 	settings.keep = True
-	mycams = ['cameras/cameraRGB', 'cameras/segmentation']
+	mycams = ['cameras/cameraRGB', 'cameras/segmentation', 'cameras/depth']
 	obj = 'Cars/VW_Golf_V/VW_Golf_V'
 	
 	if settings.skip_setup == False:
 		helpers.global_camera_setup()
 		helpers.add_camera_rgb(width=4096, height=3072, pp='EnviroFX')
 		helpers.add_camera_seg(segments=['Car'], lookupTable=[['Car', 'red']])
+		helpers.add_camera_depth(width=1024, height=768)
 		helpers.global_disk_setup()
 		helpers.add_disk_output(mycams)
 		common.send_data([

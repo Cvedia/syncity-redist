@@ -114,7 +114,8 @@ def add_camera_depth(
 		'{} SET Sensors.RenderCamera resolution ({} {})'.format(label, width, height),
 		'{} SET Camera renderingPath DeferredShading'.format(label),
 		# '{} ADD AudioListener'.format(label),
-		'{} ADD Sensors.Lidar_Internal.RenderDepthBuffer'.format(label),
+		'{} ADD Sensors.Lidar_Internal.RenderDepthBufferOld'.format(label),
+		# '{} ADD Cameras.RenderDepthBuffer'.format(label),
 		'{} SET active true'.format(label)
 	], read=False)
 	
@@ -1121,7 +1122,7 @@ def take_snapshot(lst, auto_segment=False, label='disk1', force_noop=False):
 			if (len(r) > 1):
 				common.send_data('{} EXECUTE Sensors.Disk Snapshot'.format(label), read=True)
 				r = common.send_data('{} GET Segmentation.Segmentation boundingBoxes'.format(lst[idx[0]]), read=True)
-				seq_save('bbox', ''.join(r[1:]))
+				seq_save('bbox', r)
 	else:
 		if force_noop:
 			common.send_data('NOOP', read=True);
@@ -1142,19 +1143,31 @@ def take_seg_snapshot(lst):
 	for l in lst:
 		r = common.send_data('{} GET Segmentation.Segmentation boundingBoxes'.format(l), read=True)
 		if (len(r) > 1):
-			seq_save('bbox', ''.join(r[1:]))
+			seq_save('bbox', r)
 
-def seq_save(pref, data):
+def seq_save(pref, raw_data):
 	"""
 	Helper function to mutate raw telnet outputs into json objects
 	
 	# Attributes
 	
 	pref (string): Output file prefix
-	data (string): Data to write
+	raw_data (list): Data to write
 	
 	"""
-	f = open('{}{}_{}.json'.format(settings.local_path, pref, settings.seq_save_i), 'w')
+	data = []
+	for r in raw_data:
+		if r[0:2] == 'OK' or r[0:2] == 'ER':
+			continue
+		data.append(r)
+	data = ''.join(data)
+	
+	fn = '{}{}_{}.json'.format(settings.local_path, pref, settings.seq_save_i)
+	
+	if settings.debug:
+		common.output('SEQ Save path: {} prefix: {} data: {}'.format(fn, pref, data), 'DEBUG')
+	
+	f = open(fn, 'w')
 	f.write(data)
 	f.close()
 	common.output('Wrote: {}{}_{}.json'.format(settings.local_path, pref, settings.seq_save_i))
@@ -1197,16 +1210,17 @@ def ugly_tag_fix(tag):
 	
 	return x
 
-def add_random_color(objs, colors=16, colors_weights=14, spawner=False):
+def add_random_color(objs, colors=16, colors_weights=14, spawner=False, method='FromList'):
 	"""
 	Adds random color component to a object or spawner
 	
 	# Arguments
 	
 	objs (list|string): Object or objects to add random color component
-	colors (int): Number of random colors to be assigned, defaults to `16`
+	colors (int): Number of random colors to be assigned, defaults to `16` (ignored if method is `Random`)
 	colors_weights (int): Color changing weight, defaults to `14`
 	spawner (bool): Defines if the object(s) is/are spawner or regular objects, defaults to `False`
+	method (string): Defines operation mode, `FromList` will use a fixed list of colors, `Random` will pick a random color everytime, `Lerp` will randomize between 2 colors, defaults to `FromList`
 	
 	"""
 	
@@ -1218,13 +1232,21 @@ def add_random_color(objs, colors=16, colors_weights=14, spawner=False):
 	if type(objs) != list:
 		objs = [ objs ]
 	
+	buf = []
+	
 	for obj in objs:
-		common.send_data('{} ADD {}'.format(obj, component))
+		buf.append('{} ADD {}'.format(obj, component))
+		buf.append('{} SET RandomProps.RandomColor randomMethod {}'.format(obj, method))
 		
-		for i in range(0, colors):
-			common.send_data('{} PUSH {} availableColors "{}"'.format(obj, component, get_random_color()))
+		if method == 'Random':
+			buf.append('{} PUSH {} availableColors "{}"'.format(obj, component, get_random_color()))
+		elif colors > 0:
+			for i in range(0, colors):
+				buf.append('{} PUSH {} availableColors "{}"'.format(obj, component, get_random_color()))
 		
-		common.send_data('{} PUSH {} colorsWeights {}'.format(obj, component, colors_weights))
+		buf.append('{} PUSH {} colorsWeights {}'.format(obj, component, colors_weights))
+	
+	common.send_data(buf, read=False)
 
 def add_lidar(
 	label='Lidar', virtualCamera=None, model='VLP_16',
@@ -1491,7 +1513,8 @@ def spawn_radius_generic(
 		], read=False)
 		
 		if seed != None:
-			common.send_data(['{}/{} SET RandomProps.PropArea seed {}'.format(prefix, n, seed)], read=False)
+			# common.send_data(['{}/{} SET RandomProps.PropArea seed {}'.format(prefix, n, seed)], read=False)
+			common.send_data(['RandomProps.Random.instance SET seed {}'.format(seed)], read=False)
 		
 		if ugly_fix == True:
 			try:
@@ -1602,7 +1625,8 @@ def spawn_rectangle_generic(
 		], read=False)
 		
 		if seed != None:
-			common.send_data(['{}/{} SET RandomProps.PropArea seed {}'.format(prefix, n, seed)], read=False)
+			# common.send_data(['{}/{} SET RandomProps.PropArea seed {}'.format(prefix, n, seed)], read=False)
+			common.send_data(['RandomProps.Random.instance SET seed {}'.format(seed)], read=False)
 		
 		try:
 			common.send_data(['{}/{} SET RandomProps.PropArea tags "{}"'.format(prefix, n, ugly_tag_fix(tags[i]))], read=False)
@@ -1770,11 +1794,11 @@ def spawn_misc_objs(destroy=False, prefix='spawner', seed=None):
 	spawn_radius_generic(['city/ground'], tags=['ground'], suffix='_0', limit=3, radius=75, innerradius=0, scale=[1,1,1], position=[0,0,0], collision_check=False, prefix=prefix, seed=seed)
 
 def spawn_drone_objs(
-	destroy=False, ground_position=[0,0,0], ground_limit=204,
-	dist_h=120, dist_v=120, dist_lim=1000, p_x=-20, p_z=-1000, p_y=0,
-	birds_radius=90, birds_innerradius=0, cars_radius=50, cars_innerradius=5,
-	trees_limit=[50,200], buildings_radius=335, buildings_innerradius=100, trees_radius=80, trees_innerradius=20,
-	buildings_limit=[50,150], birds_limit=[25,100], cars_limit=[5,25], drones_limit=[80,200], prefix='spawner',
+	destroy=False, ground_position=[84,0,0], ground_limit=0,
+	dist_h=25, dist_v=25, dist_lim=150, p_x=-150, p_z=-350, p_y=0,
+	birds_radius=120, birds_innerradius=0, cars_radius=50, cars_innerradius=5,
+	trees_limit=[150,200], buildings_radius=120, buildings_innerradius=60, trees_radius=80, trees_innerradius=10,
+	buildings_limit=[150,150], birds_limit=[25,100], cars_limit=[75,75], drones_limit=[80,200], prefix='spawner',
 	trees_tags=['tree'], buildings_tags=['building'], birds_tags=['bird'], cars_tags=['car'], drones_tags=['drones'],
 	trees_colors=None, buildings_colors=None, birds_colors=None, cars_colors=None, drones_colors=None,
 	# ground_segment='VOID', trees_segment='VOID', buildings_segment='VOID', birds_segment='VOID', cars_segment='VOID', drones_segment='DRONE',
@@ -1812,7 +1836,7 @@ def spawn_drone_objs(
 			common.send_data([
 				'CREATE city/ground_{} city/ground/{}'.format(k, random.choice(ground_lst)),
 				'city/ground_{} SET Transform position ({} {} {})'.format(k, p_x + settings.X_COMP, p_y, p_z + settings.Z_COMP),
-				'city/ground_{} SET Transform localScale ({} {} {})'.format(k, 12, 12, 12),
+				'city/ground_{} SET Transform localScale ({} {} {})'.format(k, 3, 3, 3),
 				'city/ground_{} SET active true'.format(k)
 			], read=False)
 			settings.obj.append('city/ground_{}'.format(k))
@@ -1829,10 +1853,17 @@ def spawn_drone_objs(
 			'{} SET Segmentation.ClassGroup itemsClassName "{}"'.format('city', ground_segment)
 		])
 	
+	spawn_radius_generic(['city/ground'], tags=['ground'], limit=300, radius=150, innerradius=0, scale=[3,3,3], position=[0,0,0], collision_check=False, prefix=prefix, seed=seed)
+	spawn_radius_generic(['humans'], tags=['human,random'], suffix='_0', limit=40, radius=30, innerradius=2, position=[0,0,0], collision_check=False, prefix=prefix, seed=seed)
 	spawn_radius_generic(['city/nature/trees'], segmentation_class=trees_segment, random_colors=trees_colors, tags=trees_tags, collision_check=False, limit=random.randint(trees_limit[0], trees_limit[1]), radius=trees_radius, innerradius=trees_innerradius, position=[0,0,0], prefix=prefix, seed=seed)
 	spawn_radius_generic(['city/buildings'], segmentation_class=buildings_segment, random_colors=buildings_colors, tags=buildings_tags, stick_to_ground=False, collision_check=False, limit=random.randint(buildings_limit[0], buildings_limit[1]), radius=buildings_radius, innerradius=buildings_innerradius, position=[0,0,0], prefix=prefix, seed=seed)
+#	spawn_radius_generic(['buildings_001'], segmentation_class=buildings_segment, random_colors=buildings_colors, tags=buildings_tags, stick_to_ground=False, collision_check=False, limit=random.randint(buildings_limit[0], buildings_limit[1]), radius=buildings_radius, innerradius=buildings_innerradius, position=[0,0,0], prefix=prefix, seed=seed)
+#	spawn_radius_generic(['buildings_002'], segmentation_class=buildings_segment, random_colors=buildings_colors, tags=buildings_tags, stick_to_ground=False, collision_check=False, limit=random.randint(buildings_limit[0], buildings_limit[1]), radius=buildings_radius, innerradius=buildings_innerradius, position=[0,0,0], prefix=prefix, seed=seed)
+#	spawn_radius_generic(['buildings_003'], segmentation_class=buildings_segment, random_colors=buildings_colors, tags=buildings_tags, stick_to_ground=False, collision_check=False, limit=random.randint(buildings_limit[0], buildings_limit[1]), radius=buildings_radius, innerradius=buildings_innerradius, position=[0,0,0], prefix=prefix, seed=seed)
 	spawn_radius_generic(['animals/birds'], segmentation_class=birds_segment, random_colors=birds_colors, tags=birds_tags, limit=random.randint(birds_limit[0], birds_limit[1]), radius=birds_radius, innerradius=birds_innerradius, position=[0,random.randint(15,95),0], prefix=prefix, seed=seed)
-	spawn_radius_generic(['cars'], segmentation_class=cars_segment, random_colors=cars_colors, tags=cars_tags, limit=random.randint(cars_limit[0], cars_limit[1]), radius=cars_radius, innerradius=cars_innerradius, position=[0,0,0], prefix=prefix, seed=seed)
+	spawn_radius_generic(['cars'], segmentation_class=cars_segment, random_colors=cars_colors, tags=cars_tags, collision_check=False, limit=random.randint(cars_limit[0], cars_limit[1]), radius=cars_radius, innerradius=cars_innerradius, position=[0,0,0], prefix=prefix, seed=seed)
+	spawn_radius_generic(['roadsigns'], tags=['roadsign'], limit=250, radius=80, collision_check=False, innerradius=15, position=[0,0,0], prefix=prefix, seed=seed)
+	
 	
 	if drones_limit[1] > 0:
 		spawn_radius_generic(['drones'], segmentation_class=drones_segment, random_colors=drones_colors, tags=drones_tags, ugly_fix=False, limit=random.randint(drones_limit[0], drones_limit[1]), radius=random.randint(30,50), innerradius=0, position=[0,0,0], prefix=prefix, seed=seed)

@@ -3,9 +3,10 @@ Cleans any registry settings for the simulator.
 Windows only.
 """
 import subprocess
+import platform
 
 from .. import common, settings_manager
-from subprocess import call
+from subprocess import PIPE, run
 
 settings = settings_manager.Singleton()
 
@@ -15,6 +16,17 @@ def help():
 '''
 
 def run():
-	common.output('Running...')
-	call(['reg', 'delete', 'HKEY_CURRENT_USER\Software\Syncity', '/f'])
-	common.output('Completed')
+	if platform.system() == 'Windows':
+		common.output('Running...')
+		result = subprocess.run(['reg', 'delete', 'HKEY_CURRENT_USER\Software\Syncity', '/f'], stdout=PIPE, stderr=PIPE, universal_newlines=True)
+		
+		common.output('Return code: {}'.format(result.returncode))
+		
+		if len(result.stdout) > 0:
+			common.output('Result: {}'.format(result.stdout))
+		if len(result.stderr) > 0:
+			common.output('Error: {}'.format(result.stderr))
+		
+		common.output('Completed')
+	else:
+		common.output('Error: this tool is windows only')
