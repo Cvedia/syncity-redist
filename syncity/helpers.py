@@ -114,7 +114,7 @@ def add_camera_depth(
 		'{} SET Sensors.RenderCamera resolution ({} {})'.format(label, width, height),
 		'{} SET Camera renderingPath DeferredShading'.format(label),
 		# '{} ADD AudioListener'.format(label),
-		'{} ADD Sensors.Lidar_Internal.RenderDepthBufferOld'.format(label),
+		'{} ADD Sensors.Lidar_Internal.RenderDepthBufferOld'.format(label) if settings.use_old_depth_buffer else '{} ADD CameraDepthOutput'.format(label),
 		# '{} ADD Cameras.RenderDepthBuffer'.format(label),
 		'{} SET active true'.format(label)
 	], read=False)
@@ -1197,6 +1197,10 @@ def add_disk_output(lst, label='disk1'):
 			'CREATE {}/{}'.format(label, l.capitalize()),
 			'{}/{} ADD Sensors.RenderCameraLink'.format(label, l.capitalize()),
 			'{}/{} SET Sensors.RenderCameraLink target {}'.format(label, l.capitalize(), l),
+			
+			# TEMPORARY HACK
+			'{}/{} SET Sensors.RenderCameraLink outputType DEPTH'.format(label, l.capitalize()) if "depth" in l else '',
+			
 			'{}/{} SET active true'.format(label, l.capitalize())
 		], read=False)
 	

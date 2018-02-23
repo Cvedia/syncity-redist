@@ -57,6 +57,7 @@ parser.add_argument('--skip_setup', action='store_true', help='Skip script setup
 parser.add_argument('--setup_only', action='store_true', help='Runs script setup and exits')
 parser.add_argument('--disable_envirosky', action='store_true', help='Disables Envirosky -- NOT RECOMMENDED')
 parser.add_argument('--disable_canvas', action='store_true', help='Disables client rendering visualization, better for performance, but you will only see outputs written to disk.')
+parser.add_argument('--use_old_depth_buffer', action='store_true', default=False, help='Uses old depth buffer component')
 parser.add_argument('--flycam', action='store_true', help='Spawns fly cam, controllable via simulator')
 parser.add_argument('--cars_limit', type=int, default=50, help='Spawn cars into scene, defaults to 100')
 parser.add_argument('--props_limit', type=int, default=250, help='Spawn props into scene, defaults to 250')

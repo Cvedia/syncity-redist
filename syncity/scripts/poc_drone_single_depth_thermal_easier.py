@@ -32,17 +32,21 @@ def args(parser):
 
 def run():
 	settings.keep = True
-	mycams = ['cameras/cameraRGB', 'cameras/segmentation']
+	mycams = ['cameras/cameraRGB', 'cameras/segmentation', 'cameras/depth']
 	
 	if settings.skip_setup == False:
 		helpers.global_camera_setup()
-		helpers.add_camera_seg(width=3072, height=2304, segments=['drone0'], lookupTable=[['drone0', 'red']])
-		
-		helpers.add_camera_rgb(width=3072, height=2304, pp='EnviroFX')
+		helpers.add_camera_seg(width=1024, height=768, segments=['drone0'], lookupTable=[['drone0', 'red']])
+		helpers.add_camera_depth(width=1024, height=768)
+		helpers.add_camera_rgb(width=1024, height=768, pp='EnviroFX')
 		
 		helpers.global_disk_setup()
 		
 		helpers.add_disk_output(mycams)
+		
+		# HACK: if you want to return BLOBs instead of DEPTH maps use this:
+		common.send_data([ 'disk1/Cameras/depth SET Sensors.RenderCameraLink outputType BLOB' ])
+		
 		helpers.spawn_drone_objs(
 			drones_limit=[0,0], buildings_innerradius=80,
 			trees_limit=[150,200], trees_innerradius=15, trees_radius=60, buildings_limit=[100,100],
@@ -81,7 +85,7 @@ def run():
 			common.send_data([
 				'cameras/drone/drone{}/drone{} SET RandomProps.RandomColor partsNames "chassis,legs,motors,battery,bolts,sensors_caps,sensors,camera,blades"'.format(x,x),
 			], read=False)
-	
+		
 	p_x_r = [-5, 5]
 	p_y_r = [1.5, 8]
 	p_z_r = [3, 9]
