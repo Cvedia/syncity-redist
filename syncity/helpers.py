@@ -1114,9 +1114,9 @@ def take_snapshot(lst, auto_segment=False, label='disk1', force_noop=False):
 			common.output('WARNING: No camera with segmentation name found, skipping auto_segment')
 		else:
 			do_render(lst)
+			common.flush_buffer()
 			r = common.send_data([
 				'{} EXECUTE Sensors.Disk Snapshot'.format(label),
-				'NOOP',
 				'{} GET Segmentation.Segmentation boundingBoxes'.format(lst[idx[0]]),
 				'NOOP'
 			], read=True)
@@ -1138,6 +1138,8 @@ def take_seg_snapshot(lst):
 	lst (list): List of cameras with segmentation component
 	
 	"""
+	common.flush_buffer()
+	
 	for l in lst:
 		r = common.send_data(['{} GET Segmentation.Segmentation boundingBoxes'.format(l), 'NOOP'], read=True)
 		seq_save('bbox', r)
@@ -1166,9 +1168,14 @@ def seq_save(pref, raw_data):
 			
 			if f[0] == True and f[1] == False:
 				data.append(r)
+			elif f[0] == True and f[1] == True:
+				common.output('More than one object received? {}'.format('\n'.join(raw_data)), 'WARN')
 			
 			if r[-1:] == ']':
 				f[1] = True
+				
+				if len(data) > 0:
+					break
 		
 		if len(data) == 0:
 			common.output('Unable to fetch bounding box, retrying...', 'DEBUG')
