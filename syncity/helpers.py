@@ -1148,19 +1148,26 @@ def seq_save(pref, raw_data):
 	"""
 	Helper function to mutate raw telnet outputs into json objects
 	
+	Note: This function is temporary, the simulator daemon itself will save json
+	files the same way it exports images in the future.
+	
 	# Attributes
 	
 	pref (string): Output file prefix
 	raw_data (list): Data to write
 	
 	"""
+	noops = 0
 	data = []
 	while len(data) == 0:
+		
 		f = [False, False]
+		raw_data = ('\n'.join(raw_data)).split('\n')
+		
 		for r in raw_data:
 			r = r.strip('\n\r')
 			
-			if r == 'OK' or r[0:2] == 'OK' or r[0:2] == 'ER':
+			if r == '' or r == 'OK' or r[0:2] == 'OK' or r[0:2] == 'ER':
 				continue
 			
 			if r[0:1] == '[':
@@ -1174,15 +1181,35 @@ def seq_save(pref, raw_data):
 			if r[-1:] == ']':
 				f[1] = True
 				
+				# if there's data and we have a valid json object, we break, otherwise it's a fake close
 				if len(data) > 0:
-					break
+					try:
+						json.loads(''.join(data))
+						break
+					except:
+						f[1] = False
+						pass
 		
 		if len(data) == 0:
 			common.output('Unable to fetch bounding box, retrying...', 'DEBUG')
 			time.sleep(.5)
 			raw_data = common.send_data('NOOP', read=True)
 		else:
-			break
+			# make sure object is valid, otherwise we might need to send another noop to complete it
+			try:
+				json.loads(''.join(data))
+				break
+			except:
+				common.output('Partially received json object, waiting for more...', 'DEBUG')
+				time.sleep(.5)
+				raw_data = common.send_data('NOOP', read=True)
+		
+		noops += 1
+		
+		if noops > 100:
+			common.output('Limit reached while waiting for json object, skipping index!', 'ERROR')
+			settings.seq_save_i = settings.seq_save_i + 1
+			return
 	
 	data = ''.join(data)
 	
