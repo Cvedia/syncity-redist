@@ -1,5 +1,5 @@
 /*===============================
-* Images Gallery v 1.0.2
+* Images Gallery v 1.0.3
 * Copyright: Cvedia (C) 2018
 *================================*/
 
@@ -33,7 +33,7 @@ function init() {
 }
 
 function ImagesGallery() {
-	var gal, viewButtons, image, boxButton, input, name, boxes, playButton, timer,
+	var gal, viewButtons, image, boxButton, input, name, meta_name, boxes, playButton, timer,
 		curImage = 1,
 		curType = 'rgb',
 		showBox = false,
@@ -52,6 +52,7 @@ function ImagesGallery() {
 	gal = $('.galWrapper');
 	image = $('.galImage img', gal).on('load', onImageLoad);
 	name = $('.galBotLeft', gal);
+	meta_name = $('.galBotRight', gal);
 	boxes = $('.galBoxes', gal);
 	viewButtons = $('.galTopLeft button', gal).on('click', onViewType);
 	boxButton = $('.galTopRight button', gal).on('click', onShowBoxes);
@@ -89,8 +90,11 @@ function ImagesGallery() {
 	}
 	
 	function updateImage() {
-		var url = images[curType][images2idx[curType][curImage-1]];
+		var url = images[curType][images2idx[curType][curImage-1]],
+				murl = meta_fn[meta2idx[curImage-1]];
+		
 		name.html('<a href="'+url+'" target="_blank">'+url+'</a>');
+		meta_name.html('<a href="'+murl+'" target="_blank">'+murl+'</a>');
 		image.attr('src', url);
 		drawBoxes();
 	}

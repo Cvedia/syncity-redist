@@ -13,6 +13,7 @@
 		var images = {{ fc }},
 			total_images = {{ total_images }},
 			meta = {{ fm }},
+			meta_fn = {{ fmfn }},
 			classColors = [
 				'#ffffff',
 				'#e6194b',
@@ -45,6 +46,7 @@
 				</div>
 			</div>
 			<div class="galBottom">
+				<div class="galBotRight"></div>
 				<div class="galBotLeft"></div>
 				<div class="galBotMid">
 					<button class="icon iconLeft"></button>

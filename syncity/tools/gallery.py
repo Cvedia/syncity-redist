@@ -36,7 +36,8 @@ def run():
 	fns = common.get_all_files(settings.local_path, recursive=False)
 	features = [] # feature list
 	fc = {} # categorized filenames
-	fm = {} # meta filenames
+	fm = {} # meta data
+	fmfn = {} # meta filenames
 	fi = len(fns)
 	
 	if fi == 0:
@@ -67,18 +68,24 @@ def run():
 				fts += .000001
 			try:
 				fm[fts] = json.loads(common.read_all(fn))
+				fmfn[fts] = fn
 			except:
 				common.output('Invalid JSON data in {}'.format(fn), 'ERROR')
 				pass
+			continue
+		elif lnm.endswith(".debug") or lnm.endswith(".html") or lnm.endswith(".txt"):
 			continue
 		
 		if fty == None:
 			common.output('Unknown file type: {}, skipping'.format(fn), 'WARN')
 			continue
+		
 		if fty not in features:
 			features.append(fty)
+		
 		if not has_attribute(fc, fty):
 			fc[fty] = {}
+		
 		while has_attribute(fc[fty], fts):
 			fts += .000001
 		
@@ -111,6 +118,7 @@ def run():
 			js_static=js_static, css_static=css_static, features=features,
 			fc=json.dumps(fc, sort_keys=True),
 			fm=json.dumps(fm, sort_keys=True),
+			fmfn=json.dumps(fmfn, sort_keys=True),
 			total_images=total_images
 		).encode('utf-8') + b""
 	)

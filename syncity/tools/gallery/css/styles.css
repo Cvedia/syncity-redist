@@ -1,7 +1,7 @@
 body {color: #222; font-size: 13px;}
 .galWrapper {width: 100%; height: 100%;}
 .galTop {width: 100%; height: 60px; background: #eee; border-bottom: 1px solid #bbb;}
-.galTopLeft, .galBotLeft {padding: 15px;}
+.galTopLeft, .galBotLeft, .galBotRight {padding: 15px;}
 .galImage {width: 100%; height: calc( 100% - 122px ); background: #fff; display: flex; justify-content: center; align-items: center; overflow: hidden;}
 .galImage img {object-fit: none;}
 .galBoxes {position: relative;}
@@ -11,6 +11,8 @@ body {color: #222; font-size: 13px;}
 .galBottom {width: 100%; height: 60px; background: #eee; border-top: 1px solid #bbb;}
 .galBotLeft {line-height: 30px;}
 .galBotLeft a {color: #0086e0;}
+.galBotRight {line-height: 30px;float:right;}
+.galBotRight a {color: #0086e0;}
 .galBotMid {position: absolute; bottom: 9px; margin-left: 50%; left: -67px; z-index: 1;}
 .btn {height: 30px; background-color: transparent; padding: 0 20px; font-size: 13px; white-space: nowrap; border-radius: 3px; -webkit-border-radius: 3px; -moz-border-radius: 3px; -ms-border-radius: 3px; box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box; cursor: pointer;}
 .btn {box-shadow: inset 0 -2px 0 0 #444; background-color: #666; color: #eee;}
