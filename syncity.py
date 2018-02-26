@@ -46,6 +46,8 @@ else:
 	parser.add_argument('-l', '--local_path', default='/tmp/', action=syncity.common.readable_dir, help='Defines local output path for recordings, json exports, etc; This path is relative to the machine running this script, defaults to /tmp/', dest='local_path')
 
 parser.add_argument('-q', '--quiet', action='store_true', help='Quiet mode')
+parser.add_argument('-n', '--no_color', action='store_true', default=False, help='Disable color output')
+parser.add_argument('-Z', '--abort_on_error', action='store_true', default=False, help='Abort execution on error')
 parser.add_argument('--assets', help='Defines assets folder name')
 parser.add_argument('--keep', default=False, action='store_true', help='Keep created assets on scene')
 parser.add_argument('--record', action='store_true', help='Record commands sent to API using --local_path as output path')
@@ -75,22 +77,25 @@ tools_parser = parser.add_argument_group('Tool specific options')
 common.modules_args('tools', parser=tools_parser)
 
 args = parser.parse_args()
+
+settings = syncity.settings_manager.Singleton()
+settings._start = time.time()
+settings._version = SYNCITY_VERSION
+settings._root = os.path.dirname(os.path.realpath(__file__))
+settings.shutdown = False
+syncity.common.init()
+
 stack = common.find_arg_order([
 	{'id': 'run', 'args': ['-r', '--run']},
 	{'id': 'script', 'args': ['-s', '--script']},
 	{'id': 'tool', 'args': ['-t', '--tool']}
 ])
+
 stack_size = len(stack)
 
 if stack_size == 0:
-	common.output('Nothing to run, aborting!')
+	common.output('Nothing to run, aborting!', 'ERROR')
 	sys.exit(0)
-
-settings = syncity.settings_manager.Singleton()
-
-settings._start = time.time()
-settings._version = SYNCITY_VERSION
-settings._root = os.path.dirname(os.path.realpath(__file__))
 
 for k in args.__dict__:
 	settings[k] = args.__dict__[k]
@@ -107,8 +112,6 @@ else:
 
 if settings.log == True:
 	settings.lfh = open('{}log_{}.txt'.format(settings.local_path, settings._start), 'wb+')
-
-syncity.common.init()
 
 # setup telnet connection
 if settings.run != None or settings.script != None:

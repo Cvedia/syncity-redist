@@ -18,6 +18,8 @@ import re
 import hashlib
 import errno
 import telnetlib
+import socket
+import colorama
 
 from . import settings_manager
 from datetime import datetime
@@ -27,7 +29,7 @@ _telnet = False
 settings = False
 counters = { 'send': 0, 'recv': 0, 'flush': 0 }
 
-def init_telnet(ip, port, retries=3, wait=.5):
+def init_telnet(ip, port, retries=3, wait=.5, timeout=30, ka_interval=3, ka_fail=10, ka_idle=1):
 	"""
 	Telnet initalizator
 	
@@ -45,13 +47,42 @@ def init_telnet(ip, port, retries=3, wait=.5):
 	"""
 	global tn, _telnet
 	
+	if _telnet == True:
+		if settings.shutdown == True:
+			return
+		output('Connection is already active, trying to reconnect...')
+		
+		try:
+			tn.close()
+		except:
+			pass
+	
 	retry = 0
 	
 	while retry < retries:
 		output('Connecting to {}:{}...'.format(ip, port))
 		
 		try:
-			tn = telnetlib.Telnet(ip, port)
+			tn = telnetlib.Telnet(ip, port, timeout)
+			
+			# set keep alive
+			sock = tn.get_socket()
+			
+			if platform.system() == 'Windows':
+				sock.ioctl(socket.SIO_KEEPALIVE_VALS, (1, ka_interval*1000, ka_fail*1000))
+			elif platform.system() == 'Darwin':
+				TCP_KEEPALIVE = 0x10
+				sock.setsockopt(socket.SOL_SOCKET, socket.SO_KEEPALIVE, 1)
+				sock.setsockopt(socket.IPPROTO_TCP, TCP_KEEPALIVE, ka_interval)
+			else:
+				sock.setsockopt(socket.SOL_SOCKET, socket.SO_KEEPALIVE, 1)
+				sock.setsockopt(socket.IPPROTO_TCP, socket.TCP_KEEPIDLE, ka_idle)
+				sock.setsockopt(socket.IPPROTO_TCP, socket.TCP_KEEPINTVL, ka_interval)
+				sock.setsockopt(socket.IPPROTO_TCP, socket.TCP_KEEPCNT, ka_fail)
+			
+			if settings.debug:
+				tn.set_debuglevel(9)
+			
 			_telnet = True
 			
 			send_data('NOOP', read=True)
@@ -61,7 +92,7 @@ def init_telnet(ip, port, retries=3, wait=.5):
 			
 			break
 		except Exception as e:
-			output('Error connecting: {}'.format(e))
+			output('Error connecting: {}'.format(e), 'ERROR')
 			retry += 1
 			
 			if retry >= retries:
@@ -89,22 +120,46 @@ def init():
 	
 	if settings.local_path:
 		mkdir_p(settings.local_path)
+	colorama.init()
 
-def output (s, prefix=''):
+def output(s, level='INFO'):
 	"""
 	Prints data to terminal with fancy formatting and ascii assurance.
 	
 	# Arguments
 	s (string): output string
+	level (string): log level
 	"""
 	
-	x = '[{}] {}{}'.format(datetime.now().strftime("%H:%M:%S.%f"), '[{}] '.format(prefix) if prefix != '' else '', s)
-	print (x)
+	if settings.no_color == True:
+		x = '[{}] {}{}'.format(datetime.now().strftime("%H:%M:%S.%f"), '[{}] '.format(level), s)
+	else:
+		if level == 'INFO':
+			level_color = colorama.Fore.GREEN
+		elif level == 'ERROR':
+			level_color = colorama.Fore.RED
+		elif level == 'DEBUG':
+			level_color = colorama.Fore.CYAN
+		elif level == 'WARN' or level == 'WARNING':
+			level_color = colorama.Fore.YELLOW
+		else:
+			level_color = colorama.Fore.MAGENTA
+		
+		x = '{}[{}] {}{}{}{}'.format(colorama.Style.RESET_ALL + colorama.Style.BRIGHT, datetime.now().strftime("%H:%M:%S.%f"), level_color, '[{}] '.format(level), s, colorama.Style.RESET_ALL)
+	
+	print(x)
 	
 	if settings.log:
-		settings.lfh.write(x.encode('ascii') + b"\n")
-
-def send_data(v, read=None, flush=None):
+		if settings.no_color == False:
+			settings.lfh.write(('[{}] {}{}'.format(datetime.now().strftime("%H:%M:%S.%f"), '[{}] '.format(level), s)).encode('ascii') + b"\n")
+		else:
+			settings.lfh.write(x.encode('ascii') + b"\n")
+	
+	if settings.abort_on_error == True and (level == 'ERROR' or level == 'WARN' or level == 'WARNING'):
+		output('Aborting on error!')
+		sys.exit(1)
+	
+def send_data(v, read=None, flush=None, timeout=3):
 	"""
 	Sends data via telnet to the server
 	
@@ -156,7 +211,7 @@ def send_data(v, read=None, flush=None):
 				counters['recv'] += 1
 				output('[{}] Telnet Reading...'.format(counters['recv']), 'DEBUG')
 			
-			l = tn.read_until(b"\r\n", 600)
+			l = tn.read_until(b"\r\n", timeout)
 			l = shape_data(l)
 			r.append(l)
 			
@@ -164,7 +219,13 @@ def send_data(v, read=None, flush=None):
 			while True:
 				if settings.debug:
 					output('Telnet Read Loop... buffer: {}'.format(r), 'DEBUG')
-				l = shape_data(tn.read_eager())
+				
+				try:
+					l = shape_data(tn.read_eager())
+				except EOFError:
+					output('Error reading data from socket, reconnecting...', 'ERROR')
+					init_telnet(settings.ip, settings.port)
+					break
 				
 				if l is '' or not l:
 					break
@@ -238,14 +299,14 @@ def shape_data(l):
 		# l = str(l).rstrip()
 		l = str(l.decode('utf-8')).rstrip()
 	except TypeError as e:
-		output('Error {} decoding: {}'.format(e, l))
+		output('Error {} decoding: {}'.format(e, l), 'ERROR')
 	
 	if settings.quiet == False and l != '':
 		output('<< {}'.format(l))
 	
 	return l
 
-def gracefull_shutdown():
+def gracefull_shutdown(a=None, b=None):
 	"""
 	Gracefully shutdown script execution:
 		- Deletes all created objects (if enabled)
@@ -254,6 +315,7 @@ def gracefull_shutdown():
 		- Close any file pointers
 		- Exits
 	"""
+	settings.shutdown = True
 	output('Shutdown sequence...')
 	
 	if _telnet == True:
@@ -267,8 +329,17 @@ def gracefull_shutdown():
 		else:
 			output('Keeping objects in scene')
 		
-		output('queueCount: {}'.format(send_data('API GET API.Manager queueCount', read=True)))
-		tn.close()
+		""""
+		try:
+			output('queueCount: {}'.format(send_data('API GET API.Manager queueCount', read=True)))
+		except:
+			pass
+		"""
+		
+		try:
+			tn.close()
+		except:
+			pass
 	
 	if settings.debug:
 		output('Telnet sent: {} recv: {} flush: {}'.format(counters['send'], counters['recv'], counters['flush']), 'DEBUG')

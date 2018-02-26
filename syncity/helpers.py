@@ -1114,15 +1114,13 @@ def take_snapshot(lst, auto_segment=False, label='disk1', force_noop=False):
 			common.output('WARNING: No camera with segmentation name found, skipping auto_segment')
 		else:
 			do_render(lst)
-			r = common.send_data('{} GET Segmentation.Segmentation boundingBoxes'.format(lst[idx[0]]), read=True)
-			
-			if force_noop:
-				common.send_data('NOOP', read=True);
-			
-			if (len(r) > 1):
-				common.send_data('{} EXECUTE Sensors.Disk Snapshot'.format(label), read=True)
-				r = common.send_data('{} GET Segmentation.Segmentation boundingBoxes'.format(lst[idx[0]]), read=True)
-				seq_save('bbox', r)
+			r = common.send_data([
+				'{} EXECUTE Sensors.Disk Snapshot'.format(label),
+				'NOOP',
+				'{} GET Segmentation.Segmentation boundingBoxes'.format(lst[idx[0]]),
+				'NOOP'
+			], read=True)
+			seq_save('bbox', r)
 	else:
 		if force_noop:
 			common.send_data('NOOP', read=True);
@@ -1141,9 +1139,8 @@ def take_seg_snapshot(lst):
 	
 	"""
 	for l in lst:
-		r = common.send_data('{} GET Segmentation.Segmentation boundingBoxes'.format(l), read=True)
-		if (len(r) > 1):
-			seq_save('bbox', r)
+		r = common.send_data(['{} GET Segmentation.Segmentation boundingBoxes'.format(l), 'NOOP'], read=True)
+		seq_save('bbox', r)
 
 def seq_save(pref, raw_data):
 	"""
@@ -1156,16 +1153,39 @@ def seq_save(pref, raw_data):
 	
 	"""
 	data = []
-	for r in raw_data:
-		if r[0:2] == 'OK' or r[0:2] == 'ER':
-			continue
-		data.append(r)
+	while len(data) == 0:
+		f = [False, False]
+		for r in raw_data:
+			r = r.strip('\n\r')
+			
+			if r == 'OK' or r[0:2] == 'OK' or r[0:2] == 'ER':
+				continue
+			
+			if r[0:1] == '[':
+				f[0] = True
+			
+			if f[0] == True and f[1] == False:
+				data.append(r)
+			
+			if r[-1:] == ']':
+				f[1] = True
+		
+		if len(data) == 0:
+			common.output('Unable to fetch bounding box, retrying...', 'DEBUG')
+			time.sleep(.5)
+			raw_data = common.send_data('NOOP', read=True)
+		else:
+			break
+	
 	data = ''.join(data)
 	
 	fn = '{}{}_{}.json'.format(settings.local_path, pref, settings.seq_save_i)
 	
 	if settings.debug:
 		common.output('SEQ Save path: {} prefix: {} data: {}'.format(fn, pref, data), 'DEBUG')
+		d = open(fn + '.debug', 'w')
+		d.write('\r\n'.join(raw_data))
+		d.close()
 	
 	f = open(fn, 'w')
 	f.write(data)

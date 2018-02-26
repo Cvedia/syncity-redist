@@ -62,12 +62,18 @@ def run():
 			fty = "depth"
 		elif "thermal" in lnm:
 			fty = "thermal"
-		elif ".json" in lnm:
+		elif lnm.endswith(".json"):
 			while has_attribute(fm, fts):
 				fts += .000001
-			fm[fts] = json.loads(common.read_all(fn))
+			try:
+				fm[fts] = json.loads(common.read_all(fn))
+			except:
+				common.output('Invalid JSON data in {}'.format(fn), 'ERROR')
+				pass
+			continue
 		
 		if fty == None:
+			common.output('Unknown file type: {}, skipping'.format(fn), 'WARN')
 			continue
 		if fty not in features:
 			features.append(fty)
