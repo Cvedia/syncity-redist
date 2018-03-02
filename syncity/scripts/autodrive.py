@@ -24,7 +24,7 @@ def run():
 	
 	car_obj = 'SyncityJPickup'
 	camera_mount = '{}/cameras'.format(car_obj)
-	mycams = ['{}/Front'.format(camera_mount)]
+	mycams = ['{}/Front'.format(camera_mount), '{}/Depth'.format(camera_mount)]
 	
 	if settings.skip_setup == False:
 		common.send_data([
@@ -35,6 +35,7 @@ def run():
 		
 		helpers.global_camera_setup(label_root=camera_mount)
 		helpers.add_camera_rgb(width=640, height=480, pp='EnviroFX', label=mycams[0], label_root=camera_mount, audio=False)
+		helpers.add_camera_depth(width=640, height=480, label=mycams[1])
 		helpers.global_disk_setup()
 		helpers.add_disk_output(mycams)
 		
@@ -43,7 +44,7 @@ def run():
 			# '{} ADD FlyCamera'.format(mycams[0]),
 			# '{} SET FlyCamera enabled true'.format(mycams[0]),
 			
-			# reset front camera
+			# reset cameras
 			'{} SET Transform localPosition (0 0.872 2.318)'.format(camera_mount),
 			'{} SET Transform localEulerAngles (0 0 0)'.format(camera_mount),
 			
@@ -94,7 +95,9 @@ def run():
 		
 		common.send_data([
 			'{} SET Sensors.RenderCamera alwaysOn true'.format(mycams[0]),
+			'{} SET Sensors.RenderCamera alwaysOn true'.format(mycams[1]),
 			'{} SET Camera enabled true'.format(mycams[0]),
+			'{} SET Camera enabled true'.format(mycams[1]),
 			'{} SET active true'.format(car_obj),
 			'EnviroSky EXECUTE EnviroSky ChangeWeather "Cloudy 1"'
 		], read=False)
@@ -181,6 +184,15 @@ def run():
 					"label": "front_camera",
 					"topic": "syncity/front_camera",
 					"target": mycams[0],
+					"component": "Camera",
+					"field": "targetTexture",
+					"interval": .5
+				},
+				# WARNING: This camera will be exported as 32-bit depth single channel
+				{
+					"label": "depth_camera",
+					"topic": "syncity/depth_camera",
+					"target": mycams[1],
 					"component": "Camera",
 					"field": "targetTexture",
 					"interval": .5
