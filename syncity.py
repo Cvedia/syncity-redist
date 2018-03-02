@@ -13,7 +13,7 @@ import syncity
 
 from syncity import common, settings_manager
 
-SYNCITY_VERSION = '3.2.2'
+SYNCITY_VERSION = '3.2.3'
 
 print ('SynCity toolbox - v{}\nCopyright (c) {} CVEDIA PVE Ltd\n'.format(SYNCITY_VERSION, datetime.date.today().year))
 
@@ -57,6 +57,7 @@ parser.add_argument('--async', action='store_true', help='Send some telnet comma
 parser.add_argument('--skip_disk', action='store_true', help='Disables disk export completly')
 parser.add_argument('--skip_setup', action='store_true', help='Skip script setup and go straight to data extraction')
 parser.add_argument('--setup_only', action='store_true', help='Runs script setup and exits')
+parser.add_argument('--disable_physics', action='store_true', default=False, help='Disables Physics, making all objects clippable, aka NOCLIP')
 parser.add_argument('--disable_envirosky', action='store_true', help='Disables Envirosky -- NOT RECOMMENDED')
 parser.add_argument('--disable_canvas', action='store_true', help='Disables client rendering visualization, better for performance, but you will only see outputs written to disk.')
 parser.add_argument('--use_old_depth_buffer', action='store_true', default=False, help='Uses old depth buffer component')

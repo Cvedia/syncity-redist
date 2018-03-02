@@ -56,9 +56,7 @@ def run():
 			# WARNING: When VPCustomInput is enabled, you won't be able to drive using the keys
 			'{} ADD VPCustomInput'.format(car_obj),
 			'{} SET VPCustomInput enabled true'.format(car_obj),
-			# '{} SET VPCustomInput enabled false'.format(car_obj),
-			
-			'"autodrive/Road/Autodrive Road" SET UnityEngine.MeshCollider enabled true',
+			#'{} SET VPCustomInput enabled false'.format(car_obj),
 			
 			'{} ADD UnityEngine.PostProcessing.PostProcessingBehaviour'.format(mycams[0]),
 			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile EnviroFX'.format(mycams[0]),

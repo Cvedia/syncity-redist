@@ -89,7 +89,8 @@ def init_telnet(ip, port, retries=3, wait=.5, timeout=30, ka_interval=3, ka_fail
 			
 			if settings.assets:
 				send_data('API SET API.Manager assetsFolder "{}"'.format(settings.assets))
-			
+			if settings.disable_physics == False:
+				send_data('API.Manager.instance SET physicsEnabled true')
 			break
 		except Exception as e:
 			output('Error connecting: {}'.format(e), 'ERROR')
