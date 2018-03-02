@@ -1369,7 +1369,7 @@ def add_lidar(
 		'{} ADD LidarNoLights'
 	])
 
-def setup_ros_topics(label_root='ROS2', writeLinks=None, readLinks=[]):
+def setup_ros_topics(label_root='ROS2', writeLinks=None, readLinks=None):
 	common.send_data([
 		'CREATE {}'.format(label_root),
 		'{} SET active false'.format(label_root),
@@ -1402,6 +1402,11 @@ def setup_ros_topics(label_root='ROS2', writeLinks=None, readLinks=[]):
 					'{}/{} SET Sensors.ReadFieldLink intervalSeconds {}'.format(label_root, lnk['label'], lnk['interval']),
 					'{}/{} SET active true'.format(label_root, lnk['label'])
 				], read=False)
+			
+			# workaround for cameras, if we're dealing with a targetTexture, the camera must have
+			# a RenderCamera and it must be always on, otherwise it will not broadcast propertly
+			if lnk['field'] == "targetTexture":
+				common.send_data('{} SET Sensors.RenderCamera alwaysOn true'.format(lnk['target']), read=False)
 	
 	common.send_data([
 		'{} SET active true'.format(label_root)
