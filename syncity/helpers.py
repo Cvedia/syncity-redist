@@ -1917,7 +1917,7 @@ def spawn_drone_objs(
 		])
 	
 	spawn_radius_generic(['city/ground'], tags=['ground'], limit=300, radius=150, innerradius=0, scale=[3,3,3], position=[0,0,0], collision_check=False, prefix=prefix, seed=seed)
-	spawn_radius_generic(['humans'], tags=['human,random'], suffix='_0', limit=40, radius=30, innerradius=2, position=[0,0,0], collision_check=False, prefix=prefix, seed=seed)
+	spawn_radius_generic(['humans'], tags=['human, +random'], suffix='_0', limit=40, radius=30, innerradius=2, position=[0,0,0], collision_check=False, prefix=prefix, seed=seed)
 	spawn_radius_generic(['city/nature/trees'], segmentation_class=trees_segment, random_colors=trees_colors, tags=trees_tags, collision_check=False, limit=random.randint(trees_limit[0], trees_limit[1]), radius=trees_radius, innerradius=trees_innerradius, position=[0,0,0], prefix=prefix, seed=seed)
 	spawn_radius_generic(['city/buildings'], segmentation_class=buildings_segment, random_colors=buildings_colors, tags=buildings_tags, stick_to_ground=False, collision_check=False, limit=random.randint(buildings_limit[0], buildings_limit[1]), radius=buildings_radius, innerradius=buildings_innerradius, position=[0,0,0], prefix=prefix, seed=seed)
 #	spawn_radius_generic(['buildings_001'], segmentation_class=buildings_segment, random_colors=buildings_colors, tags=buildings_tags, stick_to_ground=False, collision_check=False, limit=random.randint(buildings_limit[0], buildings_limit[1]), radius=buildings_radius, innerradius=buildings_innerradius, position=[0,0,0], prefix=prefix, seed=seed)
