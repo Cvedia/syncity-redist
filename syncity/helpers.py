@@ -431,6 +431,8 @@ def add_camera_rgb_pp(profile='Profile2', scion=False, label='cameras/cameraRGB'
 			'{} SET ScionEngine.ScionPostProcess depthOfField false'.format(label),
 			# '{} SET active true'
 		], read=False)
+	else:
+		common.send_data('{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false'.format(label))
 	
 	common.flush_buffer()
 	settings.obj.append(label)

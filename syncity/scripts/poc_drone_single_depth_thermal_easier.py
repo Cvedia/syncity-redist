@@ -1,4 +1,5 @@
 import random
+import time
 from .. import common, helpers, settings_manager
 
 settings = settings_manager.Singleton()
@@ -114,8 +115,11 @@ def run():
 		'cameras/drone SET Transform localPosition (0 0 0)',
 		'cameras/drone SET Transform eulerAngles ({} {} {})'.format(0, 0, 0),
 		'cameras/drone SET Transform localEulerAngles ({} {} {})'.format(10, 0, 0),
-		'cameras/cameraRGB SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1',
-		'cameras/cameraRGB SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004',
+		'{} SET Sensors.RenderCamera alwaysOn true'.format(mycams[0]),
+		'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled true'.format(mycams[0]),
+		'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.shutterAngle {}'.format(mycams[0], 270),
+		'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount {}'.format(mycams[0], 32),
+		'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending {}'.format(mycams[0], 1)
 		'disk1 SET Sensors.Disk counter {}'.format(loop+1),
 		
 		#'spawner/cars SET active False',
@@ -246,7 +250,8 @@ def run():
 				'cameras/drone/drone{}/drone{} SET active true'.format(x,x),
 			], read=False)
 			
-		
+		# wait for scene's motion blur to fade
+		time.sleep(0.5)
 		common.flush_buffer()
 		helpers.take_snapshot(mycams, True)
 		
