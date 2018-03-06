@@ -980,9 +980,9 @@ def add_camera_seg(
 		'{} SET Camera renderingPath {}'.format(label, unity_vars.renderingPath[renderingPath]),
 		'{} SET Camera targetTexture.filterMode Point'.format(label),
 		'{} ADD Segmentation.Segmentation'.format(label),
-		'{} SET Segmentation.Segmentation MinimumObjectVisibility {}'.format(label, minimum_visibility),
-		'{} SET Segmentation.Segmentation OutputType {}'.format(label, output_type),
-		'{} SET Segmentation.Segmentation BoundingBoxesExtensionAmount {}'.format(label, boundingBoxesExtensionAmount),
+		'{} SET Segmentation.Segmentation minimumObjectVisibility {}'.format(label, minimum_visibility),
+		'{} SET Segmentation.Segmentation outputType {}'.format(label, output_type),
+		'{} SET Segmentation.Segmentation boundingBoxesExtensionAmount {}'.format(label, boundingBoxesExtensionAmount),
 		'{} EXECUTE Segmentation.Segmentation DefineClass Void'.format(label)
 	], read=False)
 	
@@ -1593,7 +1593,7 @@ def spawn_radius_generic(
 			'{}/{} SET RandomProps.PropArea async false'.format(prefix, n),
 			'{}/{} SET RandomProps.PropArea numberOfProps {}'.format(prefix, n, limit),
 			
-			'{}/{} SET RandomProps.PropArea collisioncheck {}'.format(prefix, n, collision_check),
+			'{}/{} SET RandomProps.PropArea collisionCheck {}'.format(prefix, n, collision_check),
 			'{}/{} SET RandomProps.PropArea stickToGround {}'.format(prefix, n, stick_to_ground),
 			
 			'{}/{} SET RandomProps.Torus radius {}'.format(prefix, n, radius),
@@ -1702,7 +1702,7 @@ def spawn_rectangle_generic(
 			'{}/{} SET RandomProps.PropArea async false'.format(prefix, n),
 			'{}/{} SET RandomProps.PropArea numberOfProps {}'.format(prefix, n, limit),
 			
-			'{}/{} SET RandomProps.PropArea collisioncheck {}'.format(prefix, n, collision_check),
+			'{}/{} SET RandomProps.PropArea collisionCheck {}'.format(prefix, n, collision_check),
 			'{}/{} SET RandomProps.PropArea stickToGround {}'.format(prefix, n, stick_to_ground),
 			
 			'{}/{} SET RandomProps.Rectangle a {}'.format(prefix, n, a),

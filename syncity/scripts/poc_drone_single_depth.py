@@ -1,3 +1,4 @@
+import time
 import random
 from .. import common, helpers, settings_manager
 
@@ -27,9 +28,9 @@ def run():
 	
 	if settings.skip_setup == False:
 		helpers.global_camera_setup()
-		helpers.add_camera_rgb(width=4096, height=3072, pp='EnviroFX')
+		helpers.add_camera_rgb(width=1024, height=768, pp='EnviroFX')
 		helpers.add_camera_depth(width=1024, height=768)
-		helpers.add_camera_seg(width=4096, height=3072, segments=['drone0', 'drone1', 'drone2'], lookupTable=[['drone0', 'red'], ['drone1','blue'], ['drone2', 'green']])
+		helpers.add_camera_seg(width=1024, height=768, segments=['drone0', 'drone1', 'drone2'], lookupTable=[['drone0', 'red'], ['drone1','blue'], ['drone2', 'green']])
 		helpers.global_disk_setup()
 		
 		helpers.add_disk_output(mycams)
@@ -72,7 +73,31 @@ def run():
 			'drone/drone2/drone2 SET Transform eulerAngles ({} {} {})'.format(0, 0, 0),
 			'drone/drone2 SET active true',
 			'drone/drone2/drone2 SET active true',
+			
+			# magic for depth maps
+			
+			# 'cameras/depth SET Sensors.Lidar_Internal.RenderDepthBufferOld outputMode RawDepth',
+			# 'disk1/Cameras/depth SET Sensors.RenderCameraLink outputType DEPTH'
+			# 'disk1/Cameras/depth SET Sensors.RenderCameraLink outputType BLOB'
+			
+			# 'cameras/depth SET Sensors.Lidar_Internal.RenderDepthBufferOld outputMode NormalizedDistance',
+			# 'disk1/Cameras/depth SET Sensors.RenderCameraLink outputType DEPTH'
+			# 'disk1/Cameras/depth SET Sensors.RenderCameraLink outputType BLOB'
+			
+			# 'cameras/depth SET Sensors.Lidar_Internal.RenderDepthBufferOld enabled false',
+			# 'cameras/depth ADD CameraDepthOutput',
+			
+			'disk1/Cameras/depth SET Sensors.RenderCameraLink outputType DEPTH',
+			
+			'{} SET Sensors.RenderCamera alwaysOn true'.format(mycams[0]),
+			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled true'.format(mycams[0]),
+			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.shutterAngle {}'.format(mycams[0], 270),
+			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount {}'.format(mycams[0], 32),
+			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending {}'.format(mycams[0], 1)
 		], read=False)
+	
+	if settings.setup_only == True:
+		return
 	
 	p_x_r = [-3, 3]
 	p_y_r = [1.5, 8]
@@ -97,14 +122,25 @@ def run():
 		'drone SET Transform position ({} {} {})'.format(p_x, p_y, p_z),
 		'drone SET Transform eulerAngles ({} {} {})'.format(0, 0, 0),
 		
-		'spawner/cars SET active False',
-		'spawner/cars ADD RandomProps.SpawnerRandomizers.RandomColor',
-		'spawner/cars PUSH RandomProps.SpawnerRandomizers.RandomColor availableColors Red',
-		'spawner/cars PUSH RandomProps.SpawnerRandomizers.RandomColor availableColors Yellow',
-		'spawner/cars SET active True',
-		
 		# disable blooming effects
 		'cameras/cameraRGB SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.bloom.enabled false',
+		
+		# remove propellers
+		'DELETE drone/drone0/drone0/propeller_BL',
+		'DELETE drone/drone0/drone0/propeller_BR',
+		'DELETE drone/drone0/drone0/propeller_FL',
+		'DELETE drone/drone0/drone0/propeller_FR',
+		
+		'DELETE drone/drone1/drone1/Motor_01',
+		'DELETE drone/drone1/drone1/Motor_02',
+		'DELETE drone/drone1/drone1/Motor_03',
+		'DELETE drone/drone1/drone1/Motor_04',
+		'DELETE drone/drone1/drone1/Motor_05',
+		'DELETE drone/drone1/drone1/Motor_06',
+		'DELETE drone/drone1/drone1/Motor_07',
+		'DELETE drone/drone1/drone1/Motor_08',
+		
+		'DELETE drone/drone2/drone2/Propeller'
 	], read=False)
 	
 	common.flush_buffer()
@@ -136,6 +172,7 @@ def run():
 			p_z_d = 1
 		
 		common.send_data([
+			'cameras/cameraRGB SET Camera enabled false',
 			'spawner/animals/birds SET Transform position ({} {} {})'.format(0, random.randint(5, 75), 0),
 			'spawner/animals/birds SET Transform eulerAngles ({} {} {})'.format(0, random.randint(0, 359), 0),
 			'spawner/cars SET Transform eulerAngles ({} {} {})'.format(0, random.randint(0, 359), 0),
@@ -145,12 +182,18 @@ def run():
 			'EnviroSky SET EnviroSky GameTime.Hours {}'.format(random.randint(8, 12)),
 			'drone SET Transform position ({} {} {})'.format(p_x, p_y, p_z),
 			'drone SET Transform eulerAngles ({} {} {})'.format(random.randint(0, 359), random.randint(0, 359), random.randint(0, 359)),
-			'cameras/cameraRGB SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled {}'.format(motionblur),
-			'cameras/cameraRGB SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1',
-			'cameras/cameraRGB SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004'
+			'cameras/cameraRGB SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled {}'.format(motionblur)
 		], read=False)
 		
 		common.flush_buffer()
+		
+		# this is a workaround for the propellers to blur, in order to have the 
+		# motion blur correctly made, we need to allow the system to render a few
+		# frames, before taking the screenshot
+		if motionblur == 'true':
+			common.send_data('cameras/cameraRGB SET Camera enabled true', read=True)
+			time.sleep(0.5)
+		
 		helpers.take_snapshot(mycams, True)
 		
 		loop = loop + 1

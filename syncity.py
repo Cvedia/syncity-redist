@@ -13,7 +13,7 @@ import syncity
 
 from syncity import common, settings_manager
 
-SYNCITY_VERSION = '3.2.3'
+SYNCITY_VERSION = '3.2.31'
 
 print ('SynCity toolbox - v{}\nCopyright (c) {} CVEDIA PVE Ltd\n'.format(SYNCITY_VERSION, datetime.date.today().year))
 

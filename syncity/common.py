@@ -85,7 +85,7 @@ def init_telnet(ip, port, retries=3, wait=.5, timeout=30, ka_interval=3, ka_fail
 			
 			_telnet = True
 			
-			send_data('NOOP', read=True)
+			send_data(['VERSION', 'NOOP'], read=True)
 			
 			if settings.assets:
 				send_data('API SET API.Manager assetsFolder "{}"'.format(settings.assets))
@@ -146,13 +146,13 @@ def output(s, level='INFO'):
 		else:
 			level_color = colorama.Fore.MAGENTA
 		
-		x = '{}[{}] {}{}{}{}'.format(colorama.Style.RESET_ALL + colorama.Style.BRIGHT, datetime.now().strftime("%H:%M:%S.%f"), level_color, '[{}] '.format(level), s, colorama.Style.RESET_ALL)
+		x = '{}[{}] {} {}{}{}{}'.format(colorama.Style.RESET_ALL + colorama.Style.BRIGHT, datetime.now().strftime("%H:%M:%S.%f"), os.getpid(), level_color, '[{}] '.format(level), s, colorama.Style.RESET_ALL)
 	
 	print(x)
 	
 	if settings.log:
 		if settings.no_color == False:
-			settings.lfh.write(('[{}] {}{}'.format(datetime.now().strftime("%H:%M:%S.%f"), '[{}] '.format(level), s)).encode('ascii') + b"\n")
+			settings.lfh.write(('[{}] {} {}{}'.format(datetime.now().strftime("%H:%M:%S.%f"), os.getpid(), '[{}] '.format(level), s)).encode('ascii') + b"\n")
 		else:
 			settings.lfh.write(x.encode('ascii') + b"\n")
 	
