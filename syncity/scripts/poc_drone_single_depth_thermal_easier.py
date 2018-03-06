@@ -35,6 +35,8 @@ def run():
 	settings.keep = True
 	mycams = ['cameras/cameraRGB', 'cameras/segmentation', 'cameras/depth']
 	
+	common.send_data('API.Manager.instance SET physicsEnabled false')
+	
 	if settings.skip_setup == False:
 		helpers.global_camera_setup()
 		helpers.add_camera_seg(width=1024, height=768, segments=['drone0'], lookupTable=[['drone0', 'red']])
@@ -42,7 +44,6 @@ def run():
 		helpers.add_camera_rgb(width=1024, height=768, pp='EnviroFX')
 		
 		helpers.global_disk_setup()
-		
 		helpers.add_disk_output(mycams)
 		
 		# HACK: if you want to return BLOBs instead of DEPTH maps use this:
@@ -119,7 +120,7 @@ def run():
 		'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled true'.format(mycams[0]),
 		'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.shutterAngle {}'.format(mycams[0], 270),
 		'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount {}'.format(mycams[0], 32),
-		'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending {}'.format(mycams[0], 1)
+		'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending {}'.format(mycams[0], 1),
 		'disk1 SET Sensors.Disk counter {}'.format(loop+1),
 		
 		#'spawner/cars SET active False',
