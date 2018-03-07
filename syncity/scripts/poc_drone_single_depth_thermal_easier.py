@@ -105,7 +105,6 @@ def run():
 	
 	# reset camera
 	common.send_data([
-		'cameras/cameraRGB SET Camera enabled true',
 		'cameras SET Transform position ({} {} {})'.format(0, 5, 0),
 		'cameras SET Transform eulerAngles ({} {} {})'.format(random.uniform(-20, 0), 0, 0),
 		'EnviroSky EXECUTE EnviroSky ChangeWeather "{}"'.format(helpers.weather_lst[2]),
@@ -131,6 +130,8 @@ def run():
 		
 		# disable blooming effects
 		'cameras/cameraRGB SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.bloom.enabled false',
+		
+		'cameras/cameraRGB SET Camera enabled false',
 	], read=False)
 	
 	#helpers.set_thermal_props('city', temperatureValue=0, temperatureBandwidth=0, temperatureMedian=0, variance=0, reflectivity=0, heatiness=0, ambientOffset=0)
@@ -250,10 +251,14 @@ def run():
 				'cameras/drone/drone{}/drone{} SET active false'.format(x,x),
 				'cameras/drone/drone{}/drone{} SET active true'.format(x,x),
 			], read=False)
-			
+		
+		common.flush_buffer()
+		common.send_data('cameras/cameraRGB SET Camera enabled true', read=True)
+		
 		# wait for scene's motion blur to fade
 		time.sleep(0.5)
-		common.flush_buffer()
+		
 		helpers.take_snapshot(mycams, True)
+		common.send_data('cameras/cameraRGB SET Camera enabled false', read=True)
 		
 		loop = loop + 1
