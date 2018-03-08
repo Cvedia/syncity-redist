@@ -151,10 +151,13 @@ def output(s, level='INFO'):
 	print(x)
 	
 	if settings.log:
-		if settings.no_color == False:
-			settings.lfh.write(('[{}] {} {}{}'.format(datetime.now().strftime("%H:%M:%S.%f"), os.getpid(), '[{}] '.format(level), s)).encode('ascii') + b"\n")
-		else:
-			settings.lfh.write(x.encode('ascii') + b"\n")
+		try:
+			if settings.no_color == False:
+				settings.lfh.write(('[{}] {} {}{}'.format(datetime.now().strftime("%H:%M:%S.%f"), os.getpid(), '[{}] '.format(level), s)).encode('ascii') + b"\n")
+			else:
+				settings.lfh.write(x.encode('ascii') + b"\n")
+		except:
+			pass
 	
 	if settings.abort_on_error == True and (level == 'ERROR' or level == 'WARN' or level == 'WARNING'):
 		output('Aborting on error!')
@@ -207,6 +210,8 @@ def send_data(v, read=None, flush=None, timeout=3):
 		
 		tn.write(s)
 		
+		abort = False
+		
 		if read:
 			if settings.debug:
 				counters['recv'] += 1
@@ -214,6 +219,10 @@ def send_data(v, read=None, flush=None, timeout=3):
 			
 			l = tn.read_until(b"\r\n", timeout)
 			l = shape_data(l)
+			
+			if settings.abort_on_error == True and abort == False and 'ERROR' in l:
+				abort = True
+			
 			r.append(l)
 			
 			# multi return hack, ideally first response would have a line count attached to it
@@ -245,6 +254,8 @@ def send_data(v, read=None, flush=None, timeout=3):
 	
 	if settings.debug:
 		output('Telnet Read Completed: {}'.format(r), 'DEBUG')
+	if abort == True:
+		output('Error received via telnet, aborting', 'ERROR')
 	
 	return r
 

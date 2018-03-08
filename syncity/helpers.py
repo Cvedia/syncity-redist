@@ -1517,6 +1517,140 @@ def set_thermal_props(
 	
 	common.flush_buffer()
 
+
+def spawner(
+	types=[], tags=None, scale=[1,1,1], position=[0,0,0],
+	rotation=[0,0,0], limit=50, segmentation_class=None, orbit=False,
+	stick_to_ground=False, collision_check=True, suffix="", flush=False, prefix='spawner',
+	names=None, ugly_fix=True, seed=None, random_colors=None, random_colors_weights=14,
+	method=None, method_parameters=None, min_distance=None, max_distance=None
+):
+	"""
+	Creates a torus shaped object spawner
+	
+	# Arguments
+	
+	types (list): List of names for spawned objects
+	tags (list): List of object tags to be spawned, this should align with the number of arguments on types
+	scale (list): X,Y,Z scale factor, defaults to `[1,1,1]`
+	position (list): X,Y,Z position of radius spawner
+	rotation (list): X,Y,Z rotation position of radius spawner
+	limit (int): Number of objects to spawn in each of the `types`
+	segmentation_class (list): Defines segmentation classes to be bound to the spawner, this must align with the number of arguments on types, defaults to `None`
+	orbit (bool): Adds orbiting component to spawner
+	stick_to_ground (bool): Forces spawned objects to stick to ground, ideal for irregular ground. defaults to `False`
+	collision_check (bool): Avoids objects from being spawned overlapping eachother and other objects in the scene, defaults to `True`
+	suffix (string): Adds a suffix string on types
+	flush (bool): Forces a telnet queue flush after spawning, defaults to `False`
+	prefix (string): Defines a root game object to nest types into, defaults to `spawner`
+	names (list): Overrides type caption, must be aligned with the number of arguments on types, defaults to `None`
+	ugly_fix (bool): Ugly fix for asset naming, defaults to `True`
+	seed (int): Defines a seed number, this forces random values to be equal on different instances, defaults to `None`
+	random_colors (int): Defines a number of random colors to assign to spawner, when set to None disables feature, defaults to `None`, when set to `True` goes full random instead of predefined defined random colors
+	random_colors_weights (int): Defines a weight for color switching, defaults to `14`
+	method (string): Defines spawner method, defaults to `None`
+	method_parameters (dict): Defines method's parameters, defaults to `None`
+	
+	"""
+	# convert bool to strings
+	if collision_check == True:
+		collision_check = 'true'
+	else:
+		collision_check = 'false'
+	
+	if stick_to_ground == True:
+		stick_to_ground = 'true'
+	else:
+		stick_to_ground = 'false'
+	
+	# loop each of the types
+	i = 0
+	for t in types:
+		if names == None:
+			n = t.replace(' ', '_').replace('+', '_').replace('-', '_').replace(',', '_') + suffix
+		else:
+			n = names[i]
+		
+		common.send_data([
+			'CREATE {}/{}'.format(prefix, n),
+			'{}/{} SET active false'.format(prefix, n),
+			
+			'{}/{} ADD RandomProps.{}'.format(prefix, n, method) if method != None else '',
+			'{}/{} ADD RandomProps.PropArea'.format(prefix, n)
+		], read=False)
+		
+		if seed != None:
+			# common.send_data(['{}/{} SET RandomProps.PropArea seed {}'.format(prefix, n, seed)], read=False)
+			common.send_data(['RandomProps.Random.instance SET seed {}'.format(seed)], read=False)
+		
+		if ugly_fix == True:
+			try:
+				common.send_data(['{}/{} SET RandomProps.PropArea tags "{}"'.format(prefix, n, ugly_tag_fix(tags[i]))], read=False)
+			except:
+				common.send_data(['{}/{} SET RandomProps.PropArea tags "{}"'.format(prefix, n, ugly_tag_fix(t))], read=False)
+		else:
+			common.send_data(['{}/{} SET RandomProps.PropArea tags "{}"'.format(prefix, n, tags[i])], read=False)
+		
+		if min_distance != None:
+			common.send_data([
+				'{}/{} ADD RandomProps.MinDistance'.format(prefix, n),
+				'{}/{} SET RandomProps.MinDistance value {}'.format(prefix, n, min_distance)
+			], read=False)
+		
+		if max_distance != None:
+			common.send_data([
+				'{}/{} ADD RandomProps.MaxDistance'.format(prefix, n),
+				'{}/{} SET RandomProps.MaxDistance value {}'.format(prefix, n, max_distance)
+			], read=False)
+		
+		common.send_data([
+			'{}/{} SET RandomProps.PropArea async false'.format(prefix, n),
+			'{}/{} SET RandomProps.PropArea numberOfProps {}'.format(prefix, n, limit),
+			
+			'{}/{} SET RandomProps.PropArea collisionCheck {}'.format(prefix, n, collision_check),
+			'{}/{} SET RandomProps.PropArea stickToGround {}'.format(prefix, n, stick_to_ground),
+		], read=False)
+		
+		if method != None and method_parameters != None:
+			for key in method_parameters:
+				common.send_data('{}/{} SET RandomProps.{} {} {}'.format(prefix, n, method, key, method_parameters[key]), read=False)
+		
+		common.send_data([
+			'{}/{} SET Transform position ({} {} {})'.format(prefix, n, position[0], position[1], position[2]),
+			'{}/{} SET Transform eulerAngles ({} {} {})'.format(prefix, n, rotation[0], rotation[1], rotation[2]),
+			
+			'{}/{} SET Transform localScale ({} {} {})'.format(prefix, n, scale[0], scale[1], scale[2])
+		], read=False)
+		
+		if segmentation_class != None:
+			if isinstance(segmentation_class, list):
+				common.send_data([
+					'{}/{} ADD Segmentation.ClassGroup'.format(prefix, n),
+					'{}/{} SET Segmentation.ClassGroup itemsClassName "{}"'.format(prefix, n, segmentation_class[i])
+				], read=False)
+			else:
+				common.send_data([
+					'{}/{} ADD Segmentation.ClassGroup'.format(prefix, n),
+					'{}/{} SET Segmentation.ClassGroup itemsClassName "{}"'.format(prefix, n, segmentation_class)
+				], read=False)
+		
+		if orbit == True:
+			common.send_data('cameras SET Orbit target {}/{}'.format(prefix, n), read=False)
+		
+		if random_colors != None:
+			if random_colors == True:
+				add_random_color(objs='{}/{}'.format(prefix, n), colors=0, colors_weights=random_colors_weights, spawner=True, method='Random')
+			else:
+				add_random_color(objs='{}/{}'.format(prefix, n), colors=random_colors, colors_weights=random_colors_weights, spawner=True)
+		
+		common.send_data('{}/{} SET active true'.format(prefix, n))
+		settings.obj.append('{}/{}'.format(prefix, t))
+		i = i + 1
+	
+	if flush:
+		common.flush_buffer()
+
+
 def spawn_radius_generic(
 	types=[], tags=None, scale=[1,1,1], innerradius=0, radius=500, position=[0,0,0],
 	rotation=[0,0,0], limit=50, segmentation_class=None, orbit=False,
@@ -1550,85 +1684,13 @@ def spawn_radius_generic(
 	random_colors_weights (int): Defines a weight for color switching, defaults to `14`
 	
 	"""
-	# convert bool to strings
-	if collision_check == True:
-		collision_check = 'true'
-	else:
-		collision_check = 'false'
-	
-	if stick_to_ground == True:
-		stick_to_ground = 'true'
-	else:
-		stick_to_ground = 'false'
-	
-	# loop each of the types
-	i = 0
-	for t in types:
-		if names == None:
-			n = t.replace(' ', '_').replace('+', '_').replace('-', '_').replace(',', '_') + suffix
-		else:
-			n = names[i]
-		
-		common.send_data([
-			'CREATE {}/{}'.format(prefix, n),
-			'{}/{} SET active false'.format(prefix, n),
-			
-			'{}/{} ADD RandomProps.Torus'.format(prefix, n),
-			'{}/{} ADD RandomProps.PropArea'.format(prefix, n)
-		], read=False)
-		
-		if seed != None:
-			# common.send_data(['{}/{} SET RandomProps.PropArea seed {}'.format(prefix, n, seed)], read=False)
-			common.send_data(['RandomProps.Random.instance SET seed {}'.format(seed)], read=False)
-		
-		if ugly_fix == True:
-			try:
-				common.send_data(['{}/{} SET RandomProps.PropArea tags "{}"'.format(prefix, n, ugly_tag_fix(tags[i]))], read=False)
-			except:
-				common.send_data(['{}/{} SET RandomProps.PropArea tags "{}"'.format(prefix, n, ugly_tag_fix(t))], read=False)
-		else:
-			common.send_data(['{}/{} SET RandomProps.PropArea tags "{}"'.format(prefix, n, tags[i])], read=False)
-		
-		common.send_data([
-			'{}/{} SET RandomProps.PropArea async false'.format(prefix, n),
-			'{}/{} SET RandomProps.PropArea numberOfProps {}'.format(prefix, n, limit),
-			
-			'{}/{} SET RandomProps.PropArea collisionCheck {}'.format(prefix, n, collision_check),
-			'{}/{} SET RandomProps.PropArea stickToGround {}'.format(prefix, n, stick_to_ground),
-			
-			'{}/{} SET RandomProps.Torus radius {}'.format(prefix, n, radius),
-			'{}/{} SET RandomProps.Torus innerRadius {}'.format(prefix, n, innerradius),
-			
-			'{}/{} SET Transform position ({} {} {})'.format(prefix, n, position[0], position[1], position[2]),
-			'{}/{} SET Transform eulerAngles ({} {} {})'.format(prefix, n, rotation[0], rotation[1], rotation[2]),
-			
-			'{}/{} SET Transform localScale ({} {} {})'.format(prefix, n, scale[0], scale[1], scale[2])
-		], read=False)
-		
-		if segmentation_class != None:
-			if isinstance(segmentation_class, list):
-				common.send_data([
-					'{}/{} ADD Segmentation.ClassGroup'.format(prefix, n),
-					'{}/{} SET Segmentation.ClassGroup itemsClassName "{}"'.format(prefix, n, segmentation_class[i])
-				], read=False)
-			else:
-				common.send_data([
-					'{}/{} ADD Segmentation.ClassGroup'.format(prefix, n),
-					'{}/{} SET Segmentation.ClassGroup itemsClassName "{}"'.format(prefix, n, segmentation_class)
-				], read=False)
-		
-		if orbit == True:
-			common.send_data('cameras SET Orbit target {}/{}'.format(prefix, n), read=False)
-		
-		if random_colors != None and random_colors > 0:
-			add_random_color(objs='{}/{}'.format(prefix, n), colors=random_colors, colors_weights=random_colors_weights, spawner=True)
-		
-		common.send_data('{}/{} SET active true'.format(prefix, n))
-		settings.obj.append('{}/{}'.format(prefix, t))
-		i = i + 1
-	
-	if flush:
-		common.flush_buffer()
+	return spawner(
+		types=types, tags=tags, scale=scale, position=position,
+		rotation=rotation, limit=limit, segmentation_class=segmentation_class, orbit=orbit,
+		stick_to_ground=stick_to_ground, collision_check=collision_check, suffix=suffix, flush=flush, prefix=prefix,
+		names=names, ugly_fix=ugly_fix, seed=seed, random_colors=random_colors, random_colors_weights=random_colors_weights,
+		method='Torus', method_parameters={'innerRadius': innerradius, 'radius': radius}
+	)
 
 def spawn_rectangle_generic(
 	types=[], tags=None, scale=[1,1,1], a=1, b=500, position=[0,0,0],
@@ -1662,82 +1724,13 @@ def spawn_rectangle_generic(
 	random_colors_weights (int): Defines a weight for color switching, defaults to `14`
 	
 	"""
-	# convert bool to strings
-	if collision_check == True:
-		collision_check = 'true'
-	else:
-		collision_check = 'false'
-	
-	if stick_to_ground == True:
-		stick_to_ground = 'true'
-	else:
-		stick_to_ground = 'false'
-	
-	# loop each of the types
-	i = 0
-	for t in types:
-		if names == None:
-			n = t.replace(' ', '_').replace('+', '_').replace('-', '_').replace(',', '_') + suffix
-		else:
-			n = names[i]
-		
-		common.send_data([
-			'CREATE {}/{}'.format(prefix, n),
-			'{}/{} SET active false'.format(prefix, n),
-			
-			'{}/{} ADD RandomProps.Rectangle'.format(prefix, n),
-			'{}/{} ADD RandomProps.PropArea'.format(prefix, n)
-		], read=False)
-		
-		if seed != None:
-			# common.send_data(['{}/{} SET RandomProps.PropArea seed {}'.format(prefix, n, seed)], read=False)
-			common.send_data(['RandomProps.Random.instance SET seed {}'.format(seed)], read=False)
-		
-		try:
-			common.send_data(['{}/{} SET RandomProps.PropArea tags "{}"'.format(prefix, n, ugly_tag_fix(tags[i]))], read=False)
-		except:
-			common.send_data(['{}/{} SET RandomProps.PropArea tags "{}"'.format(prefix, n, ugly_tag_fix(t))], read=False)
-		
-		common.send_data([
-			'{}/{} SET RandomProps.PropArea async false'.format(prefix, n),
-			'{}/{} SET RandomProps.PropArea numberOfProps {}'.format(prefix, n, limit),
-			
-			'{}/{} SET RandomProps.PropArea collisionCheck {}'.format(prefix, n, collision_check),
-			'{}/{} SET RandomProps.PropArea stickToGround {}'.format(prefix, n, stick_to_ground),
-			
-			'{}/{} SET RandomProps.Rectangle a {}'.format(prefix, n, a),
-			'{}/{} SET RandomProps.Rectangle b {}'.format(prefix, n, b),
-			
-			'{}/{} SET Transform position ({} {} {})'.format(prefix, n, position[0], position[1], position[2]),
-			'{}/{} SET Transform eulerAngles ({} {} {})'.format(prefix, n, rotation[0], rotation[1], rotation[2]),
-			
-			'{}/{} SET Transform localScale ({} {} {})'.format(prefix, n, scale[0], scale[1], scale[2])
-		], read=False)
-		
-		if segmentation_class != None:
-			if isinstance(segmentation_class, list):
-				common.send_data([
-					'{}/{} ADD Segmentation.ClassGroup'.format(prefix, n),
-					'{}/{} SET Segmentation.ClassGroup itemsClassName "{}"'.format(prefix, n, segmentation_class[i])
-				], read=False)
-			else:
-				common.send_data([
-					'{}/{} ADD Segmentation.ClassGroup'.format(prefix, n),
-					'{}/{} SET Segmentation.ClassGroup itemsClassName "{}"'.format(prefix, n, segmentation_class)
-				], read=False)
-		
-		if orbit == True:
-			common.send_data('cameras SET Orbit target {}/{}'.format(prefix, n), read=False)
-		
-		if random_colors != None and random_colors > 0:
-			add_random_color(objs='{}/{}'.format(prefix, n), colors=random_colors, colors_weights=random_colors_weights, spawner=True)
-		
-		common.send_data('{}/{} SET active true'.format(prefix, n))
-		settings.obj.append('{}/{}'.format(prefix, t))
-		i = i + 1
-	
-	if flush:
-		common.flush_buffer()
+	return spawner(
+		types=types, tags=tags, scale=scale, position=position,
+		rotation=rotation, limit=limit, segmentation_class=segmentation_class, orbit=orbit,
+		stick_to_ground=stick_to_ground, collision_check=collision_check, suffix=suffix, flush=flush, prefix=prefix,
+		names=names, ugly_fix=ugly_fix, seed=seed, random_colors=random_colors, random_colors_weights=random_colors_weights,
+		method='Rectangle', method_parameters={'a': a, 'b': b}
+	)
 
 def spawn_flat_grid(types=[], size=[1000,1000], position=[0,0,0], scale=[1,1,1], prefix='spawner'):
 	"""
@@ -1931,7 +1924,14 @@ def spawn_drone_objs(
 	
 	
 	if drones_limit[1] > 0:
-		spawn_radius_generic(['drones'], segmentation_class=drones_segment, random_colors=drones_colors, tags=drones_tags, ugly_fix=False, limit=random.randint(drones_limit[0], drones_limit[1]), radius=random.randint(30,50), innerradius=0, position=[0,0,0], prefix=prefix, seed=seed)
+		# spawn_radius_generic(['drones'], segmentation_class=drones_segment, random_colors=drones_colors, tags=drones_tags, ugly_fix=False, limit=random.randint(drones_limit[0], drones_limit[1]), radius=random.randint(30,50), innerradius=0, position=[0,0,0], prefix=prefix, seed=seed)
+		spawner(
+			['drones'], segmentation_class=drones_segment, random_colors=drones_colors, tags=drones_tags, ugly_fix=False, limit=random.randint(drones_limit[0], drones_limit[1]), position=[0,0,0], prefix=prefix, seed=seed,
+			method='Frustum',
+			method_parameters={'cam': 'cameras/cameraRGB'},
+			min_distance=50,
+			max_distance=300
+		)
 	
 	if thermal != None:
 		common.send_data([
