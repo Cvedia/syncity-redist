@@ -55,7 +55,7 @@ def run():
 			# drones_limit=[0,0],
 			drones_limit=[2,2],
 			drones_colors=True,
-			drones_tags=['drone'],
+			drones_tags=['drone, +phantom'],
 			
 			buildings_innerradius=80,
 			trees_limit=[150,200], trees_innerradius=15, trees_radius=60, buildings_limit=[100,100],
