@@ -1929,8 +1929,8 @@ def spawn_drone_objs(
 			['drones'], segmentation_class=drones_segment, random_colors=drones_colors, tags=drones_tags, ugly_fix=False, limit=random.randint(drones_limit[0], drones_limit[1]), position=[0,0,0], prefix=prefix, seed=seed,
 			method='Frustum',
 			method_parameters={'cam': 'cameras/cameraRGB'},
-			min_distance=50,
-			max_distance=300
+			min_distance=0.3,
+			max_distance=5
 		)
 	
 	if thermal != None:
