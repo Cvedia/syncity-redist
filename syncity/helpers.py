@@ -1270,7 +1270,7 @@ def ugly_tag_fix(tag):
 	
 	return x
 
-def add_random_color(objs, colors=16, colors_weights=14, spawner=False, method='FromList'):
+def add_random_color(objs, colors=16, colors_weights=14, spawner=False, method='FromList', parts_names=None):
 	"""
 	Adds random color component to a object or spawner
 	
@@ -1281,6 +1281,7 @@ def add_random_color(objs, colors=16, colors_weights=14, spawner=False, method='
 	colors_weights (int): Color changing weight, defaults to `14`
 	spawner (bool): Defines if the object(s) is/are spawner or regular objects, defaults to `False`
 	method (string): Defines operation mode, `FromList` will use a fixed list of colors, `Random` will pick a random color everytime, `Lerp` will randomize between 2 colors, defaults to `FromList`
+	parts_names (string): Defines a list of parts to be colorized
 	
 	"""
 	
@@ -1296,7 +1297,7 @@ def add_random_color(objs, colors=16, colors_weights=14, spawner=False, method='
 	
 	for obj in objs:
 		buf.append('{} ADD {}'.format(obj, component))
-		buf.append('{} SET RandomProps.RandomColor randomMethod {}'.format(obj, method))
+		buf.append('{} SET {} randomMethod {}'.format(obj, component, method))
 		
 		if method == 'Random':
 			buf.append('{} PUSH {} availableColors "{}"'.format(obj, component, get_random_color()))
@@ -1304,6 +1305,8 @@ def add_random_color(objs, colors=16, colors_weights=14, spawner=False, method='
 			for i in range(0, colors):
 				buf.append('{} PUSH {} availableColors "{}"'.format(obj, component, get_random_color()))
 		
+		if parts_names != None:
+			buf.append('{} SET {} partsNames "{}"'.format(obj, component, parts_names))
 		buf.append('{} PUSH {} colorsWeights {}'.format(obj, component, colors_weights))
 	
 	common.send_data(buf, read=False)
@@ -1523,7 +1526,8 @@ def spawner(
 	rotation=[0,0,0], limit=50, segmentation_class=None, orbit=False,
 	stick_to_ground=False, collision_check=True, suffix="", flush=False, prefix='spawner',
 	names=None, ugly_fix=True, seed=None, random_colors=None, random_colors_weights=14,
-	method=None, method_parameters=None, min_distance=None, max_distance=None
+	method=None, method_parameters=None, min_distance=None, max_distance=None,
+	parts_names=None
 ):
 	"""
 	Creates a torus shaped object spawner
@@ -1550,6 +1554,7 @@ def spawner(
 	random_colors_weights (int): Defines a weight for color switching, defaults to `14`
 	method (string): Defines spawner method, defaults to `None`
 	method_parameters (dict): Defines method's parameters, defaults to `None`
+	parts_names (string): Defines a list of parts to be colorized, defaults to `None`
 	
 	"""
 	# convert bool to strings
@@ -1639,9 +1644,9 @@ def spawner(
 		
 		if random_colors != None:
 			if random_colors == True:
-				add_random_color(objs='{}/{}'.format(prefix, n), colors=0, colors_weights=random_colors_weights, spawner=True, method='Random')
+				add_random_color(objs='{}/{}'.format(prefix, n), colors=0, colors_weights=random_colors_weights, spawner=True, method='Random', parts_names=parts_names)
 			else:
-				add_random_color(objs='{}/{}'.format(prefix, n), colors=random_colors, colors_weights=random_colors_weights, spawner=True)
+				add_random_color(objs='{}/{}'.format(prefix, n), colors=random_colors, colors_weights=random_colors_weights, spawner=True, parts_names=parts_names)
 		
 		common.send_data('{}/{} SET active true'.format(prefix, n))
 		settings.obj.append('{}/{}'.format(prefix, t))
@@ -1655,7 +1660,8 @@ def spawn_radius_generic(
 	types=[], tags=None, scale=[1,1,1], innerradius=0, radius=500, position=[0,0,0],
 	rotation=[0,0,0], limit=50, segmentation_class=None, orbit=False,
 	stick_to_ground=False, collision_check=True, suffix="", flush=False, prefix='spawner',
-	names=None, ugly_fix=True, seed=None, random_colors=None, random_colors_weights=14
+	names=None, ugly_fix=True, seed=None, random_colors=None, random_colors_weights=14,
+	parts_names=None
 ):
 	"""
 	Creates a torus shaped object spawner
@@ -1682,6 +1688,7 @@ def spawn_radius_generic(
 	seed (int): Defines a seed number, this forces random values to be equal on different instances, defaults to `None`
 	random_colors (int): Defines a number of random colors to assign to spawner, when set to None disables feature, defaults to `None`
 	random_colors_weights (int): Defines a weight for color switching, defaults to `14`
+	parts_names (string): Defines a list of parts to be colorized, defaults to `None`
 	
 	"""
 	return spawner(
@@ -1689,14 +1696,15 @@ def spawn_radius_generic(
 		rotation=rotation, limit=limit, segmentation_class=segmentation_class, orbit=orbit,
 		stick_to_ground=stick_to_ground, collision_check=collision_check, suffix=suffix, flush=flush, prefix=prefix,
 		names=names, ugly_fix=ugly_fix, seed=seed, random_colors=random_colors, random_colors_weights=random_colors_weights,
-		method='Torus', method_parameters={'innerRadius': innerradius, 'radius': radius}
+		method='Torus', method_parameters={'innerRadius': innerradius, 'radius': radius},
+		parts_names=parts_names
 	)
 
 def spawn_rectangle_generic(
 	types=[], tags=None, scale=[1,1,1], a=1, b=500, position=[0,0,0],
 	rotation=[0,0,0], limit=50, segmentation_class=None, orbit=False,
 	stick_to_ground=False, collision_check=True, suffix="", flush=False, prefix='spawner',
-	names=None, seed=None, random_colors=None, random_colors_weights=14
+	names=None, seed=None, random_colors=None, random_colors_weights=14, parts_names=None
 ):
 	"""
 	Creates a rectangle shaped object spawner
@@ -1722,6 +1730,7 @@ def spawn_rectangle_generic(
 	seed (int): Defines a seed number, this forces random values to be equal on different instances, defaults to `None`
 	random_colors (int): Defines a number of random colors to assign to spawner, when set to None disables feature, defaults to `None`
 	random_colors_weights (int): Defines a weight for color switching, defaults to `14`
+	parts_names (string): Defines a list of parts to be colorized, defaults to `None`
 	
 	"""
 	return spawner(
@@ -1729,7 +1738,7 @@ def spawn_rectangle_generic(
 		rotation=rotation, limit=limit, segmentation_class=segmentation_class, orbit=orbit,
 		stick_to_ground=stick_to_ground, collision_check=collision_check, suffix=suffix, flush=flush, prefix=prefix,
 		names=names, ugly_fix=ugly_fix, seed=seed, random_colors=random_colors, random_colors_weights=random_colors_weights,
-		method='Rectangle', method_parameters={'a': a, 'b': b}
+		method='Rectangle', method_parameters={'a': a, 'b': b}, parts_names=parts_names
 	)
 
 def spawn_flat_grid(types=[], size=[1000,1000], position=[0,0,0], scale=[1,1,1], prefix='spawner'):
@@ -1859,6 +1868,7 @@ def spawn_drone_objs(
 	buildings_limit=[150,150], birds_limit=[25,100], cars_limit=[75,75], drones_limit=[80,200], prefix='spawner',
 	trees_tags=['tree'], buildings_tags=['building'], birds_tags=['bird'], cars_tags=['car'], drones_tags=['drones'],
 	trees_colors=None, buildings_colors=None, birds_colors=None, cars_colors=None, drones_colors=None,
+	trees_parts_names=None, buildings_parts_names=None, birds_parts_names=None, cars_parts_names=None, drones_parts_names=None,
 	# ground_segment='VOID', trees_segment='VOID', buildings_segment='VOID', birds_segment='VOID', cars_segment='VOID', drones_segment='DRONE',
 	ground_segment=None, trees_segment=None, buildings_segment=None, birds_segment=None, cars_segment=None, drones_segment='DRONE',
 	thermal=None, seed=None
@@ -1913,23 +1923,26 @@ def spawn_drone_objs(
 	
 	spawn_radius_generic(['city/ground'], tags=['ground'], limit=300, radius=150, innerradius=0, scale=[3,3,3], position=[0,0,0], collision_check=False, prefix=prefix, seed=seed)
 	spawn_radius_generic(['humans'], tags=['human, +random'], suffix='_0', limit=40, radius=30, innerradius=2, position=[0,0,0], collision_check=False, prefix=prefix, seed=seed)
-	spawn_radius_generic(['city/nature/trees'], segmentation_class=trees_segment, random_colors=trees_colors, tags=trees_tags, collision_check=False, limit=random.randint(trees_limit[0], trees_limit[1]), radius=trees_radius, innerradius=trees_innerradius, position=[0,0,0], prefix=prefix, seed=seed)
-	spawn_radius_generic(['city/buildings'], segmentation_class=buildings_segment, random_colors=buildings_colors, tags=buildings_tags, stick_to_ground=False, collision_check=False, limit=random.randint(buildings_limit[0], buildings_limit[1]), radius=buildings_radius, innerradius=buildings_innerradius, position=[0,0,0], prefix=prefix, seed=seed)
-#	spawn_radius_generic(['buildings_001'], segmentation_class=buildings_segment, random_colors=buildings_colors, tags=buildings_tags, stick_to_ground=False, collision_check=False, limit=random.randint(buildings_limit[0], buildings_limit[1]), radius=buildings_radius, innerradius=buildings_innerradius, position=[0,0,0], prefix=prefix, seed=seed)
-#	spawn_radius_generic(['buildings_002'], segmentation_class=buildings_segment, random_colors=buildings_colors, tags=buildings_tags, stick_to_ground=False, collision_check=False, limit=random.randint(buildings_limit[0], buildings_limit[1]), radius=buildings_radius, innerradius=buildings_innerradius, position=[0,0,0], prefix=prefix, seed=seed)
-#	spawn_radius_generic(['buildings_003'], segmentation_class=buildings_segment, random_colors=buildings_colors, tags=buildings_tags, stick_to_ground=False, collision_check=False, limit=random.randint(buildings_limit[0], buildings_limit[1]), radius=buildings_radius, innerradius=buildings_innerradius, position=[0,0,0], prefix=prefix, seed=seed)
-	spawn_radius_generic(['animals/birds'], segmentation_class=birds_segment, random_colors=birds_colors, tags=birds_tags, limit=random.randint(birds_limit[0], birds_limit[1]), radius=birds_radius, innerradius=birds_innerradius, position=[0,random.randint(15,95),0], prefix=prefix, seed=seed)
-	spawn_radius_generic(['cars'], segmentation_class=cars_segment, random_colors=cars_colors, tags=cars_tags, collision_check=False, limit=random.randint(cars_limit[0], cars_limit[1]), radius=cars_radius, innerradius=cars_innerradius, position=[0,0,0], prefix=prefix, seed=seed)
+	spawn_radius_generic(['city/nature/trees'], parts_names=trees_parts_names, segmentation_class=trees_segment, random_colors=trees_colors, tags=trees_tags, collision_check=False, limit=random.randint(trees_limit[0], trees_limit[1]), radius=trees_radius, innerradius=trees_innerradius, position=[0,0,0], prefix=prefix, seed=seed)
+	spawn_radius_generic(['city/buildings'], parts_names=buildings_parts_names, segmentation_class=buildings_segment, random_colors=buildings_colors, tags=buildings_tags, stick_to_ground=False, collision_check=False, limit=random.randint(buildings_limit[0], buildings_limit[1]), radius=buildings_radius, innerradius=buildings_innerradius, position=[0,0,0], prefix=prefix, seed=seed)
+#	spawn_radius_generic(['buildings_001'], parts_names=buildings_parts_names, segmentation_class=buildings_segment, random_colors=buildings_colors, tags=buildings_tags, stick_to_ground=False, collision_check=False, limit=random.randint(buildings_limit[0], buildings_limit[1]), radius=buildings_radius, innerradius=buildings_innerradius, position=[0,0,0], prefix=prefix, seed=seed)
+#	spawn_radius_generic(['buildings_002'], parts_names=buildings_parts_names, segmentation_class=buildings_segment, random_colors=buildings_colors, tags=buildings_tags, stick_to_ground=False, collision_check=False, limit=random.randint(buildings_limit[0], buildings_limit[1]), radius=buildings_radius, innerradius=buildings_innerradius, position=[0,0,0], prefix=prefix, seed=seed)
+#	spawn_radius_generic(['buildings_003'], parts_names=buildings_parts_names, segmentation_class=buildings_segment, random_colors=buildings_colors, tags=buildings_tags, stick_to_ground=False, collision_check=False, limit=random.randint(buildings_limit[0], buildings_limit[1]), radius=buildings_radius, innerradius=buildings_innerradius, position=[0,0,0], prefix=prefix, seed=seed)
+	spawn_radius_generic(['animals/birds'], parts_names=birds_parts_names, segmentation_class=birds_segment, random_colors=birds_colors, tags=birds_tags, limit=random.randint(birds_limit[0], birds_limit[1]), radius=birds_radius, innerradius=birds_innerradius, position=[0,random.randint(15,95),0], prefix=prefix, seed=seed)
+	spawn_radius_generic(['cars'], parts_names=cars_parts_names, segmentation_class=cars_segment, random_colors=cars_colors, tags=cars_tags, collision_check=False, limit=random.randint(cars_limit[0], cars_limit[1]), radius=cars_radius, innerradius=cars_innerradius, position=[0,0,0], prefix=prefix, seed=seed)
 	spawn_radius_generic(['roadsigns'], tags=['roadsign'], limit=250, radius=80, collision_check=False, innerradius=15, position=[0,0,0], prefix=prefix, seed=seed)
 	
 	
 	if drones_limit[1] > 0:
 		# spawn_radius_generic(['drones'], segmentation_class=drones_segment, random_colors=drones_colors, tags=drones_tags, ugly_fix=False, limit=random.randint(drones_limit[0], drones_limit[1]), radius=random.randint(30,50), innerradius=0, position=[0,0,0], prefix=prefix, seed=seed)
 		spawner(
-			['drones'], segmentation_class=drones_segment, random_colors=drones_colors, tags=drones_tags, ugly_fix=False, limit=random.randint(drones_limit[0], drones_limit[1]), position=[0,0,0], prefix=prefix, seed=seed,
+			['drones'], segmentation_class=drones_segment, parts_names=drones_parts_names, random_colors=drones_colors, tags=drones_tags, ugly_fix=False, limit=random.randint(drones_limit[0], drones_limit[1]), position=[0,0,0],
+			# prefix=prefix,
+			prefix='cameras/spawner',
+			seed=seed,
 			method='Frustum',
 			method_parameters={'cam': 'cameras/cameraRGB'},
-			min_distance=0.3,
+			min_distance=2,
 			max_distance=5
 		)
 	

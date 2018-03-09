@@ -314,7 +314,7 @@ def shape_data(l):
 		output('Error {} decoding: {}'.format(e, l), 'ERROR')
 	
 	if settings.quiet == False and l != '':
-		output('<< {}'.format(l))
+		output('<< {}'.format(l), 'WARN' if 'ERROR:' in l else 'INFO')
 	
 	return l
 

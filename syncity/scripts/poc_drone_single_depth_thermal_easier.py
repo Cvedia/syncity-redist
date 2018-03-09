@@ -41,7 +41,8 @@ def run():
 	
 	if settings.skip_setup == False:
 		helpers.global_camera_setup()
-		helpers.add_camera_seg(width=1024, height=1024, segments=['drone0'], lookupTable=[['drone0', 'red']])
+		# helpers.add_camera_seg(width=1024, height=1024, segments=['drone0'], lookupTable=[['drone0', 'red']])
+		helpers.add_camera_seg(width=1024, height=1024, segments=['DRONE'], lookupTable=[['DRONE', 'red']])
 #		helpers.add_camera_depth(width=1024, height=768)
 		helpers.add_camera_rgb(width=1024, height=1024, pp='EnviroFX')
 		
@@ -52,10 +53,12 @@ def run():
 		common.send_data([ 'disk1/Cameras/depth SET Sensors.RenderCameraLink outputType BLOB' ])
 		
 		helpers.spawn_drone_objs(
+			# prefix='cameras/spawner',
 			# drones_limit=[0,0],
 			drones_limit=[2,2],
 			drones_colors=True,
-			drones_tags=['drone, +phantom'],
+			drones_tags=['phantom'],
+			drones_parts_names='chassis,legs,motors,battery,bolts,sensors_caps,sensors,camera,blades',
 			
 			buildings_innerradius=80,
 			trees_limit=[150,200], trees_innerradius=15, trees_radius=60, buildings_limit=[100,100],
@@ -72,34 +75,35 @@ def run():
 			seed=-1
 		)
 		
-		if False:
-			for x in range(0,2):
-				common.send_data([
-					'CREATE cameras/drone/drone{}/drone{} "{}"'.format(x,x,helpers.drones_lst[6]), # Drones/DJI Phantom 4 Pro/DJI_Phantom_4_Pro
-					'cameras/drone/drone{} ADD Segmentation.ClassGroup'.format(x),
-					'cameras/drone/drone{} SET active false'.format(x),
-					
-					'cameras/drone/drone{} SET Segmentation.ClassGroup itemsClassName drone0'.format(x),
-					'cameras/drone/drone{}/drone{} SET Transform position ({} {} {})'.format(x, x, 0, 1, 0),
-				], read=False)
+		"""
+		for x in range(0,2):
+			common.send_data([
+				'CREATE cameras/drone/drone{}/drone{} "{}"'.format(x,x,helpers.drones_lst[6]), # Drones/DJI Phantom 4 Pro/DJI_Phantom_4_Pro
+				'cameras/drone/drone{} ADD Segmentation.ClassGroup'.format(x),
+				'cameras/drone/drone{} SET active false'.format(x),
 				
-				common.send_data([
-					'cameras/drone/drone{} SET active true'.format(x),
-					'cameras/drone/drone{}/drone{} SET active true'.format(x, x),
-					'cameras/drone/drone{}/drone{} SET Transform localPosition (0 0 0)'.format(x,x),
-				], read=False)
-				
-				# randomize colors of drones
-				helpers.add_random_color(['cameras/drone/drone{}/drone{}'.format(x, x)], method="Random")
-				
-				common.send_data([
-					'cameras/drone/drone{}/drone{} SET RandomProps.RandomColor partsNames "chassis,legs,motors,battery,bolts,sensors_caps,sensors,camera,blades"'.format(x,x),
-	#				'cameras/drone/drone{}/drone{} PUSH RandomProps.RandomColor availableColors "#FF0000"'.format(x,x),
-	#				'cameras/drone/drone{}/drone{} PUSH RandomProps.RandomColor availableColors "#FFFFFF"'.format(x,x),
-	#				'cameras/drone/drone{}/drone{} PUSH RandomProps.RandomColor availableColors "#00FF00"'.format(x,x),
-	#				'cameras/drone/drone{}/drone{} PUSH RandomProps.RandomColor availableColors "#0000FF"'.format(x,x),
-	#				'cameras/drone/drone{}/drone{} PUSH RandomProps.RandomColor availableColors "#101010"'.format(x,x),
-				], read=False)
+				'cameras/drone/drone{} SET Segmentation.ClassGroup itemsClassName drone0'.format(x),
+				'cameras/drone/drone{}/drone{} SET Transform position ({} {} {})'.format(x, x, 0, 1, 0),
+			], read=False)
+			
+			common.send_data([
+				'cameras/drone/drone{} SET active true'.format(x),
+				'cameras/drone/drone{}/drone{} SET active true'.format(x, x),
+				'cameras/drone/drone{}/drone{} SET Transform localPosition (0 0 0)'.format(x,x),
+			], read=False)
+			
+			# randomize colors of drones
+			helpers.add_random_color(['cameras/drone/drone{}/drone{}'.format(x, x)], method="Random")
+			
+			common.send_data([
+				'cameras/drone/drone{}/drone{} SET RandomProps.RandomColor partsNames "chassis,legs,motors,battery,bolts,sensors_caps,sensors,camera,blades"'.format(x,x),
+#				'cameras/drone/drone{}/drone{} PUSH RandomProps.RandomColor availableColors "#FF0000"'.format(x,x),
+#				'cameras/drone/drone{}/drone{} PUSH RandomProps.RandomColor availableColors "#FFFFFF"'.format(x,x),
+#				'cameras/drone/drone{}/drone{} PUSH RandomProps.RandomColor availableColors "#00FF00"'.format(x,x),
+#				'cameras/drone/drone{}/drone{} PUSH RandomProps.RandomColor availableColors "#0000FF"'.format(x,x),
+#				'cameras/drone/drone{}/drone{} PUSH RandomProps.RandomColor availableColors "#101010"'.format(x,x),
+			], read=False)
+		"""
 		
 	p_x_r = [-5, 5]
 	p_y_r = [1.5, 8]
@@ -126,9 +130,9 @@ def run():
 		'EnviroSky SET EnviroSky fogSettings.heightFog false',
 		'EnviroSky SET EnviroSky fogSettings.distanceFog false',
 		'EnviroSky SET EnviroSky cloudsSettings.globalCloudCoverage {}'.format(-0.04),
-		'cameras/drone SET Transform localPosition (0 0 0)',
-		'cameras/drone SET Transform eulerAngles ({} {} {})'.format(0, 0, 0),
-		'cameras/drone SET Transform localEulerAngles ({} {} {})'.format(10, 0, 0),
+#		'cameras/drone SET Transform localPosition (0 0 0)',
+#		'cameras/drone SET Transform eulerAngles ({} {} {})'.format(0, 0, 0),
+#		'cameras/drone SET Transform localEulerAngles ({} {} {})'.format(10, 0, 0),
 		'{} SET Sensors.RenderCamera alwaysOn false'.format(mycams[0]),
 		'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false'.format(mycams[0]),
 		'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.shutterAngle {}'.format(mycams[0], 270),
@@ -237,7 +241,8 @@ def run():
 		], read=False)
 
 		p_z = 2.3
-
+		
+		"""
 		common.send_data([
 			'cameras/drone/drone0 SET Transform localPosition ({} {} {})'.format(random.uniform(-1.0, 1.0), random.uniform(-0.3, 0.70), p_z),
 			'cameras/drone/drone1 SET Transform localPosition ({} {} {})'.format(random.uniform(-1.0, 1.0), random.uniform(0.80, 1.3), p_z),
@@ -253,8 +258,32 @@ def run():
 #			'cameras/drone/drone6 SET Transform localPosition ({} {} {})'.format(random.uniform(0.05, 0.55), random.uniform(0.80, 1.3), p_z),
 #			'cameras/drone/drone7 SET Transform localPosition ({} {} {})'.format(random.uniform(0.65, 1.2), random.uniform(0.80, 1.3), p_z),
 		], read=False)
-		
+		"""
+
 		if loop % 10 == 0:
+			p_x = random.uniform(-1.2, -0.55)
+			p_x = random.uniform(-0.6, 0)
+			p_x = random.uniform(0.05, 0.6)
+			p_x = random.uniform(0.65, 1.2)
+			p_y = random.uniform(0.1, 0.4)
+			p_y = random.uniform(0.45, 0.9)
+			
+#			p_x = random.uniform(-2, 2)
+#			p_y = random.uniform(3, 5)
+#			p_z = 2
+			
+			scale_f = random.uniform(0.6,1.5)
+			
+			common.send_data([
+				'cameras/spawner/drones SET active false',
+				# 'cameras/spawner/drones SET Transform localEulerAngles ({} {} {})'.format(random.randint(-20, 20), random.randint(-20, 20), random.randint(-20, 20)),
+				# 'cameras/spawner/drones SET Transform localScale ({} {} {})'.format(scale_f, scale_f, scale_f),
+				'cameras/spawner/drones SET RandomProps.PropArea rotationStep {}'.format(random.randint(0, 180)),
+				'cameras/spawner/drones SET RandomProps.PropArea propScale ({} {} {})'.format(scale_f, scale_f, scale_f),
+				'cameras/spawner/drones SET active true'
+			], read=False)
+			
+			"""
 			for x in range(0, 2):
 				p_x = random.uniform(-1.2, -0.55)
 				p_x = random.uniform(-0.6, 0)
@@ -275,7 +304,8 @@ def run():
 					'cameras/drone/drone{}/drone{} SET active false'.format(x,x),
 					'cameras/drone/drone{}/drone{} SET active true'.format(x,x),
 				], read=False)
-			
+			"""
+		
 		# wait for scene's motion blur to fade
 #		time.sleep(0.5)
 #		common.flush_buffer()
