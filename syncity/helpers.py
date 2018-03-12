@@ -1359,7 +1359,10 @@ def lcp(
 	"""
 	Adds LCP
 	
-	LCP or Lens Correction Profiles is a adobe camera lens standard, 
+	LCP or Lens Correction Profiles is a adobe camera lens standard, read more on:
+	http://blogs.adobe.com/jkost/tag/lens-correction-profiles
+	
+	In the future we will allow direct LCP file loading among with the configurables.
 	
 	# Arguments
 	
