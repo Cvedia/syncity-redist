@@ -1311,6 +1311,149 @@ def add_random_color(objs, colors=16, colors_weights=14, spawner=False, method='
 	
 	common.send_data(buf, read=False)
 
+def lcp(
+	add=True,
+	camera='cameras/cameraRGB',
+	
+	updateValuesMode=None,
+	
+	focalLength=None,
+	sensorFormatFactor=None,
+	distortionScale=None,
+	isFisheyeDistortion=None,
+	
+	radialParam1=None,
+	radialParam2=None,
+	radialParam3=None,
+	
+	radialParamX=None,
+	radialParamY=None,
+	
+	redParam1=None,
+	redParam2=None,
+	redParam3=None,
+	
+	redParamX=None,
+	redParamY=None,
+	
+	greenParam1=None,
+	greenParam2=None,
+	greenParam3=None,
+	
+	greenParamX=None,
+	greenParamY=None,
+	
+	blueParam1=None,
+	blueParam2=None,
+	blueParam3=None,
+	
+	blueParamX=None,
+	blueParamY=None,
+	
+	vignetteParam1=None,
+	vignetteParam2=None,
+	vignetteParam3=None,
+	vignetteParam4=None,
+
+):
+	"""
+	Adds LCP
+	
+	LCP or Lens Correction Profiles is a adobe camera lens standard, 
+	
+	# Arguments
+	
+	add (bool): Defines if we should add the LCP component to the camera, if you already have a LCP component you should set this to `None` so we simply manipulate settings sent, defaults to `True`
+	camera (string): Defines camera where LCP should be added / exists, defaults to `cameras/cameraRGB`,
+	
+	updateValuesMode (string): Defines how values should be updated, this depends on how you're using this component. Defaults to `None` which is `OnEnableOnly`, possible options are `OnEnableOnly` and `EveryFrame`.
+	focalLength (float): Focal Length compatible with real camera values defaults to `None`,
+	sensorFormatFactor (float): Sensoe format factor, defaults to `None`,
+	distortionScale (float): Distortion weight scale, defaults to `None`,
+	isFisheyeDistortion (bool): enables fish eye distortion defaults to `None`,
+	
+	radialParam1 (float): defaults to `None`,
+	radialParam2 (float): defaults to `None`,
+	radialParam3 (float): defaults to `None`,
+	
+	radialParamX (float): defaults to `None`,
+	radialParamY (float): defaults to `None`,
+	
+	redParam1 (float): defaults to `None`,
+	redParam2 (float): defaults to `None`,
+	redParam3 (float): defaults to `None`,
+	
+	redParamX (float): defaults to `None`,
+	redParamY (float): defaults to `None`,
+	
+	greenParam1 (float): defaults to `None`,
+	greenParam2 (float): defaults to `None`,
+	greenParam3 (float): defaults to `None`,
+	
+	greenParamX (float): defaults to `None`,
+	greenParamY (float): defaults to `None`,
+	
+	blueParam1 (float): defaults to `None`,
+	blueParam2 (float): defaults to `None`,
+	blueParam3 (float): defaults to `None`,
+	
+	blueParamX (float): defaults to `None`,
+	blueParamY (float): defaults to `None`,
+	
+	vignetteParam1 (float): defaults to `None`,
+	vignetteParam2 (float): defaults to `None`,
+	vignetteParam3 (float): defaults to `None`,
+	vignetteParam4 (float): defaults to `None`,
+	
+	"""
+	buf = []
+	
+	if add == True:
+		buf.append('{} ADD LCP'.format(camera))
+	
+	buf.extend([
+	'{} SET LCP updateValuesMode "{}"'.format(camera, updateValuesMode) if updateValuesMode != None else '',
+	'{} SET LCP focalLength {}'.format(camera, focalLength) if focalLength != None else '',
+	'{} SET LCP sensorFormatFactor {}'.format(camera, sensorFormatFactor) if sensorFormatFactor != None else '',
+	'{} SET LCP distortionScale {}'.format(camera, distortionScale) if distortionScale != None else '',
+	'{} SET LCP isFisheyeDistortion {}'.format(camera, isFisheyeDistortion) if isFisheyeDistortion != None else '',
+	
+	'{} SET LCP radialParam1 {}'.format(camera, radialParam1) if radialParam1 != None else '',
+	'{} SET LCP radialParam2 {}'.format(camera, radialParam2) if radialParam2 != None else '',
+	'{} SET LCP radialParam3 {}'.format(camera, radialParam3) if radialParam3 != None else '',
+	
+	'{} SET LCP radialParamX {}'.format(camera, radialParamX) if radialParamX != None else '',
+	'{} SET LCP radialParamY {}'.format(camera, radialParamY) if radialParamY != None else '',
+	
+	'{} SET LCP redParam1 {}'.format(camera, redParam1) if redParam1 != None else '',
+	'{} SET LCP redParam2 {}'.format(camera, redParam2) if redParam2 != None else '',
+	'{} SET LCP redParam3 {}'.format(camera, redParam3) if redParam3 != None else '',
+	
+	'{} SET LCP redParamX {}'.format(camera, redParamX) if redParamX != None else '',
+	'{} SET LCP redParamY {}'.format(camera, redParamY) if redParamY != None else '',
+	
+	'{} SET LCP greenParam1 {}'.format(camera, greenParam1) if greenParam1 != None else '',
+	'{} SET LCP greenParam2 {}'.format(camera, greenParam2) if greenParam2 != None else '',
+	'{} SET LCP greenParam3 {}'.format(camera, greenParam3) if greenParam3 != None else '',
+	
+	'{} SET LCP greenParamX {}'.format(camera, greenParamX) if greenParamX != None else '',
+	'{} SET LCP greenParamY {}'.format(camera, greenParamY) if greenParamY != None else '',
+	
+	'{} SET LCP blueParam1 {}'.format(camera, blueParam1) if blueParam1 != None else '',
+	'{} SET LCP blueParam2 {}'.format(camera, blueParam2) if blueParam2 != None else '',
+	'{} SET LCP blueParam3 {}'.format(camera, blueParam3) if blueParam3 != None else '',
+	
+	'{} SET LCP blueParamX {}'.format(camera, blueParamX) if blueParamX != None else '',
+	'{} SET LCP blueParamY {}'.format(camera, blueParamY) if blueParamY != None else '',
+	
+	'{} SET LCP vignetteParam1 {}'.format(camera, vignetteParam1) if vignetteParam1 != None else '',
+	'{} SET LCP vignetteParam2 {}'.format(camera, vignetteParam2) if vignetteParam2 != None else '',
+	'{} SET LCP vignetteParam3 {}'.format(camera, vignetteParam3) if vignetteParam3 != None else '',
+	'{} SET LCP vignetteParam4 {}'.format(camera, vignetteParam4) if vignetteParam4 != None else '',
+		
+		
+	])
+
 def add_lidar(
 	label='Lidar', virtualCamera=None, model='VLP_16',
 	minAz=-180, maxAz=180, minEl=-30, maxEl=30, rpm=900, targetFps=50, pclRenderFps=30,
@@ -1621,10 +1764,9 @@ def spawner(
 				common.send_data('{}/{} SET RandomProps.{} {} {}'.format(prefix, n, method, key, method_parameters[key]), read=False)
 		
 		common.send_data([
-			'{}/{} SET Transform position ({} {} {})'.format(prefix, n, position[0], position[1], position[2]),
-			'{}/{} SET Transform eulerAngles ({} {} {})'.format(prefix, n, rotation[0], rotation[1], rotation[2]),
-			
-			'{}/{} SET Transform localScale ({} {} {})'.format(prefix, n, scale[0], scale[1], scale[2])
+			'{}/{} SET Transform position ({} {} {})'.format(prefix, n, position[0], position[1], position[2]) if position != None else '',
+			'{}/{} SET Transform eulerAngles ({} {} {})'.format(prefix, n, rotation[0], rotation[1], rotation[2]) if rotation != None else '',
+			'{}/{} SET Transform localScale ({} {} {})'.format(prefix, n, scale[0], scale[1], scale[2]) if scale != None else ''
 		], read=False)
 		
 		if segmentation_class != None:
@@ -1936,14 +2078,17 @@ def spawn_drone_objs(
 	if drones_limit[1] > 0:
 		# spawn_radius_generic(['drones'], segmentation_class=drones_segment, random_colors=drones_colors, tags=drones_tags, ugly_fix=False, limit=random.randint(drones_limit[0], drones_limit[1]), radius=random.randint(30,50), innerradius=0, position=[0,0,0], prefix=prefix, seed=seed)
 		spawner(
-			['drones'], segmentation_class=drones_segment, parts_names=drones_parts_names, random_colors=drones_colors, tags=drones_tags, ugly_fix=False, limit=random.randint(drones_limit[0], drones_limit[1]), position=[0,0,0],
+			['drones'], segmentation_class=drones_segment, parts_names=drones_parts_names, random_colors=drones_colors, tags=drones_tags, ugly_fix=False, limit=random.randint(drones_limit[0], drones_limit[1]),
 			# prefix=prefix,
+			# position=[0,0,0],
+			position=None,
 			prefix='cameras/spawner',
 			seed=seed,
 			method='Frustum',
 			method_parameters={'cam': 'cameras/cameraRGB'},
 			min_distance=2,
-			max_distance=5
+			max_distance=5,
+			
 		)
 	
 	if thermal != None:
