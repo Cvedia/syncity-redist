@@ -14,7 +14,7 @@ import random
 
 from syncity import common, settings_manager
 
-SYNCITY_VERSION = '3.2.32'
+SYNCITY_VERSION = '3.2.4'
 
 print ('SynCity toolbox - v{}\nCopyright (c) {} CVEDIA PVE Ltd\n'.format(SYNCITY_VERSION, datetime.date.today().year))
 
@@ -148,8 +148,8 @@ for s in stack:
 	
 	if s == 'run':
 		for subject in settings.run[idx['run']]:
-			syncity.common.output('Running command line script {} {}...'.format(subject, syncity.common.md5(subject)))
-			with open(subjectr) as fp:
+			syncity.common.output('Running command line script {} {}...'.format(subject.name, syncity.common.md5(subject.name)))
+			with open(subject.name) as fp:
 				for line in fp:
 					syncity.common.send_data(line)
 		
