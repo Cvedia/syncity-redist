@@ -10,12 +10,16 @@ import textwrap
 import platform
 import datetime
 import syncity
+import random
 
 from syncity import common, settings_manager
 
-SYNCITY_VERSION = '3.2.31'
+SYNCITY_VERSION = '3.2.32'
 
 print ('SynCity toolbox - v{}\nCopyright (c) {} CVEDIA PVE Ltd\n'.format(SYNCITY_VERSION, datetime.date.today().year))
+
+if sys.version_info[0] < 3:
+	print ('*** WARNING: You\'re using a old version of python that is not maintained by this SDK, some functions might fail. Please use python 3+\n\n')
 
 parser = argparse.ArgumentParser(
 	formatter_class=argparse.RawDescriptionHelpFormatter,
@@ -26,7 +30,8 @@ You can pipe multiple scripts, tools and command line (-r , --run) files on the 
 
 `syncity.py -r path/to/my.cl -s 360 -t gallery -s something something_else -r other.cl -s 360 -t gallery`
 '''),
-	epilog=textwrap.dedent('Scripts available:\n\n{}\n\nTools available:\n\n{}\n\nFull documentation available in: https://docs.syncity.com'.format(common.modules_help('scripts'), common.modules_help('tools'))))
+	epilog=textwrap.dedent('Scripts available:\n\n{}\n\nTools available:\n\n{}\n\nFull documentation available in: https://docs.syncity.com'.format(common.modules_help('scripts'), common.modules_help('tools')))
+)
 
 parser.add_argument('-p', '--port', type=int, default=10200, help='Port to connect, defaults to 10200')
 parser.add_argument('-i', '--ip', default='127.0.0.1', help='IP of syncity simulator')
@@ -49,6 +54,8 @@ parser.add_argument('-q', '--quiet', action='store_true', help='Quiet mode')
 parser.add_argument('-n', '--no_color', action='store_true', default=False, help='Disable color output')
 parser.add_argument('-Z', '--abort_on_error', action='store_true', default=False, help='Abort execution on error')
 parser.add_argument('--assets', help='Defines assets folder name')
+parser.add_argument('--seed', help='Defines a seed number for random methods on python layer. Note that this will be treated as a string.', default=None)
+parser.add_argument('--interactive', action='store_true', help='Drops to a interactive shell after executing stack or when interrupted.', default=False)
 parser.add_argument('--keep', default=False, action='store_true', help='Keep created assets on scene')
 parser.add_argument('--record', action='store_true', help='Record commands sent to API using --local_path as output path')
 parser.add_argument('--debug', action='store_true', help='Defines a global debug flag, this will cause a lot of outputs')
@@ -84,6 +91,7 @@ settings._start = time.time()
 settings._version = SYNCITY_VERSION
 settings._root = os.path.dirname(os.path.realpath(__file__))
 settings.shutdown = False
+settings._interactive = False
 syncity.common.init()
 
 stack = common.find_arg_order([
@@ -113,6 +121,8 @@ else:
 
 if settings.log == True:
 	settings.lfh = open('{}log_{}.txt'.format(settings.local_path, settings._start), 'wb+')
+if settings.random != None:
+	random.seed(settings.random)
 
 # setup telnet connection
 if settings.run != None or settings.script != None:

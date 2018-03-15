@@ -3,6 +3,7 @@ Common static function repository for several internal functions to manage, conn
 
 This functions are accessible from scripts / tools via `common.<function>`
 """
+
 import sys
 import os
 import time
@@ -20,6 +21,7 @@ import errno
 import telnetlib
 import socket
 import colorama
+import code
 
 from . import settings_manager
 from datetime import datetime
@@ -327,6 +329,19 @@ def gracefull_shutdown(a=None, b=None):
 		- Close any file pointers
 		- Exits
 	"""
+	
+	if settings.interactive:
+		if settings._interactive == True:
+			return
+		settings._interactive = True
+		code.interact(local=locals())
+		return
+	
+	if settings.shutdown == True:
+		output('Abort!')
+		sys.exit(0)
+		return
+	
 	settings.shutdown = True
 	output('Shutdown sequence...')
 	

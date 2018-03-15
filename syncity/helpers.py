@@ -7,6 +7,7 @@ import sys
 import time
 import random
 import json
+
 from . import common, settings_manager, unity_vars
 
 # some hardcoded values, this depends on the asset packages you've been given,
@@ -33,7 +34,8 @@ settings = settings_manager.Singleton()
 
 def global_camera_setup(
 	label_root='cameras', canvas_width=1024, canvas_height=768, canvas=None,
-	orbit=True, orbitOffset=None, orbitGround=None, orbitSnap=None, position=None
+	orbit=True, orbitOffset=None, orbitGround=None, orbitSnap=None, position=None,
+	rotation=None
 ):
 	"""
 	Sets up camera root object
@@ -49,7 +51,7 @@ def global_camera_setup(
 	orbitGround (string): Defines a object to orbit ground position from, defaults to `None`
 	orbitSnap (int): Defines a Y snap position from orbited object, defaults to `None`
 	position (list): Defines a position, if not set defaults to X,Y,Z compensation values
-	
+	rotation (list): Defines a rotation, defaults to `None`
 	"""
 	if canvas == None:
 		if settings.disable_canvas:
@@ -67,7 +69,7 @@ def global_camera_setup(
 		'CREATE {}'.format(label_root),
 		'{} SET active false'.format(label_root),
 		'{} SET Transform position ({} {} {})'.format(label_root, settings.X_COMP -6, settings.Y_COMP, settings.Z_COMP -50) if position == None else '{} SET Transform position ({} {} {})'.format(label_root, position[0], position[1], position[2]),
-		'{} SET Transform eulerAngles ({} {} {})'.format(label_root, 0, 0, 0),
+		'{} SET Transform eulerAngles ({} {} {})'.format(label_root, 0, 0, 0) if rotation == None else '{} SET Transform eulerAngles ({} {} {})'.format(label_root, rotation[0], rotation[1], rotation[2]),
 		
 		# orbit
 		'{} ADD Orbit'.format(label_root) if orbit == True else '',
@@ -87,7 +89,8 @@ def add_camera_depth(
 	label='cameras/depth',
 	fov=60,
 	clipping_near=0.3,
-	clipping_far=1000
+	clipping_far=1000,
+	depthBuffer=None
 ):
 	"""
 	Creates a depth camera
@@ -100,9 +103,10 @@ def add_camera_depth(
 	fov (int): Field of view, defaults to `60`
 	clipping_near (float): Near clipping distance, defaults to `0.3` - Objects closer than this distance won't appear
 	clipping_far (float): Far clipping distance, defaults to `1000` - Objects further from this distance won't appear
+	depthBuffer (string): Defines a specific depth buffer configuration to use, if not set fallsback to default, default `None`
 	
 	"""
-	common.send_data([
+	buf = [
 		'CREATE {}'.format(label),
 		'{} SET active false'.format(label),
 		'{} ADD Camera'.format(label),
@@ -113,11 +117,22 @@ def add_camera_depth(
 		'{} SET Sensors.RenderCamera format RFloat'.format(label),
 		'{} SET Sensors.RenderCamera resolution ({} {})'.format(label, width, height),
 		'{} SET Camera renderingPath DeferredShading'.format(label),
-		# '{} ADD AudioListener'.format(label),
-		'{} ADD Sensors.Lidar_Internal.RenderDepthBufferOld'.format(label) if settings.use_old_depth_buffer else '{} ADD CameraDepthOutput'.format(label),
-		# '{} ADD Cameras.RenderDepthBuffer'.format(label),
-		'{} SET active true'.format(label)
-	], read=False)
+	]
+	
+	if depthBuffer == None:
+		buf.append('{} ADD Sensors.Lidar_Internal.RenderDepthBufferOld'.format(label) if settings.use_old_depth_buffer else '{} ADD CameraDepthOutput'.format(label))
+	elif depthBuffer == 'simple':
+		buf.extend([
+			'{} ADD Cameras.RenderDepthBufferSimple'.format(label),
+			'{} SET Cameras.RenderDepthBufferSimple outputMode Linear01Depth'.format(label),
+			'{} SET Cameras.RenderDepthBufferSimple transparencyCutout 0.05'.format(label)
+			#'{} Cameras.RenderDepthBufferSimple drawTransparentObjectsDepth false'.format(label)
+		])
+	else:
+		common.output('Unknown depthBuffer: {}'.format(depthBuffer), 'ERROR')
+	
+	buf.append('{} SET active true'.format(label))
+	common.send_data(buf, read=False)
 	
 	common.flush_buffer()
 	settings.obj.append(label)
@@ -1562,7 +1577,10 @@ def setup_ros_topics(label_root='ROS2', writeLinks=None, readLinks=None):
 	common.send_data([
 		'{} SET active true'.format(label_root)
 	], read=True)
-	
+
+def str_to_seg(s):
+	return s.replace('+', ' ').replace('_', ' ').split(",")[0].split(" ")[0]
+
 def get_random_color(alpha='FF'):
 	"""
 	Generates a random color with configurable alpha channel value
@@ -1673,7 +1691,7 @@ def spawner(
 	stick_to_ground=False, collision_check=True, suffix="", flush=False, prefix='spawner',
 	names=None, ugly_fix=True, seed=None, random_colors=None, random_colors_weights=14,
 	method=None, method_parameters=None, min_distance=None, max_distance=None,
-	parts_names=None
+	parts_names=None, auto_segment=False
 ):
 	"""
 	Creates a torus shaped object spawner
@@ -1701,8 +1719,10 @@ def spawner(
 	method (string): Defines spawner method, defaults to `None`
 	method_parameters (dict): Defines method's parameters, defaults to `None`
 	parts_names (string): Defines a list of parts to be colorized, defaults to `None`
+	auto_segment (bool): Automatically segment objects based on types or tags given, defaults to `False`
 	
 	"""
+	
 	# convert bool to strings
 	if collision_check == True:
 		collision_check = 'true'
@@ -1772,6 +1792,9 @@ def spawner(
 			'{}/{} SET Transform localScale ({} {} {})'.format(prefix, n, scale[0], scale[1], scale[2]) if scale != None else ''
 		], read=False)
 		
+		if segmentation_class == None and auto_segment == True:
+			segmentation_class = str_to_seg(tags[0]) if tags != None else str_to_seg(t)
+		
 		if segmentation_class != None:
 			if isinstance(segmentation_class, list):
 				common.send_data([
@@ -1806,7 +1829,7 @@ def spawn_radius_generic(
 	rotation=[0,0,0], limit=50, segmentation_class=None, orbit=False,
 	stick_to_ground=False, collision_check=True, suffix="", flush=False, prefix='spawner',
 	names=None, ugly_fix=True, seed=None, random_colors=None, random_colors_weights=14,
-	parts_names=None
+	parts_names=None, auto_segment=False
 ):
 	"""
 	Creates a torus shaped object spawner
@@ -1834,6 +1857,7 @@ def spawn_radius_generic(
 	random_colors (int): Defines a number of random colors to assign to spawner, when set to None disables feature, defaults to `None`
 	random_colors_weights (int): Defines a weight for color switching, defaults to `14`
 	parts_names (string): Defines a list of parts to be colorized, defaults to `None`
+	auto_segment (bool): Automatically segment objects based on types or tags given, defaults to `False`
 	
 	"""
 	return spawner(
@@ -1849,7 +1873,7 @@ def spawn_rectangle_generic(
 	types=[], tags=None, scale=[1,1,1], a=1, b=500, position=[0,0,0],
 	rotation=[0,0,0], limit=50, segmentation_class=None, orbit=False,
 	stick_to_ground=False, collision_check=True, suffix="", flush=False, prefix='spawner',
-	names=None, seed=None, random_colors=None, random_colors_weights=14, parts_names=None
+	names=None, seed=None, random_colors=None, random_colors_weights=14, parts_names=None, auto_segment=False
 ):
 	"""
 	Creates a rectangle shaped object spawner
@@ -1876,6 +1900,7 @@ def spawn_rectangle_generic(
 	random_colors (int): Defines a number of random colors to assign to spawner, when set to None disables feature, defaults to `None`
 	random_colors_weights (int): Defines a weight for color switching, defaults to `14`
 	parts_names (string): Defines a list of parts to be colorized, defaults to `None`
+	auto_segment (bool): Automatically segment objects based on types or tags given, defaults to `False`
 	
 	"""
 	return spawner(
@@ -2015,6 +2040,7 @@ def spawn_drone_objs(
 	trees_colors=None, buildings_colors=None, birds_colors=None, cars_colors=None, drones_colors=None,
 	trees_parts_names=None, buildings_parts_names=None, birds_parts_names=None, cars_parts_names=None, drones_parts_names=None,
 	# ground_segment='VOID', trees_segment='VOID', buildings_segment='VOID', birds_segment='VOID', cars_segment='VOID', drones_segment='DRONE',
+	# ground_segment='GROUND', trees_segment='TREE', buildings_segment='BUILDING', birds_segment='BIRD', cars_segment='CAR', drones_segment='DRONE',
 	ground_segment=None, trees_segment=None, buildings_segment=None, birds_segment=None, cars_segment=None, drones_segment='DRONE',
 	thermal=None, seed=None
 ):
