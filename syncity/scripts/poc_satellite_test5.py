@@ -34,12 +34,12 @@ def run():
 		if r == 0:
 			mode = 'rgb'
 			common.send_data([
-				'cameraRGB/cameraSeg SET active false'
+				'"cameraRGB/cameraSeg" SET active false'
 			]);
 		elif r == 1:
 			mode = 'segmentation'
 			common.send_data([
-				'cameraRGB/cameraSeg SET active true'
+				'"cameraRGB/cameraSeg" SET active true'
 			]);
 			
 		
@@ -72,10 +72,10 @@ def run():
 		z_increment = 5
 		
 		common.send_data([
-			'EnviroSky SET EnviroSky weatherSettings.cloudTransitionSpeed {}'.format(100),
-			'EnviroSky SET EnviroSky weatherSettings.effectTransitionSpeed {}'.format(100),
-			'EnviroSky SET EnviroSky weatherSettings.fogTransitionSpeed {}'.format(100),
-			'cameraRGB SET Transform eulerAngles ({} {} {})'.format(60, 90, 0)
+			'"EnviroSky" SET EnviroSky weatherSettings.cloudTransitionSpeed {}'.format(100),
+			'"EnviroSky" SET EnviroSky weatherSettings.effectTransitionSpeed {}'.format(100),
+			'"EnviroSky" SET EnviroSky weatherSettings.fogTransitionSpeed {}'.format(100),
+			'"cameraRGB" SET Transform eulerAngles ({} {} {})'.format(60, 90, 0)
 		], read=True)
 		
 		while x > x_range[1]:
@@ -103,13 +103,13 @@ def run():
 				hour_d = 1
 			
 			buf = [
-				'EnviroSky SET EnviroSky GameTime.Hours {}'.format(hour),
-				'EnviroSky SET EnviroSky GameTime.Minutes {}'.format(minute),
-				'cameraRGB SET Transform position ({} {} {})'.format(x, 777, z)
+				'"EnviroSky" SET EnviroSky GameTime.Hours {}'.format(hour),
+				'"EnviroSky" SET EnviroSky GameTime.Minutes {}'.format(minute),
+				'"cameraRGB" SET Transform position ({} {} {})'.format(x, 777, z)
 			]
 			
 			if loop % 25 == 0:
-				buf.append('EnviroSky EXECUTE EnviroSky ChangeWeather "{}"'.format(random.choice(helpers.weather_lst)))
+				buf.append('"EnviroSky" EXECUTE EnviroSky ChangeWeather "{}"'.format(random.choice(helpers.weather_lst)))
 			
 			common.send_data(buf)
 			common.flush_buffer()

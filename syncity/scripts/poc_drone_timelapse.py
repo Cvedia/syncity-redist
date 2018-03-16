@@ -30,10 +30,10 @@ def run():
 	
 	# reset camera
 	common.send_data([
-		'cameras/cameraRGB SET Camera enabled true',
-		'cameras SET Transform position ({} {} {})'.format(0, 1, 0),
-		'cameras SET Transform eulerAngles ({} {} {})'.format(-20, -45, 0),
-		'EnviroSky SET EnviroSky cloudsMode {}'.format('Volume')
+		'"cameras/cameraRGB" SET Camera enabled true',
+		'"cameras" SET Transform position ({} {} {})'.format(0, 1, 0),
+		'"cameras" SET Transform eulerAngles ({} {} {})'.format(-20, -45, 0),
+		'"EnviroSky" SET EnviroSky cloudsMode "{}"'.format('Volume')
 	])
 	
 	y = 24
@@ -47,21 +47,21 @@ def run():
 	
 	while hour < 19:
 		common.send_data([
-			'spawner/drones SET Transform position ({} {} {})'.format(0, random.randint(2, 25), 0),
-			'spawner/drones SET Transform eulerAngles ({} {} {})'.format(random.randint(-15, 15), random.randint(0, 359), random.randint(-2, 2)),
-			# 'spawner/drones/white SET Transform position ({} {} {})'.format(0, random.randint(2, 25), 0),
-			# 'spawner/drones/white SET Transform eulerAngles ({} {} {})'.format(random.randint(-15, 15), random.randint(0, 359), random.randint(-2, 2)),
-			'spawner/animals/birds SET Transform position ({} {} {})'.format(0, random.randint(5, 75), 0),
-			'spawner/animals/birds SET Transform eulerAngles ({} {} {})'.format(0, random.randint(0, 359), 0),
-			# 'spawner/cars SET Transform eulerAngles ({} {} {})'.format(0, random.randint(0, 359), 0),
-			'spawner/cars SET Transform eulerAngles ({} {} {})'.format(0, -y_slow * 8, 0),
-			'spawner/city/nature SET Transform eulerAngles ({} {} {})'.format(0, y_slow, 0),
-			# 'spawner/city/buildings SET Transform eulerAngles ({} {} {})'.format(0, random.randint(0, 359), 0),
-			# 'cameras SET Transform eulerAngles ({} {} {})'.format(-20, y, 0),
-			# 'city SET Transform eulerAngles ({} {} {})'.format(0, random.randint(0, 359), 0),
-			'EnviroSky SET EnviroSky GameTime.Hours {}'.format(hour),
-			'EnviroSky SET EnviroSky GameTime.Minutes {}'.format(minute),
-			'EnviroSky SET EnviroSky GameTime.Seconds {}'.format(second)
+			'"spawner/drones" SET Transform position ({} {} {})'.format(0, random.randint(2, 25), 0),
+			'"spawner/drones" SET Transform eulerAngles ({} {} {})'.format(random.randint(-15, 15), random.randint(0, 359), random.randint(-2, 2)),
+			# '"spawner/drones/white" SET Transform position ({} {} {})'.format(0, random.randint(2, 25), 0),
+			# '"spawner/drones/white" SET Transform eulerAngles ({} {} {})'.format(random.randint(-15, 15), random.randint(0, 359), random.randint(-2, 2)),
+			'"spawner/animals/birds" SET Transform position ({} {} {})'.format(0, random.randint(5, 75), 0),
+			'"spawner/animals/birds" SET Transform eulerAngles ({} {} {})'.format(0, random.randint(0, 359), 0),
+			# '"spawner/cars" SET Transform eulerAngles ({} {} {})'.format(0, random.randint(0, 359), 0),
+			'"spawner/cars" SET Transform eulerAngles ({} {} {})'.format(0, -y_slow * 8, 0),
+			'"spawner/city/nature" SET Transform eulerAngles ({} {} {})'.format(0, y_slow, 0),
+			# '"spawner/city/buildings" SET Transform eulerAngles ({} {} {})'.format(0, random.randint(0, 359), 0),
+			# '"cameras" SET Transform eulerAngles ({} {} {})'.format(-20, y, 0),
+			# '"city" SET Transform eulerAngles ({} {} {})'.format(0, random.randint(0, 359), 0),
+			'"EnviroSky" SET EnviroSky GameTime.Hours {}'.format(hour),
+			'"EnviroSky" SET EnviroSky GameTime.Minutes {}'.format(minute),
+			'"EnviroSky" SET EnviroSky GameTime.Seconds {}'.format(second)
 		])
 		
 		helpers.take_snapshot(mycams)
@@ -88,7 +88,7 @@ def run():
 		
 		if loop % 30 == 0:
 			common.send_data([
-				'EnviroSky EXECUTE EnviroSky ChangeWeather "{}"'.format(helpers.weather_lst[c]),
+				'"EnviroSky" EXECUTE EnviroSky ChangeWeather "{}"'.format(helpers.weather_lst[c]),
 			])
 			c = c + 1
 			if c > 7:

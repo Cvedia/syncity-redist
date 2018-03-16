@@ -36,14 +36,16 @@ def run():
 	# force a render to visualize on the ui
 	helpers.do_render(mycams)
 	
-	common.send_data(['cameras/cameraRGB SET Transform eulerAngles (90 0 0)'])
-	common.send_data(['cameras/segmentation SET Transform eulerAngles (90 0 0)'])
+	common.send_data([
+		'"cameras/cameraRGB" SET Transform eulerAngles (90 0 0)',
+		'"cameras/segmentation" SET Transform eulerAngles (90 0 0)'
+	])
 	
 	for x in range(-40, 40):
 		for z in range(-40, 40):
 			common.send_data([
-				'cameras/cameraRGB SET Transform position ({} 50 {})'.format(x, z),
-				'cameras/segmentation SET Transform position ({} 50 {})'.format(x, z)
+				'"cameras/cameraRGB" SET Transform position ({} 50 {})'.format(x, z),
+				'"cameras/segmentation" SET Transform position ({} 50 {})'.format(x, z)
 			])
 			
 			# for i in range(0,200):

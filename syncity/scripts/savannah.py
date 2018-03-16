@@ -30,13 +30,13 @@ def run():
 		
 		helpers.add_disk_output(mycams)
 		common.send_data([
-			'cameras/cameraRGB SET Transform position ({} {} {})'.format(0, -10, 0),
-			'CREATE test Terrains/Savannah/Savannah',
-			'cameras/cameraRGB ADD EnviroCamera',
-			'test SET Transform position ({} {} {})'.format(-5000,-180,-5000),
-			'test SET Terrain basemapDistance 2000',
-			'test SET TerrainCollider enabled true',
-			'test SET active true',
+			'"cameras/cameraRGB" SET Transform position ({} {} {})'.format(0, -10, 0),
+			'CREATE "test" Terrains/Savannah/Savannah',
+			'"cameras/cameraRGB" ADD EnviroCamera',
+			'"test" SET Transform position ({} {} {})'.format(-5000,-180,-5000),
+			'"test" SET Terrain basemapDistance 2000',
+			'"test" SET TerrainCollider enabled true',
+			'"test" SET active true',
 			# 'cameras SET Orbit target test'
 		])
 		
@@ -57,12 +57,12 @@ def run():
 		
 		while azimuth < 360:
 			common.send_data([
-				'cameras SET Orbit distance {}'.format(dist),
-				'cameras SET Orbit elevation {}'.format(elevation),
-				'cameras SET Orbit azimuth {}'.format(azimuth),
-				'spawner/animals SET Transform eulerAngles ({} {} {})'.format(0, random.randint(0, 359), 0),
-				'cameras/cameraRGB SET Camera fieldOfView {}'.format(random.randint(50, 120)),
-				'EnviroSky SET EnviroSky GameTime.Hours {}'.format(random.randint(6, 18))
+				'"cameras" SET Orbit distance {}'.format(dist),
+				'"cameras" SET Orbit elevation {}'.format(elevation),
+				'"cameras" SET Orbit azimuth {}'.format(azimuth),
+				'"spawner/animals" SET Transform eulerAngles ({} {} {})'.format(0, random.randint(0, 359), 0),
+				'"cameras/cameraRGB" SET Camera fieldOfView {}'.format(random.randint(50, 120)),
+				'"EnviroSky" SET EnviroSky GameTime.Hours {}'.format(random.randint(6, 18))
 			])
 			
 			helpers.take_snapshot(mycams)

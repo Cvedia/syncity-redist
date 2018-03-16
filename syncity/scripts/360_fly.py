@@ -26,26 +26,26 @@ def run():
 		helpers.global_disk_setup()
 		helpers.add_disk_output(mycams)
 		common.send_data([
-			'CREATE obj {}'.format(obj),
-			'obj ADD Segmentation.ClassGroup',
-			'obj SET Segmentation.ClassGroup itemsClassName Car',
-			'obj SET Transform position ({} {} {})'.format(-6, 0, -9),
-			'obj SET Transform eulerAngles ({} {} {})'.format(0, 0, 0),
+			'CREATE "obj" "{}"'.format(obj),
+			'"obj" ADD Segmentation.ClassGroup',
+			'"obj" SET Segmentation.ClassGroup itemsClassName "Car"',
+			'"obj" SET Transform position ({} {} {})'.format(-6, 0, -9),
+			'"obj" SET Transform eulerAngles ({} {} {})'.format(0, 0, 0),
 			
-			'CREATE city/ground_0 city/ground/Grass',
-			'city/ground_0 SET Transform position (0 0 0)',
-			'city/ground_0 SET Transform localScale (5 5 5)'
+			'CREATE "city/ground_0" "city/ground/Grass"',
+			'"city/ground_0" SET Transform position (0 0 0)',
+			'"city/ground_0" SET Transform localScale (5 5 5)'
 		], read=False)
 	
 	# reset camera
 	common.send_data([
-		'obj SET active true',
-		'cameras/cameraRGB SET Camera enabled true',
-		'cameras SET Transform position ({} {} {})'.format(0, 1, -16),
-		'cameras SET Transform eulerAngles ({} {} {})'.format(0, -40, 0),
-		'EnviroSky SET EnviroSky cloudsMode {}'.format('Volume'),
-		'EnviroSky SET EnviroSky cloudsSettings.globalCloudCoverage {}'.format(-0.04),
-		'EnviroSky EXECUTE EnviroSky ChangeWeather "{}"'.format(helpers.weather_lst[1])
+		'"obj" SET active true',
+		'"cameras/cameraRGB" SET Camera enabled true',
+		'"cameras" SET Transform position ({} {} {})'.format(0, 1, -16),
+		'"cameras" SET Transform eulerAngles ({} {} {})'.format(0, -40, 0),
+		'"EnviroSky" SET EnviroSky cloudsMode "{}"'.format('Volume'),
+		'"EnviroSky" SET EnviroSky cloudsSettings.globalCloudCoverage {}'.format(-0.04),
+		'"EnviroSky" EXECUTE EnviroSky ChangeWeather "{}"'.format(helpers.weather_lst[1])
 	], read=False)
 	
 	common.flush_buffer()
@@ -60,7 +60,7 @@ def run():
 		# do a 360 around object
 		while a_y < 360:
 			common.send_data([
-				'obj SET Transform eulerAngles ({} {} {})'.format(0, a_y, 0)
+				'"obj" SET Transform eulerAngles ({} {} {})'.format(0, a_y, 0)
 			])
 			a_y = a_y + displ_y
 			helpers.take_snapshot(mycams, False)
@@ -70,6 +70,6 @@ def run():
 		a_x = c_y * 4.285714
 		
 		common.send_data([
-			'cameras SET Transform position ({} {} {})'.format(0, c_y, -16),
-			'cameras SET Transform eulerAngles ({} {} {})'.format(a_x, -40, 0)
+			'"cameras" SET Transform position ({} {} {})'.format(0, c_y, -16),
+			'"cameras" SET Transform eulerAngles ({} {} {})'.format(a_x, -40, 0)
 		])

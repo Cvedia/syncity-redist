@@ -37,7 +37,7 @@ def run():
 	dist_e = 5 # elevation increment
 	dist_a = 10 # azimuth increment
 	elevation = 15
-	common.send_data('cameras SET Orbit target cars/car_{}'.format(int(settings.cars_limit / 2))) # get a car roughtly on the center
+	common.send_data('"cameras" SET Orbit target "cars/car_{}"'.format(int(settings.cars_limit / 2))) # get a car roughtly on the center
 	
 	# orbit car in the center
 	while elevation < 90:
@@ -45,9 +45,9 @@ def run():
 		
 		while azimuth < 360:
 			common.send_data([
-				'cameras SET Orbit distance {}'.format(dist),
-				'cameras SET Orbit elevation {}'.format(elevation),
-				'cameras SET Orbit azimuth {}'.format(azimuth)
+				'"cameras" SET Orbit distance {}'.format(dist),
+				'"cameras" SET Orbit elevation {}'.format(elevation),
+				'"cameras" SET Orbit azimuth {}'.format(azimuth)
 			])
 			
 			helpers.take_snapshot(mycams)

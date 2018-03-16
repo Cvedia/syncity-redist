@@ -66,20 +66,20 @@ def global_camera_setup(
 		canvas = 'false'
 	
 	common.send_data([
-		'CREATE {}'.format(label_root),
-		'{} SET active false'.format(label_root),
-		'{} SET Transform position ({} {} {})'.format(label_root, settings.X_COMP -6, settings.Y_COMP, settings.Z_COMP -50) if position == None else '{} SET Transform position ({} {} {})'.format(label_root, position[0], position[1], position[2]),
-		'{} SET Transform eulerAngles ({} {} {})'.format(label_root, 0, 0, 0) if rotation == None else '{} SET Transform eulerAngles ({} {} {})'.format(label_root, rotation[0], rotation[1], rotation[2]),
+		'CREATE "{}"'.format(label_root),
+		'"{}" SET active false'.format(label_root),
+		'"{}" SET Transform position ({} {} {})'.format(label_root, settings.X_COMP -6, settings.Y_COMP, settings.Z_COMP -50) if position == None else '"{}" SET Transform position ({} {} {})'.format(label_root, position[0], position[1], position[2]),
+		'"{}" SET Transform eulerAngles ({} {} {})'.format(label_root, 0, 0, 0) if rotation == None else '"{}" SET Transform eulerAngles ({} {} {})'.format(label_root, rotation[0], rotation[1], rotation[2]),
 		
 		# orbit
-		'{} ADD Orbit'.format(label_root) if orbit == True else '',
-		'{} SET Orbit groundObj "{}"'.format(label_root, orbitGround) if orbitGround != None else '',
-		'{} SET Orbit targetOffset ({} {} {})'.format(label_root, orbitOffset[0], orbitOffset[1], orbitOffset[2]) if orbitOffset != None else '',
-		'{} SET Orbit snapOffset {}'.format(label_root, orbitSnap) if orbitSnap != None else '',
+		'"{}" ADD Orbit'.format(label_root) if orbit == True else '',
+		'"{}" SET Orbit groundObj "{}"'.format(label_root, orbitGround) if orbitGround != None else '',
+		'"{}" SET Orbit targetOffset ({} {} {})'.format(label_root, orbitOffset[0], orbitOffset[1], orbitOffset[2]) if orbitOffset != None else '',
+		'"{}" SET Orbit snapOffset {}'.format(label_root, orbitSnap) if orbitSnap != None else '',
 		
 		# resize camera display on app, this is relative to the size of the window
-		'Canvas/Cameras/Viewport/Content SET UI.GridLayoutGroup cellSize ({} {})'.format(canvas_width, canvas_height),
-		'Canvas SET active {}'.format(canvas)
+		'"Canvas/Cameras/Viewport/Content" SET UI.GridLayoutGroup cellSize ({} {})'.format(canvas_width, canvas_height),
+		'"Canvas" SET active {}'.format(canvas)
 	], read=False)
 	
 	settings.obj.append(label_root)
@@ -107,31 +107,31 @@ def add_camera_depth(
 	
 	"""
 	buf = [
-		'CREATE {}'.format(label),
-		'{} SET active false'.format(label),
-		'{} ADD Camera'.format(label),
-		'{} SET Camera near {}'.format(label, clipping_near),
-		'{} SET Camera far {}'.format(label, clipping_far),
-		'{} SET Camera fov {}'.format(label, fov),
-		'{} ADD Sensors.RenderCamera'.format(label),
-		'{} SET Sensors.RenderCamera format RFloat'.format(label),
-		'{} SET Sensors.RenderCamera resolution ({} {})'.format(label, width, height),
-		'{} SET Camera renderingPath DeferredShading'.format(label),
+		'CREATE "{}"'.format(label),
+		'"{}" SET active false'.format(label),
+		'"{}" ADD Camera'.format(label),
+		'"{}" SET Camera near {}'.format(label, clipping_near),
+		'"{}" SET Camera far {}'.format(label, clipping_far),
+		'"{}" SET Camera fieldOfView {}'.format(label, fov),
+		'"{}" ADD Sensors.RenderCamera'.format(label),
+		'"{}" SET Sensors.RenderCamera format "RFloat"'.format(label),
+		'"{}" SET Sensors.RenderCamera resolution ({} {})'.format(label, width, height),
+		'"{}" SET Camera renderingPath "DeferredShading"'.format(label),
 	]
 	
 	if depthBuffer == None:
-		buf.append('{} ADD Sensors.Lidar_Internal.RenderDepthBufferOld'.format(label) if settings.use_old_depth_buffer else '{} ADD CameraDepthOutput'.format(label))
+		buf.append('"{}" ADD Sensors.Lidar_Internal.RenderDepthBufferOld'.format(label) if settings.use_old_depth_buffer else '"{}" ADD CameraDepthOutput'.format(label))
 	elif depthBuffer == 'simple':
 		buf.extend([
-			'{} ADD Cameras.RenderDepthBufferSimple'.format(label),
-			'{} SET Cameras.RenderDepthBufferSimple outputMode Linear01Depth'.format(label),
-			'{} SET Cameras.RenderDepthBufferSimple transparencyCutout 0.05'.format(label)
-			#'{} Cameras.RenderDepthBufferSimple drawTransparentObjectsDepth false'.format(label)
+			'"{}" ADD Cameras.RenderDepthBufferSimple'.format(label),
+			'"{}" SET Cameras.RenderDepthBufferSimple outputMode "Linear01Depth"'.format(label),
+			'"{}" SET Cameras.RenderDepthBufferSimple transparencyCutout 0.05'.format(label)
+			#'"{}" Cameras.RenderDepthBufferSimple drawTransparentObjectsDepth false'.format(label)
 		])
 	else:
 		common.output('Unknown depthBuffer: {}'.format(depthBuffer), 'ERROR')
 	
-	buf.append('{} SET active true'.format(label))
+	buf.append('"{}" SET active true'.format(label))
 	common.send_data(buf, read=False)
 	
 	common.flush_buffer()
@@ -183,55 +183,56 @@ def add_camera_rgb(
 			envirosky = True
 	
 	common.send_data([
-		'CREATE {}'.format(label),
-		'{} SET active false'.format(label),
-		'{} ADD Camera'.format(label),
-		'{} SET Camera near {}'.format(label, clipping_near),
-		'{} SET Camera far {}'.format(label, clipping_far),
-		'{} SET Camera fov {}'.format(label, fov)
+		'CREATE "{}"'.format(label),
+		'"{}" SET active false'.format(label),
+		'"{}" ADD Camera'.format(label),
+		'"{}" SET Camera near {}'.format(label, clipping_near),
+		'"{}" SET Camera far {}'.format(label, clipping_far),
+		'"{}" SET Camera fieldOfView {}'.format(label, fov)
 	], read=False)
 	
 	if renderCamera:
 		common.send_data([
-			'{} ADD Sensors.RenderCamera'.format(label),
+			'"{}" ADD Sensors.RenderCamera'.format(label),
 			
-			# '{} SET Sensors.RenderCamera sRGB true'.format(label),
-			'{} SET Sensors.RenderCamera format {}'.format(label, unity_vars.textureFormat[textureFormat]),
-			'{} SET Sensors.RenderCamera resolution ({} {})'.format(label, width, height),
-			'{} SET Camera renderingPath {}'.format(label, unity_vars.renderingPath[renderingPath]),
+			# '"{}" SET Sensors.RenderCamera sRGB true'.format(label),
+			'"{}" SET Sensors.RenderCamera format "{}"'.format(label, unity_vars.textureFormat[textureFormat]),
+			'"{}" SET Sensors.RenderCamera resolution ({} {})'.format(label, width, height),
+			'"{}" SET Camera renderingPath "{}"'.format(label, unity_vars.renderingPath[renderingPath]),
 			
 			# 'cameras/cameraRGB SET Camera targetTexture.antiAliasing 8',
 			# 'cameras/cameraRGB SET active true',
 		], read=False)
 	
 	if audio:
-		common.send_data(['{} ADD AudioListener'.format(label)], read=False)
+		common.send_data(['"{}" ADD AudioListener'.format(label)], read=False)
 	if flycam:
 		common.send_data([
-			'{} ADD FlyCamera'.format(label),
-			'{} SET FlyCamera enabled true'.format(label)
+			'"{}" ADD FlyCamera'.format(label),
+			'"{}" SET FlyCamera enabled true'.format(label)
 		], read=False)
 	if envirosky:
 		common.send_data([
-			'CREATE EnviroSky EnviroSky',
-			'EnviroSky SET EnviroSky Player {}'.format(label_root),
-			'EnviroSky SET EnviroSky PlayerCamera {}'.format(label),
+			# NOTE: This is a prefab that already contains the EnviroSky default profile
+			'CREATE "EnviroSky" AS "EnviroSky"',
+			'"EnviroSky" SET EnviroSky Player "{}"'.format(label_root),
+			'"EnviroSky" SET EnviroSky PlayerCamera "{}"'.format(label),
 			
 			# time progression
-			'EnviroSky SET EnviroSky GameTime.ProgressTime {}'.format(envirosky_progressTime),
+			'"EnviroSky" SET EnviroSky GameTime.ProgressTime "{}"'.format(envirosky_progressTime),
 			
 			# skip weather transitions
-			'EnviroSky SET EnviroSky weatherSettings.cloudTransitionSpeed {}'.format(envirosky_cloudTransitionSpeed),
-			'EnviroSky SET EnviroSky weatherSettings.effectTransitionSpeed {}'.format(envirosky_effectTransitionSpeed),
-			'EnviroSky SET EnviroSky weatherSettings.fogTransitionSpeed {}'.format(envirosky_fogTransitionSpeed),
+			'"EnviroSky" SET EnviroSky weatherSettings.cloudTransitionSpeed {}'.format(envirosky_cloudTransitionSpeed),
+			'"EnviroSky" SET EnviroSky weatherSettings.effectTransitionSpeed {}'.format(envirosky_effectTransitionSpeed),
+			'"EnviroSky" SET EnviroSky weatherSettings.fogTransitionSpeed {}'.format(envirosky_fogTransitionSpeed),
 			
-			'{} ADD EnviroCamera'.format(label),
-			'EnviroSky SET active true'.format(label)
+			'"{}" ADD EnviroCamera'.format(label),
+			'"EnviroSky" SET active true'.format(label)
 		], read=False)
 	
 	common.send_data([
-		'{} SET active true'.format(label_root),
-		'{} SET active true'.format(label)
+		'"{}" SET active true'.format(label_root),
+		'"{}" SET active true'.format(label)
 	], read=False)
 	
 	common.flush_buffer()
@@ -312,75 +313,75 @@ def add_camera_thermal(
 	
 	"""
 	common.send_data([
-		'CREATE {}'.format(label),
-		'{} SET active false'.format(label),
-		'{} ADD Camera'.format(label),
-		'{} SET Camera near {}'.format(label, clipping_near),
-		'{} SET Camera far {}'.format(label, clipping_far),
-		'{} SET Camera fov {}'.format(label, fov)
+		'CREATE "{}"'.format(label),
+		'"{}" SET active false'.format(label),
+		'"{}" ADD Camera'.format(label),
+		'"{}" SET Camera near {}'.format(label, clipping_near),
+		'"{}" SET Camera far {}'.format(label, clipping_far),
+		'"{}" SET Camera fieldOfView {}'.format(label, fov)
 	], read=False)
 	
 	if renderCamera:
 		common.send_data([
-			'{} ADD Sensors.RenderCamera'.format(label),
+			'"{}" ADD Sensors.RenderCamera'.format(label),
 			
-			'{} SET Sensors.RenderCamera format {}'.format(label, unity_vars.textureFormat[textureFormat]),
-			'{} SET Sensors.RenderCamera resolution ({} {})'.format(label, width, height),
-			'{} SET Camera renderingPath {}'.format(label, unity_vars.renderingPath[renderingPath])
+			'"{}" SET Sensors.RenderCamera format "{}"'.format(label, unity_vars.textureFormat[textureFormat]),
+			'"{}" SET Sensors.RenderCamera resolution ({} {})'.format(label, width, height),
+			'"{}" SET Camera renderingPath "{}"'.format(label, unity_vars.renderingPath[renderingPath])
 		], read=False)
 	
 	if audio:
-		common.send_data(['{} ADD AudioListener'.format(label)], read=False)
+		common.send_data(['"{}" ADD AudioListener'.format(label)], read=False)
 	
 	common.send_data([
-		'{} ADD Thermal.ThermalCamera'.format(label),
-		'{} SET Thermal.ThermalCamera enabled false'.format(label)
+		'"{}" ADD Thermal.ThermalCamera'.format(label),
+		'"{}" SET Thermal.ThermalCamera enabled false'.format(label)
 	], read=False)
 	
 	if patchyness:
 		common.send_data([
-			'{} ADD CameraFilterPack_Pixelisation_DeepOilPaintHQ'.format(label),
-			'{} SET CameraFilterPack_Pixelisation_DeepOilPaintHQ enabled false'.format(label),
-			'{} SET CameraFilterPack_Pixelisation_DeepOilPaintHQ _FixDistance {}'.format(label, patchyness_fixDistance),
-			'{} SET CameraFilterPack_Pixelisation_DeepOilPaintHQ _Distance {}'.format(label, patchyness_distance),
-			'{} SET CameraFilterPack_Pixelisation_DeepOilPaintHQ _Size {}'.format(label, patchyness_size),
-			'{} SET CameraFilterPack_Pixelisation_DeepOilPaintHQ Intensity {}'.format(label, patchyness_intensity),
-			'{} SET CameraFilterPack_Pixelisation_DeepOilPaintHQ enabled true'.format(label)
+			'"{}" ADD CameraFilterPack_Pixelisation_DeepOilPaintHQ'.format(label),
+			'"{}" SET CameraFilterPack_Pixelisation_DeepOilPaintHQ enabled false'.format(label),
+			'"{}" SET CameraFilterPack_Pixelisation_DeepOilPaintHQ _FixDistance {}'.format(label, patchyness_fixDistance),
+			'"{}" SET CameraFilterPack_Pixelisation_DeepOilPaintHQ _Distance {}'.format(label, patchyness_distance),
+			'"{}" SET CameraFilterPack_Pixelisation_DeepOilPaintHQ _Size {}'.format(label, patchyness_size),
+			'"{}" SET CameraFilterPack_Pixelisation_DeepOilPaintHQ Intensity {}'.format(label, patchyness_intensity),
+			'"{}" SET CameraFilterPack_Pixelisation_DeepOilPaintHQ enabled true'.format(label)
 		], read=False)
 	
 	if blur:
 		common.send_data([
-			'{} ADD CameraFilterPack_Blur_Noise'.format(label),
-			'{} SET CameraFilterPack_Blur_Noise enabled false'.format(label),
-			'{} SET CameraFilterPack_Blur_Noise Distance ({} {})'.format(label, blur_noise[0], blur_noise[1]),
-			'{} SET CameraFilterPack_Blur_Noise enabled true'.format(label)
+			'"{}" ADD CameraFilterPack_Blur_Noise'.format(label),
+			'"{}" SET CameraFilterPack_Blur_Noise enabled false'.format(label),
+			'"{}" SET CameraFilterPack_Blur_Noise Distance ({} {})'.format(label, blur_noise[0], blur_noise[1]),
+			'"{}" SET CameraFilterPack_Blur_Noise enabled true'.format(label)
 		], read=False)
 	
 	if trees:
 		common.send_data([
-			'{} ADD Thermal.GlobalTreeSettings'.format(label),
-			'{} SET Thermal.GlobalTreeSettings enabled false'.format(label),
-			'{} SET Thermal.GlobalTreeSettings temperature {}'.format(label, trees_base),
-			'{} SET Thermal.GlobalTreeSettings temperatureBandwidth {}'.format(label, trees_bandwidth),
-			'{} SET Thermal.GlobalTreeSettings temperatureMedian {}'.format(label, trees_median),
-			'{} SET Thermal.GlobalTreeSettings treeLeafsHeatVariance {}'.format(label, trees_leafs_variance),
-			'{} SET Thermal.GlobalTreeSettings enabled true'.format(label)
+			'"{}" ADD Thermal.GlobalTreeSettings'.format(label),
+			'"{}" SET Thermal.GlobalTreeSettings enabled false'.format(label),
+			'"{}" SET Thermal.GlobalTreeSettings temperature {}'.format(label, trees_base),
+			'"{}" SET Thermal.GlobalTreeSettings temperatureBandwidth {}'.format(label, trees_bandwidth),
+			'"{}" SET Thermal.GlobalTreeSettings temperatureMedian {}'.format(label, trees_median),
+			'"{}" SET Thermal.GlobalTreeSettings treeLeafsHeatVariance {}'.format(label, trees_leafs_variance),
+			'"{}" SET Thermal.GlobalTreeSettings enabled true'.format(label)
 		], read=False);
 
 	common.send_data([
-		'{} ADD UnityEngine.PostProcessing.PostProcessingBehaviour'.format(label),
-		'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile Thermal'.format(label),
+		'"{}" ADD UnityEngine.PostProcessing.PostProcessingBehaviour'.format(label),
+		'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile "Thermal"'.format(label),
 		
-		'{} SET Thermal.ThermalCamera ambientTemperature {}'.format(label, ambientTemperature),
-		'{} SET Thermal.ThermalCamera temperatureRange ({} {})'.format(label, minimumTemperature, maximumTemperature),
+		'"{}" SET Thermal.ThermalCamera ambientTemperature {}'.format(label, ambientTemperature),
+		'"{}" SET Thermal.ThermalCamera temperatureRange ({} {})'.format(label, minimumTemperature, maximumTemperature),
 		
-		'{} SET Thermal.ThermalCamera maxDistanceForProbeUpdate {}'.format(label, maxDistanceForProbeUpdate),
-		'{} SET Thermal.ThermalCamera useAGC {}'.format(label, useAGC),
-		'{} SET Thermal.ThermalCamera enabled true'.format(label)
+		'"{}" SET Thermal.ThermalCamera maxDistanceForProbeUpdate {}'.format(label, maxDistanceForProbeUpdate),
+		'"{}" SET Thermal.ThermalCamera useAGC {}'.format(label, useAGC),
+		'"{}" SET Thermal.ThermalCamera enabled true'.format(label)
 	], read=False)
 		
 	common.send_data([
-		'{} SET active true'.format(label)
+		'"{}" SET active true'.format(label)
 	], read=False)
 	
 	common.flush_buffer()
@@ -392,62 +393,62 @@ def camera_pp_thermal(label='cameras/cameraRGB'):
 	This is a dummy function that demonstrates all possible configurable values on a camera profile, in this case we're showing off all parameters tuned to a thermal profile
 	"""
 	common.send_data([
-		'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.antialiasing.enabled false'.format(label),
-		'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.ambientOcclusion.enabled false'.format(label),
+		'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.antialiasing.enabled false'.format(label),
+		'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.ambientOcclusion.enabled false'.format(label),
 		
-		'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.bloom.enabled true'.format(label),
-		'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.bloom.settings.bloom.intensity {}'.format(label, 2),
-		'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.bloom.settings.bloom.threshold {}'.format(label, 1.1),
-		'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.bloom.settings.bloom.softKnee {}'.format(label, .6),
-		'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.bloom.settings.bloom.radius {}'.format(label, 4.36),
-		'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.bloom.settings.bloom.antiFlicker {}'.format(label, 'true'),
-		'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.bloom.settings.lensDirt.intensity {}'.format(label, 3),
+		'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.bloom.enabled true'.format(label),
+		'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.bloom.settings.bloom.intensity {}'.format(label, 2),
+		'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.bloom.settings.bloom.threshold {}'.format(label, 1.1),
+		'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.bloom.settings.bloom.softKnee {}'.format(label, .6),
+		'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.bloom.settings.bloom.radius {}'.format(label, 4.36),
+		'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.bloom.settings.bloom.antiFlicker {}'.format(label, 'true'),
+		'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.bloom.settings.lensDirt.intensity {}'.format(label, 3),
 		
-		'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.enabled false'.format(label),
+		'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.enabled false'.format(label),
 		
-		'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.enabled false'.format(label),
+		'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.enabled false'.format(label),
 		
-		'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.depthOfField.enabled false'.format(label),
-		'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.dithering.enabled false'.format(label),
-		'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.eyeAdaptation.enabled false'.format(label),
-		'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.fog.enabled false'.format(label),
+		'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.depthOfField.enabled false'.format(label),
+		'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.dithering.enabled false'.format(label),
+		'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.eyeAdaptation.enabled false'.format(label),
+		'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.fog.enabled false'.format(label),
 		
-		'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.grain.enabled true'.format(label),
-		'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.grain.settings.colored 1'.format(label),
-		'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.grain.settings.intensity 0.68'.format(label),
-		'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.grain.settings.luminanceContribution 1'.format(label),
-		'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.grain.settings.size 0.3'.format(label),
+		'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.grain.enabled true'.format(label),
+		'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.grain.settings.colored 1'.format(label),
+		'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.grain.settings.intensity 0.68'.format(label),
+		'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.grain.settings.luminanceContribution 1'.format(label),
+		'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.grain.settings.size 0.3'.format(label),
 		
-		'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false'.format(label),
-		'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.screenSpaceReflection.enabled false'.format(label),
-		'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.vignette.enabled false'.format(label),
+		'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false'.format(label),
+		'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.screenSpaceReflection.enabled false'.format(label),
+		'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.vignette.enabled false'.format(label),
 	], read=False)
 
 # WARNING: It's not recommended to use Scion with Envirosky
 def add_camera_rgb_pp(profile='Profile2', scion=False, label='cameras/cameraRGB'):
 	common.send_data([
 		# 'cameras/cameraRGB SET active false',
-		'{} ADD UnityEngine.PostProcessing.PostProcessingBehaviour'.format(label),
-		'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile {}'.format(label, profile)
+		'"{}" ADD UnityEngine.PostProcessing.PostProcessingBehaviour'.format(label),
+		'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile "{}"'.format(label, profile)
 	], read=False)
 	
 	if scion:
 		if not settings.disable_envirosky:
 			common.output('WARNING: Using scion with envirosky is not recommended')
 		common.send_data([
-			'{} ADD ScionEngine.ScionPostProcess'.format(label),
-			'{} SET ScionEngine.ScionPostProcess bloom true'.format(label),
-			'{} SET ScionEngine.ScionPostProcess bloomIntensity 0.3'.format(label),
-			'{} SET ScionEngine.ScionPostProcess grain false'.format(label),
-			'{} SET ScionEngine.ScionPostProcess vignette false'.format(label),
-			'{} SET ScionEngine.ScionPostProcess chromaticAberration false'.format(label),
-			'{} SET ScionEngine.ScionPostProcess lensFlare false'.format(label),
-			'{} SET ScionEngine.ScionPostProcess lensDirt false'.format(label),
-			'{} SET ScionEngine.ScionPostProcess depthOfField false'.format(label),
-			# '{} SET active true'
+			'"{}" ADD ScionEngine.ScionPostProcess'.format(label),
+			'"{}" SET ScionEngine.ScionPostProcess bloom true'.format(label),
+			'"{}" SET ScionEngine.ScionPostProcess bloomIntensity 0.3'.format(label),
+			'"{}" SET ScionEngine.ScionPostProcess grain false'.format(label),
+			'"{}" SET ScionEngine.ScionPostProcess vignette false'.format(label),
+			'"{}" SET ScionEngine.ScionPostProcess chromaticAberration false'.format(label),
+			'"{}" SET ScionEngine.ScionPostProcess lensFlare false'.format(label),
+			'"{}" SET ScionEngine.ScionPostProcess lensDirt false'.format(label),
+			'"{}" SET ScionEngine.ScionPostProcess depthOfField false'.format(label),
+			# '"{}" SET active true'
 		], read=False)
 	else:
-		common.send_data('{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false'.format(label))
+		common.send_data('"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false'.format(label))
 	
 	common.flush_buffer()
 	settings.obj.append(label)
@@ -472,354 +473,354 @@ def camera_rgb_pp_random(label='cameras/cameraRGB'):
 	# antialiasing
 	if bool(random.getrandbits(1)):
 		common.send_data([
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.antialiasing.enabled true'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.antialiasing.settings.fxaaSettings.preset 4'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.antialiasing.settings.method 0'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.antialiasing.settings.taaSettings.jitterSpread 0.75'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.antialiasing.settings.taaSettings.motionBlending 0.85'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.antialiasing.settings.taaSettings.sharpen 0.3'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.antialiasing.settings.taaSettings.stationaryBlending 0.95'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.antialiasing.enabled true'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.antialiasing.settings.fxaaSettings.preset 4'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.antialiasing.settings.method 0'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.antialiasing.settings.taaSettings.jitterSpread 0.75'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.antialiasing.settings.taaSettings.motionBlending 0.85'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.antialiasing.settings.taaSettings.sharpen 0.3'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.antialiasing.settings.taaSettings.stationaryBlending 0.95'.format(label),
 		], read=False)
 	else:
 		common.send_data([
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.antialiasing.enabled false'.format(label)
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.antialiasing.enabled false'.format(label)
 		], read=False)
 	
 	# ambient occlusion
 	if bool(random.getrandbits(1)):
 		common.send_data([
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.ambientOcclusion.enabled true'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.ambientOcclusion.settings.intensity 2'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.ambientOcclusion.settings.radius 0.3'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.ambientOcclusion.settings.sampleCount 10'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.ambientOcclusion.settings.downsampling 1'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.ambientOcclusion.settings.forceForwardCompatibility 0'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.ambientOcclusion.settings.ambientOnly 1'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.ambientOcclusion.settings.highPrecision 0'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.ambientOcclusion.enabled true'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.ambientOcclusion.settings.intensity 2'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.ambientOcclusion.settings.radius 0.3'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.ambientOcclusion.settings.sampleCount 10'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.ambientOcclusion.settings.downsampling 1'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.ambientOcclusion.settings.forceForwardCompatibility 0'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.ambientOcclusion.settings.ambientOnly 1'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.ambientOcclusion.settings.highPrecision 0'.format(label),
 		], read=False)
 	else:
 		common.send_data([
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.ambientOcclusion.enabled false'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.ambientOcclusion.enabled false'.format(label),
 		], read=False)
 	
 	# blooming effects
 	if bool(random.getrandbits(1)):
 		common.send_data([
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.bloom.enabled true'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.bloom.settings.bloom.intensity {}'.format(label, random.randint(0, 100)),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.bloom.settings.bloom.threshold {}'.format(label, random.uniform(0, 2)),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.bloom.settings.bloom.softKnee {}'.format(label, random.uniform(0, 1)),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.bloom.settings.bloom.radius {}'.format(label, random.uniform(1, 7)),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.bloom.settings.bloom.antiFlicker {}'.format(label, 'true'),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.bloom.settings.lensDirt.intensity {}'.format(label, random.randint(0, 10)),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.bloom.enabled true'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.bloom.settings.bloom.intensity {}'.format(label, random.randint(0, 100)),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.bloom.settings.bloom.threshold {}'.format(label, random.uniform(0, 2)),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.bloom.settings.bloom.softKnee {}'.format(label, random.uniform(0, 1)),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.bloom.settings.bloom.radius {}'.format(label, random.uniform(1, 7)),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.bloom.settings.bloom.antiFlicker {}'.format(label, 'true'),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.bloom.settings.lensDirt.intensity {}'.format(label, random.randint(0, 10)),
 		], read=False)
 	else:
-		common.send_data(['{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.bloom.enabled false'.format(label)], read=False)
+		common.send_data(['"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.bloom.enabled false'.format(label)], read=False)
 	
 	# chromatic aberration
 	if bool(random.getrandbits(1)):
 		common.send_data([
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.enabled true'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.475'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.spectralTexture.fileID 0'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.enabled true'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.475'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.spectralTexture.fileID 0'.format(label),
 		], read=False)
 	else:
 		common.send_data([
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.enabled false'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.enabled false'.format(label),
 		], read=False)
 	
 	# color grading
 	if bool(random.getrandbits(1)):
 		common.send_data([
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.enabled true'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.027'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.hueShift 0'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.postExposure 0.5'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.188'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.temperature 13.8'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.tint 0'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.channelMixer.blue.x 0'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.channelMixer.blue.y 0'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.channelMixer.blue.z 1'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.channelMixer.currentEditingChannel 2'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.channelMixer.green.x 0'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.channelMixer.green.y 1'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.channelMixer.green.z 0'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.channelMixer.red.x 1'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.channelMixer.red.y 0'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.channelMixer.red.z 0'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.colorWheels.linear.gain.a 0'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.colorWheels.linear.gain.b 0'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.colorWheels.linear.gain.g 0'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.colorWheels.linear.gain.r 0'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.colorWheels.linear.gamma.a 0'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.colorWheels.linear.gamma.b 0'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.colorWheels.linear.gamma.g 0'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.colorWheels.linear.gamma.r 0'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.colorWheels.linear.lift.a 0'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.colorWheels.linear.lift.b 0'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.colorWheels.linear.lift.g 0'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.colorWheels.linear.lift.r 0'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.colorWheels.log.offset.a 0'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.colorWheels.log.offset.b 1'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.colorWheels.log.offset.g 1'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.colorWheels.log.offset.r 1'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.colorWheels.log.power.a 0'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.colorWheels.log.power.b 1'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.colorWheels.log.power.g 1'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.colorWheels.log.power.r 1'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.colorWheels.log.slope.a 0'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.colorWheels.log.slope.b 1'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.colorWheels.log.slope.g 1'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.colorWheels.log.slope.r 1'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.colorWheels.mode 1'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.blue.curve.m_Curve.0.inSlope 1'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.blue.curve.m_Curve.0.outSlope 1'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.blue.curve.m_Curve.0.serializedVersion 2'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.blue.curve.m_Curve.0.tangentMode 0'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.blue.curve.m_Curve.0.time 0'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.blue.curve.m_Curve.0.value 0'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.blue.curve.m_Curve.1.inSlope 1'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.blue.curve.m_Curve.1.outSlope 1'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.blue.curve.m_Curve.1.serializedVersion 2'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.blue.curve.m_Curve.1.tangentMode 0'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.blue.curve.m_Curve.1.time 1'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.blue.curve.m_Curve.1.value 1'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.blue.curve.m_PostInfinity 2'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.blue.curve.m_PreInfinity 2'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.blue.curve.m_RotationOrder 4'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.blue.curve.serializedVersion 2'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.blue.m_Loop 0'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.blue.m_Range 1'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.blue.m_ZeroValue 0'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.e_CurrentEditingCurve 0'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.e_CurveB 0'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.e_CurveG 0'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.e_CurveR 0'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.e_CurveY 1'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.green.curve.m_Curve.0.inSlope 1'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.green.curve.m_Curve.0.outSlope 1'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.green.curve.m_Curve.0.serializedVersion 2'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.green.curve.m_Curve.0.tangentMode 0'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.green.curve.m_Curve.0.time 0'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.green.curve.m_Curve.0.value 0'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.green.curve.m_Curve.1.inSlope 1'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.green.curve.m_Curve.1.outSlope 1'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.green.curve.m_Curve.1.serializedVersion 2'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.green.curve.m_Curve.1.tangentMode 0'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.green.curve.m_Curve.1.time 1'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.green.curve.m_Curve.1.value 1'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.green.curve.m_PostInfinity 2'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.green.curve.m_PreInfinity 2'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.green.curve.m_RotationOrder 4'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.green.curve.serializedVersion 2'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.green.m_Loop 0'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.green.m_Range 1'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.green.m_ZeroValue 0'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.hueVShue.curve.m_PostInfinity 2'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.hueVShue.curve.m_PreInfinity 2'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.hueVShue.curve.m_RotationOrder 4'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.hueVShue.curve.serializedVersion 2'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.hueVShue.m_Loop 1'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.hueVShue.m_Range 1'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.hueVShue.m_ZeroValue 0.5'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.hueVSsat.curve.m_PostInfinity 2'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.hueVSsat.curve.m_PreInfinity 2'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.hueVSsat.curve.m_RotationOrder 4'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.hueVSsat.curve.serializedVersion 2'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.hueVSsat.m_Loop 1'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.hueVSsat.m_Range 1'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.hueVSsat.m_ZeroValue 0.5'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.lumVSsat.curve.m_PostInfinity 2'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.lumVSsat.curve.m_PreInfinity 2'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.lumVSsat.curve.m_RotationOrder 4'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.lumVSsat.curve.serializedVersion 2'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.lumVSsat.m_Loop 0'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.lumVSsat.m_Range 1'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.lumVSsat.m_ZeroValue 0.5'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.master.curve.m_Curve.0.inSlope 1'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.master.curve.m_Curve.0.outSlope 1'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.master.curve.m_Curve.0.serializedVersion 2'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.master.curve.m_Curve.0.tangentMode 0'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.master.curve.m_Curve.0.time 0'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.master.curve.m_Curve.0.value 0'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.master.curve.m_Curve.1.inSlope 1'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.master.curve.m_Curve.1.outSlope 1'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.master.curve.m_Curve.1.serializedVersion 2'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.master.curve.m_Curve.1.tangentMode 0'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.master.curve.m_Curve.1.time 1'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.master.curve.m_Curve.1.value 1'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.master.curve.m_PostInfinity 2'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.master.curve.m_PreInfinity 2'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.master.curve.m_RotationOrder 0'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.master.curve.serializedVersion 2'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.master.m_Loop 0'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.master.m_Range 1'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.master.m_ZeroValue 0'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.red.curve.m_Curve.0.inSlope 1'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.red.curve.m_Curve.0.outSlope 1'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.red.curve.m_Curve.0.serializedVersion 2'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.red.curve.m_Curve.0.tangentMode 0'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.red.curve.m_Curve.0.time 0'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.red.curve.m_Curve.0.value 0'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.red.curve.m_Curve.1.inSlope 1'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.red.curve.m_Curve.1.outSlope 1'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.red.curve.m_Curve.1.serializedVersion 2'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.red.curve.m_Curve.1.tangentMode 0'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.red.curve.m_Curve.1.time 1'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.red.curve.m_Curve.1.value 1'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.red.curve.m_PostInfinity 2'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.red.curve.m_PreInfinity 2'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.red.curve.m_RotationOrder 4'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.red.curve.serializedVersion 2'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.red.m_Loop 0'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.red.m_Range 1'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.red.m_ZeroValue 0'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.satVSsat.curve.m_PostInfinity 2'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.satVSsat.curve.m_PreInfinity 2'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.satVSsat.curve.m_RotationOrder 4'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.satVSsat.curve.serializedVersion 2'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.satVSsat.m_Loop 0'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.satVSsat.m_Range 1'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.satVSsat.m_ZeroValue 0.5'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.tonemapping.neutralBlackIn 0.0073'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.tonemapping.neutralBlackOut 0.0113'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.tonemapping.neutralWhiteClip 10'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.tonemapping.neutralWhiteIn 15'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.tonemapping.neutralWhiteLevel 5.62'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.tonemapping.neutralWhiteOut 15.49'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.tonemapping.tonemapper "2"'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.enabled true'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.027'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.hueShift 0'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.postExposure 0.5'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.188'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.temperature 13.8'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.tint 0'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.channelMixer.blue.x 0'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.channelMixer.blue.y 0'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.channelMixer.blue.z 1'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.channelMixer.currentEditingChannel 2'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.channelMixer.green.x 0'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.channelMixer.green.y 1'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.channelMixer.green.z 0'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.channelMixer.red.x 1'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.channelMixer.red.y 0'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.channelMixer.red.z 0'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.colorWheels.linear.gain.a 0'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.colorWheels.linear.gain.b 0'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.colorWheels.linear.gain.g 0'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.colorWheels.linear.gain.r 0'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.colorWheels.linear.gamma.a 0'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.colorWheels.linear.gamma.b 0'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.colorWheels.linear.gamma.g 0'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.colorWheels.linear.gamma.r 0'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.colorWheels.linear.lift.a 0'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.colorWheels.linear.lift.b 0'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.colorWheels.linear.lift.g 0'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.colorWheels.linear.lift.r 0'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.colorWheels.log.offset.a 0'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.colorWheels.log.offset.b 1'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.colorWheels.log.offset.g 1'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.colorWheels.log.offset.r 1'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.colorWheels.log.power.a 0'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.colorWheels.log.power.b 1'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.colorWheels.log.power.g 1'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.colorWheels.log.power.r 1'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.colorWheels.log.slope.a 0'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.colorWheels.log.slope.b 1'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.colorWheels.log.slope.g 1'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.colorWheels.log.slope.r 1'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.colorWheels.mode 1'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.blue.curve.m_Curve.0.inSlope 1'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.blue.curve.m_Curve.0.outSlope 1'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.blue.curve.m_Curve.0.serializedVersion 2'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.blue.curve.m_Curve.0.tangentMode 0'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.blue.curve.m_Curve.0.time 0'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.blue.curve.m_Curve.0.value 0'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.blue.curve.m_Curve.1.inSlope 1'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.blue.curve.m_Curve.1.outSlope 1'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.blue.curve.m_Curve.1.serializedVersion 2'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.blue.curve.m_Curve.1.tangentMode 0'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.blue.curve.m_Curve.1.time 1'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.blue.curve.m_Curve.1.value 1'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.blue.curve.m_PostInfinity 2'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.blue.curve.m_PreInfinity 2'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.blue.curve.m_RotationOrder 4'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.blue.curve.serializedVersion 2'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.blue.m_Loop 0'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.blue.m_Range 1'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.blue.m_ZeroValue 0'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.e_CurrentEditingCurve 0'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.e_CurveB 0'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.e_CurveG 0'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.e_CurveR 0'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.e_CurveY 1'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.green.curve.m_Curve.0.inSlope 1'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.green.curve.m_Curve.0.outSlope 1'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.green.curve.m_Curve.0.serializedVersion 2'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.green.curve.m_Curve.0.tangentMode 0'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.green.curve.m_Curve.0.time 0'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.green.curve.m_Curve.0.value 0'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.green.curve.m_Curve.1.inSlope 1'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.green.curve.m_Curve.1.outSlope 1'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.green.curve.m_Curve.1.serializedVersion 2'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.green.curve.m_Curve.1.tangentMode 0'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.green.curve.m_Curve.1.time 1'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.green.curve.m_Curve.1.value 1'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.green.curve.m_PostInfinity 2'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.green.curve.m_PreInfinity 2'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.green.curve.m_RotationOrder 4'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.green.curve.serializedVersion 2'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.green.m_Loop 0'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.green.m_Range 1'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.green.m_ZeroValue 0'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.hueVShue.curve.m_PostInfinity 2'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.hueVShue.curve.m_PreInfinity 2'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.hueVShue.curve.m_RotationOrder 4'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.hueVShue.curve.serializedVersion 2'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.hueVShue.m_Loop 1'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.hueVShue.m_Range 1'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.hueVShue.m_ZeroValue 0.5'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.hueVSsat.curve.m_PostInfinity 2'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.hueVSsat.curve.m_PreInfinity 2'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.hueVSsat.curve.m_RotationOrder 4'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.hueVSsat.curve.serializedVersion 2'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.hueVSsat.m_Loop 1'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.hueVSsat.m_Range 1'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.hueVSsat.m_ZeroValue 0.5'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.lumVSsat.curve.m_PostInfinity 2'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.lumVSsat.curve.m_PreInfinity 2'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.lumVSsat.curve.m_RotationOrder 4'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.lumVSsat.curve.serializedVersion 2'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.lumVSsat.m_Loop 0'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.lumVSsat.m_Range 1'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.lumVSsat.m_ZeroValue 0.5'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.master.curve.m_Curve.0.inSlope 1'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.master.curve.m_Curve.0.outSlope 1'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.master.curve.m_Curve.0.serializedVersion 2'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.master.curve.m_Curve.0.tangentMode 0'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.master.curve.m_Curve.0.time 0'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.master.curve.m_Curve.0.value 0'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.master.curve.m_Curve.1.inSlope 1'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.master.curve.m_Curve.1.outSlope 1'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.master.curve.m_Curve.1.serializedVersion 2'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.master.curve.m_Curve.1.tangentMode 0'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.master.curve.m_Curve.1.time 1'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.master.curve.m_Curve.1.value 1'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.master.curve.m_PostInfinity 2'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.master.curve.m_PreInfinity 2'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.master.curve.m_RotationOrder 0'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.master.curve.serializedVersion 2'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.master.m_Loop 0'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.master.m_Range 1'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.master.m_ZeroValue 0'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.red.curve.m_Curve.0.inSlope 1'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.red.curve.m_Curve.0.outSlope 1'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.red.curve.m_Curve.0.serializedVersion 2'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.red.curve.m_Curve.0.tangentMode 0'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.red.curve.m_Curve.0.time 0'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.red.curve.m_Curve.0.value 0'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.red.curve.m_Curve.1.inSlope 1'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.red.curve.m_Curve.1.outSlope 1'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.red.curve.m_Curve.1.serializedVersion 2'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.red.curve.m_Curve.1.tangentMode 0'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.red.curve.m_Curve.1.time 1'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.red.curve.m_Curve.1.value 1'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.red.curve.m_PostInfinity 2'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.red.curve.m_PreInfinity 2'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.red.curve.m_RotationOrder 4'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.red.curve.serializedVersion 2'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.red.m_Loop 0'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.red.m_Range 1'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.red.m_ZeroValue 0'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.satVSsat.curve.m_PostInfinity 2'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.satVSsat.curve.m_PreInfinity 2'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.satVSsat.curve.m_RotationOrder 4'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.satVSsat.curve.serializedVersion 2'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.satVSsat.m_Loop 0'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.satVSsat.m_Range 1'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.curves.satVSsat.m_ZeroValue 0.5'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.tonemapping.neutralBlackIn 0.0073'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.tonemapping.neutralBlackOut 0.0113'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.tonemapping.neutralWhiteClip 10'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.tonemapping.neutralWhiteIn 15'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.tonemapping.neutralWhiteLevel 5.62'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.tonemapping.neutralWhiteOut 15.49'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.tonemapping.tonemapper "2"'.format(label),
 		], read=False)
 	else:
 		common.send_data([
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.enabled false'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.enabled false'.format(label),
 		], read=False)
 	
 	# depth of field
 	if bool(random.getrandbits(1)):
 		common.send_data([
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.depthOfField.enabled true'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.depthOfField.settings.focusDistance 0.1'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.depthOfField.settings.aperture 8.7'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.depthOfField.settings.focalLength 200'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.depthOfField.settings.useCameraFov 1'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.depthOfField.settings.kernelSize 1'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.depthOfField.enabled true'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.depthOfField.settings.focusDistance 0.1'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.depthOfField.settings.aperture 8.7'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.depthOfField.settings.focalLength 200'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.depthOfField.settings.useCameraFov 1'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.depthOfField.settings.kernelSize 1'.format(label),
 		], read=False)
 	else:
 		common.send_data([
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.depthOfField.enabled true'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.depthOfField.enabled true'.format(label),
 		], read=False)
 	
 	# dithering
 	if bool(random.getrandbits(1)):
 		common.send_data([
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.dithering.enabled true'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.dithering.enabled true'.format(label),
 		], read=False)
 	else:
 		common.send_data([
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.dithering.enabled false'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.dithering.enabled false'.format(label),
 		], read=False)
 	
 	# eye adaptation
 	if bool(random.getrandbits(1)):
 		common.send_data([
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.eyeAdaptation.enabled true'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.eyeAdaptation.settings.adaptationType 0'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.eyeAdaptation.settings.dynamicKeyValue 1'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.eyeAdaptation.settings.highPercent 95'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.eyeAdaptation.settings.keyValue 0.25'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.eyeAdaptation.settings.logMax 4'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.eyeAdaptation.settings.logMin -8'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.eyeAdaptation.settings.lowPercent 45'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.eyeAdaptation.settings.maxLuminance 1'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.eyeAdaptation.settings.minLuminance -5'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.eyeAdaptation.settings.speedDown 1'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.eyeAdaptation.settings.speedUp 2'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.eyeAdaptation.enabled true'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.eyeAdaptation.settings.adaptationType 0'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.eyeAdaptation.settings.dynamicKeyValue 1'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.eyeAdaptation.settings.highPercent 95'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.eyeAdaptation.settings.keyValue 0.25'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.eyeAdaptation.settings.logMax 4'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.eyeAdaptation.settings.logMin -8'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.eyeAdaptation.settings.lowPercent 45'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.eyeAdaptation.settings.maxLuminance 1'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.eyeAdaptation.settings.minLuminance -5'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.eyeAdaptation.settings.speedDown 1'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.eyeAdaptation.settings.speedUp 2'.format(label),
 		], read=False)
 	else:
 		common.send_data([
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.eyeAdaptation.enabled false'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.eyeAdaptation.enabled false'.format(label),
 		], read=False)
 	
 	# fog
 	if bool(random.getrandbits(1)):
 		common.send_data([
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.fog.enabled true'.format(label)
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.fog.enabled true'.format(label)
 		], read=False)
 	else:
 		common.send_data([
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.fog.enabled false'.format(label)
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.fog.enabled false'.format(label)
 		], read=False)
 	
 	# grain
 	if bool(random.getrandbits(1)):
 		common.send_data([
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.grain.enabled true'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.grain.settings.colored 1'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.grain.settings.intensity 0.281'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.grain.settings.luminanceContribution 0.8'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.grain.settings.size 0.3'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.grain.enabled true'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.grain.settings.colored 1'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.grain.settings.intensity 0.281'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.grain.settings.luminanceContribution 0.8'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.grain.settings.size 0.3'.format(label),
 		], read=False)
 	else:
 		common.send_data([
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.grain.enabled false'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.grain.enabled false'.format(label),
 		], read=False)
 	
 	# motion blur effects
 	if bool(random.getrandbits(1)):
 		common.send_data([
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled true'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.shutterAngle {}'.format(label, random.randint(0, 360)),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount {}'.format(label, random.randint(1, 32)),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending {}'.format(label, random.uniform(0, 1))
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled true'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.shutterAngle {}'.format(label, random.randint(0, 360)),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount {}'.format(label, random.randint(1, 32)),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending {}'.format(label, random.uniform(0, 1))
 		], read=False)
 	else:
-		common.send_data(['{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false'.format(label)], read=False)
+		common.send_data(['"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false'.format(label)], read=False)
 	
 	# screen space reflection
 	if bool(random.getrandbits(1)):
 		common.send_data([
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.screenSpaceReflection.enabled true'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.screenSpaceReflection.settings.reflection.blendType 1'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.screenSpaceReflection.settings.reflection.reflectionQuality 3'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.screenSpaceReflection.settings.reflection.maxDistance 99'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.screenSpaceReflection.settings.reflection.iterationCount 99'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.screenSpaceReflection.settings.reflection.stepSize 3'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.screenSpaceReflection.settings.reflection.widthModifier 0.5'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.screenSpaceReflection.settings.reflection.reflectionBlur 1'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.screenSpaceReflection.settings.reflection.reflectBackfaces 0'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.screenSpaceReflection.settings.intensity.reflectionMultiplier 1'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.screenSpaceReflection.settings.intensity.fadeDistance 100'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.screenSpaceReflection.settings.intensity.fresnelFade 1'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.screenSpaceReflection.settings.intensity.fresnelFadePower 1'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.screenSpaceReflection.settings.screenEdgeMask.intensity 0.03'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.screenSpaceReflection.enabled true'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.screenSpaceReflection.settings.reflection.blendType 1'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.screenSpaceReflection.settings.reflection.reflectionQuality 3'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.screenSpaceReflection.settings.reflection.maxDistance 99'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.screenSpaceReflection.settings.reflection.iterationCount 99'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.screenSpaceReflection.settings.reflection.stepSize 3'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.screenSpaceReflection.settings.reflection.widthModifier 0.5'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.screenSpaceReflection.settings.reflection.reflectionBlur 1'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.screenSpaceReflection.settings.reflection.reflectBackfaces 0'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.screenSpaceReflection.settings.intensity.reflectionMultiplier 1'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.screenSpaceReflection.settings.intensity.fadeDistance 100'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.screenSpaceReflection.settings.intensity.fresnelFade 1'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.screenSpaceReflection.settings.intensity.fresnelFadePower 1'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.screenSpaceReflection.settings.screenEdgeMask.intensity 0.03'.format(label),
 		], read=False)
 	else:
 		common.send_data([
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.screenSpaceReflection.enabled false'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.screenSpaceReflection.enabled false'.format(label),
 		], read=False)
 	
 	# vignette
 	if bool(random.getrandbits(1)):
 		common.send_data([
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.vignette.enabled true'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.vignette.settings.center.x 0.5'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.vignette.settings.center.y 0.5'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.vignette.settings.color.a 1'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.vignette.settings.color.b 0'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.vignette.settings.color.g 0'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.vignette.settings.color.r 0'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.vignette.settings.intensity 0.692'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.vignette.settings.mask.fileID 0'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.vignette.settings.mode 0'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.vignette.settings.opacity 1'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.vignette.settings.rounded 0'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.vignette.settings.roundness 0.255'.format(label),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.vignette.settings.smoothness 0.439'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.vignette.enabled true'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.vignette.settings.center.x 0.5'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.vignette.settings.center.y 0.5'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.vignette.settings.color.a 1'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.vignette.settings.color.b 0'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.vignette.settings.color.g 0'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.vignette.settings.color.r 0'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.vignette.settings.intensity 0.692'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.vignette.settings.mask.fileID 0'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.vignette.settings.mode 0'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.vignette.settings.opacity 1'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.vignette.settings.rounded 0'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.vignette.settings.roundness 0.255'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.vignette.settings.smoothness 0.439'.format(label),
 		], read=False)
 	else:
 		common.send_data([
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.vignette.enabled false'.format(label),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.vignette.enabled false'.format(label),
 		], read=False)
 	
 	common.flush_buffer()
@@ -835,64 +836,64 @@ def camera_rgb_pp_scion_random(label='cameras/cameraRGB'):
 	# grain effect
 	if bool(random.getrandbits(1)):
 		common.send_data([
-			'{} SET ScionEngine.ScionPostProcess grain true'.format(label),
-			'{} SET ScionEngine.ScionPostProcess grainIntensity {}'.format(label, random.uniform(0, 0.4))
+			'"{}" SET ScionEngine.ScionPostProcess grain true'.format(label),
+			'"{}" SET ScionEngine.ScionPostProcess grainIntensity {}'.format(label, random.uniform(0, 0.4))
 		], read=False)
 	# else:
-	# 	common.send_data(['{} SET ScionEngine.ScionPostProcess grain false'.format(label)])
+	# 	common.send_data(['"{}" SET ScionEngine.ScionPostProcess grain false'.format(label)])
 	
 	# chromatic aberration
 	if bool(random.getrandbits(1)):
 		common.send_data([
-			'{} SET ScionEngine.ScionPostProcess chromaticAberration true'.format(label),
-			'{} SET ScionEngine.ScionPostProcess chromaticAberrationDistortion {}'.format(label, random.uniform(0, 1)),
-			'{} SET ScionEngine.ScionPostProcess chromaticAberrationIntensity {}'.format(label, random.uniform(0, 20))
+			'"{}" SET ScionEngine.ScionPostProcess chromaticAberration true'.format(label),
+			'"{}" SET ScionEngine.ScionPostProcess chromaticAberrationDistortion {}'.format(label, random.uniform(0, 1)),
+			'"{}" SET ScionEngine.ScionPostProcess chromaticAberrationIntensity {}'.format(label, random.uniform(0, 20))
 		], read=False)
 	# else:
-	# 	common.send_data(['{} SET ScionEngine.ScionPostProcess chromaticAberration false'.format(label)])
+	# 	common.send_data(['"{}" SET ScionEngine.ScionPostProcess chromaticAberration false'.format(label)])
 	
 	# blooming effect
 	if bool(random.getrandbits(1)):
 		common.send_data([
-			'{} SET ScionEngine.ScionPostProcess bloom true'.format(label),
-			'{} SET ScionEngine.ScionPostProcess bloomThreshold {}'.format(label, random.uniform(0, 50)),
-			'{} SET ScionEngine.ScionPostProcess bloomIntensity {}'.format(label, random.uniform(0, 1)),
-			'{} SET ScionEngine.ScionPostProcess bloomBrightness {}'.format(label, random.uniform(0, 8)),
-			'{} SET ScionEngine.ScionPostProcess bloomDownsamples {}'.format(label, random.randint(1, 8)),
-			'{} SET ScionEngine.ScionPostProcess bloomDistanceMultiplier {}'.format(label, random.randuniform(0.25, 1.25))
+			'"{}" SET ScionEngine.ScionPostProcess bloom true'.format(label),
+			'"{}" SET ScionEngine.ScionPostProcess bloomThreshold {}'.format(label, random.uniform(0, 50)),
+			'"{}" SET ScionEngine.ScionPostProcess bloomIntensity {}'.format(label, random.uniform(0, 1)),
+			'"{}" SET ScionEngine.ScionPostProcess bloomBrightness {}'.format(label, random.uniform(0, 8)),
+			'"{}" SET ScionEngine.ScionPostProcess bloomDownsamples {}'.format(label, random.randint(1, 8)),
+			'"{}" SET ScionEngine.ScionPostProcess bloomDistanceMultiplier {}'.format(label, random.randuniform(0.25, 1.25))
 		], read=False)
 	# else:
-	# 	common.send_data(['{} SET ScionEngine.ScionPostProcess bloom false'])
+	# 	common.send_data(['"{}" SET ScionEngine.ScionPostProcess bloom false'])
 	
 	# vignette
 	if bool(random.getrandbits(1)):
 		common.send_data([
-			'{} SET ScionEngine.ScionPostProcess vignette true'.format(label),
-			'{} SET ScionEngine.ScionPostProcess vignetteIntensity {}'.format(label, rand.uniform(0, 1)),
-			'{} SET ScionEngine.ScionPostProcess vignetteScale {}'.format(label, random.uniform(0, 1)),
+			'"{}" SET ScionEngine.ScionPostProcess vignette true'.format(label),
+			'"{}" SET ScionEngine.ScionPostProcess vignetteIntensity {}'.format(label, rand.uniform(0, 1)),
+			'"{}" SET ScionEngine.ScionPostProcess vignetteScale {}'.format(label, random.uniform(0, 1)),
 		], read=False)
 	# else:
-	#	common.send_data(['{} SET ScionEngine.ScionPostProcess vignette false'.format(label)])
+	#	common.send_data(['"{}" SET ScionEngine.ScionPostProcess vignette false'.format(label)])
 	
 	# lens flare
 	if bool(random.getrandbits(1)):
 		common.send_data([
-			'{} SET ScionEngine.ScionPostProcess lensFlare true'.format(label),
-			'{} SET ScionEngine.ScionPostProcess lensFlareGhostIntensity {}'.format(label, random.uniform(0, 2)),
-			'{} SET ScionEngine.ScionPostProcess lensFlareGhostDispersal {}'.format(label, random.uniform(0, 2)),
-			'{} SET ScionEngine.ScionPostProcess lensFlareGhostDistortion {}'.format(label, random.uniform(0, 1)),
-			'{} SET ScionEngine.ScionPostProcess lensFlareGhostEdgeFade {}'.format(label, random.uniform(0, 1.5)),
-			'{} SET ScionEngine.ScionPostProcess lensFlareHaloIntensity {}'.format(label, random.uniform(0, 2)),
-			'{} SET ScionEngine.ScionPostProcess lensFlareHaloWidth {}'.format(label, random.uniform(0, 0.8)),
-			'{} SET ScionEngine.ScionPostProcess lensFlareHaloDistortion {}'.format(label, random.uniform(0, 1)),
-			'{} SET ScionEngine.ScionPostProcess lensFlareBlurStrength {}'.format(label, random.uniform(0, 1)),
-			'{} SET ScionEngine.ScionPostProcess lensFlareDownsamples {}'.format(label, random.randint(1, 3))
+			'"{}" SET ScionEngine.ScionPostProcess lensFlare true'.format(label),
+			'"{}" SET ScionEngine.ScionPostProcess lensFlareGhostIntensity {}'.format(label, random.uniform(0, 2)),
+			'"{}" SET ScionEngine.ScionPostProcess lensFlareGhostDispersal {}'.format(label, random.uniform(0, 2)),
+			'"{}" SET ScionEngine.ScionPostProcess lensFlareGhostDistortion {}'.format(label, random.uniform(0, 1)),
+			'"{}" SET ScionEngine.ScionPostProcess lensFlareGhostEdgeFade {}'.format(label, random.uniform(0, 1.5)),
+			'"{}" SET ScionEngine.ScionPostProcess lensFlareHaloIntensity {}'.format(label, random.uniform(0, 2)),
+			'"{}" SET ScionEngine.ScionPostProcess lensFlareHaloWidth {}'.format(label, random.uniform(0, 0.8)),
+			'"{}" SET ScionEngine.ScionPostProcess lensFlareHaloDistortion {}'.format(label, random.uniform(0, 1)),
+			'"{}" SET ScionEngine.ScionPostProcess lensFlareBlurStrength {}'.format(label, random.uniform(0, 1)),
+			'"{}" SET ScionEngine.ScionPostProcess lensFlareDownsamples {}'.format(label, random.randint(1, 3))
 		], read=False)
 	# else:
-	# 	common.send_data(['{} SET ScionEngine.ScionPostProcess lensFlare false'.format(label)])
+	# 	common.send_data(['"{}" SET ScionEngine.ScionPostProcess lensFlare false'.format(label)])
 	
 	# tonemapping
-	common.send_data(['{} SET ScionEngine.ScionPostProcess tonemappingMode {}'.format(label, random.choice(unity_vars.tonemappings))], read=False)
+	common.send_data(['"{}" SET ScionEngine.ScionPostProcess tonemappingMode "{}"'.format(label, random.choice(unity_vars.tonemappings))], read=False)
 	common.flush_buffer()
 
 def set_disk_texture(lst, label='disk1'):
@@ -913,7 +914,7 @@ def set_disk_texture(lst, label='disk1'):
 	
 	for l in lst:
 		common.send_data([
-			'{}/{} SET Sensors.RenderCameraLink target {}'.format(label, l.capitalize(), l)
+			'"{}/{}" SET Sensors.RenderCameraLink target "{}"'.format(label, l.capitalize(), l)
 		], read=False)
 
 def add_camera_seg_filter(segments=['Car'], label='cameras/segmentation', unoccluded=None):
@@ -930,13 +931,13 @@ def add_camera_seg_filter(segments=['Car'], label='cameras/segmentation', unoccl
 	
 	for s in segments:
 		common.send_data([
-			'{} PUSH Segmentation.Segmentation boundingBoxesFilter {}'.format(label, s)
+			'"{}" PUSH Segmentation.Segmentation boundingBoxesFilter "{}"'.format(label, s)
 		], read=False)
 	
 	if unoccluded != None:
 		for s in segments:
 			common.send_data([
-				'{} PUSH Segmentation.Segmentation unoccludedClasses {}'.format(label, s)
+				'"{}" PUSH Segmentation.Segmentation unoccludedClasses "{}"'.format(label, s)
 			], read=False)
 
 # output_type options: Auto, ClassIds, InstanceIds, ClassColors, Raw
@@ -976,29 +977,29 @@ def add_camera_seg(
 	
 	"""
 	common.send_data([
-		'CREATE {}'.format(label),
-		'{} SET active false'.format(label),
-		'{} ADD Camera'.format(label),
-		'{} SET Camera near {}'.format(label, clipping_near),
-		'{} SET Camera far {}'.format(label, clipping_far),
-		'{} SET Camera fov {}'.format(label, fov),
+		'CREATE "{}"'.format(label),
+		'"{}" SET active false'.format(label),
+		'"{}" ADD Camera'.format(label),
+		'"{}" SET Camera near {}'.format(label, clipping_near),
+		'"{}" SET Camera far {}'.format(label, clipping_far),
+		'"{}" SET Camera fieldOfView {}'.format(label, fov),
 	], read=False)
 	
 	if renderCamera:
 		common.send_data([
-			'{} ADD Sensors.RenderCamera'.format(label),
-			'{} SET Sensors.RenderCamera format {}'.format(label, unity_vars.textureFormat[textureFormat]),
-			'{} SET Sensors.RenderCamera resolution ({} {})'.format(label, width, height),
+			'"{}" ADD Sensors.RenderCamera'.format(label),
+			'"{}" SET Sensors.RenderCamera format "{}"'.format(label, unity_vars.textureFormat[textureFormat]),
+			'"{}" SET Sensors.RenderCamera resolution ({} {})'.format(label, width, height),
 		], read=False)
 	
 	common.send_data([
-		'{} SET Camera renderingPath {}'.format(label, unity_vars.renderingPath[renderingPath]),
-		'{} SET Camera targetTexture.filterMode Point'.format(label),
-		'{} ADD Segmentation.Segmentation'.format(label),
-		'{} SET Segmentation.Segmentation minimumObjectVisibility {}'.format(label, minimum_visibility),
-		'{} SET Segmentation.Segmentation outputType {}'.format(label, output_type),
-		'{} SET Segmentation.Segmentation boundingBoxesExtensionAmount {}'.format(label, boundingBoxesExtensionAmount),
-		'{} EXECUTE Segmentation.Segmentation DefineClass Void'.format(label)
+		'"{}" SET Camera renderingPath "{}"'.format(label, unity_vars.renderingPath[renderingPath]),
+		'"{}" SET Camera targetTexture.filterMode "Point"'.format(label),
+		'"{}" ADD Segmentation.Segmentation'.format(label),
+		'"{}" SET Segmentation.Segmentation minimumObjectVisibility {}'.format(label, minimum_visibility),
+		'"{}" SET Segmentation.Segmentation outputType "{}"'.format(label, output_type),
+		'"{}" SET Segmentation.Segmentation boundingBoxesExtensionAmount {}'.format(label, boundingBoxesExtensionAmount),
+		'"{}" EXECUTE Segmentation.Segmentation DefineClass "Void"'.format(label)
 	], read=False)
 	
 	if segments != None:
@@ -1006,9 +1007,9 @@ def add_camera_seg(
 	
 	# add default class
 	common.send_data([
-		'{} ADD Segmentation.LookUpTable'.format(label),
-		'{} PUSH Segmentation.LookUpTable classes Void'.format(label),
-		'{} PUSH Segmentation.LookUpTable colors black'.format(label)
+		'"{}" ADD Segmentation.LookUpTable'.format(label),
+		'"{}" PUSH Segmentation.LookUpTable classes "Void"'.format(label),
+		'"{}" PUSH Segmentation.LookUpTable colors "black"'.format(label)
 	], read=False)
 	
 	if lookupTable == True and segments != None:
@@ -1019,22 +1020,22 @@ def add_camera_seg(
 			else:
 				color = unity_vars.colors[idx]
 			common.send_data([
-				'{} EXECUTE Segmentation.Segmentation DefineClass "{}"'.format(label, i),
-				'{} PUSH Segmentation.LookUpTable classes "{}"'.format(label, i),
-				'{} PUSH Segmentation.LookUpTable colors "{}"'.format(label, color)
+				'"{}" EXECUTE Segmentation.Segmentation DefineClass "{}"'.format(label, i),
+				'"{}" PUSH Segmentation.LookUpTable classes "{}"'.format(label, i),
+				'"{}" PUSH Segmentation.LookUpTable colors "{}"'.format(label, color)
 			], read=False)
 			idx += 1
 	elif isinstance(lookupTable, list):
 		for i in lookupTable:
 			common.send_data([
-				'{} EXECUTE Segmentation.Segmentation DefineClass "{}"'.format(label, i[0]),
-				'{} PUSH Segmentation.LookUpTable classes "{}"'.format(label, i[0]),
-				'{} PUSH Segmentation.LookUpTable colors "{}"'.format(label, i[1])
+				'"{}" EXECUTE Segmentation.Segmentation DefineClass "{}"'.format(label, i[0]),
+				'"{}" PUSH Segmentation.LookUpTable classes "{}"'.format(label, i[0]),
+				'"{}" PUSH Segmentation.LookUpTable colors "{}"'.format(label, i[1])
 			], read=False)
 	
 	common.send_data([
-		'{} EXECUTE Segmentation.LookUpTable MarkTextureDirty'.format(label),
-		'{} SET active true'.format(label)
+		'"{}" EXECUTE Segmentation.LookUpTable MarkTextureDirty'.format(label),
+		'"{}" SET active true'.format(label)
 	], read=False)
 	common.flush_buffer()
 	settings.obj.append(label)
@@ -1054,14 +1055,14 @@ def add_light(position=[34,-22.53,0], intensity=1.7, label='light'):
 	
 	"""
 	common.send_data([
-		'CREATE {}'.format(label),
-		'{} ADD Light'.format(label),
-		'{} SET Light type Directional'.format(label),
-		'{} SET Transform eulerAngles ({} {} {})'.format(label, position[0], position[1], position[2]),
-		'{} SET Light intensity {}'.format(label, intensity),
-		# '{} SET Light color #'.format(label),
-		'{} SET Light shadows Soft'.format(label),
-		'{} SET active true'.format(label)
+		'CREATE "{}"'.format(label),
+		'"{}" ADD Light'.format(label),
+		'"{}" SET Light type Directional'.format(label),
+		'"{}" SET Transform eulerAngles ({} {} {})'.format(label, position[0], position[1], position[2]),
+		'"{}" SET Light intensity {}'.format(label, intensity),
+		# '"{}" SET Light color #'.format(label),
+		'"{}" SET Light shadows "Soft"'.format(label),
+		'"{}" SET active true'.format(label)
 	], read=False)
 	
 	common.flush_buffer()
@@ -1082,11 +1083,11 @@ def global_disk_setup(label='disk1', output_path=None):
 	if output_path == None:
 		output_path = settings.output_path
 	common.send_data([
-		'CREATE {}'.format(label),
-		'{} SET active false'.format(label),
-		'{} ADD Sensors.Disk'.format(label),
-		'{} SET Sensors.Disk path "{}"'.format(label, output_path),
-		'{} SET active true'.format(label)
+		'CREATE "{}"'.format(label),
+		'"{}" SET active false'.format(label),
+		'"{}" ADD Sensors.Disk'.format(label),
+		'"{}" SET Sensors.Disk path "{}"'.format(label, output_path),
+		'"{}" SET active true'.format(label)
 	], read=False)
 	
 	common.flush_buffer()
@@ -1104,7 +1105,7 @@ def do_render(lst):
 	
 	"""
 	for l in lst:
-		common.send_data('{} EXECUTE Sensors.RenderCamera RenderFrame'.format(l))
+		common.send_data('"{}" EXECUTE Sensors.RenderCamera RenderFrame'.format(l))
 
 def take_snapshot(lst, auto_segment=False, label='disk1', force_noop=False):
 	"""
@@ -1133,8 +1134,8 @@ def take_snapshot(lst, auto_segment=False, label='disk1', force_noop=False):
 			do_render(lst)
 			common.flush_buffer()
 			r = common.send_data([
-				'{} EXECUTE Sensors.Disk Snapshot'.format(label),
-				'{} GET Segmentation.Segmentation boundingBoxes'.format(lst[idx[0]]),
+				'"{}" EXECUTE Sensors.Disk Snapshot'.format(label),
+				'"{}" GET Segmentation.Segmentation boundingBoxes'.format(lst[idx[0]]),
 				'NOOP'
 			], read=True)
 			seq_save('bbox', r)
@@ -1142,7 +1143,7 @@ def take_snapshot(lst, auto_segment=False, label='disk1', force_noop=False):
 		if force_noop:
 			common.send_data('NOOP', read=True);
 		
-		common.send_data('{} EXECUTE Sensors.Disk Snapshot'.format(label))
+		common.send_data('"{}" EXECUTE Sensors.Disk Snapshot'.format(label))
 	
 	time.sleep(settings.cooldown)
 
@@ -1158,7 +1159,7 @@ def take_seg_snapshot(lst):
 	common.flush_buffer()
 	
 	for l in lst:
-		r = common.send_data(['{} GET Segmentation.Segmentation boundingBoxes'.format(l), 'NOOP'], read=True)
+		r = common.send_data(['"{}" GET Segmentation.Segmentation boundingBoxes'.format(l), 'NOOP'], read=True)
 		seq_save('bbox', r)
 
 def seq_save(pref, raw_data):
@@ -1261,21 +1262,21 @@ def add_disk_output(lst, label='disk1'):
 	"""
 	if settings.skip_disk:
 		return
-	common.send_data('{} SET active false'.format(label))
+	common.send_data('"{}" SET active false'.format(label))
 	
 	for l in lst:
 		common.send_data([
-			'CREATE {}/{}'.format(label, l.capitalize()),
-			'{}/{} ADD Sensors.RenderCameraLink'.format(label, l.capitalize()),
-			'{}/{} SET Sensors.RenderCameraLink target {}'.format(label, l.capitalize(), l),
+			'CREATE "{}/{}"'.format(label, l.capitalize()),
+			'"{}/{}" ADD Sensors.RenderCameraLink'.format(label, l.capitalize()),
+			'"{}/{}" SET Sensors.RenderCameraLink target "{}"'.format(label, l.capitalize(), l),
 			
 			# TEMPORARY HACK
-			'{}/{} SET Sensors.RenderCameraLink outputType DEPTH'.format(label, l.capitalize()) if "depth" in l else '',
+			'"{}/{}" SET Sensors.RenderCameraLink outputType "DEPTH"'.format(label, l.capitalize()) if "depth" in l else '',
 			
-			'{}/{} SET active true'.format(label, l.capitalize())
+			'"{}/{}" SET active true'.format(label, l.capitalize())
 		], read=False)
 	
-	common.send_data('{} SET active true'.format(label))
+	common.send_data('"{}" SET active true'.format(label))
 
 def ugly_tag_fix(tag):
 	x = tag.split('/')[-1]
@@ -1311,18 +1312,18 @@ def add_random_color(objs, colors=16, colors_weights=14, spawner=False, method='
 	buf = []
 	
 	for obj in objs:
-		buf.append('{} ADD {}'.format(obj, component))
-		buf.append('{} SET {} randomMethod {}'.format(obj, component, method))
+		buf.append('"{}" ADD {}'.format(obj, component))
+		buf.append('"{}" SET {} randomMethod "{}"'.format(obj, component, method))
 		
 		if method == 'Random':
-			buf.append('{} PUSH {} availableColors "{}"'.format(obj, component, get_random_color()))
+			buf.append('"{}" PUSH {} availableColors "{}"'.format(obj, component, get_random_color()))
 		elif colors > 0:
 			for i in range(0, colors):
-				buf.append('{} PUSH {} availableColors "{}"'.format(obj, component, get_random_color()))
+				buf.append('"{}" PUSH {} availableColors "{}"'.format(obj, component, get_random_color()))
 		
 		if parts_names != None:
-			buf.append('{} SET {} partsNames "{}"'.format(obj, component, parts_names))
-		buf.append('{} PUSH {} colorsWeights {}'.format(obj, component, colors_weights))
+			buf.append('"{}" SET {} partsNames "{}"'.format(obj, component, parts_names))
+		buf.append('"{}" PUSH {} colorsWeights {}'.format(obj, component, colors_weights))
 	
 	common.send_data(buf, read=False)
 
@@ -1427,50 +1428,50 @@ def lcp(
 	buf = []
 	
 	if add == True:
-		buf.append('{} ADD LCP'.format(camera))
+		buf.append('"{}" ADD LCP'.format(camera))
 	
 	buf.extend([
-	'{} SET LCP updateValuesMode "{}"'.format(camera, updateValuesMode) if updateValuesMode != None else '',
-	'{} SET LCP focalLength {}'.format(camera, focalLength) if focalLength != None else '',
-	'{} SET LCP sensorFormatFactor {}'.format(camera, sensorFormatFactor) if sensorFormatFactor != None else '',
-	'{} SET LCP distortionScale {}'.format(camera, distortionScale) if distortionScale != None else '',
-	'{} SET LCP isFisheyeDistortion {}'.format(camera, isFisheyeDistortion) if isFisheyeDistortion != None else '',
+	'"{}" SET LCP updateValuesMode "{}"'.format(camera, updateValuesMode) if updateValuesMode != None else '',
+	'"{}" SET LCP focalLength {}'.format(camera, focalLength) if focalLength != None else '',
+	'"{}" SET LCP sensorFormatFactor {}'.format(camera, sensorFormatFactor) if sensorFormatFactor != None else '',
+	'"{}" SET LCP distortionScale {}'.format(camera, distortionScale) if distortionScale != None else '',
+	'"{}" SET LCP isFisheyeDistortion {}'.format(camera, isFisheyeDistortion) if isFisheyeDistortion != None else '',
 	
-	'{} SET LCP radialParam1 {}'.format(camera, radialParam1) if radialParam1 != None else '',
-	'{} SET LCP radialParam2 {}'.format(camera, radialParam2) if radialParam2 != None else '',
-	'{} SET LCP radialParam3 {}'.format(camera, radialParam3) if radialParam3 != None else '',
+	'"{}" SET LCP radialParam1 {}'.format(camera, radialParam1) if radialParam1 != None else '',
+	'"{}" SET LCP radialParam2 {}'.format(camera, radialParam2) if radialParam2 != None else '',
+	'"{}" SET LCP radialParam3 {}'.format(camera, radialParam3) if radialParam3 != None else '',
 	
-	'{} SET LCP radialParamX {}'.format(camera, radialParamX) if radialParamX != None else '',
-	'{} SET LCP radialParamY {}'.format(camera, radialParamY) if radialParamY != None else '',
+	'"{}" SET LCP radialParamX {}'.format(camera, radialParamX) if radialParamX != None else '',
+	'"{}" SET LCP radialParamY {}'.format(camera, radialParamY) if radialParamY != None else '',
 	
-	'{} SET LCP redParam1 {}'.format(camera, redParam1) if redParam1 != None else '',
-	'{} SET LCP redParam2 {}'.format(camera, redParam2) if redParam2 != None else '',
-	'{} SET LCP redParam3 {}'.format(camera, redParam3) if redParam3 != None else '',
+	'"{}" SET LCP redParam1 {}'.format(camera, redParam1) if redParam1 != None else '',
+	'"{}" SET LCP redParam2 {}'.format(camera, redParam2) if redParam2 != None else '',
+	'"{}" SET LCP redParam3 {}'.format(camera, redParam3) if redParam3 != None else '',
 	
-	'{} SET LCP redParamX {}'.format(camera, redParamX) if redParamX != None else '',
-	'{} SET LCP redParamY {}'.format(camera, redParamY) if redParamY != None else '',
+	'"{}" SET LCP redParamX {}'.format(camera, redParamX) if redParamX != None else '',
+	'"{}" SET LCP redParamY {}'.format(camera, redParamY) if redParamY != None else '',
 	
-	'{} SET LCP greenParam1 {}'.format(camera, greenParam1) if greenParam1 != None else '',
-	'{} SET LCP greenParam2 {}'.format(camera, greenParam2) if greenParam2 != None else '',
-	'{} SET LCP greenParam3 {}'.format(camera, greenParam3) if greenParam3 != None else '',
+	'"{}" SET LCP greenParam1 {}'.format(camera, greenParam1) if greenParam1 != None else '',
+	'"{}" SET LCP greenParam2 {}'.format(camera, greenParam2) if greenParam2 != None else '',
+	'"{}" SET LCP greenParam3 {}'.format(camera, greenParam3) if greenParam3 != None else '',
 	
-	'{} SET LCP greenParamX {}'.format(camera, greenParamX) if greenParamX != None else '',
-	'{} SET LCP greenParamY {}'.format(camera, greenParamY) if greenParamY != None else '',
+	'"{}" SET LCP greenParamX {}'.format(camera, greenParamX) if greenParamX != None else '',
+	'"{}" SET LCP greenParamY {}'.format(camera, greenParamY) if greenParamY != None else '',
 	
-	'{} SET LCP blueParam1 {}'.format(camera, blueParam1) if blueParam1 != None else '',
-	'{} SET LCP blueParam2 {}'.format(camera, blueParam2) if blueParam2 != None else '',
-	'{} SET LCP blueParam3 {}'.format(camera, blueParam3) if blueParam3 != None else '',
+	'"{}" SET LCP blueParam1 {}'.format(camera, blueParam1) if blueParam1 != None else '',
+	'"{}" SET LCP blueParam2 {}'.format(camera, blueParam2) if blueParam2 != None else '',
+	'"{}" SET LCP blueParam3 {}'.format(camera, blueParam3) if blueParam3 != None else '',
 	
-	'{} SET LCP blueParamX {}'.format(camera, blueParamX) if blueParamX != None else '',
-	'{} SET LCP blueParamY {}'.format(camera, blueParamY) if blueParamY != None else '',
+	'"{}" SET LCP blueParamX {}'.format(camera, blueParamX) if blueParamX != None else '',
+	'"{}" SET LCP blueParamY {}'.format(camera, blueParamY) if blueParamY != None else '',
 	
-	'{} SET LCP vignetteParam1 {}'.format(camera, vignetteParam1) if vignetteParam1 != None else '',
-	'{} SET LCP vignetteParam2 {}'.format(camera, vignetteParam2) if vignetteParam2 != None else '',
-	'{} SET LCP vignetteParam3 {}'.format(camera, vignetteParam3) if vignetteParam3 != None else '',
-	'{} SET LCP vignetteParam4 {}'.format(camera, vignetteParam4) if vignetteParam4 != None else '',
-		
-		
+	'"{}" SET LCP vignetteParam1 {}'.format(camera, vignetteParam1) if vignetteParam1 != None else '',
+	'"{}" SET LCP vignetteParam2 {}'.format(camera, vignetteParam2) if vignetteParam2 != None else '',
+	'"{}" SET LCP vignetteParam3 {}'.format(camera, vignetteParam3) if vignetteParam3 != None else '',
+	'"{}" SET LCP vignetteParam4 {}'.format(camera, vignetteParam4) if vignetteParam4 != None else ''
 	])
+	
+	common.send_data(buf)
 
 def add_lidar(
 	label='Lidar', virtualCamera=None, model='VLP_16',
@@ -1497,85 +1498,85 @@ def add_lidar(
 	
 	"""
 	common.send_data([
-		'CREATE {}'.format(label),
+		'CREATE "{}"'.format(label),
 		
-		'{} SET Transform position ({} {} {})'.format(label, position[0], position[1], position[2]),
-		'{} SET Transform eulerAngles ({} {} {})'.format(label, rotation[0], rotation[1], rotation[2]),
+		'"{}" SET Transform position ({} {} {})'.format(label, position[0], position[1], position[2]),
+		'"{}" SET Transform eulerAngles ({} {} {})'.format(label, rotation[0], rotation[1], rotation[2]),
 		
-		'{} ADD Lidar'.format(label),
-		'{} SET Lidar model "{}"'.format(label, model),
+		'"{}" ADD Lidar'.format(label),
+		'"{}" SET Lidar model "{}"'.format(label, model),
 		
-		'{} SET Lidar minAz {}'.format(label, minAz),
-		'{} SET Lidar maxAz {}'.format(label, maxAz),
-		'{} SET Lidar minEl {}'.format(label, minEl),
-		'{} SET Lidar maxEl {}'.format(label, maxEl),
+		'"{}" SET Lidar minAz {}'.format(label, minAz),
+		'"{}" SET Lidar maxAz {}'.format(label, maxAz),
+		'"{}" SET Lidar minEl {}'.format(label, minEl),
+		'"{}" SET Lidar maxEl {}'.format(label, maxEl),
 		
-		'{} SET Lidar rpm {}'.format(label, rpm),
+		'"{}" SET Lidar rpm {}'.format(label, rpm),
 		
-		'{} SET Lidar targetFps {}'.format(label, targetFps),
-		'{} SET Lidar pclRenderFps {}'.format(label, pclRenderFps),
-		'{} SET Lidar dataType {}'.format(label, dataType) if dataType != None else '',
-		'{} SET Lidar colorLUT {}'.format(label, colorLUT) if colorLUT != None else '',
-		'{} SET Lidar colorTo {}'.format(label, colorTo) if colorTo != None else '',
-		'{} SET Lidar colorFrom {}'.format(label, colorFrom) if colorFrom != None else '',
+		'"{}" SET Lidar targetFps {}'.format(label, targetFps),
+		'"{}" SET Lidar pclRenderFps {}'.format(label, pclRenderFps),
+		'"{}" SET Lidar dataType {}'.format(label, dataType) if dataType != None else '',
+		'"{}" SET Lidar colorLUT "{}"'.format(label, colorLUT) if colorLUT != None else '',
+		'"{}" SET Lidar colorTo "{}"'.format(label, colorTo) if colorTo != None else '',
+		'"{}" SET Lidar colorFrom "{}"'.format(label, colorFrom) if colorFrom != None else '',
 		
-		'{} SET Lidar MinimumIntensity {}'.format(label, minimumIntensity),
-		'{} SET Lidar ipAddressOverride "{}"'.format(label, ipAddressOverride) if ipAddressOverride != None else '',
+		'"{}" SET Lidar MinimumIntensity {}'.format(label, minimumIntensity),
+		'"{}" SET Lidar ipAddressOverride "{}"'.format(label, ipAddressOverride) if ipAddressOverride != None else '',
 		
-		'{} SET active true'.format(label),
+		'"{}" SET active true'.format(label),
 		
-		'{} SET Lidar accuracy {}'.format(label, accuracy),
-		'{} SET Lidar virtualCamera {}'.format(label, virtualCamera) if virtualCamera != None else '',
-		'{} SET Lidar disableUDPBroadcast {}'.format(label, 'True' if disableUDPBroadcast == True else 'False'),
-		'{} SET Lidar enableVisualizer {}'.format(label, 'True' if enableVisualizer == True else 'False'),
-		'{} SET Lidar FullScreenOutputTexture {}'.format(label, 'True' if fullScreenOutputTexture == True else 'False'),
+		'"{}" SET Lidar accuracy "{}"'.format(label, accuracy),
+		'"{}" SET Lidar virtualCamera "{}"'.format(label, virtualCamera) if virtualCamera != None else '',
+		'"{}" SET Lidar disableUDPBroadcast {}'.format(label, 'True' if disableUDPBroadcast == True else 'False'),
+		'"{}" SET Lidar enableVisualizer {}'.format(label, 'True' if enableVisualizer == True else 'False'),
+		'"{}" SET Lidar FullScreenOutputTexture "{}"'.format(label, 'True' if fullScreenOutputTexture == True else 'False'),
 		
-		'{} SET Lidar timingAccuracy {}'.format(label, timingAccuracy),
+		'"{}" SET Lidar timingAccuracy "{}"'.format(label, timingAccuracy),
 		
-		'{} ADD LidarNoLights'
+		'"{}" ADD LidarNoLights'
 	])
 
 def setup_ros_topics(label_root='ROS2', writeLinks=None, readLinks=None):
 	common.send_data([
-		'CREATE {}'.format(label_root),
-		'{} SET active false'.format(label_root),
-		'{} ADD Sensors.ROS2'.format(label_root)
+		'CREATE "{}"'.format(label_root),
+		'"{}" SET active false'.format(label_root),
+		'"{}" ADD Sensors.ROS2'.format(label_root)
 	], read=False)
 	
 	if writeLinks != None:
 		for lnk in writeLinks:
 			common.send_data([
-					'CREATE {}/{}'.format(label_root, lnk['label']),
-					'{}/{} ADD Sensors.WriteFieldLink'.format(label_root, lnk['label']),
-					'{}/{} SET Sensors.WriteFieldLink topicName {}'.format(label_root, lnk['label'], lnk['topic']),
-					'{}/{} SET Sensors.WriteFieldLink target {}'.format(label_root, lnk['label'], lnk['target']),
-					'{}/{} SET Sensors.WriteFieldLink componentName {}'.format(label_root, lnk['label'], lnk['component']),
-					'{}/{} SET Sensors.WriteFieldLink fieldName {}'.format(label_root, lnk['label'], lnk['field']),
-					'{}/{} SET Sensors.WriteFieldLink intervalSeconds {}'.format(label_root, lnk['label'], lnk['interval']),
-					'{}/{} SET active true'.format(label_root, lnk['label'])
+					'CREATE "{}/{}"'.format(label_root, lnk['label']),
+					'"{}/{}" ADD Sensors.WriteFieldLink'.format(label_root, lnk['label']),
+					'"{}/{}" SET Sensors.WriteFieldLink topicName "{}"'.format(label_root, lnk['label'], lnk['topic']),
+					'"{}/{}" SET Sensors.WriteFieldLink target "{}"'.format(label_root, lnk['label'], lnk['target']),
+					'"{}/{}" SET Sensors.WriteFieldLink componentName "{}"'.format(label_root, lnk['label'], lnk['component']),
+					'"{}/{}" SET Sensors.WriteFieldLink fieldName "{}"'.format(label_root, lnk['label'], lnk['field']),
+					'"{}/{}" SET Sensors.WriteFieldLink intervalSeconds {}'.format(label_root, lnk['label'], lnk['interval']),
+					'"{}/{}" SET active true'.format(label_root, lnk['label'])
 				], read=False)
 	
 	if readLinks != None:
 		for lnk in readLinks:
 			common.send_data([
-					'CREATE {}/{}'.format(label_root, lnk['label']),
-					'{}/{} ADD Sensors.ReadFieldLink'.format(label_root, lnk['label']),
-					'{}/{} SET Sensors.ReadFieldLink topicName {}'.format(label_root, lnk['label'], lnk['topic']),
-					'{}/{} SET Sensors.ReadFieldLink target {}'.format(label_root, lnk['label'], lnk['target']),
-					'{}/{} SET Sensors.ReadFieldLink componentName {}'.format(label_root, lnk['label'], lnk['component']),
-					'{}/{} SET Sensors.ReadFieldLink fieldName {}'.format(label_root, lnk['label'], lnk['field']),
-					'{}/{} SET Sensors.ReadFieldLink onChange true'.format(label_root, lnk['label']),
-					'{}/{} SET Sensors.ReadFieldLink intervalSeconds {}'.format(label_root, lnk['label'], lnk['interval']),
-					'{}/{} SET active true'.format(label_root, lnk['label'])
+					'CREATE "{}/{}"'.format(label_root, lnk['label']),
+					'"{}/{}" ADD Sensors.ReadFieldLink'.format(label_root, lnk['label']),
+					'"{}/{}" SET Sensors.ReadFieldLink topicName "{}"'.format(label_root, lnk['label'], lnk['topic']),
+					'"{}/{}" SET Sensors.ReadFieldLink target "{}"'.format(label_root, lnk['label'], lnk['target']),
+					'"{}/{}" SET Sensors.ReadFieldLink componentName "{}"'.format(label_root, lnk['label'], lnk['component']),
+					'"{}/{}" SET Sensors.ReadFieldLink fieldName "{}"'.format(label_root, lnk['label'], lnk['field']),
+					'"{}/{}" SET Sensors.ReadFieldLink onChange true'.format(label_root, lnk['label']),
+					'"{}/{}" SET Sensors.ReadFieldLink intervalSeconds {}'.format(label_root, lnk['label'], lnk['interval']),
+					'"{}/{}" SET active true'.format(label_root, lnk['label'])
 				], read=False)
 			
 			# workaround for cameras, if we're dealing with a targetTexture, the camera must have
 			# a RenderCamera and it must be always on, otherwise it will not broadcast propertly
 			if lnk['field'] == "targetTexture":
-				common.send_data('{} SET Sensors.RenderCamera alwaysOn true'.format(lnk['target']), read=False)
+				common.send_data('"{}" SET Sensors.RenderCamera alwaysOn true'.format(lnk['target']), read=False)
 	
 	common.send_data([
-		'{} SET active true'.format(label_root)
+		'"{}" SET active true'.format(label_root)
 	], read=True)
 
 def str_to_seg(s):
@@ -1626,61 +1627,61 @@ def set_thermal_props(
 		objs = [ objs ]
 	
 	for obj in objs:
-		common.send_data(['{} SET active false'.format(obj)], read=False)
+		common.send_data(['"{}" SET active false'.format(obj)], read=False)
 		
 		if heatiness != None:
 			common.send_data([
-				'{} SET Thermal.ThermalObjectOverride overrideHeatiness true'.format(obj),
-				'{} SET Thermal.ThermalObjectOverride heatiness.value {}'.format(obj, heatiness)
+				'"{}" SET Thermal.ThermalObjectOverride overrideHeatiness true'.format(obj),
+				'"{}" SET Thermal.ThermalObjectOverride heatiness.value {}'.format(obj, heatiness)
 			], read=False)
 		else:
 			common.send_data([
-				'{} SET Thermal.ThermalObjectOverride overrideHeatiness false'.format(obj)
+				'"{}" SET Thermal.ThermalObjectOverride overrideHeatiness false'.format(obj)
 			], read=False)
 		
 		if reflectivity != None:
 			common.send_data([
-				'{} SET Thermal.ThermalObjectOverride overrideReflectivity true'.format(obj),
-				'{} SET Thermal.ThermalObjectOverride reflectivity.value {}'.format(obj, reflectivity)
+				'"{}" SET Thermal.ThermalObjectOverride overrideReflectivity true'.format(obj),
+				'"{}" SET Thermal.ThermalObjectOverride reflectivity.value {}'.format(obj, reflectivity)
 			], read=False)
 		else:
 			common.send_data([
-				'{} SET Thermal.ThermalObjectOverride overrideReflectivity false'.format(obj)
+				'"{}" SET Thermal.ThermalObjectOverride overrideReflectivity false'.format(obj)
 			], read=False)
 		
 		if ambientOffset != None:
 			common.send_data([
-				'{} SET Thermal.ThermalObjectOverride overrideAmbientOffset true'.format(obj),
-				'{} SET Thermal.ThermalObjectOverride ambientOffset.value {}'.format(obj, ambientOffset)
+				'"{}" SET Thermal.ThermalObjectOverride overrideAmbientOffset true'.format(obj),
+				'"{}" SET Thermal.ThermalObjectOverride ambientOffset.value {}'.format(obj, ambientOffset)
 			], read=False)
 		else:
 			common.send_data([
-				'{} SET Thermal.ThermalObjectOverride overrideAmbientOffset false'.format(obj)
+				'"{}" SET Thermal.ThermalObjectOverride overrideAmbientOffset false'.format(obj)
 			], read=False)
 		
 		if temperatureValue != None or temperatureBandwidth != None or temperatureMedian != None:
-			common.send_data(['{} SET Thermal.ThermalObjectOverride overrideTemperature true'.format(obj)], read=False)
+			common.send_data(['"{}" SET Thermal.ThermalObjectOverride overrideTemperature true'.format(obj)], read=False)
 			
 			if temperatureValue != None:
-				common.send_data(['{} SET Thermal.ThermalObjectOverride temperature.value {}'.format(obj, temperatureValue)], read=False)
+				common.send_data(['"{}" SET Thermal.ThermalObjectOverride temperature.value {}'.format(obj, temperatureValue)], read=False)
 			if temperatureBandwidth != None:
-				common.send_data(['{} SET Thermal.ThermalObjectOverride temperature.bandwidth {}'.format(obj, temperatureBandwidth)], read=False)
+				common.send_data(['"{}" SET Thermal.ThermalObjectOverride temperature.bandwidth {}'.format(obj, temperatureBandwidth)], read=False)
 			if temperatureMedian != None:
-				common.send_data(['{} SET Thermal.ThermalObjectOverride temperature.median {}'.format(obj, temperatureMedian)], read=False)
+				common.send_data(['"{}" SET Thermal.ThermalObjectOverride temperature.median {}'.format(obj, temperatureMedian)], read=False)
 		else:
-			common.send_data(['{} SET Thermal.ThermalObjectOverride overrideTemperature false'.format(obj)], read=False)
+			common.send_data(['"{}" SET Thermal.ThermalObjectOverride overrideTemperature false'.format(obj)], read=False)
 		
 		if variance != None:
 			common.send_data([
-				'{} SET Thermal.ThermalObjectOverride overrideVariance true'.format(obj),
-				'{} SET Thermal.ThermalObjectOverride variance.value {}'.format(obj, variance)
+				'"{}" SET Thermal.ThermalObjectOverride overrideVariance true'.format(obj),
+				'"{}" SET Thermal.ThermalObjectOverride variance.value {}'.format(obj, variance)
 			], read=False)
 		else:
 			common.send_data([
-				'{} SET Thermal.ThermalObjectOverride overrideVariance false'.format(obj)
+				'"{}" SET Thermal.ThermalObjectOverride overrideVariance false'.format(obj)
 			], read=False)
 		
-		common.send_data(['{} SET active true'.format(obj)], read=False)
+		common.send_data(['"{}" SET active true'.format(obj)], read=False)
 	
 	common.flush_buffer()
 
@@ -1743,53 +1744,52 @@ def spawner(
 			n = names[i]
 		
 		common.send_data([
-			'CREATE {}/{}'.format(prefix, n),
-			'{}/{} SET active false'.format(prefix, n),
+			'CREATE "{}/{}"'.format(prefix, n),
+			'"{}/{}" SET active false'.format(prefix, n),
 			
-			'{}/{} ADD RandomProps.{}'.format(prefix, n, method) if method != None else '',
-			'{}/{} ADD RandomProps.PropArea'.format(prefix, n)
+			'"{}/{}" ADD RandomProps.{}'.format(prefix, n, method) if method != None else '',
+			'"{}/{}" ADD RandomProps.PropArea'.format(prefix, n)
 		], read=False)
 		
 		if seed != None:
-			# common.send_data(['{}/{} SET RandomProps.PropArea seed {}'.format(prefix, n, seed)], read=False)
-			common.send_data(['RandomProps.Random.instance SET seed {}'.format(seed)], read=False)
+			common.send_data(['"RandomProps.Random.instance" SET seed {}'.format(seed)], read=False)
 		
 		if ugly_fix == True:
 			try:
-				common.send_data(['{}/{} SET RandomProps.PropArea tags "{}"'.format(prefix, n, ugly_tag_fix(tags[i]))], read=False)
+				common.send_data(['"{}/{}" SET RandomProps.PropArea tags "{}"'.format(prefix, n, ugly_tag_fix(tags[i]))], read=False)
 			except:
-				common.send_data(['{}/{} SET RandomProps.PropArea tags "{}"'.format(prefix, n, ugly_tag_fix(t))], read=False)
+				common.send_data(['"{}/{}" SET RandomProps.PropArea tags "{}"'.format(prefix, n, ugly_tag_fix(t))], read=False)
 		else:
-			common.send_data(['{}/{} SET RandomProps.PropArea tags "{}"'.format(prefix, n, tags[i])], read=False)
+			common.send_data(['"{}/{}" SET RandomProps.PropArea tags "{}"'.format(prefix, n, tags[i])], read=False)
 		
 		if min_distance != None:
 			common.send_data([
-				'{}/{} ADD RandomProps.MinDistance'.format(prefix, n),
-				'{}/{} SET RandomProps.MinDistance value {}'.format(prefix, n, min_distance)
+				'"{}/{}" ADD RandomProps.MinDistance'.format(prefix, n),
+				'"{}/{}" SET RandomProps.MinDistance value {}'.format(prefix, n, min_distance)
 			], read=False)
 		
 		if max_distance != None:
 			common.send_data([
-				'{}/{} ADD RandomProps.MaxDistance'.format(prefix, n),
-				'{}/{} SET RandomProps.MaxDistance value {}'.format(prefix, n, max_distance)
+				'"{}/{}" ADD RandomProps.MaxDistance'.format(prefix, n),
+				'"{}/{}" SET RandomProps.MaxDistance value {}'.format(prefix, n, max_distance)
 			], read=False)
 		
 		common.send_data([
-			'{}/{} SET RandomProps.PropArea async false'.format(prefix, n),
-			'{}/{} SET RandomProps.PropArea numberOfProps {}'.format(prefix, n, limit),
+			'"{}/{}" SET RandomProps.PropArea async false'.format(prefix, n),
+			'"{}/{}" SET RandomProps.PropArea numberOfProps {}'.format(prefix, n, limit),
 			
-			'{}/{} SET RandomProps.PropArea collisionCheck {}'.format(prefix, n, collision_check),
-			'{}/{} SET RandomProps.PropArea stickToGround {}'.format(prefix, n, stick_to_ground),
+			'"{}/{}" SET RandomProps.PropArea collisionCheck {}'.format(prefix, n, collision_check),
+			'"{}/{}" SET RandomProps.PropArea stickToGround {}'.format(prefix, n, stick_to_ground),
 		], read=False)
 		
 		if method != None and method_parameters != None:
 			for key in method_parameters:
-				common.send_data('{}/{} SET RandomProps.{} {} {}'.format(prefix, n, method, key, method_parameters[key]), read=False)
+				common.send_data('"{}/{}" SET RandomProps.{} {} {}'.format(prefix, n, method, key, method_parameters[key]), read=False)
 		
 		common.send_data([
-			'{}/{} SET Transform position ({} {} {})'.format(prefix, n, position[0], position[1], position[2]) if position != None else '',
-			'{}/{} SET Transform eulerAngles ({} {} {})'.format(prefix, n, rotation[0], rotation[1], rotation[2]) if rotation != None else '',
-			'{}/{} SET Transform localScale ({} {} {})'.format(prefix, n, scale[0], scale[1], scale[2]) if scale != None else ''
+			'"{}/{}" SET Transform position ({} {} {})'.format(prefix, n, position[0], position[1], position[2]) if position != None else '',
+			'"{}/{}" SET Transform eulerAngles ({} {} {})'.format(prefix, n, rotation[0], rotation[1], rotation[2]) if rotation != None else '',
+			'"{}/{}" SET Transform localScale ({} {} {})'.format(prefix, n, scale[0], scale[1], scale[2]) if scale != None else ''
 		], read=False)
 		
 		if segmentation_class == None and auto_segment == True:
@@ -1798,13 +1798,13 @@ def spawner(
 		if segmentation_class != None:
 			if isinstance(segmentation_class, list):
 				common.send_data([
-					'{}/{} ADD Segmentation.ClassGroup'.format(prefix, n),
-					'{}/{} SET Segmentation.ClassGroup itemsClassName "{}"'.format(prefix, n, segmentation_class[i])
+					'"{}/{}" ADD Segmentation.ClassGroup'.format(prefix, n),
+					'"{}/{}" SET Segmentation.ClassGroup itemsClassName "{}"'.format(prefix, n, segmentation_class[i])
 				], read=False)
 			else:
 				common.send_data([
-					'{}/{} ADD Segmentation.ClassGroup'.format(prefix, n),
-					'{}/{} SET Segmentation.ClassGroup itemsClassName "{}"'.format(prefix, n, segmentation_class)
+					'"{}/{}" ADD Segmentation.ClassGroup'.format(prefix, n),
+					'"{}/{}" SET Segmentation.ClassGroup itemsClassName "{}"'.format(prefix, n, segmentation_class)
 				], read=False)
 		
 		if orbit == True:
@@ -1816,7 +1816,7 @@ def spawner(
 			else:
 				add_random_color(objs='{}/{}'.format(prefix, n), colors=random_colors, colors_weights=random_colors_weights, spawner=True, parts_names=parts_names)
 		
-		common.send_data('{}/{} SET active true'.format(prefix, n))
+		common.send_data('"{}/{}" SET active true'.format(prefix, n))
 		settings.obj.append('{}/{}'.format(prefix, t))
 		i = i + 1
 	
@@ -1929,14 +1929,14 @@ def spawn_flat_grid(types=[], size=[1000,1000], position=[0,0,0], scale=[1,1,1],
 		n = t.replace(' ', '_')
 		
 		common.send_data([
-			'CREATE {}/{}'.format(prefix, n),
-			'{}/{} SET active false'.format(prefix, n),
-			'{}/{} ADD RandomProps.FillGrid'.format(prefix, n),
-			'{}/{} SET Transform position ({} {} {})'.format(prefix, n, position[0], position[1], position[2]),
-			'{}/{} SET RandomProps.FillGrid tags "{}"'.format(prefix, n, ugly_tag_fix(n)),
-			'{}/{} SET RandomProps.FillGrid size ({} {})'.format(prefix, n, size[0], size[1]),
-			'{}/{} SET active true'.format(prefix, n),
-			'{}/{} SET Transform localScale ({} {} {})'.format(prefix, n, scale[0], scale[1], scale[2])
+			'CREATE "{}/{}"'.format(prefix, n),
+			'"{}/{}" SET active false'.format(prefix, n),
+			'"{}/{}" ADD RandomProps.FillGrid'.format(prefix, n),
+			'"{}/{}" SET Transform position ({} {} {})'.format(prefix, n, position[0], position[1], position[2]),
+			'"{}/{}" SET RandomProps.FillGrid tags "{}"'.format(prefix, n, ugly_tag_fix(n)),
+			'"{}/{}" SET RandomProps.FillGrid size ({} {})'.format(prefix, n, size[0], size[1]),
+			'"{}/{}" SET active true'.format(prefix, n),
+			'"{}/{}" SET Transform localScale ({} {} {})'.format(prefix, n, scale[0], scale[1], scale[2])
 		], read=False)
 		
 		settings.obj.append('{}/{}'.format(prefix, t))
@@ -1985,11 +1985,11 @@ def spawn_parking_lot(
 			carID = '?'
 		
 		common.send_data([
-			'CREATE {}/car_{} Cars/{}'.format(prefix, k, carID),
-			'{}/car_{} ADD Segmentation.ClassGroup'.format(prefix, k),
-			'{}/car_{} SET Segmentation.ClassGroup itemsClassName "{}"'.format(prefix, k, segment),
-			'{}/car_{} SET Transform position ({} {} {})'.format(prefix, k, p_x + settings.X_COMP, p_y, p_z + settings.Z_COMP),
-			'{}/car_{} SET active true'.format(prefix, k)
+			'CREATE "{}/car_{}" Cars/{}'.format(prefix, k, carID),
+			'"{}/car_{}" ADD Segmentation.ClassGroup'.format(prefix, k),
+			'"{}/car_{}" SET Segmentation.ClassGroup itemsClassName "{}"'.format(prefix, k, segment),
+			'"{}/car_{}" SET Transform position ({} {} {})'.format(prefix, k, p_x + settings.X_COMP, p_y, p_z + settings.Z_COMP),
+			'"{}/car_{}" SET active true'.format(prefix, k)
 		], read=False)
 		
 		settings.obj.append('{}/car_{}'.format(prefix, k))
@@ -2015,9 +2015,9 @@ def spawn_misc_objs(destroy=False, prefix='spawner', seed=None):
 	"""
 	if destroy == True:
 		common.send_data([
-			'DELETE {}/city'.format(prefix),
-			'DELETE {}/animals'.format(prefix),
-			'DELETE {}/cars'.format(prefix)
+			'DELETE "{}/city"'.format(prefix),
+			'DELETE "{}/animals"'.format(prefix),
+			'DELETE "{}/cars"'.format(prefix)
 		], read=False)
 		
 		common.flush_buffer()
@@ -2055,28 +2055,28 @@ def spawn_drone_objs(
 	"""
 	if destroy == True:
 		common.send_data([
-			'DELETE {}/city/nature/trees'.format(prefix),
-			'DELETE {}/city/buildings'.format(prefix),
-			'DELETE {}/animals/birds'.format(prefix),
-			'DELETE {}/drones'.format(prefix),
-			'DELETE {}/cars'.format(prefix)
+			'DELETE "{}/city/nature/trees"'.format(prefix),
+			'DELETE "{}/city/buildings"'.format(prefix),
+			'DELETE "{}/animals/birds"'.format(prefix),
+			'DELETE "{}/drones"'.format(prefix),
+			'DELETE "{}/cars"'.format(prefix)
 		], read=False)
 	else:
 		k = 0
 		idx = 0
 		
 		common.send_data([
-			'CREATE city',
-			'city SET Transform position ({} {} {})'.format(ground_position[0], ground_position[1], ground_position[2]),
-			'city SET active false'
+			'CREATE "city"',
+			'"city" SET Transform position ({} {} {})'.format(ground_position[0], ground_position[1], ground_position[2]),
+			'"city" SET active false'
 		], read=False)
 		
 		while k < ground_limit:
 			common.send_data([
-				'CREATE city/ground_{} city/ground/{}'.format(k, random.choice(ground_lst)),
-				'city/ground_{} SET Transform position ({} {} {})'.format(k, p_x + settings.X_COMP, p_y, p_z + settings.Z_COMP),
-				'city/ground_{} SET Transform localScale ({} {} {})'.format(k, 3, 3, 3),
-				'city/ground_{} SET active true'.format(k)
+				'CREATE city/ground_{}" city/ground/{}'.format(k, random.choice(ground_lst)),
+				'"city/ground_{}" SET Transform position ({} {} {})'.format(k, p_x + settings.X_COMP, p_y, p_z + settings.Z_COMP),
+				'"city/ground_{}" SET Transform localScale ({} {} {})'.format(k, 3, 3, 3),
+				'"city/ground_{}" SET active true'.format(k)
 			], read=False)
 			settings.obj.append('city/ground_{}'.format(k))
 			k += 1
@@ -2088,8 +2088,8 @@ def spawn_drone_objs(
 	
 	if ground_segment != None:
 		common.send_data([
-			'{} ADD Segmentation.ClassGroup'.format('city'),
-			'{} SET Segmentation.ClassGroup itemsClassName "{}"'.format('city', ground_segment)
+			'"{}" ADD Segmentation.ClassGroup'.format('city'),
+			'"{}" SET Segmentation.ClassGroup itemsClassName "{}"'.format('city', ground_segment)
 		])
 	
 	spawn_radius_generic(['city/ground'], tags=['ground'], limit=300, radius=150, innerradius=0, scale=[3,3,3], position=[0,0,0], collision_check=False, prefix=prefix, seed=seed)
@@ -2122,34 +2122,34 @@ def spawn_drone_objs(
 	
 	if thermal != None:
 		common.send_data([
-			'city ADD Thermal.ThermalObjectOverride',
-			'city ADD Thermal.ThermalObjectBehaviour',
-			'city SET Thermal.ThermalObjectBehaviour profile {}'.format(thermal)
+			'"city" ADD Thermal.ThermalObjectOverride',
+			'"city" ADD Thermal.ThermalObjectBehaviour',
+			'"city" SET Thermal.ThermalObjectBehaviour profile "{}"'.format(thermal)
 		])
 		
 		if not any('thermal' in s for s in birds_tags) and birds_limit[1] > 0:
 			common.send_data([
-				'{}/animals ADD Thermal.ThermalObjectOverride'.format(prefix),
-				'{}/animals ADD Thermal.ThermalObjectBehaviour'.format(prefix),
-				'{}/animals SET Thermal.ThermalObjectBehaviour profile {}'.format(prefix, thermal)
+				'"{}/animals" ADD Thermal.ThermalObjectOverride'.format(prefix),
+				'"{}/animals" ADD Thermal.ThermalObjectBehaviour'.format(prefix),
+				'"{}/animals" SET Thermal.ThermalObjectBehaviour profile "{}"'.format(prefix, thermal)
 			], read=False)
 		
 		if not any('thermal' in s for s in cars_tags) and cars_limit[1] > 0:
 			common.send_data([
-				'{}/cars ADD Thermal.ThermalObjectOverride'.format(prefix),
-				'{}/cars ADD Thermal.ThermalObjectBehaviour'.format(prefix),
-				'{}/cars SET Thermal.ThermalObjectBehaviour profile {}'.format(prefix, thermal)
+				'"{}/cars" ADD Thermal.ThermalObjectOverride'.format(prefix),
+				'"{}/cars" ADD Thermal.ThermalObjectBehaviour'.format(prefix),
+				'"{}/cars" SET Thermal.ThermalObjectBehaviour profile "{}"'.format(prefix, thermal)
 			], read=False)
 		
 		if not any('thermal' in s for s in drones_tags) and drones_limit[1] > 0:
 			common.send_data([
-				'{}/drones ADD Thermal.ThermalObjectOverride'.format(prefix),
-				'{}/drones ADD Thermal.ThermalObjectBehaviour'.format(prefix),
-				'{}/drones SET Thermal.ThermalObjectBehaviour profile {}'.format(prefix, thermal)
+				'"{}/drones" ADD Thermal.ThermalObjectOverride'.format(prefix),
+				'"{}/drones" ADD Thermal.ThermalObjectBehaviour'.format(prefix),
+				'"{}/drones" SET Thermal.ThermalObjectBehaviour profile "{}"'.format(prefix, thermal)
 			], read=False)
 	
 	common.send_data([
-		'city SET active true'
+		'"city" SET active true'
 	], read=True)
 
 def spawn_drone_objs_alt(
@@ -2160,11 +2160,11 @@ def spawn_drone_objs_alt(
 ):
 	if destroy == True:
 		common.send_data([
-			'DELETE {}/city/nature/trees'.format(prefix),
-			'DELETE {}/city/buildings'.format(prefix),
-			'DELETE {}/animals/birds'.format(prefix),
-			'DELETE {}/drones'.format(prefix),
-			'DELETE {}/cars'.format(prefix)
+			'DELETE "{}/city/nature/trees"'.format(prefix),
+			'DELETE "{}/city/buildings"'.format(prefix),
+			'DELETE "{}/animals/birds"'.format(prefix),
+			'DELETE "{}/drones"'.format(prefix),
+			'DELETE "{}/cars"'.format(prefix)
 		], read=False)
 	else:
 		k = 0
@@ -2172,10 +2172,10 @@ def spawn_drone_objs_alt(
 		
 		while k < ground_limit:
 			common.send_data([
-				'CREATE city/ground_{} city/ground/{}'.format(k, random.choice(ground_lst)),
-				'city/ground_{} SET Transform position ({} {} {})'.format(k, p_x + settings.X_COMP, p_y, p_z + settings.Z_COMP),
-				'city/ground_{} SET Transform localScale ({} {} {})'.format(k, 12, 12, 12),
-				'city/ground_{} SET active true'.format(k)
+				'CREATE "city/ground_{}" city/ground/{}'.format(k, random.choice(ground_lst)),
+				'"city/ground_{}" SET Transform position ({} {} {})'.format(k, p_x + settings.X_COMP, p_y, p_z + settings.Z_COMP),
+				'"city/ground_{}" SET Transform localScale ({} {} {})'.format(k, 12, 12, 12),
+				'"city/ground_{}" SET active true'.format(k)
 			], read=False)
 			settings.obj.append('city/ground_{}'.format(k))
 			k += 1
@@ -2205,8 +2205,8 @@ def spawn_animals_objs(destroy=False, prefix='spawner', seed=None):
 	"""
 	if destroy == True:
 		common.send_data([
-			'DELETE {}/city'.format(prefix),
-			'DELETE {}/animals'.format(prefix)
+			'DELETE "{}/city"'.format(prefix),
+			'DELETE "{}/animals"'.format(prefix)
 		], read=False)
 	
 	spawn_radius_generic(['city/nature/trees'], tags=['tree'], collision_check=True, stick_to_ground=True, limit=random.randint(150, 400), radius=80, innerradius=random.randint(30, 50), position=[0,5,0], prefix=prefix, seed=seed)

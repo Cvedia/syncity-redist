@@ -87,12 +87,18 @@ def init_telnet(ip, port, retries=3, wait=.5, timeout=30, ka_interval=3, ka_fail
 			
 			_telnet = True
 			
-			send_data(['VERSION', 'NOOP'], read=True)
+			settings._simulator_version = send_data(['VERSION', 'NOOP'], read=True)[0].replace('"', '')
+			output('Simulator Version: {}'.format(settings._simulator_version))
+			if int(settings._simulator_version.replace('.', '')[0:10]) < int(settings._simulator_min_version.replace('.', '')[0:10]):
+				output('The version of the simulator you\'re connecting with is deprecated and most likely not compatible with the version of this SDK.', 'ERROR')
+				output('You should use a old branch of the SDK or update the simulator.', 'ERROR')
+				output('SDK minimum supported simulator version: {}'.format(settings._simulator_min_version), 'ERROR')
+				output('Simulator version: {}'.format(settings._simulator_version), 'ERROR')
 			
 			if settings.assets:
-				send_data('API SET API.Manager assetsFolder "{}"'.format(settings.assets))
+				send_data('"API" SET API.Manager assetsFolder "{}"'.format(settings.assets))
 			if settings.disable_physics == False:
-				send_data('API.Manager.instance SET physicsEnabled true')
+				send_data('"API.Manager.instance" SET physicsEnabled true')
 			break
 		except Exception as e:
 			output('Error connecting: {}'.format(e), 'ERROR')
@@ -349,7 +355,7 @@ def gracefull_shutdown(a=None, b=None):
 		if settings.keep == False:
 			time.sleep(1)
 			for o in settings.obj:
-				send_data('DELETE {}'.format(o), read=False)
+				send_data('DELETE "{}"'.format(o), read=False)
 			
 			flush_buffer()
 			time.sleep(5)

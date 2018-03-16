@@ -14,7 +14,8 @@ import random
 
 from syncity import common, settings_manager
 
-SYNCITY_VERSION = '3.2.4'
+SYNCITY_VERSION = '4.0.0'
+SIMULATOR_MIN_VERSION = '18.03.15.0000'
 
 print ('SynCity toolbox - v{}\nCopyright (c) {} CVEDIA PVE Ltd\n'.format(SYNCITY_VERSION, datetime.date.today().year))
 
@@ -89,6 +90,7 @@ args = parser.parse_args()
 settings = syncity.settings_manager.Singleton()
 settings._start = time.time()
 settings._version = SYNCITY_VERSION
+settings._simulator_min_version = SIMULATOR_MIN_VERSION
 settings._root = os.path.dirname(os.path.realpath(__file__))
 settings.shutdown = False
 settings._interactive = False

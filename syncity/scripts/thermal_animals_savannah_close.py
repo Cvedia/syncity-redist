@@ -47,7 +47,7 @@ def run():
 	
 	if settings.skip_setup == False:
 		common.send_data([
-			'CREATE savannah tiles Savannah',
+			'CREATE "savannah" tiles Savannah',
 			'savannah ADD WindZone',
 			'savannah SET active true'
 		])
@@ -95,14 +95,14 @@ def run():
 		'"savannah/Main Terrain" SET Thermal.ThermalTerrain ambientOffset {}'.format(terrain_ambient_offset),
 		'"savannah/Main Terrain" SET Thermal.ThermalTerrain bandwidth {}'.format(terrain_ambient_bandwidth),
 		'"savannah/Main Terrain" SET Thermal.ThermalTerrain median {}'.format(terrain_ambient_median),
-		'cameras SET Transform position ({} {} {})'.format(3167, 265, 8160),
-		'cameras SET Transform eulerAngles ({} {} {})'.format(13, 0, 0)
+		'"cameras" SET Transform position ({} {} {})'.format(3167, 265, 8160),
+		'"cameras" SET Transform eulerAngles ({} {} {})'.format(13, 0, 0)
 	], read=False)
 	
 	while y_rot < 360:
 		common.send_data([
-			'cameras/cameraRGB SET Thermal.ThermalCamera temperatureRange ({} {})'.format(min_agc, max_agc),
-			'cameras SET Transform eulerAngles ({} {} {})'.format(x_rot, y_rot, z_rot)
+			'"cameras/cameraRGB" SET Thermal.ThermalCamera temperatureRange ({} {})'.format(min_agc, max_agc),
+			'"cameras" SET Transform eulerAngles ({} {} {})'.format(x_rot, y_rot, z_rot)
 		], read=False)
 		
 		helpers.take_snapshot(mycams, True)

@@ -43,29 +43,29 @@ def run():
 		'''
 		
 		common.send_data([
-			'CREATE drone/drone0/drone0 "{}"'.format(helpers.drones_lst[6]), # Drones/DJI Phantom 4 Pro/DJI_Phantom_4_Pro
-			'drone/drone0 ADD Segmentation.ClassGroup',
-			'drone/drone0 SET active false',
-			'drone/drone0 SET Segmentation.ClassGroup itemsClassName drone0',
-			'drone/drone0/drone0 SET Transform position ({} {} {})'.format(0, 1, 0),
-			'drone/drone0 SET active true',
-			'drone/drone0/drone0 SET active true',
+			'CREATE "drone/drone0/drone0" "{}"'.format(helpers.drones_lst[6]), # Drones/DJI Phantom 4 Pro/DJI_Phantom_4_Pro
+			'"drone/drone0" ADD Segmentation.ClassGroup',
+			'"drone/drone0" SET active false',
+			'"drone/drone0" SET Segmentation.ClassGroup itemsClassName "drone0"',
+			'"drone/drone0/drone0" SET Transform position ({} {} {})'.format(0, 1, 0),
+			'"drone/drone0" SET active true',
+			'"drone/drone0/drone0" SET active true',
 			
-			'CREATE drone/drone1/drone1 "{}"'.format(helpers.drones_lst[4]), # Drones/DJI S1000/DJI S1000
-			'drone/drone1 ADD Segmentation.ClassGroup',
-			'drone/drone1 SET active false',
-			'drone/drone1 SET Segmentation.ClassGroup itemsClassName drone1',
-			'drone/drone1/drone1 SET Transform position ({} {} {})'.format(0, 1.5, 0),
-			'drone/drone1 SET active true',
-			'drone/drone1/drone1 SET active true',
+			'CREATE "drone/drone1/drone1" "{}"'.format(helpers.drones_lst[4]), # Drones/DJI S1000/DJI S1000
+			'"drone/drone1" ADD Segmentation.ClassGroup',
+			'"drone/drone1" SET active false',
+			'"drone/drone1" SET Segmentation.ClassGroup itemsClassName "drone1"',
+			'"drone/drone1/drone1" SET Transform position ({} {} {})'.format(0, 1.5, 0),
+			'"drone/drone1" SET active true',
+			'"drone/drone1/drone1" SET active true',
 			
-			'CREATE drone/drone2/drone2 "{}"'.format(helpers.drones_lst[7]), # Drones/Parrot Disco/Parrot Disco
-			'drone/drone2 ADD Segmentation.ClassGroup',
-			'drone/drone2 SET active false',
-			'drone/drone2 SET Segmentation.ClassGroup itemsClassName drone2',
-			'drone/drone2/drone2 SET Transform position ({} {} {})'.format(0, 2, 0),
-			'drone/drone2 SET active true',
-			'drone/drone2/drone2 SET active true',
+			'CREATE "drone/drone2/drone2" "{}"'.format(helpers.drones_lst[7]), # Drones/Parrot Disco/Parrot Disco
+			'"drone/drone2" ADD Segmentation.ClassGroup',
+			'"drone/drone2" SET active false',
+			'"drone/drone2" SET Segmentation.ClassGroup itemsClassName "drone2"',
+			'"drone/drone2/drone2" SET Transform position ({} {} {})'.format(0, 2, 0),
+			'"drone/drone2" SET active true',
+			'"drone/drone2/drone2" SET active true',
 		], read=False)
 	
 	p_x_r = [-3, 3]
@@ -82,23 +82,23 @@ def run():
 	
 	# reset camera
 	common.send_data([
-		'cameras/cameraRGB SET Camera enabled true',
-		'cameras SET Transform position ({} {} {})'.format(0, 1, 0),
-		'cameras SET Transform eulerAngles ({} {} {})'.format(-20, 0, 0),
-		'EnviroSky EXECUTE EnviroSky ChangeWeather "{}"'.format(helpers.weather_lst[1]),
-		'EnviroSky SET EnviroSky cloudsMode {}'.format(helpers.clouds_lst[2]),
-		'EnviroSky SET EnviroSky cloudsSettings.globalCloudCoverage {}'.format(-0.04),
-		'drone SET Transform position ({} {} {})'.format(p_x, p_y, p_z),
-		'drone SET Transform eulerAngles ({} {} {})'.format(0, 0, 0),
+		'"cameras/cameraRGB" SET Camera enabled true',
+		'"cameras" SET Transform position ({} {} {})'.format(0, 1, 0),
+		'"cameras" SET Transform eulerAngles ({} {} {})'.format(-20, 0, 0),
+		'"EnviroSky" EXECUTE EnviroSky ChangeWeather "{}"'.format(helpers.weather_lst[1]),
+		'"EnviroSky" SET EnviroSky cloudsMode "{}"'.format(helpers.clouds_lst[2]),
+		'"EnviroSky" SET EnviroSky cloudsSettings.globalCloudCoverage {}'.format(-0.04),
+		'"drone" SET Transform position ({} {} {})'.format(p_x, p_y, p_z),
+		'"drone" SET Transform eulerAngles ({} {} {})'.format(0, 0, 0),
 		
-		'spawner/cars SET active False',
-		'spawner/cars ADD RandomProps.SpawnerRandomizers.RandomColor',
-		'spawner/cars PUSH RandomProps.SpawnerRandomizers.RandomColor availableColors Red',
-		'spawner/cars PUSH RandomProps.SpawnerRandomizers.RandomColor availableColors Yellow',
-		'spawner/cars SET active True',
+		'"spawner/cars" SET active False',
+		'"spawner/cars" ADD RandomProps.SpawnerRandomizers.RandomColor',
+		'"spawner/cars" PUSH RandomProps.SpawnerRandomizers.RandomColor availableColors "Red"',
+		'"spawner/cars" PUSH RandomProps.SpawnerRandomizers.RandomColor availableColors "Yellow"',
+		'"spawner/cars" SET active True',
 		
 		# disable blooming effects
-		'cameras/cameraRGB SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.bloom.enabled false',
+		'"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.bloom.enabled false',
 	], read=False)
 	
 	common.flush_buffer()
@@ -130,18 +130,18 @@ def run():
 			p_z_d = 1
 		
 		common.send_data([
-			'spawner/animals/birds SET Transform position ({} {} {})'.format(0, random.randint(5, 75), 0),
-			'spawner/animals/birds SET Transform eulerAngles ({} {} {})'.format(0, random.randint(0, 359), 0),
-			'spawner/cars SET Transform eulerAngles ({} {} {})'.format(0, random.randint(0, 359), 0),
-			'spawner/city/nature SET Transform eulerAngles ({} {} {})'.format(0, random.randint(0, 359), 0),
-			'spawner/city/buildings SET Transform eulerAngles ({} {} {})'.format(0, random.randint(0, 359), 0),
-			'city SET Transform eulerAngles ({} {} {})'.format(0, random.randint(0, 359), 0),
-			'EnviroSky SET EnviroSky GameTime.Hours {}'.format(random.randint(8, 12)),
-			'drone SET Transform position ({} {} {})'.format(p_x, p_y, p_z),
-			'drone SET Transform eulerAngles ({} {} {})'.format(random.randint(0, 359), random.randint(0, 359), random.randint(0, 359)),
-			'cameras/cameraRGB SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled {}'.format(motionblur),
-			'cameras/cameraRGB SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1',
-			'cameras/cameraRGB SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004'
+			'"spawner/animals/birds" SET Transform position ({} {} {})'.format(0, random.randint(5, 75), 0),
+			'"spawner/animals/birds" SET Transform eulerAngles ({} {} {})'.format(0, random.randint(0, 359), 0),
+			'"spawner/cars" SET Transform eulerAngles ({} {} {})'.format(0, random.randint(0, 359), 0),
+			'"spawner/city/nature" SET Transform eulerAngles ({} {} {})'.format(0, random.randint(0, 359), 0),
+			'"spawner/city/buildings" SET Transform eulerAngles ({} {} {})'.format(0, random.randint(0, 359), 0),
+			'"city" SET Transform eulerAngles ({} {} {})'.format(0, random.randint(0, 359), 0),
+			'"EnviroSky" SET EnviroSky GameTime.Hours {}'.format(random.randint(8, 12)),
+			'"drone" SET Transform position ({} {} {})'.format(p_x, p_y, p_z),
+			'"drone" SET Transform eulerAngles ({} {} {})'.format(random.randint(0, 359), random.randint(0, 359), random.randint(0, 359)),
+			'"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled {}'.format(motionblur),
+			'"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1',
+			'"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004'
 		], read=False)
 		
 		common.flush_buffer()

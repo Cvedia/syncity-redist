@@ -25,8 +25,8 @@ def run():
 	
 	if settings.skip_setup == False:
 		common.send_data([
-			'cameras/cameraRGB ADD Sensors.RenderCamera',
-			'cameras/cameraRGB SET Sensors.RenderCamera resolution ({} {})'.format(1024, 768),
+			'"cameras/cameraRGB" ADD Sensors.RenderCamera',
+			'"cameras/cameraRGB" SET Sensors.RenderCamera resolution ({} {})'.format(1024, 768),
 		])
 		
 		helpers.global_camera_setup(mycams[1])
@@ -54,14 +54,14 @@ def run():
 	
 	# reset camera
 	common.send_data([
-		'cameras/cameraRGB SET Camera enabled true',
-		'cameras SET Transform position ({} {} {})'.format(262, 840, 243),
-		'cameras SET Transform eulerAngles ({} {} {})'.format(90, 0, 0),
-		'EnviroSky EXECUTE EnviroSky ChangeWeather "{}"'.format(helpers.weather_lst[1]),
-		'EnviroSky SET EnviroSky cloudsMode {}'.format(helpers.clouds_lst[2]),
-		'EnviroSky SET EnviroSky cloudsSettings.globalCloudCoverage {}'.format(-0.04),
+		'"cameras/cameraRGB" SET Camera enabled true',
+		'"cameras" SET Transform position ({} {} {})'.format(262, 840, 243),
+		'"cameras" SET Transform eulerAngles ({} {} {})'.format(90, 0, 0),
+		'"EnviroSky" EXECUTE EnviroSky ChangeWeather "{}"'.format(helpers.weather_lst[1]),
+		'"EnviroSky" SET EnviroSky cloudsMode "{}"'.format(helpers.clouds_lst[2]),
+		'"EnviroSky" SET EnviroSky cloudsSettings.globalCloudCoverage {}'.format(-0.04),
 		# HACK: change output type to get multiple segmentation classIds working
-		'cameras/segmentation SET Segmentation.Segmentation OutputType InstanceIds'
+		'cameras/segmentation SET Segmentation.Segmentation OutputType "InstanceIds"'
 	], read=False)
 	
 	common.flush_buffer()
@@ -94,10 +94,10 @@ def run():
 		
 		common.send_data([
 			# 'cameras SET Transform eulerAngles ({} {} {})'.format(-20, y, 0),
-			'EnviroSky SET EnviroSky GameTime.Hours {}'.format(random.randint(8, 12)),
-			'cameras/cameraRGB SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled {}'.format(motionblur),
-			'cameras/cameraRGB SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1',
-			'cameras/cameraRGB SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004'
+			'"EnviroSky" SET EnviroSky GameTime.Hours {}'.format(random.randint(8, 12)),
+			'"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled {}'.format(motionblur),
+			'"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1',
+			'"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004'
 		], read=False)
 		
 		common.flush_buffer()

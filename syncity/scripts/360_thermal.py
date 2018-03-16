@@ -56,31 +56,31 @@ def run():
 		helpers.add_disk_output(mycams)
 		common.send_data([
 			# bind object to segmentation Car
-			'CREATE obj',
-			'obj ADD Segmentation.ClassGroup',
-			'obj SET Segmentation.ClassGroup itemsClassName Car',
+			'CREATE "obj"',
+			'"obj" ADD Segmentation.ClassGroup',
+			'"obj" SET Segmentation.ClassGroup itemsClassName "Car"',
 			
-			'CREATE obj/subject {}'.format(obj),
-			'obj/subject SET Transform position ({} {} {})'.format(0, 0, 0),
-			'obj/subject SET Transform eulerAngles ({} {} {})'.format(0, 0, 0),
+			'CREATE "obj/subject" "{}"'.format(obj),
+			'"obj/subject" SET Transform position ({} {} {})'.format(0, 0, 0),
+			'"obj/subject" SET Transform eulerAngles ({} {} {})'.format(0, 0, 0),
 			
-			'obj/subject ADD Thermal.ThermalObjectOverride',
+			'"obj/subject" ADD Thermal.ThermalObjectOverride',
 			
-			'obj/subject ADD Thermal.ThermalObjectBehaviour',
-			'obj/subject SET Thermal.ThermalObjectBehaviour profile DefaultThermalProfile',
+			'"obj/subject" ADD Thermal.ThermalObjectBehaviour',
+			'"obj/subject" SET Thermal.ThermalObjectBehaviour profile "DefaultThermalProfile"',
 			
-			'obj SET Transform position ({} {} {})'.format(-6, 0, -9),
-			'obj SET Transform eulerAngles ({} {} {})'.format(0, 0, 0)
+			'"obj" SET Transform position ({} {} {})'.format(-6, 0, -9),
+			'"obj" SET Transform eulerAngles ({} {} {})'.format(0, 0, 0)
 			
 	], read=False)
 	
 	# reset camera
 	common.send_data([
-		'obj SET active true',
-		'obj/subject SET active true',
-		'cameras/cameraRGB SET Camera enabled true',
-		'cameras SET Transform position ({} {} {})'.format(0, 1, -16),
-		'cameras SET Transform eulerAngles ({} {} {})'.format(0, -40, 0)
+		'"obj" SET active true',
+		'"obj/subject" SET active true',
+		'"cameras/cameraRGB" SET Camera enabled true',
+		'"cameras" SET Transform position ({} {} {})'.format(0, 1, -16),
+		'"cameras" SET Transform eulerAngles ({} {} {})'.format(0, -40, 0)
 	], read=False)
 	
 	if settings.setup_only == True:
@@ -109,9 +109,9 @@ def run():
 			)
 			
 			common.send_data([
-				'cameras/thermal SET Thermal.ThermalCamera temperatureRange ({} {})'.format(min_agc, max_agc),
-				'obj SET Transform eulerAngles ({} {} {})'.format(a_x, a_y, 0),
-				'obj SET Transform position ({} {} {})'.format(random.randint(-23, -3) , 0, 0)
+				'"cameras/thermal" SET Thermal.ThermalCamera temperatureRange ({} {})'.format(min_agc, max_agc),
+				'"obj" SET Transform eulerAngles ({} {} {})'.format(a_x, a_y, 0),
+				'"obj" SET Transform position ({} {} {})'.format(random.randint(-23, -3) , 0, 0)
 			])
 			
 			a_y = a_y + displ_y

@@ -118,13 +118,13 @@ def run():
 			'"spawner/animals0/Elef(Clone)" SET Thermal.ThermalObjectBehaviour profile.heatiness.value 40',
 			
 			# respawn them to update profiles properly
-			'spawner SET active false',
+			'"spawner" SET active false',
 			
-			'spawner/animals1 SET Transform position (2519 591 9005)',
-			'spawner/animals2 SET Transform position (2519 591 8380)',
-			'spawner/animals3 SET Transform position (2519 591 7755)',
+			'"spawner/animals1" SET Transform position (2519 591 9005)',
+			'"spawner/animals2" SET Transform position (2519 591 8380)',
+			'"spawner/animals3" SET Transform position (2519 591 7755)',
 			
-			'spawner SET active true'
+			'"spawner" SET active true'
 			
 		], read=False)
 	
@@ -133,11 +133,11 @@ def run():
 	
 	while dist > 0:
 		common.send_data([
-			'cameras/cameraRGB SET Thermal.ThermalCamera temperatureRange ({} {})'.format(min_agc, max_agc),
-			'cameras SET Orbit distance {}'.format(dist),
-			'cameras SET Orbit elevation {}'.format(elevation),
-			'cameras SET Orbit azimuth {}'.format(azimuth),
-			'cameras SET Orbit snapOffset {}'.format(snapOffset)
+			'"cameras/cameraRGB" SET Thermal.ThermalCamera temperatureRange ({} {})'.format(min_agc, max_agc),
+			'"cameras" SET Orbit distance {}'.format(dist),
+			'"cameras" SET Orbit elevation {}'.format(elevation),
+			'"cameras" SET Orbit azimuth {}'.format(azimuth),
+			'"cameras" SET Orbit snapOffset {}'.format(snapOffset)
 		], read=False)
 		
 		helpers.take_snapshot(mycams, True)

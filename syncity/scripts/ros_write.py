@@ -24,15 +24,15 @@ def run():
 		helpers.global_disk_setup()
 		helpers.add_disk_output(mycams)
 		common.send_data([
-			'CREATE obj/subject {}'.format(obj),
-			'obj SET active false',
-			'obj/subject SET Transform position ({} {} {})'.format(0, 0, 0),
-			'obj/subject SET Transform eulerAngles ({} {} {})'.format(0, 0, 0),
+			'CREATE "obj/subject" {}'.format(obj),
+			'"obj" SET active false',
+			'"obj/subject" SET Transform position ({} {} {})'.format(0, 0, 0),
+			'"obj/subject" SET Transform eulerAngles ({} {} {})'.format(0, 0, 0),
 			
-			'obj ADD Segmentation.ClassGroup',
-			'obj SET Segmentation.ClassGroup itemsClassName Car',
-			'obj SET Transform position ({} {} {})'.format(-6, 0, -9),
-			'obj SET Transform eulerAngles ({} {} {})'.format(0, 0, 0),
+			'"obj" ADD Segmentation.ClassGroup',
+			'"obj" SET Segmentation.ClassGroup itemsClassName "Car"',
+			'"obj" SET Transform position ({} {} {})'.format(-6, 0, -9),
+			'"obj" SET Transform eulerAngles ({} {} {})'.format(0, 0, 0),
 			
 			# 'CREATE city/ground_0 city/ground/Grass',
 			# 'city/ground_0 SET Transform position (0 0 0)',
@@ -41,17 +41,17 @@ def run():
 	
 	# reset camera
 	common.send_data([
-		'obj SET active true',
-		'obj/subject SET active true',
+		'"obj" SET active true',
+		'"obj/subject" SET active true',
 		
-		'cameras/cameraRGB SET Camera enabled true',
-		'cameras/segmentation SET Camera enabled true',
+		'"cameras/cameraRGB" SET Camera enabled true',
+		'"cameras/segmentation" SET Camera enabled true',
 		
-		'cameras SET Transform position ({} {} {})'.format(0, 1, -16),
-		'cameras SET Transform eulerAngles ({} {} {})'.format(0, -40, 0),
-		'EnviroSky SET EnviroSky cloudsMode {}'.format('Volume'),
-		'EnviroSky SET EnviroSky cloudsSettings.globalCloudCoverage {}'.format(-0.04),
-		'EnviroSky EXECUTE EnviroSky ChangeWeather "{}"'.format(helpers.weather_lst[1]),
+		'"cameras" SET Transform position ({} {} {})'.format(0, 1, -16),
+		'"cameras" SET Transform eulerAngles ({} {} {})'.format(0, -40, 0),
+		'"EnviroSky" SET EnviroSky cloudsMode "{}"'.format('Volume'),
+		'"EnviroSky" SET EnviroSky cloudsSettings.globalCloudCoverage {}'.format(-0.04),
+		'"EnviroSky" EXECUTE EnviroSky ChangeWeather "{}"'.format(helpers.weather_lst[1]),
 	])
 	
 	helpers.setup_ros_topics(
@@ -106,7 +106,7 @@ def run():
 		# do a 360 around object
 		while a_y < 360:
 			common.send_data([
-				'obj SET Transform eulerAngles ({} {} {})'.format(a_x, a_y, 0)
+				'"obj" SET Transform eulerAngles ({} {} {})'.format(a_x, a_y, 0)
 			])
 			a_y = a_y + displ_y
 			helpers.take_snapshot(mycams, True)

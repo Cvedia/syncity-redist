@@ -32,10 +32,10 @@ def run():
 		i = 0
 		for d in helpers.drones_lst:
 			common.send_data([
-				'CREATE drone/dr_{} {}'.format(i, d),
-				'drone/dr_{} ADD Segmentation.ClassGroup'.format(i),
-				'drone/dr_{} SET Segmentation.ClassGroup itemsClassName Car'.format(i),
-				'drone/dr_{} SET Transform position ({} {} {})'.format(i, i, 1, 0)
+				'CREATE "drone/dr_{}" "{}"'.format(i, d),
+				'"drone/dr_{}" ADD Segmentation.ClassGroup'.format(i),
+				'"drone/dr_{}" SET Segmentation.ClassGroup itemsClassName "Car"'.format(i),
+				'"drone/dr_{}" SET Transform position ({} {} {})'.format(i, i, 1, 0)
 			], read=False)
 			i = i + 1
 	
@@ -57,14 +57,14 @@ def run():
 	
 	# reset camera
 	common.send_data([
-		'cameras/cameraRGB SET Camera enabled true',
-		'cameras SET Transform position ({} {} {})'.format(0, 1, 0),
-		'cameras SET Transform eulerAngles ({} {} {})'.format(-20, 0, 0),
-		'EnviroSky EXECUTE EnviroSky ChangeWeather "{}"'.format(helpers.weather_lst[1]),
-		'EnviroSky SET EnviroSky cloudsMode {}'.format(helpers.clouds_lst[2]),
-		'EnviroSky SET EnviroSky cloudsSettings.globalCloudCoverage {}'.format(-0.04),
-		'drone SET Transform position ({} {} {})'.format(p_x, p_y, p_z),
-		'drone SET Transform eulerAngles ({} {} {})'.format(a_x, a_y, a_z)
+		'"cameras/cameraRGB" SET Camera enabled true',
+		'"cameras" SET Transform position ({} {} {})'.format(0, 1, 0),
+		'"cameras" SET Transform eulerAngles ({} {} {})'.format(-20, 0, 0),
+		'"EnviroSky" EXECUTE EnviroSky ChangeWeather "{}"'.format(helpers.weather_lst[1]),
+		'"EnviroSky" SET EnviroSky cloudsMode "{}"'.format(helpers.clouds_lst[2]),
+		'"EnviroSky" SET EnviroSky cloudsSettings.globalCloudCoverage {}'.format(-0.04),
+		'"drone" SET Transform position ({} {} {})'.format(p_x, p_y, p_z),
+		'"drone" SET Transform eulerAngles ({} {} {})'.format(a_x, a_y, a_z)
 	], read=False)
 	
 	loop = 0
@@ -96,19 +96,19 @@ def run():
 			p_z_d = 1
 		
 		common.send_data([
-			'spawner/animals/birds SET Transform position ({} {} {})'.format(0, random.randint(5, 75), 0),
-			'spawner/animals/birds SET Transform eulerAngles ({} {} {})'.format(0, random.randint(0, 359), 0),
-			'spawner/cars SET Transform eulerAngles ({} {} {})'.format(0, random.randint(0, 359), 0),
-			'spawner/city/nature SET Transform eulerAngles ({} {} {})'.format(0, random.randint(0, 359), 0),
-			'spawner/city/buildings SET Transform eulerAngles ({} {} {})'.format(0, random.randint(0, 359), 0),
-			# 'cameras SET Transform eulerAngles ({} {} {})'.format(-20, y, 0),
-			'city SET Transform eulerAngles ({} {} {})'.format(0, random.randint(0, 359), 0),
-			'EnviroSky SET EnviroSky GameTime.Hours {}'.format(random.randint(8, 18)),
-			'drone SET Transform position ({} {} {})'.format(p_x, p_y, p_z),
-			'drone SET Transform eulerAngles ({} {} {})'.format(a_x, a_y, a_z),
-			'cameras/cameraRGB SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled {}'.format(motionblur),
-			'cameras/cameraRGB SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1',
-			'cameras/cameraRGB SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004'
+			'"spawner/animals/birds" SET Transform position ({} {} {})'.format(0, random.randint(5, 75), 0),
+			'"spawner/animals/birds" SET Transform eulerAngles ({} {} {})'.format(0, random.randint(0, 359), 0),
+			'"spawner/cars" SET Transform eulerAngles ({} {} {})'.format(0, random.randint(0, 359), 0),
+			'"spawner/city/nature" SET Transform eulerAngles ({} {} {})'.format(0, random.randint(0, 359), 0),
+			'"spawner/city/buildings" SET Transform eulerAngles ({} {} {})'.format(0, random.randint(0, 359), 0),
+			# '"cameras" SET Transform eulerAngles ({} {} {})'.format(-20, y, 0),
+			'"city" SET Transform eulerAngles ({} {} {})'.format(0, random.randint(0, 359), 0),
+			'"EnviroSky" SET EnviroSky GameTime.Hours {}'.format(random.randint(8, 18)),
+			'"drone" SET Transform position ({} {} {})'.format(p_x, p_y, p_z),
+			'"drone" SET Transform eulerAngles ({} {} {})'.format(a_x, a_y, a_z),
+			'"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled {}'.format(motionblur),
+			'"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1',
+			'"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004'
 		], read=False)
 		
 		common.flush_buffer()

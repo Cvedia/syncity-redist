@@ -48,13 +48,13 @@ def run():
 	elevation = 2.5
 	
 	common.send_data([
-		'cameras SET Orbit distance {}'.format(dist),
-		'cameras SET Orbit elevation {}'.format(elevation),
-		'cameras SET Orbit azimuth {}'.format(azimuth)
+		'"cameras" SET Orbit distance {}'.format(dist),
+		'"cameras" SET Orbit elevation {}'.format(elevation),
+		'"cameras" SET Orbit azimuth {}'.format(azimuth)
 	])
 	
 	# get spanwed objects - this returns an array
-	spawned_cars = json.loads(''.join(common.send_data('{} GET CHILDREN'.format('spawner/car___thermal'))[1:]))
+	spawned_cars = json.loads(''.join(common.send_data('"{}" GET CHILDREN'.format('spawner/car___thermal'))[1:]))
 	
 	if len(spawned_cars) == 0:
 		common.output('No thermal cars spawned, maybe your asset package doesn\'t include any. Aborting!');
@@ -67,9 +67,9 @@ def run():
 		robj = 'spawner/car___thermal/{}'.format(random.choice(spawned_cars))
 		
 		common.send_data([
-			'spawner/car___thermal SET Transform eulerAngles ({} {} {})'.format(0, r_y, 0),
+			'"spawner/car___thermal" SET Transform eulerAngles ({} {} {})'.format(0, r_y, 0),
 			# set a random ambient temperature
-			'{} SET Thermal.Thermal AmbientTemperature {}'.format('cameras/cameraRGB', random.randint(0, 20)), # -50 - 50 float
+			'"{}" SET Thermal.Thermal AmbientTemperature {}'.format('cameras/cameraRGB', random.randint(0, 20)), # -50 - 50 float
 			
 			# change thermal properties of a random spawned object
 			'"{}" SET Thermal.TemperatureInfo temperature {}'.format(robj, random.randint(20, 50)), # 0 - 500

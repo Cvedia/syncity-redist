@@ -37,7 +37,7 @@ def run():
 	mycams = ['cameras/cameraRGB', 'cameras/segmentation']
 #	mycams = ['cameras/cameraRGB', 'cameras/segmentation', 'cameras/depth']
 	
-	common.send_data('API.Manager.instance SET physicsEnabled false')
+	common.send_data('"API.Manager.instance"" SET physicsEnabled false')
 	
 	if settings.skip_setup == False:
 		helpers.global_camera_setup()
@@ -50,7 +50,7 @@ def run():
 		helpers.add_disk_output(mycams)
 		
 		# HACK: if you want to return BLOBs instead of DEPTH maps use this:
-		common.send_data([ 'disk1/Cameras/depth SET Sensors.RenderCameraLink outputType BLOB' ])
+		common.send_data([ '"disk1/Cameras/depth"" SET Sensors.RenderCameraLink outputType "BLOB"' ])
 		
 		helpers.spawn_drone_objs(
 			# prefix='cameras/spawner',
@@ -78,30 +78,30 @@ def run():
 		"""
 		for x in range(0,2):
 			common.send_data([
-				'CREATE cameras/drone/drone{}/drone{} "{}"'.format(x,x,helpers.drones_lst[6]), # Drones/DJI Phantom 4 Pro/DJI_Phantom_4_Pro
-				'cameras/drone/drone{} ADD Segmentation.ClassGroup'.format(x),
-				'cameras/drone/drone{} SET active false'.format(x),
+				'CREATE "cameras/drone/drone{}/drone{}" "{}"'.format(x,x,helpers.drones_lst[6]), # Drones/DJI Phantom 4 Pro/DJI_Phantom_4_Pro
+				'"cameras/drone/drone{}" ADD Segmentation.ClassGroup'.format(x),
+				'"cameras/drone/drone{}" SET active false'.format(x),
 				
-				'cameras/drone/drone{} SET Segmentation.ClassGroup itemsClassName drone0'.format(x),
-				'cameras/drone/drone{}/drone{} SET Transform position ({} {} {})'.format(x, x, 0, 1, 0),
+				'"cameras/drone/drone{}" SET Segmentation.ClassGroup itemsClassName "drone0"'.format(x),
+				'"cameras/drone/drone{}/drone{}" SET Transform position ({} {} {})'.format(x, x, 0, 1, 0),
 			], read=False)
 			
 			common.send_data([
-				'cameras/drone/drone{} SET active true'.format(x),
-				'cameras/drone/drone{}/drone{} SET active true'.format(x, x),
-				'cameras/drone/drone{}/drone{} SET Transform localPosition (0 0 0)'.format(x,x),
+				'"cameras/drone/drone{}" SET active true'.format(x),
+				'"cameras/drone/drone{}/drone{}" SET active true'.format(x, x),
+				'"cameras/drone/drone{}/drone{}" SET Transform localPosition (0 0 0)'.format(x,x),
 			], read=False)
 			
 			# randomize colors of drones
 			helpers.add_random_color(['cameras/drone/drone{}/drone{}'.format(x, x)], method="Random")
 			
 			common.send_data([
-				'cameras/drone/drone{}/drone{} SET RandomProps.RandomColor partsNames "chassis,legs,motors,battery,bolts,sensors_caps,sensors,camera,blades"'.format(x,x),
-#				'cameras/drone/drone{}/drone{} PUSH RandomProps.RandomColor availableColors "#FF0000"'.format(x,x),
-#				'cameras/drone/drone{}/drone{} PUSH RandomProps.RandomColor availableColors "#FFFFFF"'.format(x,x),
-#				'cameras/drone/drone{}/drone{} PUSH RandomProps.RandomColor availableColors "#00FF00"'.format(x,x),
-#				'cameras/drone/drone{}/drone{} PUSH RandomProps.RandomColor availableColors "#0000FF"'.format(x,x),
-#				'cameras/drone/drone{}/drone{} PUSH RandomProps.RandomColor availableColors "#101010"'.format(x,x),
+				'"cameras/drone/drone{}/drone{}" SET RandomProps.RandomColor partsNames "chassis,legs,motors,battery,bolts,sensors_caps,sensors,camera,blades"'.format(x,x),
+#				'"cameras/drone/drone{}/drone{} PUSH RandomProps.RandomColor availableColors "#FF0000"'.format(x,x),
+#				'"cameras/drone/drone{}/drone{} PUSH RandomProps.RandomColor availableColors "#FFFFFF"'.format(x,x),
+#				'"cameras/drone/drone{}/drone{} PUSH RandomProps.RandomColor availableColors "#00FF00"'.format(x,x),
+#				'"cameras/drone/drone{}/drone{} PUSH RandomProps.RandomColor availableColors "#0000FF"'.format(x,x),
+#				'"cameras/drone/drone{}/drone{} PUSH RandomProps.RandomColor availableColors "#101010"'.format(x,x),
 			], read=False)
 		"""
 		
@@ -122,32 +122,32 @@ def run():
 	
 	# reset camera
 	common.send_data([
-		'cameras/cameraRGB SET Camera enabled true',
-		'cameras SET Transform position ({} {} {})'.format(0, 5, 0),
-		'cameras SET Transform eulerAngles ({} {} {})'.format(random.uniform(-20, 0), 0, 0),
-		'EnviroSky EXECUTE EnviroSky ChangeWeather "{}"'.format(helpers.weather_lst[2]),
-		'EnviroSky SET EnviroSky cloudsMode {}'.format(helpers.clouds_lst[2]),
-		'EnviroSky SET EnviroSky fogSettings.heightFog false',
-		'EnviroSky SET EnviroSky fogSettings.distanceFog false',
-		'EnviroSky SET EnviroSky cloudsSettings.globalCloudCoverage {}'.format(-0.04),
-#		'cameras/drone SET Transform localPosition (0 0 0)',
-#		'cameras/drone SET Transform eulerAngles ({} {} {})'.format(0, 0, 0),
-#		'cameras/drone SET Transform localEulerAngles ({} {} {})'.format(10, 0, 0),
-		'{} SET Sensors.RenderCamera alwaysOn false'.format(mycams[0]),
-		'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false'.format(mycams[0]),
-		'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.shutterAngle {}'.format(mycams[0], 270),
-		'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount {}'.format(mycams[0], 32),
-		'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending {}'.format(mycams[0], 1),
-		'disk1 SET Sensors.Disk counter {}'.format(loop+1),
+		'"cameras/cameraRGB" SET Camera enabled true',
+		'"cameras" SET Transform position ({} {} {})'.format(0, 5, 0),
+		'"cameras" SET Transform eulerAngles ({} {} {})'.format(random.uniform(-20, 0), 0, 0),
+		'"EnviroSky" EXECUTE EnviroSky ChangeWeather "{}"'.format(helpers.weather_lst[2]),
+		'"EnviroSky" SET EnviroSky cloudsMode "{}"'.format(helpers.clouds_lst[2]),
+		'"EnviroSky" SET EnviroSky fogSettings.heightFog false',
+		'"EnviroSky" SET EnviroSky fogSettings.distanceFog false',
+		'"EnviroSky" SET EnviroSky cloudsSettings.globalCloudCoverage {}'.format(-0.04),
+#		'cameras/drone" SET Transform localPosition (0 0 0)',
+#		'cameras/drone" SET Transform eulerAngles ({} {} {})'.format(0, 0, 0),
+#		'cameras/drone" SET Transform localEulerAngles ({} {} {})'.format(10, 0, 0),
+		'"{}" SET Sensors.RenderCamera alwaysOn false'.format(mycams[0]),
+		'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false'.format(mycams[0]),
+		'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.shutterAngle {}'.format(mycams[0], 270),
+		'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount {}'.format(mycams[0], 32),
+		'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending {}'.format(mycams[0], 1),
+		'"disk1" SET Sensors.Disk counter {}'.format(loop+1),
 		
-		#'spawner/cars SET active False',
+		#'"spawner/cars" SET active False',
 		
 		# if not using cars, +thermal
-		#'spawner/cars ADD Thermal.ThermalObjectOverride',
-		#'spawner/cars SET active True',
+		#'"spawner/cars" ADD Thermal.ThermalObjectOverride',
+		#'"spawner/cars" SET active True',
 		
 		# disable blooming effects
-		'cameras/cameraRGB SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.bloom.enabled false',
+		'"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.bloom.enabled false',
 	], read=False)
 	
 	#helpers.set_thermal_props('city', temperatureValue=0, temperatureBandwidth=0, temperatureMedian=0, variance=0, reflectivity=0, heatiness=0, ambientOffset=0)
@@ -185,78 +185,78 @@ def run():
 		render_width = math.floor(render_width / 64) * 64
 		render_height = math.floor(render_height / 64) * 64
 		
-#		common.send_data([ 'cameras/cameraRGB SET Sensors.RenderCamera resolution ({} {})'.format(render_width, render_height) ])
-#		common.send_data([ 'cameras/segmentation SET Sensors.RenderCamera resolution ({} {})'.format(render_width, render_height) ])
+#		common.send_data([ 'cameras/cameraRGB" SET Sensors.RenderCamera resolution ({} {})'.format(render_width, render_height) ])
+#		common.send_data([ 'cameras/segmentation" SET Sensors.RenderCamera resolution ({} {})'.format(render_width, render_height) ])
 		
 		if loop % 100 == 0 and loop > 0:
 			common.send_data([
-				'spawner/city/ground SET active false',
-				'spawner/city/ground SET RandomProps.PropArea numberOfProps {}'.format(random.randint(999, 1000)),
-				'spawner/city/ground SET active true',
+				'"spawner/city/ground" SET active false',
+				'"spawner/city/ground" SET RandomProps.PropArea numberOfProps {}'.format(random.randint(999, 1000)),
+				'"spawner/city/ground" SET active true',
 				
-				'spawner/cars SET active false',
-				'spawner/cars SET RandomProps.PropArea numberOfProps {}'.format(random.randint(35, 75)),
-				'spawner/cars SET active true',
+				'"spawner/cars" SET active false',
+				'"spawner/cars" SET RandomProps.PropArea numberOfProps {}'.format(random.randint(35, 75)),
+				'"spawner/cars" SET active true',
 
-				'spawner/city/nature/trees SET active false',
-				'spawner/city/nature/trees SET RandomProps.PropArea numberOfProps {}'.format(random.randint(70, 200)),
-				'spawner/city/nature/trees SET active true',
+				'"spawner/city/nature/trees" SET active false',
+				'"spawner/city/nature/trees" SET RandomProps.PropArea numberOfProps {}'.format(random.randint(70, 200)),
+				'"spawner/city/nature/trees" SET active true',
 
-				'spawner/city/buildings SET active false',
-				'spawner/city/buildings SET RandomProps.PropArea numberOfProps {}'.format(random.randint(100, 150)),
-				'spawner/city/buildings SET RandomProps.Torus innerRadius {}'.format(random.randint(30, 100)),
-				'spawner/city/buildings SET active true',
+				'"spawner/city/buildings" SET active false',
+				'"spawner/city/buildings" SET RandomProps.PropArea numberOfProps {}'.format(random.randint(100, 150)),
+				'"spawner/city/buildings" SET RandomProps.Torus innerRadius {}'.format(random.randint(30, 100)),
+				'"spawner/city/buildings" SET active true',
 
-				'spawner/roadsigns SET active false',
-				'spawner/roadsigns SET RandomProps.PropArea numberOfProps {}'.format(random.randint(160, 250)),
-				'spawner/roadsigns SET active true',
+				'"spawner/roadsigns" SET active false',
+				'"spawner/roadsigns" SET RandomProps.PropArea numberOfProps {}'.format(random.randint(160, 250)),
+				'"spawner/roadsigns" SET active true',
 
-				'spawner/humans_0 SET active false',
-				'spawner/humans_0 SET RandomProps.PropArea numberOfProps {}'.format(random.randint(50, 70)),
-				'spawner/humans_0 SET active true',
+				'"spawner/humans_0" SET active false',
+				'"spawner/humans_0" SET RandomProps.PropArea numberOfProps {}'.format(random.randint(50, 70)),
+				'"spawner/humans_0" SET active true',
 			], read=False)
 		elif loop % 10 == 0:
 			common.send_data([
-				'spawner/city/ground EXECUTE RandomProps.PropArea Shuffle',
-				'spawner/cars EXECUTE RandomProps.PropArea Shuffle',
-				'spawner/city/nature/trees EXECUTE RandomProps.PropArea Shuffle',
-				'spawner/animals/birds EXECUTE RandomProps.PropArea Shuffle',
-				'spawner/city/buildings EXECUTE RandomProps.PropArea Shuffle',
-				'spawner/roadsigns EXECUTE RandomProps.PropArea Shuffle',
-				'spawner/humans_0 EXECUTE RandomProps.PropArea Shuffle',
+				'"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle',
+				'"spawner/cars" EXECUTE RandomProps.PropArea Shuffle',
+				'"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle',
+				'"spawner/animals/birds" EXECUTE RandomProps.PropArea Shuffle',
+				'"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle',
+				'"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle',
+				'"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle',
 			], read=False)
 
 			common.send_data([
-				'EnviroSky SET EnviroSky GameTime.Hours {}'.format(random.randint(10, 17)),
+				'"EnviroSky" SET EnviroSky GameTime.Hours {}'.format(random.randint(10, 17)),
 				
-				'cameras/cameraRGB SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation {}'.format(random.uniform(0.4, 1.3)),
-				'cameras/cameraRGB SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.postExposure {}'.format(random.uniform(-0.5, 0.2)),
-				'cameras/cameraRGB SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast {}'.format(random.uniform(0.9, 1.3)),
-				'cameras/cameraRGB SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity {}'.format(random.uniform(0.0, 0.3))
+				'"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation {}'.format(random.uniform(0.4, 1.3)),
+				'"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.postExposure {}'.format(random.uniform(-0.5, 0.2)),
+				'"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast {}'.format(random.uniform(0.9, 1.3)),
+				'"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity {}'.format(random.uniform(0.0, 0.3))
 			], read=False)
 			
 		common.send_data([
-			'cameras SET Transform position ({} {} {})'.format(0, random.uniform(5, 20), 0),
-			'cameras SET Transform eulerAngles ({} {} {})'.format(random.uniform(-20, 70), 0, 0)
+			'"cameras" SET Transform position ({} {} {})'.format(0, random.uniform(5, 20), 0),
+			'"cameras" SET Transform eulerAngles ({} {} {})'.format(random.uniform(-20, 70), 0, 0)
 		], read=False)
 
 		p_z = 2.3
 		
 		"""
 		common.send_data([
-			'cameras/drone/drone0 SET Transform localPosition ({} {} {})'.format(random.uniform(-1.0, 1.0), random.uniform(-0.3, 0.70), p_z),
-			'cameras/drone/drone1 SET Transform localPosition ({} {} {})'.format(random.uniform(-1.0, 1.0), random.uniform(0.80, 1.3), p_z),
-#			'cameras/drone/drone0 SET Transform localPosition ({} {} {})'.format(random.uniform(-1.2, 1.2), random.uniform(-0.3, 0.70), p_z),
-#			'cameras/drone/drone1 SET Transform localPosition ({} {} {})'.format(random.uniform(-1.2, 1.2), random.uniform(0.80, 1.3), p_z),
+			'"cameras/drone/drone0" SET Transform localPosition ({} {} {})'.format(random.uniform(-1.0, 1.0), random.uniform(-0.3, 0.70), p_z),
+			'"cameras/drone/drone1" SET Transform localPosition ({} {} {})'.format(random.uniform(-1.0, 1.0), random.uniform(0.80, 1.3), p_z),
+#			'"cameras/drone/drone0" SET Transform localPosition ({} {} {})'.format(random.uniform(-1.2, 1.2), random.uniform(-0.3, 0.70), p_z),
+#			'"cameras/drone/drone1" SET Transform localPosition ({} {} {})'.format(random.uniform(-1.2, 1.2), random.uniform(0.80, 1.3), p_z),
 			
-#			'cameras/drone/drone0 SET Transform localPosition ({} {} {})'.format(random.uniform(-1.2, -0.5), random.uniform(-0.3, 0.70), p_z),
-#			'cameras/drone/drone1 SET Transform localPosition ({} {} {})'.format(random.uniform(-0.6, 0), random.uniform(-0.3, 0.70), p_z),
-#			'cameras/drone/drone2 SET Transform localPosition ({} {} {})'.format(random.uniform(0.05, 0.55), random.uniform(-0.3, 0.70), p_z),
-#			'cameras/drone/drone3 SET Transform localPosition ({} {} {})'.format(random.uniform(0.65, 1.2), random.uniform(-0.3, 0.70), p_z),
-#			'cameras/drone/drone4 SET Transform localPosition ({} {} {})'.format(random.uniform(-1.2, -0.5), random.uniform(0.80, 1.3), p_z),
-#			'cameras/drone/drone5 SET Transform localPosition ({} {} {})'.format(random.uniform(-0.6, 0), random.uniform(0.80, 1.3), p_z),
-#			'cameras/drone/drone6 SET Transform localPosition ({} {} {})'.format(random.uniform(0.05, 0.55), random.uniform(0.80, 1.3), p_z),
-#			'cameras/drone/drone7 SET Transform localPosition ({} {} {})'.format(random.uniform(0.65, 1.2), random.uniform(0.80, 1.3), p_z),
+#			'"cameras/drone/drone0" SET Transform localPosition ({} {} {})'.format(random.uniform(-1.2, -0.5), random.uniform(-0.3, 0.70), p_z),
+#			'"cameras/drone/drone1" SET Transform localPosition ({} {} {})'.format(random.uniform(-0.6, 0), random.uniform(-0.3, 0.70), p_z),
+#			'"cameras/drone/drone2" SET Transform localPosition ({} {} {})'.format(random.uniform(0.05, 0.55), random.uniform(-0.3, 0.70), p_z),
+#			'"cameras/drone/drone3" SET Transform localPosition ({} {} {})'.format(random.uniform(0.65, 1.2), random.uniform(-0.3, 0.70), p_z),
+#			'"cameras/drone/drone4" SET Transform localPosition ({} {} {})'.format(random.uniform(-1.2, -0.5), random.uniform(0.80, 1.3), p_z),
+#			'"cameras/drone/drone5" SET Transform localPosition ({} {} {})'.format(random.uniform(-0.6, 0), random.uniform(0.80, 1.3), p_z),
+#			'"cameras/drone/drone6" SET Transform localPosition ({} {} {})'.format(random.uniform(0.05, 0.55), random.uniform(0.80, 1.3), p_z),
+#			'"cameras/drone/drone7" SET Transform localPosition ({} {} {})'.format(random.uniform(0.65, 1.2), random.uniform(0.80, 1.3), p_z),
 		], read=False)
 		"""
 
@@ -275,12 +275,12 @@ def run():
 			scale_f = random.uniform(0.6,1.5)
 			
 			common.send_data([
-				'cameras/spawner/drones SET active false',
-				# 'cameras/spawner/drones SET Transform localEulerAngles ({} {} {})'.format(random.randint(-20, 20), random.randint(-20, 20), random.randint(-20, 20)),
-				# 'cameras/spawner/drones SET Transform localScale ({} {} {})'.format(scale_f, scale_f, scale_f),
-				'cameras/spawner/drones SET RandomProps.PropArea rotationStep {}'.format(random.randint(0, 180)),
-				'cameras/spawner/drones SET RandomProps.PropArea propScale ({} {} {})'.format(scale_f, scale_f, scale_f),
-				'cameras/spawner/drones SET active true'
+				'"cameras/spawner/drones" SET active false',
+				# '"cameras/spawner/drones" SET Transform localEulerAngles ({} {} {})'.format(random.randint(-20, 20), random.randint(-20, 20), random.randint(-20, 20)),
+				# '"cameras/spawner/drones" SET Transform localScale ({} {} {})'.format(scale_f, scale_f, scale_f),
+				'"cameras/spawner/drones" SET RandomProps.PropArea rotationStep {}'.format(random.randint(0, 180)),
+				'"cameras/spawner/drones" SET RandomProps.PropArea propScale ({} {} {})'.format(scale_f, scale_f, scale_f),
+				'"cameras/spawner/drones" SET active true'
 			], read=False)
 			
 			"""
@@ -299,10 +299,10 @@ def run():
 				scale_f = random.uniform(0.6,1.5)
 				
 				common.send_data([
-					'cameras/drone/drone{} SET Transform localEulerAngles ({} {} {})'.format(x, random.randint(-20, 20), random.randint(-20, 20), random.randint(-20, 20)),
-					'cameras/drone/drone{} SET Transform localScale ({} {} {})'.format(x, scale_f, scale_f, scale_f),
-					'cameras/drone/drone{}/drone{} SET active false'.format(x,x),
-					'cameras/drone/drone{}/drone{} SET active true'.format(x,x),
+					'"cameras/drone/drone{}" SET Transform localEulerAngles ({} {} {})'.format(x, random.randint(-20, 20), random.randint(-20, 20), random.randint(-20, 20)),
+					'"cameras/drone/drone{}" SET Transform localScale ({} {} {})'.format(x, scale_f, scale_f, scale_f),
+					'"cameras/drone/drone{}/drone{}" SET active false'.format(x,x),
+					'"cameras/drone/drone{}/drone{}" SET active true'.format(x,x),
 				], read=False)
 			"""
 		

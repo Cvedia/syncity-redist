@@ -77,10 +77,10 @@ def run():
 		helpers.add_camera_depth(width=1024, height=768, fov=90)
 		
 		common.send_data([
-			'savannah SET active true',
-			'savannah ADD Segmentation.ClassGroup',
-			'savannah SET Segmentation.ClassGroup itemsClassName "{}"'.format('ground'),
-			'savannah SET active false',
+			'"savannah" SET active true',
+			'"savannah" ADD Segmentation.ClassGroup',
+			'"savannah" SET Segmentation.ClassGroup itemsClassName "{}"'.format('ground'),
+			'"savannah" SET active false',
 			'"savannah/Main Terrain" SET Segmentation.ClassInfo itemClass "ground"',
 			'"savannah/Main Terrain/SubMeshes" ADD Segmentation.ClassInfo',
 			'"savannah/Main Terrain/SubMeshes" SET Segmentation.ClassInfo itemClass "ground"',
@@ -128,12 +128,12 @@ def run():
 			'"spawner/animals0/Elef(Clone)" SET Thermal.ThermalObjectBehaviour profile.heatiness.value 90',
 			
 			# respawn assets to update thermal profiles properly
-			'spawner SET active false',
+			'"spawner" SET active false',
 			
 			# add more props
-			'spawner/cars0 SET RandomProps.PropArea numberOfProps 50',
-			'spawner/animals0 SET RandomProps.PropArea numberOfProps 250',
-			'spawner/humans0 SET RandomProps.PropArea numberOfProps 250',
+			'"spawner/cars0" SET RandomProps.PropArea numberOfProps 50',
+			'"spawner/animals0" SET RandomProps.PropArea numberOfProps 250',
+			'"spawner/humans0" SET RandomProps.PropArea numberOfProps 250',
 			
 			'spawner SET active true'
 		], read=False)
@@ -149,11 +149,11 @@ def run():
 	# loop changing camera positions with random agc bounduaries
 	while loop < settings.loop_limit:
 		common.send_data([
-			'cameras/thermal SET Thermal.ThermalCamera temperatureRange ({} {})'.format(min_agc, max_agc),
-			'cameras SET Orbit distance {}'.format(dist),
-			'cameras SET Orbit elevation {}'.format(elevation),
-			'cameras SET Orbit azimuth {}'.format(azimuth),
-			'cameras SET Orbit snapOffset {}'.format(snapOffset)
+			'"cameras/thermal" SET Thermal.ThermalCamera temperatureRange ({} {})'.format(min_agc, max_agc),
+			'"cameras" SET Orbit distance {}'.format(dist),
+			'"cameras" SET Orbit elevation {}'.format(elevation),
+			'"cameras" SET Orbit azimuth {}'.format(azimuth),
+			'"cameras" SET Orbit snapOffset {}'.format(snapOffset)
 		], read=False)
 		
 		helpers.take_snapshot(mycams, auto_segment=True, force_noop=True)

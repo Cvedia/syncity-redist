@@ -49,10 +49,10 @@ def run():
 		
 		while azimuth < 360:
 			common.send_data([
-				'cameras SET Orbit distance {}'.format(dist),
-				'cameras SET Orbit elevation {}'.format(elevation),
-				'cameras SET Orbit azimuth {}'.format(azimuth),
-				'EnviroSky SET EnviroSky GameTime.Hours {}'.format(random.randint(6, 18))
+				'"cameras" SET Orbit distance {}'.format(dist),
+				'"cameras" SET Orbit elevation {}'.format(elevation),
+				'"cameras" SET Orbit azimuth {}'.format(azimuth),
+				'"EnviroSky" SET EnviroSky GameTime.Hours {}'.format(random.randint(6, 18))
 			])
 			
 			helpers.take_snapshot(mycams)

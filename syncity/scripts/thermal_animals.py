@@ -38,10 +38,10 @@ def run():
 		helpers.spawn_radius_generic(['animal, +thermal'], limit=10, radius=50, innerradius=0, position=[0,0,0])
 	
 	common.send_data([
-		'cameras/cameraRGB SET EnviroCamera enabled false',
-		'disk1/Cameras/camerargb SET active true',
-		'cameras SET active true',
-		'cameras/cameraRGB SET active true'
+		'"cameras/cameraRGB" SET EnviroCamera enabled false',
+		'"disk1/Cameras/camerargb" SET active true',
+		'"cameras" SET active true',
+		'"cameras/cameraRGB" SET active true'
 	]);
 	
 	dist = 55
@@ -53,10 +53,10 @@ def run():
 	
 	while azimuth < 360:
 		common.send_data([
-			'cameras/thermal SET Thermal.ThermalCamera ambientTemperature {}'.format(ambient_temperature),
-			'cameras SET Orbit distance {}'.format(dist),
-			'cameras SET Orbit elevation {}'.format(elevation),
-			'cameras SET Orbit azimuth {}'.format(azimuth)
+			'"cameras/thermal" SET Thermal.ThermalCamera ambientTemperature {}'.format(ambient_temperature),
+			'"cameras" SET Orbit distance {}'.format(dist),
+			'"cameras" SET Orbit elevation {}'.format(elevation),
+			'"cameras" SET Orbit azimuth {}'.format(azimuth)
 		])
 		
 		helpers.do_render(mycams)

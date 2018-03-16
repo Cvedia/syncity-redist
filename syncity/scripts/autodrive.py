@@ -24,13 +24,16 @@ def run():
 	
 	car_obj = 'SyncityJPickup'
 	camera_mount = '{}/cameras'.format(car_obj)
-	mycams = ['{}/Front'.format(camera_mount), '{}/Depth'.format(camera_mount)]
+	mycams = [
+		'{}/Front'.format(camera_mount),
+		'{}/Depth'.format(camera_mount)
+	]
 	
 	if settings.skip_setup == False:
 		common.send_data([
-			'CREATE autodrive autodrive autodrive/autodrive_tile',
-			'autodrive ADD WindZone',
-			'autodrive SET active true'
+			'CREATE "autodrive" autodrive "autodrive/autodrive_tile"',
+			'"autodrive" ADD WindZone',
+			'"autodrive" SET active true'
 		])
 		
 		helpers.global_camera_setup(label_root=camera_mount)
@@ -41,63 +44,63 @@ def run():
 		
 		common.send_data([
 			# flycam
-			# '{} ADD FlyCamera'.format(mycams[0]),
-			# '{} SET FlyCamera enabled true'.format(mycams[0]),
+			# '"{}" ADD FlyCamera'.format(mycams[0]),
+			# '"{}" SET FlyCamera enabled true'.format(mycams[0]),
 			
 			# reset cameras
-			'{} SET Transform localPosition (0 0.872 2.318)'.format(camera_mount),
-			'{} SET Transform localEulerAngles (0 0 0)'.format(camera_mount),
+			'"{}" SET Transform localPosition (0 0.872 2.318)'.format(camera_mount),
+			'"{}" SET Transform localEulerAngles (0 0 0)'.format(camera_mount),
 			
 			# reset car position
-			'{} SET Transform position (-100.76 2.25 -415.57)'.format(car_obj),
-			'{} SET Transform eulerAngles (0.274 37.499 0)'.format(car_obj),
+			'"{}" SET Transform position (-100.76 2.25 -415.57)'.format(car_obj),
+			'"{}" SET Transform eulerAngles (0.274 37.499 0)'.format(car_obj),
 			
 			# add custom inputs for ros bridge
 			# WARNING: When VPCustomInput is enabled, you won't be able to drive using the keys
-			'{} ADD VPCustomInput'.format(car_obj),
-			'{} SET VPCustomInput enabled true'.format(car_obj),
-			#'{} SET VPCustomInput enabled false'.format(car_obj),
+			'"{}" ADD VPCustomInput'.format(car_obj),
+			'"{}" SET VPCustomInput enabled true'.format(car_obj),
+			#'"{}" SET VPCustomInput enabled false'.format(car_obj),
 			
-			'{} ADD UnityEngine.PostProcessing.PostProcessingBehaviour'.format(mycams[0]),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile EnviroFX'.format(mycams[0]),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.eyeAdaptation.enabled true'.format(mycams[0]),
-			'{} SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.tonemapping.tonemapper "1"'.format(mycams[0]),
+			'"{}" ADD UnityEngine.PostProcessing.PostProcessingBehaviour'.format(mycams[0]),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile "EnviroFX"'.format(mycams[0]),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.eyeAdaptation.enabled true'.format(mycams[0]),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.tonemapping.tonemapper "1"'.format(mycams[0]),
 		], read=False)
 		
 		if settings.disable_lidar == False:
 			common.send_data([
 				# lidar position / angle setup
-				'{}/Lidar SET Transform localPosition (0 2 0)'.format(car_obj),
-				'{}/Lidar SET Transform localEulerAngles (0 0 0)'.format(car_obj),
+				'"{}/Lidar" SET Transform localPosition (0 2 0)'.format(car_obj),
+				'"{}/Lidar" SET Transform localEulerAngles (0 0 0)'.format(car_obj),
 				
 				# lidar specs
-				'{}/Lidar SET Lidar model "VLP_16"'.format(car_obj),
+				'"{}/Lidar" SET Lidar model "VLP_16"'.format(car_obj),
 				
-				'{}/Lidar SET Lidar minAz -180'.format(car_obj),
-				'{}/Lidar SET Lidar maxAz 180'.format(car_obj),
-				'{}/Lidar SET Lidar minEl -30'.format(car_obj),
-				'{}/Lidar SET Lidar maxEl 30'.format(car_obj),
+				'"{}/Lidar" SET Lidar minAz -180'.format(car_obj),
+				'"{}/Lidar" SET Lidar maxAz 180'.format(car_obj),
+				'"{}/Lidar" SET Lidar minEl -30'.format(car_obj),
+				'"{}/Lidar" SET Lidar maxEl 30'.format(car_obj),
 				
-				'{}/Lidar SET Lidar rpm 900'.format(car_obj),
+				'"{}/Lidar" SET Lidar rpm 900'.format(car_obj),
 				
-				'{}/Lidar SET Lidar MinimumIntensity 0'.format(car_obj),
-				'{}/Lidar SET Lidar ipAddressOverride "{}"'.format(car_obj, settings.lidar_ip),
+				'"{}/Lidar" SET Lidar MinimumIntensity 0'.format(car_obj),
+				'"{}/Lidar" SET Lidar ipAddressOverride "{}"'.format(car_obj, settings.lidar_ip),
 				
-				'{}/Lidar SET Lidar accuracy HIGH'.format(car_obj),
-				'{}/Lidar SET Lidar timingAccuracy ULTRA'.format(car_obj),
-				# '{}/Lidar SET Lidar disableUDPBroadcast True'.format(car_obj),
+				'"{}/Lidar" SET Lidar accuracy "HIGH"'.format(car_obj),
+				'"{}/Lidar" SET Lidar timingAccuracy "ULTRA"'.format(car_obj),
+				# '"{}/Lidar" SET Lidar disableUDPBroadcast True'.format(car_obj),
 				
 				# all set, enable objects
-				'{}/Lidar SET active true'.format(car_obj)
+				'"{}/Lidar" SET active true'.format(car_obj)
 			], read=False)
 		
 		common.send_data([
-			'{} SET Sensors.RenderCamera alwaysOn true'.format(mycams[0]),
-			'{} SET Sensors.RenderCamera alwaysOn true'.format(mycams[1]),
-			'{} SET Camera enabled true'.format(mycams[0]),
-			'{} SET Camera enabled true'.format(mycams[1]),
-			'{} SET active true'.format(car_obj),
-			'EnviroSky EXECUTE EnviroSky ChangeWeather "Cloudy 1"'
+			'"{}" SET Sensors.RenderCamera alwaysOn true'.format(mycams[0]),
+			'"{}" SET Sensors.RenderCamera alwaysOn true'.format(mycams[1]),
+			'"{}" SET Camera enabled true'.format(mycams[0]),
+			'"{}" SET Camera enabled true'.format(mycams[1]),
+			'"{}" SET active true'.format(car_obj),
+			'"EnviroSky" EXECUTE EnviroSky ChangeWeather "Cloudy 1"'
 		], read=False)
 	
 	# setup ros ios

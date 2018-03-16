@@ -22,18 +22,20 @@ def run():
 		helpers.global_camera_setup()
 		helpers.add_camera_rgb(flycam=settings.flycam, pp='EnviroFX')
 		helpers.add_camera_seg(segments=['Car'])
+		
 		if settings.envirosky == False:
 			helpers.add_light()
+		
 		helpers.global_disk_setup()
 		
 		helpers.add_disk_output(mycams)
 		
 		# list all childs
-		common.send_data('cameras get children')
+		common.send_data('"cameras" GET children')
 		# list all properties
-		common.send_data('cameras get properties')
+		common.send_data('"cameras" GET properties')
 		# list all properties from transform
-		common.send_data('cameras get properties transform')
+		common.send_data('"cameras" GET properties transform')
 	
 	# load all cars cars_limit times on scene
 	k = 0
@@ -46,10 +48,10 @@ def run():
 	
 	while k < settings.cars_limit:
 		common.send_data([
-			'CREATE mycar_{} Cars/?'.format(k),
-			'mycar_{} ADD Segmentation.ClassGroup'.format(k),
-			'mycar_{} SET Segmentation.ClassGroup itemsClassName Car'.format(k),
-			'mycar_{} SET Transform position ({} {} {})'.format(k, p_x + settings.X_COMP, 5 + settings.Y_COMP, p_z + settings.Z_COMP)
+			'CREATE "mycar_{}" "Cars/?"'.format(k),
+			'"mycar_{}" ADD Segmentation.ClassGroup'.format(k),
+			'"mycar_{}" SET Segmentation.ClassGroup itemsClassName "Car"'.format(k),
+			'"mycar_{}" SET Transform position ({} {} {})'.format(k, p_x + settings.X_COMP, 5 + settings.Y_COMP, p_z + settings.Z_COMP)
 		])
 		
 		settings.obj.append('mycar_{}'.format(k))
@@ -63,14 +65,14 @@ def run():
 	a = 0
 	while a < 360:
 		# one dimension camera sweep in 10 degrees steps
-		common.send_data('camera SET Transform eulerAngles (0 {} 0)'.format(a))
+		common.send_data('"camera" SET Transform eulerAngles (0 {} 0)'.format(a))
 		k = 0
 		
 		while k < cars_limit:
 			# make sure car is on camera's fov
 			# common.send_data('mycar_{} FRUSTUM mycamera RIGHT {} DOWN {} DEPTH {}'.format(k, random.uniform(0, 1), random.uniform(0, 1), random.randint(5, 120)))
 			# rotate car at random
-			common.send_data('mycar_{} SET Transform eulerAngles ({} {} {})'.format(k, random.randint(0, 359), random.randint(0, 359), random.randint(0, 359)))
+			common.send_data('"mycar_{}" SET Transform eulerAngles ({} {} {})'.format(k, random.randint(0, 359), random.randint(0, 359), random.randint(0, 359)))
 			k += 1
 		
 		# all possible properties - https://docs.unity3d.com/ScriptReference/Camera.html
