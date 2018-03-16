@@ -203,7 +203,9 @@ def send_data(v, read=None, flush=None, timeout=3):
 	r = []
 	
 	for s in v:
-		if len(s) == 0 or len(s.strip('\n\r ')) == 0:
+		s = re.sub(r'\s{2,}', ' ', s.strip('\n\r').replace('\t', ' '))
+		
+		if len(s) == 0 or len(s.strip(' ')) == 0:
 			continue
 		if settings.quiet == False:
 			output('>> {}'.format(s))

@@ -90,7 +90,8 @@ def add_camera_depth(
 	fov=60,
 	clipping_near=0.3,
 	clipping_far=1000,
-	depthBuffer=None
+	depthBuffer='simple',
+	transparencyCutout=0
 ):
 	"""
 	Creates a depth camera
@@ -104,8 +105,10 @@ def add_camera_depth(
 	clipping_near (float): Near clipping distance, defaults to `0.3` - Objects closer than this distance won't appear
 	clipping_far (float): Far clipping distance, defaults to `1000` - Objects further from this distance won't appear
 	depthBuffer (string): Defines a specific depth buffer configuration to use, if not set fallsback to default, default `None`
+	transparencyCutout (float): Defines a cutout percentage for transparent objects, defaults to `0` that will show transparent objects at full extent, when set to 1 will hide them completly.
 	
 	"""
+	
 	buf = [
 		'CREATE "{}"'.format(label),
 		'"{}" SET active false'.format(label),
@@ -125,7 +128,7 @@ def add_camera_depth(
 		buf.extend([
 			'"{}" ADD Cameras.RenderDepthBufferSimple'.format(label),
 			'"{}" SET Cameras.RenderDepthBufferSimple outputMode "Linear01Depth"'.format(label),
-			'"{}" SET Cameras.RenderDepthBufferSimple transparencyCutout 0.05'.format(label)
+			'"{}" SET Cameras.RenderDepthBufferSimple transparencyCutout {}'.format(label, transparencyCutout)
 			#'"{}" Cameras.RenderDepthBufferSimple drawTransparentObjectsDepth false'.format(label)
 		])
 	else:
@@ -950,7 +953,8 @@ def add_camera_seg(
 	renderingPath=4, textureFormat=4,
 	minimum_visibility=0,
 	renderCamera=True,
-	lookupTable=True
+	lookupTable=True,
+	transparencyCutout=0
 ):
 	"""
 	Creates a Segmentation camera
@@ -969,6 +973,7 @@ def add_camera_seg(
 	renderCamera (bool): Binds a renderCamera component allowing for disk exports, defaults to `True`
 	lookupTable (list): Binds a color to a class, this is essential for outputting pixel dense images, this is an array of arrays like `[ [ Car , red ] , [ Person, blue ] .. ]`; Defaults to `True` which will automatically populate the segmentation lookup table based on the segments sent.
 	minimum_visibility (float): Defines minimum visibility of object in % (0 - 1), objects with less than % of it's total size visible won't appear on the segmentation maps neither yeild bounding boxes, defaults to `0`
+	transparencyCutout (float): Defines a cutout percentage for transparent objects, defaults to `0` that will show transparent objects at full extent, when set to 1 will hide them completly.
 	
 	# Notes
 	
@@ -999,6 +1004,7 @@ def add_camera_seg(
 		'"{}" SET Segmentation.Segmentation minimumObjectVisibility {}'.format(label, minimum_visibility),
 		'"{}" SET Segmentation.Segmentation outputType "{}"'.format(label, output_type),
 		'"{}" SET Segmentation.Segmentation boundingBoxesExtensionAmount {}'.format(label, boundingBoxesExtensionAmount),
+		'"{}" SET Segmentation.Segmentation transparencyCutout {}'.format(label, transparencyCutout),
 		'"{}" EXECUTE Segmentation.Segmentation DefineClass "Void"'.format(label)
 	], read=False)
 	
@@ -1685,6 +1691,105 @@ def set_thermal_props(
 	
 	common.flush_buffer()
 
+def human_spawner(
+		label='human_walker',
+		goals=None,
+		spawners=None,
+		delay=[0.3, 3],
+		speed=[0.5, 3],
+		limit=20,
+		goal_threshold=5,
+		gender_restriction='None',
+		container='container',
+		prefix='spawner'
+	):
+	"""
+	Creates a human walker spawner.
+	This requires a scene with a NavMesh, otherwise humans will be stuck on their spawning points.
+	All human bodies and props are automatically randomized.
+	
+	# Arguments
+	
+	label (string): Defines a name for the spawner, defaults to `human_walker`, if you have multiple spawners of this type you should provide unique names.
+	goals (list): Defines a list of goal triplets, Example: `[ [ x, y, z ], ... ]`, you must set at least one goal point
+	spawners (list): Defines a list of spawners triplets, Example: `[ [ x, y, z ], ... ]`, you must set at least one spawn point
+	delay (list): Defines min and max delay for the spawner, defaults to `[0.3, 3]`
+	speed (list): Defines min and max walking speed for humans, defaults to `[0.5, 3]`
+	limit (int): Defines the maximum active humans, defaults to `20`
+	goal_threshold (list): Defines a threshold for goal points, defaults to `5`
+	gender_restriction (string): Defines a gender restriction for human spawner, defaults to `None`, where possible options are `Female` and `Male`
+	container (string): Defines a game object name / path where spawned humans will reside, those game objects are dynamic and will be cycled after reaching the goal. Defaults to `container`, when set to `None` will spawn on root.
+	prefix (string): Defines a game object name / path where the human spawner game object and childs will be created, defaults to `spawner`
+	
+	"""
+	
+	if goals == None or len(goals) == 0:
+		raise Exception('No goals set')
+		return False
+	
+	if spawners == None or len(spawners) == 0:
+		raise Exception('No spawners set')
+		return False
+	
+	buf = []
+	
+	# little fixy
+	if prefix == None:
+		prefix = ""
+	else:
+		prefix += "/"
+	
+	prefix += label + "/"
+	
+	buf.extend([
+		'CREATE "{}"'.format(prefix),
+		'CREATE "{}points"'.format(prefix),
+		'CREATE "{}points/goals"'.format(prefix),
+		'CREATE "{}points/spawners"'.format(prefix),
+		'CREATE "{}human_spawner"'.format(prefix),
+		'"{}human_spawner" ADD Human_tests.Locomotion.HumanWalkerSpawner'.format(prefix),
+		'''"{}human_spawner" SET Human_tests.Locomotion.HumanWalkerSpawner
+			MinimumDelayBetweenSpawns {}
+			MaximumDelayBetweenSpawns {}
+			MinimumSpeed {}
+			MaximumSpeed {}
+			MaximumHumans {}
+			ArriveDistance {}
+			GenderRestriction "{}"
+		'''.format(prefix, delay[0], delay[1], speed[0], speed[1], limit, goal_threshold, gender_restriction),
+		'"{}human_spawner" SET Human_tests.Locomotion.HumanWalkerSpawner Container "{}"'.format(prefix, container) if container != None else '',
+	])
+	
+	i = 0
+	for g in goals:
+		buf.extend([
+			'CREATE "{}points/goals/g_{}"'.format(prefix, i),
+			'"{}points/goals/g_{}" SET Transform position ({} {} {})'.format(prefix, i, g[0], g[1], g[2]),
+			'"{}points/goals/g_{}" SET active true'.format(prefix, i),
+			'"{}human_spawner" PUSH Human_tests.Locomotion.HumanWalkerSpawner GoalPoints "{}points/goals/g_{}"'.format(prefix, prefix, i)
+		])
+		i += 1
+	
+	i = 0
+	for s in spawners:
+		buf.extend([
+			'CREATE "{}points/spawners/s_{}"'.format(prefix, i),
+			'"{}points/spawners/s_{}" SET Transform position ({} {} {})'.format(prefix, i, s[0], s[1], s[2]),
+			'"{}points/spawners/s_{}" ADD Humans.HumanSpawnPoint'.format(prefix, i),
+			'"{}points/spawners/s_{}" SET active true'.format(prefix, i),
+			'"{}human_spawner" PUSH Human_tests.Locomotion.HumanWalkerSpawner SpawnPoints "{}points/spawners/s_{}"'.format(prefix, prefix, i)
+		])
+		i += 1
+	
+	buf.extend([
+		'"{}human_spawner" SET active true'.format(prefix),
+		'"{}points/goals" SET active true'.format(prefix),
+		'"{}points/spawners" SET active true'.format(prefix),
+		'"{}points" SET active true'.format(prefix),
+		'"{}" SET active true'.format(prefix)
+	])
+	
+	common.send_data(buf)
 
 def spawner(
 	types=[], tags=None, scale=[1,1,1], position=[0,0,0],
