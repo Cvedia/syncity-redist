@@ -113,13 +113,9 @@ def add_camera_depth(
 		'CREATE "{}"'.format(label),
 		'"{}" SET active false'.format(label),
 		'"{}" ADD Camera'.format(label),
-		'"{}" SET Camera near {}'.format(label, clipping_near),
-		'"{}" SET Camera far {}'.format(label, clipping_far),
-		'"{}" SET Camera fieldOfView {}'.format(label, fov),
+		'"{}" SET Camera near {} far {} fieldOfView {} renderingPath "DeferredShading"'.format(label, clipping_near, clipping_far, fov),
 		'"{}" ADD Sensors.RenderCamera'.format(label),
-		'"{}" SET Sensors.RenderCamera format "RFloat"'.format(label),
-		'"{}" SET Sensors.RenderCamera resolution ({} {})'.format(label, width, height),
-		'"{}" SET Camera renderingPath "DeferredShading"'.format(label),
+		'"{}" SET Sensors.RenderCamera format "RFloat" resolution ({} {})'.format(label, width, height)
 	]
 	
 	if depthBuffer == None:
@@ -127,8 +123,7 @@ def add_camera_depth(
 	elif depthBuffer == 'simple':
 		buf.extend([
 			'"{}" ADD Cameras.RenderDepthBufferSimple'.format(label),
-			'"{}" SET Cameras.RenderDepthBufferSimple outputMode "Linear01Depth"'.format(label),
-			'"{}" SET Cameras.RenderDepthBufferSimple transparencyCutout {}'.format(label, transparencyCutout)
+			'"{}" SET Cameras.RenderDepthBufferSimple outputMode "Linear01Depth" transparencyCutout {}'.format(label, transparencyCutout)
 			#'"{}" Cameras.RenderDepthBufferSimple drawTransparentObjectsDepth false'.format(label)
 		])
 	else:
@@ -189,9 +184,7 @@ def add_camera_rgb(
 		'CREATE "{}"'.format(label),
 		'"{}" SET active false'.format(label),
 		'"{}" ADD Camera'.format(label),
-		'"{}" SET Camera near {}'.format(label, clipping_near),
-		'"{}" SET Camera far {}'.format(label, clipping_far),
-		'"{}" SET Camera fieldOfView {}'.format(label, fov)
+		'"{}" SET Camera near {} far {} fieldOfView {}'.format(label, clipping_near, clipping_far, fov),
 	], read=False)
 	
 	if renderCamera:
@@ -199,8 +192,7 @@ def add_camera_rgb(
 			'"{}" ADD Sensors.RenderCamera'.format(label),
 			
 			# '"{}" SET Sensors.RenderCamera sRGB true'.format(label),
-			'"{}" SET Sensors.RenderCamera format "{}"'.format(label, unity_vars.textureFormat[textureFormat]),
-			'"{}" SET Sensors.RenderCamera resolution ({} {})'.format(label, width, height),
+			'"{}" SET Sensors.RenderCamera format "{}" resolution ({} {})'.format(label, unity_vars.textureFormat[textureFormat], width, height),
 			'"{}" SET Camera renderingPath "{}"'.format(label, unity_vars.renderingPath[renderingPath]),
 			
 			# 'cameras/cameraRGB SET Camera targetTexture.antiAliasing 8',
@@ -218,18 +210,8 @@ def add_camera_rgb(
 		common.send_data([
 			# NOTE: This is a prefab that already contains the EnviroSky default profile
 			'CREATE "EnviroSky" AS "EnviroSky"',
-			'"EnviroSky" SET EnviroSky Player "{}"'.format(label_root),
-			'"EnviroSky" SET EnviroSky PlayerCamera "{}"'.format(label),
-			
-			# time progression
-			'"EnviroSky" SET EnviroSky GameTime.ProgressTime "{}"'.format(envirosky_progressTime),
-			
-			# skip weather transitions
-			'"EnviroSky" SET EnviroSky weatherSettings.cloudTransitionSpeed {}'.format(envirosky_cloudTransitionSpeed),
-			'"EnviroSky" SET EnviroSky weatherSettings.effectTransitionSpeed {}'.format(envirosky_effectTransitionSpeed),
-			'"EnviroSky" SET EnviroSky weatherSettings.fogTransitionSpeed {}'.format(envirosky_fogTransitionSpeed),
-			
-			'"{}" ADD EnviroCamera'.format(label),
+			'"EnviroSky" SET EnviroSky Player "{}" PlayerCamera "{}" GameTime.ProgressTime "{}" weatherSettings.cloudTransitionSpeed {} weatherSettings.effectTransitionSpeed {} weatherSettings.fogTransitionSpeed {}'.format(label_root, label, envirosky_progressTime, envirosky_cloudTransitionSpeed, envirosky_effectTransitionSpeed, envirosky_fogTransitionSpeed),
+			'"EnviroSky" EXECUTE EnviroSky AssignAndStart "{}" "{}"'.format(label, label),
 			'"EnviroSky" SET active true'.format(label)
 		], read=False)
 	
@@ -319,17 +301,14 @@ def add_camera_thermal(
 		'CREATE "{}"'.format(label),
 		'"{}" SET active false'.format(label),
 		'"{}" ADD Camera'.format(label),
-		'"{}" SET Camera near {}'.format(label, clipping_near),
-		'"{}" SET Camera far {}'.format(label, clipping_far),
-		'"{}" SET Camera fieldOfView {}'.format(label, fov)
+		'"{}" SET Camera near {} far {} fieldOfView {}'.format(label, clipping_near, clipping_far, fov),
 	], read=False)
 	
 	if renderCamera:
 		common.send_data([
 			'"{}" ADD Sensors.RenderCamera'.format(label),
 			
-			'"{}" SET Sensors.RenderCamera format "{}"'.format(label, unity_vars.textureFormat[textureFormat]),
-			'"{}" SET Sensors.RenderCamera resolution ({} {})'.format(label, width, height),
+			'"{}" SET Sensors.RenderCamera format "{}" resolution ({} {})'.format(label, unity_vars.textureFormat[textureFormat], width, height),
 			'"{}" SET Camera renderingPath "{}"'.format(label, unity_vars.renderingPath[renderingPath])
 		], read=False)
 	
@@ -345,42 +324,25 @@ def add_camera_thermal(
 		common.send_data([
 			'"{}" ADD CameraFilterPack_Pixelisation_DeepOilPaintHQ'.format(label),
 			'"{}" SET CameraFilterPack_Pixelisation_DeepOilPaintHQ enabled false'.format(label),
-			'"{}" SET CameraFilterPack_Pixelisation_DeepOilPaintHQ _FixDistance {}'.format(label, patchyness_fixDistance),
-			'"{}" SET CameraFilterPack_Pixelisation_DeepOilPaintHQ _Distance {}'.format(label, patchyness_distance),
-			'"{}" SET CameraFilterPack_Pixelisation_DeepOilPaintHQ _Size {}'.format(label, patchyness_size),
-			'"{}" SET CameraFilterPack_Pixelisation_DeepOilPaintHQ Intensity {}'.format(label, patchyness_intensity),
-			'"{}" SET CameraFilterPack_Pixelisation_DeepOilPaintHQ enabled true'.format(label)
+			'"{}" SET CameraFilterPack_Pixelisation_DeepOilPaintHQ _FixDistance {} _Distance {} _Size {} Intensity {} enabled true'.format(label, patchyness_fixDistance, patchyness_distance, patchyness_size, patchyness_intensity)
 		], read=False)
 	
 	if blur:
 		common.send_data([
 			'"{}" ADD CameraFilterPack_Blur_Noise'.format(label),
-			'"{}" SET CameraFilterPack_Blur_Noise enabled false'.format(label),
-			'"{}" SET CameraFilterPack_Blur_Noise Distance ({} {})'.format(label, blur_noise[0], blur_noise[1]),
-			'"{}" SET CameraFilterPack_Blur_Noise enabled true'.format(label)
+			'"{}" SET CameraFilterPack_Blur_Noise Distance ({} {}) enabled true'.format(label, blur_noise[0], blur_noise[1])
 		], read=False)
 	
 	if trees:
 		common.send_data([
 			'"{}" ADD Thermal.GlobalTreeSettings'.format(label),
-			'"{}" SET Thermal.GlobalTreeSettings enabled false'.format(label),
-			'"{}" SET Thermal.GlobalTreeSettings temperature {}'.format(label, trees_base),
-			'"{}" SET Thermal.GlobalTreeSettings temperatureBandwidth {}'.format(label, trees_bandwidth),
-			'"{}" SET Thermal.GlobalTreeSettings temperatureMedian {}'.format(label, trees_median),
-			'"{}" SET Thermal.GlobalTreeSettings treeLeafsHeatVariance {}'.format(label, trees_leafs_variance),
-			'"{}" SET Thermal.GlobalTreeSettings enabled true'.format(label)
+			'"{}" SET Thermal.GlobalTreeSettings temperature {} temperatureBandwidth {} temperatureMedian {} treeLeafsHeatVariance {} enabled true'.format(label, trees_base, trees_bandwidth, trees_median, trees_leafs_variance)
 		], read=False);
 
 	common.send_data([
 		'"{}" ADD UnityEngine.PostProcessing.PostProcessingBehaviour'.format(label),
 		'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile "Thermal"'.format(label),
-		
-		'"{}" SET Thermal.ThermalCamera ambientTemperature {}'.format(label, ambientTemperature),
-		'"{}" SET Thermal.ThermalCamera temperatureRange ({} {})'.format(label, minimumTemperature, maximumTemperature),
-		
-		'"{}" SET Thermal.ThermalCamera maxDistanceForProbeUpdate {}'.format(label, maxDistanceForProbeUpdate),
-		'"{}" SET Thermal.ThermalCamera useAGC {}'.format(label, useAGC),
-		'"{}" SET Thermal.ThermalCamera enabled true'.format(label)
+		'"{}" SET Thermal.ThermalCamera ambientTemperature {} temperatureRange ({} {}) maxDistanceForProbeUpdate {} useAGC {} enabled true'.format(label, ambientTemperature, minimumTemperature, maximumTemperature, maxDistanceForProbeUpdate, useAGC)
 	], read=False)
 		
 	common.send_data([
@@ -985,26 +947,19 @@ def add_camera_seg(
 		'CREATE "{}"'.format(label),
 		'"{}" SET active false'.format(label),
 		'"{}" ADD Camera'.format(label),
-		'"{}" SET Camera near {}'.format(label, clipping_near),
-		'"{}" SET Camera far {}'.format(label, clipping_far),
-		'"{}" SET Camera fieldOfView {}'.format(label, fov),
+		'"{}" SET Camera near {} far {} fieldOfView {}'.format(label, clipping_near, clipping_far, fov),
 	], read=False)
 	
 	if renderCamera:
 		common.send_data([
 			'"{}" ADD Sensors.RenderCamera'.format(label),
-			'"{}" SET Sensors.RenderCamera format "{}"'.format(label, unity_vars.textureFormat[textureFormat]),
-			'"{}" SET Sensors.RenderCamera resolution ({} {})'.format(label, width, height),
+			'"{}" SET Sensors.RenderCamera format "{}" resolution ({} {})'.format(label, unity_vars.textureFormat[textureFormat], width, height),
 		], read=False)
 	
 	common.send_data([
-		'"{}" SET Camera renderingPath "{}"'.format(label, unity_vars.renderingPath[renderingPath]),
-		'"{}" SET Camera targetTexture.filterMode "Point"'.format(label),
+		'"{}" SET Camera renderingPath "{}" targetTexture.filterMode "Point"'.format(label, unity_vars.renderingPath[renderingPath]),
 		'"{}" ADD Segmentation.Segmentation'.format(label),
-		'"{}" SET Segmentation.Segmentation minimumObjectVisibility {}'.format(label, minimum_visibility),
-		'"{}" SET Segmentation.Segmentation outputType "{}"'.format(label, output_type),
-		'"{}" SET Segmentation.Segmentation boundingBoxesExtensionAmount {}'.format(label, boundingBoxesExtensionAmount),
-		'"{}" SET Segmentation.Segmentation transparencyCutout {}'.format(label, transparencyCutout),
+		'"{}" SET Segmentation.Segmentation minimumObjectVisibility {} outputType "{}" boundingBoxesExtensionAmount {} transparencyCutout {}'.format(label, minimum_visibility, output_type, boundingBoxesExtensionAmount, transparencyCutout),
 		'"{}" EXECUTE Segmentation.Segmentation DefineClass "Void"'.format(label)
 	], read=False)
 	
