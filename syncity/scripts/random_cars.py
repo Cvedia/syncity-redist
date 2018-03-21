@@ -48,10 +48,11 @@ def run():
 	
 	while k < settings.cars_limit:
 		common.send_data([
-			'CREATE "mycar_{}" "Cars/?"'.format(k),
+			'CREATE "Cars/?" FROM "cars" AS "mycar_{}"'.format(k),
 			'"mycar_{}" ADD Segmentation.ClassGroup'.format(k),
 			'"mycar_{}" SET Segmentation.ClassGroup itemsClassName "Car"'.format(k),
-			'"mycar_{}" SET Transform position ({} {} {})'.format(k, p_x + settings.X_COMP, 5 + settings.Y_COMP, p_z + settings.Z_COMP)
+			'"mycar_{}" SET Transform position ({} {} {})'.format(k, p_x + settings.X_COMP, 5 + settings.Y_COMP, p_z + settings.Z_COMP),
+			'"mycar_{}" SET active true'.format(k)
 		])
 		
 		settings.obj.append('mycar_{}'.format(k))

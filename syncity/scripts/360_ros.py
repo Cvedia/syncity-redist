@@ -28,7 +28,7 @@ def run():
 		helpers.global_disk_setup()
 		helpers.add_disk_output(mycams)
 		common.send_data([
-			'CREATE "obj/subject" "{}"'.format(obj),
+			'CREATE "{}" FROM "cars" AS "obj/subject"'.format(obj),
 			'"obj" SET active false',
 			'"obj/subject" SET Transform position ({} {} {})'.format(0, 0, 0),
 			'"obj/subject" SET Transform eulerAngles ({} {} {})'.format(0, 0, 0),

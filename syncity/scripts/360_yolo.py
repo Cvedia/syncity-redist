@@ -59,7 +59,7 @@ def run():
 		helpers.global_disk_setup()
 		helpers.add_disk_output(mycams)
 		common.send_data([
-			'CREATE "obj" "{}"'.format(obj),
+			'CREATE "{}" FROM "cars" AS "obj"'.format(obj),
 			# '"obj" ADD Segmentation.ClassGroup',
 			# '"obj" SET Segmentation.ClassGroup itemsClassName Car',
 			'"obj" SET Transform position ({} {} {})'.format(-6, 0, -9),

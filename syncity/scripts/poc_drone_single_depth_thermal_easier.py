@@ -37,7 +37,7 @@ def run():
 	mycams = ['cameras/cameraRGB', 'cameras/segmentation']
 #	mycams = ['cameras/cameraRGB', 'cameras/segmentation', 'cameras/depth']
 	
-	common.send_data('"API.Manager.instance"" SET physicsEnabled false')
+	common.send_data('"API.Manager.instance" SET physicsEnabled false')
 	
 	if settings.skip_setup == False:
 		helpers.global_camera_setup()
@@ -50,7 +50,7 @@ def run():
 		helpers.add_disk_output(mycams)
 		
 		# HACK: if you want to return BLOBs instead of DEPTH maps use this:
-		common.send_data([ '"disk1/Cameras/depth"" SET Sensors.RenderCameraLink outputType "BLOB"' ])
+		common.send_data([ '"disk1/Cameras/depth" SET Sensors.RenderCameraLink outputType "BLOB"' ])
 		
 		helpers.spawn_drone_objs(
 			# prefix='cameras/spawner',

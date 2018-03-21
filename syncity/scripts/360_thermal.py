@@ -60,7 +60,7 @@ def run():
 			'"obj" ADD Segmentation.ClassGroup',
 			'"obj" SET Segmentation.ClassGroup itemsClassName "Car"',
 			
-			'CREATE "obj/subject" "{}"'.format(obj),
+			'CREATE "{}" FROM "cars" AS "obj/subject"'.format(obj),
 			'"obj/subject" SET Transform position ({} {} {})'.format(0, 0, 0),
 			'"obj/subject" SET Transform eulerAngles ({} {} {})'.format(0, 0, 0),
 			

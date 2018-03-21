@@ -24,13 +24,8 @@ def run():
 	mycams = ['cameras/cameraRGB', 'cameras/segmentation']
 	
 	if settings.skip_setup == False:
-		common.send_data([
-			'"cameras/cameraRGB" ADD Sensors.RenderCamera',
-			'"cameras/cameraRGB" SET Sensors.RenderCamera resolution ({} {})'.format(1024, 768),
-		])
-		
 		helpers.global_camera_setup(mycams[1])
-		# helpers.add_camera_rgb(width=4096, height=3072, pp='EnviroFX')
+		helpers.add_camera_rgb(pp='EnviroFX')
 		helpers.add_camera_seg()
 		helpers.global_disk_setup()
 		

@@ -35,7 +35,7 @@ settings = settings_manager.Singleton()
 def global_camera_setup(
 	label_root='cameras', canvas_width=1024, canvas_height=768, canvas=None,
 	orbit=True, orbitOffset=None, orbitGround=None, orbitSnap=None, position=None,
-	rotation=None
+	rotation=None, flycam=False
 ):
 	"""
 	Sets up camera root object
@@ -52,6 +52,7 @@ def global_camera_setup(
 	orbitSnap (int): Defines a Y snap position from orbited object, defaults to `None`
 	position (list): Defines a position, if not set defaults to X,Y,Z compensation values
 	rotation (list): Defines a rotation, defaults to `None`
+	flycam (bool): Adds a fly cam component that will move any nested cameras among with it
 	"""
 	if canvas == None:
 		if settings.disable_canvas:
@@ -81,6 +82,12 @@ def global_camera_setup(
 		'"Canvas/Cameras/Viewport/Content" SET UI.GridLayoutGroup cellSize ({} {})'.format(canvas_width, canvas_height),
 		'"Canvas" SET active {}'.format(canvas)
 	], read=False)
+	
+	if flycam:
+		common.send_data([
+			'"{}" ADD FlyCamera'.format(label_root),
+			'"{}" SET FlyCamera enabled true'.format(label_root)
+		], read=False)
 	
 	settings.obj.append(label_root)
 
@@ -790,6 +797,83 @@ def camera_rgb_pp_random(label='cameras/cameraRGB'):
 	
 	common.flush_buffer()
 
+def add_thermal_profile_override(
+		target,
+		temperature_mode='Disabled', temperature_value=0,
+		temperature_median_mode='Disabled', temperature_median_value=0.5,
+		temperature_bandwidth_mode='Disabled', temperature_bandwidth_value=0,
+		heatiness_mode='Disabled', heatiness_value=0,
+		variance_mode='Disabled', variance_value=0,
+		reflectivity_mode='Disabled', reflectivity_value=0,
+		ambient_offset_mode='Disabled', ambient_offset_value=0
+	):
+	common.send_data([
+		'"{}" ADD Thermal.ThermalProfileOverride'.format(target),
+		'''"{}" SET Thermal.ThermalProfileOverride
+			temperatureMode "{}"
+			temperature {}
+			temperatureMedianMode "{}"
+			temperatureMedian {}
+			temperatureBandwidthMode "{}"
+			temperatureBandwidth {}
+			heatinessMode "{}"
+			heatiness {}
+			varianceMode "{}"
+			variance {}
+			reflectivityMode "{}"
+			reflectivity {}
+			ambientOffsetMode "{}"
+			ambientOffset {}
+		'''.format(
+			target, temperature_mode, temperature_value,
+			temperature_median_mode, temperature_median_value,
+			temperature_bandwidth_mode, temperature_bandwidth_value,
+			heatiness_mode, heatiness_value, reflectivity_mode, reflectivity_value,
+			variance_mode, variance_value, ambient_offset_mode, ambient_offset_value
+		)
+	])
+
+def add_thermal_terrain(target, ambient_offset=0, bandwidth=1, median=0, base_map_distance=10000):
+	common.send_data([
+		'"{}" ADD Thermal.ThermalTerrain'.format(target),
+		'''"{}" SET Thermal.ThermalTerrain
+			ambientOffset {}
+			bandwidth {}
+			median {}
+			baseMapDistance {}
+		'''.format(target, ambient_offset, bandwidth, median, base_map_distance)
+	])
+
+def add_windzone(target, mode='Directional', radius=0, main=1, turbulence=1, pulse_magnitude=0.5, pulse_frequency=0.01):
+	"""
+	Creates a wind zone component
+	
+	This is the same component described on Unity's WindZone:
+	https://docs.unity3d.com/ScriptReference/WindZone.html
+	
+	# Parameters
+	
+	target (string): Game object to add windzone to
+	mode (string): Wind zone type, `Directional` or `Spherical`, defaults to `Directional`
+	radius (float): Spherical wind radius, defaults to `0`
+	main (float): Primary wind force, defaults to `1`
+	turbulence (float): Turbulence wind force, defaults to `1`
+	pulse_magnitude (float): Defines how much the wind changes over time, defaults to `0.5`
+	pulse_frequency (float): Defines the frequency the wind changes, defaults to `0.01`
+	
+	"""
+	common.send_data([
+		'"{}" ADD WindZone'.format(target),
+		'''"{}" SET WindZone
+			mode "{}"
+			radius {}
+			windMain {}
+			windTurbulence {}
+			windPulseMagnitude {}
+			windPulseFrequency {}
+		'''.format(target, mode, radius, main, turbulence, pulse_magnitude, pulse_frequency)
+	])
+
 def camera_rgb_pp_scion_random(label='cameras/cameraRGB'):
 	"""
 	Show case for scion camera postprocessing effects
@@ -1018,7 +1102,7 @@ def add_light(position=[34,-22.53,0], intensity=1.7, label='light'):
 	common.send_data([
 		'CREATE "{}"'.format(label),
 		'"{}" ADD Light'.format(label),
-		'"{}" SET Light type Directional'.format(label),
+		'"{}" SET Light type "Directional"'.format(label),
 		'"{}" SET Transform eulerAngles ({} {} {})'.format(label, position[0], position[1], position[2]),
 		'"{}" SET Light intensity {}'.format(label, intensity),
 		# '"{}" SET Light color #'.format(label),
@@ -1656,7 +1740,9 @@ def human_spawner(
 		goal_threshold=5,
 		gender_restriction='None',
 		container='container',
-		prefix='spawner'
+		prefix='spawner',
+		segmentation_class='Human',
+		require_thermal_clothing=False
 	):
 	"""
 	Creates a human walker spawner.
@@ -1675,7 +1761,7 @@ def human_spawner(
 	gender_restriction (string): Defines a gender restriction for human spawner, defaults to `None`, where possible options are `Female` and `Male`
 	container (string): Defines a game object name / path where spawned humans will reside, those game objects are dynamic and will be cycled after reaching the goal. Defaults to `container`, when set to `None` will spawn on root.
 	prefix (string): Defines a game object name / path where the human spawner game object and childs will be created, defaults to `spawner`
-	
+	segmentation_class (string): Defines a segmentation class for the spawned objects; Defaults to `Human`, disable this by setting it to `None`. Note that this will be bound to the `container`, if you set `container` to `None` this parameter will be ignored.
 	"""
 	
 	if goals == None or len(goals) == 0:
@@ -1697,23 +1783,32 @@ def human_spawner(
 	prefix += label + "/"
 	
 	buf.extend([
-		'CREATE "{}"'.format(prefix),
+		'CREATE "{}"'.format(prefix[0:-1]),
 		'CREATE "{}points"'.format(prefix),
 		'CREATE "{}points/goals"'.format(prefix),
 		'CREATE "{}points/spawners"'.format(prefix),
 		'CREATE "{}human_spawner"'.format(prefix),
-		'"{}human_spawner" ADD Human_tests.Locomotion.HumanWalkerSpawner'.format(prefix),
-		'''"{}human_spawner" SET Human_tests.Locomotion.HumanWalkerSpawner
-			MinimumDelayBetweenSpawns {}
-			MaximumDelayBetweenSpawns {}
-			MinimumSpeed {}
-			MaximumSpeed {}
-			MaximumHumans {}
-			ArriveDistance {}
-			GenderRestriction "{}"
-		'''.format(prefix, delay[0], delay[1], speed[0], speed[1], limit, goal_threshold, gender_restriction),
-		'"{}human_spawner" SET Human_tests.Locomotion.HumanWalkerSpawner Container "{}"'.format(prefix, container) if container != None else '',
+		'CREATE "{}{}"'.format(prefix, container) if container != None else '',
+		'"{}human_spawner" SET active false'.format(prefix),
+		'"{}human_spawner" ADD Humans.Locomotion.WalkerSpawner'.format(prefix),
+		'''"{}human_spawner" SET Humans.Locomotion.WalkerSpawner
+			minimumDelayBetweenSpawns {}
+			maximumDelayBetweenSpawns {}
+			minimumSpeed {}
+			maximumSpeed {}
+			maximumHumans {}
+			arriveDistance {}
+			genderRestriction "{}"
+			requireThermalClothing {}
+		'''.format(prefix, delay[0], delay[1], speed[0], speed[1], limit, goal_threshold, gender_restriction, 'true' if require_thermal_clothing == True else 'false'),
+		'"{}human_spawner" SET Humans.Locomotion.WalkerSpawner container "{}{}"'.format(prefix, prefix, container) if container != None else '',
 	])
+	
+	if container != None and segmentation_class != None:
+		buf.extend([
+			'"{}{}" ADD Segmentation.ClassGroup'.format(prefix, container),
+			'"{}{}" SET Segmentation.ClassGroup itemsClassName "{}"'.format(prefix, container, segmentation_class)
+		])
 	
 	i = 0
 	for g in goals:
@@ -1721,7 +1816,7 @@ def human_spawner(
 			'CREATE "{}points/goals/g_{}"'.format(prefix, i),
 			'"{}points/goals/g_{}" SET Transform position ({} {} {})'.format(prefix, i, g[0], g[1], g[2]),
 			'"{}points/goals/g_{}" SET active true'.format(prefix, i),
-			'"{}human_spawner" PUSH Human_tests.Locomotion.HumanWalkerSpawner GoalPoints "{}points/goals/g_{}"'.format(prefix, prefix, i)
+			'"{}human_spawner" PUSH Humans.Locomotion.WalkerSpawner goalPoints "{}points/goals/g_{}"'.format(prefix, prefix, i)
 		])
 		i += 1
 	
@@ -1732,7 +1827,7 @@ def human_spawner(
 			'"{}points/spawners/s_{}" SET Transform position ({} {} {})'.format(prefix, i, s[0], s[1], s[2]),
 			'"{}points/spawners/s_{}" ADD Humans.HumanSpawnPoint'.format(prefix, i),
 			'"{}points/spawners/s_{}" SET active true'.format(prefix, i),
-			'"{}human_spawner" PUSH Human_tests.Locomotion.HumanWalkerSpawner SpawnPoints "{}points/spawners/s_{}"'.format(prefix, prefix, i)
+			'"{}human_spawner" PUSH Humans.Locomotion.WalkerSpawner spawnPoints "{}points/spawners/s_{}"'.format(prefix, prefix, i)
 		])
 		i += 1
 	
@@ -1740,8 +1835,9 @@ def human_spawner(
 		'"{}human_spawner" SET active true'.format(prefix),
 		'"{}points/goals" SET active true'.format(prefix),
 		'"{}points/spawners" SET active true'.format(prefix),
+		'"{}{}" SET active true'.format(prefix, container) if container != None else '',
 		'"{}points" SET active true'.format(prefix),
-		'"{}" SET active true'.format(prefix)
+		'"{}" SET active true'.format(prefix[0:-1])
 	])
 	
 	common.send_data(buf)
@@ -1824,14 +1920,12 @@ def spawner(
 		
 		if min_distance != None:
 			common.send_data([
-				'"{}/{}" ADD RandomProps.MinDistance'.format(prefix, n),
-				'"{}/{}" SET RandomProps.MinDistance value {}'.format(prefix, n, min_distance)
+				'"{}/{}" SET RandomProps.Frustum minDistance {}'.format(prefix, n, min_distance)
 			], read=False)
 		
 		if max_distance != None:
 			common.send_data([
-				'"{}/{}" ADD RandomProps.MaxDistance'.format(prefix, n),
-				'"{}/{}" SET RandomProps.MaxDistance value {}'.format(prefix, n, max_distance)
+				'"{}/{}" SET RandomProps.Frustum maxDistance {}'.format(prefix, n, max_distance)
 			], read=False)
 		
 		common.send_data([
@@ -2004,7 +2098,7 @@ def spawn_flat_grid(types=[], size=[1000,1000], position=[0,0,0], scale=[1,1,1],
 	common.flush_buffer()
 
 def spawn_parking_lot(
-	limit, fixed=True, dist_h=8, dist_v=3, dist_lim=30,
+	limit, fixed=False, dist_h=8, dist_v=3, dist_lim=30,
 	p_x=-15, p_z=-30, p_y=-5, prefix='cars', segment='Car'
 ):
 	"""
@@ -2013,7 +2107,7 @@ def spawn_parking_lot(
 	# Arguments
 	
 	limit (int): Number of objects to spawn in each of the `types`
-	fixed
+	fixed (bool): Sets if script should follow cars_lst instead of picking a random car from the available assets, defaults to `False`
 	dist_h (int): Horizontal distance, defaults to `8`
 	dist_v (int): Vertical distance, defaults to `3`
 	dist_lim (int): Distance limit, defaults to `30`
@@ -2045,7 +2139,7 @@ def spawn_parking_lot(
 			carID = '?'
 		
 		common.send_data([
-			'CREATE "{}/car_{}" Cars/{}'.format(prefix, k, carID),
+			'CREATE "Cars/{}" FROM "cars" AS "{}/car_{}"'.format(carID, prefix, k),
 			'"{}/car_{}" ADD Segmentation.ClassGroup'.format(prefix, k),
 			'"{}/car_{}" SET Segmentation.ClassGroup itemsClassName "{}"'.format(prefix, k, segment),
 			'"{}/car_{}" SET Transform position ({} {} {})'.format(prefix, k, p_x + settings.X_COMP, p_y, p_z + settings.Z_COMP),
@@ -2174,7 +2268,7 @@ def spawn_drone_objs(
 			prefix='cameras/spawner',
 			seed=seed,
 			method='Frustum',
-			method_parameters={'cam': 'cameras/cameraRGB'},
+			method_parameters={'cam': '"cameras/cameraRGB"'},
 			min_distance=2,
 			max_distance=5,
 			

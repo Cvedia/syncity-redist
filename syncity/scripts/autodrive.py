@@ -15,9 +15,17 @@ Autodrive
 '''
 
 def args(parser):
-	parser.add_argument('--disable_ros', action='store_true', default=False, help='Disables ROS')
-	parser.add_argument('--disable_lidar', action='store_true', default=False, help='Disables LiDAR')
-	parser.add_argument('--lidar_ip', default="192.168.1.100", help='Defines a IP for lidar devices')
+	try:
+		parser.add_argument('--disable_ros', action='store_true', default=False, help='Disables ROS')
+	except: pass
+	
+	try:
+		parser.add_argument('--disable_lidar', action='store_true', default=False, help='Disables LiDAR')
+	except: pass
+	
+	try:
+		parser.add_argument('--lidar_ip', default="192.168.1.100", help='Defines a IP for lidar devices')
+	except: pass
 
 def run():
 	settings.keep = True
@@ -31,10 +39,12 @@ def run():
 	
 	if settings.skip_setup == False:
 		common.send_data([
-			'CREATE "autodrive" autodrive "autodrive/autodrive_tile"',
-			'"autodrive" ADD WindZone',
+			'CREATE "autodrive/autodrive_tile" FROM "autodrive" AS "autodrive"',
+			'CREATE "autodrive/SyncityJPickup" FROM "autodrive" AS "{}"'.format(car_obj),
 			'"autodrive" SET active true'
 		])
+		
+		helpers.add_windzone(target='autodrive')
 		
 		helpers.global_camera_setup(label_root=camera_mount)
 		helpers.add_camera_rgb(width=640, height=480, pp='EnviroFX', label=mycams[0], label_root=camera_mount, audio=False)
@@ -48,18 +58,14 @@ def run():
 			# '"{}" SET FlyCamera enabled true'.format(mycams[0]),
 			
 			# reset cameras
-			'"{}" SET Transform localPosition (0 0.872 2.318)'.format(camera_mount),
-			'"{}" SET Transform localEulerAngles (0 0 0)'.format(camera_mount),
+			'"{}" SET Transform localPosition (0 0.872 2.318) localEulerAngles (0 0 0)'.format(camera_mount),
 			
 			# reset car position
-			'"{}" SET Transform position (-100.76 2.25 -415.57)'.format(car_obj),
-			'"{}" SET Transform eulerAngles (0.274 37.499 0)'.format(car_obj),
+			'"{}" SET Transform position (-100.76 2.25 -415.57) eulerAngles (0.274 37.499 0)'.format(car_obj),
 			
 			# add custom inputs for ros bridge
 			# WARNING: When VPCustomInput is enabled, you won't be able to drive using the keys
-			'"{}" ADD VPCustomInput'.format(car_obj),
-			'"{}" SET VPCustomInput enabled true'.format(car_obj),
-			#'"{}" SET VPCustomInput enabled false'.format(car_obj),
+			'"{}" SET VPCustomInput enabled false'.format(car_obj),
 			
 			'"{}" ADD UnityEngine.PostProcessing.PostProcessingBehaviour'.format(mycams[0]),
 			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile "EnviroFX"'.format(mycams[0]),
@@ -70,25 +76,23 @@ def run():
 		if settings.disable_lidar == False:
 			common.send_data([
 				# lidar position / angle setup
-				'"{}/Lidar" SET Transform localPosition (0 2 0)'.format(car_obj),
-				'"{}/Lidar" SET Transform localEulerAngles (0 0 0)'.format(car_obj),
+				'"{}/Lidar" SET Transform localPosition (0 2 0) localEulerAngles (0 0 0)'.format(car_obj),
+				# '"{}/Lidar" SET Transform localEulerAngles (0 0 0)'.format(car_obj),
 				
 				# lidar specs
-				'"{}/Lidar" SET Lidar model "VLP_16"'.format(car_obj),
-				
-				'"{}/Lidar" SET Lidar minAz -180'.format(car_obj),
-				'"{}/Lidar" SET Lidar maxAz 180'.format(car_obj),
-				'"{}/Lidar" SET Lidar minEl -30'.format(car_obj),
-				'"{}/Lidar" SET Lidar maxEl 30'.format(car_obj),
-				
-				'"{}/Lidar" SET Lidar rpm 900'.format(car_obj),
-				
-				'"{}/Lidar" SET Lidar MinimumIntensity 0'.format(car_obj),
-				'"{}/Lidar" SET Lidar ipAddressOverride "{}"'.format(car_obj, settings.lidar_ip),
-				
-				'"{}/Lidar" SET Lidar accuracy "HIGH"'.format(car_obj),
-				'"{}/Lidar" SET Lidar timingAccuracy "ULTRA"'.format(car_obj),
-				# '"{}/Lidar" SET Lidar disableUDPBroadcast True'.format(car_obj),
+				'''"{}/Lidar" SET Lidar
+					model "VLP_16"
+					minAz -180
+					maxAz 180
+					minEl -30
+					maxEl 30
+					rpm 900
+					MinimumIntensity 0
+					accuracy "HIGH"
+					timingAccuracy "ULTRA"
+					ipAddressOverride "{}"
+					disableUDPBroadcast false
+				'''.format(car_obj, settings.lidar_ip),
 				
 				# all set, enable objects
 				'"{}/Lidar" SET active true'.format(car_obj)
