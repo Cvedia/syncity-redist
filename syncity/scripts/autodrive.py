@@ -38,21 +38,21 @@ def run():
 	]
 	
 	if settings.skip_setup == False:
-		common.send_data([
+		common.sendData([
 			'CREATE "autodrive/autodrive_tile" FROM "autodrive" AS "autodrive"',
 			'CREATE "autodrive/SyncityJPickup" FROM "autodrive" AS "{}"'.format(car_obj),
 			'"autodrive" SET active true'
 		])
 		
-		helpers.add_windzone(target='autodrive')
+		helpers.addWindzone(target='autodrive')
 		
-		helpers.global_camera_setup(label_root=camera_mount)
-		helpers.add_camera_rgb(width=640, height=480, pp='EnviroFX', label=mycams[0], label_root=camera_mount, audio=False)
-		helpers.add_camera_depth(width=640, height=480, label=mycams[1])
-		helpers.global_disk_setup()
-		helpers.add_disk_output(mycams)
+		helpers.globalCameraSetup(labelRoot=camera_mount)
+		helpers.addCameraRGB(width=640, height=480, pp='EnviroFX', label=mycams[0], labelRoot=camera_mount, audio=False)
+		helpers.addCameraDepth(width=640, height=480, label=mycams[1])
+		helpers.globalDiskSetup()
+		helpers.addDiskOutput(mycams)
 		
-		common.send_data([
+		common.sendData([
 			# flycam
 			# '"{}" ADD FlyCamera'.format(mycams[0]),
 			# '"{}" SET FlyCamera enabled true'.format(mycams[0]),
@@ -74,7 +74,7 @@ def run():
 		], read=False)
 		
 		if settings.disable_lidar == False:
-			helpers.add_lidar(
+			helpers.addLidar(
 				label='{}/Lidar'.format(car_obj),
 				localPosition=[0, 2, 0],
 				localRotation=[0, 0, 0],
@@ -82,7 +82,7 @@ def run():
 				ipAddressOverride=settings.lidar_ip
 			)
 		
-		common.send_data([
+		common.sendData([
 			'"{}" SET Sensors.RenderCamera alwaysOn true'.format(mycams[0]),
 			'"{}" SET Sensors.RenderCamera alwaysOn true'.format(mycams[1]),
 			'"{}" SET Camera enabled true'.format(mycams[0]),
@@ -93,7 +93,7 @@ def run():
 	
 	# setup ros ios
 	if settings.disable_ros == False:
-		helpers.setup_ros_topics(
+		helpers.setupROSTopics(
 			writeLinks=[
 				{
 					"label": "throttle",
@@ -189,4 +189,4 @@ def run():
 			]
 		)
 	
-	common.flush_buffer()
+	common.flushBuffer()

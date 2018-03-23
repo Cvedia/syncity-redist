@@ -21,7 +21,7 @@ Animals thermal in Savannah scene
 '''
 
 def args(parser):
-	parser.add_argument('--loop_limit', type=int, default=500, help='Defines a limit of iterations for exporting')
+	parser.add_argument('--loopLimit', type=int, default=500, help='Defines a limit of iterations for exporting')
 
 def run():
 	settings.keep = True
@@ -50,33 +50,33 @@ def run():
 	
 	if settings.skip_setup == False:
 		# scenario goes first as it's the base for all objects to be placed upon
-		common.send_data([
+		common.sendData([
 			'CREATE savannah tiles Savannah',
 			'savannah ADD WindZone'
 		])
 		
 		# camera setup
-		helpers.global_camera_setup(
+		helpers.globalCameraSetup(
 			orbitOffset=[1667.05, 32.37876, 1000],
 			orbitSnap=snapOffset,
 			orbitGround='savannah/Main Terrain'
 		)
 		
-		helpers.add_camera_seg(
-			width=1024, height=768, fov=90, clipping_far=10000,
+		helpers.addCameraSeg(
+			width=1024, height=768, fov=90, clippingFar=10000,
 			segments=['Car', 'Animal', 'Human'],
 			lookupTable=[['Car', 'red'], ['Animal', 'blue'], ['Human', 'green'], ['ground', '#807C00FF']]
 		)
 		
-		helpers.add_camera_rgb(
+		helpers.addCameraRGB(
 			width=1024, height=768, pp='EnviroFX',
 			fov=90,
-			clipping_far=10000
+			clippingFar=10000
 		)
 		
-		helpers.add_camera_depth(width=1024, height=768, fov=90)
+		helpers.addCameraDepth(width=1024, height=768, fov=90)
 		
-		common.send_data([
+		common.sendData([
 			'"savannah" SET active true',
 			'"savannah" ADD Segmentation.ClassGroup',
 			'"savannah" SET Segmentation.ClassGroup itemsClassName "{}"'.format('ground'),
@@ -87,30 +87,30 @@ def run():
 			'savannah SET active true'
 		])
 		
-		helpers.add_camera_thermal(
+		helpers.addCameraThermal(
 			fov=90,
-			clipping_far=10000,
+			clippingFar=10000,
 			
 			trees=True,
 			ambientTemperature=15, minimumTemperature=9, maximumTemperature=35,
-			trees_base=8, trees_bandwidth=50, trees_median=0, trees_leafs_variance=10,
+			treesBase=8, treesBandwidth=50, treesMedian=0, treesLeafsVariance=10,
 		)
 		
-		helpers.global_disk_setup()
-		helpers.add_disk_output(mycams)
+		helpers.globalDiskSetup()
+		helpers.addDiskOutput(mycams)
 		
 		# spawn objects in a rectangular shape
-		helpers.spawn_rectangle_generic(
+		helpers.spawnRectangleGeneric(
 			['+animal, +thermal, +savannah', '+carthermal', '+humans' ],
 			names=['animals0', 'cars0', 'humans0'],
-			segmentation_class=['Animal', 'Car', 'Human'],
+			segmentationClass=['Animal', 'Car', 'Human'],
 			limit=50, a=1000, b=1000, position=[1685, 591, 7894],
-			collision_check=True,
-			stick_to_ground=True
+			collisionCheck=True,
+			stickToGround=True
 		)
 		
 		# fine tune specifics
-		common.send_data([
+		common.sendData([
 			'"savannah/Main Terrain" SET Thermal.ThermalTerrain ambientOffset {}'.format(terrain_ambient_offset),
 			'"savannah/Main Terrain" SET Thermal.ThermalTerrain bandwidth {}'.format(terrain_ambient_bandwidth),
 			'"savannah/Main Terrain" SET Thermal.ThermalTerrain median {}'.format(terrain_ambient_median),
@@ -139,7 +139,7 @@ def run():
 		], read=False)
 	
 	# warm up
-	helpers.do_render(mycams)
+	helpers.doRender(mycams)
 	
 	if settings.setup_only == True:
 		return
@@ -147,8 +147,8 @@ def run():
 	loop = 0
 	
 	# loop changing camera positions with random agc bounduaries
-	while loop < settings.loop_limit:
-		common.send_data([
+	while loop < settings.loopLimit:
+		common.sendData([
 			'"cameras/thermal" SET Thermal.ThermalCamera temperatureRange ({} {})'.format(min_agc, max_agc),
 			'"cameras" SET Orbit distance {}'.format(dist),
 			'"cameras" SET Orbit elevation {}'.format(elevation),
@@ -156,7 +156,7 @@ def run():
 			'"cameras" SET Orbit snapOffset {}'.format(snapOffset)
 		], read=False)
 		
-		helpers.take_snapshot(mycams, auto_segment=True, force_noop=True)
+		helpers.takeSnapshot(mycams, autoSegment=True, forceNoop=True)
 		
 		# random agc values
 		min_agc = randint(-3, 5)
@@ -177,4 +177,4 @@ def run():
 			azimuth = 0
 		
 		loop = loop + 1
-		common.output('Loop {} ({}%)'.format(loop, round(100 * (settings.loop_limit / loop),2)))
+		common.output('Loop {} ({}%)'.format(loop, round(100 * (settings.loopLimit / loop),2)))

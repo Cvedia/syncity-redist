@@ -21,7 +21,7 @@ Human walker at forest
 '''
 
 def args(parser):
-	parser.add_argument('--loop_limit', type=int, default=500, help='Defines a limit of iterations for exporting')
+	parser.add_argument('--loopLimit', type=int, default=500, help='Defines a limit of iterations for exporting')
 
 def run():
 	settings.keep = True
@@ -46,7 +46,7 @@ def run():
 	
 	if settings.skip_setup == False:
 		# load forest scene
-		common.send_data([
+		common.sendData([
 			'LOAD "Forest" FROM "tile"',
 			'"Forest" SET active false',
 			'"Forest" ADD Segmentation.ClassInfo',
@@ -56,7 +56,7 @@ def run():
 			'"Forest" SET Segmentation.ClassInfo itemClass "ground"'
 		])
 		
-		helpers.add_thermal_terrain(
+		helpers.addThermalTerrain(
 			target='Forest',
 			ambient_offset=0,
 			bandwidth=-15.88,
@@ -64,53 +64,53 @@ def run():
 		)
 		
 		# camera setup
-		helpers.global_camera_setup(position=position, rotation=rotation, flycam=True)
+		helpers.globalCameraSetup(position=position, rotation=rotation, flycam=True)
 		
-		helpers.add_camera_seg(
-			width=1024, height=768, fov=90, clipping_far=10000,
+		helpers.addCameraSeg(
+			width=1024, height=768, fov=90, clippingFar=10000,
 			segments=['Human'],
 			lookupTable=[['Human', 'green'], ['ground', '#520000FF']]
 		)
 		
-		helpers.add_camera_rgb(
+		helpers.addCameraRGB(
 			width=1024, height=768, pp='EnviroFX',
 			fov=90,
-			clipping_far=10000,
+			clippingFar=10000,
 			audio=False
 		)
 		
-		helpers.add_camera_depth(width=1024, height=768, fov=90)
-		helpers.add_windzone(target='Forest', main=.12, turbulence=.5)
+		helpers.addCameraDepth(width=1024, height=768, fov=90)
+		helpers.addWindzone(target='Forest', main=.12, turbulence=.5)
 		
-		common.send_data('"Forest" SET active true')
+		common.sendData('"Forest" SET active true')
 		
-		helpers.add_camera_thermal(
+		helpers.addCameraThermal(
 			width=1024, height=768, fov=90,
-			clipping_far=10000,
+			clippingFar=10000,
 			
 			trees=True,
 			ambientTemperature=4.3, minimumTemperature=4.5, maximumTemperature=35,
-			trees_base=6.41, trees_bandwidth=50, trees_median=.18, trees_leafs_variance=10
+			treesBase=6.41, treesBandwidth=50, treesMedian=.18, treesLeafsVariance=10
 		)
 		
-		helpers.global_disk_setup()
-		helpers.add_disk_output(mycams)
+		helpers.globalDiskSetup()
+		helpers.addDiskOutput(mycams)
 		
-		helpers.human_spawner(
+		helpers.humanSpawner(
 			goals=[[1696.21069, 215.3, 7000]],
 			spawners=[[1723.81311, 213.312, 6838.701], [1655.723, 211.563, 6797.911], [1528.34314, 219.4655, 7124.911]],
 			delay=[.01, .3], speed=[.5, 5], limit=50,
-			require_thermal_clothing=True
+			requireThermalClothing=True
 		)
 		
-		helpers.add_thermal_profile_override(
+		helpers.addThermalProfileOverride(
 			target='spawner/human_walker/container',
-			heatiness_mode='Absolute',
-			heatiness_value=60
+			heatinessMode='Absolute',
+			heatinessValue=60
 		)
 	
 	# warm up
-	helpers.do_render(mycams)
+	helpers.doRender(mycams)
 	
 	if settings.setup_only == True:
 		return
@@ -118,8 +118,8 @@ def run():
 	loop = 0
 	
 	# loop changing camera positions with random agc bounduaries
-	while loop < settings.loop_limit:
-		common.send_data([
+	while loop < settings.loopLimit:
+		common.sendData([
 			# '"cameras/thermal" SET Thermal.ThermalCamera temperatureRange ({} {})'.format(min_agc, max_agc),
 			'"cameras" SET Transform position ({} {} {}) eulerAngles ({} {} {})'.format(
 				position[0], position[1], position[2],
@@ -127,7 +127,7 @@ def run():
 			)
 		])
 		
-		helpers.take_snapshot(mycams, auto_segment=True, force_noop=True)
+		helpers.takeSnapshot(mycams, autoSegment=True, forceNoop=True)
 		
 		# random agc values
 		min_agc = randint(-3, 5)
@@ -146,4 +146,4 @@ def run():
 				rotation_incr[k] = rotation_incr[k] * -1
 		
 		loop = loop + 1
-		common.output('Loop {} ({}%)'.format(loop, round(100 * (settings.loop_limit / loop),2)))
+		common.output('Loop {} ({}%)'.format(loop, round(100 * (settings.loopLimit / loop),2)))

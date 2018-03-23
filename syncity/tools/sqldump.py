@@ -19,4 +19,4 @@ def run():
 	fh = open(rfn, 'wb+')
 	for row in cur.fetchall():
 		print('row: {}'.format(row[0]))
-		common.ts_write(fh, 'Database entry `{}` contains no asset.'.format(row[0]))
+		common.tsWrite(fh, 'Database entry `{}` contains no asset.'.format(row[0]))

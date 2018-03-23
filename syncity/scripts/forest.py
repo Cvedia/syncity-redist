@@ -23,12 +23,12 @@ def run():
 	mycams = ['cameras/cameraRGB']
 	
 	if settings.skip_setup == False:
-		helpers.global_camera_setup()
-		helpers.add_camera_rgb(flycam=settings.flycam, pp='EnviroFX')
-		helpers.global_disk_setup()
+		helpers.globalCameraSetup()
+		helpers.addCameraRGB(flycam=settings.flycam, pp='EnviroFX')
+		helpers.globalDiskSetup()
 		
-		helpers.add_disk_output(mycams)
-		common.send_data([
+		helpers.addDiskOutput(mycams)
+		common.sendData([
 			'CREATE "test" "Terrains/Forest/Forest"',
 			'"test" SET Transform position ({} {} {})'.format(-5000,-180,-5000),
 			'"test" SET Terrain basemapDistance 2000',
@@ -37,10 +37,10 @@ def run():
 			# 'cameras SET Orbit target test'
 		])
 		
-		# helpers.spawn_radius_generic(['cars'], limit=10, radius=50, innerradius=0, segmentation_class="Car", orbit=True, position=[0,10,0])
-		# helpers.spawn_radius_generic(['prefabs/terrains/desert'], orbit=True, limit=1, radius=65, innerradius=0, position=[0,0,0], collision_check=False)
+		# helpers.spawnRadiusGeneric(['cars'], limit=10, radius=50, innerradius=0, segmentationClass="Car", orbit=True, position=[0,10,0])
+		# helpers.spawnRadiusGeneric(['prefabs/terrains/desert'], orbit=True, limit=1, radius=65, innerradius=0, position=[0,0,0], collisionCheck=False)
 		
-		helpers.spawn_misc_objs()
+		helpers.spawnMiscObjs()
 	
 	dist = -60
 	dist_e = 5 # elevation increment
@@ -53,19 +53,19 @@ def run():
 		azimuth = 0
 		
 		while azimuth < 360:
-			common.send_data([
+			common.sendData([
 				'"cameras" SET Orbit distance {}'.format(dist),
 				'"cameras" SET Orbit elevation {}'.format(elevation),
 				'"cameras" SET Orbit azimuth {}'.format(azimuth),
 				'"EnviroSky" SET EnviroSky GameTime.Hours {}'.format(random.randint(6, 18))
 			])
 			
-			helpers.take_snapshot(mycams)
+			helpers.takeSnapshot(mycams)
 			loops += 1
 			
 			if loops == reroll:
 				loops = 0
-				helpers.spawn_misc_objs(True)
+				helpers.spawnMiscObjs(True)
 			
 			azimuth += dist_a
 		

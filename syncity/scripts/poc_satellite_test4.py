@@ -32,12 +32,12 @@ def run():
 	while r != 2:
 		if r == 0:
 			mode = 'rgb'
-			common.send_data([
+			common.sendData([
 				'cameraRGB/cameraSeg SET active false'
 			]);
 		elif r == 1:
 			mode = 'segmentation'
-			common.send_data([
+			common.sendData([
 				'cameraRGB/cameraSeg SET active true'
 			]);
 			
@@ -70,7 +70,7 @@ def run():
 		x_increment = .5
 		z_increment = 5
 		
-		common.send_data([
+		common.sendData([
 			'EnviroSky SET EnviroSky weatherSettings.cloudTransitionSpeed {}'.format(100),
 			'EnviroSky SET EnviroSky weatherSettings.effectTransitionSpeed {}'.format(100),
 			'EnviroSky SET EnviroSky weatherSettings.fogTransitionSpeed {}'.format(100),
@@ -79,9 +79,9 @@ def run():
 		
 		while x > x_range[1]:
 			'''
-			p_x = p_x + (random.uniform(.05, .75) * p_x_d)
-			p_y = p_y + (random.uniform(.01, .95) * p_y_d)
-			p_z = p_z + (random.uniform(.25, .75) * p_z_d)
+			pX = pX + (random.uniform(.05, .75) * pX_d)
+			pY = pY + (random.uniform(.01, .95) * pY_d)
+			pZ = pZ + (random.uniform(.25, .75) * pZ_d)
 			'''
 			x = x + (x_increment * x_d)
 			z = z + (z_increment * z_d)
@@ -110,8 +110,8 @@ def run():
 			if loop % 25 == 0:
 				buf.append('EnviroSky EXECUTE EnviroSky ChangeWeather "{}"'.format(random.choice(helpers.weather_lst)))
 			
-			common.send_data(buf)
-			common.flush_buffer()
+			common.sendData(buf)
+			common.flushBuffer()
 			common.output('Sleeping')
 			time.sleep(2)
 			common.output('SS')

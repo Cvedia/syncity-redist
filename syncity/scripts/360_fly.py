@@ -20,12 +20,12 @@ def run():
 	obj = 'Cars/VW_Golf_V/VW_Golf_V'
 	
 	if settings.skip_setup == False:
-		helpers.global_camera_setup()
-		helpers.add_camera_rgb(width=4096, height=3072, pp='EnviroFX')
-		helpers.add_camera_seg(segments=['Car'])
-		helpers.global_disk_setup()
-		helpers.add_disk_output(mycams)
-		common.send_data([
+		helpers.globalCameraSetup()
+		helpers.addCameraRGB(width=4096, height=3072, pp='EnviroFX')
+		helpers.addCameraSeg(segments=['Car'])
+		helpers.globalDiskSetup()
+		helpers.addDiskOutput(mycams)
+		common.sendData([
 			'CREATE "obj" "{}"'.format(obj),
 			'"obj" ADD Segmentation.ClassGroup',
 			'"obj" SET Segmentation.ClassGroup itemsClassName "Car"',
@@ -38,7 +38,7 @@ def run():
 		], read=False)
 	
 	# reset camera
-	common.send_data([
+	common.sendData([
 		'"obj" SET active true',
 		'"cameras/cameraRGB" SET Camera enabled true',
 		'"cameras" SET Transform position ({} {} {})'.format(0, 1, -16),
@@ -48,7 +48,7 @@ def run():
 		'"EnviroSky" EXECUTE EnviroSky ChangeWeather "{}"'.format(helpers.weather_lst[1])
 	], read=False)
 	
-	common.flush_buffer()
+	common.flushBuffer()
 	
 	displ_h = .5
 	displ_y = 4
@@ -59,17 +59,17 @@ def run():
 		a_y = 0
 		# do a 360 around object
 		while a_y < 360:
-			common.send_data([
+			common.sendData([
 				'"obj" SET Transform eulerAngles ({} {} {})'.format(0, a_y, 0)
 			])
 			a_y = a_y + displ_y
-			helpers.take_snapshot(mycams, False)
+			helpers.takeSnapshot(mycams, False)
 		
 		# next
 		c_y = c_y + displ_h
 		a_x = c_y * 4.285714
 		
-		common.send_data([
+		common.sendData([
 			'"cameras" SET Transform position ({} {} {})'.format(0, c_y, -16),
 			'"cameras" SET Transform eulerAngles ({} {} {})'.format(a_x, -40, 0)
 		])

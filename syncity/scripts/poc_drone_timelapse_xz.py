@@ -20,17 +20,17 @@ def run():
 	mycams = ['cameras/cameraRGB']
 	
 	if settings.skip_setup == False:
-		helpers.global_camera_setup()
-		helpers.add_camera_rgb(width=4096, height=3072, pp='EnviroFX')
-		helpers.global_disk_setup()
+		helpers.globalCameraSetup()
+		helpers.addCameraRGB(width=4096, height=3072, pp='EnviroFX')
+		helpers.globalDiskSetup()
 		
-		helpers.add_disk_output(mycams)
-		helpers.spawn_drone_objs(cars_limit=[50,100],trees_limit=[250,300],birds_limit=[200,250],buildings_limit=[100,150])
+		helpers.addDiskOutput(mycams)
+		helpers.spawnDroneObjs(carsLimit=[50,100],treesLimit=[250,300],birdsLimit=[200,250],buildingsLimit=[100,150])
 	
-	p_y = 1
-	p_y_direction = True
-	p_z = -16
-	p_z_direction = True
+	pY = 1
+	pY_direction = True
+	pZ = -16
+	pZ_direction = True
 	
 	a_y = -45
 	a_y_direction = True
@@ -44,30 +44,30 @@ def run():
 	c = 0
 	
 	# reset camera
-	common.send_data([
+	common.sendData([
 		'"cameras/cameraRGB" SET Camera enabled true',
-		'"cameras" SET Transform position ({} {} {})'.format(0, p_y, p_z),
+		'"cameras" SET Transform position ({} {} {})'.format(0, pY, pZ),
 		'"cameras" SET Transform eulerAngles ({} {} {})'.format(a_x, a_y, 0),
 		'"EnviroSky" SET EnviroSky cloudsMode "{}"'.format('Volume'),
 		'"EnviroSky" SET EnviroSky cloudsSettings.globalCloudCoverage {}'.format(-0.04)
 	])
 	
 	while hour < 19:
-		common.send_data([
+		common.sendData([
 			'"spawner/drones" SET Transform position ({} {} {})'.format(0, random.randint(2, 25), 0),
 			'"spawner/drones" SET Transform eulerAngles ({} {} {})'.format(random.randint(-15, 15), random.randint(0, 359), random.randint(-2, 2)),
 			'"spawner/animals/birds" SET Transform position ({} {} {})'.format(0, random.randint(5, 75), 0),
 			'"spawner/animals/birds" SET Transform eulerAngles ({} {} {})'.format(0, random.randint(0, 359), 0),
 			'"spawner/cars" SET Transform eulerAngles ({} {} {})'.format(0, -y_slow * 8, 0),
 			'"spawner/city/nature" SET Transform eulerAngles ({} {} {})'.format(0, y_slow, 0),
-			'"cameras" SET Transform position ({} {} {})'.format(0, p_y, p_z),
+			'"cameras" SET Transform position ({} {} {})'.format(0, pY, pZ),
 			'"cameras" SET Transform eulerAngles ({} {} {})'.format(a_x, a_y, 0),
 			'"EnviroSky" SET EnviroSky GameTime.Hours {}'.format(hour),
 			'"EnviroSky" SET EnviroSky GameTime.Minutes {}'.format(minute),
 			'"EnviroSky" SET EnviroSky GameTime.Seconds {}'.format(second)
 		], read=False)
 		
-		helpers.take_snapshot(mycams)
+		helpers.takeSnapshot(mycams)
 		
 		y_slow = y_slow + .1
 		
@@ -82,27 +82,27 @@ def run():
 		elif a_y <= -45:
 			a_y_direction = True
 		
-		if p_y_direction == True:
-			p_y = p_y + random.uniform(.1, .75)
+		if pY_direction == True:
+			pY = pY + random.uniform(.1, .75)
 		else:
-			p_y = p_y - random.uniform(.1, .75)
+			pY = pY - random.uniform(.1, .75)
 		
-		if p_y >= 30:
-			p_y_direction = False
-		elif p_y <= 1:
-			p_y_direction = True
+		if pY >= 30:
+			pY_direction = False
+		elif pY <= 1:
+			pY_direction = True
 		
-		if p_z_direction == True:
-			p_z = p_z + random.uniform(.1, .75)
+		if pZ_direction == True:
+			pZ = pZ + random.uniform(.1, .75)
 		else:
-			p_z = p_z - random.uniform(.1, .75)
+			pZ = pZ - random.uniform(.1, .75)
 		
-		if p_z >= 16:
-			p_z_direction = False
-		elif p_z <= -16:
-			p_z_direction = True
+		if pZ >= 16:
+			pZ_direction = False
+		elif pZ <= -16:
+			pZ_direction = True
 		
-		a_x = (p_y * 2.667) -20 # -20 -> 60 depending on Y
+		a_x = (pY * 2.667) -20 # -20 -> 60 depending on Y
 		
 		# time
 		second = second + 30
@@ -117,7 +117,7 @@ def run():
 		loop = loop + 1
 		
 		if loop % 30 == 0:
-			common.send_data([
+			common.sendData([
 				'"EnviroSky" EXECUTE EnviroSky ChangeWeather "{}"'.format(helpers.weather_lst[c])
 			], read=False)
 			c = c + 1

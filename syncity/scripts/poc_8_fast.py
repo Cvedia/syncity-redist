@@ -22,20 +22,20 @@ def run():
 	mycams = ['cameras/cameraRGB', 'cameras/segmentation']
 	
 	if settings.skip_setup == False:
-		helpers.global_camera_setup()
-		helpers.add_camera_rgb(width=1024, height=768, flycam=settings.flycam, pp='EnviroFX')
-		helpers.add_camera_seg(segments=['Car'])
-		helpers.global_disk_setup()
+		helpers.globalCameraSetup()
+		helpers.addCameraRGB(width=1024, height=768, flycam=settings.flycam, pp='EnviroFX')
+		helpers.addCameraSeg(segments=['Car'])
+		helpers.globalDiskSetup()
 		
-		helpers.add_disk_output(mycams)
-		helpers.spawn_radius_generic(['city/nature/trees'], collision_check=False, limit=50, radius=80, innerradius=30, position=[0,10,0])
-		helpers.spawn_radius_generic(['city/signs'], limit=10, radius=35, innerradius=0, position=[0,10,0])
-		# spawn_radius_generic(['animals'], limit=300, radius=50, innerradius=0, position=[0,10,0])
-		helpers.spawn_radius_generic(['city/buildings'], limit=10, radius=335, innerradius=80, position=[0,10,0])
-		helpers.spawn_radius_generic(['cars'], limit=10, radius=50, innerradius=0, segmentation_class="Car", orbit=True, position=[0,10,0])
+		helpers.addDiskOutput(mycams)
+		helpers.spawnRadiusGeneric(['city/nature/trees'], collisionCheck=False, limit=50, radius=80, innerradius=30, position=[0,10,0])
+		helpers.spawnRadiusGeneric(['city/signs'], limit=10, radius=35, innerradius=0, position=[0,10,0])
+		# spawnRadiusGeneric(['animals'], limit=300, radius=50, innerradius=0, position=[0,10,0])
+		helpers.spawnRadiusGeneric(['city/buildings'], limit=10, radius=335, innerradius=80, position=[0,10,0])
+		helpers.spawnRadiusGeneric(['cars'], limit=10, radius=50, innerradius=0, segmentationClass="Car", orbit=True, position=[0,10,0])
 		
 		for i in range(0,9):
-			helpers.spawn_radius_generic(['city/ground'], suffix='_{}'.format(i), limit=3, radius=50, innerradius=0, scale=[2,2,2], position=[0,i,0], collision_check=False)
+			helpers.spawnRadiusGeneric(['city/ground'], suffix='_{}'.format(i), limit=3, radius=50, innerradius=0, scale=[2,2,2], position=[0,i,0], collisionCheck=False)
 	
 	dist = -60
 	dist_e = 5 # elevation increment
@@ -48,20 +48,20 @@ def run():
 		azimuth = 0
 		
 		while azimuth < 360:
-			common.send_data([
+			common.sendData([
 				'"cameras" SET Orbit distance {}'.format(dist),
 				'"cameras" SET Orbit elevation {}'.format(elevation),
 				'"cameras" SET Orbit azimuth {}'.format(azimuth),
 				'"EnviroSky" SET EnviroSky GameTime.Hours {}'.format(random.randint(6, 18))
 			])
 			
-			helpers.take_snapshot(mycams)
-			helpers.take_seg_snapshot([ 'cameras/segmentation' ])
+			helpers.takeSnapshot(mycams)
+			helpers.takeSegSnapshot([ 'cameras/segmentation' ])
 			loops += 1
 			
 			if loops == reroll:
 				loops = 0
-				helpers.spawn_misc_objs(True)
+				helpers.spawnMiscObjs(True)
 			
 			azimuth += dist_a
 		

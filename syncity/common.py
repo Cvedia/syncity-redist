@@ -31,7 +31,7 @@ _telnet = False
 settings = False
 counters = { 'send': 0, 'recv': 0, 'flush': 0 }
 
-def init_telnet(ip, port, retries=3, wait=.5, timeout=30, ka_interval=3, ka_fail=10, ka_idle=1):
+def initTelnet(ip, port, retries=3, wait=.5, timeout=30, ka_interval=3, ka_fail=10, ka_idle=1):
 	"""
 	Telnet initalizator
 	
@@ -87,7 +87,7 @@ def init_telnet(ip, port, retries=3, wait=.5, timeout=30, ka_interval=3, ka_fail
 			
 			_telnet = True
 			output('Connected')
-			settings._simulator_version = send_data(['VERSION', 'NOOP'], read=True)[0].replace('"', '')
+			settings._simulator_version = sendData(['VERSION', 'NOOP'], read=True)[0].replace('"', '')
 			output('Simulator Version: {}'.format(settings._simulator_version))
 			
 			if int(settings._simulator_version.replace('.', '')[0:10]) < int(settings._simulator_min_version.replace('.', '')[0:10]):
@@ -102,14 +102,14 @@ def init_telnet(ip, port, retries=3, wait=.5, timeout=30, ka_interval=3, ka_fail
 				output('Init sequence...')
 				
 				if settings.assets:
-					send_data('"Config.instance" SET assetBundlesCache "{}"'.format(settings.assets))
+					sendData('"Config.instance" SET assetBundlesCache "{}"'.format(settings.assets))
 				
 				if settings.db:
-					send_data('"Config.instance" SET databaseFolderPath "{}"'.format(settings.db))
+					sendData('"Config.instance" SET databaseFolderPath "{}"'.format(settings.db))
 				elif settings.assets:
-					send_data('"Config.instance" SET databaseFolderPath "{}"'.format(settings.assets))
+					sendData('"Config.instance" SET databaseFolderPath "{}"'.format(settings.assets))
 				
-				send_data('"Config.instance" SET physicsEnabled {}'.format('false' if settings.enable_physics == False else 'true'))
+				sendData('"Config.instance" SET physicsEnabled {}'.format('false' if settings.enable_physics == False else 'true'))
 			
 			break
 		except Exception as e:
@@ -134,11 +134,11 @@ def init():
 	global settings
 	
 	settings = settings_manager.Singleton()
-	signal.signal(signal.SIGINT, gracefull_shutdown)
-	atexit.register(gracefull_shutdown)
+	signal.signal(signal.SIGINT, gracefullShutdown)
+	atexit.register(gracefullShutdown)
 	
 	if settings.local_path:
-		mkdir_p(settings.local_path)
+		mkdirP(settings.local_path)
 	colorama.init()
 
 def output(s, level='INFO'):
@@ -181,7 +181,7 @@ def output(s, level='INFO'):
 		output('Aborting on error!')
 		sys.exit(1)
 	
-def send_data(v, read=None, flush=None, timeout=3):
+def sendData(v, read=None, flush=None, timeout=3):
 	"""
 	Sends data via telnet to the server
 	
@@ -208,7 +208,7 @@ def send_data(v, read=None, flush=None, timeout=3):
 	
 	if settings.debug:
 		counters['send'] += 1
-		output('[{}] Telnet send_data v: {} read: {} flush: {}'.format(counters['send'], v, 'True' if read == True else 'False', 'True' if flush != None else 'False'))
+		output('[{}] Telnet sendData v: {} read: {} flush: {}'.format(counters['send'], v, 'True' if read == True else 'False', 'True' if flush != None else 'False'))
 	
 	r = []
 	
@@ -238,7 +238,7 @@ def send_data(v, read=None, flush=None, timeout=3):
 				output('[{}] Telnet Reading...'.format(counters['recv']), 'DEBUG')
 			
 			l = tn.read_until(b"\r\n", timeout)
-			l = shape_data(l)
+			l = shapeData(l)
 			
 			if settings.abort_on_error == True and abort == False and 'ERROR' in l:
 				abort = True
@@ -251,10 +251,10 @@ def send_data(v, read=None, flush=None, timeout=3):
 					output('Telnet Read Loop... buffer: {}'.format(r), 'DEBUG')
 				
 				try:
-					l = shape_data(tn.read_eager())
+					l = shapeData(tn.read_eager())
 				except EOFError:
 					output('Error reading data from socket, reconnecting...', 'ERROR')
-					init_telnet(settings.ip, settings.port)
+					initTelnet(settings.ip, settings.port)
 					break
 				
 				if l is '' or not l:
@@ -266,10 +266,10 @@ def send_data(v, read=None, flush=None, timeout=3):
 			if flush:
 				time.sleep(.5)
 				l = tn.read_until(b"\r\n", 1)
-				l = shape_data(l)
+				l = shapeData(l)
 				
 				if l != '':
-					send_data('NOOP', read=True, flush=True)
+					sendData('NOOP', read=True, flush=True)
 			"""
 	
 	if settings.debug:
@@ -299,7 +299,7 @@ def md5(fname):
 	
 	return hash_md5.hexdigest()
 
-def ts_write(fh, x):
+def tsWrite(fh, x):
 	"""
 	Prepends timestamp a string and appends it to a file pointer
 	
@@ -311,7 +311,7 @@ def ts_write(fh, x):
 	"""
 	fh.write('[{}] {}'.format(datetime.now().strftime("%H:%M:%S.%f"), x).encode('utf-8') + b"\n")
 
-def shape_data(l):
+def shapeData(l):
 	"""
 	Properly shapes raw data returned from low level telnet protocol into strings or json objects
 	
@@ -338,7 +338,7 @@ def shape_data(l):
 	
 	return l
 
-def gracefull_shutdown(a=None, b=None):
+def gracefullShutdown(a=None, b=None):
 	"""
 	Gracefully shutdown script execution:
 		- Deletes all created objects (if enabled)
@@ -367,16 +367,16 @@ def gracefull_shutdown(a=None, b=None):
 		if settings.keep == False:
 			time.sleep(1)
 			for o in settings.obj:
-				send_data('DELETE "{}"'.format(o), read=False)
+				sendData('DELETE "{}"'.format(o), read=False)
 			
-			flush_buffer()
+			flushBuffer()
 			time.sleep(5)
 		else:
 			output('Keeping objects in scene')
 		
 		""""
 		try:
-			output('queueCount: {}'.format(send_data('API GET API.Manager queueCount', read=True)))
+			output('queueCount: {}'.format(sendData('API GET API.Manager queueCount', read=True)))
 		except:
 			pass
 		"""
@@ -403,16 +403,16 @@ def gracefull_shutdown(a=None, b=None):
 	except:
 		pass
 
-def flush_buffer():
+def flushBuffer():
 	"""
 	Forces a telnet command read by sending NOOP
 	"""
 	if settings.debug:
 		counters['flush'] += 1
 	
-	send_data('NOOP', read=True, flush=True)
+	sendData('NOOP', read=True, flush=True)
 
-def modules_help(module):
+def modulesHelp(module):
 	"""
 	Transverses existing modules searching for help sections
 	
@@ -441,7 +441,7 @@ def modules_help(module):
 	
 	return '\n'.join(output)
 
-def modules_args(module, parser):
+def modulesArgs(module, parser):
 	"""
 	Transverses existing modules searching for command line arguments
 	
@@ -463,7 +463,7 @@ def modules_args(module, parser):
 			except:
 				pass
 
-def local_time_offset(t=None):
+def localTimeOffset(t=None):
 	"""
 	Figures out local timezone
 	"""
@@ -475,12 +475,12 @@ def local_time_offset(t=None):
 	else:
 		return -time.timezone
 
-def read_all(fn):
+def readAll(fn):
 	with open(fn, "r") as fh:
 		data = fh.read()
 	return data
 
-def find_arg_order(aargs, argv=sys.argv):
+def findArgOrder(aargs, argv=sys.argv):
 	order = []
 	
 	for i in argv:
@@ -492,7 +492,7 @@ def find_arg_order(aargs, argv=sys.argv):
 	
 	return order
 
-def mkdir_p(path):
+def mkdirP(path):
 	try:
 		os.makedirs(path)
 	except OSError as exc:
@@ -501,7 +501,7 @@ def mkdir_p(path):
 		else:
 			raise
 
-def get_all_files(base, ignore_path=['.git', '__pycache__'], ignore_ext=['.md', 'pyc'], recursive=True):
+def getAllFiles(base, ignore_path=['.git', '__pycache__'], ignore_ext=['.md', 'pyc'], recursive=True):
 	"""
 	Recursively lists all files from a folder
 	
@@ -548,12 +548,12 @@ def get_all_files(base, ignore_path=['.git', '__pycache__'], ignore_ext=['.md', 
 	
 	return fns
 
-class readable_dir(argparse.Action):
+class readableDir(argparse.Action):
 	def __call__(self, parser, namespace, values, option_string=None):
 		prospective_dir=values
 		if not os.path.isdir(prospective_dir):
-			raise argparse.ArgumentTypeError("readable_dir:{0} is not a valid path".format(prospective_dir))
+			raise argparse.ArgumentTypeError("readableDir:{0} is not a valid path".format(prospective_dir))
 		if os.access(prospective_dir, os.R_OK):
 			setattr(namespace,self.dest,prospective_dir)
 		else:
-			raise argparse.ArgumentTypeError("readable_dir:{0} is not a readable dir".format(prospective_dir))
+			raise argparse.ArgumentTypeError("readableDir:{0} is not a readable dir".format(prospective_dir))

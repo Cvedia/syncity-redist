@@ -16,7 +16,7 @@ def run():
 	displ_z = -8.44
 	displ_x = 45.789
 	
-	common.send_data([
+	common.sendData([
 		'"{}" SET Transform eulerAngles ({} {} {})'.format(obj, 0, 0, 0),
 		'"{}" SET Transform position ({} {} {})'.format(obj, x, 0, z)
 	])
@@ -40,91 +40,91 @@ def run():
 		# move forward
 		while c_x < displ_x:
 			c_x += stepping['x']
-			common.send_data([
+			common.sendData([
 				'"{}" SET Transform position ({} {} {})'.format(obj, x + c_x, 0, z + c_z)
 			])
 		
 		# turn 90 degrees
 		while a_y < 90:
 			a_y += stepping['a_y']
-			common.send_data([
+			common.sendData([
 				'"{}" SET Transform eulerAngles ({} {} {})'.format(obj, 0, a_y, 0),
 			])
 		
 		# move to the next step field
 		while c_z > displ_z:
 			c_z -= stepping['z']
-			common.send_data([
+			common.sendData([
 				'"{}" SET Transform position ({} {} {})'.format(obj, x + c_x, 0, z + c_z)
 			])
 		
 		# turn 90 degrees
 		while a_y < 180:
 			a_y += stepping['a_y']
-			common.send_data([
+			common.sendData([
 				'"{}" SET Transform eulerAngles ({} {} {})'.format(obj, 0, a_y, 0),
 			])
 		
 		# move back
 		while c_x > 0:
 			c_x -= stepping['x']
-			common.send_data([
+			common.sendData([
 				'"{}" SET Transform position ({} {} {})'.format(obj, x + c_x, 0, z + c_z)
 			])
 		
 		# turn back 90 degrees
 		while a_y > 90:
 			a_y -= stepping['a_y']
-			common.send_data([
+			common.sendData([
 				'"{}" SET Transform eulerAngles ({} {} {})'.format(obj, 0, a_y, 0),
 			])
 		
 		# move to the next step field
 		while c_z > displ_z*2:
 			c_z -= stepping['z']
-			common.send_data([
+			common.sendData([
 				'"{}" SET Transform position ({} {} {})'.format(obj, x + c_x, 0, z + c_z)
 			])
 		
 		# turn back 90 degrees
 		while a_y > 0:
 			a_y -= stepping['a_y']
-			common.send_data([
+			common.sendData([
 				'"{}" SET Transform eulerAngles ({} {} {})'.format(obj, 0, a_y, 0),
 			])
 		
 		# move forward
 		while c_x < displ_x:
 			c_x += stepping['x']
-			common.send_data([
+			common.sendData([
 				'"{}" SET Transform position ({} {} {})'.format(obj, x + c_x, 0, z + c_z)
 			])
 		
 		# turn 90 degrees
 		while a_y < 90:
 			a_y += stepping['a_y']
-			common.send_data([
+			common.sendData([
 				'"{}" SET Transform eulerAngles ({} {} {})'.format(obj, 0, a_y, 0),
 			])
 		
 		# move to the next step field
 		while c_z > displ_z*3:
 			c_z -= stepping['z']
-			common.send_data([
+			common.sendData([
 				'"{}" SET Transform position ({} {} {})'.format(obj, x + c_x, 0, z + c_z)
 			])
 		
 		# turn 90 degrees
 		while a_y < 180:
 			a_y += stepping['a_y']
-			common.send_data([
+			common.sendData([
 				'"{}" SET Transform eulerAngles ({} {} {})'.format(obj, 0, a_y, 0),
 			])
 		
 		# move back
 		while c_x > 0:
 			c_x -= stepping['x']
-			common.send_data([
+			common.sendData([
 				'"{}" SET Transform position ({} {} {})'.format(obj, x + c_x, 0, z + c_z)
 			])
 		

@@ -46,52 +46,52 @@ def run():
 	terrain_ambient_median = 0
 	
 	if settings.skip_setup == False:
-		common.send_data([
+		common.sendData([
 			'CREATE "savannah" tiles Savannah',
 			'savannah ADD WindZone',
 			'savannah SET active true'
 		])
 		
-		helpers.global_camera_setup()
+		helpers.globalCameraSetup()
 		
-		helpers.add_camera_seg(
-			width=1024, height=768, fov=90, clipping_far=10000,
+		helpers.addCameraSeg(
+			width=1024, height=768, fov=90, clippingFar=10000,
 			segments=['Animal'], lookupTable=[['Animal', 'blue']]
 		)
 		
-		helpers.add_camera_rgb(
+		helpers.addCameraRGB(
 			width=1024, height=768, pp='EnviroFX',
 			fov=90,
-			clipping_far=10000
+			clippingFar=10000
 		)
 
-		helpers.add_camera_thermal(
+		helpers.addCameraThermal(
 			fov=90,
-			clipping_far=10000,
+			clippingFar=10000,
 			
 			trees=True,
 			ambientTemperature=15, minimumTemperature=9, maximumTemperature=35,
-			trees_base=8, trees_bandwidth=50, trees_median=0, trees_leafs_variance=10,
+			treesBase=8, treesBandwidth=50, treesMedian=0, treesLeafsVariance=10,
 		)
 		
-		helpers.add_camera_depth(width=1024, height=768, fov=90)
-		helpers.spawn_rectangle_generic(
+		helpers.addCameraDepth(width=1024, height=768, fov=90)
+		helpers.spawnRectangleGeneric(
 			['+animal, +thermal, +savannah', '+animal, +thermal, +savannah', '+animal, +thermal, +savannah'],
 			names=['animals0', 'animals1', 'animals2'],
 			
-			collision_check=True,
+			collisionCheck=True,
 			limit=100, a=100, b=100, position=[3193, 374.7158, 8161],
-			segmentation_class=['Animal', 'Animal', 'Animal'],
-			stick_to_ground=True
+			segmentationClass=['Animal', 'Animal', 'Animal'],
+			stickToGround=True
 		)
 		
-		helpers.global_disk_setup()
-		helpers.add_disk_output(mycams)
+		helpers.globalDiskSetup()
+		helpers.addDiskOutput(mycams)
 	
 	# warm up
-	helpers.do_render(mycams)
+	helpers.doRender(mycams)
 	
-	common.send_data([
+	common.sendData([
 		'"savannah/Main Terrain" SET Thermal.ThermalTerrain ambientOffset {}'.format(terrain_ambient_offset),
 		'"savannah/Main Terrain" SET Thermal.ThermalTerrain bandwidth {}'.format(terrain_ambient_bandwidth),
 		'"savannah/Main Terrain" SET Thermal.ThermalTerrain median {}'.format(terrain_ambient_median),
@@ -100,12 +100,12 @@ def run():
 	], read=False)
 	
 	while y_rot < 360:
-		common.send_data([
+		common.sendData([
 			'"cameras/cameraRGB" SET Thermal.ThermalCamera temperatureRange ({} {})'.format(min_agc, max_agc),
 			'"cameras" SET Transform eulerAngles ({} {} {})'.format(x_rot, y_rot, z_rot)
 		], read=False)
 		
-		helpers.take_snapshot(mycams, True)
+		helpers.takeSnapshot(mycams, True)
 		
 		# random agc values
 		min_agc = randint(-9, 2)

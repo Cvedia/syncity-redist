@@ -46,33 +46,33 @@ def run():
 	
 	if settings.skip_setup == False:
 		# basic camera setup
-		helpers.global_camera_setup()
+		helpers.globalCameraSetup()
 		# creates a camera with envirofx postprocessing
-		helpers.add_camera_rgb(flycam=flycam, pp='EnviroFX')
+		helpers.addCameraRGB(flycam=flycam, pp='EnviroFX')
 		# creates a segmentation camera
-		helpers.add_camera_seg(segments=['Car'])
+		helpers.addCameraSeg(segments=['Car'])
 		# disk output setup
-		helpers.global_disk_setup()
+		helpers.globalDiskSetup()
 		# binds cameras to disk output
-		helpers.add_disk_output(mycams)
+		helpers.addDiskOutput(mycams)
 		
 		# spawn something, ideally you'd have this methods within this script instead of placing them on helpers
-		helpers.spawn_parking_lot(settings.cars_limit)
+		helpers.spawnParkingLot(settings.cars_limit)
 	
 	# get position of the car in the center
-	x = common.send_data('"cars/car_{}" GET Transform position'.format(int(settings.cars_limit / 2)))
+	x = common.sendData('"cars/car_{}" GET Transform position'.format(int(settings.cars_limit / 2)))
 	
 	# this will return OK and a LIST, which we will parse as JSON to use as center of our spawning point
 	pos = json.loads(x[1])
 	
 	# spawn some random props around cars
-	helpers.spawn_radius_generic(types=['city/buildings', 'city/props', 'city/signs'], position=pos, limit=100, radius=100, innerradius=50)
+	helpers.spawnRadiusGeneric(types=['city/buildings', 'city/props', 'city/signs'], position=pos, limit=100, radius=100, innerradius=50)
 	
 	# center camera an point down 20 degrees
-	common.send_data([
+	common.sendData([
 		'"cameras" SET Transform position (-10 10 -100)',
 		'"cameras" SET Transform eulerAngles (20 0 0)'
 	])
 	
 	# force a render to visualize on the ui
-	helpers.do_render(mycams)
+	helpers.doRender(mycams)

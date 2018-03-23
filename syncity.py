@@ -14,7 +14,7 @@ import random
 
 from syncity import common, settings_manager
 
-SYNCITY_VERSION = '4.0.0'
+SYNCITY_VERSION = '4.1.0'
 SIMULATOR_MIN_VERSION = '18.03.15.0000'
 
 print ('SynCity toolbox - v{}\nCopyright (c) {} CVEDIA PVE Ltd\n'.format(SYNCITY_VERSION, datetime.date.today().year))
@@ -31,7 +31,7 @@ You can pipe multiple scripts, tools and command line (-r , --run) files on the 
 
 `syncity.py -r path/to/my.cl -s 360 -t gallery -s something something_else -r other.cl -s 360 -t gallery`
 '''),
-	epilog=textwrap.dedent('Scripts available:\n\n{}\n\nTools available:\n\n{}\n\nFull documentation available in: https://docs.syncity.com'.format(common.modules_help('scripts'), common.modules_help('tools')))
+	epilog=textwrap.dedent('Scripts available:\n\n{}\n\nTools available:\n\n{}\n\nFull documentation available in: https://docs.syncity.com'.format(common.modulesHelp('scripts'), common.modulesHelp('tools')))
 )
 
 parser.add_argument('-p', '--port', type=int, default=10200, help='Port to connect, defaults to 10200')
@@ -46,10 +46,10 @@ parser.add_argument('--cooldown', type=int, default=0, help='Cooldown after snap
 
 if platform.system() == 'Windows':
 	parser.add_argument('-o', '--output', default='E:\\tmp\\', help='Defines output path for snapshots, note that this path is relative to the machine running the simulator, defaults to E:\\tmp\\', dest='output_path')
-	parser.add_argument('-l', '--local_output', default='E:\\tmp\\', action=syncity.common.readable_dir, help='Defines local output path for recordings, json exports, etc; This path is relative to the machine running this script, defaults to E:\\tmp\\', dest='local_path')
+	parser.add_argument('-l', '--local_output', default='E:\\tmp\\', action=syncity.common.readableDir, help='Defines local output path for recordings, json exports, etc; This path is relative to the machine running this script, defaults to E:\\tmp\\', dest='local_path')
 else:
 	parser.add_argument('-o', '--output', default='/tmp/', help='Defines output path for snapshots, note that this path is relative to the machine running the simulator, defaults to /tmp/', dest='output_path')
-	parser.add_argument('-l', '--local_path', default='/tmp/', action=syncity.common.readable_dir, help='Defines local output path for recordings, json exports, etc; This path is relative to the machine running this script, defaults to /tmp/', dest='local_path')
+	parser.add_argument('-l', '--local_path', default='/tmp/', action=syncity.common.readableDir, help='Defines local output path for recordings, json exports, etc; This path is relative to the machine running this script, defaults to /tmp/', dest='local_path')
 
 parser.add_argument('-q', '--quiet', action='store_true', help='Quiet mode')
 parser.add_argument('-n', '--no_color', action='store_true', default=False, help='Disable color output')
@@ -72,20 +72,20 @@ parser.add_argument('--disable_envirosky', action='store_true', help='Disables E
 parser.add_argument('--disable_canvas', action='store_true', help='Disables client rendering visualization, better for performance, but you will only see outputs written to disk.')
 parser.add_argument('--use_old_depth_buffer', action='store_true', default=False, help='Uses old depth buffer component')
 parser.add_argument('--flycam', action='store_true', help='Spawns fly cam, controllable via simulator')
-parser.add_argument('--cars_limit', type=int, default=50, help='Spawn cars into scene, defaults to 100')
-parser.add_argument('--props_limit', type=int, default=250, help='Spawn props into scene, defaults to 250')
-parser.add_argument('--signs_limit', type=int, default=250, help='Spawn signs into scene, defaults to 250')
-parser.add_argument('--trees_limit', type=int, default=250, help='Spawn trees into scene, defaults to 250')
-parser.add_argument('--backdrops_limit', type=int, default=50, help='Spawn backdrops into scene, defaults to 50')
+parser.add_argument('--carsLimit', type=int, default=50, help='Spawn cars into scene, defaults to 100')
+parser.add_argument('--propsLimit', type=int, default=250, help='Spawn props into scene, defaults to 250')
+parser.add_argument('--signsLimit', type=int, default=250, help='Spawn signs into scene, defaults to 250')
+parser.add_argument('--treesLimit', type=int, default=250, help='Spawn trees into scene, defaults to 250')
+parser.add_argument('--backdropsLimit', type=int, default=50, help='Spawn backdrops into scene, defaults to 50')
 parser.add_argument('--X_COMP', type=float, default=0, help='Spawner X Compensation, defaults to 0')
 parser.add_argument('--Y_COMP', type=float, default=1, help='Spawner Y Compensation, defaults to 1')
 parser.add_argument('--Z_COMP', type=float, default=0, help='Spawner Z Compensation, defaults to 0')
 
 scripts_parser = parser.add_argument_group('Scripts specific options')
-common.modules_args('scripts', parser=scripts_parser)
+common.modulesArgs('scripts', parser=scripts_parser)
 
 tools_parser = parser.add_argument_group('Tool specific options')
-common.modules_args('tools', parser=tools_parser)
+common.modulesArgs('tools', parser=tools_parser)
 
 args = parser.parse_args()
 
@@ -98,7 +98,7 @@ settings.shutdown = False
 settings._interactive = False
 syncity.common.init()
 
-stack = common.find_arg_order([
+stack = common.findArgOrder([
 	{'id': 'run', 'args': ['-r', '--run']},
 	{'id': 'script', 'args': ['-s', '--script']},
 	{'id': 'tool', 'args': ['-t', '--tool']}
@@ -140,8 +140,8 @@ if settings.run != None or settings.script != None:
 		common.output('Telnet mode set to SYNCRONOUS')
 		settings.force_sync = True
 	
-	syncity.common.init_telnet(settings.ip, settings.port)
-	syncity.common.flush_buffer()
+	syncity.common.initTelnet(settings.ip, settings.port)
+	syncity.common.flushBuffer()
 
 idx = { 'run': 0, 'script': 0, 'tool': 0 }
 ran = 1
@@ -154,7 +154,7 @@ for s in stack:
 			syncity.common.output('Running command line script {} {}...'.format(subject.name, syncity.common.md5(subject.name)))
 			with open(subject.name) as fp:
 				for line in fp:
-					syncity.common.send_data(line)
+					syncity.common.sendData(line)
 		
 		idx['run'] += 1
 	
@@ -167,7 +167,7 @@ for s in stack:
 			
 			# track objects created by script to remove them from scene later on
 			settings.obj = []
-			settings.seq_save_i = 1
+			settings.seqSave_i = 1
 			
 			# this should work with both python 2.7 and 3+
 			import_script = __import__('syncity.scripts.{}'.format(subject), fromlist=['syncity.scripts'])

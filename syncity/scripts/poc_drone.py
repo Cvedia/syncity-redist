@@ -21,16 +21,16 @@ def run():
 	mycams = ['cameras/cameraRGB', 'cameras/segmentation']
 	
 	if settings.skip_setup == False:
-		helpers.global_camera_setup()
-		helpers.add_camera_rgb(width=4096, height=3072, pp='EnviroFX')
-		helpers.add_camera_seg(segments=['Car'])
-		helpers.global_disk_setup()
+		helpers.globalCameraSetup()
+		helpers.addCameraRGB(width=4096, height=3072, pp='EnviroFX')
+		helpers.addCameraSeg(segments=['Car'])
+		helpers.globalDiskSetup()
 		
-		helpers.add_disk_output(mycams)
-		helpers.spawn_drone_objs()
+		helpers.addDiskOutput(mycams)
+		helpers.spawnDroneObjs()
 	
 	# reset camera
-	common.send_data([
+	common.sendData([
 		'"cameras/cameraRGB" SET Camera enabled true',
 		'"cameras" SET Transform position ({} {} {})'.format(0, 1, 0),
 		'"cameras" SET Transform eulerAngles ({} {} {})'.format(-20, -45, 0),
@@ -48,7 +48,7 @@ def run():
 		else:
 			motionblur = 'false'
 		
-		common.send_data([
+		common.sendData([
 			'"spawner/drones" SET Transform position ({} {} {})'.format(0, random.randint(2, 25), 0),
 			'"spawner/drones" SET Transform eulerAngles ({} {} {})'.format(random.randint(-15, 15), random.randint(0, 359), random.randint(-2, 2)),
 			'"spawner/animals/birds" SET Transform position ({} {} {})'.format(0, random.randint(5, 75), 0),
@@ -64,18 +64,18 @@ def run():
 			'"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004'
 		])
 		
-		helpers.take_snapshot(mycams, True)
+		helpers.takeSnapshot(mycams, True)
 		
 		y = y + 1
 		loop = loop + 1
 		
 		if loop % 10 == 0:
-			common.send_data([
+			common.sendData([
 				'"EnviroSky" EXECUTE EnviroSky ChangeWeather "{}"'.format(random.choice(helpers.weather_lst)),
 				'"EnviroSky" SET EnviroSky cloudsMode "{}"'.format(random.choice(helpers.clouds_lst)),
 				'"EnviroSky" SET EnviroSky cloudsSettings.globalCloudCoverage {}'.format(random.uniform(-0.4, 0.1))
 			])
 		
 		if loop == reroll:
-			helpers.spawn_drone_objs(True)
+			helpers.spawnDroneObjs(True)
 			loop = 0

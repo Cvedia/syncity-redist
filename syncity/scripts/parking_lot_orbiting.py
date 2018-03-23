@@ -18,40 +18,40 @@ def run():
 	mycams = ['cameras/cameraRGB', 'cameras/segmentation']
 	
 	if settings.skip_setup == False:
-		helpers.global_camera_setup()
-		helpers.add_camera_rgb(pp='EnviroFX')
-		helpers.add_camera_seg(segments=['Car'])
+		helpers.globalCameraSetup()
+		helpers.addCameraRGB(pp='EnviroFX')
+		helpers.addCameraSeg(segments=['Car'])
 		
 		# if settings.envirosky == False:
-		# 	helpers.add_light()
+		# 	helpers.addLight()
 		
-		helpers.global_disk_setup()
-		helpers.add_disk_output(mycams)
+		helpers.globalDiskSetup()
+		helpers.addDiskOutput(mycams)
 		
-		helpers.spawn_parking_lot(settings.cars_limit)
+		helpers.spawnParkingLot(settings.cars_limit)
 	
 	# force a render to visualize on the ui
-	helpers.do_render(mycams)
+	helpers.doRender(mycams)
 	
 	dist = -50
 	dist_e = 5 # elevation increment
 	dist_a = 10 # azimuth increment
 	elevation = 15
-	common.send_data('"cameras" SET Orbit target "cars/car_{}"'.format(int(settings.cars_limit / 2))) # get a car roughtly on the center
+	common.sendData('"cameras" SET Orbit target "cars/car_{}"'.format(int(settings.cars_limit / 2))) # get a car roughtly on the center
 	
 	# orbit car in the center
 	while elevation < 90:
 		azimuth = 0
 		
 		while azimuth < 360:
-			common.send_data([
+			common.sendData([
 				'"cameras" SET Orbit distance {}'.format(dist),
 				'"cameras" SET Orbit elevation {}'.format(elevation),
 				'"cameras" SET Orbit azimuth {}'.format(azimuth)
 			])
 			
-			helpers.take_snapshot(mycams)
-			helpers.take_seg_snapshot([ 'cameras/segmentation' ])
+			helpers.takeSnapshot(mycams)
+			helpers.takeSegSnapshot([ 'cameras/segmentation' ])
 			
 			azimuth += dist_a
 		

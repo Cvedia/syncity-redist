@@ -22,13 +22,13 @@ def run():
 	mycams = ['cameras/cameraRGB', 'cameras/segmentation']
 	
 	if settings.skip_setup == False:
-		helpers.global_camera_setup()
-		helpers.add_camera_rgb(width=4096, height=3072, flycam=settings.flycam, pp='EnviroFX')
-		helpers.add_camera_seg(segments=['Car'])
-		helpers.global_disk_setup()
+		helpers.globalCameraSetup()
+		helpers.addCameraRGB(width=4096, height=3072, flycam=settings.flycam, pp='EnviroFX')
+		helpers.addCameraSeg(segments=['Car'])
+		helpers.globalDiskSetup()
 		
-		helpers.add_disk_output(mycams)
-		helpers.spawn_misc_objs()
+		helpers.addDiskOutput(mycams)
+		helpers.spawnMiscObjs()
 	
 	dist = -60
 	dist_e = 5 # elevation increment
@@ -41,20 +41,20 @@ def run():
 		azimuth = 0
 		
 		while azimuth < 360:
-			common.send_data([
+			common.sendData([
 				'"cameras" SET Orbit distance {}'.format(dist),
 				'"cameras" SET Orbit elevation {}'.format(elevation),
 				'"cameras" SET Orbit azimuth {}'.format(azimuth),
 				'"EnviroSky" SET EnviroSky GameTime.Hours {}'.format(random.randint(6, 18))
 			])
 			
-			helpers.take_snapshot(mycams)
-			helpers.take_seg_snapshot([ 'cameras/segmentation' ])
+			helpers.takeSnapshot(mycams)
+			helpers.takeSegSnapshot([ 'cameras/segmentation' ])
 			loops += 1
 			
 			if loops == reroll:
 				loops = 0
-				helpers.spawn_misc_objs(True)
+				helpers.spawnMiscObjs(True)
 			
 			azimuth += dist_a
 		

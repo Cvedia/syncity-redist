@@ -46,15 +46,15 @@ def run():
 	# obj = 'humans Human/Runfast'
 	
 	if settings.skip_setup == False:
-		helpers.global_camera_setup()
+		helpers.globalCameraSetup()
 		
-		helpers.add_camera_rgb(pp='EnviroFX')
-		helpers.add_camera_seg(segments=['Car'], lookupTable=[['Car', 'red']])
-		helpers.add_camera_thermal(ambientTemperature=3)
+		helpers.addCameraRGB(pp='EnviroFX')
+		helpers.addCameraSeg(segments=['Car'], lookupTable=[['Car', 'red']])
+		helpers.addCameraThermal(ambientTemperature=3)
 		
-		helpers.global_disk_setup()
-		helpers.add_disk_output(mycams)
-		common.send_data([
+		helpers.globalDiskSetup()
+		helpers.addDiskOutput(mycams)
+		common.sendData([
 			# bind object to segmentation Car
 			'CREATE "obj"',
 			'"obj" ADD Segmentation.ClassGroup',
@@ -75,7 +75,7 @@ def run():
 	], read=False)
 	
 	# reset camera
-	common.send_data([
+	common.sendData([
 		'"obj" SET active true',
 		'"obj/subject" SET active true',
 		'"cameras/cameraRGB" SET Camera enabled true',
@@ -101,21 +101,21 @@ def run():
 			min_agc = random.randint(-10, 5)
 			max_agc = random.randint(30, 150)
 			
-			helpers.set_thermal_props(
+			helpers.setThermalProps(
 				'obj/subject',
 				heatiness=random.uniform(0, 50), reflectivity=random.uniform(0, 1), ambientOffset=random.uniform(-25, 25),
 				temperatureValue=random.uniform(-20, 50), temperatureBandwidth=random.uniform(0, 20), temperatureMedian=random.uniform(0, 1),
 				variance=random.uniform(0, 50)
 			)
 			
-			common.send_data([
+			common.sendData([
 				'"cameras/thermal" SET Thermal.ThermalCamera temperatureRange ({} {})'.format(min_agc, max_agc),
 				'"obj" SET Transform eulerAngles ({} {} {})'.format(a_x, a_y, 0),
 				'"obj" SET Transform position ({} {} {})'.format(random.randint(-23, -3) , 0, 0)
 			])
 			
 			a_y = a_y + displ_y
-			helpers.take_snapshot(mycams, True)
+			helpers.takeSnapshot(mycams, True)
 			output_fn.append('{}{}_Cameras_camerargb.jpg'.format(settings.output_path, exp))
 			exp = exp + 1
 		

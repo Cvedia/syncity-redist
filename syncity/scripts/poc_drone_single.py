@@ -24,25 +24,25 @@ def run():
 	mycams = ['cameras/cameraRGB', 'cameras/segmentation']
 	
 	if settings.skip_setup == False:
-		helpers.global_camera_setup()
-		helpers.add_camera_rgb(pp='EnviroFX')
-		helpers.add_camera_seg(segments=['drone0', 'drone1', 'drone2'], lookupTable=[['drone0', 'red'], ['drone1','blue'], ['drone2', 'green']])
-		helpers.global_disk_setup()
+		helpers.globalCameraSetup()
+		helpers.addCameraRGB(pp='EnviroFX')
+		helpers.addCameraSeg(segments=['drone0', 'drone1', 'drone2'], lookupTable=[['drone0', 'red'], ['drone1','blue'], ['drone2', 'green']])
+		helpers.globalDiskSetup()
 		
-		helpers.add_disk_output(mycams)
-		helpers.spawn_drone_objs(drones_limit=[0,0], buildings_innerradius=300, trees_innerradius=60, trees_radius=100, buildings_limit=[50,80])
+		helpers.addDiskOutput(mycams)
+		helpers.spawnDroneObjs(dronesLimit=[0,0], buildingsInnerRadius=300, treesInnerRadius=60, treesRadius=100, buildingsLimit=[50,80])
 		
 		# single drone
 		'''
-		helpers.add_camera_seg_filter(['drone'])
-		common.send_data([
+		helpers.addCameraSegFilter(['drone'])
+		common.sendData([
 			'CREATE drone/drone0/drone0 "{}"'.format(random.choice(helpers.drones_lst)),
 			'drone/drone0 ADD Segmentation.ClassGroup',
 			'drone/drone0 SET Segmentation.ClassGroup itemsClassName Drone'
 		], read=False)
 		'''
 		
-		common.send_data([
+		common.sendData([
 			'CREATE "drone/drone0/drone0" "{}"'.format(helpers.drones_lst[6]), # Drones/DJI Phantom 4 Pro/DJI_Phantom_4_Pro
 			'"drone/drone0" ADD Segmentation.ClassGroup',
 			'"drone/drone0" SET active false',
@@ -68,27 +68,27 @@ def run():
 			'"drone/drone2/drone2" SET active true',
 		], read=False)
 	
-	p_x_r = [-3, 3]
-	p_y_r = [1.5, 8]
-	p_z_r = [3, 9]
+	pX_r = [-3, 3]
+	pY_r = [1.5, 8]
+	pZ_r = [3, 9]
 	
-	p_x = p_x_r[0]
-	p_y = p_y_r[0]
-	p_z = p_z_r[0]
+	pX = pX_r[0]
+	pY = pY_r[0]
+	pZ = pZ_r[0]
 	
-	p_x_d = 1
-	p_y_d = 1
-	p_z_d = 1
+	pX_d = 1
+	pY_d = 1
+	pZ_d = 1
 	
 	# reset camera
-	common.send_data([
+	common.sendData([
 		'"cameras/cameraRGB" SET Camera enabled true',
 		'"cameras" SET Transform position ({} {} {})'.format(0, 1, 0),
 		'"cameras" SET Transform eulerAngles ({} {} {})'.format(-20, 0, 0),
 		'"EnviroSky" EXECUTE EnviroSky ChangeWeather "{}"'.format(helpers.weather_lst[1]),
 		'"EnviroSky" SET EnviroSky cloudsMode "{}"'.format(helpers.clouds_lst[2]),
 		'"EnviroSky" SET EnviroSky cloudsSettings.globalCloudCoverage {}'.format(-0.04),
-		'"drone" SET Transform position ({} {} {})'.format(p_x, p_y, p_z),
+		'"drone" SET Transform position ({} {} {})'.format(pX, pY, pZ),
 		'"drone" SET Transform eulerAngles ({} {} {})'.format(0, 0, 0),
 		
 		'"spawner/cars" SET active False',
@@ -101,7 +101,7 @@ def run():
 		'"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.bloom.enabled false',
 	], read=False)
 	
-	common.flush_buffer()
+	common.flushBuffer()
 	loop = 0
 	
 	while loop < 100:
@@ -110,26 +110,26 @@ def run():
 		else:
 			motionblur = 'false'
 		
-		p_x = p_x + (random.uniform(.05, .75) * p_x_d)
-		p_y = p_y + (random.uniform(.01, .95) * p_y_d)
-		p_z = p_z + (random.uniform(.25, .75) * p_z_d)
+		pX = pX + (random.uniform(.05, .75) * pX_d)
+		pY = pY + (random.uniform(.01, .95) * pY_d)
+		pZ = pZ + (random.uniform(.25, .75) * pZ_d)
 		
-		if p_x_d == 1 and p_x > p_x_r[1]:
-			p_x_d = -1
-		elif p_x_d == -1 and p_x < p_x_r[0]:
-			p_x_d = 1
+		if pX_d == 1 and pX > pX_r[1]:
+			pX_d = -1
+		elif pX_d == -1 and pX < pX_r[0]:
+			pX_d = 1
 			
-		if p_y_d == 1 and p_y > p_y_r[1]:
-			p_y_d = -1
-		elif p_y_d == -1 and p_y < p_y_r[0]:
-			p_y_d = 1
+		if pY_d == 1 and pY > pY_r[1]:
+			pY_d = -1
+		elif pY_d == -1 and pY < pY_r[0]:
+			pY_d = 1
 		
-		if p_z_d == 1 and p_z > p_z_r[1]:
-			p_z_d = -1
-		elif p_z_d == -1 and p_z < p_z_r[0]:
-			p_z_d = 1
+		if pZ_d == 1 and pZ > pZ_r[1]:
+			pZ_d = -1
+		elif pZ_d == -1 and pZ < pZ_r[0]:
+			pZ_d = 1
 		
-		common.send_data([
+		common.sendData([
 			'"spawner/animals/birds" SET Transform position ({} {} {})'.format(0, random.randint(5, 75), 0),
 			'"spawner/animals/birds" SET Transform eulerAngles ({} {} {})'.format(0, random.randint(0, 359), 0),
 			'"spawner/cars" SET Transform eulerAngles ({} {} {})'.format(0, random.randint(0, 359), 0),
@@ -137,14 +137,14 @@ def run():
 			'"spawner/city/buildings" SET Transform eulerAngles ({} {} {})'.format(0, random.randint(0, 359), 0),
 			'"city" SET Transform eulerAngles ({} {} {})'.format(0, random.randint(0, 359), 0),
 			'"EnviroSky" SET EnviroSky GameTime.Hours {}'.format(random.randint(8, 12)),
-			'"drone" SET Transform position ({} {} {})'.format(p_x, p_y, p_z),
+			'"drone" SET Transform position ({} {} {})'.format(pX, pY, pZ),
 			'"drone" SET Transform eulerAngles ({} {} {})'.format(random.randint(0, 359), random.randint(0, 359), random.randint(0, 359)),
 			'"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled {}'.format(motionblur),
 			'"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1',
 			'"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004'
 		], read=False)
 		
-		common.flush_buffer()
-		helpers.take_snapshot(mycams, True)
+		common.flushBuffer()
+		helpers.takeSnapshot(mycams, True)
 		
 		loop = loop + 1

@@ -45,63 +45,63 @@ def run():
 	terrain_ambient_median = 0
 	
 	if settings.skip_setup == False:
-		common.send_data([
+		common.sendData([
 			'CREATE savannah tiles Savannah',
 			'savannah ADD WindZone',
 			'savannah SET active true'
 		])
 		
-		helpers.global_camera_setup(
+		helpers.globalCameraSetup(
 			orbitOffset=[1667.05, 32.37876, 1000],
 			orbitSnap=snapOffset,
 			orbitGround='savannah/Main Terrain'
 		)
 		
-		helpers.add_camera_seg(
-			width=1024, height=768, fov=90, clipping_far=10000,
+		helpers.addCameraSeg(
+			width=1024, height=768, fov=90, clippingFar=10000,
 			segments=['Car', 'Animal'], lookupTable=[['Car', 'red'], ['Animal', 'blue']]
 		)
 		
-		helpers.add_camera_rgb(
+		helpers.addCameraRGB(
 			width=1024, height=768, pp='EnviroFX',
 			fov=90,
-			clipping_far=10000
+			clippingFar=10000
 		)
 		
-		helpers.add_camera_thermal(
+		helpers.addCameraThermal(
 			fov=90,
-			clipping_far=10000,
+			clippingFar=10000,
 			
 			trees=True,
 			ambientTemperature=15, minimumTemperature=9, maximumTemperature=35,
-			trees_base=8, trees_bandwidth=50, trees_median=0, trees_leafs_variance=10,
+			treesBase=8, treesBandwidth=50, treesMedian=0, treesLeafsVariance=10,
 		)
 		
-		helpers.add_camera_depth(width=1024, height=768, fov=90)
-		helpers.global_disk_setup()
-		helpers.add_disk_output(mycams)
+		helpers.addCameraDepth(width=1024, height=768, fov=90)
+		helpers.globalDiskSetup()
+		helpers.addDiskOutput(mycams)
 		
-		helpers.spawn_rectangle_generic(
+		helpers.spawnRectangleGeneric(
 			['+carthermal', '+animal, +thermal, +savannah', '+animal, +thermal, +savannah', '+animal, +thermal, +savannah' ,'+animal, +thermal, +savannah'],
 			names=['cars0', 'animals0', 'animals1', 'animals2', 'animals3'],
-			segmentation_class=['Car', 'Animal', 'Animal', 'Animal', 'Animal'],
+			segmentationClass=['Car', 'Animal', 'Animal', 'Animal', 'Animal'],
 			limit=50, a=5000, b=625, position=[2519, 591, 9630],
 			
-			collision_check=True,
-			stick_to_ground=True
+			collisionCheck=True,
+			stickToGround=True
 		)
 		
-		helpers.spawn_rectangle_generic(
+		helpers.spawnRectangleGeneric(
 			['+animal, +thermal, +savannah' ],
 			names=['animalsF'],
-			segmentation_class=['Animal'],
+			segmentationClass=['Animal'],
 			limit=50, a=100, b=100, position=[1685, 591, 9856],
 			
-			collision_check=True,
-			stick_to_ground=True
+			collisionCheck=True,
+			stickToGround=True
 		)
 		
-		common.send_data([
+		common.sendData([
 			'"savannah/Main Terrain" SET Thermal.ThermalTerrain ambientOffset {}'.format(terrain_ambient_offset),
 			'"savannah/Main Terrain" SET Thermal.ThermalTerrain bandwidth {}'.format(terrain_ambient_bandwidth),
 			'"savannah/Main Terrain" SET Thermal.ThermalTerrain median {}'.format(terrain_ambient_median),
@@ -129,10 +129,10 @@ def run():
 		], read=False)
 	
 	# warm up
-	helpers.do_render(mycams)
+	helpers.doRender(mycams)
 	
 	while dist > 0:
-		common.send_data([
+		common.sendData([
 			'"cameras/cameraRGB" SET Thermal.ThermalCamera temperatureRange ({} {})'.format(min_agc, max_agc),
 			'"cameras" SET Orbit distance {}'.format(dist),
 			'"cameras" SET Orbit elevation {}'.format(elevation),
@@ -140,7 +140,7 @@ def run():
 			'"cameras" SET Orbit snapOffset {}'.format(snapOffset)
 		], read=False)
 		
-		helpers.take_snapshot(mycams, True)
+		helpers.takeSnapshot(mycams, True)
 		
 		# random agc values
 		min_agc = randint(-9, 2)

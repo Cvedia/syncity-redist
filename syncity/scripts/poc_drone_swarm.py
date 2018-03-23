@@ -21,17 +21,17 @@ def run():
 	mycams = ['cameras/cameraRGB', 'cameras/segmentation']
 	
 	if settings.skip_setup == False:
-		helpers.global_camera_setup()
-		helpers.add_camera_rgb(width=4096, height=3072, pp='EnviroFX')
-		helpers.add_camera_seg(segments=['Car'])
-		helpers.global_disk_setup()
+		helpers.globalCameraSetup()
+		helpers.addCameraRGB(width=4096, height=3072, pp='EnviroFX')
+		helpers.addCameraSeg(segments=['Car'])
+		helpers.globalDiskSetup()
 		
-		helpers.add_disk_output(mycams)
-		helpers.spawn_drone_objs(drones_limit=[0,0])
+		helpers.addDiskOutput(mycams)
+		helpers.spawnDroneObjs(dronesLimit=[0,0])
 		
 		i = 0
 		for d in helpers.drones_lst:
-			common.send_data([
+			common.sendData([
 				'CREATE "drone/dr_{}" "{}"'.format(i, d),
 				'"drone/dr_{}" ADD Segmentation.ClassGroup'.format(i),
 				'"drone/dr_{}" SET Segmentation.ClassGroup itemsClassName "Car"'.format(i),
@@ -39,36 +39,36 @@ def run():
 			], read=False)
 			i = i + 1
 	
-	p_x_r = [-17, 13]
-	p_y_r = [0.5, 17]
-	p_z_r = [24, 42]
+	pX_r = [-17, 13]
+	pY_r = [0.5, 17]
+	pZ_r = [24, 42]
 	
-	p_x = p_x_r[0]
-	p_y = p_y_r[0]
-	p_z = p_z_r[0]
+	pX = pX_r[0]
+	pY = pY_r[0]
+	pZ = pZ_r[0]
 	
-	p_x_d = 1
-	p_y_d = 1
-	p_z_d = 1
+	pX_d = 1
+	pY_d = 1
+	pZ_d = 1
 	
 	a_x = 0
 	a_y = 0
 	a_z = 0
 	
 	# reset camera
-	common.send_data([
+	common.sendData([
 		'"cameras/cameraRGB" SET Camera enabled true',
 		'"cameras" SET Transform position ({} {} {})'.format(0, 1, 0),
 		'"cameras" SET Transform eulerAngles ({} {} {})'.format(-20, 0, 0),
 		'"EnviroSky" EXECUTE EnviroSky ChangeWeather "{}"'.format(helpers.weather_lst[1]),
 		'"EnviroSky" SET EnviroSky cloudsMode "{}"'.format(helpers.clouds_lst[2]),
 		'"EnviroSky" SET EnviroSky cloudsSettings.globalCloudCoverage {}'.format(-0.04),
-		'"drone" SET Transform position ({} {} {})'.format(p_x, p_y, p_z),
+		'"drone" SET Transform position ({} {} {})'.format(pX, pY, pZ),
 		'"drone" SET Transform eulerAngles ({} {} {})'.format(a_x, a_y, a_z)
 	], read=False)
 	
 	loop = 0
-	common.flush_buffer()
+	common.flushBuffer()
 	
 	while loop < 100:
 		if random.uniform(0,1) > .8:
@@ -76,26 +76,26 @@ def run():
 		else:
 			motionblur = 'false'
 		
-		p_x = p_x + (random.uniform(.5, 2.5) * p_x_d)
-		p_y = p_y + (random.uniform(.1, 1.5) * p_y_d)
-		p_z = p_z + (random.uniform(.1, 1.5) * p_z_d)
+		pX = pX + (random.uniform(.5, 2.5) * pX_d)
+		pY = pY + (random.uniform(.1, 1.5) * pY_d)
+		pZ = pZ + (random.uniform(.1, 1.5) * pZ_d)
 		
-		if p_x_d == 1 and p_x > p_x_r[1]:
-			p_x_d = -1
-		elif p_x_d == -1 and p_x < p_x_r[0]:
-			p_x_d = 1
+		if pX_d == 1 and pX > pX_r[1]:
+			pX_d = -1
+		elif pX_d == -1 and pX < pX_r[0]:
+			pX_d = 1
 			
-		if p_y_d == 1 and p_y > p_y_r[1]:
-			p_y_d = -1
-		elif p_y_d == -1 and p_y < p_y_r[0]:
-			p_y_d = 1
+		if pY_d == 1 and pY > pY_r[1]:
+			pY_d = -1
+		elif pY_d == -1 and pY < pY_r[0]:
+			pY_d = 1
 		
-		if p_z_d == 1 and p_z > p_z_r[1]:
-			p_z_d = -1
-		elif p_z_d == -1 and p_z < p_z_r[0]:
-			p_z_d = 1
+		if pZ_d == 1 and pZ > pZ_r[1]:
+			pZ_d = -1
+		elif pZ_d == -1 and pZ < pZ_r[0]:
+			pZ_d = 1
 		
-		common.send_data([
+		common.sendData([
 			'"spawner/animals/birds" SET Transform position ({} {} {})'.format(0, random.randint(5, 75), 0),
 			'"spawner/animals/birds" SET Transform eulerAngles ({} {} {})'.format(0, random.randint(0, 359), 0),
 			'"spawner/cars" SET Transform eulerAngles ({} {} {})'.format(0, random.randint(0, 359), 0),
@@ -104,14 +104,14 @@ def run():
 			# '"cameras" SET Transform eulerAngles ({} {} {})'.format(-20, y, 0),
 			'"city" SET Transform eulerAngles ({} {} {})'.format(0, random.randint(0, 359), 0),
 			'"EnviroSky" SET EnviroSky GameTime.Hours {}'.format(random.randint(8, 18)),
-			'"drone" SET Transform position ({} {} {})'.format(p_x, p_y, p_z),
+			'"drone" SET Transform position ({} {} {})'.format(pX, pY, pZ),
 			'"drone" SET Transform eulerAngles ({} {} {})'.format(a_x, a_y, a_z),
 			'"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled {}'.format(motionblur),
 			'"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1',
 			'"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004'
 		], read=False)
 		
-		common.flush_buffer()
-		helpers.take_snapshot(mycams, True)
+		common.flushBuffer()
+		helpers.takeSnapshot(mycams, True)
 		
 		loop = loop + 1

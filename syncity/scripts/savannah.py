@@ -23,13 +23,13 @@ def run():
 	mycams = ['cameras/cameraRGB']
 	
 	if settings.skip_setup == False:
-		helpers.global_camera_setup()
-		helpers.add_camera_rgb(width=1024, height=768, flycam=settings.flycam, pp='Savannah')
-		# add_light(position=[-684.8,532.5,262.466])
-		helpers.global_disk_setup()
+		helpers.globalCameraSetup()
+		helpers.addCameraRGB(width=1024, height=768, flycam=settings.flycam, pp='Savannah')
+		# addLight(position=[-684.8,532.5,262.466])
+		helpers.globalDiskSetup()
 		
-		helpers.add_disk_output(mycams)
-		common.send_data([
+		helpers.addDiskOutput(mycams)
+		common.sendData([
 			'"cameras/cameraRGB" SET Transform position ({} {} {})'.format(0, -10, 0),
 			'CREATE "test" Terrains/Savannah/Savannah',
 			'"cameras/cameraRGB" ADD EnviroCamera',
@@ -40,10 +40,10 @@ def run():
 			# 'cameras SET Orbit target test'
 		])
 		
-		# helpers.spawn_radius_generic(['cars'], limit=10, radius=50, innerradius=0, segmentation_class="Car", orbit=True, position=[0,10,0])
-		# helpers.spawn_radius_generic(['prefabs/terrains/desert'], orbit=True, limit=1, radius=65, innerradius=0, position=[0,0,0], collision_check=False)
+		# helpers.spawnRadiusGeneric(['cars'], limit=10, radius=50, innerradius=0, segmentationClass="Car", orbit=True, position=[0,10,0])
+		# helpers.spawnRadiusGeneric(['prefabs/terrains/desert'], orbit=True, limit=1, radius=65, innerradius=0, position=[0,0,0], collisionCheck=False)
 		
-		helpers.spawn_animals_objs()
+		helpers.spawnAnimalsObjs()
 	
 	dist = 100
 	dist_e = 5 # elevation increment
@@ -56,7 +56,7 @@ def run():
 		azimuth = 0
 		
 		while azimuth < 360:
-			common.send_data([
+			common.sendData([
 				'"cameras" SET Orbit distance {}'.format(dist),
 				'"cameras" SET Orbit elevation {}'.format(elevation),
 				'"cameras" SET Orbit azimuth {}'.format(azimuth),
@@ -65,12 +65,12 @@ def run():
 				'"EnviroSky" SET EnviroSky GameTime.Hours {}'.format(random.randint(6, 18))
 			])
 			
-			helpers.take_snapshot(mycams)
+			helpers.takeSnapshot(mycams)
 			loops += 1
 			
 			if loops == reroll:
 				loops = 0
-				helpers.spawn_animals_objs(True)
+				helpers.spawnAnimalsObjs(True)
 			
 			azimuth += dist_a
 		

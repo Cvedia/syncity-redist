@@ -21,15 +21,15 @@ def run():
 	mycams = ['cameras/cameraRGB']
 	
 	if settings.skip_setup == False:
-		helpers.global_camera_setup()
-		helpers.add_camera_rgb(width=4096, height=3072, pp='EnviroFX')
-		helpers.global_disk_setup()
+		helpers.globalCameraSetup()
+		helpers.addCameraRGB(width=4096, height=3072, pp='EnviroFX')
+		helpers.globalDiskSetup()
 		
-		helpers.add_disk_output(mycams)
-		helpers.spawn_drone_objs(cars_limit=[50,100],trees_limit=[250,300],birds_limit=[200,250],buildings_limit=[100,150])
+		helpers.addDiskOutput(mycams)
+		helpers.spawnDroneObjs(carsLimit=[50,100],treesLimit=[250,300],birdsLimit=[200,250],buildingsLimit=[100,150])
 	
 	# reset camera
-	common.send_data([
+	common.sendData([
 		'"cameras/cameraRGB" SET Camera enabled true',
 		'"cameras" SET Transform position ({} {} {})'.format(0, 1, 0),
 		'"cameras" SET Transform eulerAngles ({} {} {})'.format(-20, -45, 0),
@@ -46,7 +46,7 @@ def run():
 	direction = True
 	
 	while hour < 19:
-		common.send_data([
+		common.sendData([
 			'"spawner/drones" SET Transform position ({} {} {})'.format(0, random.randint(2, 25), 0),
 			'"spawner/drones" SET Transform eulerAngles ({} {} {})'.format(random.randint(-15, 15), random.randint(0, 359), random.randint(-2, 2)),
 			# '"spawner/drones/white" SET Transform position ({} {} {})'.format(0, random.randint(2, 25), 0),
@@ -64,7 +64,7 @@ def run():
 			'"EnviroSky" SET EnviroSky GameTime.Seconds {}'.format(second)
 		])
 		
-		helpers.take_snapshot(mycams)
+		helpers.takeSnapshot(mycams)
 		
 		y_slow = y_slow + .1
 		if direction == True:
@@ -87,7 +87,7 @@ def run():
 			hour = hour + 1
 		
 		if loop % 30 == 0:
-			common.send_data([
+			common.sendData([
 				'"EnviroSky" EXECUTE EnviroSky ChangeWeather "{}"'.format(helpers.weather_lst[c]),
 			])
 			c = c + 1

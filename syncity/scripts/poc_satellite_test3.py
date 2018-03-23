@@ -25,7 +25,7 @@ POC Satellite
 
 def run():
 	
-	common.send_data([
+	common.sendData([
 		'cameraRGB/cameraSeg SET active false'
 	]);
 	
@@ -37,7 +37,7 @@ def run():
 	hour_d = 1
 	minute = 0
 	loop = 0
-	common.send_data([
+	common.sendData([
 		'EnviroSky SET EnviroSky weatherSettings.cloudTransitionSpeed {}'.format(100),
 		'EnviroSky SET EnviroSky weatherSettings.effectTransitionSpeed {}'.format(100),
 		'EnviroSky SET EnviroSky weatherSettings.fogTransitionSpeed {}'.format(100)
@@ -50,9 +50,9 @@ def run():
 			motionblur = 'false'
 		
 		'''
-		p_x = p_x + (random.uniform(.05, .75) * p_x_d)
-		p_y = p_y + (random.uniform(.01, .95) * p_y_d)
-		p_z = p_z + (random.uniform(.25, .75) * p_z_d)
+		pX = pX + (random.uniform(.05, .75) * pX_d)
+		pY = pY + (random.uniform(.01, .95) * pY_d)
+		pZ = pZ + (random.uniform(.25, .75) * pZ_d)
 		'''
 		x = x - random.uniform(1.05, 1.75)
 		a_x = a_x + (random.uniform(.05, .75) * a_x_d)
@@ -72,7 +72,7 @@ def run():
 		elif hour < 9:
 			hour_d = 1
 		
-		common.send_data([
+		common.sendData([
 			'EnviroSky SET EnviroSky GameTime.Hours {}'.format(hour),
 			'EnviroSky SET EnviroSky GameTime.Minutes {}'.format(minute),
 			'cameraRGB SET Transform position ({} {} {})'.format(x, 777, 317),
@@ -80,7 +80,7 @@ def run():
 			# 'cameraRGB SET Transform eulerAngles ({} {} {})'.format(a_x, 212.5, 0)
 		], read=True)
 		
-		common.flush_buffer()
+		common.flushBuffer()
 		common.outout('Sleeping')
 		time.sleep(2)
 		common.output('SS')
@@ -88,7 +88,7 @@ def run():
 		loop = loop + 1
 	
 	
-	common.send_data([
+	common.sendData([
 		'cameraRGB/cameraSeg SET active true'
 	]);
 	
@@ -100,7 +100,7 @@ def run():
 	hour_d = 1
 	minute = 0
 	loop = 0
-	common.send_data([
+	common.sendData([
 		'EnviroSky SET EnviroSky weatherSettings.cloudTransitionSpeed {}'.format(100),
 		'EnviroSky SET EnviroSky weatherSettings.effectTransitionSpeed {}'.format(100),
 		'EnviroSky SET EnviroSky weatherSettings.fogTransitionSpeed {}'.format(100)
@@ -113,9 +113,9 @@ def run():
 			motionblur = 'false'
 		
 		'''
-		p_x = p_x + (random.uniform(.05, .75) * p_x_d)
-		p_y = p_y + (random.uniform(.01, .95) * p_y_d)
-		p_z = p_z + (random.uniform(.25, .75) * p_z_d)
+		pX = pX + (random.uniform(.05, .75) * pX_d)
+		pY = pY + (random.uniform(.01, .95) * pY_d)
+		pZ = pZ + (random.uniform(.25, .75) * pZ_d)
 		'''
 		x = x - random.uniform(1.05, 1.75)
 		a_x = a_x + (random.uniform(.05, .75) * a_x_d)
@@ -135,7 +135,7 @@ def run():
 		elif hour < 9:
 			hour_d = 1
 		
-		common.send_data([
+		common.sendData([
 			# 'EnviroSky SET EnviroSky GameTime.Hours {}'.format(hour),
 			# 'EnviroSky SET EnviroSky GameTime.Minutes {}'.format(minute),
 			'cameraRGB SET Transform position ({} {} {})'.format(x, 777, 317),
@@ -143,7 +143,7 @@ def run():
 			# 'cameraRGB SET Transform eulerAngles ({} {} {})'.format(a_x, 212.5, 0)
 		], read=True)
 		
-		common.flush_buffer()
+		common.flushBuffer()
 		common.output('Sleeping')
 		time.sleep(2)
 		common.output('SS')

@@ -9,28 +9,28 @@ def run():
 	mycams = ['cameras/cameraRGB', 'cameras/segmentation']
 	
 	if settings.skip_setup == False:
-		helpers.global_camera_setup()
-		# helpers.add_camera_rgb(width=4096, height=3072, audio=True, envirosky=True)
-		helpers.add_camera_rgb(width=1024, height=768, audio=True, envirosky=True)
-		helpers.add_camera_rgb_pp('EnviroFX', scion=False)
-		helpers.add_camera_seg(segments=['Drone'])
-		# helpers.add_light()
-		helpers.global_disk_setup()
+		helpers.globalCameraSetup()
+		# helpers.addCameraRGB(width=4096, height=3072, audio=True, envirosky=True)
+		helpers.addCameraRGB(width=1024, height=768, audio=True, envirosky=True)
+		helpers.addCameraRGBPP('EnviroFX', scion=False)
+		helpers.addCameraSeg(segments=['Drone'])
+		# helpers.addLight()
+		helpers.globalDiskSetup()
 		
-		# helpers.add_disk_output(mycams)
-		helpers.add_disk_output([mycams[0]])
-		helpers.spawn_drone_objs(p_x=-500, dist_lim=500, p_z=-500)
+		# helpers.addDiskOutput(mycams)
+		helpers.addDiskOutput([mycams[0]])
+		helpers.spawnDroneObjs(pX=-500, dist_lim=500, pZ=-500)
 	
 	for c in range(4):
 		for w in range(8):
 			
-			common.flush_buffer()
+			common.flushBuffer()
 			
 			for fov in range(100, 9, -10):
 			#fov = 30
 				#print('FOV: {}.'.format(fov))
 				# reset camera
-				common.send_data([
+				common.sendData([
 					'"cameras/cameraRGB" SET Camera enabled true',
 					'"cameras/cameraRGB" SET Camera fieldOfView ' + str(fov),
 					'"cameras/segmentation" SET Camera fieldOfView ' + str(fov),
@@ -53,7 +53,7 @@ def run():
 					else:
 						motionblur = 'false'
 					
-					common.send_data([
+					common.sendData([
 						'"spawner/drones" SET Transform position ({} {} {})'.format(0, random.randint(15, 35), 0),
 						#'"spawner/drones" SET Transform position ({} {} {})'.format(0, h_dr, 0),
 						'"spawner/drones" SET Transform eulerAngles ({} {} {})'.format(random.randint(-15, -15), random.randint(0, 359), random.randint(-10, 10)),
@@ -69,25 +69,25 @@ def run():
 					], read=False)
 					
 					# for i in range(3):
-					# 	spawn_radius_generic(['drones/white'], limit=random.randint(50,100), radius=random.randint(50,100), innerradius=0, position=[0,0,0], segmentation_class="Car")
-					# 	common.send_data([
+					# 	spawnRadiusGeneric(['drones/white'], limit=random.randint(50,100), radius=random.randint(50,100), innerradius=0, position=[0,0,0], segmentationClass="Car")
+					# 	common.sendData([
 					# 		'"spawner/drones" SET Transform position ({} {} {})'.format(0, random.randint(5, 30), 0)
 					# 	])
 					
-					helpers.set_disk_texture([mycams[0]])
-					helpers.take_snapshot(mycams, True)
-					# take_seg_snapshot([ 'cameras/segmentation' ])
+					helpers.setDiskTexture([mycams[0]])
+					helpers.takeSnapshot(mycams, True)
+					# takeSegSnapshot([ 'cameras/segmentation' ])
 					
 					y = y + 1
 					loop = loop + 1
 					
 					if loop % 10 == 0:
-						common.send_data([
+						common.sendData([
 							'"EnviroSky" EXECUTE EnviroSky ChangeWeather "{}"'.format(helpers.weather_lst[w]),
 							'"EnviroSky" SET EnviroSky cloudsMode "{}"'.format(helpers.clouds_lst[c])
 							#'"EnviroSky" SET EnviroSky cloudsMode "{}"'.format(random.choice(helpers.clouds_lst))
 						])
 					
 					if loop == reroll:
-						helpers.spawn_drone_objs(destroy=True, p_x=-500, dist_lim=500, p_z=-500)
+						helpers.spawnDroneObjs(destroy=True, pX=-500, dist_lim=500, pZ=-500)
 						loop = 0

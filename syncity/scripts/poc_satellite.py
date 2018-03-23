@@ -24,31 +24,31 @@ def run():
 	mycams = ['cameras/cameraRGB', 'cameras/segmentation']
 	
 	if settings.skip_setup == False:
-		helpers.global_camera_setup(mycams[1])
-		helpers.add_camera_rgb(pp='EnviroFX')
-		helpers.add_camera_seg()
-		helpers.global_disk_setup()
+		helpers.globalCameraSetup(mycams[1])
+		helpers.addCameraRGB(pp='EnviroFX')
+		helpers.addCameraSeg()
+		helpers.globalDiskSetup()
 		
-		helpers.add_disk_output(mycams)
+		helpers.addDiskOutput(mycams)
 	
-	# p_x_r = [-17, 13]
-	# p_y_r = [1.5, 17]
-	# p_z_r = [24, 42]
+	# pX_r = [-17, 13]
+	# pY_r = [1.5, 17]
+	# pZ_r = [24, 42]
 	
-	p_x_r = [-3, 3]
-	p_y_r = [1.5, 8]
-	p_z_r = [3, 9]
+	pX_r = [-3, 3]
+	pY_r = [1.5, 8]
+	pZ_r = [3, 9]
 	
-	p_x = p_x_r[0]
-	p_y = p_y_r[0]
-	p_z = p_z_r[0]
+	pX = pX_r[0]
+	pY = pY_r[0]
+	pZ = pZ_r[0]
 	
-	p_x_d = 1
-	p_y_d = 1
-	p_z_d = 1
+	pX_d = 1
+	pY_d = 1
+	pZ_d = 1
 	
 	# reset camera
-	common.send_data([
+	common.sendData([
 		'"cameras/cameraRGB" SET Camera enabled true',
 		'"cameras" SET Transform position ({} {} {})'.format(262, 840, 243),
 		'"cameras" SET Transform eulerAngles ({} {} {})'.format(90, 0, 0),
@@ -59,7 +59,7 @@ def run():
 		'cameras/segmentation SET Segmentation.Segmentation OutputType "InstanceIds"'
 	], read=False)
 	
-	common.flush_buffer()
+	common.flushBuffer()
 	loop = 0
 	
 	while loop < 100:
@@ -68,26 +68,26 @@ def run():
 		else:
 			motionblur = 'false'
 		
-		p_x = p_x + (random.uniform(.05, .75) * p_x_d)
-		p_y = p_y + (random.uniform(.01, .95) * p_y_d)
-		p_z = p_z + (random.uniform(.25, .75) * p_z_d)
+		pX = pX + (random.uniform(.05, .75) * pX_d)
+		pY = pY + (random.uniform(.01, .95) * pY_d)
+		pZ = pZ + (random.uniform(.25, .75) * pZ_d)
 		
-		if p_x_d == 1 and p_x > p_x_r[1]:
-			p_x_d = -1
-		elif p_x_d == -1 and p_x < p_x_r[0]:
-			p_x_d = 1
+		if pX_d == 1 and pX > pX_r[1]:
+			pX_d = -1
+		elif pX_d == -1 and pX < pX_r[0]:
+			pX_d = 1
 			
-		if p_y_d == 1 and p_y > p_y_r[1]:
-			p_y_d = -1
-		elif p_y_d == -1 and p_y < p_y_r[0]:
-			p_y_d = 1
+		if pY_d == 1 and pY > pY_r[1]:
+			pY_d = -1
+		elif pY_d == -1 and pY < pY_r[0]:
+			pY_d = 1
 		
-		if p_z_d == 1 and p_z > p_z_r[1]:
-			p_z_d = -1
-		elif p_z_d == -1 and p_z < p_z_r[0]:
-			p_z_d = 1
+		if pZ_d == 1 and pZ > pZ_r[1]:
+			pZ_d = -1
+		elif pZ_d == -1 and pZ < pZ_r[0]:
+			pZ_d = 1
 		
-		common.send_data([
+		common.sendData([
 			# 'cameras SET Transform eulerAngles ({} {} {})'.format(-20, y, 0),
 			'"EnviroSky" SET EnviroSky GameTime.Hours {}'.format(random.randint(8, 12)),
 			'"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled {}'.format(motionblur),
@@ -95,7 +95,7 @@ def run():
 			'"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004'
 		], read=False)
 		
-		common.flush_buffer()
-		helpers.take_snapshot(mycams, True)
+		common.flushBuffer()
+		helpers.takeSnapshot(mycams, True)
 		
 		loop = loop + 1

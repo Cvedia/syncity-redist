@@ -8,13 +8,13 @@ def run():
 	mycams = ['cameras/cameraRGB', 'cameras/segmentation']
 	
 	if settings.skip_setup == False:
-		helpers.global_camera_setup()
-		helpers.add_camera_rgb(width=1024, height=768, pp='Savannah')
-		helpers.add_camera_seg(segments=['Drone'])
-		helpers.global_disk_setup()
-		helpers.add_disk_output(mycams)
+		helpers.globalCameraSetup()
+		helpers.addCameraRGB(width=1024, height=768, pp='Savannah')
+		helpers.addCameraSeg(segments=['Drone'])
+		helpers.globalDiskSetup()
+		helpers.addDiskOutput(mycams)
 
-		common.send_data([
+		common.sendData([
 			'"cameras" SET Transform position ({} {} {})'.format(0, random.randint(2, 10), -30),
 			'CREATE "test" "Terrains/Savannah/Savannah"',
 			'"test" SET Transform position ({} {} {})'.format(-5000,-180,-5000),
@@ -25,8 +25,8 @@ def run():
 		])
 		
 	
-	helpers.spawn_animals_objs()
-	helpers.spawn_radius_generic(['drones/Parrot Disco/'], limit=random.randint(30,50), radius=random.randint(20,35), innerradius=5, position=[0,0,0], segmentation_class="Drone")
+	helpers.spawnAnimalsObjs()
+	helpers.spawnRadiusGeneric(['drones/Parrot Disco/'], limit=random.randint(30,50), radius=random.randint(20,35), innerradius=5, position=[0,0,0], segmentationClass="Drone")
 	
 	for c in range(2):
 		for w in range(8):
@@ -34,7 +34,7 @@ def run():
 			#fov = 30
 				#print('FOV: {}.'.format(fov))
 				# reset camera
-				common.send_data([
+				common.sendData([
 					'"cameras/cameraRGB" SET Camera enabled true',
 					'"cameras/cameraRGB" SET Camera fieldOfView ' + str(fov),
 					'"cameras/segmentation" SET Camera fieldOfView ' + str(fov),
@@ -61,7 +61,7 @@ def run():
 					else:
 						motionblur = 'false'
 					
-					common.send_data([
+					common.sendData([
 						'"spawner/drones" SET Transform position ({} {} {})'.format(0, random.randint(15, 25), 0),
 						#'"spawner/drones" SET Transform position ({} {} {})'.format(0, h_dr, 0),
 						'"spawner/drones" SET Transform eulerAngles ({} {} {})'.format(random.randint(-15, -15), random.randint(0, 359), random.randint(-10, 10)),
@@ -79,29 +79,29 @@ def run():
 					])
 					
 					# for i in range(3):
-					# 	spawn_radius_generic(['drones/white'], limit=random.randint(50,100), radius=random.randint(50,100), innerradius=0, position=[0,0,0], segmentation_class="Car")
-					# 	send_data([
+					# 	spawnRadiusGeneric(['drones/white'], limit=random.randint(50,100), radius=random.randint(50,100), innerradius=0, position=[0,0,0], segmentationClass="Car")
+					# 	sendData([
 					# 		'spawner/drones" SET Transform position ({} {} {})'.format(0, random.randint(5, 30), 0)
 					# 	])
 					
-					helpers.set_disk_texture(mycams)
-					helpers.take_snapshot(mycams, True)
-					# take_seg_snapshot([ 'cameras/segmentation' ])
+					helpers.setDiskTexture(mycams)
+					helpers.takeSnapshot(mycams, True)
+					# takeSegSnapshot([ 'cameras/segmentation' ])
 					
 					y = y + 1
 					loop = loop + 1
 					
 					if loop % 10 == 0:
-						common.send_data([
+						common.sendData([
 							'"EnviroSky" EXECUTE EnviroSky ChangeWeather "{}"'.format(helpers.weather_lst[w]),
 							'"EnviroSky" SET EnviroSky cloudsMode "{}"'.format(helpers.clouds_lst[c])
 							#'EnviroSky" SET EnviroSky cloudsMode "{}"'.format(random.choice(helpers.clouds_lst))
 						])
 					
 					if loop == reroll:
-						helpers.spawn_animals_objs(True)
-						common.send_data([
+						helpers.spawnAnimalsObjs(True)
+						common.sendData([
 							'DELETE "spawner/drones"'
 						])
-						helpers.spawn_radius_generic(['drones/Parrot Disco/'], limit=random.randint(30,50), radius=random.randint(20,35), innerradius=5, position=[0,0,0], segmentation_class="Drone")
+						helpers.spawnRadiusGeneric(['drones/Parrot Disco/'], limit=random.randint(30,50), radius=random.randint(20,35), innerradius=5, position=[0,0,0], segmentationClass="Drone")
 						loop = 0

@@ -32,8 +32,8 @@ drones_lite_lst = [ 'Drones/buzz/buzz', 'Drones/splinter/splinter', 'Drones/red/
 
 settings = settings_manager.Singleton()
 
-def global_camera_setup(
-	label_root='cameras', canvas_width=1024, canvas_height=768, canvas=None,
+def globalCameraSetup(
+	labelRoot='cameras', canvasWidth=1024, canvasHeight=768, canvas=None,
 	orbit=True, orbitOffset=None, orbitGround=None, orbitSnap=None, position=None,
 	rotation=None, flycam=False
 ):
@@ -42,10 +42,10 @@ def global_camera_setup(
 	
 	# Arguments
 	
-	label_root (string): Root game object name/path, defaults to `cameras`
+	labelRoot (string): Root game object name/path, defaults to `cameras`
 	canvas (bool): Canvas switch, defaults to `False`
-	canvas_width (int): Display canvas width, defaults to `1024`
-	canvas_height (int): Display canvas height, defaults to `768`
+	canvasWidth (int): Display canvas width, defaults to `1024`
+	canvasHeight (int): Display canvas height, defaults to `768`
 	orbit (bool): Adds orbiting component, defaults to `True`
 	orbitOffset (list): Defines offset x,y,z coordinates from orbiting object target, defaults to `None`
 	orbitGround (string): Defines a object to orbit ground position from, defaults to `None`
@@ -66,37 +66,37 @@ def global_camera_setup(
 		common.output('Warning: Canvas has been disabled, you will not see output on simulator')
 		canvas = 'false'
 	
-	common.send_data([
-		'CREATE "{}"'.format(label_root),
-		'"{}" SET active false'.format(label_root),
-		'"{}" SET Transform position ({} {} {})'.format(label_root, settings.X_COMP -6, settings.Y_COMP, settings.Z_COMP -50) if position == None else '"{}" SET Transform position ({} {} {})'.format(label_root, position[0], position[1], position[2]),
-		'"{}" SET Transform eulerAngles ({} {} {})'.format(label_root, 0, 0, 0) if rotation == None else '"{}" SET Transform eulerAngles ({} {} {})'.format(label_root, rotation[0], rotation[1], rotation[2]),
+	common.sendData([
+		'CREATE "{}"'.format(labelRoot),
+		'"{}" SET active false'.format(labelRoot),
+		'"{}" SET Transform position ({} {} {})'.format(labelRoot, settings.X_COMP -6, settings.Y_COMP, settings.Z_COMP -50) if position == None else '"{}" SET Transform position ({} {} {})'.format(labelRoot, position[0], position[1], position[2]),
+		'"{}" SET Transform eulerAngles ({} {} {})'.format(labelRoot, 0, 0, 0) if rotation == None else '"{}" SET Transform eulerAngles ({} {} {})'.format(labelRoot, rotation[0], rotation[1], rotation[2]),
 		
 		# orbit
-		'"{}" ADD Orbit'.format(label_root) if orbit == True else '',
-		'"{}" SET Orbit groundObj "{}"'.format(label_root, orbitGround) if orbitGround != None else '',
-		'"{}" SET Orbit targetOffset ({} {} {})'.format(label_root, orbitOffset[0], orbitOffset[1], orbitOffset[2]) if orbitOffset != None else '',
-		'"{}" SET Orbit snapOffset {}'.format(label_root, orbitSnap) if orbitSnap != None else '',
+		'"{}" ADD Orbit'.format(labelRoot) if orbit == True else '',
+		'"{}" SET Orbit groundObj "{}"'.format(labelRoot, orbitGround) if orbitGround != None else '',
+		'"{}" SET Orbit targetOffset ({} {} {})'.format(labelRoot, orbitOffset[0], orbitOffset[1], orbitOffset[2]) if orbitOffset != None else '',
+		'"{}" SET Orbit snapOffset {}'.format(labelRoot, orbitSnap) if orbitSnap != None else '',
 		
 		# resize camera display on app, this is relative to the size of the window
-		'"Canvas/Cameras/Viewport/Content" SET UI.GridLayoutGroup cellSize ({} {})'.format(canvas_width, canvas_height),
+		'"Canvas/Cameras/Viewport/Content" SET UI.GridLayoutGroup cellSize ({} {})'.format(canvasWidth, canvasHeight),
 		'"Canvas" SET active {}'.format(canvas)
 	], read=False)
 	
 	if flycam:
-		common.send_data([
-			'"{}" ADD FlyCamera'.format(label_root),
-			'"{}" SET FlyCamera enabled true'.format(label_root)
+		common.sendData([
+			'"{}" ADD FlyCamera'.format(labelRoot),
+			'"{}" SET FlyCamera enabled true'.format(labelRoot)
 		], read=False)
 	
-	settings.obj.append(label_root)
+	settings.obj.append(labelRoot)
 
-def add_camera_depth(
+def addCameraDepth(
 	width=2048, height=1536,
 	label='cameras/depth',
 	fov=60,
-	clipping_near=0.3,
-	clipping_far=1000,
+	clippingNear=0.3,
+	clippingFar=1000,
 	depthBuffer='simple',
 	transparencyCutout=0
 ):
@@ -107,10 +107,10 @@ def add_camera_depth(
 	
 	width (int): Resolution width, defaults to `2048`
 	height (int): Resolution height, defaults to `1536`
-	label (string): Game object path, defaults to `cameras/depth` - This should follow `label_root` from `global_camera_setup`
+	label (string): Game object path, defaults to `cameras/depth` - This should follow `labelRoot` from `globalCameraSetup`
 	fov (int): Field of view, defaults to `60`
-	clipping_near (float): Near clipping distance, defaults to `0.3` - Objects closer than this distance won't appear
-	clipping_far (float): Far clipping distance, defaults to `1000` - Objects further from this distance won't appear
+	clippingNear (float): Near clipping distance, defaults to `0.3` - Objects closer than this distance won't appear
+	clippingFar (float): Far clipping distance, defaults to `1000` - Objects further from this distance won't appear
 	depthBuffer (string): Defines a specific depth buffer configuration to use, if not set fallsback to default, default `None`
 	transparencyCutout (float): Defines a cutout percentage for transparent objects, defaults to `0` that will show transparent objects at full extent, when set to 1 will hide them completly.
 	
@@ -120,7 +120,7 @@ def add_camera_depth(
 		'CREATE "{}"'.format(label),
 		'"{}" SET active false'.format(label),
 		'"{}" ADD Camera'.format(label),
-		'"{}" SET Camera near {} far {} fieldOfView {} renderingPath "DeferredShading"'.format(label, clipping_near, clipping_far, fov),
+		'"{}" SET Camera near {} far {} fieldOfView {} renderingPath "DeferredShading"'.format(label, clippingNear, clippingFar, fov),
 		'"{}" ADD Sensors.RenderCamera'.format(label),
 		'"{}" SET Sensors.RenderCamera format "RFloat" resolution ({} {})'.format(label, width, height)
 	]
@@ -137,22 +137,22 @@ def add_camera_depth(
 		common.output('Unknown depthBuffer: {}'.format(depthBuffer), 'ERROR')
 	
 	buf.append('"{}" SET active true'.format(label))
-	common.send_data(buf, read=False)
+	common.sendData(buf, read=False)
 	
-	common.flush_buffer()
+	common.flushBuffer()
 	settings.obj.append(label)
 
-def add_camera_rgb(
+def addCameraRGB(
 	width=2048, height=1536, audio=True, envirosky=None, flycam=False,
-	label_root='cameras', label='cameras/cameraRGB', pp=None,
+	labelRoot='cameras', label='cameras/cameraRGB', pp=None,
 	renderingPath=4, textureFormat=4,
 	
 	fov=60,
-	clipping_near=0.3,
-	clipping_far=1000,
+	clippingNear=0.3,
+	clippingFar=1000,
 	
-	envirosky_cloudTransitionSpeed=100, envirosky_effectTransitionSpeed=100,
-	envirosky_fogTransitionSpeed=100, envirosky_progressTime='None',
+	enviroskyCloudTransitionSpeed=100, enviroskyEffectTransitionSpeed=100,
+	enviroskyFogTransitionSpeed=100, enviroskyProgressTime='None',
 	renderCamera=True
 ):
 	"""
@@ -165,18 +165,18 @@ def add_camera_rgb(
 	audio (bool): Audio listener, defaults to `True` - You must have at one audio listener on the scene
 	envirosky (bool): Enables envirosky stack, defaults to `None`
 	flycam (bool): Enables wasd interactive controllable fly cam, defaults to `False`
-	label_root (string): Root game object name/path, defaults to `cameras`
-	label (string): Game object path, defaults to `cameras/cameraRGB` - This should follow `label_root` from `global_camera_setup`
+	labelRoot (string): Root game object name/path, defaults to `cameras`
+	label (string): Game object path, defaults to `cameras/cameraRGB` - This should follow `labelRoot` from `globalCameraSetup`
 	pp (string): Defines a postprocessing stack, defaults to `None`
 	renderingPath (int): Defines rendering path, defaults to `4` - This is defined on unity_vars lookup table
 	textureFormat (int): Defines texture format, defaults to `4` - This is defined on unity_vars lookup table
 	fov (int): Field of view, defaults to `60`
-	clipping_near (float): Near clipping distance, defaults to `0.3` - Objects closer than this distance won't appear
-	clipping_far (float): Far clipping distance, defaults to `1000` - Objects further from this distance won't appear
-	envirosky_cloudTransitionSpeed (int): Defines cloud transition speed, defaults to `100` which is instant
-	envirosky_effectTransitionSpeed (int): Defines weather transition speed, defaults to `100` which is instant
-	envirosky_fogTransitionSpeed (int): Defines fog deposition speed, defaults to `100` which is instant
-	envirosky_progressTime (string): Defines time progression, defaults to `None` avoiding time to change
+	clippingNear (float): Near clipping distance, defaults to `0.3` - Objects closer than this distance won't appear
+	clippingFar (float): Far clipping distance, defaults to `1000` - Objects further from this distance won't appear
+	enviroskyCloudTransitionSpeed (int): Defines cloud transition speed, defaults to `100` which is instant
+	enviroskyEffectTransitionSpeed (int): Defines weather transition speed, defaults to `100` which is instant
+	enviroskyFogTransitionSpeed (int): Defines fog deposition speed, defaults to `100` which is instant
+	enviroskyProgressTime (string): Defines time progression, defaults to `None` avoiding time to change
 	renderCamera (bool): Binds a renderCamera component allowing for disk exports, defaults to `True`
 	
 	
@@ -187,15 +187,15 @@ def add_camera_rgb(
 		else:
 			envirosky = True
 	
-	common.send_data([
+	common.sendData([
 		'CREATE "{}"'.format(label),
 		'"{}" SET active false'.format(label),
 		'"{}" ADD Camera'.format(label),
-		'"{}" SET Camera near {} far {} fieldOfView {}'.format(label, clipping_near, clipping_far, fov),
+		'"{}" SET Camera near {} far {} fieldOfView {}'.format(label, clippingNear, clippingFar, fov),
 	], read=False)
 	
 	if renderCamera:
-		common.send_data([
+		common.sendData([
 			'"{}" ADD Sensors.RenderCamera'.format(label),
 			
 			# '"{}" SET Sensors.RenderCamera sRGB true'.format(label),
@@ -207,41 +207,41 @@ def add_camera_rgb(
 		], read=False)
 	
 	if audio:
-		common.send_data(['"{}" ADD AudioListener'.format(label)], read=False)
+		common.sendData(['"{}" ADD AudioListener'.format(label)], read=False)
 	if flycam:
-		common.send_data([
+		common.sendData([
 			'"{}" ADD FlyCamera'.format(label),
 			'"{}" SET FlyCamera enabled true'.format(label)
 		], read=False)
 	if envirosky:
-		common.send_data([
+		common.sendData([
 			# NOTE: This is a prefab that already contains the EnviroSky default profile
 			'CREATE "EnviroSky" AS "EnviroSky"',
-			'"EnviroSky" SET EnviroSky Player "{}" PlayerCamera "{}" GameTime.ProgressTime "{}" weatherSettings.cloudTransitionSpeed {} weatherSettings.effectTransitionSpeed {} weatherSettings.fogTransitionSpeed {}'.format(label_root, label, envirosky_progressTime, envirosky_cloudTransitionSpeed, envirosky_effectTransitionSpeed, envirosky_fogTransitionSpeed),
+			'"EnviroSky" SET EnviroSky Player "{}" PlayerCamera "{}" GameTime.ProgressTime "{}" weatherSettings.cloudTransitionSpeed {} weatherSettings.effectTransitionSpeed {} weatherSettings.fogTransitionSpeed {}'.format(labelRoot, label, enviroskyProgressTime, enviroskyCloudTransitionSpeed, enviroskyEffectTransitionSpeed, enviroskyFogTransitionSpeed),
 			'"EnviroSky" EXECUTE EnviroSky AssignAndStart "{}" "{}"'.format(label, label),
 			'"EnviroSky" SET active true'.format(label)
 		], read=False)
 	
-	common.send_data([
-		'"{}" SET active true'.format(label_root),
+	common.sendData([
+		'"{}" SET active true'.format(labelRoot),
 		'"{}" SET active true'.format(label)
 	], read=False)
 	
-	common.flush_buffer()
+	common.flushBuffer()
 	
 	if pp != None:
-		add_camera_rgb_pp(profile=pp, label=label)
+		addCameraRGBPP(profile=pp, label=label)
 	
 	settings.obj.append(label)
 
-def add_camera_thermal(
+def addCameraThermal(
 	width=2048, height=1536, audio=False,
 	label='cameras/thermal',
 	renderingPath=4, textureFormat=4,
 	
 	fov=60,
-	clipping_near=0.3,
-	clipping_far=1000,
+	clippingNear=0.3,
+	clippingFar=1000,
 	
 	ambientTemperature=16, minimumTemperature=10,
 	maximumTemperature=30, maxDistanceForProbeUpdate=100,
@@ -252,11 +252,11 @@ def add_camera_thermal(
 	patchyness_size=0.481, patchyness_intensity=0.60,
 	
 	trees=False,
-	trees_base=10, trees_bandwidth=3, trees_median=0.5,
-	trees_leafs_variance=4,
+	treesBase=10, treesBandwidth=3, treesMedian=0.5,
+	treesLeafsVariance=4,
 	
 	blur=True,
-	blur_noise=[2, 1],
+	blurNoise=[2, 1],
 	
 	renderCamera=True
 ):
@@ -268,12 +268,12 @@ def add_camera_thermal(
 	width (int): Resolution width, defaults to `2048`
 	height (int): Resolution height, defaults to `1536`
 	audio (bool): Audio listener, defaults to `False` - You must have at one audio listener on the scene
-	label (string): Game object path, defaults to `cameras/cameraRGB` - This should follow `label_root` from `global_camera_setup`
+	label (string): Game object path, defaults to `cameras/cameraRGB` - This should follow `labelRoot` from `globalCameraSetup`
 	renderingPath (int): Defines rendering path, defaults to `4` - This is defined on unity_vars lookup table
 	textureFormat (int): Defines texture format, defaults to `4` - This is defined on unity_vars lookup table
 	fov (int): Field of view, defaults to `60`
-	clipping_near (float): Near clipping distance, defaults to `0.3` - Objects closer than this distance won't appear
-	clipping_far (float): Far clipping distance, defaults to `1000` - Objects further from this distance won't appear
+	clippingNear (float): Near clipping distance, defaults to `0.3` - Objects closer than this distance won't appear
+	clippingFar (float): Far clipping distance, defaults to `1000` - Objects further from this distance won't appear
 	
 	ambientTemperature (float): Defines a global ambient temperature, defaults to `16`
 	minimumTemperature (float): Minimum AGC temperature, defaults to `10`
@@ -288,13 +288,13 @@ def add_camera_thermal(
 	patchyness_intensity (float): Defines how much detail is preserved from the original when patch is applied in reverse, defaults to `0.6`
 	
 	trees (bool): Enables / disable trees / bushes heat signature, defaults to `False`
-	trees_base (float): Tree base temperature, defaults to `10`
-	trees_bandwidth (float): Heat pattern bandwidth, defaults to `3`
-	trees_median (float): Heat pattern median, defaults to `0.5`
-	trees_leafs_variance (int): Define how much diffuse heat will be applied to tree leafs, defaults to `4`
+	treesBase (float): Tree base temperature, defaults to `10`
+	treesBandwidth (float): Heat pattern bandwidth, defaults to `3`
+	treesMedian (float): Heat pattern median, defaults to `0.5`
+	treesLeafsVariance (int): Define how much diffuse heat will be applied to tree leafs, defaults to `4`
 	
 	blur (bool): Enables / disable blur effect, defaults to `True`
-	blur_noise (list of min / max): Defines noise blur distance, defaults to `[2, 1]`
+	blurNoise (list of min / max): Defines noise blur distance, defaults to `[2, 1]`
 	
 	renderCamera (bool): Binds a renderCamera component allowing for disk exports, defaults to `True`
 	
@@ -304,15 +304,15 @@ def add_camera_thermal(
 	- blur effects mimics noise around object edges, more visible when close by
 	
 	"""
-	common.send_data([
+	common.sendData([
 		'CREATE "{}"'.format(label),
 		'"{}" SET active false'.format(label),
 		'"{}" ADD Camera'.format(label),
-		'"{}" SET Camera near {} far {} fieldOfView {}'.format(label, clipping_near, clipping_far, fov),
+		'"{}" SET Camera near {} far {} fieldOfView {}'.format(label, clippingNear, clippingFar, fov),
 	], read=False)
 	
 	if renderCamera:
-		common.send_data([
+		common.sendData([
 			'"{}" ADD Sensors.RenderCamera'.format(label),
 			
 			'"{}" SET Sensors.RenderCamera format "{}" resolution ({} {})'.format(label, unity_vars.textureFormat[textureFormat], width, height),
@@ -320,51 +320,51 @@ def add_camera_thermal(
 		], read=False)
 	
 	if audio:
-		common.send_data(['"{}" ADD AudioListener'.format(label)], read=False)
+		common.sendData(['"{}" ADD AudioListener'.format(label)], read=False)
 	
-	common.send_data([
+	common.sendData([
 		'"{}" ADD Thermal.ThermalCamera'.format(label),
 		'"{}" SET Thermal.ThermalCamera enabled false'.format(label)
 	], read=False)
 	
 	if patchyness:
-		common.send_data([
+		common.sendData([
 			'"{}" ADD CameraFilterPack_Pixelisation_DeepOilPaintHQ'.format(label),
 			'"{}" SET CameraFilterPack_Pixelisation_DeepOilPaintHQ enabled false'.format(label),
 			'"{}" SET CameraFilterPack_Pixelisation_DeepOilPaintHQ _FixDistance {} _Distance {} _Size {} Intensity {} enabled true'.format(label, patchyness_fixDistance, patchyness_distance, patchyness_size, patchyness_intensity)
 		], read=False)
 	
 	if blur:
-		common.send_data([
+		common.sendData([
 			'"{}" ADD CameraFilterPack_Blur_Noise'.format(label),
-			'"{}" SET CameraFilterPack_Blur_Noise Distance ({} {}) enabled true'.format(label, blur_noise[0], blur_noise[1])
+			'"{}" SET CameraFilterPack_Blur_Noise Distance ({} {}) enabled true'.format(label, blurNoise[0], blurNoise[1])
 		], read=False)
 	
 	if trees:
-		common.send_data([
+		common.sendData([
 			'"{}" ADD Thermal.GlobalTreeSettings'.format(label),
-			'"{}" SET Thermal.GlobalTreeSettings temperature {} temperatureBandwidth {} temperatureMedian {} treeLeafsHeatVariance {} enabled true'.format(label, trees_base, trees_bandwidth, trees_median, trees_leafs_variance)
+			'"{}" SET Thermal.GlobalTreeSettings temperature {} temperatureBandwidth {} temperatureMedian {} treeLeafsHeatVariance {} enabled true'.format(label, treesBase, treesBandwidth, treesMedian, treesLeafsVariance)
 		], read=False);
 
-	common.send_data([
+	common.sendData([
 		'"{}" ADD UnityEngine.PostProcessing.PostProcessingBehaviour'.format(label),
 		'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile "Thermal"'.format(label),
 		'"{}" SET Thermal.ThermalCamera ambientTemperature {} temperatureRange ({} {}) maxDistanceForProbeUpdate {} useAGC {} enabled true'.format(label, ambientTemperature, minimumTemperature, maximumTemperature, maxDistanceForProbeUpdate, useAGC)
 	], read=False)
 		
-	common.send_data([
+	common.sendData([
 		'"{}" SET active true'.format(label)
 	], read=False)
 	
-	common.flush_buffer()
+	common.flushBuffer()
 	
 	settings.obj.append(label)
 
-def camera_pp_thermal(label='cameras/cameraRGB'):
+def cameraPPThermal(label='cameras/cameraRGB'):
 	"""
 	This is a dummy function that demonstrates all possible configurable values on a camera profile, in this case we're showing off all parameters tuned to a thermal profile
 	"""
-	common.send_data([
+	common.sendData([
 		'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.antialiasing.enabled false'.format(label),
 		'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.ambientOcclusion.enabled false'.format(label),
 		
@@ -397,8 +397,8 @@ def camera_pp_thermal(label='cameras/cameraRGB'):
 	], read=False)
 
 # WARNING: It's not recommended to use Scion with Envirosky
-def add_camera_rgb_pp(profile='Profile2', scion=False, label='cameras/cameraRGB'):
-	common.send_data([
+def addCameraRGBPP(profile='Profile2', scion=False, label='cameras/cameraRGB'):
+	common.sendData([
 		# 'cameras/cameraRGB SET active false',
 		'"{}" ADD UnityEngine.PostProcessing.PostProcessingBehaviour'.format(label),
 		'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile "{}"'.format(label, profile)
@@ -407,7 +407,7 @@ def add_camera_rgb_pp(profile='Profile2', scion=False, label='cameras/cameraRGB'
 	if scion:
 		if not settings.disable_envirosky:
 			common.output('WARNING: Using scion with envirosky is not recommended')
-		common.send_data([
+		common.sendData([
 			'"{}" ADD ScionEngine.ScionPostProcess'.format(label),
 			'"{}" SET ScionEngine.ScionPostProcess bloom true'.format(label),
 			'"{}" SET ScionEngine.ScionPostProcess bloomIntensity 0.3'.format(label),
@@ -420,12 +420,12 @@ def add_camera_rgb_pp(profile='Profile2', scion=False, label='cameras/cameraRGB'
 			# '"{}" SET active true'
 		], read=False)
 	else:
-		common.send_data('"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false'.format(label))
+		common.sendData('"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false'.format(label))
 	
-	common.flush_buffer()
+	common.flushBuffer()
 	settings.obj.append(label)
 
-def camera_rgb_pp_random(label='cameras/cameraRGB'):
+def cameraRGBPPRandom(label='cameras/cameraRGB'):
 	""""
 	This function randomizes all available parameters for native postprocessing.
 	Parameters that contain random statements will randomize between the acceptable
@@ -444,7 +444,7 @@ def camera_rgb_pp_random(label='cameras/cameraRGB'):
 	"""
 	# antialiasing
 	if bool(random.getrandbits(1)):
-		common.send_data([
+		common.sendData([
 			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.antialiasing.enabled true'.format(label),
 			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.antialiasing.settings.fxaaSettings.preset 4'.format(label),
 			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.antialiasing.settings.method 0'.format(label),
@@ -454,13 +454,13 @@ def camera_rgb_pp_random(label='cameras/cameraRGB'):
 			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.antialiasing.settings.taaSettings.stationaryBlending 0.95'.format(label),
 		], read=False)
 	else:
-		common.send_data([
+		common.sendData([
 			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.antialiasing.enabled false'.format(label)
 		], read=False)
 	
 	# ambient occlusion
 	if bool(random.getrandbits(1)):
-		common.send_data([
+		common.sendData([
 			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.ambientOcclusion.enabled true'.format(label),
 			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.ambientOcclusion.settings.intensity 2'.format(label),
 			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.ambientOcclusion.settings.radius 0.3'.format(label),
@@ -471,13 +471,13 @@ def camera_rgb_pp_random(label='cameras/cameraRGB'):
 			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.ambientOcclusion.settings.highPrecision 0'.format(label),
 		], read=False)
 	else:
-		common.send_data([
+		common.sendData([
 			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.ambientOcclusion.enabled false'.format(label),
 		], read=False)
 	
 	# blooming effects
 	if bool(random.getrandbits(1)):
-		common.send_data([
+		common.sendData([
 			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.bloom.enabled true'.format(label),
 			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.bloom.settings.bloom.intensity {}'.format(label, random.randint(0, 100)),
 			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.bloom.settings.bloom.threshold {}'.format(label, random.uniform(0, 2)),
@@ -487,23 +487,23 @@ def camera_rgb_pp_random(label='cameras/cameraRGB'):
 			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.bloom.settings.lensDirt.intensity {}'.format(label, random.randint(0, 10)),
 		], read=False)
 	else:
-		common.send_data(['"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.bloom.enabled false'.format(label)], read=False)
+		common.sendData(['"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.bloom.enabled false'.format(label)], read=False)
 	
 	# chromatic aberration
 	if bool(random.getrandbits(1)):
-		common.send_data([
+		common.sendData([
 			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.enabled true'.format(label),
 			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.475'.format(label),
 			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.spectralTexture.fileID 0'.format(label),
 		], read=False)
 	else:
-		common.send_data([
+		common.sendData([
 			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.enabled false'.format(label),
 		], read=False)
 	
 	# color grading
 	if bool(random.getrandbits(1)):
-		common.send_data([
+		common.sendData([
 			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.enabled true'.format(label),
 			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.027'.format(label),
 			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.hueShift 0'.format(label),
@@ -664,13 +664,13 @@ def camera_rgb_pp_random(label='cameras/cameraRGB'):
 			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.tonemapping.tonemapper "2"'.format(label),
 		], read=False)
 	else:
-		common.send_data([
+		common.sendData([
 			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.enabled false'.format(label),
 		], read=False)
 	
 	# depth of field
 	if bool(random.getrandbits(1)):
-		common.send_data([
+		common.sendData([
 			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.depthOfField.enabled true'.format(label),
 			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.depthOfField.settings.focusDistance 0.1'.format(label),
 			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.depthOfField.settings.aperture 8.7'.format(label),
@@ -679,23 +679,23 @@ def camera_rgb_pp_random(label='cameras/cameraRGB'):
 			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.depthOfField.settings.kernelSize 1'.format(label),
 		], read=False)
 	else:
-		common.send_data([
+		common.sendData([
 			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.depthOfField.enabled true'.format(label),
 		], read=False)
 	
 	# dithering
 	if bool(random.getrandbits(1)):
-		common.send_data([
+		common.sendData([
 			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.dithering.enabled true'.format(label),
 		], read=False)
 	else:
-		common.send_data([
+		common.sendData([
 			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.dithering.enabled false'.format(label),
 		], read=False)
 	
 	# eye adaptation
 	if bool(random.getrandbits(1)):
-		common.send_data([
+		common.sendData([
 			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.eyeAdaptation.enabled true'.format(label),
 			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.eyeAdaptation.settings.adaptationType 0'.format(label),
 			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.eyeAdaptation.settings.dynamicKeyValue 1'.format(label),
@@ -710,23 +710,23 @@ def camera_rgb_pp_random(label='cameras/cameraRGB'):
 			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.eyeAdaptation.settings.speedUp 2'.format(label),
 		], read=False)
 	else:
-		common.send_data([
+		common.sendData([
 			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.eyeAdaptation.enabled false'.format(label),
 		], read=False)
 	
 	# fog
 	if bool(random.getrandbits(1)):
-		common.send_data([
+		common.sendData([
 			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.fog.enabled true'.format(label)
 		], read=False)
 	else:
-		common.send_data([
+		common.sendData([
 			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.fog.enabled false'.format(label)
 		], read=False)
 	
 	# grain
 	if bool(random.getrandbits(1)):
-		common.send_data([
+		common.sendData([
 			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.grain.enabled true'.format(label),
 			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.grain.settings.colored 1'.format(label),
 			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.grain.settings.intensity 0.281'.format(label),
@@ -734,24 +734,24 @@ def camera_rgb_pp_random(label='cameras/cameraRGB'):
 			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.grain.settings.size 0.3'.format(label),
 		], read=False)
 	else:
-		common.send_data([
+		common.sendData([
 			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.grain.enabled false'.format(label),
 		], read=False)
 	
 	# motion blur effects
 	if bool(random.getrandbits(1)):
-		common.send_data([
+		common.sendData([
 			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled true'.format(label),
 			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.shutterAngle {}'.format(label, random.randint(0, 360)),
 			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount {}'.format(label, random.randint(1, 32)),
 			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending {}'.format(label, random.uniform(0, 1))
 		], read=False)
 	else:
-		common.send_data(['"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false'.format(label)], read=False)
+		common.sendData(['"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false'.format(label)], read=False)
 	
 	# screen space reflection
 	if bool(random.getrandbits(1)):
-		common.send_data([
+		common.sendData([
 			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.screenSpaceReflection.enabled true'.format(label),
 			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.screenSpaceReflection.settings.reflection.blendType 1'.format(label),
 			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.screenSpaceReflection.settings.reflection.reflectionQuality 3'.format(label),
@@ -768,13 +768,13 @@ def camera_rgb_pp_random(label='cameras/cameraRGB'):
 			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.screenSpaceReflection.settings.screenEdgeMask.intensity 0.03'.format(label),
 		], read=False)
 	else:
-		common.send_data([
+		common.sendData([
 			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.screenSpaceReflection.enabled false'.format(label),
 		], read=False)
 	
 	# vignette
 	if bool(random.getrandbits(1)):
-		common.send_data([
+		common.sendData([
 			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.vignette.enabled true'.format(label),
 			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.vignette.settings.center.x 0.5'.format(label),
 			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.vignette.settings.center.y 0.5'.format(label),
@@ -791,23 +791,23 @@ def camera_rgb_pp_random(label='cameras/cameraRGB'):
 			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.vignette.settings.smoothness 0.439'.format(label),
 		], read=False)
 	else:
-		common.send_data([
+		common.sendData([
 			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.vignette.enabled false'.format(label),
 		], read=False)
 	
-	common.flush_buffer()
+	common.flushBuffer()
 
-def add_thermal_profile_override(
+def addThermalProfileOverride(
 		target,
-		temperature_mode='Disabled', temperature_value=0,
-		temperature_median_mode='Disabled', temperature_median_value=0.5,
-		temperature_bandwidth_mode='Disabled', temperature_bandwidth_value=0,
-		heatiness_mode='Disabled', heatiness_value=0,
-		variance_mode='Disabled', variance_value=0,
-		reflectivity_mode='Disabled', reflectivity_value=0,
-		ambient_offset_mode='Disabled', ambient_offset_value=0
+		temperatureMode='Disabled', temperatureValue=0,
+		temperatureMedianMode='Disabled', temperatureMedianValue=0.5,
+		temperatureBandwidthMode='Disabled', temperatureBandwidthValue=0,
+		heatinessMode='Disabled', heatinessValue=0,
+		varianceMode='Disabled', varianceValue=0,
+		reflectivityMode='Disabled', reflectivityValue=0,
+		ambientOffsetMode='Disabled', ambientOffsetValue=0
 	):
-	common.send_data([
+	common.sendData([
 		'"{}" ADD Thermal.ThermalProfileOverride'.format(target),
 		'''"{}" SET Thermal.ThermalProfileOverride
 			temperatureMode "{}"
@@ -825,26 +825,26 @@ def add_thermal_profile_override(
 			ambientOffsetMode "{}"
 			ambientOffset {}
 		'''.format(
-			target, temperature_mode, temperature_value,
-			temperature_median_mode, temperature_median_value,
-			temperature_bandwidth_mode, temperature_bandwidth_value,
-			heatiness_mode, heatiness_value, reflectivity_mode, reflectivity_value,
-			variance_mode, variance_value, ambient_offset_mode, ambient_offset_value
+			target, temperatureMode, temperatureValue,
+			temperatureMedianMode, temperatureMedianValue,
+			temperatureBandwidthMode, temperatureBandwidthValue,
+			heatinessMode, heatinessValue, reflectivityMode, reflectivityValue,
+			varianceMode, varianceValue, ambientOffsetMode, ambientOffsetValue
 		)
 	])
 
-def add_thermal_terrain(target, ambient_offset=0, bandwidth=1, median=0, base_map_distance=10000):
-	common.send_data([
+def addThermalTerrain(target, ambientOffset=0, bandwidth=1, median=0, baseMapDistance=10000):
+	common.sendData([
 		'"{}" ADD Thermal.ThermalTerrain'.format(target),
 		'''"{}" SET Thermal.ThermalTerrain
 			ambientOffset {}
 			bandwidth {}
 			median {}
 			baseMapDistance {}
-		'''.format(target, ambient_offset, bandwidth, median, base_map_distance)
+		'''.format(target, ambientOffset, bandwidth, median, baseMapDistance)
 	])
 
-def add_windzone(target, mode='Directional', radius=0, main=1, turbulence=1, pulse_magnitude=0.5, pulse_frequency=0.01):
+def addWindzone(target, mode='Directional', radius=0, main=1, turbulence=1, pulse_magnitude=0.5, pulse_frequency=0.01):
 	"""
 	Creates a wind zone component
 	
@@ -862,7 +862,7 @@ def add_windzone(target, mode='Directional', radius=0, main=1, turbulence=1, pul
 	pulse_frequency (float): Defines the frequency the wind changes, defaults to `0.01`
 	
 	"""
-	common.send_data([
+	common.sendData([
 		'"{}" ADD WindZone'.format(target),
 		'''"{}" SET WindZone
 			mode "{}"
@@ -874,7 +874,7 @@ def add_windzone(target, mode='Directional', radius=0, main=1, turbulence=1, pul
 		'''.format(target, mode, radius, main, turbulence, pulse_magnitude, pulse_frequency)
 	])
 
-def camera_rgb_pp_scion_random(label='cameras/cameraRGB'):
+def cameraRGBPPScionRandom(label='cameras/cameraRGB'):
 	"""
 	Show case for scion camera postprocessing effects
 	
@@ -884,26 +884,26 @@ def camera_rgb_pp_scion_random(label='cameras/cameraRGB'):
 	"""
 	# grain effect
 	if bool(random.getrandbits(1)):
-		common.send_data([
+		common.sendData([
 			'"{}" SET ScionEngine.ScionPostProcess grain true'.format(label),
 			'"{}" SET ScionEngine.ScionPostProcess grainIntensity {}'.format(label, random.uniform(0, 0.4))
 		], read=False)
 	# else:
-	# 	common.send_data(['"{}" SET ScionEngine.ScionPostProcess grain false'.format(label)])
+	# 	common.sendData(['"{}" SET ScionEngine.ScionPostProcess grain false'.format(label)])
 	
 	# chromatic aberration
 	if bool(random.getrandbits(1)):
-		common.send_data([
+		common.sendData([
 			'"{}" SET ScionEngine.ScionPostProcess chromaticAberration true'.format(label),
 			'"{}" SET ScionEngine.ScionPostProcess chromaticAberrationDistortion {}'.format(label, random.uniform(0, 1)),
 			'"{}" SET ScionEngine.ScionPostProcess chromaticAberrationIntensity {}'.format(label, random.uniform(0, 20))
 		], read=False)
 	# else:
-	# 	common.send_data(['"{}" SET ScionEngine.ScionPostProcess chromaticAberration false'.format(label)])
+	# 	common.sendData(['"{}" SET ScionEngine.ScionPostProcess chromaticAberration false'.format(label)])
 	
 	# blooming effect
 	if bool(random.getrandbits(1)):
-		common.send_data([
+		common.sendData([
 			'"{}" SET ScionEngine.ScionPostProcess bloom true'.format(label),
 			'"{}" SET ScionEngine.ScionPostProcess bloomThreshold {}'.format(label, random.uniform(0, 50)),
 			'"{}" SET ScionEngine.ScionPostProcess bloomIntensity {}'.format(label, random.uniform(0, 1)),
@@ -912,21 +912,21 @@ def camera_rgb_pp_scion_random(label='cameras/cameraRGB'):
 			'"{}" SET ScionEngine.ScionPostProcess bloomDistanceMultiplier {}'.format(label, random.randuniform(0.25, 1.25))
 		], read=False)
 	# else:
-	# 	common.send_data(['"{}" SET ScionEngine.ScionPostProcess bloom false'])
+	# 	common.sendData(['"{}" SET ScionEngine.ScionPostProcess bloom false'])
 	
 	# vignette
 	if bool(random.getrandbits(1)):
-		common.send_data([
+		common.sendData([
 			'"{}" SET ScionEngine.ScionPostProcess vignette true'.format(label),
 			'"{}" SET ScionEngine.ScionPostProcess vignetteIntensity {}'.format(label, rand.uniform(0, 1)),
 			'"{}" SET ScionEngine.ScionPostProcess vignetteScale {}'.format(label, random.uniform(0, 1)),
 		], read=False)
 	# else:
-	#	common.send_data(['"{}" SET ScionEngine.ScionPostProcess vignette false'.format(label)])
+	#	common.sendData(['"{}" SET ScionEngine.ScionPostProcess vignette false'.format(label)])
 	
 	# lens flare
 	if bool(random.getrandbits(1)):
-		common.send_data([
+		common.sendData([
 			'"{}" SET ScionEngine.ScionPostProcess lensFlare true'.format(label),
 			'"{}" SET ScionEngine.ScionPostProcess lensFlareGhostIntensity {}'.format(label, random.uniform(0, 2)),
 			'"{}" SET ScionEngine.ScionPostProcess lensFlareGhostDispersal {}'.format(label, random.uniform(0, 2)),
@@ -939,13 +939,13 @@ def camera_rgb_pp_scion_random(label='cameras/cameraRGB'):
 			'"{}" SET ScionEngine.ScionPostProcess lensFlareDownsamples {}'.format(label, random.randint(1, 3))
 		], read=False)
 	# else:
-	# 	common.send_data(['"{}" SET ScionEngine.ScionPostProcess lensFlare false'.format(label)])
+	# 	common.sendData(['"{}" SET ScionEngine.ScionPostProcess lensFlare false'.format(label)])
 	
 	# tonemapping
-	common.send_data(['"{}" SET ScionEngine.ScionPostProcess tonemappingMode "{}"'.format(label, random.choice(unity_vars.tonemappings))], read=False)
-	common.flush_buffer()
+	common.sendData(['"{}" SET ScionEngine.ScionPostProcess tonemappingMode "{}"'.format(label, random.choice(unity_vars.tonemappings))], read=False)
+	common.flushBuffer()
 
-def set_disk_texture(lst, label='disk1'):
+def setDiskTexture(lst, label='disk1'):
 	"""
 	Links a texture to a disk output
 	
@@ -962,11 +962,11 @@ def set_disk_texture(lst, label='disk1'):
 		return
 	
 	for l in lst:
-		common.send_data([
+		common.sendData([
 			'"{}/{}" SET Sensors.RenderCameraLink target "{}"'.format(label, l.capitalize(), l)
 		], read=False)
 
-def add_camera_seg_filter(segments=['Car'], label='cameras/segmentation', unoccluded=None):
+def addCameraSegFilter(segments=['Car'], label='cameras/segmentation', unoccluded=None):
 	"""
 	Creates a filterable bounding boxes with unoccluded option enabled by default.
 	This allows you to export json objects containig segmented classes.
@@ -979,25 +979,25 @@ def add_camera_seg_filter(segments=['Car'], label='cameras/segmentation', unoccl
 	"""
 	
 	for s in segments:
-		common.send_data([
+		common.sendData([
 			'"{}" PUSH Segmentation.Segmentation boundingBoxesFilter "{}"'.format(label, s)
 		], read=False)
 	
 	if unoccluded != None:
 		for s in segments:
-			common.send_data([
+			common.sendData([
 				'"{}" PUSH Segmentation.Segmentation unoccludedClasses "{}"'.format(label, s)
 			], read=False)
 
 # output_type options: Auto, ClassIds, InstanceIds, ClassColors, Raw
-def add_camera_seg(
+def addCameraSeg(
 	width=1024, height=768, segments=None, output_type='Auto', label='cameras/segmentation',
 	fov=60,
-	clipping_near=0.3,
-	clipping_far=1000,
+	clippingNear=0.3,
+	clippingFar=1000,
 	boundingBoxesExtensionAmount=0,
 	renderingPath=4, textureFormat=4,
-	minimum_visibility=0,
+	minimumVisibility=0,
 	renderCamera=True,
 	lookupTable=True,
 	transparencyCutout=0
@@ -1010,15 +1010,15 @@ def add_camera_seg(
 	width (int): Resolution width, defaults to `2048`
 	height (int): Resolution height, defaults to `1536`
 	segments (list|string): Defines one or more classes this camera will see, defaults to `None`
-	label (string): Game object path, defaults to `cameras/segmentation` - This should follow `label_root` from `global_camera_setup`
+	label (string): Game object path, defaults to `cameras/segmentation` - This should follow `labelRoot` from `globalCameraSetup`
 	renderingPath (int): Defines rendering path, defaults to `4` - This is defined on unity_vars lookup table
 	textureFormat (int): Defines texture format, defaults to `4` - This is defined on unity_vars lookup table
 	fov (int): Field of view, defaults to `60`
-	clipping_near (float): Near clipping distance, defaults to `0.3` - Objects closer than this distance won't appear
-	clipping_far (float): Far clipping distance, defaults to `1000` - Objects further from this distance won't appear
+	clippingNear (float): Near clipping distance, defaults to `0.3` - Objects closer than this distance won't appear
+	clippingFar (float): Far clipping distance, defaults to `1000` - Objects further from this distance won't appear
 	renderCamera (bool): Binds a renderCamera component allowing for disk exports, defaults to `True`
 	lookupTable (list): Binds a color to a class, this is essential for outputting pixel dense images, this is an array of arrays like `[ [ Car , red ] , [ Person, blue ] .. ]`; Defaults to `True` which will automatically populate the segmentation lookup table based on the segments sent.
-	minimum_visibility (float): Defines minimum visibility of object in % (0 - 1), objects with less than % of it's total size visible won't appear on the segmentation maps neither yeild bounding boxes, defaults to `0`
+	minimumVisibility (float): Defines minimum visibility of object in % (0 - 1), objects with less than % of it's total size visible won't appear on the segmentation maps neither yeild bounding boxes, defaults to `0`
 	transparencyCutout (float): Defines a cutout percentage for transparent objects, defaults to `0` that will show transparent objects at full extent, when set to 1 will hide them completly.
 	
 	# Notes
@@ -1027,31 +1027,31 @@ def add_camera_seg(
 	- blur effects mimics noise around object edges, more visible when close by
 	
 	"""
-	common.send_data([
+	common.sendData([
 		'CREATE "{}"'.format(label),
 		'"{}" SET active false'.format(label),
 		'"{}" ADD Camera'.format(label),
-		'"{}" SET Camera near {} far {} fieldOfView {}'.format(label, clipping_near, clipping_far, fov),
+		'"{}" SET Camera near {} far {} fieldOfView {}'.format(label, clippingNear, clippingFar, fov),
 	], read=False)
 	
 	if renderCamera:
-		common.send_data([
+		common.sendData([
 			'"{}" ADD Sensors.RenderCamera'.format(label),
 			'"{}" SET Sensors.RenderCamera format "{}" resolution ({} {})'.format(label, unity_vars.textureFormat[textureFormat], width, height),
 		], read=False)
 	
-	common.send_data([
+	common.sendData([
 		'"{}" SET Camera renderingPath "{}" targetTexture.filterMode "Point"'.format(label, unity_vars.renderingPath[renderingPath]),
 		'"{}" ADD Segmentation.Segmentation'.format(label),
-		'"{}" SET Segmentation.Segmentation minimumObjectVisibility {} outputType "{}" boundingBoxesExtensionAmount {} transparencyCutout {}'.format(label, minimum_visibility, output_type, boundingBoxesExtensionAmount, transparencyCutout),
+		'"{}" SET Segmentation.Segmentation minimumObjectVisibility {} outputType "{}" boundingBoxesExtensionAmount {} transparencyCutout {}'.format(label, minimumVisibility, output_type, boundingBoxesExtensionAmount, transparencyCutout),
 		'"{}" EXECUTE Segmentation.Segmentation DefineClass "Void"'.format(label)
 	], read=False)
 	
 	if segments != None:
-		add_camera_seg_filter(segments, label=label)
+		addCameraSegFilter(segments, label=label)
 	
 	# add default class
-	common.send_data([
+	common.sendData([
 		'"{}" ADD Segmentation.LookUpTable'.format(label),
 		'"{}" PUSH Segmentation.LookUpTable classes "Void"'.format(label),
 		'"{}" PUSH Segmentation.LookUpTable colors "black"'.format(label)
@@ -1061,10 +1061,10 @@ def add_camera_seg(
 		idx = 0
 		for i in segments:
 			if idx > len(unity_vars.colors):
-				color = '"{}"'.format(get_random_color())
+				color = '"{}"'.format(getRandomColor())
 			else:
 				color = unity_vars.colors[idx]
-			common.send_data([
+			common.sendData([
 				'"{}" EXECUTE Segmentation.Segmentation DefineClass "{}"'.format(label, i),
 				'"{}" PUSH Segmentation.LookUpTable classes "{}"'.format(label, i),
 				'"{}" PUSH Segmentation.LookUpTable colors "{}"'.format(label, color)
@@ -1072,20 +1072,20 @@ def add_camera_seg(
 			idx += 1
 	elif isinstance(lookupTable, list):
 		for i in lookupTable:
-			common.send_data([
+			common.sendData([
 				'"{}" EXECUTE Segmentation.Segmentation DefineClass "{}"'.format(label, i[0]),
 				'"{}" PUSH Segmentation.LookUpTable classes "{}"'.format(label, i[0]),
 				'"{}" PUSH Segmentation.LookUpTable colors "{}"'.format(label, i[1])
 			], read=False)
 	
-	common.send_data([
+	common.sendData([
 		'"{}" EXECUTE Segmentation.LookUpTable MarkTextureDirty'.format(label),
 		'"{}" SET active true'.format(label)
 	], read=False)
-	common.flush_buffer()
+	common.flushBuffer()
 	settings.obj.append(label)
 
-def add_light(position=[34,-22.53,0], intensity=1.7, label='light'):
+def addLight(position=[34,-22.53,0], intensity=1.7, label='light'):
 	"""
 	Creates a light object
 	
@@ -1099,7 +1099,7 @@ def add_light(position=[34,-22.53,0], intensity=1.7, label='light'):
 	label (string): Game object name, defaults to `light`
 	
 	"""
-	common.send_data([
+	common.sendData([
 		'CREATE "{}"'.format(label),
 		'"{}" ADD Light'.format(label),
 		'"{}" SET Light type "Directional"'.format(label),
@@ -1110,35 +1110,35 @@ def add_light(position=[34,-22.53,0], intensity=1.7, label='light'):
 		'"{}" SET active true'.format(label)
 	], read=False)
 	
-	common.flush_buffer()
+	common.flushBuffer()
 	settings.obj.append(label)
 
-def global_disk_setup(label='disk1', output_path=None):
+def globalDiskSetup(label='disk1', outputPath=None):
 	"""
 	Setups the disk output module root component
 	
 	# Arguments
 	
 	label (string): Game object name, defaults to `disk1`
-	output_path (string): Image output path, when not set, defaults to settings.output_path (set by the syncity inialization script)
+	outputPath (string): Image output path, when not set, defaults to settings.output_path (set by the syncity inialization script)
 	
 	"""
 	if settings.skip_disk:
 		return
-	if output_path == None:
-		output_path = settings.output_path
-	common.send_data([
+	if outputPath == None:
+		outputPath = settings.output_path
+	common.sendData([
 		'CREATE "{}"'.format(label),
 		'"{}" SET active false'.format(label),
 		'"{}" ADD Sensors.Disk'.format(label),
-		'"{}" SET Sensors.Disk path "{}"'.format(label, output_path),
+		'"{}" SET Sensors.Disk path "{}"'.format(label, outputPath),
 		'"{}" SET active true'.format(label)
 	], read=False)
 	
-	common.flush_buffer()
+	common.flushBuffer()
 	settings.obj.append(label)
 
-def do_render(lst):
+def doRender(lst):
 	"""
 	By default syncity simulator doesn't render anything unless it's necessary, this method allows you to render one frame.
 	This funcionality works with renderCamera component and is intended for outputting data.
@@ -1150,49 +1150,49 @@ def do_render(lst):
 	
 	"""
 	for l in lst:
-		common.send_data('"{}" EXECUTE Sensors.RenderCamera RenderFrame'.format(l))
+		common.sendData('"{}" EXECUTE Sensors.RenderCamera RenderFrame'.format(l))
 
-def take_snapshot(lst, auto_segment=False, label='disk1', force_noop=False):
+def takeSnapshot(lst, autoSegment=False, label='disk1', forceNoop=False):
 	"""
 	Creates a image snapshot from a set of cameras using a disk component
 	
 	# Arguments
 	
 	lst (list): List of cameras
-	auto_segment (bool): Automatic guess which cameras are segmentation and export json objects among with the pixel dense image, defaults to `None`
+	autoSegment (bool): Automatic guess which cameras are segmentation and export json objects among with the pixel dense image, defaults to `None`
 	label (string): Game object name, defaults to `disk1`
-	force_noop (bool): Force a buffer flush before snapshot happens, this ensures that any queued commands are executed before doing the render. Defaults to `False`
+	forceNoop (bool): Force a buffer flush before snapshot happens, this ensures that any queued commands are executed before doing the render. Defaults to `False`
 	
 	"""
-	if settings.skip_disk and auto_segment == False:
-		if force_noop:
-			common.send_data('NOOP', read=True);
-		do_render(lst)
+	if settings.skip_disk and autoSegment == False:
+		if forceNoop:
+			common.sendData('NOOP', read=True);
+		doRender(lst)
 		return
 	
-	if auto_segment:
+	if autoSegment:
 		idx = [i for i, s in enumerate(lst) if 'segmentation' in s]
 		
 		if len(idx) == 0:
-			common.output('WARNING: No camera with segmentation name found, skipping auto_segment')
+			common.output('WARNING: No camera with segmentation name found, skipping autoSegment')
 		else:
-			do_render(lst)
-			common.flush_buffer()
-			r = common.send_data([
+			doRender(lst)
+			common.flushBuffer()
+			r = common.sendData([
 				'"{}" EXECUTE Sensors.Disk Snapshot'.format(label),
 				'"{}" GET Segmentation.Segmentation boundingBoxes'.format(lst[idx[0]]),
 				'NOOP'
 			], read=True)
-			seq_save('bbox', r)
+			seqSave('bbox', r)
 	else:
-		if force_noop:
-			common.send_data('NOOP', read=True);
+		if forceNoop:
+			common.sendData('NOOP', read=True);
 		
-		common.send_data('"{}" EXECUTE Sensors.Disk Snapshot'.format(label))
+		common.sendData('"{}" EXECUTE Sensors.Disk Snapshot'.format(label))
 	
 	time.sleep(settings.cooldown)
 
-def take_seg_snapshot(lst):
+def takeSegSnapshot(lst):
 	"""
 	Creates a segmentation snapshot with json output from a list of cameras
 	
@@ -1201,13 +1201,13 @@ def take_seg_snapshot(lst):
 	lst (list): List of cameras with segmentation component
 	
 	"""
-	common.flush_buffer()
+	common.flushBuffer()
 	
 	for l in lst:
-		r = common.send_data(['"{}" GET Segmentation.Segmentation boundingBoxes'.format(l), 'NOOP'], read=True)
-		seq_save('bbox', r)
+		r = common.sendData(['"{}" GET Segmentation.Segmentation boundingBoxes'.format(l), 'NOOP'], read=True)
+		seqSave('bbox', r)
 
-def seq_save(pref, raw_data):
+def seqSave(pref, rawData):
 	"""
 	Helper function to mutate raw telnet outputs into json objects
 	
@@ -1217,7 +1217,7 @@ def seq_save(pref, raw_data):
 	# Attributes
 	
 	pref (string): Output file prefix
-	raw_data (list): Data to write
+	rawData (list): Data to write
 	
 	"""
 	noops = 0
@@ -1225,9 +1225,9 @@ def seq_save(pref, raw_data):
 	while len(data) == 0:
 		
 		f = [False, False]
-		raw_data = ('\n'.join(raw_data)).split('\n')
+		rawData = ('\n'.join(rawData)).split('\n')
 		
-		for r in raw_data:
+		for r in rawData:
 			r = r.strip('\n\r')
 			
 			if r == '' or r == 'OK' or r[0:2] == 'OK' or r[0:2] == 'ER':
@@ -1239,7 +1239,7 @@ def seq_save(pref, raw_data):
 			if f[0] == True and f[1] == False:
 				data.append(r)
 			elif f[0] == True and f[1] == True:
-				common.output('More than one object received? {}'.format('\n'.join(raw_data)), 'WARN')
+				common.output('More than one object received? {}'.format('\n'.join(rawData)), 'WARN')
 			
 			if r[-1:] == ']':
 				f[1] = True
@@ -1256,7 +1256,7 @@ def seq_save(pref, raw_data):
 		if len(data) == 0:
 			common.output('Unable to fetch bounding box, retrying...', 'DEBUG')
 			time.sleep(.5)
-			raw_data = common.send_data('NOOP', read=True)
+			rawData = common.sendData('NOOP', read=True)
 		else:
 			# make sure object is valid, otherwise we might need to send another noop to complete it
 			try:
@@ -1265,32 +1265,32 @@ def seq_save(pref, raw_data):
 			except:
 				common.output('Partially received json object, waiting for more...', 'DEBUG')
 				time.sleep(.5)
-				raw_data = common.send_data('NOOP', read=True)
+				rawData = common.sendData('NOOP', read=True)
 		
 		noops += 1
 		
 		if noops > 100:
 			common.output('Limit reached while waiting for json object, skipping index!', 'ERROR')
-			settings.seq_save_i = settings.seq_save_i + 1
+			settings.seqSave_i = settings.seqSave_i + 1
 			return
 	
 	data = ''.join(data)
 	
-	fn = '{}{}_{}.json'.format(settings.local_path, pref, settings.seq_save_i)
+	fn = '{}{}_{}.json'.format(settings.local_path, pref, settings.seqSave_i)
 	
 	if settings.debug:
 		common.output('SEQ Save path: {} prefix: {} data: {}'.format(fn, pref, data), 'DEBUG')
 		d = open(fn + '.debug', 'w')
-		d.write('\r\n'.join(raw_data))
+		d.write('\r\n'.join(rawData))
 		d.close()
 	
 	f = open(fn, 'w')
 	f.write(data)
 	f.close()
-	common.output('Wrote: {}{}_{}.json'.format(settings.local_path, pref, settings.seq_save_i))
-	settings.seq_save_i = settings.seq_save_i + 1
+	common.output('Wrote: {}{}_{}.json'.format(settings.local_path, pref, settings.seqSave_i))
+	settings.seqSave_i = settings.seqSave_i + 1
 
-def add_disk_output(lst, label='disk1'):
+def addDiskOutput(lst, label='disk1'):
 	"""
 	Creates a image output from a existing disk component
 	
@@ -1307,10 +1307,10 @@ def add_disk_output(lst, label='disk1'):
 	"""
 	if settings.skip_disk:
 		return
-	common.send_data('"{}" SET active false'.format(label))
+	common.sendData('"{}" SET active false'.format(label))
 	
 	for l in lst:
-		common.send_data([
+		common.sendData([
 			'CREATE "{}/{}"'.format(label, l.capitalize()),
 			'"{}/{}" ADD Sensors.RenderCameraLink'.format(label, l.capitalize()),
 			'"{}/{}" SET Sensors.RenderCameraLink target "{}"'.format(label, l.capitalize(), l),
@@ -1321,9 +1321,9 @@ def add_disk_output(lst, label='disk1'):
 			'"{}/{}" SET active true'.format(label, l.capitalize())
 		], read=False)
 	
-	common.send_data('"{}" SET active true'.format(label))
+	common.sendData('"{}" SET active true'.format(label))
 
-def ugly_tag_fix(tag):
+def uglyTagFix(tag):
 	x = tag.split('/')[-1]
 	
 	if x[-1:] == 's':
@@ -1331,7 +1331,7 @@ def ugly_tag_fix(tag):
 	
 	return x
 
-def add_random_color(objs, colors=16, colors_weights=14, spawner=False, method='FromList', parts_names=None):
+def addRandomColor(objs, colors=16, colorsWeights=14, spawner=False, method='FromList', partsNames=None):
 	"""
 	Adds random color component to a object or spawner
 	
@@ -1339,10 +1339,10 @@ def add_random_color(objs, colors=16, colors_weights=14, spawner=False, method='
 	
 	objs (list|string): Object or objects to add random color component
 	colors (int): Number of random colors to be assigned, defaults to `16` (ignored if method is `Random`)
-	colors_weights (int): Color changing weight, defaults to `14`
+	colorsWeights (int): Color changing weight, defaults to `14`
 	spawner (bool): Defines if the object(s) is/are spawner or regular objects, defaults to `False`
 	method (string): Defines operation mode, `FromList` will use a fixed list of colors, `Random` will pick a random color everytime, `Lerp` will randomize between 2 colors, defaults to `FromList`
-	parts_names (string): Defines a list of parts to be colorized
+	partsNames (string): Defines a list of parts to be colorized
 	
 	"""
 	
@@ -1361,16 +1361,16 @@ def add_random_color(objs, colors=16, colors_weights=14, spawner=False, method='
 		buf.append('"{}" SET {} randomMethod "{}"'.format(obj, component, method))
 		
 		if method == 'Random':
-			buf.append('"{}" PUSH {} availableColors "{}"'.format(obj, component, get_random_color()))
+			buf.append('"{}" PUSH {} availableColors "{}"'.format(obj, component, getRandomColor()))
 		elif colors > 0:
 			for i in range(0, colors):
-				buf.append('"{}" PUSH {} availableColors "{}"'.format(obj, component, get_random_color()))
+				buf.append('"{}" PUSH {} availableColors "{}"'.format(obj, component, getRandomColor()))
 		
-		if parts_names != None:
-			buf.append('"{}" SET {} partsNames "{}"'.format(obj, component, parts_names))
-		buf.append('"{}" PUSH {} colorsWeights {}'.format(obj, component, colors_weights))
+		if partsNames != None:
+			buf.append('"{}" SET {} partsNames "{}"'.format(obj, component, partsNames))
+		buf.append('"{}" PUSH {} colorsWeights {}'.format(obj, component, colorsWeights))
 	
-	common.send_data(buf, read=False)
+	common.sendData(buf, read=False)
 
 def lcp(
 	add=True,
@@ -1516,9 +1516,9 @@ def lcp(
 	'"{}" SET LCP vignetteParam4 {}'.format(camera, vignetteParam4) if vignetteParam4 != None else ''
 	])
 	
-	common.send_data(buf)
+	common.sendData(buf)
 
-def add_lidar(
+def addLidar(
 	label='Lidar', model='VLP_16',
 	minAz=-180, maxAz=180, minEl=-30, maxEl=30, rpm=900,
 	timingAccuracy='MEDIUM', accuracy='HIGH', disableUDPBroadcast=False,
@@ -1549,7 +1549,7 @@ def add_lidar(
 	localRotation (list): Defines X, Y, Z relative angles to spawn component, defaults to `None`
 	
 	"""
-	common.send_data([
+	common.sendData([
 		'CREATE "{}"'.format(label),
 		
 		'' if position == False else '"{}" SET Transform position ({} {} {})'.format(label, position[0], position[1], position[2]),
@@ -1581,18 +1581,18 @@ def add_lidar(
 		'"{}" SET active true'.format(label)
 	])
 
-def setup_ros_topics(label_root='ROS2', writeLinks=None, readLinks=None):
+def setupROSTopics(labelRoot='ROS2', writeLinks=None, readLinks=None):
 	buf = [
-		'CREATE "{}"'.format(label_root),
-		'"{}" SET active false'.format(label_root),
-		'"{}" ADD Sensors.ROS2'.format(label_root)
+		'CREATE "{}"'.format(labelRoot),
+		'"{}" SET active false'.format(labelRoot),
+		'"{}" ADD Sensors.ROS2'.format(labelRoot)
 	]
 	
 	if writeLinks != None:
 		for lnk in writeLinks:
 			buf.extend([
-				'CREATE "{}/{}"'.format(label_root, lnk['label']),
-				'"{}/{}" ADD Sensors.WriteFieldLink'.format(label_root, lnk['label']),
+				'CREATE "{}/{}"'.format(labelRoot, lnk['label']),
+				'"{}/{}" ADD Sensors.WriteFieldLink'.format(labelRoot, lnk['label']),
 				'''"{}/{}" SET Sensors.WriteFieldLink
 					topicName "{}"
 					target "{}"
@@ -1600,17 +1600,17 @@ def setup_ros_topics(label_root='ROS2', writeLinks=None, readLinks=None):
 					fieldName "{}"
 					intervalSeconds {}
 				'''.format(
-					label_root, lnk['label'], lnk['topic'], lnk['target'],
+					labelRoot, lnk['label'], lnk['topic'], lnk['target'],
 					lnk['component'], lnk['field'], lnk['interval']
 				),
-				'"{}/{}" SET active true'.format(label_root, lnk['label'])
+				'"{}/{}" SET active true'.format(labelRoot, lnk['label'])
 			])
 	
 	if readLinks != None:
 		for lnk in readLinks:
 			buf.extend([
-				'CREATE "{}/{}"'.format(label_root, lnk['label']),
-				'"{}/{}" ADD Sensors.ReadFieldLink'.format(label_root, lnk['label']),
+				'CREATE "{}/{}"'.format(labelRoot, lnk['label']),
+				'"{}/{}" ADD Sensors.ReadFieldLink'.format(labelRoot, lnk['label']),
 				'''"{}/{}" SET Sensors.ReadFieldLink
 					topicName "{}"
 					target "{}"
@@ -1619,10 +1619,10 @@ def setup_ros_topics(label_root='ROS2', writeLinks=None, readLinks=None):
 					intervalSeconds {}
 					onChange true
 				'''.format(
-					label_root, lnk['label'], lnk['topic'], lnk['target'],
+					labelRoot, lnk['label'], lnk['topic'], lnk['target'],
 					lnk['component'], lnk['field'], lnk['interval']
 				),
-				'"{}/{}" SET active true'.format(label_root, lnk['label'])
+				'"{}/{}" SET active true'.format(labelRoot, lnk['label'])
 			])
 			
 			# workaround for cameras, if we're dealing with a targetTexture, the camera must have
@@ -1630,13 +1630,13 @@ def setup_ros_topics(label_root='ROS2', writeLinks=None, readLinks=None):
 			if lnk['field'] == "targetTexture":
 				buf.append('"{}" SET Sensors.RenderCamera alwaysOn true'.format(lnk['target']))
 	
-	buf.append('"{}" SET active true'.format(label_root))
-	common.send_data(buf)
+	buf.append('"{}" SET active true'.format(labelRoot))
+	common.sendData(buf)
 
-def str_to_seg(s):
+def strToSeg(s):
 	return s.replace('+', ' ').replace('_', ' ').split(",")[0].split(" ")[0]
 
-def get_random_color(alpha='FF'):
+def getRandomColor(alpha='FF'):
 	"""
 	Generates a random color with configurable alpha channel value
 	
@@ -1655,7 +1655,7 @@ def get_random_color(alpha='FF'):
 	
 	return '#' + o + alpha
 
-def set_thermal_props(
+def setThermalProps(
 	objs,
 	heatiness=None, reflectivity=None, ambientOffset=None,
 	temperatureValue=None, temperatureBandwidth=None, temperatureMedian=None,
@@ -1681,77 +1681,77 @@ def set_thermal_props(
 		objs = [ objs ]
 	
 	for obj in objs:
-		common.send_data(['"{}" SET active false'.format(obj)], read=False)
+		common.sendData(['"{}" SET active false'.format(obj)], read=False)
 		
 		if heatiness != None:
-			common.send_data([
+			common.sendData([
 				'"{}" SET Thermal.ThermalObjectOverride overrideHeatiness true'.format(obj),
 				'"{}" SET Thermal.ThermalObjectOverride heatiness.value {}'.format(obj, heatiness)
 			], read=False)
 		else:
-			common.send_data([
+			common.sendData([
 				'"{}" SET Thermal.ThermalObjectOverride overrideHeatiness false'.format(obj)
 			], read=False)
 		
 		if reflectivity != None:
-			common.send_data([
+			common.sendData([
 				'"{}" SET Thermal.ThermalObjectOverride overrideReflectivity true'.format(obj),
 				'"{}" SET Thermal.ThermalObjectOverride reflectivity.value {}'.format(obj, reflectivity)
 			], read=False)
 		else:
-			common.send_data([
+			common.sendData([
 				'"{}" SET Thermal.ThermalObjectOverride overrideReflectivity false'.format(obj)
 			], read=False)
 		
 		if ambientOffset != None:
-			common.send_data([
+			common.sendData([
 				'"{}" SET Thermal.ThermalObjectOverride overrideAmbientOffset true'.format(obj),
 				'"{}" SET Thermal.ThermalObjectOverride ambientOffset.value {}'.format(obj, ambientOffset)
 			], read=False)
 		else:
-			common.send_data([
+			common.sendData([
 				'"{}" SET Thermal.ThermalObjectOverride overrideAmbientOffset false'.format(obj)
 			], read=False)
 		
 		if temperatureValue != None or temperatureBandwidth != None or temperatureMedian != None:
-			common.send_data(['"{}" SET Thermal.ThermalObjectOverride overrideTemperature true'.format(obj)], read=False)
+			common.sendData(['"{}" SET Thermal.ThermalObjectOverride overrideTemperature true'.format(obj)], read=False)
 			
 			if temperatureValue != None:
-				common.send_data(['"{}" SET Thermal.ThermalObjectOverride temperature.value {}'.format(obj, temperatureValue)], read=False)
+				common.sendData(['"{}" SET Thermal.ThermalObjectOverride temperature.value {}'.format(obj, temperatureValue)], read=False)
 			if temperatureBandwidth != None:
-				common.send_data(['"{}" SET Thermal.ThermalObjectOverride temperature.bandwidth {}'.format(obj, temperatureBandwidth)], read=False)
+				common.sendData(['"{}" SET Thermal.ThermalObjectOverride temperature.bandwidth {}'.format(obj, temperatureBandwidth)], read=False)
 			if temperatureMedian != None:
-				common.send_data(['"{}" SET Thermal.ThermalObjectOverride temperature.median {}'.format(obj, temperatureMedian)], read=False)
+				common.sendData(['"{}" SET Thermal.ThermalObjectOverride temperature.median {}'.format(obj, temperatureMedian)], read=False)
 		else:
-			common.send_data(['"{}" SET Thermal.ThermalObjectOverride overrideTemperature false'.format(obj)], read=False)
+			common.sendData(['"{}" SET Thermal.ThermalObjectOverride overrideTemperature false'.format(obj)], read=False)
 		
 		if variance != None:
-			common.send_data([
+			common.sendData([
 				'"{}" SET Thermal.ThermalObjectOverride overrideVariance true'.format(obj),
 				'"{}" SET Thermal.ThermalObjectOverride variance.value {}'.format(obj, variance)
 			], read=False)
 		else:
-			common.send_data([
+			common.sendData([
 				'"{}" SET Thermal.ThermalObjectOverride overrideVariance false'.format(obj)
 			], read=False)
 		
-		common.send_data(['"{}" SET active true'.format(obj)], read=False)
+		common.sendData(['"{}" SET active true'.format(obj)], read=False)
 	
-	common.flush_buffer()
+	common.flushBuffer()
 
-def human_spawner(
+def humanSpawner(
 		label='human_walker',
 		goals=None,
 		spawners=None,
 		delay=[0.3, 3],
 		speed=[0.5, 3],
 		limit=20,
-		goal_threshold=5,
-		gender_restriction='None',
+		goalThreshold=5,
+		genderRestriction='None',
 		container='container',
 		prefix='spawner',
-		segmentation_class='Human',
-		require_thermal_clothing=False
+		segmentationClass='Human',
+		requireThermalClothing=False
 	):
 	"""
 	Creates a human walker spawner.
@@ -1766,11 +1766,11 @@ def human_spawner(
 	delay (list): Defines min and max delay for the spawner, defaults to `[0.3, 3]`
 	speed (list): Defines min and max walking speed for humans, defaults to `[0.5, 3]`
 	limit (int): Defines the maximum active humans, defaults to `20`
-	goal_threshold (list): Defines a threshold for goal points, defaults to `5`
-	gender_restriction (string): Defines a gender restriction for human spawner, defaults to `None`, where possible options are `Female` and `Male`
+	goalThreshold (list): Defines a threshold for goal points, defaults to `5`
+	genderRestriction (string): Defines a gender restriction for human spawner, defaults to `None`, where possible options are `Female` and `Male`
 	container (string): Defines a game object name / path where spawned humans will reside, those game objects are dynamic and will be cycled after reaching the goal. Defaults to `container`, when set to `None` will spawn on root.
 	prefix (string): Defines a game object name / path where the human spawner game object and childs will be created, defaults to `spawner`
-	segmentation_class (string): Defines a segmentation class for the spawned objects; Defaults to `Human`, disable this by setting it to `None`. Note that this will be bound to the `container`, if you set `container` to `None` this parameter will be ignored.
+	segmentationClass (string): Defines a segmentation class for the spawned objects; Defaults to `Human`, disable this by setting it to `None`. Note that this will be bound to the `container`, if you set `container` to `None` this parameter will be ignored.
 	"""
 	
 	if goals == None or len(goals) == 0:
@@ -1796,11 +1796,11 @@ def human_spawner(
 		'CREATE "{}points"'.format(prefix),
 		'CREATE "{}points/goals"'.format(prefix),
 		'CREATE "{}points/spawners"'.format(prefix),
-		'CREATE "{}human_spawner"'.format(prefix),
+		'CREATE "{}humanSpawner"'.format(prefix),
 		'CREATE "{}{}"'.format(prefix, container) if container != None else '',
-		'"{}human_spawner" SET active false'.format(prefix),
-		'"{}human_spawner" ADD Humans.Locomotion.WalkerSpawner'.format(prefix),
-		'''"{}human_spawner" SET Humans.Locomotion.WalkerSpawner
+		'"{}humanSpawner" SET active false'.format(prefix),
+		'"{}humanSpawner" ADD Humans.Locomotion.WalkerSpawner'.format(prefix),
+		'''"{}humanSpawner" SET Humans.Locomotion.WalkerSpawner
 			minimumDelayBetweenSpawns {}
 			maximumDelayBetweenSpawns {}
 			minimumSpeed {}
@@ -1809,14 +1809,14 @@ def human_spawner(
 			arriveDistance {}
 			genderRestriction "{}"
 			requireThermalClothing {}
-		'''.format(prefix, delay[0], delay[1], speed[0], speed[1], limit, goal_threshold, gender_restriction, 'true' if require_thermal_clothing == True else 'false'),
-		'"{}human_spawner" SET Humans.Locomotion.WalkerSpawner container "{}{}"'.format(prefix, prefix, container) if container != None else '',
+		'''.format(prefix, delay[0], delay[1], speed[0], speed[1], limit, goalThreshold, genderRestriction, 'true' if requireThermalClothing == True else 'false'),
+		'"{}humanSpawner" SET Humans.Locomotion.WalkerSpawner container "{}{}"'.format(prefix, prefix, container) if container != None else '',
 	])
 	
-	if container != None and segmentation_class != None:
+	if container != None and segmentationClass != None:
 		buf.extend([
 			'"{}{}" ADD Segmentation.ClassGroup'.format(prefix, container),
-			'"{}{}" SET Segmentation.ClassGroup itemsClassName "{}"'.format(prefix, container, segmentation_class)
+			'"{}{}" SET Segmentation.ClassGroup itemsClassName "{}"'.format(prefix, container, segmentationClass)
 		])
 	
 	i = 0
@@ -1825,7 +1825,7 @@ def human_spawner(
 			'CREATE "{}points/goals/g_{}"'.format(prefix, i),
 			'"{}points/goals/g_{}" SET Transform position ({} {} {})'.format(prefix, i, g[0], g[1], g[2]),
 			'"{}points/goals/g_{}" SET active true'.format(prefix, i),
-			'"{}human_spawner" PUSH Humans.Locomotion.WalkerSpawner goalPoints "{}points/goals/g_{}"'.format(prefix, prefix, i)
+			'"{}humanSpawner" PUSH Humans.Locomotion.WalkerSpawner goalPoints "{}points/goals/g_{}"'.format(prefix, prefix, i)
 		])
 		i += 1
 	
@@ -1836,12 +1836,12 @@ def human_spawner(
 			'"{}points/spawners/s_{}" SET Transform position ({} {} {})'.format(prefix, i, s[0], s[1], s[2]),
 			'"{}points/spawners/s_{}" ADD Humans.HumanSpawnPoint'.format(prefix, i),
 			'"{}points/spawners/s_{}" SET active true'.format(prefix, i),
-			'"{}human_spawner" PUSH Humans.Locomotion.WalkerSpawner spawnPoints "{}points/spawners/s_{}"'.format(prefix, prefix, i)
+			'"{}humanSpawner" PUSH Humans.Locomotion.WalkerSpawner spawnPoints "{}points/spawners/s_{}"'.format(prefix, prefix, i)
 		])
 		i += 1
 	
 	buf.extend([
-		'"{}human_spawner" SET active true'.format(prefix),
+		'"{}humanSpawner" SET active true'.format(prefix),
 		'"{}points/goals" SET active true'.format(prefix),
 		'"{}points/spawners" SET active true'.format(prefix),
 		'"{}{}" SET active true'.format(prefix, container) if container != None else '',
@@ -1849,15 +1849,15 @@ def human_spawner(
 		'"{}" SET active true'.format(prefix[0:-1])
 	])
 	
-	common.send_data(buf)
+	common.sendData(buf)
 
 def spawner(
 	types=[], tags=None, scale=[1,1,1], position=[0,0,0],
-	rotation=[0,0,0], limit=50, segmentation_class=None, orbit=False,
-	stick_to_ground=False, collision_check=True, suffix="", flush=False, prefix='spawner',
-	names=None, ugly_fix=True, seed=None, random_colors=None, random_colors_weights=14,
-	method=None, method_parameters=None, min_distance=None, max_distance=None,
-	parts_names=None, auto_segment=False
+	rotation=[0,0,0], limit=50, segmentationClass=None, orbit=False,
+	stickToGround=False, collisionCheck=True, suffix="", flush=False, prefix='spawner',
+	names=None, uglyFix=True, seed=None, randomColors=None, randomColorsWeights=14,
+	method=None, methodParameters=None, minDistance=None, maxDistance=None,
+	partsNames=None, autoSegment=False
 ):
 	"""
 	Creates a torus shaped object spawner
@@ -1870,35 +1870,35 @@ def spawner(
 	position (list): X,Y,Z position of radius spawner
 	rotation (list): X,Y,Z rotation position of radius spawner
 	limit (int): Number of objects to spawn in each of the `types`
-	segmentation_class (list): Defines segmentation classes to be bound to the spawner, this must align with the number of arguments on types, defaults to `None`
+	segmentationClass (list): Defines segmentation classes to be bound to the spawner, this must align with the number of arguments on types, defaults to `None`
 	orbit (bool): Adds orbiting component to spawner
-	stick_to_ground (bool): Forces spawned objects to stick to ground, ideal for irregular ground. defaults to `False`
-	collision_check (bool): Avoids objects from being spawned overlapping eachother and other objects in the scene, defaults to `True`
+	stickToGround (bool): Forces spawned objects to stick to ground, ideal for irregular ground. defaults to `False`
+	collisionCheck (bool): Avoids objects from being spawned overlapping eachother and other objects in the scene, defaults to `True`
 	suffix (string): Adds a suffix string on types
 	flush (bool): Forces a telnet queue flush after spawning, defaults to `False`
 	prefix (string): Defines a root game object to nest types into, defaults to `spawner`
 	names (list): Overrides type caption, must be aligned with the number of arguments on types, defaults to `None`
-	ugly_fix (bool): Ugly fix for asset naming, defaults to `True`
+	uglyFix (bool): Ugly fix for asset naming, defaults to `True`
 	seed (int): Defines a seed number, this forces random values to be equal on different instances, defaults to `None`
-	random_colors (int): Defines a number of random colors to assign to spawner, when set to None disables feature, defaults to `None`, when set to `True` goes full random instead of predefined defined random colors
-	random_colors_weights (int): Defines a weight for color switching, defaults to `14`
+	randomColors (int): Defines a number of random colors to assign to spawner, when set to None disables feature, defaults to `None`, when set to `True` goes full random instead of predefined defined random colors
+	randomColorsWeights (int): Defines a weight for color switching, defaults to `14`
 	method (string): Defines spawner method, defaults to `None`
-	method_parameters (dict): Defines method's parameters, defaults to `None`
-	parts_names (string): Defines a list of parts to be colorized, defaults to `None`
-	auto_segment (bool): Automatically segment objects based on types or tags given, defaults to `False`
+	methodParameters (dict): Defines method's parameters, defaults to `None`
+	partsNames (string): Defines a list of parts to be colorized, defaults to `None`
+	autoSegment (bool): Automatically segment objects based on types or tags given, defaults to `False`
 	
 	"""
 	
 	# convert bool to strings
-	if collision_check == True:
-		collision_check = 'true'
+	if collisionCheck == True:
+		collisionCheck = 'true'
 	else:
-		collision_check = 'false'
+		collisionCheck = 'false'
 	
-	if stick_to_ground == True:
-		stick_to_ground = 'true'
+	if stickToGround == True:
+		stickToGround = 'true'
 	else:
-		stick_to_ground = 'false'
+		stickToGround = 'false'
 	
 	# loop each of the types
 	i = 0
@@ -1908,7 +1908,7 @@ def spawner(
 		else:
 			n = names[i]
 		
-		common.send_data([
+		common.sendData([
 			'CREATE "{}/{}"'.format(prefix, n),
 			'"{}/{}" SET active false'.format(prefix, n),
 			
@@ -1917,82 +1917,82 @@ def spawner(
 		], read=False)
 		
 		if seed != None:
-			common.send_data(['"RandomProps.Random.instance" SET seed {}'.format(seed)], read=False)
+			common.sendData(['"RandomProps.Random.instance" SET seed {}'.format(seed)], read=False)
 		
-		if ugly_fix == True:
+		if uglyFix == True:
 			try:
-				common.send_data(['"{}/{}" SET RandomProps.PropArea tags "{}"'.format(prefix, n, ugly_tag_fix(tags[i]))], read=False)
+				common.sendData(['"{}/{}" SET RandomProps.PropArea tags "{}"'.format(prefix, n, uglyTagFix(tags[i]))], read=False)
 			except:
-				common.send_data(['"{}/{}" SET RandomProps.PropArea tags "{}"'.format(prefix, n, ugly_tag_fix(t))], read=False)
+				common.sendData(['"{}/{}" SET RandomProps.PropArea tags "{}"'.format(prefix, n, uglyTagFix(t))], read=False)
 		else:
-			common.send_data(['"{}/{}" SET RandomProps.PropArea tags "{}"'.format(prefix, n, tags[i])], read=False)
+			common.sendData(['"{}/{}" SET RandomProps.PropArea tags "{}"'.format(prefix, n, tags[i])], read=False)
 		
-		if min_distance != None:
-			common.send_data([
-				'"{}/{}" SET RandomProps.Frustum minDistance {}'.format(prefix, n, min_distance)
+		if minDistance != None:
+			common.sendData([
+				'"{}/{}" SET RandomProps.Frustum minDistance {}'.format(prefix, n, minDistance)
 			], read=False)
 		
-		if max_distance != None:
-			common.send_data([
-				'"{}/{}" SET RandomProps.Frustum maxDistance {}'.format(prefix, n, max_distance)
+		if maxDistance != None:
+			common.sendData([
+				'"{}/{}" SET RandomProps.Frustum maxDistance {}'.format(prefix, n, maxDistance)
 			], read=False)
 		
-		common.send_data([
+		common.sendData([
 			'"{}/{}" SET RandomProps.PropArea async false'.format(prefix, n),
 			'"{}/{}" SET RandomProps.PropArea numberOfProps {}'.format(prefix, n, limit),
 			
-			'"{}/{}" SET RandomProps.PropArea collisionCheck {}'.format(prefix, n, collision_check),
-			'"{}/{}" SET RandomProps.PropArea stickToGround {}'.format(prefix, n, stick_to_ground),
+			'"{}/{}" SET RandomProps.PropArea collisionCheck {}'.format(prefix, n, collisionCheck),
+			'"{}/{}" SET RandomProps.PropArea stickToGround {}'.format(prefix, n, stickToGround),
 		], read=False)
 		
-		if method != None and method_parameters != None:
-			for key in method_parameters:
-				common.send_data('"{}/{}" SET RandomProps.{} {} {}'.format(prefix, n, method, key, method_parameters[key]), read=False)
+		if method != None and methodParameters != None:
+			for key in methodParameters:
+				common.sendData('"{}/{}" SET RandomProps.{} {} {}'.format(prefix, n, method, key, methodParameters[key]), read=False)
 		
-		common.send_data([
+		common.sendData([
 			'"{}/{}" SET Transform position ({} {} {})'.format(prefix, n, position[0], position[1], position[2]) if position != None else '',
 			'"{}/{}" SET Transform eulerAngles ({} {} {})'.format(prefix, n, rotation[0], rotation[1], rotation[2]) if rotation != None else '',
 			'"{}/{}" SET Transform localScale ({} {} {})'.format(prefix, n, scale[0], scale[1], scale[2]) if scale != None else ''
 		], read=False)
 		
-		if segmentation_class == None and auto_segment == True:
-			segmentation_class = str_to_seg(tags[0]) if tags != None else str_to_seg(t)
+		if segmentationClass == None and autoSegment == True:
+			segmentationClass = strToSeg(tags[0]) if tags != None else strToSeg(t)
 		
-		if segmentation_class != None:
-			if isinstance(segmentation_class, list):
-				common.send_data([
+		if segmentationClass != None:
+			if isinstance(segmentationClass, list):
+				common.sendData([
 					'"{}/{}" ADD Segmentation.ClassGroup'.format(prefix, n),
-					'"{}/{}" SET Segmentation.ClassGroup itemsClassName "{}"'.format(prefix, n, segmentation_class[i])
+					'"{}/{}" SET Segmentation.ClassGroup itemsClassName "{}"'.format(prefix, n, segmentationClass[i])
 				], read=False)
 			else:
-				common.send_data([
+				common.sendData([
 					'"{}/{}" ADD Segmentation.ClassGroup'.format(prefix, n),
-					'"{}/{}" SET Segmentation.ClassGroup itemsClassName "{}"'.format(prefix, n, segmentation_class)
+					'"{}/{}" SET Segmentation.ClassGroup itemsClassName "{}"'.format(prefix, n, segmentationClass)
 				], read=False)
 		
 		if orbit == True:
-			common.send_data('cameras SET Orbit target {}/{}'.format(prefix, n), read=False)
+			common.sendData('cameras SET Orbit target {}/{}'.format(prefix, n), read=False)
 		
-		if random_colors != None:
-			if random_colors == True:
-				add_random_color(objs='{}/{}'.format(prefix, n), colors=0, colors_weights=random_colors_weights, spawner=True, method='Random', parts_names=parts_names)
+		if randomColors != None:
+			if randomColors == True:
+				addRandomColor(objs='{}/{}'.format(prefix, n), colors=0, colorsWeights=randomColorsWeights, spawner=True, method='Random', partsNames=partsNames)
 			else:
-				add_random_color(objs='{}/{}'.format(prefix, n), colors=random_colors, colors_weights=random_colors_weights, spawner=True, parts_names=parts_names)
+				addRandomColor(objs='{}/{}'.format(prefix, n), colors=randomColors, colorsWeights=randomColorsWeights, spawner=True, partsNames=partsNames)
 		
-		common.send_data('"{}/{}" SET active true'.format(prefix, n))
+		common.sendData('"{}/{}" SET active true'.format(prefix, n))
 		settings.obj.append('{}/{}'.format(prefix, t))
 		i = i + 1
 	
 	if flush:
-		common.flush_buffer()
+		common.flushBuffer()
 
 
-def spawn_radius_generic(
+def spawnRadiusGeneric(
 	types=[], tags=None, scale=[1,1,1], innerradius=0, radius=500, position=[0,0,0],
-	rotation=[0,0,0], limit=50, segmentation_class=None, orbit=False,
-	stick_to_ground=False, collision_check=True, suffix="", flush=False, prefix='spawner',
-	names=None, ugly_fix=True, seed=None, random_colors=None, random_colors_weights=14,
-	parts_names=None, auto_segment=False
+	rotation=[0,0,0], limit=50, segmentationClass=None, orbit=False,
+	stickToGround=False, collisionCheck=True, suffix="", flush=False, prefix='spawner',
+	names=None, uglyFix=True, seed=None, randomColors=None, randomColorsWeights=14,
+	partsNames=None, autoSegment=False
 ):
 	"""
 	Creates a torus shaped object spawner
@@ -2007,36 +2007,36 @@ def spawn_radius_generic(
 	position (list): X,Y,Z position of radius spawner
 	rotation (list): X,Y,Z rotation position of radius spawner
 	limit (int): Number of objects to spawn in each of the `types`
-	segmentation_class (list): Defines segmentation classes to be bound to the spawner, this must align with the number of arguments on types, defaults to `None`
+	segmentationClass (list): Defines segmentation classes to be bound to the spawner, this must align with the number of arguments on types, defaults to `None`
 	orbit (bool): Adds orbiting component to spawner
-	stick_to_ground (bool): Forces spawned objects to stick to ground, ideal for irregular ground. defaults to `False`
-	collision_check (bool): Avoids objects from being spawned overlapping eachother and other objects in the scene, defaults to `True`
+	stickToGround (bool): Forces spawned objects to stick to ground, ideal for irregular ground. defaults to `False`
+	collisionCheck (bool): Avoids objects from being spawned overlapping eachother and other objects in the scene, defaults to `True`
 	suffix (string): Adds a suffix string on types
 	flush (bool): Forces a telnet queue flush after spawning, defaults to `False`
 	prefix (string): Defines a root game object to nest types into, defaults to `spawner`
 	names (list): Overrides type caption, must be aligned with the number of arguments on types, defaults to `None`
-	ugly_fix (bool): Ugly fix for asset naming, defaults to `True`
+	uglyFix (bool): Ugly fix for asset naming, defaults to `True`
 	seed (int): Defines a seed number, this forces random values to be equal on different instances, defaults to `None`
-	random_colors (int): Defines a number of random colors to assign to spawner, when set to None disables feature, defaults to `None`
-	random_colors_weights (int): Defines a weight for color switching, defaults to `14`
-	parts_names (string): Defines a list of parts to be colorized, defaults to `None`
-	auto_segment (bool): Automatically segment objects based on types or tags given, defaults to `False`
+	randomColors (int): Defines a number of random colors to assign to spawner, when set to None disables feature, defaults to `None`
+	randomColorsWeights (int): Defines a weight for color switching, defaults to `14`
+	partsNames (string): Defines a list of parts to be colorized, defaults to `None`
+	autoSegment (bool): Automatically segment objects based on types or tags given, defaults to `False`
 	
 	"""
 	return spawner(
 		types=types, tags=tags, scale=scale, position=position,
-		rotation=rotation, limit=limit, segmentation_class=segmentation_class, orbit=orbit,
-		stick_to_ground=stick_to_ground, collision_check=collision_check, suffix=suffix, flush=flush, prefix=prefix,
-		names=names, ugly_fix=ugly_fix, seed=seed, random_colors=random_colors, random_colors_weights=random_colors_weights,
-		method='Torus', method_parameters={'innerRadius': innerradius, 'radius': radius},
-		parts_names=parts_names
+		rotation=rotation, limit=limit, segmentationClass=segmentationClass, orbit=orbit,
+		stickToGround=stickToGround, collisionCheck=collisionCheck, suffix=suffix, flush=flush, prefix=prefix,
+		names=names, uglyFix=uglyFix, seed=seed, randomColors=randomColors, randomColorsWeights=randomColorsWeights,
+		method='Torus', methodParameters={'innerRadius': innerradius, 'radius': radius},
+		partsNames=partsNames
 	)
 
-def spawn_rectangle_generic(
+def spawnRectangleGeneric(
 	types=[], tags=None, scale=[1,1,1], a=1, b=500, position=[0,0,0],
-	rotation=[0,0,0], limit=50, segmentation_class=None, orbit=False,
-	stick_to_ground=False, collision_check=True, suffix="", flush=False, prefix='spawner',
-	names=None, seed=None, random_colors=None, random_colors_weights=14, parts_names=None, auto_segment=False
+	rotation=[0,0,0], limit=50, segmentationClass=None, orbit=False,
+	stickToGround=False, collisionCheck=True, suffix="", flush=False, prefix='spawner',
+	names=None, seed=None, randomColors=None, randomColorsWeights=14, partsNames=None, autoSegment=False
 ):
 	"""
 	Creates a rectangle shaped object spawner
@@ -2051,30 +2051,30 @@ def spawn_rectangle_generic(
 	position (list): X,Y,Z position of rectangle spawner
 	rotation (list): X,Y,Z rotation position of rectangle spawner
 	limit (int): Number of objects to spawn in each of the `types`
-	segmentation_class (list): Defines segmentation classes to be bound to the spawner, this must align with the number of arguments on types, defaults to `None`
+	segmentationClass (list): Defines segmentation classes to be bound to the spawner, this must align with the number of arguments on types, defaults to `None`
 	orbit (bool): Adds orbiting component to spawner
-	stick_to_ground (bool): Forces spawned objects to stick to ground, ideal for irregular ground. defaults to `False`
-	collision_check (bool): Avoids objects from being spawned overlapping eachother and other objects in the scene, defaults to `True`
+	stickToGround (bool): Forces spawned objects to stick to ground, ideal for irregular ground. defaults to `False`
+	collisionCheck (bool): Avoids objects from being spawned overlapping eachother and other objects in the scene, defaults to `True`
 	suffix (string): Adds a suffix string on types
 	flush (bool): Forces a telnet queue flush after spawning, defaults to `False`
 	prefix (string): Defines a root game object to nest types into, defaults to `spawner`
 	names (list): Overrides type caption, must be aligned with the number of arguments on types, defaults to `None`
 	seed (int): Defines a seed number, this forces random values to be equal on different instances, defaults to `None`
-	random_colors (int): Defines a number of random colors to assign to spawner, when set to None disables feature, defaults to `None`
-	random_colors_weights (int): Defines a weight for color switching, defaults to `14`
-	parts_names (string): Defines a list of parts to be colorized, defaults to `None`
-	auto_segment (bool): Automatically segment objects based on types or tags given, defaults to `False`
+	randomColors (int): Defines a number of random colors to assign to spawner, when set to None disables feature, defaults to `None`
+	randomColorsWeights (int): Defines a weight for color switching, defaults to `14`
+	partsNames (string): Defines a list of parts to be colorized, defaults to `None`
+	autoSegment (bool): Automatically segment objects based on types or tags given, defaults to `False`
 	
 	"""
 	return spawner(
 		types=types, tags=tags, scale=scale, position=position,
-		rotation=rotation, limit=limit, segmentation_class=segmentation_class, orbit=orbit,
-		stick_to_ground=stick_to_ground, collision_check=collision_check, suffix=suffix, flush=flush, prefix=prefix,
-		names=names, ugly_fix=ugly_fix, seed=seed, random_colors=random_colors, random_colors_weights=random_colors_weights,
-		method='Rectangle', method_parameters={'a': a, 'b': b}, parts_names=parts_names
+		rotation=rotation, limit=limit, segmentationClass=segmentationClass, orbit=orbit,
+		stickToGround=stickToGround, collisionCheck=collisionCheck, suffix=suffix, flush=flush, prefix=prefix,
+		names=names, uglyFix=uglyFix, seed=seed, randomColors=randomColors, randomColorsWeights=randomColorsWeights,
+		method='Rectangle', methodParameters={'a': a, 'b': b}, partsNames=partsNames
 	)
 
-def spawn_flat_grid(types=[], size=[1000,1000], position=[0,0,0], scale=[1,1,1], prefix='spawner'):
+def spawnFlatGrid(types=[], size=[1000,1000], position=[0,0,0], scale=[1,1,1], prefix='spawner'):
 	"""
 	Creates a flat grid shaped object spawner
 	
@@ -2091,12 +2091,12 @@ def spawn_flat_grid(types=[], size=[1000,1000], position=[0,0,0], scale=[1,1,1],
 	for t in types:
 		n = t.replace(' ', '_')
 		
-		common.send_data([
+		common.sendData([
 			'CREATE "{}/{}"'.format(prefix, n),
 			'"{}/{}" SET active false'.format(prefix, n),
 			'"{}/{}" ADD RandomProps.FillGrid'.format(prefix, n),
 			'"{}/{}" SET Transform position ({} {} {})'.format(prefix, n, position[0], position[1], position[2]),
-			'"{}/{}" SET RandomProps.FillGrid tags "{}"'.format(prefix, n, ugly_tag_fix(n)),
+			'"{}/{}" SET RandomProps.FillGrid tags "{}"'.format(prefix, n, uglyTagFix(n)),
 			'"{}/{}" SET RandomProps.FillGrid size ({} {})'.format(prefix, n, size[0], size[1]),
 			'"{}/{}" SET active true'.format(prefix, n),
 			'"{}/{}" SET Transform localScale ({} {} {})'.format(prefix, n, scale[0], scale[1], scale[2])
@@ -2104,11 +2104,11 @@ def spawn_flat_grid(types=[], size=[1000,1000], position=[0,0,0], scale=[1,1,1],
 		
 		settings.obj.append('{}/{}'.format(prefix, t))
 	
-	common.flush_buffer()
+	common.flushBuffer()
 
-def spawn_parking_lot(
-	limit, fixed=False, dist_h=8, dist_v=3, dist_lim=30,
-	p_x=-15, p_z=-30, p_y=-5, prefix='cars', segment='Car'
+def spawnParkingLot(
+	limit, fixed=False, distH=8, distV=3, distLimit=30,
+	pX=-15, pZ=-30, pY=-5, prefix='cars', segment='Car'
 ):
 	"""
 	Creates a parking lot using a list of cars
@@ -2117,13 +2117,13 @@ def spawn_parking_lot(
 	
 	limit (int): Number of objects to spawn in each of the `types`
 	fixed (bool): Sets if script should follow cars_lst instead of picking a random car from the available assets, defaults to `False`
-	dist_h (int): Horizontal distance, defaults to `8`
-	dist_v (int): Vertical distance, defaults to `3`
-	dist_lim (int): Distance limit, defaults to `30`
+	distH (int): Horizontal distance, defaults to `8`
+	distV (int): Vertical distance, defaults to `3`
+	distLimit (int): Distance limit, defaults to `30`
 	
-	p_x (float): Starting X coordintate, defaults to `-15`
-	p_y (float): Starting Y coordintate, defaults to `-5`
-	p_z (float): Starting Z coordintate, defaults to `-30`
+	pX (float): Starting X coordintate, defaults to `-15`
+	pY (float): Starting Y coordintate, defaults to `-5`
+	pZ (float): Starting Z coordintate, defaults to `-30`
 	
 	prefix (string): Defines a root game object to nest types into, defaults to `cars`
 	segment (string): Defines a segmentation class, defaults to `Car`
@@ -2134,7 +2134,7 @@ def spawn_parking_lot(
 	j = len(cars_lst)
 	
 	# cars common parent
-	# common.send_data('CREATE cars')
+	# common.sendData('CREATE cars')
 	# settings.obj.append('cars')
 	
 	while k < limit:
@@ -2147,25 +2147,25 @@ def spawn_parking_lot(
 		else:
 			carID = '?'
 		
-		common.send_data([
+		common.sendData([
 			'CREATE "Cars/{}" FROM "cars" AS "{}/car_{}"'.format(carID, prefix, k),
 			'"{}/car_{}" ADD Segmentation.ClassGroup'.format(prefix, k),
 			'"{}/car_{}" SET Segmentation.ClassGroup itemsClassName "{}"'.format(prefix, k, segment),
-			'"{}/car_{}" SET Transform position ({} {} {})'.format(prefix, k, p_x + settings.X_COMP, p_y, p_z + settings.Z_COMP),
+			'"{}/car_{}" SET Transform position ({} {} {})'.format(prefix, k, pX + settings.X_COMP, pY, pZ + settings.Z_COMP),
 			'"{}/car_{}" SET active true'.format(prefix, k)
 		], read=False)
 		
 		settings.obj.append('{}/car_{}'.format(prefix, k))
 		k += 1
-		p_z += dist_h
+		pZ += distH
 		
-		if p_z > dist_lim:
-			p_z = -dist_lim
-			p_x += dist_v
+		if pZ > distLimit:
+			pZ = -distLimit
+			pX += distV
 	
-	common.flush_buffer()
+	common.flushBuffer()
 
-def spawn_misc_objs(destroy=False, prefix='spawner', seed=None):
+def spawnMiscObjs(destroy=False, prefix='spawner', seed=None):
 	"""
 	Spawns city / animals / cars objects
 	
@@ -2177,34 +2177,34 @@ def spawn_misc_objs(destroy=False, prefix='spawner', seed=None):
 	
 	"""
 	if destroy == True:
-		common.send_data([
+		common.sendData([
 			'DELETE "{}/city"'.format(prefix),
 			'DELETE "{}/animals"'.format(prefix),
 			'DELETE "{}/cars"'.format(prefix)
 		], read=False)
 		
-		common.flush_buffer()
+		common.flushBuffer()
 	
-	spawn_radius_generic(['city/nature/trees'], tags=['tree'], collision_check=False, limit=random.randint(100, 350), radius=80, innerradius=random.randint(30, 50), position=[0,10,0], prefix=prefix, seed=seed)
-	spawn_radius_generic(['city/signs'], tags=['sign'], limit=random.randint(80, 250), radius=random.randint(15, 40), innerradius=0, position=[0,10,0], prefix=prefix, seed=seed)
-	spawn_radius_generic(['animals'], tags=['animals'], limit=random.randint(150, 250), radius=random.randint(40, 80), innerradius=0, position=[0,10,0], prefix=prefix, seed=seed)
-	spawn_radius_generic(['city/buildings'], tags=['building'], limit=random.randint(50, 150), radius=335, innerradius=random.randint(80, 100), position=[0,10,0], prefix=prefix, seed=seed)
-	spawn_radius_generic(['cars'], tags=['car'], limit=random.randint(50, 150), radius=50, innerradius=0, segmentation_class="Car", orbit=True, position=[0,10,0], prefix=prefix, seed=seed)
+	spawnRadiusGeneric(['city/nature/trees'], tags=['tree'], collisionCheck=False, limit=random.randint(100, 350), radius=80, innerradius=random.randint(30, 50), position=[0,10,0], prefix=prefix, seed=seed)
+	spawnRadiusGeneric(['city/signs'], tags=['sign'], limit=random.randint(80, 250), radius=random.randint(15, 40), innerradius=0, position=[0,10,0], prefix=prefix, seed=seed)
+	spawnRadiusGeneric(['animals'], tags=['animals'], limit=random.randint(150, 250), radius=random.randint(40, 80), innerradius=0, position=[0,10,0], prefix=prefix, seed=seed)
+	spawnRadiusGeneric(['city/buildings'], tags=['building'], limit=random.randint(50, 150), radius=335, innerradius=random.randint(80, 100), position=[0,10,0], prefix=prefix, seed=seed)
+	spawnRadiusGeneric(['cars'], tags=['car'], limit=random.randint(50, 150), radius=50, innerradius=0, segmentationClass="Car", orbit=True, position=[0,10,0], prefix=prefix, seed=seed)
 
-	spawn_radius_generic(['city/ground'], tags=['ground'], suffix='_0', limit=3, radius=75, innerradius=0, scale=[1,1,1], position=[0,0,0], collision_check=False, prefix=prefix, seed=seed)
+	spawnRadiusGeneric(['city/ground'], tags=['ground'], suffix='_0', limit=3, radius=75, innerradius=0, scale=[1,1,1], position=[0,0,0], collisionCheck=False, prefix=prefix, seed=seed)
 
-def spawn_drone_objs(
-	destroy=False, ground_position=[84,0,0], ground_limit=0,
-	dist_h=25, dist_v=25, dist_lim=150, p_x=-150, p_z=-350, p_y=0,
-	birds_radius=120, birds_innerradius=0, cars_radius=50, cars_innerradius=5,
-	trees_limit=[150,200], buildings_radius=120, buildings_innerradius=60, trees_radius=80, trees_innerradius=10,
-	buildings_limit=[150,150], birds_limit=[25,100], cars_limit=[75,75], drones_limit=[80,200], prefix='spawner',
-	trees_tags=['tree'], buildings_tags=['building'], birds_tags=['bird'], cars_tags=['car'], drones_tags=['drones'],
-	trees_colors=None, buildings_colors=None, birds_colors=None, cars_colors=None, drones_colors=None,
-	trees_parts_names=None, buildings_parts_names=None, birds_parts_names=None, cars_parts_names=None, drones_parts_names=None,
-	# ground_segment='VOID', trees_segment='VOID', buildings_segment='VOID', birds_segment='VOID', cars_segment='VOID', drones_segment='DRONE',
-	# ground_segment='GROUND', trees_segment='TREE', buildings_segment='BUILDING', birds_segment='BIRD', cars_segment='CAR', drones_segment='DRONE',
-	ground_segment=None, trees_segment=None, buildings_segment=None, birds_segment=None, cars_segment=None, drones_segment='DRONE',
+def spawnDroneObjs(
+	destroy=False, ground_position=[84,0,0], groundLimit=0,
+	distH=25, distV=25, distLimit=150, pX=-150, pZ=-350, pY=0,
+	birdsRadius=120, birdsInnerRadius=0, carsRadius=50, carsInnerRadius=5,
+	treesLimit=[150,200], buildingsRadius=120, buildingsInnerRadius=60, treesRadius=80, treesInnerRadius=10,
+	buildingsLimit=[150,150], birdsLimit=[25,100], carsLimit=[75,75], dronesLimit=[80,200], prefix='spawner',
+	treesTags=['tree'], buildingsTags=['building'], birdsTags=['bird'], carsTags=['car'], dronesTags=['drones'],
+	trees_colors=None, buildings_colors=None, birds_colors=None, cars_colors=None, dronesColors=None,
+	treesPartsNames=None, buildingsPartsNames=None, birdsPartsNames=None, carsPartsNames=None, dronesPartsNames=None,
+	# groundSegment='VOID', treesSegment='VOID', buildingsSegment='VOID', birdsSegment='VOID', carsSegment='VOID', dronesSegment='DRONE',
+	# groundSegment='GROUND', treesSegment='TREE', buildingsSegment='BUILDING', birdsSegment='BIRD', carsSegment='CAR', dronesSegment='DRONE',
+	groundSegment=None, treesSegment=None, buildingsSegment=None, birdsSegment=None, carsSegment=None, dronesSegment='DRONE',
 	thermal=None, seed=None
 ):
 	"""
@@ -2217,7 +2217,7 @@ def spawn_drone_objs(
 	seed (int): Defines a seed number, this forces random values to be equal on different instances, defaults to `None`
 	"""
 	if destroy == True:
-		common.send_data([
+		common.sendData([
 			'DELETE "{}/city/nature/trees"'.format(prefix),
 			'DELETE "{}/city/buildings"'.format(prefix),
 			'DELETE "{}/animals/birds"'.format(prefix),
@@ -2228,101 +2228,101 @@ def spawn_drone_objs(
 		k = 0
 		idx = 0
 		
-		common.send_data([
+		common.sendData([
 			'CREATE "city"',
 			'"city" SET Transform position ({} {} {})'.format(ground_position[0], ground_position[1], ground_position[2]),
 			'"city" SET active false'
 		], read=False)
 		
-		while k < ground_limit:
-			common.send_data([
+		while k < groundLimit:
+			common.sendData([
 				'CREATE city/ground_{}" city/ground/{}'.format(k, random.choice(ground_lst)),
-				'"city/ground_{}" SET Transform position ({} {} {})'.format(k, p_x + settings.X_COMP, p_y, p_z + settings.Z_COMP),
+				'"city/ground_{}" SET Transform position ({} {} {})'.format(k, pX + settings.X_COMP, pY, pZ + settings.Z_COMP),
 				'"city/ground_{}" SET Transform localScale ({} {} {})'.format(k, 3, 3, 3),
 				'"city/ground_{}" SET active true'.format(k)
 			], read=False)
 			settings.obj.append('city/ground_{}'.format(k))
 			k += 1
-			p_z += dist_h
+			pZ += distH
 			
-			if p_z > dist_lim:
-				p_z = -dist_lim
-				p_x += dist_v
+			if pZ > distLimit:
+				pZ = -distLimit
+				pX += distV
 	
-	if ground_segment != None:
-		common.send_data([
+	if groundSegment != None:
+		common.sendData([
 			'"{}" ADD Segmentation.ClassGroup'.format('city'),
-			'"{}" SET Segmentation.ClassGroup itemsClassName "{}"'.format('city', ground_segment)
+			'"{}" SET Segmentation.ClassGroup itemsClassName "{}"'.format('city', groundSegment)
 		])
 	
-	spawn_radius_generic(['city/ground'], tags=['ground'], limit=300, radius=150, innerradius=0, scale=[3,3,3], position=[0,0,0], collision_check=False, prefix=prefix, seed=seed)
-	spawn_radius_generic(['humans'], tags=['human, +random'], suffix='_0', limit=40, radius=30, innerradius=2, position=[0,0,0], collision_check=False, prefix=prefix, seed=seed)
-	spawn_radius_generic(['city/nature/trees'], parts_names=trees_parts_names, segmentation_class=trees_segment, random_colors=trees_colors, tags=trees_tags, collision_check=False, limit=random.randint(trees_limit[0], trees_limit[1]), radius=trees_radius, innerradius=trees_innerradius, position=[0,0,0], prefix=prefix, seed=seed)
-	spawn_radius_generic(['city/buildings'], parts_names=buildings_parts_names, segmentation_class=buildings_segment, random_colors=buildings_colors, tags=buildings_tags, stick_to_ground=False, collision_check=False, limit=random.randint(buildings_limit[0], buildings_limit[1]), radius=buildings_radius, innerradius=buildings_innerradius, position=[0,0,0], prefix=prefix, seed=seed)
-#	spawn_radius_generic(['buildings_001'], parts_names=buildings_parts_names, segmentation_class=buildings_segment, random_colors=buildings_colors, tags=buildings_tags, stick_to_ground=False, collision_check=False, limit=random.randint(buildings_limit[0], buildings_limit[1]), radius=buildings_radius, innerradius=buildings_innerradius, position=[0,0,0], prefix=prefix, seed=seed)
-#	spawn_radius_generic(['buildings_002'], parts_names=buildings_parts_names, segmentation_class=buildings_segment, random_colors=buildings_colors, tags=buildings_tags, stick_to_ground=False, collision_check=False, limit=random.randint(buildings_limit[0], buildings_limit[1]), radius=buildings_radius, innerradius=buildings_innerradius, position=[0,0,0], prefix=prefix, seed=seed)
-#	spawn_radius_generic(['buildings_003'], parts_names=buildings_parts_names, segmentation_class=buildings_segment, random_colors=buildings_colors, tags=buildings_tags, stick_to_ground=False, collision_check=False, limit=random.randint(buildings_limit[0], buildings_limit[1]), radius=buildings_radius, innerradius=buildings_innerradius, position=[0,0,0], prefix=prefix, seed=seed)
-	spawn_radius_generic(['animals/birds'], parts_names=birds_parts_names, segmentation_class=birds_segment, random_colors=birds_colors, tags=birds_tags, limit=random.randint(birds_limit[0], birds_limit[1]), radius=birds_radius, innerradius=birds_innerradius, position=[0,random.randint(15,95),0], prefix=prefix, seed=seed)
-	spawn_radius_generic(['cars'], parts_names=cars_parts_names, segmentation_class=cars_segment, random_colors=cars_colors, tags=cars_tags, collision_check=False, limit=random.randint(cars_limit[0], cars_limit[1]), radius=cars_radius, innerradius=cars_innerradius, position=[0,0,0], prefix=prefix, seed=seed)
-	spawn_radius_generic(['roadsigns'], tags=['roadsign'], limit=250, radius=80, collision_check=False, innerradius=15, position=[0,0,0], prefix=prefix, seed=seed)
+	spawnRadiusGeneric(['city/ground'], tags=['ground'], limit=300, radius=150, innerradius=0, scale=[3,3,3], position=[0,0,0], collisionCheck=False, prefix=prefix, seed=seed)
+	spawnRadiusGeneric(['humans'], tags=['human, +random'], suffix='_0', limit=40, radius=30, innerradius=2, position=[0,0,0], collisionCheck=False, prefix=prefix, seed=seed)
+	spawnRadiusGeneric(['city/nature/trees'], partsNames=treesPartsNames, segmentationClass=treesSegment, randomColors=trees_colors, tags=treesTags, collisionCheck=False, limit=random.randint(treesLimit[0], treesLimit[1]), radius=treesRadius, innerradius=treesInnerRadius, position=[0,0,0], prefix=prefix, seed=seed)
+	spawnRadiusGeneric(['city/buildings'], partsNames=buildingsPartsNames, segmentationClass=buildingsSegment, randomColors=buildings_colors, tags=buildingsTags, stickToGround=False, collisionCheck=False, limit=random.randint(buildingsLimit[0], buildingsLimit[1]), radius=buildingsRadius, innerradius=buildingsInnerRadius, position=[0,0,0], prefix=prefix, seed=seed)
+#	spawnRadiusGeneric(['buildings_001'], partsNames=buildingsPartsNames, segmentationClass=buildingsSegment, randomColors=buildings_colors, tags=buildingsTags, stickToGround=False, collisionCheck=False, limit=random.randint(buildingsLimit[0], buildingsLimit[1]), radius=buildingsRadius, innerradius=buildingsInnerRadius, position=[0,0,0], prefix=prefix, seed=seed)
+#	spawnRadiusGeneric(['buildings_002'], partsNames=buildingsPartsNames, segmentationClass=buildingsSegment, randomColors=buildings_colors, tags=buildingsTags, stickToGround=False, collisionCheck=False, limit=random.randint(buildingsLimit[0], buildingsLimit[1]), radius=buildingsRadius, innerradius=buildingsInnerRadius, position=[0,0,0], prefix=prefix, seed=seed)
+#	spawnRadiusGeneric(['buildings_003'], partsNames=buildingsPartsNames, segmentationClass=buildingsSegment, randomColors=buildings_colors, tags=buildingsTags, stickToGround=False, collisionCheck=False, limit=random.randint(buildingsLimit[0], buildingsLimit[1]), radius=buildingsRadius, innerradius=buildingsInnerRadius, position=[0,0,0], prefix=prefix, seed=seed)
+	spawnRadiusGeneric(['animals/birds'], partsNames=birdsPartsNames, segmentationClass=birdsSegment, randomColors=birds_colors, tags=birdsTags, limit=random.randint(birdsLimit[0], birdsLimit[1]), radius=birdsRadius, innerradius=birdsInnerRadius, position=[0,random.randint(15,95),0], prefix=prefix, seed=seed)
+	spawnRadiusGeneric(['cars'], partsNames=carsPartsNames, segmentationClass=carsSegment, randomColors=cars_colors, tags=carsTags, collisionCheck=False, limit=random.randint(carsLimit[0], carsLimit[1]), radius=carsRadius, innerradius=carsInnerRadius, position=[0,0,0], prefix=prefix, seed=seed)
+	spawnRadiusGeneric(['roadsigns'], tags=['roadsign'], limit=250, radius=80, collisionCheck=False, innerradius=15, position=[0,0,0], prefix=prefix, seed=seed)
 	
 	
-	if drones_limit[1] > 0:
-		# spawn_radius_generic(['drones'], segmentation_class=drones_segment, random_colors=drones_colors, tags=drones_tags, ugly_fix=False, limit=random.randint(drones_limit[0], drones_limit[1]), radius=random.randint(30,50), innerradius=0, position=[0,0,0], prefix=prefix, seed=seed)
+	if dronesLimit[1] > 0:
+		# spawnRadiusGeneric(['drones'], segmentationClass=dronesSegment, randomColors=dronesColors, tags=dronesTags, uglyFix=False, limit=random.randint(dronesLimit[0], dronesLimit[1]), radius=random.randint(30,50), innerradius=0, position=[0,0,0], prefix=prefix, seed=seed)
 		spawner(
-			['drones'], segmentation_class=drones_segment, parts_names=drones_parts_names, random_colors=drones_colors, tags=drones_tags, ugly_fix=False, limit=random.randint(drones_limit[0], drones_limit[1]),
+			['drones'], segmentationClass=dronesSegment, partsNames=dronesPartsNames, randomColors=dronesColors, tags=dronesTags, uglyFix=False, limit=random.randint(dronesLimit[0], dronesLimit[1]),
 			# prefix=prefix,
 			# position=[0,0,0],
 			position=None,
 			prefix='cameras/spawner',
 			seed=seed,
 			method='Frustum',
-			method_parameters={'cam': '"cameras/cameraRGB"'},
-			min_distance=2,
-			max_distance=5,
+			methodParameters={'cam': '"cameras/cameraRGB"'},
+			minDistance=2,
+			maxDistance=5,
 			
 		)
 	
 	if thermal != None:
-		common.send_data([
+		common.sendData([
 			'"city" ADD Thermal.ThermalObjectOverride',
 			'"city" ADD Thermal.ThermalObjectBehaviour',
 			'"city" SET Thermal.ThermalObjectBehaviour profile "{}"'.format(thermal)
 		])
 		
-		if not any('thermal' in s for s in birds_tags) and birds_limit[1] > 0:
-			common.send_data([
+		if not any('thermal' in s for s in birdsTags) and birdsLimit[1] > 0:
+			common.sendData([
 				'"{}/animals" ADD Thermal.ThermalObjectOverride'.format(prefix),
 				'"{}/animals" ADD Thermal.ThermalObjectBehaviour'.format(prefix),
 				'"{}/animals" SET Thermal.ThermalObjectBehaviour profile "{}"'.format(prefix, thermal)
 			], read=False)
 		
-		if not any('thermal' in s for s in cars_tags) and cars_limit[1] > 0:
-			common.send_data([
+		if not any('thermal' in s for s in carsTags) and carsLimit[1] > 0:
+			common.sendData([
 				'"{}/cars" ADD Thermal.ThermalObjectOverride'.format(prefix),
 				'"{}/cars" ADD Thermal.ThermalObjectBehaviour'.format(prefix),
 				'"{}/cars" SET Thermal.ThermalObjectBehaviour profile "{}"'.format(prefix, thermal)
 			], read=False)
 		
-		if not any('thermal' in s for s in drones_tags) and drones_limit[1] > 0:
-			common.send_data([
+		if not any('thermal' in s for s in dronesTags) and dronesLimit[1] > 0:
+			common.sendData([
 				'"{}/drones" ADD Thermal.ThermalObjectOverride'.format(prefix),
 				'"{}/drones" ADD Thermal.ThermalObjectBehaviour'.format(prefix),
 				'"{}/drones" SET Thermal.ThermalObjectBehaviour profile "{}"'.format(prefix, thermal)
 			], read=False)
 	
-	common.send_data([
+	common.sendData([
 		'"city" SET active true'
 	], read=True)
 
-def spawn_drone_objs_alt(
-	destroy=False, ground_limit=204,
-	dist_h=120, dist_v=120, dist_lim=1000,
-	p_x=-20, p_z=-1000, p_y=0, prefix='spawner',
+def spawnDroneObjs_alt(
+	destroy=False, groundLimit=204,
+	distH=120, distV=120, distLimit=1000,
+	pX=-20, pZ=-1000, pY=0, prefix='spawner',
 	seed=None
 ):
 	if destroy == True:
-		common.send_data([
+		common.sendData([
 			'DELETE "{}/city/nature/trees"'.format(prefix),
 			'DELETE "{}/city/buildings"'.format(prefix),
 			'DELETE "{}/animals/birds"'.format(prefix),
@@ -2333,30 +2333,30 @@ def spawn_drone_objs_alt(
 		k = 0
 		idx = 0
 		
-		while k < ground_limit:
-			common.send_data([
+		while k < groundLimit:
+			common.sendData([
 				'CREATE "city/ground_{}" city/ground/{}'.format(k, random.choice(ground_lst)),
-				'"city/ground_{}" SET Transform position ({} {} {})'.format(k, p_x + settings.X_COMP, p_y, p_z + settings.Z_COMP),
+				'"city/ground_{}" SET Transform position ({} {} {})'.format(k, pX + settings.X_COMP, pY, pZ + settings.Z_COMP),
 				'"city/ground_{}" SET Transform localScale ({} {} {})'.format(k, 12, 12, 12),
 				'"city/ground_{}" SET active true'.format(k)
 			], read=False)
 			settings.obj.append('city/ground_{}'.format(k))
 			k += 1
-			p_z += dist_h
+			pZ += distH
 			
-			if p_z > dist_lim:
-				p_z = -dist_lim
-				p_x += dist_v
+			if pZ > distLimit:
+				pZ = -distLimit
+				pX += distV
 	
-	spawn_radius_generic(['city/nature/trees'], tags=['tree'], limit=random.randint(600,600), radius=80, innerradius=30, position=[0,0,0], collision_check=False, prefix=prefix, seed=seed)
-	spawn_radius_generic(['city/buildings'], tags=['building'], limit=random.randint(10,10), radius=335, innerradius=100, position=[0,0,0], collision_check=False, prefix=prefix, seed=seed)
-	spawn_radius_generic(['animals/birds'], tags=['bird'], limit=random.randint(10,10), radius=random.randint(80,110), innerradius=0, position=[0,random.randint(15,95),0], prefix=prefix, seed=seed)
-	spawn_radius_generic(['cars'], tags=['car'], limit=random.randint(5, 10), radius=50, innerradius=5, position=[0,0,0], prefix=prefix, seed=seed)
-	spawn_radius_generic(['drones/white'], limit=random.randint(80,80), radius=random.randint(80,110), innerradius=0, position=[0,random.randint(15,65),0], segmentation_class="Car", prefix=prefix, seed=seed)
+	spawnRadiusGeneric(['city/nature/trees'], tags=['tree'], limit=random.randint(600,600), radius=80, innerradius=30, position=[0,0,0], collisionCheck=False, prefix=prefix, seed=seed)
+	spawnRadiusGeneric(['city/buildings'], tags=['building'], limit=random.randint(10,10), radius=335, innerradius=100, position=[0,0,0], collisionCheck=False, prefix=prefix, seed=seed)
+	spawnRadiusGeneric(['animals/birds'], tags=['bird'], limit=random.randint(10,10), radius=random.randint(80,110), innerradius=0, position=[0,random.randint(15,95),0], prefix=prefix, seed=seed)
+	spawnRadiusGeneric(['cars'], tags=['car'], limit=random.randint(5, 10), radius=50, innerradius=5, position=[0,0,0], prefix=prefix, seed=seed)
+	spawnRadiusGeneric(['drones/white'], limit=random.randint(80,80), radius=random.randint(80,110), innerradius=0, position=[0,random.randint(15,65),0], segmentationClass="Car", prefix=prefix, seed=seed)
 	
-	common.flush_buffer()
+	common.flushBuffer()
 
-def spawn_animals_objs(destroy=False, prefix='spawner', seed=None):
+def spawnAnimalsObjs(destroy=False, prefix='spawner', seed=None):
 	"""
 	Spawns trees and animals
 	
@@ -2367,12 +2367,12 @@ def spawn_animals_objs(destroy=False, prefix='spawner', seed=None):
 	seed (int): Defines a seed number, this forces random values to be equal on different instances, defaults to `None`
 	"""
 	if destroy == True:
-		common.send_data([
+		common.sendData([
 			'DELETE "{}/city"'.format(prefix),
 			'DELETE "{}/animals"'.format(prefix)
 		], read=False)
 	
-	spawn_radius_generic(['city/nature/trees'], tags=['tree'], collision_check=True, stick_to_ground=True, limit=random.randint(150, 400), radius=80, innerradius=random.randint(30, 50), position=[0,5,0], prefix=prefix, seed=seed)
-	spawn_radius_generic(['animals'], tags=['animal'], collision_check=True, stick_to_ground=True, limit=random.randint(200, 350), radius=random.randint(40, 80), innerradius=0, position=[0,5,0], orbit=True, prefix=prefix, seed=seed)
+	spawnRadiusGeneric(['city/nature/trees'], tags=['tree'], collisionCheck=True, stickToGround=True, limit=random.randint(150, 400), radius=80, innerradius=random.randint(30, 50), position=[0,5,0], prefix=prefix, seed=seed)
+	spawnRadiusGeneric(['animals'], tags=['animal'], collisionCheck=True, stickToGround=True, limit=random.randint(200, 350), radius=random.randint(40, 80), innerradius=0, position=[0,5,0], orbit=True, prefix=prefix, seed=seed)
 	
-	common.flush_buffer()
+	common.flushBuffer()

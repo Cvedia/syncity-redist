@@ -18,12 +18,12 @@ def run():
 	obj = 'Cars/VW_Golf_V/VW_Golf_V'
 	
 	if settings.skip_setup == False:
-		helpers.global_camera_setup()
-		helpers.add_camera_rgb(width=4096, height=3072, pp='EnviroFX')
-		helpers.add_camera_seg(segments=['Car'], lookupTable=[['Car', 'red']])
-		helpers.global_disk_setup()
-		helpers.add_disk_output(mycams)
-		common.send_data([
+		helpers.globalCameraSetup()
+		helpers.addCameraRGB(width=4096, height=3072, pp='EnviroFX')
+		helpers.addCameraSeg(segments=['Car'], lookupTable=[['Car', 'red']])
+		helpers.globalDiskSetup()
+		helpers.addDiskOutput(mycams)
+		common.sendData([
 			'CREATE "obj/subject" {}'.format(obj),
 			'"obj" SET active false',
 			'"obj/subject" SET Transform position ({} {} {})'.format(0, 0, 0),
@@ -40,7 +40,7 @@ def run():
 		], read=False)
 	
 	# reset camera
-	common.send_data([
+	common.sendData([
 		'"obj" SET active true',
 		'"obj/subject" SET active true',
 		
@@ -54,7 +54,7 @@ def run():
 		'"EnviroSky" EXECUTE EnviroSky ChangeWeather "{}"'.format(helpers.weather_lst[1]),
 	])
 	
-	helpers.setup_ros_topics(
+	helpers.setupROSTopics(
 		writeLinks=[
 			{
 				"label": "eulerAngles",
@@ -94,7 +94,7 @@ def run():
 	if settings.setup_only == True:
 		return
 	
-	common.flush_buffer()
+	common.flushBuffer()
 	
 	displ_x = 5
 	displ_y = 2
@@ -105,11 +105,11 @@ def run():
 		a_y = 0
 		# do a 360 around object
 		while a_y < 360:
-			common.send_data([
+			common.sendData([
 				'"obj" SET Transform eulerAngles ({} {} {})'.format(a_x, a_y, 0)
 			])
 			a_y = a_y + displ_y
-			helpers.take_snapshot(mycams, True)
+			helpers.takeSnapshot(mycams, True)
 		
 		# next
 		a_x = a_x + displ_x

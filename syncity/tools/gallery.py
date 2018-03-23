@@ -33,7 +33,7 @@ def run():
 	
 	rfn = '{}___gallery_{}.html'.format(settings.local_path, settings._start)
 	fh = open(rfn, 'wb+')
-	fns = common.get_all_files(settings.local_path, recursive=False)
+	fns = common.getAllFiles(settings.local_path, recursive=False)
 	features = [] # feature list
 	fc = {} # categorized filenames
 	fm = {} # meta data
@@ -67,7 +67,7 @@ def run():
 			while has_attribute(fm, fts):
 				fts += .000001
 			try:
-				fm[fts] = json.loads(common.read_all(fn))
+				fm[fts] = json.loads(common.readAll(fn))
 				fmfn[fts] = fn
 			except:
 				common.output('Invalid JSON data in {}'.format(fn), 'ERROR')
@@ -102,15 +102,15 @@ def run():
 			total_images = len(fc[i])
 	
 	common.output('Generating html...')
-	html = Template(common.read_all('{}index.tpl'.format(tpl_path)))
+	html = Template(common.readAll('{}index.tpl'.format(tpl_path)))
 	
 	js_static = ''
 	for i in static_assets['js']:
-		js_static += common.read_all('{}js/{}'.format(tpl_path, i))
+		js_static += common.readAll('{}js/{}'.format(tpl_path, i))
 	
 	css_static = ''
 	for i in static_assets['css']:
-		css_static += common.read_all('{}css/{}'.format(tpl_path, i))
+		css_static += common.readAll('{}css/{}'.format(tpl_path, i))
 	
 	fh.write(
 		html.render(

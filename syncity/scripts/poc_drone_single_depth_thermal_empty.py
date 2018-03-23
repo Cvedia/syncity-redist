@@ -28,24 +28,24 @@ POC Drone single scene
 '''
 
 def args(parser):
-	parser.add_argument('--loop_limit', type=int, default=100, help='Defines a limit of iterations for exporting')
+	parser.add_argument('--loopLimit', type=int, default=100, help='Defines a limit of iterations for exporting')
 
 def run():
 	settings.keep = True
 	mycams = ['cameras/cameraRGB', 'cameras/segmentation']
 	
 	if settings.skip_setup == False:
-		helpers.global_camera_setup()
-		helpers.add_camera_seg(width=1536, height=1152, segments=['drone0'], lookupTable=[['drone0', 'red']])
+		helpers.globalCameraSetup()
+		helpers.addCameraSeg(width=1536, height=1152, segments=['drone0'], lookupTable=[['drone0', 'red']])
 
-		helpers.add_camera_rgb(width=1536, height=1152, pp='EnviroFX')
+		helpers.addCameraRGB(width=1536, height=1152, pp='EnviroFX')
 		
-		helpers.global_disk_setup()
+		helpers.globalDiskSetup()
 		
-		helpers.add_disk_output(mycams)
-		helpers.spawn_drone_objs(
-			drones_limit=[0,0], buildings_innerradius=80,
-			trees_limit=[150,200], trees_innerradius=15, trees_radius=60, buildings_limit=[100,100],
+		helpers.addDiskOutput(mycams)
+		helpers.spawnDroneObjs(
+			dronesLimit=[0,0], buildingsInnerRadius=80,
+			treesLimit=[150,200], treesInnerRadius=15, treesRadius=60, buildingsLimit=[100,100],
 			#
 			# NOTE:
 			#
@@ -55,12 +55,12 @@ def run():
 			#
 			# use 'car, +thermal' to spawn only cars with thermal profiles
 			#
-			cars_tags=['car'],
+			carsTags=['car'],
 			seed=-1
 		)
 		
 		for x in range(0,2):
-			common.send_data([
+			common.sendData([
 				'CREATE ccameras/drone/drone{}/drone{}v "{}"'.format(x,x,helpers.drones_lst[6]), # Drones/DJI Phantom 4 Pro/DJI_Phantom_4_Pro
 				'"cameras/drone/drone{}" ADD Segmentation.ClassGroup'.format(x),
 				'"cameras/drone/drone{}" SET active false'.format(x),
@@ -70,31 +70,31 @@ def run():
 			], read=False)
 			
 			# randomize colors of drones
-			# helpers.add_random_color(['drone/drone0/drone0'])
+			# helpers.addRandomColor(['drone/drone0/drone0'])
 			
-			common.send_data([
+			common.sendData([
 				'"cameras/drone/drone{}" SET active true'.format(x),
 				'"cameras/drone/drone{}/drone{}" SET active true'.format(x, x),
 				'"cameras/drone/drone{}/drone{}" SET Transform localPosition (0 0 0)'.format(x,x),
 			], read=False)
 	
-	p_x_r = [-5, 5]
-	p_y_r = [1.5, 8]
-	p_z_r = [3, 9]
+	pX_r = [-5, 5]
+	pY_r = [1.5, 8]
+	pZ_r = [3, 9]
 	
-	p_x = 0
-	p_y = 8
-	p_z = 3
+	pX = 0
+	pY = 8
+	pZ = 3
 	
-	p_x_d = 1
-	p_y_d = 1
-	p_z_d = 1
+	pX_d = 1
+	pY_d = 1
+	pZ_d = 1
 	
 	loop = 0
-	settings.seq_save_i = loop;
+	settings.seqSave_i = loop;
 	
 	# reset camera
-	common.send_data([
+	common.sendData([
 		'"cameras/cameraRGB" SET Camera enabled true',
 		'"cameras" SET Transform position ({} {} {})'.format(0, 5, 0),
 		'"cameras" SET Transform eulerAngles ({} {} {})'.format(random.uniform(-20, 0), 0, 0),
@@ -120,36 +120,36 @@ def run():
 		'"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.bloom.enabled false',
 	], read=False)
 	
-	#helpers.set_thermal_props('city', temperatureValue=0, temperatureBandwidth=0, temperatureMedian=0, variance=0, reflectivity=0, heatiness=0, ambientOffset=0)
+	#helpers.setThermalProps('city', temperatureValue=0, temperatureBandwidth=0, temperatureMedian=0, variance=0, reflectivity=0, heatiness=0, ambientOffset=0)
 	
-	# helpers.set_thermal_props('spawner/city', temperatureValue=18, temperatureBandwidth=20, temperatureMedian=1, variance=5)
+	# helpers.setThermalProps('spawner/city', temperatureValue=18, temperatureBandwidth=20, temperatureMedian=1, variance=5)
 	
-	# helpers.set_thermal_props('spawner/animals', temperatureValue=22, temperatureBandwidth=20, temperatureMedian=1, variance=15, heatiness=1)
-	#helpers.set_thermal_props('spawner/cars', temperatureValue=25, temperatureBandwidth=10, temperatureMedian=0, variance=15, heatiness=0)
-	#helpers.set_thermal_props(['drone/drone0/drone0'], temperatureValue=0, temperatureBandwidth=0, temperatureMedian=0, variance=0, reflectivity=0, heatiness=-5)
+	# helpers.setThermalProps('spawner/animals', temperatureValue=22, temperatureBandwidth=20, temperatureMedian=1, variance=15, heatiness=1)
+	#helpers.setThermalProps('spawner/cars', temperatureValue=25, temperatureBandwidth=10, temperatureMedian=0, variance=15, heatiness=0)
+	#helpers.setThermalProps(['drone/drone0/drone0'], temperatureValue=0, temperatureBandwidth=0, temperatureMedian=0, variance=0, reflectivity=0, heatiness=-5)
 
-	common.flush_buffer()
+	common.flushBuffer()
 	
-	while loop < settings.loop_limit:
+	while loop < settings.loopLimit:
 		if random.uniform(0,1) > 1:
 			motionblur = 'true'
 		else:
 			motionblur = 'false'
 		
-#		p_x = random.uniform(-1, 1)
-#		p_y = random.uniform(5, 6)
-#		p_z = random.uniform(1.5, 5)
+#		pX = random.uniform(-1, 1)
+#		pY = random.uniform(5, 6)
+#		pZ = random.uniform(1.5, 5)
 
 		"""
 		# set drone body thermal
-		helpers.set_thermal_props(
+		helpers.setThermalProps(
 			random.choice(['drone/drone0/drone0', 'drone/drone1/drone1', 'drone/drone2/drone2']),
 			temperatureValue=random.randint(-10, 10), heatiness=random.randint(0, 2)
 		)
 		"""
 		
 		if loop % 100 == 0:
-			common.send_data([
+			common.sendData([
 				'"spawner/city/ground" SET active false',
 				'"spawner/city/ground" SET RandomProps.PropArea numberOfProps 0',
 				'"spawner/city/ground" SET active false',
@@ -176,7 +176,7 @@ def run():
 				'"spawner/humans_0" SET active false',
 			], read=False)
 		else:
-			common.send_data([
+			common.sendData([
 				'"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle',
 				'"spawner/cars" EXECUTE RandomProps.PropArea Shuffle',
 				'"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle',
@@ -185,7 +185,7 @@ def run():
 				'"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle',
 			], read=False)
 		
-		common.send_data([
+		common.sendData([
 			'"cameras" SET Transform position ({} {} {})'.format(0, random.uniform(3, 5), 0),
 			'"cameras" SET Transform eulerAngles ({} {} {})'.format(random.uniform(-20, 20), 0, 0),
 
@@ -202,42 +202,42 @@ def run():
 
 		scale_f = random.uniform(0.3,1.0)
 
-		p_z = 2.3
+		pZ = 2.3
 
-		common.send_data([
-			'"cameras/drone/drone0" SET Transform localPosition ({} {} {})'.format(random.uniform(-1.2, 1.2), random.uniform(-0.3, 0.70), p_z),
-			'"cameras/drone/drone1" SET Transform localPosition ({} {} {})'.format(random.uniform(-1.2, 1.2), random.uniform(0.80, 1.3), p_z),
-#			'"cameras/drone/drone0" SET Transform localPosition ({} {} {})'.format(random.uniform(-1.2, -0.5), random.uniform(-0.3, 0.70), p_z),
-#			'"cameras/drone/drone1" SET Transform localPosition ({} {} {})'.format(random.uniform(-0.6, 0), random.uniform(-0.3, 0.70), p_z),
-#			'"cameras/drone/drone2" SET Transform localPosition ({} {} {})'.format(random.uniform(0.05, 0.55), random.uniform(-0.3, 0.70), p_z),
-#			'"cameras/drone/drone3" SET Transform localPosition ({} {} {})'.format(random.uniform(0.65, 1.2), random.uniform(-0.3, 0.70), p_z),
-#			'"cameras/drone/drone4" SET Transform localPosition ({} {} {})'.format(random.uniform(-1.2, -0.5), random.uniform(0.80, 1.3), p_z),
-#			'"cameras/drone/drone5" SET Transform localPosition ({} {} {})'.format(random.uniform(-0.6, 0), random.uniform(0.80, 1.3), p_z),
-#			'"cameras/drone/drone6" SET Transform localPosition ({} {} {})'.format(random.uniform(0.05, 0.55), random.uniform(0.80, 1.3), p_z),
-#			'"cameras/drone/drone7" SET Transform localPosition ({} {} {})'.format(random.uniform(0.65, 1.2), random.uniform(0.80, 1.3), p_z),
+		common.sendData([
+			'"cameras/drone/drone0" SET Transform localPosition ({} {} {})'.format(random.uniform(-1.2, 1.2), random.uniform(-0.3, 0.70), pZ),
+			'"cameras/drone/drone1" SET Transform localPosition ({} {} {})'.format(random.uniform(-1.2, 1.2), random.uniform(0.80, 1.3), pZ),
+#			'"cameras/drone/drone0" SET Transform localPosition ({} {} {})'.format(random.uniform(-1.2, -0.5), random.uniform(-0.3, 0.70), pZ),
+#			'"cameras/drone/drone1" SET Transform localPosition ({} {} {})'.format(random.uniform(-0.6, 0), random.uniform(-0.3, 0.70), pZ),
+#			'"cameras/drone/drone2" SET Transform localPosition ({} {} {})'.format(random.uniform(0.05, 0.55), random.uniform(-0.3, 0.70), pZ),
+#			'"cameras/drone/drone3" SET Transform localPosition ({} {} {})'.format(random.uniform(0.65, 1.2), random.uniform(-0.3, 0.70), pZ),
+#			'"cameras/drone/drone4" SET Transform localPosition ({} {} {})'.format(random.uniform(-1.2, -0.5), random.uniform(0.80, 1.3), pZ),
+#			'"cameras/drone/drone5" SET Transform localPosition ({} {} {})'.format(random.uniform(-0.6, 0), random.uniform(0.80, 1.3), pZ),
+#			'"cameras/drone/drone6" SET Transform localPosition ({} {} {})'.format(random.uniform(0.05, 0.55), random.uniform(0.80, 1.3), pZ),
+#			'"cameras/drone/drone7" SET Transform localPosition ({} {} {})'.format(random.uniform(0.65, 1.2), random.uniform(0.80, 1.3), pZ),
 		], read=False)
 		
 		for x in range(0, 2):
-			p_x = random.uniform(-1.2, -0.55)
-			p_x = random.uniform(-0.6, 0)
-			p_x = random.uniform(0.05, 0.6)
-			p_x = random.uniform(0.65, 1.2)
-			p_y = random.uniform(0.1, 0.4)
-			p_y = random.uniform(0.45, 0.9)
+			pX = random.uniform(-1.2, -0.55)
+			pX = random.uniform(-0.6, 0)
+			pX = random.uniform(0.05, 0.6)
+			pX = random.uniform(0.65, 1.2)
+			pY = random.uniform(0.1, 0.4)
+			pY = random.uniform(0.45, 0.9)
 			
-#			p_x = random.uniform(-2, 2)
-#			p_y = random.uniform(3, 5)
-#			p_z = 2
+#			pX = random.uniform(-2, 2)
+#			pY = random.uniform(3, 5)
+#			pZ = 2
 			
 			scale_f = random.uniform(0.6,1.5)
 			
-			common.send_data([
+			common.sendData([
 				'"cameras/drone/drone{}" SET Transform localEulerAngles ({} {} {})'.format(x, random.randint(-20, 20), random.randint(-20, 20), random.randint(-20, 20)),
 				'"cameras/drone/drone{}" SET Transform localScale ({} {} {})'.format(x, scale_f, scale_f, scale_f),
 			], read=False)
 			
 		
-		common.flush_buffer()
-		helpers.take_snapshot(mycams, True)
+		common.flushBuffer()
+		helpers.takeSnapshot(mycams, True)
 		
 		loop = loop + 1
