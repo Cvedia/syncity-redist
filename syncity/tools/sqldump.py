@@ -7,7 +7,6 @@ import time
 import sqlite3
 
 from .. import common, helpers, settings_manager
-from datetime import datetime
 
 settings = settings_manager.Singleton()
 

@@ -82,10 +82,10 @@ def run():
 				dronesLimit=[0,0], buildingsInnerRadius=300,
 				treesLimit=[300,600], treesInnerRadius=30, treesRadius=50, buildingsLimit=[50,80],
 				thermal='DefaultThermalProfile',
-				cars_colors=16,
+				carsColors=16,
 				carsTags=['car, +thermal'],
 				seed=666,
-				ground_segment='ground', trees_segment='tree', buildings_segment='building', birds_segment='bird', cars_segment='car'
+				groundSegment='ground', treesSegment='tree', buildingsSegment='building', birdsSegment='bird', carsSegment='car'
 			)
 		else:
 			helpers.spawnDroneObjs(

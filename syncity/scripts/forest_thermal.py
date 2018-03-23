@@ -58,7 +58,7 @@ def run():
 		
 		helpers.addThermalTerrain(
 			target='Forest',
-			ambient_offset=0,
+			ambientOffset=0,
 			bandwidth=-15.88,
 			median=0.094
 		)

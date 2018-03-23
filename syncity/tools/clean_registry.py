@@ -7,7 +7,6 @@ import platform
 import time
 
 from .. import common, settings_manager
-# from subprocess import PIPE, run
 
 settings = settings_manager.Singleton()
 

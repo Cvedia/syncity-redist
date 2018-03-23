@@ -219,7 +219,7 @@ def addCameraRGB(
 			'CREATE "EnviroSky" AS "EnviroSky"',
 			'"EnviroSky" SET EnviroSky Player "{}" PlayerCamera "{}" GameTime.ProgressTime "{}" weatherSettings.cloudTransitionSpeed {} weatherSettings.effectTransitionSpeed {} weatherSettings.fogTransitionSpeed {}'.format(labelRoot, label, enviroskyProgressTime, enviroskyCloudTransitionSpeed, enviroskyEffectTransitionSpeed, enviroskyFogTransitionSpeed),
 			'"EnviroSky" EXECUTE EnviroSky AssignAndStart "{}" "{}"'.format(label, label),
-			'"EnviroSky" SET active true'.format(label)
+			'"EnviroSky" SET active true'
 		], read=False)
 	
 	common.sendData([
@@ -1251,7 +1251,6 @@ def seqSave(pref, rawData):
 						break
 					except:
 						f[1] = False
-						pass
 		
 		if len(data) == 0:
 			common.output('Unable to fetch bounding box, retrying...', 'DEBUG')
@@ -1775,11 +1774,9 @@ def humanSpawner(
 	
 	if goals == None or len(goals) == 0:
 		raise Exception('No goals set')
-		return False
 	
 	if spawners == None or len(spawners) == 0:
 		raise Exception('No spawners set')
-		return False
 	
 	buf = []
 	

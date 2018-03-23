@@ -1,6 +1,5 @@
 import random
 import time
-import subprocess
 
 from .. import common, helpers, settings_manager
 from subprocess import call

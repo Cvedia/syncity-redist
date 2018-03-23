@@ -1,5 +1,5 @@
 import random
-from .. import common, helpers, settings_manager
+from .. import common, settings_manager
 
 settings = settings_manager.Singleton()
 

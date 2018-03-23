@@ -80,7 +80,6 @@ def run():
 	displ_x = 5
 	displ_y = 2
 	a_x = 0
-	exp = 1
 	
 	while a_x < 360:
 		a_y = 0

@@ -1,4 +1,3 @@
-import random
 from .. import common, helpers, settings_manager
 
 settings = settings_manager.Singleton()

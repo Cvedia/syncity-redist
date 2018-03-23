@@ -19,7 +19,7 @@ def run():
 		
 		# helpers.addDiskOutput(mycams)
 		helpers.addDiskOutput([mycams[0]])
-		helpers.spawnDroneObjs(pX=-500, dist_lim=500, pZ=-500)
+		helpers.spawnDroneObjs(pX=-500, distLimit=500, pZ=-500)
 	
 	for c in range(4):
 		for w in range(8):
@@ -89,5 +89,5 @@ def run():
 						])
 					
 					if loop == reroll:
-						helpers.spawnDroneObjs(destroy=True, pX=-500, dist_lim=500, pZ=-500)
+						helpers.spawnDroneObjs(destroy=True, pX=-500, distLimit=500, pZ=-500)
 						loop = 0

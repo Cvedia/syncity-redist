@@ -14,7 +14,6 @@ import random
 import signal
 import textwrap
 import types
-import json
 import re
 import hashlib
 import errno

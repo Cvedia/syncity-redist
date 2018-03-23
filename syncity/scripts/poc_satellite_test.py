@@ -2,13 +2,10 @@ import random
 import time
 import subprocess
 
-from .. import common, helpers, settings_manager
+from .. import common, settings_manager
 from subprocess import call
 
 settings = settings_manager.Singleton()
-
-# use lite drone packages
-# helpers.drones_lst = helpers.drones_lite_lst
 
 def help():
 	return '''\
