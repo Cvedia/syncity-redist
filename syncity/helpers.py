@@ -1519,110 +1519,119 @@ def lcp(
 	common.send_data(buf)
 
 def add_lidar(
-	label='Lidar', virtualCamera=None, model='VLP_16',
-	minAz=-180, maxAz=180, minEl=-30, maxEl=30, rpm=900, targetFps=50, pclRenderFps=30,
-	dataType=None, colorLUT=None, colorTo='Red', colorFrom='Blue',
+	label='Lidar', model='VLP_16',
+	minAz=-180, maxAz=180, minEl=-30, maxEl=30, rpm=900,
 	timingAccuracy='MEDIUM', accuracy='HIGH', disableUDPBroadcast=False,
-	enableVisualizer=False, fullScreenOutputTexture=False,
-	minimumIntensity=0, ipAddressOverride=None,
-	position=[0, 0, 0], rotation=[0, 0, 0]
+	minimumIntensity=0, ipAddressOverride='192.168.1.100',
+	position=False, rotation=False,
+	localPosition=False, localRotation=False
 ):
 	"""
 	Creates a LiDAR Sensors
 	
 	# Arguments
 	
-	target (string): Defines an existing game object to bind lidar to, this must contain a camera component, if it doesn't the system will add one.
-	model (string): Defines a model to use, this will depend on what libraries you have on the system, some models: VLP_16, HDL_32E, HDL_64E_S3, M8
-	accuracy (string): Defines lidar CPU burn accuracy, options: LOW, MEDIUM, HIGH, ULTRA
-	minAz (int): Minimum azimuth, defaults to -180
-	maxAz (int): Maximum azimuth, defaults to 180
-	minEl (int): Minimum elevation, defaults to -30
-	maxEl (int): Maximum elevation, defaults to 30
-	rpm (int): Device RPM, defaults to 900
+	label (string): Defines an existing game object to bind lidar to, this must contain a camera component, if it doesn't the system will add one, defaults to `Lidar`
+	model (string): Defines a model to use, this will depend on what libraries you have on the system, some models: VLP_16, HDL_32E, HDL_64E_S3, M8, defaults to `VLP_16`
+	minAz (int): Minimum azimuth, defaults to `-180`
+	maxAz (int): Maximum azimuth, defaults to `180`
+	minEl (int): Minimum elevation, defaults to `-30`
+	maxEl (int): Maximum elevation, defaults to `30`
+	rpm (int): Device RPM, defaults to `900`
+	timingAccuracy (string): Defines lidar CPU burn timing accuracy resolution, options: LOW, MEDIUM, HIGH, defaults to `MEDIUM`
+	accuracy (string): Defines lidar CPU burn accuracy, options: LOW, MEDIUM, HIGH, ULTRA, defaults to `HIGH`
+	disableUDPBroadcast (bool): Defines if protocol broadcasting is disabled, defaults to `False`
+	minimumIntensity (string): Defines minimum intensity returned by the device; defaults to `0` meaning everything
+	ipAddressOverride (string): Defines a ip address where the device will broadcast to, defaults to `192.168.1.100`; This option will be deprecated in the future.
+	position (list): Defines X, Y, Z absolute position to spawn component, defaults to `None`
+	rotation (list): Defines X, Y, Z absolute angles to spawn component, defaults to `None`
+	localPosition (list): Defines X, Y, Z relative position to spawn component, defaults to `None`
+	localRotation (list): Defines X, Y, Z relative angles to spawn component, defaults to `None`
 	
 	"""
 	common.send_data([
 		'CREATE "{}"'.format(label),
 		
-		'"{}" SET Transform position ({} {} {})'.format(label, position[0], position[1], position[2]),
-		'"{}" SET Transform eulerAngles ({} {} {})'.format(label, rotation[0], rotation[1], rotation[2]),
+		'' if position == False else '"{}" SET Transform position ({} {} {})'.format(label, position[0], position[1], position[2]),
+		'' if rotation == False else '"{}" SET Transform eulerAngles ({} {} {})'.format(label, rotation[0], rotation[1], rotation[2]),
 		
-		'"{}" ADD Lidar'.format(label),
-		'"{}" SET Lidar model "{}"'.format(label, model),
+		'' if localPosition == False else '"{}" SET Transform localPosition ({} {} {})'.format(label, localPosition[0], localPosition[1], localPosition[2]),
+		'' if localRotation == False else '"{}" SET Transform localEulerAngles ({} {} {})'.format(label, localRotation[0], localRotation[1], localRotation[2]),
 		
-		'"{}" SET Lidar minAz {}'.format(label, minAz),
-		'"{}" SET Lidar maxAz {}'.format(label, maxAz),
-		'"{}" SET Lidar minEl {}'.format(label, minEl),
-		'"{}" SET Lidar maxEl {}'.format(label, maxEl),
-		
-		'"{}" SET Lidar rpm {}'.format(label, rpm),
-		
-		'"{}" SET Lidar targetFps {}'.format(label, targetFps),
-		'"{}" SET Lidar pclRenderFps {}'.format(label, pclRenderFps),
-		'"{}" SET Lidar dataType {}'.format(label, dataType) if dataType != None else '',
-		'"{}" SET Lidar colorLUT "{}"'.format(label, colorLUT) if colorLUT != None else '',
-		'"{}" SET Lidar colorTo "{}"'.format(label, colorTo) if colorTo != None else '',
-		'"{}" SET Lidar colorFrom "{}"'.format(label, colorFrom) if colorFrom != None else '',
-		
-		'"{}" SET Lidar MinimumIntensity {}'.format(label, minimumIntensity),
-		'"{}" SET Lidar ipAddressOverride "{}"'.format(label, ipAddressOverride) if ipAddressOverride != None else '',
-		
-		'"{}" SET active true'.format(label),
-		
-		'"{}" SET Lidar accuracy "{}"'.format(label, accuracy),
-		'"{}" SET Lidar virtualCamera "{}"'.format(label, virtualCamera) if virtualCamera != None else '',
-		'"{}" SET Lidar disableUDPBroadcast {}'.format(label, 'True' if disableUDPBroadcast == True else 'False'),
-		'"{}" SET Lidar enableVisualizer {}'.format(label, 'True' if enableVisualizer == True else 'False'),
-		'"{}" SET Lidar FullScreenOutputTexture "{}"'.format(label, 'True' if fullScreenOutputTexture == True else 'False'),
-		
-		'"{}" SET Lidar timingAccuracy "{}"'.format(label, timingAccuracy),
-		
-		'"{}" ADD LidarNoLights'
+		'"{}" ADD Sensors.Lidar'.format(label),
+		'''"{}" SET Sensors.Lidar
+			model "{}"
+			minAz {}
+			maxAz {}
+			minEl {}
+			maxEl {}
+			rpm {}
+			
+			minimumIntensity {}
+			timingAccuracy "{}"
+			accuracy "{}"
+			
+			ipAddressOverride "{}"
+			disableUDPBroadcast {}
+		'''.format(
+			label, model, minAz, maxAz, minEl, maxEl, rpm,
+			minimumIntensity, timingAccuracy, accuracy, ipAddressOverride,
+			'false' if disableUDPBroadcast == False else 'true'
+		),
+		'"{}" SET active true'.format(label)
 	])
 
 def setup_ros_topics(label_root='ROS2', writeLinks=None, readLinks=None):
-	common.send_data([
+	buf = [
 		'CREATE "{}"'.format(label_root),
 		'"{}" SET active false'.format(label_root),
 		'"{}" ADD Sensors.ROS2'.format(label_root)
-	], read=False)
+	]
 	
 	if writeLinks != None:
 		for lnk in writeLinks:
-			common.send_data([
-					'CREATE "{}/{}"'.format(label_root, lnk['label']),
-					'"{}/{}" ADD Sensors.WriteFieldLink'.format(label_root, lnk['label']),
-					'"{}/{}" SET Sensors.WriteFieldLink topicName "{}"'.format(label_root, lnk['label'], lnk['topic']),
-					'"{}/{}" SET Sensors.WriteFieldLink target "{}"'.format(label_root, lnk['label'], lnk['target']),
-					'"{}/{}" SET Sensors.WriteFieldLink componentName "{}"'.format(label_root, lnk['label'], lnk['component']),
-					'"{}/{}" SET Sensors.WriteFieldLink fieldName "{}"'.format(label_root, lnk['label'], lnk['field']),
-					'"{}/{}" SET Sensors.WriteFieldLink intervalSeconds {}'.format(label_root, lnk['label'], lnk['interval']),
-					'"{}/{}" SET active true'.format(label_root, lnk['label'])
-				], read=False)
+			buf.extend([
+				'CREATE "{}/{}"'.format(label_root, lnk['label']),
+				'"{}/{}" ADD Sensors.WriteFieldLink'.format(label_root, lnk['label']),
+				'''"{}/{}" SET Sensors.WriteFieldLink
+					topicName "{}"
+					target "{}"
+					componentName "{}"
+					fieldName "{}"
+					intervalSeconds {}
+				'''.format(
+					label_root, lnk['label'], lnk['topic'], lnk['target'],
+					lnk['component'], lnk['field'], lnk['interval']
+				),
+				'"{}/{}" SET active true'.format(label_root, lnk['label'])
+			])
 	
 	if readLinks != None:
 		for lnk in readLinks:
-			common.send_data([
-					'CREATE "{}/{}"'.format(label_root, lnk['label']),
-					'"{}/{}" ADD Sensors.ReadFieldLink'.format(label_root, lnk['label']),
-					'"{}/{}" SET Sensors.ReadFieldLink topicName "{}"'.format(label_root, lnk['label'], lnk['topic']),
-					'"{}/{}" SET Sensors.ReadFieldLink target "{}"'.format(label_root, lnk['label'], lnk['target']),
-					'"{}/{}" SET Sensors.ReadFieldLink componentName "{}"'.format(label_root, lnk['label'], lnk['component']),
-					'"{}/{}" SET Sensors.ReadFieldLink fieldName "{}"'.format(label_root, lnk['label'], lnk['field']),
-					'"{}/{}" SET Sensors.ReadFieldLink onChange true'.format(label_root, lnk['label']),
-					'"{}/{}" SET Sensors.ReadFieldLink intervalSeconds {}'.format(label_root, lnk['label'], lnk['interval']),
-					'"{}/{}" SET active true'.format(label_root, lnk['label'])
-				], read=False)
+			buf.extend([
+				'CREATE "{}/{}"'.format(label_root, lnk['label']),
+				'"{}/{}" ADD Sensors.ReadFieldLink'.format(label_root, lnk['label']),
+				'''"{}/{}" SET Sensors.ReadFieldLink
+					topicName "{}"
+					target "{}"
+					componentName "{}"
+					fieldName "{}"
+					intervalSeconds {}
+					onChange true
+				'''.format(
+					label_root, lnk['label'], lnk['topic'], lnk['target'],
+					lnk['component'], lnk['field'], lnk['interval']
+				),
+				'"{}/{}" SET active true'.format(label_root, lnk['label'])
+			])
 			
 			# workaround for cameras, if we're dealing with a targetTexture, the camera must have
 			# a RenderCamera and it must be always on, otherwise it will not broadcast propertly
 			if lnk['field'] == "targetTexture":
-				common.send_data('"{}" SET Sensors.RenderCamera alwaysOn true'.format(lnk['target']), read=False)
+				buf.append('"{}" SET Sensors.RenderCamera alwaysOn true'.format(lnk['target']))
 	
-	common.send_data([
-		'"{}" SET active true'.format(label_root)
-	], read=True)
+	buf.append('"{}" SET active true'.format(label_root))
+	common.send_data(buf)
 
 def str_to_seg(s):
 	return s.replace('+', ' ').replace('_', ' ').split(",")[0].split(" ")[0]

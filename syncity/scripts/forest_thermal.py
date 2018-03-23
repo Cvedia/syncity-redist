@@ -10,12 +10,12 @@ settings = settings_manager.Singleton()
 
 def help():
 	return '''\
-Animals thermal in Savannah scene
+Human walker at forest
 	- Creates a RGB camera
 	- Creates a Thermal camera
 	- Creates a Depth camera
 	- Creates a Segmentation camera
-	- Spawns animals, people and cars with random distribution at savannah
+	- Creates a human walker spawner, this will create random body, random gender and random acessorized humans walking from a starting point to a goal
 	- Flys around as a drone, rotating height , distance and azimuth
 	- Exports depth maps, rgb images, thermal images, segmentation images and bounding boxes
 '''

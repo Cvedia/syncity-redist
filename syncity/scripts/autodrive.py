@@ -65,7 +65,7 @@ def run():
 			
 			# add custom inputs for ros bridge
 			# WARNING: When VPCustomInput is enabled, you won't be able to drive using the keys
-			'"{}" SET VPCustomInput enabled false'.format(car_obj),
+			'"{}" SET VPCustomInput enabled true'.format(car_obj),
 			
 			'"{}" ADD UnityEngine.PostProcessing.PostProcessingBehaviour'.format(mycams[0]),
 			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile "EnviroFX"'.format(mycams[0]),
@@ -74,29 +74,13 @@ def run():
 		], read=False)
 		
 		if settings.disable_lidar == False:
-			common.send_data([
-				# lidar position / angle setup
-				'"{}/Lidar" SET Transform localPosition (0 2 0) localEulerAngles (0 0 0)'.format(car_obj),
-				# '"{}/Lidar" SET Transform localEulerAngles (0 0 0)'.format(car_obj),
-				
-				# lidar specs
-				'''"{}/Lidar" SET Lidar
-					model "VLP_16"
-					minAz -180
-					maxAz 180
-					minEl -30
-					maxEl 30
-					rpm 900
-					MinimumIntensity 0
-					accuracy "HIGH"
-					timingAccuracy "ULTRA"
-					ipAddressOverride "{}"
-					disableUDPBroadcast false
-				'''.format(car_obj, settings.lidar_ip),
-				
-				# all set, enable objects
-				'"{}/Lidar" SET active true'.format(car_obj)
-			], read=False)
+			helpers.add_lidar(
+				label='{}/Lidar'.format(car_obj),
+				localPosition=[0, 2, 0],
+				localRotation=[0, 0, 0],
+				timingAccuracy='ULTRA',
+				ipAddressOverride=settings.lidar_ip
+			)
 		
 		common.send_data([
 			'"{}" SET Sensors.RenderCamera alwaysOn true'.format(mycams[0]),
@@ -191,7 +175,7 @@ def run():
 					"target": mycams[0],
 					"component": "Camera",
 					"field": "targetTexture",
-					"interval": .5
+					"interval": 1
 				},
 				# WARNING: This camera will be exported as 32-bit depth single channel
 				{
@@ -200,7 +184,7 @@ def run():
 					"target": mycams[1],
 					"component": "Camera",
 					"field": "targetTexture",
-					"interval": .5
+					"interval": 1
 				}
 			]
 		)

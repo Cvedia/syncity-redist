@@ -63,10 +63,11 @@ parser.add_argument('--record', action='store_true', help='Record commands sent 
 parser.add_argument('--debug', action='store_true', help='Defines a global debug flag, this will cause a lot of outputs')
 parser.add_argument('--log', action='store_true', help='Log all IOs')
 parser.add_argument('--async', action='store_true', help='Send some telnet commands asyncronously -- EXPERIMENTAL')
+parser.add_argument('--skip_init', action='store_true', default=False, help='Disables telnet init sequence')
 parser.add_argument('--skip_disk', action='store_true', help='Disables disk export completly')
 parser.add_argument('--skip_setup', action='store_true', help='Skip script setup and go straight to data extraction')
 parser.add_argument('--setup_only', action='store_true', help='Runs script setup and exits')
-parser.add_argument('--disable_physics', action='store_true', default=False, help='Disables Physics, making all objects clippable, aka NOCLIP')
+parser.add_argument('--enable_physics', action='store_true', default=False, help='Enable Physics, mainly affects objects with rigidbodies.')
 parser.add_argument('--disable_envirosky', action='store_true', help='Disables Envirosky -- NOT RECOMMENDED')
 parser.add_argument('--disable_canvas', action='store_true', help='Disables client rendering visualization, better for performance, but you will only see outputs written to disk.')
 parser.add_argument('--use_old_depth_buffer', action='store_true', default=False, help='Uses old depth buffer component')
@@ -132,8 +133,6 @@ if settings.run != None or settings.script != None:
 	if settings.record == True:
 		settings.fh = open('{}record_{}.txt'.format(settings.local_path, settings._start), 'wb+')
 	
-	syncity.common.init_telnet(settings.ip, settings.port)
-	
 	if settings.async == True:
 		common.output('Telnet mode set to ASYNCRONOUS')
 		settings.force_sync = False
@@ -141,6 +140,7 @@ if settings.run != None or settings.script != None:
 		common.output('Telnet mode set to SYNCRONOUS')
 		settings.force_sync = True
 	
+	syncity.common.init_telnet(settings.ip, settings.port)
 	syncity.common.flush_buffer()
 
 idx = { 'run': 0, 'script': 0, 'tool': 0 }

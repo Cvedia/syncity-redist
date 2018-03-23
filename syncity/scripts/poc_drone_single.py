@@ -25,8 +25,8 @@ def run():
 	
 	if settings.skip_setup == False:
 		helpers.global_camera_setup()
-		helpers.add_camera_rgb(width=4096, height=3072, pp='EnviroFX')
-		helpers.add_camera_seg(width=4096, height=3072, segments=['drone0', 'drone1', 'drone2'], lookupTable=[['drone0', 'red'], ['drone1','blue'], ['drone2', 'green']])
+		helpers.add_camera_rgb(pp='EnviroFX')
+		helpers.add_camera_seg(segments=['drone0', 'drone1', 'drone2'], lookupTable=[['drone0', 'red'], ['drone1','blue'], ['drone2', 'green']])
 		helpers.global_disk_setup()
 		
 		helpers.add_disk_output(mycams)

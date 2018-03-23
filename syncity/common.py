@@ -86,25 +86,31 @@ def init_telnet(ip, port, retries=3, wait=.5, timeout=30, ka_interval=3, ka_fail
 				tn.set_debuglevel(9)
 			
 			_telnet = True
-			
+			output('Connected')
 			settings._simulator_version = send_data(['VERSION', 'NOOP'], read=True)[0].replace('"', '')
 			output('Simulator Version: {}'.format(settings._simulator_version))
+			
 			if int(settings._simulator_version.replace('.', '')[0:10]) < int(settings._simulator_min_version.replace('.', '')[0:10]):
 				output('The version of the simulator you\'re connecting with is deprecated and most likely not compatible with the version of this SDK.', 'ERROR')
 				output('You should use a old branch of the SDK or update the simulator.', 'ERROR')
 				output('SDK minimum supported simulator version: {}'.format(settings._simulator_min_version), 'ERROR')
 				output('Simulator version: {}'.format(settings._simulator_version), 'ERROR')
 			
-			if settings.assets:
-				send_data('"API" SET API.Manager assetsFolder "{}"'.format(settings.assets))
+			if settings.skip_init == True:
+				ouptut('Skipping init sequence')
+			else:
+				output('Init sequence...')
+				
+				if settings.assets:
+					send_data('"Config.instance" SET assetBundlesCache "{}"'.format(settings.assets))
+				
+				if settings.db:
+					send_data('"Config.instance" SET databaseFolderPath "{}"'.format(settings.db))
+				elif settings.assets:
+					send_data('"Config.instance" SET databaseFolderPath "{}"'.format(settings.assets))
+				
+				send_data('"Config.instance" SET physicsEnabled {}'.format('false' if settings.enable_physics == False else 'true'))
 			
-			if settings.db:
-				send_data('"API" SET API.Manager databaseFolderPath "{}"'.format(settings.db))
-			elif settings.assets:
-				send_data('"API" SET API.Manager databaseFolderPath "{}"'.format(settings.assets))
-			
-			if settings.disable_physics == False:
-				send_data('"API.Manager.instance" SET physicsEnabled true')
 			break
 		except Exception as e:
 			output('Error connecting: {}'.format(e), 'ERROR')
@@ -116,8 +122,6 @@ def init_telnet(ip, port, retries=3, wait=.5, timeout=30, ka_interval=3, ka_fail
 			else:
 				output('Waiting for retry #{} ...'.format(retry))
 				time.sleep(wait)
-	
-	output('Connected')
 
 def init():
 	"""

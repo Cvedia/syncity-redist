@@ -37,8 +37,6 @@ def run():
 	mycams = ['cameras/cameraRGB', 'cameras/segmentation']
 #	mycams = ['cameras/cameraRGB', 'cameras/segmentation', 'cameras/depth']
 	
-	common.send_data('"API.Manager.instance" SET physicsEnabled false')
-	
 	if settings.skip_setup == False:
 		helpers.global_camera_setup()
 		# helpers.add_camera_seg(width=1024, height=1024, segments=['drone0'], lookupTable=[['drone0', 'red']])
