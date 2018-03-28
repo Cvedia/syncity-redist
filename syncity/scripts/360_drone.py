@@ -32,7 +32,7 @@ def run():
 			['drone'],
 			segmentationClass="Drone",
 			tags=['drone'],
-			limit=3,
+			limit=35,
 			radius=10,
 			innerradius=0,
 			position=[0,0,0],
