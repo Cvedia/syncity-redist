@@ -14,7 +14,7 @@ import random
 
 from syncity import common, settings_manager
 
-SYNCITY_VERSION = '18.03.28.1834'
+SYNCITY_VERSION = '18.03.28.1818'
 SIMULATOR_MIN_VERSION = '18.03.15.0000'
 
 print ('SynCity toolbox - v{}\nCopyright (c) 2016-{} CVEDIA PVE Ltd\n'.format(SYNCITY_VERSION, datetime.date.today().year))
@@ -56,7 +56,8 @@ parser.add_argument('-n', '--no_color', action='store_true', default=False, help
 parser.add_argument('-Z', '--abort_on_error', action='store_true', default=False, help='Abort execution on error')
 parser.add_argument('--assets', help='Defines assets folder name')
 parser.add_argument('--db', help='Defines database folder name, if not set will follow --assets, if --assets is not defined, this value will not be touched')
-parser.add_argument('--seed', help='Defines a seed number for random methods on python layer. Note that this will be treated as a string.', default=None)
+parser.add_argument('--seed_py', help='Defines a seed number for random methods on python layer. Note that this will be treated as a string.', default=None)
+parser.add_argument('--seed_api', type=int, help='Defines a seed number for random methods on api layer.', default=None)
 parser.add_argument('--interactive', action='store_true', help='Drops to a interactive shell after executing stack or when interrupted.', default=False)
 parser.add_argument('--keep', default=False, action='store_true', help='Keep created assets on scene')
 parser.add_argument('--record', action='store_true', help='Record commands sent to API using --local_path as output path')
@@ -112,6 +113,7 @@ if stack_size == 0:
 	sys.exit(0)
 
 for k in args.__dict__:
+	# print('{}: {}'.format(k, args.__dict__[k]))
 	settings[k] = args.__dict__[k]
 
 if platform.system() == 'Windows':
@@ -126,8 +128,8 @@ else:
 
 syncity.common.init2()
 
-if settings.random != None:
-	random.seed(settings.random)
+if settings.seed_py != None:
+	random.seed(settings.seed_py)
 
 # setup telnet connection
 if settings.run != None or settings.script != None:
