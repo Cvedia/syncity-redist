@@ -25,14 +25,14 @@ def run():
 		helpers.addCameraRGB(width=1024, height=768, pp='EnviroFX')
 		helpers.addCameraSeg(segments=['Drone'], lookupTable=[['Drone', 'red']])
 		helpers.addCameraDepth(width=1024, height=768, depthBuffer='simple')
-		helpers.globalDiskSetup(orbit=False, flycam=True)
+		helpers.globalDiskSetup()
 		helpers.addDiskOutput(mycams)
 		
 		helpers.spawnRadiusGeneric(
 			['drone'],
 			segmentationClass="Drone",
 			tags=['drone'],
-			limit=35,
+			limit=3,
 			radius=10,
 			innerradius=0,
 			position=[0,0,0],
