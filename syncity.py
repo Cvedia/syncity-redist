@@ -17,7 +17,7 @@ from syncity import common, settings_manager
 SYNCITY_VERSION = '4.1.0'
 SIMULATOR_MIN_VERSION = '18.03.15.0000'
 
-print ('SynCity toolbox - v{}\nCopyright (c) {} CVEDIA PVE Ltd\n'.format(SYNCITY_VERSION, datetime.date.today().year))
+print ('SynCity toolbox - v{}\nCopyright (c) 2016-{} CVEDIA PVE Ltd\n'.format(SYNCITY_VERSION, datetime.date.today().year))
 
 if sys.version_info[0] < 3:
 	print ('*** WARNING: You\'re using a old version of python that is not maintained by this SDK, some functions might fail. Please use python 3+\n\n')
@@ -96,6 +96,7 @@ settings._simulator_min_version = SIMULATOR_MIN_VERSION
 settings._root = os.path.dirname(os.path.realpath(__file__))
 settings.shutdown = False
 settings._interactive = False
+
 syncity.common.init()
 
 stack = common.findArgOrder([
@@ -123,16 +124,13 @@ else:
 	if settings.local_path[-1:] != '/':
 		settings.local_path = settings.local_path + '/'
 
-if settings.log == True:
-	settings.lfh = open('{}log_{}.txt'.format(settings.local_path, settings._start), 'wb+')
+syncity.common.init2()
+
 if settings.random != None:
 	random.seed(settings.random)
 
 # setup telnet connection
 if settings.run != None or settings.script != None:
-	if settings.record == True:
-		settings.fh = open('{}record_{}.txt'.format(settings.local_path, settings._start), 'wb+')
-	
 	if settings.async == True:
 		common.output('Telnet mode set to ASYNCRONOUS')
 		settings.force_sync = False

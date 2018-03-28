@@ -47,9 +47,9 @@ def run():
 	
 	if settings.skip_setup == False:
 		common.sendData([
-			'CREATE "savannah" tiles Savannah',
-			'savannah ADD WindZone',
-			'savannah SET active true'
+			'LOAD "Savannah" FROM "tile"',
+			'"Savannah" ADD WindZone',
+			'"Savannah" SET active true'
 		])
 		
 		helpers.globalCameraSetup()
@@ -92,9 +92,9 @@ def run():
 	helpers.doRender(mycams)
 	
 	common.sendData([
-		'"savannah/Main Terrain" SET Thermal.ThermalTerrain ambientOffset {}'.format(terrain_ambient_offset),
-		'"savannah/Main Terrain" SET Thermal.ThermalTerrain bandwidth {}'.format(terrain_ambient_bandwidth),
-		'"savannah/Main Terrain" SET Thermal.ThermalTerrain median {}'.format(terrain_ambient_median),
+		'"Savannah/Main Terrain" SET Thermal.ThermalTerrain ambientOffset {}'.format(terrain_ambient_offset),
+		'"Savannah/Main Terrain" SET Thermal.ThermalTerrain bandwidth {}'.format(terrain_ambient_bandwidth),
+		'"Savannah/Main Terrain" SET Thermal.ThermalTerrain median {}'.format(terrain_ambient_median),
 		'"cameras" SET Transform position ({} {} {})'.format(3167, 265, 8160),
 		'"cameras" SET Transform eulerAngles ({} {} {})'.format(13, 0, 0)
 	], read=False)

@@ -23,9 +23,10 @@ def run():
 	settings.keep = True
 	mycams = ['cameras/cameraRGB', 'cameras/segmentation', 'cameras/depth']
 	
-	dist = 8900
+	dist = [ 260, 320 ]
 	azimuth = 0
 	elevation = 72
+	z_pos = [ 8900, 2000 ]
 	y_rot = 0
 	snapOffset = 60
 	
@@ -34,7 +35,7 @@ def run():
 	
 	incr_e = -.25 # elevation increment
 	incr_a = .5 # azimuth increment
-	incr_d = -2.5 # distance increment
+	incr_z = -2.5 # z_position increment
 	incr_s = .5 # snap offset increment
 	
 	min_agc = 9
@@ -46,15 +47,15 @@ def run():
 	
 	if settings.skip_setup == False:
 		common.sendData([
-			'CREATE savannah tiles Savannah',
-			'savannah ADD WindZone',
-			'savannah SET active true'
+			'LOAD "Savannah" FROM "tile"',
+			'"Savannah" ADD WindZone',
+			'"Savannah" SET active true'
 		])
 		
 		helpers.globalCameraSetup(
 			orbitOffset=[1667.05, 32.37876, 1000],
 			orbitSnap=snapOffset,
-			orbitGround='savannah/Main Terrain'
+			orbitGround='Savannah/Main Terrain'
 		)
 		
 		helpers.addCameraSeg(
@@ -102,9 +103,9 @@ def run():
 		)
 		
 		common.sendData([
-			'"savannah/Main Terrain" SET Thermal.ThermalTerrain ambientOffset {}'.format(terrain_ambient_offset),
-			'"savannah/Main Terrain" SET Thermal.ThermalTerrain bandwidth {}'.format(terrain_ambient_bandwidth),
-			'"savannah/Main Terrain" SET Thermal.ThermalTerrain median {}'.format(terrain_ambient_median),
+			'"Savannah/Main Terrain" SET Thermal.ThermalTerrain ambientOffset {}'.format(terrain_ambient_offset),
+			'"Savannah/Main Terrain" SET Thermal.ThermalTerrain bandwidth {}'.format(terrain_ambient_bandwidth),
+			'"Savannah/Main Terrain" SET Thermal.ThermalTerrain median {}'.format(terrain_ambient_median),
 			
 			# set profiles heatiness
 			'"spawner/cars0/RangeRover(Clone)" SET Thermal.ThermalObjectBehaviour profile.heatiness.value 50',
@@ -133,11 +134,9 @@ def run():
 	
 	while dist > 0:
 		common.sendData([
+			'"cameras" SET Transform position.z {}'.format(z_pos),
 			'"cameras/cameraRGB" SET Thermal.ThermalCamera temperatureRange ({} {})'.format(min_agc, max_agc),
-			'"cameras" SET Orbit distance {}'.format(dist),
-			'"cameras" SET Orbit elevation {}'.format(elevation),
-			'"cameras" SET Orbit azimuth {}'.format(azimuth),
-			'"cameras" SET Orbit snapOffset {}'.format(snapOffset)
+			'"cameras" SET Orbit distance {} elevation {} azimuth {} snapOffset (0 {}~{} 0)'.format(dist, elevation, azimuth, snapOffset[0], snapOffset[1])
 		], read=False)
 		
 		helpers.takeSnapshot(mycams, True)
@@ -146,10 +145,10 @@ def run():
 		min_agc = randint(-9, 2)
 		max_agc = randint(25, 35)
 		
-		snapOffset = snapOffset + incr_s
+		# snapOffset = snapOffset + incr_s
 		elevation = elevation + incr_e
 		azimuth += incr_a
-		dist += incr_d
+		z_pos += incr_z
 		
 		if elevation >= elevation_range[1] or elevation <= elevation_range[0]:
 			incr_e = incr_e * -1

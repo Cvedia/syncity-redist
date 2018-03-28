@@ -140,6 +140,22 @@ def init():
 		mkdirP(settings.local_path)
 	colorama.init()
 
+def init2():
+	init_logging()
+	
+	if settings.run != None or settings.script != None:
+		init_recording()
+
+def init_logging():
+	if settings.log == True:
+		settings.lfh = open('{}log_{}.txt'.format(settings.local_path, settings._start), 'wb+')
+		settings.lfh.write('// SDK v{}'.format(settings._version).encode('ascii') + b"\r\n")
+
+def init_recording():
+	if settings.record == True:
+		settings.fh = open('{}record_{}.txt'.format(settings.local_path, settings._start), 'wb+')
+		settings.fh.write('// SDK v{}'.format(settings._version).encode('ascii') + b"\r\n")
+
 def output(s, level='INFO'):
 	"""
 	Prints data to terminal with fancy formatting and ascii assurance.

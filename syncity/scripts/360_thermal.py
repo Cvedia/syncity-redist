@@ -1,4 +1,3 @@
-import random
 import subprocess
 import os
 import pathlib
@@ -44,9 +43,10 @@ def run():
 	# obj = 'Cars/BMW6_Series_650i/BMW6_Series_650i'
 	obj = 'Cars/VW_Golf_V/VW_Golf_V'
 	# obj = 'humans Human/Runfast'
+	obj = helpers.drones_lst[7]
 	
 	if settings.skip_setup == False:
-		helpers.globalCameraSetup()
+		helpers.globalCameraSetup(orbit=False, flycam=True)
 		
 		helpers.addCameraRGB(pp='EnviroFX')
 		helpers.addCameraSeg(segments=['Car'], lookupTable=[['Car', 'red']])
@@ -60,17 +60,19 @@ def run():
 			'"obj" ADD Segmentation.ClassGroup',
 			'"obj" SET Segmentation.ClassGroup itemsClassName "Car"',
 			
-			'CREATE "{}" FROM "cars" AS "obj/subject"'.format(obj),
-			'"obj/subject" SET Transform position ({} {} {})'.format(0, 0, 0),
-			'"obj/subject" SET Transform eulerAngles ({} {} {})'.format(0, 0, 0),
+			# 'CREATE "{}" FROM "cars" AS "obj/subject"'.format(obj),
+			'CREATE "{}" FROM "drones" AS "obj/subject"'.format(obj),
+			
+			'"obj" ADD Thermal.ThermalObjectBehaviour',
+			'"obj" SET Thermal.ThermalObjectBehaviour profile "DefaultThermalProfile"',
 			
 			'"obj/subject" ADD Thermal.ThermalObjectOverride',
 			
-			'"obj/subject" ADD Thermal.ThermalObjectBehaviour',
-			'"obj/subject" SET Thermal.ThermalObjectBehaviour profile "DefaultThermalProfile"',
+			# '"obj/subject" ADD Thermal.ThermalObjectBehaviour',
+			# '"obj/subject" SET Thermal.ThermalObjectBehaviour profile "DefaultThermalProfile"',
 			
-			'"obj" SET Transform position ({} {} {})'.format(-6, 0, -9),
-			'"obj" SET Transform eulerAngles ({} {} {})'.format(0, 0, 0)
+			'"obj/subject" SET Transform position ({} {} {}) eulerAngles ({} {} {})'.format(0, 0, 0, 0, 0, 0),
+			'"obj" SET Transform position ({} {} {}) eulerAngles ({} {} {})'.format(-6, 0, -9, 0, 0, 0)
 			
 	], read=False)
 	
@@ -79,8 +81,7 @@ def run():
 		'"obj" SET active true',
 		'"obj/subject" SET active true',
 		'"cameras/cameraRGB" SET Camera enabled true',
-		'"cameras" SET Transform position ({} {} {})'.format(0, 1, -16),
-		'"cameras" SET Transform eulerAngles ({} {} {})'.format(0, -40, 0)
+		'"cameras" SET Transform position ({} {} {}) eulerAngles ({} {} {})'.format(0, 1, -16, 0, -40, 0)
 	], read=False)
 	
 	if settings.setup_only == True:
@@ -97,21 +98,21 @@ def run():
 		
 		# do a 360 around object
 		while a_y < 360:
-			# random agc values
-			min_agc = random.randint(-10, 5)
-			max_agc = random.randint(30, 150)
+			common.sendData('"obj" SET active false', read=False)
 			
 			helpers.setThermalProps(
 				'obj/subject',
-				heatiness=random.uniform(0, 50), reflectivity=random.uniform(0, 1), ambientOffset=random.uniform(-25, 25),
-				temperatureValue=random.uniform(-20, 50), temperatureBandwidth=random.uniform(0, 20), temperatureMedian=random.uniform(0, 1),
-				variance=random.uniform(0, 50)
+				heatiness=[0, 50], reflectivity=[0, 1], ambientOffset=[-25, 25],
+				temperatureValue=[-20, 50], temperatureBandwidth=[0, 20], temperatureMedian=[0, 1],
+				variance=[0, 50]
 			)
 			
+			common.sendData('"obj" SET active true', read=False)
+			
 			common.sendData([
-				'"cameras/thermal" SET Thermal.ThermalCamera temperatureRange ({} {})'.format(min_agc, max_agc),
+				'"cameras/thermal" SET Thermal.ThermalCamera temperatureRange ({}~{} {}~{})'.format(-10, 5, 30, 150),
 				'"obj" SET Transform eulerAngles ({} {} {})'.format(a_x, a_y, 0),
-				'"obj" SET Transform position ({} {} {})'.format(random.randint(-23, -3) , 0, 0)
+				'"obj" SET Transform position ({}~{} {} {})'.format(-23, -3, 0, 0)
 			])
 			
 			a_y = a_y + displ_y

@@ -1,4 +1,3 @@
-import random
 import subprocess
 import os
 import pathlib
@@ -17,6 +16,7 @@ Human walker at forest
 	- Creates a Segmentation camera
 	- Creates a human walker spawner, this will create random body, random gender and random acessorized humans walking from a starting point to a goal
 	- Flys around as a drone, rotating height , distance and azimuth
+	- Randomizes camera AGC min/max using API
 	- Exports depth maps, rgb images, thermal images, segmentation images and bounding boxes
 '''
 
@@ -28,21 +28,16 @@ def run():
 	mycams = ['cameras/cameraRGB', 'cameras/thermal', 'cameras/segmentation', 'cameras/depth']
 	
 	# start / current position
-	# position = [ 1487.321, 297.3508, 6836.579 ]
 	position = [ 1600, 246, 6829 ]
 	rotation = [ 31.971, 60.161, 0 ]
 	
 	# limits
-	# position_bounduaries = [ [ 1533.402, 232.6935, 6841.968 ], [ 989.1672, 297.3509, 6529.784 ] ]
 	position_bounduaries = [ [ 1683, 240, 6983 ], [ 1600, 246, 6829 ] ]
 	rotation_bounduaries = [ [ 25, 45, 0 ], [ 60, 70, 0 ] ] # 25 - 60 pitch angle , 45 to 70 degree side-to-side
 	
 	# increment settings per loop for X, Y, Z
 	position_incr = [ .25, .0125, .025 ]
 	rotation_incr = [ .75, .55, 0 ]
-	
-	min_agc = 9
-	max_agc = 35
 	
 	if settings.skip_setup == False:
 		# load forest scene
@@ -120,7 +115,7 @@ def run():
 	# loop changing camera positions with random agc bounduaries
 	while loop < settings.loopLimit:
 		common.sendData([
-			# '"cameras/thermal" SET Thermal.ThermalCamera temperatureRange ({} {})'.format(min_agc, max_agc),
+			'"cameras/thermal" SET Thermal.ThermalCamera temperatureRange ({}~{} {}~{})'.format(-3, 5, 30, 35),
 			'"cameras" SET Transform position ({} {} {}) eulerAngles ({} {} {})'.format(
 				position[0], position[1], position[2],
 				rotation[0], rotation[1], rotation[2]
@@ -128,10 +123,6 @@ def run():
 		])
 		
 		helpers.takeSnapshot(mycams, autoSegment=True, forceNoop=True)
-		
-		# random agc values
-		min_agc = randint(-3, 5)
-		max_agc = randint(30, 35)
 		
 		# increments
 		for k, v in enumerate(position_incr):

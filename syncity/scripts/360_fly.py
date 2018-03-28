@@ -26,15 +26,15 @@ def run():
 		helpers.globalDiskSetup()
 		helpers.addDiskOutput(mycams)
 		common.sendData([
-			'CREATE "obj" "{}"'.format(obj),
+			'CREATE "{}" FROM "cars" AS "obj"'.format(obj),
 			'"obj" ADD Segmentation.ClassGroup',
 			'"obj" SET Segmentation.ClassGroup itemsClassName "Car"',
 			'"obj" SET Transform position ({} {} {})'.format(-6, 0, -9),
 			'"obj" SET Transform eulerAngles ({} {} {})'.format(0, 0, 0),
 			
-			'CREATE "city/ground_0" "city/ground/Grass"',
-			'"city/ground_0" SET Transform position (0 0 0)',
-			'"city/ground_0" SET Transform localScale (5 5 5)'
+			'CREATE "city/ground/Grass" FROM "city" AS "city/ground_0"',
+			'"city/ground_0" SET Transform position (0 0 0) localScale (5 5 5)',
+			'"city/ground_0" SET active true'
 		], read=False)
 	
 	# reset camera

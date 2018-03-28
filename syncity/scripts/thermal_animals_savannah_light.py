@@ -50,15 +50,15 @@ def run():
 	if settings.skip_setup == False:
 		# scenario goes first as it's the base for all objects to be placed upon
 		common.sendData([
-			'CREATE savannah tiles Savannah',
-			'savannah ADD WindZone'
+			'LOAD "Savannah" FROM "tile"',
+			'"Savannah" ADD WindZone'
 		])
 		
 		# camera setup
 		helpers.globalCameraSetup(
 			orbitOffset=[1667.05, 32.37876, 1000],
 			orbitSnap=snapOffset,
-			orbitGround='savannah/Main Terrain'
+			orbitGround='Savannah/Main Terrain'
 		)
 		
 		helpers.addCameraSeg(
@@ -76,14 +76,14 @@ def run():
 		helpers.addCameraDepth(width=1024, height=768, fov=90)
 		
 		common.sendData([
-			'"savannah" SET active true',
-			'"savannah" ADD Segmentation.ClassGroup',
-			'"savannah" SET Segmentation.ClassGroup itemsClassName "{}"'.format('ground'),
-			'"savannah" SET active false',
-			'"savannah/Main Terrain" SET Segmentation.ClassInfo itemClass "ground"',
-			'"savannah/Main Terrain/SubMeshes" ADD Segmentation.ClassInfo',
-			'"savannah/Main Terrain/SubMeshes" SET Segmentation.ClassInfo itemClass "ground"',
-			'savannah SET active true'
+			'"Savannah" SET active true',
+			'"Savannah" ADD Segmentation.ClassGroup',
+			'"Savannah" SET Segmentation.ClassGroup itemsClassName "{}"'.format('ground'),
+			'"Savannah" SET active false',
+			'"Savannah/Main Terrain" SET Segmentation.ClassInfo itemClass "ground"',
+			'"Savannah/Main Terrain/SubMeshes" ADD Segmentation.ClassInfo',
+			'"Savannah/Main Terrain/SubMeshes" SET Segmentation.ClassInfo itemClass "ground"',
+			'"Savannah" SET active true'
 		])
 		
 		helpers.addCameraThermal(
@@ -110,9 +110,9 @@ def run():
 		
 		# fine tune specifics
 		common.sendData([
-			'"savannah/Main Terrain" SET Thermal.ThermalTerrain ambientOffset {}'.format(terrain_ambient_offset),
-			'"savannah/Main Terrain" SET Thermal.ThermalTerrain bandwidth {}'.format(terrain_ambient_bandwidth),
-			'"savannah/Main Terrain" SET Thermal.ThermalTerrain median {}'.format(terrain_ambient_median),
+			'"Savannah/Main Terrain" SET Thermal.ThermalTerrain ambientOffset {}'.format(terrain_ambient_offset),
+			'"Savannah/Main Terrain" SET Thermal.ThermalTerrain bandwidth {}'.format(terrain_ambient_bandwidth),
+			'"Savannah/Main Terrain" SET Thermal.ThermalTerrain median {}'.format(terrain_ambient_median),
 			
 			# HACK: set profiles heatiness to high values so objects are visible
 			'"spawner/cars0/RangeRover(Clone)" SET Thermal.ThermalObjectBehaviour profile.heatiness.value 50',
@@ -152,7 +152,7 @@ def run():
 			'"cameras" SET Orbit distance {}'.format(dist),
 			'"cameras" SET Orbit elevation {}'.format(elevation),
 			'"cameras" SET Orbit azimuth {}'.format(azimuth),
-			'"cameras" SET Orbit snapOffset {}'.format(snapOffset)
+			'"cameras" SET Orbit snapOffset (0 {} 0)'.format(snapOffset)
 		], read=False)
 		
 		helpers.takeSnapshot(mycams, autoSegment=True, forceNoop=True)
