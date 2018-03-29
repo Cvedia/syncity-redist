@@ -17,20 +17,65 @@ def help():
 
 def run():
 	settings.keep = True
-	mycams = ['cameras/cameraRGB', 'cameras/segmentation', 'cameras/depth']
+	mycams = [
+		'cameras/cameraRGB',
+		'cameras/segmentation',
+		'cameras/depth_blob',
+		'cameras/depth_depth',
+		'cameras/depth_rgb',
+		'cameras/depth_jpg',
+		'cameras/depth_tif',
+	]
+	
 	# obj = 'Cars/MINI_CooperS/MINI_CooperS'
-	# obj = 'Cars/VW_Golf_V/VW_Golf_V'
-	obj = 'Drones/DJI_Phantom_4_Pro/DJI_Phantom_4_Pro'
+	obj = 'Cars/VW_Golf_V/VW_Golf_V'
+	# obj = 'Drones/DJI_Phantom_4_Pro/DJI_Phantom_4_Pro'
 	
 	if settings.skip_setup == False:
 		helpers.globalCameraSetup()
 		helpers.addCameraRGB(width=4096, height=3072, pp='EnviroFX')
 		helpers.addCameraSeg(segments=['Car'], lookupTable=[['Car', 'red']])
-		helpers.addCameraDepth(width=1024, height=768)
+		
+		helpers.addCameraDepth(label=mycams[2:7], width=1024, height=768)
+		
 		helpers.globalDiskSetup()
 		helpers.addDiskOutput(mycams)
+		
+		# pixel sizes:
+		# 1 8bit
+		# 2 16bit
+		# 4 32bit
+		
 		common.sendData([
-			'CREATE "{}" FROM "drones" AS "obj/subject"'.format(obj),
+			# BLOB is 32bit raw binary
+			'"disk1/Cameras/depth_blob" SET Sensors.RenderCameraLink outputType "BLOB"',
+			
+			# DEPTH shortcut to 1 channel 16bit png
+			'"disk1/Cameras/depth_depth" SET Sensors.RenderCameraLink outputType "DEPTH"',
+			
+			# RGB shortcut to 3 channels 8bit jpg
+			'"disk1/Cameras/depth_rgb" SET Sensors.RenderCameraLink outputType "RGB"',
+			
+			# 3 channels 8bit, this is the same of RGB shortcut
+			'''"disk1/Cameras/depth_jpg" SET Sensors.RenderCameraLink
+					outputType "CUSTOM"
+					outputChannels 3
+					outputPixelSize 1
+					outputExtension "jpg"
+			''',
+			
+			# 1 channel 16bit tif
+			'''"disk1/Cameras/depth_tif" SET Sensors.RenderCameraLink
+				outputType "CUSTOM"
+				outputChannels 1
+				outputPixelSize 2
+				outputExtension "tif"
+			'''
+		])
+		
+		common.sendData([
+			# 'CREATE "{}" FROM "drones" AS "obj/subject"'.format(obj),
+			'CREATE "{}" FROM "cars" AS "obj/subject"'.format(obj),
 			'"obj" SET active false',
 			'"obj/subject" SET Transform position ({} {} {})'.format(0, 0, 0),
 			'"obj/subject" SET Transform eulerAngles ({} {} {})'.format(0, 0, 0),
