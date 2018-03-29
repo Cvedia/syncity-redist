@@ -21,7 +21,7 @@ Human walker at forest
 '''
 
 def args(parser):
-	parser.add_argument('--loopLimit', type=int, default=500, help='Defines a limit of iterations for exporting')
+	parser.add_argument('--loop_limit', type=int, default=500, help='Defines a limit of iterations for exporting')
 
 def run():
 	settings.keep = True
@@ -31,8 +31,8 @@ def run():
 	position = [ 1600, 246, 6829 ]
 	rotation = [ 31.971, 60.161, 0 ]
 	
-	# limits
-	position_bounduaries = [ [ 1683, 240, 6983 ], [ 1600, 246, 6829 ] ]
+	# limits [ [ min ] , [ max ] ]
+	position_bounduaries = [ [ 1600, 225, 6829 ], [ 1683, 246, 6990 ] ]
 	rotation_bounduaries = [ [ 25, 45, 0 ], [ 60, 70, 0 ] ] # 25 - 60 pitch angle , 45 to 70 degree side-to-side
 	
 	# increment settings per loop for X, Y, Z
@@ -113,7 +113,7 @@ def run():
 	loop = 0
 	
 	# loop changing camera positions with random agc bounduaries
-	while loop < settings.loopLimit:
+	while loop < settings.loop_limit:
 		common.sendData([
 			'"cameras/thermal" SET Thermal.ThermalCamera temperatureRange ({}~{} {}~{})'.format(-3, 5, 30, 35),
 			'"cameras" SET Transform position ({} {} {}) eulerAngles ({} {} {})'.format(
@@ -137,4 +137,4 @@ def run():
 				rotation_incr[k] = rotation_incr[k] * -1
 		
 		loop = loop + 1
-		common.output('Loop {} ({}%)'.format(loop, round(100 * (settings.loopLimit / loop),2)))
+		common.output('Loop {} ({}%)'.format(loop, round(100 * (settings.loop_limit / loop),2)))
