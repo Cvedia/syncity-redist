@@ -47,7 +47,7 @@ def run():
 		'''
 		
 		common.sendData([
-			'CREATE "drone/drone0/drone0" "{}"'.format(helpers.drones_lst[6]), # Drones/DJI Phantom 4 Pro/DJI_Phantom_4_Pro
+			'CREATE "{}" FROM "drones" AS "drone/drone0/drone0"'.format(helpers.drones_lst[6]), # Drones/DJI Phantom 4 Pro/DJI_Phantom_4_Pro
 			'"drone/drone0" SET active false',
 			'"drone/drone0" ADD Segmentation.ClassGroup',
 			'"drone/drone0" SET Segmentation.ClassGroup itemsClassName "drone0"',
@@ -56,7 +56,7 @@ def run():
 			'"drone/drone0" SET active true',
 			'"drone/drone0/drone0" SET active true',
 			
-			'CREATE "drone/drone1/drone1" "{}"'.format(helpers.drones_lst[4]), # Drones/DJI S1000/DJI S1000
+			'CREATE "{}" FROM "drones" AS "drone/drone1/drone1"'.format(helpers.drones_lst[4]), # Drones/DJI S1000/DJI S1000
 			'"drone/drone1" SET active false',
 			'"drone/drone1" ADD Segmentation.ClassGroup',
 			'"drone/drone1" SET Segmentation.ClassGroup itemsClassName "drone1"',
@@ -65,7 +65,7 @@ def run():
 			'"drone/drone1" SET active true',
 			'"drone/drone1/drone1" SET active true',
 			
-			'CREATE "drone/drone2/drone2" "{}"'.format(helpers.drones_lst[7]), # Drones/Parrot Disco/Parrot Disco
+			'CREATE "{}" FROM "drones" AS "drone/drone2/drone2"'.format(helpers.drones_lst[7]), # Drones/Parrot Disco/Parrot Disco
 			'"drone/drone2" SET active false',
 			'"drone/drone2" ADD Segmentation.ClassGroup',
 			'"drone/drone2" SET Segmentation.ClassGroup itemsClassName "drone2"',

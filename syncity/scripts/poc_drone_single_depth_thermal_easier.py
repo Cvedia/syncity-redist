@@ -30,7 +30,7 @@ POC Drone single scene
 '''
 
 def args(parser):
-	parser.add_argument('--loopLimit', type=int, default=100, help='Defines a limit of iterations for exporting')
+	parser.add_argument('--loop_limit', type=int, default=100, help='Defines a limit of iterations for exporting')
 
 def run():
 	settings.keep = True
@@ -139,7 +139,7 @@ def run():
 	
 	common.flushBuffer()
 	
-	while loop < settings.loopLimit:
+	while loop < settings.loop_limit:
 		
 		"""
 		# radomize motion blur

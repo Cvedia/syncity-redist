@@ -137,4 +137,4 @@ def run():
 				rotation_incr[k] = rotation_incr[k] * -1
 		
 		loop = loop + 1
-		common.output('Loop {} ({}%)'.format(loop, round(100 * (settings.loop_limit / loop),2)))
+		common.output('Loop {} ({}%)'.format(loop, round(100 * (loop / settings.loop_limit),2)))

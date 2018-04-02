@@ -10,6 +10,9 @@ class Singleton:
 	__instance = None
 	__data = {}
 	
+	def getData(self):
+		return self.__data
+	
 	def __init__(self):
 		pass
 	

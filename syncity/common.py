@@ -13,6 +13,7 @@ import platform
 import random
 import signal
 import textwrap
+import json
 import types
 import re
 import hashlib
@@ -143,20 +144,25 @@ def init():
 	colorama.init()
 
 def init2():
-	init_logging()
+	head = '// SDK v{}'.format(settings._version).encode('ascii') + b"\r\n" + '// ARGV {}'.format(' '.join(sys.argv)).encode('ascii') + b"\r\n" + '// SETTINGS {}'.format(json.dumps(settings.getData())).encode('ascii') + b"\r\n"
+	init_logging(head)
 	
 	if settings.run != None or settings.script != None:
-		init_recording()
+		init_recording(head)
 
-def init_logging():
+def init_logging(head=None):
 	if settings.log == True:
 		settings.lfh = open('{}log_{}.txt'.format(settings.local_path, settings._start), 'wb+')
-		settings.lfh.write('// SDK v{}'.format(settings._version).encode('ascii') + b"\r\n")
+		
+		if head != None:
+			settings.lfh.write(head)
 
-def init_recording():
+def init_recording(head=None):
 	if settings.record == True:
 		settings.fh = open('{}record_{}.txt'.format(settings.local_path, settings._start), 'wb+')
-		settings.fh.write('// SDK v{}'.format(settings._version).encode('ascii') + b"\r\n")
+		
+		if head != None:
+			settings.fh.write(head)
 
 def output(s, level='INFO'):
 	"""

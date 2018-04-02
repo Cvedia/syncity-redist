@@ -28,13 +28,26 @@ def run():
 		helpers.globalDiskSetup()
 		helpers.addDiskOutput(mycams)
 		
+		"""
 		helpers.spawnRadiusGeneric(
 			['drone'],
 			segmentationClass="Drone",
 			tags=['drone'],
-			limit=35,
+			limit=3,
 			radius=10,
 			innerradius=0,
+			position=[0,0,0],
+			collisionCheck=False
+		)
+		"""
+		
+		helpers.spawnRectangleGeneric(
+			['drone'],
+			segmentationClass="Drone",
+			tags=['drone'],
+			limit=3,
+			a=10,
+			b=10,
 			position=[0,0,0],
 			collisionCheck=False
 		)

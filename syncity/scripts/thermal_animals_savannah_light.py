@@ -20,7 +20,7 @@ Animals thermal in Savannah scene
 '''
 
 def args(parser):
-	parser.add_argument('--loopLimit', type=int, default=500, help='Defines a limit of iterations for exporting')
+	parser.add_argument('--loop_limit', type=int, default=500, help='Defines a limit of iterations for exporting')
 
 def run():
 	settings.keep = True
@@ -146,7 +146,7 @@ def run():
 	loop = 0
 	
 	# loop changing camera positions with random agc bounduaries
-	while loop < settings.loopLimit:
+	while loop < settings.loop_limit:
 		common.sendData([
 			'"cameras/thermal" SET Thermal.ThermalCamera temperatureRange ({} {})'.format(min_agc, max_agc),
 			'"cameras" SET Orbit distance {}'.format(dist),
@@ -176,4 +176,4 @@ def run():
 			azimuth = 0
 		
 		loop = loop + 1
-		common.output('Loop {} ({}%)'.format(loop, round(100 * (settings.loopLimit / loop),2)))
+		common.output('Loop {} ({}%)'.format(loop, round(100 * (settings.loop_limit / loop),2)))
