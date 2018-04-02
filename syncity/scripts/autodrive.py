@@ -83,7 +83,7 @@ def run():
 			common.sendData([
 				'CREATE "_subsystems/splinetool/prefabs/cube" FROM "drones" AS "{}/cube"'.format(camera_mount),
 				'"{}/cube" SET active true'.format(camera_mount),
-				'"{}/cube" SET Transform eulerAngles (0 0 0) localPosition (0 0 1)'.format(camera_mount)
+				'"{}/cube" SET Transform localEulerAngles (0 0 0) localPosition (0 0 1)'.format(camera_mount)
 			], read=False)
 		
 		if settings.disable_lidar == False:
