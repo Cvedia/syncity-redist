@@ -1235,7 +1235,7 @@ def takeSnapshot(lst, autoSegment=False, label='disk1', forceNoop=False):
 		idx = [i for i, s in enumerate(lst) if 'segmentation' in s]
 		
 		if len(idx) == 0:
-			common.output('WARNING: No camera with segmentation name found, skipping autoSegment')
+			common.output('No camera with segmentation name found, skipping autoSegment', 'WARNING')
 		else:
 			
 			# DEPRECATED: This is no longer needed

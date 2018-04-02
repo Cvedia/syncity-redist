@@ -28,7 +28,7 @@ def args(parser):
 	except: pass
 	
 	try:
-		parser.add_argument('--enable_cube', action='store_true', default=False, help='Adds a cube 1 meter away from the front camera')
+		parser.add_argument('--enable_cube', action='store_true', default=False, help='Adds a 1x1x1 cube 1 meter away from the front camera')
 	except: pass
 
 def run():
@@ -77,12 +77,13 @@ def run():
 			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.tonemapping.tonemapper "1"'.format(mycams[0])
 		], read=False)
 		
-		# add measuremnt cube 1 meter away from front camera mount
+		# add 1x1x1 meter cube 1 meter away from front camera mount
+		# if you place the cube at 0 1 1 it will also show on lidar
 		if settings.enable_cube:
 			common.sendData([
 				'CREATE "_subsystems/splinetool/prefabs/cube" FROM "drones" AS "{}/cube"'.format(camera_mount),
 				'"{}/cube" SET active true'.format(camera_mount),
-				'"{}/cube" SET Transform localPosition (0 0 1)'.format(camera_mount)
+				'"{}/cube" SET Transform eulerAngles (0 0 0) localPosition (0 0 1)'.format(camera_mount)
 			], read=False)
 		
 		if settings.disable_lidar == False:
