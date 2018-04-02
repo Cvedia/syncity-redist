@@ -26,6 +26,10 @@ def args(parser):
 	try:
 		parser.add_argument('--lidar_ip', default="192.168.1.100", help='Defines a IP for lidar devices')
 	except: pass
+	
+	try:
+		parser.add_argument('--enable_cube', action='store_true', default=False, help='Adds a cube 1 meter away from the front camera')
+	except: pass
 
 def run():
 	settings.keep = True
@@ -70,8 +74,16 @@ def run():
 			'"{}" ADD UnityEngine.PostProcessing.PostProcessingBehaviour'.format(mycams[0]),
 			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile "EnviroFX"'.format(mycams[0]),
 			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.eyeAdaptation.enabled true'.format(mycams[0]),
-			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.tonemapping.tonemapper "1"'.format(mycams[0]),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.tonemapping.tonemapper "1"'.format(mycams[0])
 		], read=False)
+		
+		# add measuremnt cube 1 meter away from front camera mount
+		if settings.enable_cube:
+			common.sendData([
+				'CREATE "_subsystems/splinetool/prefabs/cube" FROM "drones" AS "{}/cube"'.format(camera_mount),
+				'"{}/cube" SET active true'.format(camera_mount),
+				'"{}/cube" SET Transform localPosition (0 0 1)'.format(camera_mount)
+			], read=False)
 		
 		if settings.disable_lidar == False:
 			helpers.addLidar(
