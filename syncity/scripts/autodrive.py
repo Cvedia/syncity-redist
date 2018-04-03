@@ -74,7 +74,40 @@ def run():
 			'"{}" ADD UnityEngine.PostProcessing.PostProcessingBehaviour'.format(mycams[0]),
 			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile "EnviroFX"'.format(mycams[0]),
 			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.eyeAdaptation.enabled true'.format(mycams[0]),
-			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.tonemapping.tonemapper "1"'.format(mycams[0])
+			
+			# '"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.enabled true'.format(mycams[0]),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.tonemapping.tonemapper "1"'.format(mycams[0]),
+			
+			# antialiasing
+			'''"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour
+				profile.antialiasing.enabled true
+				profile.antialiasing.settings.method 1
+				profile.antialiasing.settings.taaSettings.jitterSpread 1.0
+				profile.antialiasing.settings.taaSettings.sharpen 0.8
+				profile.antialiasing.settings.taaSettings.stationaryBlending 0.99
+				profile.antialiasing.settings.taaSettings.motionBlending 0.8
+			'''.format(mycams[0]),
+			
+			# ambient occlusion
+			'''"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour
+				profile.ambientOcclusion.enabled true
+				profile.ambientOcclusion.settings.intensity 1.3
+				profile.ambientOcclusion.settings.radius 0.3
+				profile.ambientOcclusion.settings.sampleCount 10
+				profile.ambientOcclusion.settings.downsampling 1
+				profile.ambientOcclusion.settings.forceForwardCompatibility 0
+				profile.ambientOcclusion.settings.ambientOnly 0
+				profile.ambientOcclusion.settings.highPrecision 0
+			'''.format(mycams[0]),
+			
+			# motion blur
+			'''"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour
+				profile.motionBlur.enabled true
+				profile.motionBlur.settings.shutterAngle 180
+				profile.motionBlur.settings.sampleCount 4
+				profile.motionBlur.settings.frameBlending 0.5
+			'''.format(mycams[0])
+			
 		], read=False)
 		
 		# add 1x1x1 meter cube 1 meter away from front camera mount
