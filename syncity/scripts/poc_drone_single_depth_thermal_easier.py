@@ -51,7 +51,8 @@ def run():
 		helpers.spawnDroneObjs(
 			dronesLimit=[2,2],
 			dronesColors=True,
-			dronesTags=['phantom'],
+			# dronesTags=['phantom'],
+			dronesTags=['blurred'],
 			dronesPartsNames='chassis,legs,motors,battery,bolts,sensors_caps,sensors,camera,blades',
 			
 			buildingsInnerRadius=80,
