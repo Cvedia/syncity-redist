@@ -2425,7 +2425,7 @@ def spawnDroneObjs(
 			seed=seed,
 			method='Frustum',
 			methodParameters={'cam': '"cameras/cameraRGB"'},
-			minDistance=2,
+			minDistance=2.5,
 			maxDistance=5
 		)
 	
