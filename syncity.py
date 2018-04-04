@@ -14,13 +14,13 @@ import random
 
 from syncity import common, settings_manager
 
-SYNCITY_VERSION = '18.04.02.1748'
+SYNCITY_VERSION = '18.04.03.2141'
 SIMULATOR_MIN_VERSION = '18.03.15.0000'
 
 print ('SynCity toolbox - v{}\nCopyright (c) 2016-{} CVEDIA PVE Ltd\n'.format(SYNCITY_VERSION, datetime.date.today().year))
 
 if sys.version_info[0] < 3:
-	print ('*** WARNING: You\'re using a old version of python that is not maintained by this SDK, some functions might fail. Please use python 3+\n\n')
+	print ('*** WARNING: You\'re using a old version of python that is not maintained by this SDK, some functions might fail. Run at your own risk! Please use python 3+\n\n')
 
 parser = argparse.ArgumentParser(
 	formatter_class=argparse.RawDescriptionHelpFormatter,
@@ -44,6 +44,7 @@ parser.add_argument('-r', '--run', type=argparse.FileType('r'), action='append',
 
 parser.add_argument('--cooldown', type=int, default=0, help='Cooldown after snapshot')
 
+# platform specific
 if platform.system() == 'Windows':
 	parser.add_argument('-o', '--output', default='E:\\tmp\\', help='Defines output path for snapshots, note that this path is relative to the machine running the simulator, defaults to E:\\tmp\\', dest='output_path')
 	parser.add_argument('-l', '--local_output', default='E:\\tmp\\', action=syncity.common.readableDir, help='Defines local output path for recordings, json exports, etc; This path is relative to the machine running this script, defaults to E:\\tmp\\', dest='local_path')
@@ -51,36 +52,44 @@ else:
 	parser.add_argument('-o', '--output', default='/tmp/', help='Defines output path for snapshots, note that this path is relative to the machine running the simulator, defaults to /tmp/', dest='output_path')
 	parser.add_argument('-l', '--local_path', default='/tmp/', action=syncity.common.readableDir, help='Defines local output path for recordings, json exports, etc; This path is relative to the machine running this script, defaults to /tmp/', dest='local_path')
 
+# misc
 parser.add_argument('-q', '--quiet', action='store_true', help='Quiet mode')
 parser.add_argument('-n', '--no_color', action='store_true', default=False, help='Disable color output')
 parser.add_argument('-Z', '--abort_on_error', action='store_true', default=False, help='Abort execution on error')
-parser.add_argument('--assets', help='Defines assets folder name')
+parser.add_argument('-A', '--assets', help='Defines assets folder name')
 parser.add_argument('--db', help='Defines database folder name, if not set will follow --assets, if --assets is not defined, this value will not be touched')
 parser.add_argument('--seed_py', help='Defines a seed number for random methods on python layer. Note that this will be treated as a string.', default=None)
 parser.add_argument('--seed_api', type=int, help='Defines a seed number for random methods on api layer.', default=None)
 parser.add_argument('--interactive', action='store_true', help='Drops to a interactive shell after executing stack or when interrupted.', default=False)
 parser.add_argument('--keep', default=False, action='store_true', help='Keep created assets on scene')
+parser.add_argument('-R', '--reset', action='store_true', help='Resets simulator before running anything on stack')
 parser.add_argument('--record', action='store_true', help='Record commands sent to API using --local_path as output path')
 parser.add_argument('--debug', action='store_true', help='Defines a global debug flag, this will cause a lot of outputs')
-parser.add_argument('--log', action='store_true', help='Log all IOs')
+parser.add_argument('-L', '--log', action='store_true', help='Log all IOs')
 parser.add_argument('--async', action='store_true', help='Send some telnet commands asyncronously -- EXPERIMENTAL')
+
 parser.add_argument('--skip_init', action='store_true', default=False, help='Disables telnet init sequence')
 parser.add_argument('--skip_disk', action='store_true', help='Disables disk export completly')
 parser.add_argument('--skip_setup', action='store_true', help='Skip script setup and go straight to data extraction')
+
 parser.add_argument('--setup_only', action='store_true', help='Runs script setup and exits')
 parser.add_argument('--enable_physics', action='store_true', default=False, help='Enable Physics, mainly affects objects with rigidbodies.')
 parser.add_argument('--disable_envirosky', action='store_true', help='Disables Envirosky -- NOT RECOMMENDED')
 parser.add_argument('--disable_canvas', action='store_true', help='Disables client rendering visualization, better for performance, but you will only see outputs written to disk.')
 parser.add_argument('--use_old_depth_buffer', action='store_true', default=False, help='Uses old depth buffer component')
 parser.add_argument('--flycam', action='store_true', help='Spawns fly cam, controllable via simulator')
+
 parser.add_argument('--carsLimit', type=int, default=50, help='Spawn cars into scene, defaults to 100')
 parser.add_argument('--propsLimit', type=int, default=250, help='Spawn props into scene, defaults to 250')
 parser.add_argument('--signsLimit', type=int, default=250, help='Spawn signs into scene, defaults to 250')
 parser.add_argument('--treesLimit', type=int, default=250, help='Spawn trees into scene, defaults to 250')
 parser.add_argument('--backdropsLimit', type=int, default=50, help='Spawn backdrops into scene, defaults to 50')
+
 parser.add_argument('--X_COMP', type=float, default=0, help='Spawner X Compensation, defaults to 0')
 parser.add_argument('--Y_COMP', type=float, default=1, help='Spawner Y Compensation, defaults to 1')
 parser.add_argument('--Z_COMP', type=float, default=0, help='Spawner Z Compensation, defaults to 0')
+
+parser.add_argument('-v', '--version', action='store_true', default=False, help='Shows current SDK version, can be combined with -i and -p to get simulator version')
 
 scripts_parser = parser.add_argument_group('Scripts specific options')
 common.modulesArgs('scripts', parser=scripts_parser)
@@ -92,8 +101,10 @@ args = parser.parse_args()
 
 settings = syncity.settings_manager.Singleton()
 settings._start = time.time()
+
 settings._version = SYNCITY_VERSION
 settings._simulator_min_version = SIMULATOR_MIN_VERSION
+
 settings._root = os.path.dirname(os.path.realpath(__file__))
 settings.shutdown = False
 settings._interactive = False
@@ -141,6 +152,10 @@ if settings.run != None or settings.script != None:
 		settings.force_sync = True
 	
 	syncity.common.initTelnet(settings.ip, settings.port)
+	
+	if settings.reset:
+		syncity.common.resetSimulator()
+	
 	syncity.common.flushBuffer()
 
 idx = { 'run': 0, 'script': 0, 'tool': 0 }
@@ -186,5 +201,9 @@ for s in stack:
 			import_tool.run()
 		
 		idx['tool'] += 1
+	else:
+		raise 'Trying to run unknown stack type: {}'.format(s)
 	
 	ran += 1
+
+common.output('Stack completed.')
