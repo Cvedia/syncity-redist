@@ -49,8 +49,6 @@ def run():
 		common.sendData([ '"disk1/Cameras/depth" SET Sensors.RenderCameraLink outputType "BLOB"' ])
 		
 		helpers.spawnDroneObjs(
-			# prefix='cameras/spawner',
-			# dronesLimit=[0,0],
 			dronesLimit=[2,2],
 			dronesColors=True,
 			dronesTags=['phantom'],
@@ -123,10 +121,10 @@ def run():
 		'"EnviroSky" EXECUTE EnviroSky ChangeWeather "{}"'.format(helpers.weather_lst[2]),
 		'"EnviroSky" SET EnviroSky cloudsMode "{}" fogSettings.heightFog false fogSettings.distanceFog false cloudsSettings.globalCloudCoverage {}'.format(helpers.clouds_lst[2], -0.04),
 		'"{}" SET Sensors.RenderCamera alwaysOn false'.format(mycams[0]),
-		'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false'.format(mycams[0]),
-		'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.shutterAngle {}'.format(mycams[0], 270),
-		'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount {}'.format(mycams[0], 32),
-		'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending {}'.format(mycams[0], 1),
+		'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled true'.format(mycams[0]),
+		'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.shutterAngle {}'.format(mycams[0], 360),
+		'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount {}'.format(mycams[0], 4),
+		'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending {}'.format(mycams[0], .064),
 		'"disk1" SET Sensors.Disk counter {}'.format(loop+1),
 		
 		# if not using cars, +thermal
@@ -135,23 +133,15 @@ def run():
 		
 		# disable blooming effects
 		'"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.bloom.enabled false',
+		
+		# shrink spawn area to make it fit on camera frustrum
+		'"cameras/spawner" SET Transform localScale (0.75 0.75 0.75)'
+		
 	], read=False)
 	
 	common.flushBuffer()
 	
 	while loop < settings.loop_limit:
-		
-		"""
-		# radomize motion blur
-		if random.uniform(0,1) > 1:
-			motionblur = 'true'
-		else:
-			motionblur = 'false'
-		"""
-		
-		motionblur = 'false'
-		
-		
 		"""
 		# set drone body thermal
 		helpers.setThermalProps(
@@ -225,8 +215,15 @@ def run():
 				'"cameras/spawner/drones" SET active true'
 			], read=False)
 		
-		# randomize drone positions on every loop
-		common.sendData('"cameras/spawner/drones" EXECUTE RandomProps.PropArea Shuffle')
+		common.sendData([
+			# randomize drone positions
+			'"cameras/spawner/drones" EXECUTE RandomProps.PropArea Shuffle',
+			# move drone container a bit further away
+			'"cameras/spawner" SET Transform localPosition (0 0 {}~{})'.format(.5, 1.5),
+			# enable rendering for motion blur
+			'"{}" SET Camera enabled true'.format(mycams[0])
+		])
+		time.sleep(.5)
 		helpers.takeSnapshot(mycams, True)
 		
 		loop = loop + 1
