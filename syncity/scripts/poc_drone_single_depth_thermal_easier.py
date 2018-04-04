@@ -35,6 +35,9 @@ def args(parser):
 def run():
 	settings.keep = True
 	mycams = ['cameras/cameraRGB', 'cameras/segmentation', 'cameras/depth']
+	# set to `embedded` for rotors that are blurred textures
+	# set to `motion` for rotors that will be blurred by render camera's motion blur
+	blurring_method = 'embedded'
 	
 	if settings.skip_setup == False:
 		helpers.globalCameraSetup(orbit=False)
@@ -51,8 +54,7 @@ def run():
 		helpers.spawnDroneObjs(
 			dronesLimit=[2,2],
 			dronesColors=True,
-			# dronesTags=['phantom'],
-			dronesTags=['blurred'],
+			dronesTags=['blurred' if blurring_method == 'embedded' else 'phantom'],
 			dronesPartsNames='chassis,legs,motors,battery,bolts,sensors_caps,sensors,camera,blades',
 			
 			buildingsInnerRadius=80,
@@ -122,10 +124,12 @@ def run():
 		'"EnviroSky" EXECUTE EnviroSky ChangeWeather "{}"'.format(helpers.weather_lst[2]),
 		'"EnviroSky" SET EnviroSky cloudsMode "{}" fogSettings.heightFog false fogSettings.distanceFog false cloudsSettings.globalCloudCoverage {}'.format(helpers.clouds_lst[2], -0.04),
 		'"{}" SET Sensors.RenderCamera alwaysOn false'.format(mycams[0]),
-		'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled true'.format(mycams[0]),
-		'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.shutterAngle {}'.format(mycams[0], 360),
-		'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount {}'.format(mycams[0], 4),
-		'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending {}'.format(mycams[0], .064),
+		'''"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour
+				profile.motionBlur.enabled true
+				profile.motionBlur.settings.shutterAngle {}
+				profile.motionBlur.settings.sampleCount {}
+				profile.motionBlur.settings.frameBlending {}
+		'''.format(mycams[0], 360, 4, .064) if blurring_method != 'embedded' else '"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false'.format(mycams[0]),
 		'"disk1" SET Sensors.Disk counter {}'.format(loop+1),
 		
 		# if not using cars, +thermal
@@ -222,9 +226,11 @@ def run():
 			# move drone container a bit further away
 			'"cameras/spawner" SET Transform localPosition (0 0 {}~{})'.format(.5, 1.5),
 			# enable rendering for motion blur
-			'"{}" SET Camera enabled true'.format(mycams[0])
+			'"{}" SET Camera enabled true'.format(mycams[0]) if blurring_method != 'embedded' else ''
 		])
-		time.sleep(.5)
-		helpers.takeSnapshot(mycams, True)
 		
+		if blurring_method != 'embedded':
+			time.sleep(.5)
+		
+		helpers.takeSnapshot(mycams, True)
 		loop = loop + 1
