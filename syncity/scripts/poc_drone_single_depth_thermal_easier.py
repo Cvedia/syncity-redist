@@ -51,6 +51,14 @@ def run():
 		# HACK: if you want to return BLOBs instead of DEPTH maps use this:
 		common.sendData([ '"disk1/Cameras/depth" SET Sensors.RenderCameraLink outputType "BLOB"' ])
 		
+		# chromatic aberration setup
+		helpers.LCP(
+			camera=mycams[0],
+			redParam1=0.1,
+			redParam2=0.1,
+			redParam3=-1
+		)
+		
 		helpers.spawnDroneObjs(
 			dronesLimit=[2,2],
 			dronesColors=True,

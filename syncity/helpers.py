@@ -23,8 +23,10 @@ drones_lst = [
 	'Drones/red/red',
 	'Drones/DJI Spreading Wings S1000 Professional Octocopter/Spreading_Wings_S1000',
 	'Drones/white/white',
-	'Drones/DJI_Phantom_4_Pro/DJI_Phantom_4_Pro',
-	'Drones/Parrot Disco Drone/Parrot_Disco'
+	'Drones/DJI_Phantom_4_Pro/DJI_Phantom_4_Pron',
+	'Drones/Parrot Disco Drone/Parrot_Disco',
+	'Drones/DJI_Phantom_3_Pro/DJI_Phantom_3_Pro',
+	'Drones/DJI_Phantom_4_Pro_obsidian/DJI_Phantom_4_Pro_obsidian'
 ]
 
 # lite asset package
@@ -1438,7 +1440,102 @@ def addRandomColor(objs, colors=16, colorsWeights=14, spawner=False, method='Fro
 	
 	common.sendData(buf, read=False)
 
-def lcp(
+def sphericalCamera(
+	add=True,
+	camera='cameras/cameraRGB',
+	
+	fisheye=None,
+	azimuth=None,
+	elevation=None
+):
+	buf = []
+	if not isinstance(camera, list):
+		camera = [ camera ]
+	
+	for c in camera:
+		if add == True:
+			buf.append('"{}" ADD SphericalCamera'.format(c))
+		
+		s = ['"{}" SET SphericalCamera '.format(c)]
+		
+		if fisheye != None:
+			s.append('fisheye "{}"'.format("true" if fisheye == True else "false"))
+		if azimuth != None:
+			s.append('azimuth {}'.format(azimuth))
+		if elevation != None:
+			s.append('elevation {}'.format(elevation))
+		
+		if len(s) == 1:
+			raise 'No parameters sent'
+		
+		buf.append(' '.join(s))
+	
+	common.sendData(buf)
+
+def physicalCameraParameters(
+	add=True,
+	camera='cameras/cameraRGB',
+	
+	focalLengthMM=None,
+	sensorWidthMM=None,
+	sensorHeightMM=None,
+	sensorAspect=None,
+	sensorFormatFactor=None
+):
+	"""
+	Changes camera lens parameters compatible with physical metrics
+	
+	# Arguments
+	
+	add (bool): Defines if we should add the `PhysicalCameraParameters` component to the camera, if you already have a `PhysicalCameraParameters` component you should set this to `None` so we simply manipulate settings sent, defaults to `True`
+	camera (string|list): Defines camera where `PhysicalCameraParameters` should be added / exists, defaults to `cameras/cameraRGB`,
+	
+	focalLengthMM (float): Focal Length in milimiters defaults to `None`
+	sensorWidthMM (float): Defines physical CMOS sensor width in milimiters defaults to `None`
+	sensorHeightMM (float): Defines physical CMOS sensor height in milimiters defaults to `None`
+	sensorAspect (float): Defines physical CMOS sensor aspect ratio, this might override `sensorHeightMM` or `sensorWidthMM` defaults to `None`
+	sensorFormatFactor (float): Sensoe format factor, defaults to `None`
+	
+	# Note
+	
+	Values set to `None` won't be changed, meaning they will default to what's been defined on the camera previously, if those values haven't been yet set, defaults will fallback to the component `PhysicalCameraParameters` defaults, which are:
+	
+	focalLengthMM: 50
+	sensorWidthMM: 36
+	sensorHeightMM: 24
+	sensorAspect: 1
+	sensorFormatFactor: 1
+	
+	"""
+	buf = []
+	if not isinstance(camera, list):
+		camera = [ camera ]
+	
+	for c in camera:
+		if add == True:
+			buf.append('"{}" ADD PhysicalCameraParameters'.format(c))
+		
+		s = ['"{}" SET PhysicalCameraParameters '.format(c)]
+		
+		if sensorWidthMM != None:
+			s.append('sensorWidthMM {}'.format(sensorWidthMM))
+		if sensorHeightMM != None:
+			s.append('sensorHeightMM {}'.format(sensorHeightMM))
+		if focalLengthMM != None:
+			s.append('focalLengthMM {}'.format(focalLengthMM))
+		if sensorAspect != None:
+			s.append('sensorAspect {}'.format(sensorAspect))
+		if sensorFormatFactor != None:
+			s.append('sensorFormatFactor {}'.format(sensorFormatFactor))
+		
+		if len(s) == 1:
+			raise 'No parameters sent'
+		
+		buf.append(' '.join(s))
+	
+	common.sendData(buf)
+
+def LCP(
 	add=True,
 	camera='cameras/cameraRGB',
 	
@@ -1494,55 +1591,61 @@ def lcp(
 	# Arguments
 	
 	add (bool): Defines if we should add the LCP component to the camera, if you already have a LCP component you should set this to `None` so we simply manipulate settings sent, defaults to `True`
-	camera (string|list): Defines camera where LCP should be added / exists, defaults to `cameras/cameraRGB`,
+	camera (string|list): Defines camera where LCP should be added / exists, defaults to `cameras/cameraRGB`
 	
 	updateValuesMode (string): Defines how values should be updated, this depends on how you're using this component. Defaults to `None` which is `OnEnableOnly`, possible options are `OnEnableOnly` and `EveryFrame`.
-	focalLength (float): Focal Length compatible with real camera values defaults to `None`,
-	sensorFormatFactor (float): Sensoe format factor, defaults to `None`,
-	distortionScale (float): Distortion weight scale, defaults to `None`,
-	isFisheyeDistortion (bool): enables fish eye distortion defaults to `None`,
+	focalLength (float): Focal Length compatible with real camera values defaults to `None`
+	sensorFormatFactor (float): Sensoe format factor, defaults to `None`
+	distortionScale (float): Distortion weight scale, defaults to `None`
+	isFisheyeDistortion (bool): enables fish eye distortion defaults to `None`
 	
-	radialParam1 (float): defaults to `None`,
-	radialParam2 (float): defaults to `None`,
-	radialParam3 (float): defaults to `None`,
+	radialParam1 (float): defaults to `None`
+	radialParam2 (float): defaults to `None`
+	radialParam3 (float): defaults to `None`
 	
-	radialParamX (float): defaults to `None`,
-	radialParamY (float): defaults to `None`,
+	radialParamX (float): defaults to `None`
+	radialParamY (float): defaults to `None`
 	
-	redParam1 (float): defaults to `None`,
-	redParam2 (float): defaults to `None`,
-	redParam3 (float): defaults to `None`,
+	redParam1 (float): defaults to `None`
+	redParam2 (float): defaults to `None`
+	redParam3 (float): defaults to `None`
 	
-	redParamX (float): defaults to `None`,
-	redParamY (float): defaults to `None`,
+	redParamX (float): defaults to `None`
+	redParamY (float): defaults to `None`
 	
-	greenParam1 (float): defaults to `None`,
-	greenParam2 (float): defaults to `None`,
-	greenParam3 (float): defaults to `None`,
+	greenParam1 (float): defaults to `None`
+	greenParam2 (float): defaults to `None`
+	greenParam3 (float): defaults to `None`
 	
-	greenParamX (float): defaults to `None`,
-	greenParamY (float): defaults to `None`,
+	greenParamX (float): defaults to `None`
+	greenParamY (float): defaults to `None`
 	
-	blueParam1 (float): defaults to `None`,
-	blueParam2 (float): defaults to `None`,
-	blueParam3 (float): defaults to `None`,
+	blueParam1 (float): defaults to `None`
+	blueParam2 (float): defaults to `None`
+	blueParam3 (float): defaults to `None`
 	
-	blueParamX (float): defaults to `None`,
-	blueParamY (float): defaults to `None`,
+	blueParamX (float): defaults to `None`
+	blueParamY (float): defaults to `None`
 	
-	vignetteParam1 (float): defaults to `None`,
-	vignetteParam2 (float): defaults to `None`,
-	vignetteParam3 (float): defaults to `None`,
-	vignetteParam4 (float): defaults to `None`,
+	vignetteParam1 (float): defaults to `None`
+	vignetteParam2 (float): defaults to `None`
+	vignetteParam3 (float): defaults to `None`
+	vignetteParam4 (float): defaults to `None`
+	
+	# Note
+	
+	Values set to `None` won't be changed, meaning they will default to what's been defined on the camera previously, if those values haven't been yet set, defaults will fallback to the component `LCP` defaults, which are all zero.
 	
 	"""
 	buf = []
+	if not isinstance(camera, list):
+		camera = [ camera ]
 	
 	for c in camera:
 		if add == True:
 			buf.append('"{}" ADD LCP'.format(c))
 		
-		s = ['"{}" SET LCP '.format(c)]
+		s = ['"{}" SET LCP enabled false '.format(c)]
 		
 		if updateValuesMode != None:
 			s.append('updateValuesMode "{}"'.format(updateValuesMode))
@@ -1553,7 +1656,7 @@ def lcp(
 		if distortionScale != None:
 			s.append('distortionScale {}'.format(distortionScale))
 		if isFisheyeDistortion != None:
-			s.append('isFisheyeDistortion {}'.format(isFisheyeDistortion))
+			s.append('isFisheyeDistortion {}'.format('true' if isFisheyeDistortion == True else 'false'))
 		
 		if radialParam1 != None:
 			s.append('radialParam1 {}'.format(radialParam1))
@@ -1614,7 +1717,7 @@ def lcp(
 		if len(s) == 1:
 			raise 'No parameters sent'
 		
-		buf.append(' '.join(s))
+		buf.append('{} enabled true'.format(' '.join(s)))
 	
 	common.sendData(buf)
 
@@ -1785,6 +1888,16 @@ def setThermalProps(
 	ambientOffset (float): Temperature offset in relation to ambient (from camera watching); ranges from -25 to 25
 	reflectivity (float): How reflective the object is for other infrared emissions; ranges from 0 - 1
 	variance (float): Defines the fuzzyness of temperature variance across texturized objects
+	
+	# Note
+	
+	`ThermalObjectOverride` component expects a `ThermalObjectBehaviour` on the parent game object,
+	you must have this added before adding the `ThermalObjectOverride`; If you have a override without
+	profile, the component will not have and effect.
+	
+	Additionally, when changing the settings you should disable the container and the child (`objs`),
+	then change the profile, and finally enable the child and container (in this order) to get maximum
+	performance. This method will disable / enable the child but will not touch the container.
 	
 	"""
 	
@@ -1957,10 +2070,10 @@ def humanSpawner(
 def spawner(
 	types=[], tags=None, scale=[1,1,1], position=[0,0,0],
 	rotation=[0,0,0], limit=50, segmentationClass=None, orbit=False,
-	stickToGround=False, collisionCheck=True, suffix="", flush=False, prefix='spawner',
+	stickToGround=False, collisionCheck=True, suffix="", flush=False, prefix='spawner', container='container',
 	names=None, uglyFix=True, seed=None, randomColors=None, randomColorsWeights=14,
 	method=None, methodParameters=None, minDistance=None, maxDistance=None,
-	partsNames=None, autoSegment=False, thermalObjectBehaviour=None
+	partsNames=None, autoSegment=False, thermalObjectBehaviour=None, thermalObjectOverride=False
 ):
 	"""
 	Creates a torus shaped object spawner
@@ -1980,6 +2093,7 @@ def spawner(
 	suffix (string): Adds a suffix string on types
 	flush (bool): Forces a telnet queue flush after spawning, defaults to `False`
 	prefix (string): Defines a root game object to nest types into, defaults to `spawner`
+	container (string): Defines a container object name nested within `type`, defaults to `container`
 	names (list): Overrides type caption, must be aligned with the number of arguments on types, defaults to `None`
 	uglyFix (bool): Ugly fix for asset naming, defaults to `True`
 	seed (int): Defines a seed number, this forces random values to be equal on different instances, defaults to `None`
@@ -1991,7 +2105,8 @@ def spawner(
 	maxDistance (int|list): defines a maximum distance within spawned objects, when a `list` type is sent, the api range randomizer will be used
 	partsNames (string): Defines a list of parts to be colorized, defaults to `None`
 	autoSegment (bool): Automatically segment objects based on types or tags given, defaults to `False`
-	thermalObjectBehaviour (string|dict|dict<list>): Defines a thermal profile for the group, defaults to `None`, when a `string` is sent, assumes it's a profile name, when a dictionary is send, binds the default profile and override values set on dictionary; When a `dict` with `list` elements is sent, assumes it's a random range of values.
+	thermalObjectBehaviour (string|bool): Defines a thermal profile; Note that this will be added to the second level component allowing for a `thermalObjectOverride` to be placed at the `container`; defaults to `None`, when set to `True` will use `DefaultThermalProfile`
+	thermalObjectOverride (bool): Adds a thermalObjectOverride component to the `container`. You must have `thermalObjectBehaviour` on the parent object in order for this work; Defaults to `False`
 	
 	"""
 	
@@ -2006,6 +2121,9 @@ def spawner(
 	else:
 		stickToGround = 'false'
 	
+	if thermalObjectBehaviour != None and isinstance(thermalObjectBehaviour, bool) and thermalObjectBehaviour == True:
+		thermalObjectBehaviour = 'DefaultThermalProfile'
+	
 	# loop each of the types
 	i = 0
 	for t in types:
@@ -2014,13 +2132,28 @@ def spawner(
 		else:
 			n = names[i]
 		
+		obj = '{}/{}/{}'.format(prefix, n, container)
+		
 		common.sendData([
-			'CREATE "{}/{}"'.format(prefix, n),
-			'"{}/{}" SET active false'.format(prefix, n),
+			'CREATE "{}"'.format(obj),
+			'"{}" SET active false'.format(obj),
 			
-			'"{}/{}" ADD RandomProps.{}'.format(prefix, n, method) if method != None else '',
-			'"{}/{}" ADD RandomProps.PropArea'.format(prefix, n)
+			'"{}" ADD RandomProps.{}'.format(obj, method) if method != None else '',
+			'"{}" ADD RandomProps.PropArea'.format(obj)
 		], read=False)
+		
+		# NOTE: This is added to the parent object, not container
+		if thermalObjectBehaviour != None:
+			common.sendData([
+			'"{}/{}" ADD Thermal.ThermalObjectBehaviour'.format(prefix, n),
+			'"{}/{}" SET Thermal.ThermalObjectBehaviour profile "{}"'.format(prefix, n, thermalObjectBehaviour)
+			], read=False)
+		
+		# NOTE: This is added to the container object and will propagate thuru spawned childs
+		if thermalObjectOverride == True:
+			common.sendData([
+				'"{}" ADD Thermal.ThermalObjectOverride'.format(obj)
+			], read=False)
 		
 		# this will apply a global seed, it's recommended to do this on the startup
 		# of the simulation session instead of doing it at random points on the code
@@ -2030,60 +2163,62 @@ def spawner(
 		
 		if uglyFix == True:
 			try:
-				common.sendData(['"{}/{}" SET RandomProps.PropArea tags "{}"'.format(prefix, n, uglyTagFix(tags[i]))], read=False)
+				common.sendData(['"{}" SET RandomProps.PropArea tags "{}"'.format(obj, uglyTagFix(tags[i]))], read=False)
 			except:
-				common.sendData(['"{}/{}" SET RandomProps.PropArea tags "{}"'.format(prefix, n, uglyTagFix(t))], read=False)
+				common.sendData(['"{}" SET RandomProps.PropArea tags "{}"'.format(obj, uglyTagFix(t))], read=False)
 		else:
-			common.sendData(['"{}/{}" SET RandomProps.PropArea tags "{}"'.format(prefix, n, tags[i])], read=False)
-		
-		#if thermalObjectBehaviour != None:
-		#	setThermalProps('{}/{}'.format(prefix, n), thermalObjectBehaviour, switchActive=False)
+			common.sendData(['"{}" SET RandomProps.PropArea tags "{}"'.format(obj, tags[i])], read=False)
 		
 		if minDistance != None:
 			common.sendData([
-				'"{}/{}" SET RandomProps.Frustum minDistance {}'.format(prefix, n, '{}~{}'.format(minDistance[0], minDistance[1]) if isinstance(minDistance, list) else minDistance)
+				'"{}" SET RandomProps.Frustum minDistance {}'.format(obj, '{}~{}'.format(minDistance[0], minDistance[1]) if isinstance(minDistance, list) else minDistance)
 			], read=False)
 		
 		if maxDistance != None:
 			common.sendData([
-				'"{}/{}" SET RandomProps.Frustum maxDistance {}'.format(prefix, n, '{}~{}'.format(maxDistance[0], maxDistance[1]) if isinstance(maxDistance, list) else maxDistance)
+				'"{}" SET RandomProps.Frustum maxDistance {}'.format(obj, '{}~{}'.format(maxDistance[0], maxDistance[1]) if isinstance(maxDistance, list) else maxDistance)
 			], read=False)
 		
 		common.sendData([
-			'"{}/{}" SET RandomProps.PropArea async false'.format(prefix, n),
-			'"{}/{}" SET RandomProps.PropArea numberOfProps {}'.format(prefix, n, '{}~{}'.format(limit[0], limit[1]) if isinstance(limit, list) else limit),
-			
-			'"{}/{}" SET RandomProps.PropArea collisionCheck {}'.format(prefix, n, collisionCheck),
-			'"{}/{}" SET RandomProps.PropArea stickToGround {}'.format(prefix, n, stickToGround),
+			'''"{}" SET RandomProps.PropArea
+				async false
+				numberOfProps {}
+				collisionCheck {}
+				stickToGround {}
+			'''.format(
+				obj, '{}~{}'.format(limit[0], limit[1]) if isinstance(limit, list) else limit,
+				collisionCheck, stickToGround
+			)
 		], read=False)
 		
 		if method != None and methodParameters != None:
 			for key in methodParameters:
-				common.sendData('"{}/{}" SET RandomProps.{} {} {}'.format(
-					prefix, n, method, key,
+				common.sendData('"{}" SET RandomProps.{} {} {}'.format(
+					obj, method, key,
 					'{}~{}'.format(methodParameters[key][0], methodParameters[key][1]) if isinstance(methodParameters[key], list) else methodParameters[key]
 				), read=False)
 		
-		common.sendData([
-			'"{}/{}" SET Transform position ({} {} {})'.format(
-				prefix, n,
-				'{}~{}'.format(position[0][0], position[0][1]) if isinstance(position[0], list) else position[0],
-				'{}~{}'.format(position[1][0], position[1][1]) if isinstance(position[1], list) else position[1],
-				'{}~{}'.format(position[2][0], position[2][1]) if isinstance(position[2], list) else position[2]
-			) if position != None else '',
-			'"{}/{}" SET Transform eulerAngles ({} {} {})'.format(
-				prefix, n,
-				'{}~{}'.format(rotation[0][0], rotation[0][1]) if isinstance(rotation[0], list) else rotation[0],
-				'{}~{}'.format(rotation[1][0], rotation[1][1]) if isinstance(rotation[1], list) else rotation[1],
-				'{}~{}'.format(rotation[2][0], rotation[2][1]) if isinstance(rotation[2], list) else rotation[2]
-			) if rotation != None else '',
-			'"{}/{}" SET Transform localScale ({} {} {})'.format(
-				prefix, n,
-				'{}~{}'.format(scale[0][0], scale[0][1]) if isinstance(scale[0], list) else scale[0],
-				'{}~{}'.format(scale[1][0], scale[1][1]) if isinstance(scale[1], list) else scale[1],
-				'{}~{}'.format(scale[2][0], scale[2][1]) if isinstance(scale[2], list) else scale[2]
-			) if scale != None else ''
-		], read=False)
+		if position != None or scale != None or rotation != None:
+			common.sendData([
+				'"{}" SET Transform {} {} {}'.format(
+					obj,
+					'position ({} {} {})'.format(
+						'{}~{}'.format(position[0][0], position[0][1]) if isinstance(position[0], list) else position[0],
+						'{}~{}'.format(position[1][0], position[1][1]) if isinstance(position[1], list) else position[1],
+						'{}~{}'.format(position[2][0], position[2][1]) if isinstance(position[2], list) else position[2]
+					) if position != None else '',
+					'eulerAngles ({} {} {})'.format(
+						'{}~{}'.format(rotation[0][0], rotation[0][1]) if isinstance(rotation[0], list) else rotation[0],
+						'{}~{}'.format(rotation[1][0], rotation[1][1]) if isinstance(rotation[1], list) else rotation[1],
+						'{}~{}'.format(rotation[2][0], rotation[2][1]) if isinstance(rotation[2], list) else rotation[2]
+					) if rotation != None else '',
+					'localScale ({} {} {})'.format(
+						'{}~{}'.format(scale[0][0], scale[0][1]) if isinstance(scale[0], list) else scale[0],
+						'{}~{}'.format(scale[1][0], scale[1][1]) if isinstance(scale[1], list) else scale[1],
+						'{}~{}'.format(scale[2][0], scale[2][1]) if isinstance(scale[2], list) else scale[2]
+					) if scale != None else ''
+				)
+			], read=False)
 		
 		if segmentationClass == None and autoSegment == True:
 			segmentationClass = strToSeg(tags[0]) if tags != None else strToSeg(t)
@@ -2091,49 +2226,45 @@ def spawner(
 		if segmentationClass != None:
 			if isinstance(segmentationClass, list):
 				common.sendData([
-					'"{}/{}" ADD Segmentation.ClassGroup'.format(prefix, n),
-					'"{}/{}" SET Segmentation.ClassGroup itemsClassName "{}"'.format(prefix, n, segmentationClass[i])
+					'"{}" ADD Segmentation.ClassGroup'.format(obj),
+					'"{}" SET Segmentation.ClassGroup itemsClassName "{}"'.format(obj, segmentationClass[i])
 				], read=False)
 			else:
 				common.sendData([
-					'"{}/{}" ADD Segmentation.ClassGroup'.format(prefix, n),
-					'"{}/{}" SET Segmentation.ClassGroup itemsClassName "{}"'.format(prefix, n, segmentationClass)
+					'"{}" ADD Segmentation.ClassGroup'.format(obj),
+					'"{}" SET Segmentation.ClassGroup itemsClassName "{}"'.format(obj, segmentationClass)
 				], read=False)
 		
 		if orbit == True:
-			common.sendData('cameras SET Orbit target {}/{}'.format(prefix, n), read=False)
+			common.sendData('cameras SET Orbit target {}'.format(obj), read=False)
 		
 		if randomColors != None:
 			if randomColors == True:
 				addRandomColor(
-					objs='{}/{}'.format(prefix, n), colors=0, colorsWeights=randomColorsWeights,
+					objs='{}'.format(obj), colors=0, colorsWeights=randomColorsWeights,
 					spawner=True, method='Random', partsNames=partsNames
 				)
 			else:
 				addRandomColor(
-					objs='{}/{}'.format(prefix, n), colors=randomColors, colorsWeights=randomColorsWeights,
+					objs='{}'.format(obj), colors=randomColors, colorsWeights=randomColorsWeights,
 					spawner=True, partsNames=partsNames
 				)
 		
+		common.sendData('"{}" SET active true'.format(obj))
 		common.sendData('"{}/{}" SET active true'.format(prefix, n))
 		
-		# thermal goes after objects are spawned, so it sticks to the gameobjects
-		if thermalObjectBehaviour != None:
-			common.sendData('"{}/{}" SET Thermal.ThermalObjectBehaviour enabled true'.format(prefix, n))
-		
-		settings.obj.append('{}/{}'.format(prefix, t))
+		settings.obj.append('{}'.format(obj))
 		i = i + 1
 	
 	if flush:
 		common.flushBuffer()
 
-
 def spawnRadiusGeneric(
 	types=[], tags=None, scale=[1,1,1], innerradius=0, radius=500, position=[0,0,0],
 	rotation=[0,0,0], limit=50, segmentationClass=None, orbit=False,
-	stickToGround=False, collisionCheck=True, suffix="", flush=False, prefix='spawner',
+	stickToGround=False, collisionCheck=True, suffix="", flush=False, prefix='spawner', container='container',
 	names=None, uglyFix=True, seed=None, randomColors=None, randomColorsWeights=14,
-	partsNames=None, autoSegment=False
+	partsNames=None, autoSegment=False, thermalObjectBehaviour=None, thermalObjectOverride=False
 ):
 	"""
 	Creates a torus shaped object spawner
@@ -2155,6 +2286,7 @@ def spawnRadiusGeneric(
 	suffix (string): Adds a suffix string on types
 	flush (bool): Forces a telnet queue flush after spawning, defaults to `False`
 	prefix (string): Defines a root game object to nest types into, defaults to `spawner`
+	container (string): Defines a container object name nested within `type`, defaults to `container`
 	names (list): Overrides type caption, must be aligned with the number of arguments on types, defaults to `None`
 	uglyFix (bool): Ugly fix for asset naming, defaults to `True`
 	seed (int): Defines a seed number, this forces random values to be equal on different instances, defaults to `None`
@@ -2162,6 +2294,8 @@ def spawnRadiusGeneric(
 	randomColorsWeights (int): Defines a weight for color switching, defaults to `14`
 	partsNames (string): Defines a list of parts to be colorized, defaults to `None`
 	autoSegment (bool): Automatically segment objects based on types or tags given, defaults to `False`
+	thermalObjectBehaviour (string|bool): Defines a thermal profile; Note that this will be added to the second level component allowing for a `thermalObjectOverride` to be placed at the `container`; defaults to `None`, when set to `True` will use `DefaultThermalProfile`
+	thermalObjectOverride (bool): Adds a thermalObjectOverride component to the `container`. You must have `thermalObjectBehaviour` on the parent object in order for this work; Defaults to `False`
 	
 	"""
 	if radius <= 0:
@@ -2172,18 +2306,18 @@ def spawnRadiusGeneric(
 	return spawner(
 		types=types, tags=tags, scale=scale, position=position,
 		rotation=rotation, limit=limit, segmentationClass=segmentationClass, orbit=orbit,
-		stickToGround=stickToGround, collisionCheck=collisionCheck, suffix=suffix, flush=flush, prefix=prefix,
+		stickToGround=stickToGround, collisionCheck=collisionCheck, suffix=suffix, flush=flush, prefix=prefix, container=container,
 		names=names, uglyFix=uglyFix, seed=seed, randomColors=randomColors, randomColorsWeights=randomColorsWeights,
 		method='Torus', methodParameters={'innerRadius': innerradius, 'radius': radius},
-		partsNames=partsNames
+		partsNames=partsNames, thermalObjectBehaviour=thermalObjectBehaviour, thermalObjectOverride=thermalObjectOverride
 	)
 
 def spawnRectangleGeneric(
 	types=[], tags=None, scale=[1,1,1], a=1, b=500, position=[0,0,0],
 	rotation=[0,0,0], limit=50, segmentationClass=None, orbit=False,
-	stickToGround=False, collisionCheck=True, suffix="", flush=False, prefix='spawner',
+	stickToGround=False, collisionCheck=True, suffix="", flush=False, prefix='spawner', container='container',
 	names=None, uglyFix=True, seed=None, randomColors=None, randomColorsWeights=14,
-	partsNames=None, autoSegment=False
+	partsNames=None, autoSegment=False, thermalObjectBehaviour=None, thermalObjectOverride=False
 ):
 	"""
 	Creates a rectangle shaped object spawner
@@ -2205,12 +2339,15 @@ def spawnRectangleGeneric(
 	suffix (string): Adds a suffix string on types
 	flush (bool): Forces a telnet queue flush after spawning, defaults to `False`
 	prefix (string): Defines a root game object to nest types into, defaults to `spawner`
+	container (string): Defines a container object name nested within `type`, defaults to `container`
 	names (list): Overrides type caption, must be aligned with the number of arguments on types, defaults to `None`
 	seed (int): Defines a seed number, this forces random values to be equal on different instances, defaults to `None`
 	randomColors (int): Defines a number of random colors to assign to spawner, when set to None disables feature, defaults to `None`
 	randomColorsWeights (int): Defines a weight for color switching, defaults to `14`
 	partsNames (string): Defines a list of parts to be colorized, defaults to `None`
 	autoSegment (bool): Automatically segment objects based on types or tags given, defaults to `False`
+	thermalObjectBehaviour (string|bool): Defines a thermal profile; Note that this will be added to the second level component allowing for a `thermalObjectOverride` to be placed at the `container`; defaults to `None`, when set to `True` will use `DefaultThermalProfile`
+	thermalObjectOverride (bool): Adds a thermalObjectOverride component to the `container`. You must have `thermalObjectBehaviour` on the parent object in order for this work; Defaults to `False`
 	
 	"""
 	
@@ -2220,9 +2357,10 @@ def spawnRectangleGeneric(
 	return spawner(
 		types=types, tags=tags, scale=scale, position=position,
 		rotation=rotation, limit=limit, segmentationClass=segmentationClass, orbit=orbit,
-		stickToGround=stickToGround, collisionCheck=collisionCheck, suffix=suffix, flush=flush, prefix=prefix,
+		stickToGround=stickToGround, collisionCheck=collisionCheck, suffix=suffix, flush=flush, prefix=prefix, container=container,
 		names=names, uglyFix=uglyFix, seed=seed, randomColors=randomColors, randomColorsWeights=randomColorsWeights,
-		method='Rectangle', methodParameters={'size': '({} {})'.format(a,b)}, partsNames=partsNames
+		method='Rectangle', methodParameters={'size': '({} {})'.format(a,b)}, partsNames=partsNames,
+		thermalObjectBehaviour=thermalObjectBehaviour, thermalObjectOverride=thermalObjectOverride
 	)
 
 def spawnFlatGrid(types=[], size=[1000,1000], position=[0,0,0], scale=[1,1,1], prefix='spawner'):
@@ -2237,6 +2375,11 @@ def spawnFlatGrid(types=[], size=[1000,1000], position=[0,0,0], scale=[1,1,1], p
 	position (list): X,Y,Z position of rectangle spawner
 	rotation (list): X,Y,Z rotation position of rectangle spawner
 	prefix (string): Defines a root game object to nest types into, defaults to `spawner`
+	
+	# Note
+	
+	This function is not a part of the api spawning system, it's a simple grid object
+	creator based on positional arguments.
 	
 	"""
 	
@@ -2280,6 +2423,11 @@ def spawnParkingLot(
 	prefix (string): Defines a root game object to nest types into, defaults to `cars`
 	segment (string): Defines a segmentation class, defaults to `Car`
 	
+	# Note
+	
+	This function is not a part of the api spawning system, it's a simple grid object
+	creator based on positional arguments.
+	
 	"""
 	k = 0
 	idx = 0
@@ -2313,7 +2461,7 @@ def spawnParkingLot(
 	
 	common.flushBuffer()
 
-def spawnMiscObjs(destroy=False, prefix='spawner', seed=None):
+def spawnMiscObjs(destroy=False, prefix='spawner', container='container', seed=None):
 	"""
 	Spawns city / animals / cars objects
 	
@@ -2333,25 +2481,27 @@ def spawnMiscObjs(destroy=False, prefix='spawner', seed=None):
 		
 		common.flushBuffer()
 	
-	spawnRadiusGeneric(['city/nature/trees'], tags=['tree'], collisionCheck=False, limit=[100, 350], radius=80, innerradius=[30, 50], position=[0,10,0], prefix=prefix, seed=seed)
-	spawnRadiusGeneric(['city/signs'], tags=['sign'], limit=[80, 250], radius=[15, 40], innerradius=0, position=[0,10,0], prefix=prefix, seed=seed)
-	spawnRadiusGeneric(['animals'], tags=['animals'], limit=[150, 250], radius=[40, 80], innerradius=0, position=[0,10,0], prefix=prefix, seed=seed)
-	spawnRadiusGeneric(['city/buildings'], tags=['building'], limit=[50, 150], radius=335, innerradius=[80, 100], position=[0,10,0], prefix=prefix, seed=seed)
-	spawnRadiusGeneric(['cars'], tags=['car'], limit=[50, 150], radius=50, innerradius=0, segmentationClass="Car", orbit=True, position=[0,10,0], prefix=prefix, seed=seed)
+	spawnRadiusGeneric(['city/nature/trees'], tags=['tree'], container=container, collisionCheck=False, limit=[100, 350], radius=80, innerradius=[30, 50], position=[0,10,0], prefix=prefix, seed=seed)
+	spawnRadiusGeneric(['city/signs'], tags=['sign'], container=container, limit=[80, 250], radius=[15, 40], innerradius=0, position=[0,10,0], prefix=prefix, seed=seed)
+	spawnRadiusGeneric(['animals'], tags=['animals'], container=container, limit=[150, 250], radius=[40, 80], innerradius=0, position=[0,10,0], prefix=prefix, seed=seed)
+	spawnRadiusGeneric(['city/buildings'], tags=['building'], container=container, limit=[50, 150], radius=335, innerradius=[80, 100], position=[0,10,0], prefix=prefix, seed=seed)
+	spawnRadiusGeneric(['cars'], tags=['car'], limit=[50, 150], container=container, radius=50, innerradius=0, segmentationClass="Car", orbit=True, position=[0,10,0], prefix=prefix, seed=seed)
 
-	spawnRadiusGeneric(['city/ground'], tags=['ground'], suffix='_0', limit=3, radius=75, innerradius=0, scale=[1,1,1], position=[0,0,0], collisionCheck=False, prefix=prefix, seed=seed)
+	spawnRadiusGeneric(['city/ground'], tags=['ground'], container=container, suffix='_0', limit=3, radius=75, innerradius=0, scale=[1,1,1], position=[0,0,0], collisionCheck=False, prefix=prefix, seed=seed)
 
 def spawnDroneObjs(
 	destroy=False, ground_position=[84,0,0], groundLimit=0,
 	distH=25, distV=25, distLimit=150, pX=-150, pZ=-350, pY=0,
 	birdsRadius=120, birdsInnerRadius=0, carsRadius=50, carsInnerRadius=5,
 	treesLimit=[150,200], buildingsRadius=120, buildingsInnerRadius=60, treesRadius=80, treesInnerRadius=10,
-	buildingsLimit=[150,150], birdsLimit=[25,100], carsLimit=[75,75], dronesLimit=[80,200], prefix='spawner',
+	buildingsLimit=[150,150], birdsLimit=[25,100], carsLimit=[75,75], dronesLimit=[80,200], prefix='spawner', container='container',
 	treesTags=['tree'], buildingsTags=['building'], birdsTags=['bird'], carsTags=['car'], dronesTags=['drones'],
 	trees_colors=None, buildings_colors=None, birds_colors=None, cars_colors=None, dronesColors=None,
 	treesPartsNames=None, buildingsPartsNames=None, birdsPartsNames=None, carsPartsNames=None, dronesPartsNames=None,
 	groundSegment=None, treesSegment=None, buildingsSegment=None, birdsSegment=None, carsSegment=None, dronesSegment='DRONE',
-	thermal=None, seed=None
+	birdsThermalObjectBehaviour=None, treesThermalObjectBehaviour=None, buildingsThermalObjectBehaviour=None, carsThermalObjectBehaviour=None, groundThermalObjectBehaviour=None, dronesThermalObjectBehaviour=None,
+	humansThermalObjectBehaviour=None, signsThermalObjectBehaviour=None, cityThermalObjectBehaviour=None,
+	seed=None
 ):
 	"""
 	Spawns trees / buildings / birds / donres and cars objects
@@ -2401,18 +2551,18 @@ def spawnDroneObjs(
 			'"{}" SET Segmentation.ClassGroup itemsClassName "{}"'.format('city', groundSegment)
 		])
 	
-	spawnRadiusGeneric(['city/ground'], tags=['ground'], limit=300, radius=150, innerradius=0, scale=[3,3,3], position=[0,0,0], collisionCheck=False, prefix=prefix, seed=seed)
-	spawnRadiusGeneric(['humans'], tags=['human, +random'], suffix='_0', limit=40, radius=30, innerradius=2, position=[0,0,0], collisionCheck=False, prefix=prefix, seed=seed)
-	spawnRadiusGeneric(['city/nature/trees'], partsNames=treesPartsNames, segmentationClass=treesSegment, randomColors=trees_colors, tags=treesTags, collisionCheck=False, limit=random.randint(treesLimit[0], treesLimit[1]), radius=treesRadius, innerradius=treesInnerRadius, position=[0,0,0], prefix=prefix, seed=seed)
-	spawnRadiusGeneric(['city/buildings'], partsNames=buildingsPartsNames, segmentationClass=buildingsSegment, randomColors=buildings_colors, tags=buildingsTags, stickToGround=False, collisionCheck=False, limit=random.randint(buildingsLimit[0], buildingsLimit[1]), radius=buildingsRadius, innerradius=buildingsInnerRadius, position=[0,0,0], prefix=prefix, seed=seed)
+	spawnRadiusGeneric(['city/ground'], tags=['ground'], limit=300, radius=150, innerradius=0, scale=[3,3,3], position=[0,0,0], collisionCheck=False, prefix=prefix, seed=seed, thermalObjectBehaviour=groundThermalObjectBehaviour, thermalObjectOverride=True if groundThermalObjectBehaviour != None else False)
+	spawnRadiusGeneric(['humans'], tags=['human, +random'], suffix='_0', limit=40, radius=30, innerradius=2, position=[0,0,0], collisionCheck=False, prefix=prefix, seed=seed, thermalObjectBehaviour=humansThermalObjectBehaviour, thermalObjectOverride=True if humansThermalObjectBehaviour != None else False)
+	spawnRadiusGeneric(['city/nature/trees'], partsNames=treesPartsNames, segmentationClass=treesSegment, randomColors=trees_colors, tags=treesTags, collisionCheck=False, limit=random.randint(treesLimit[0], treesLimit[1]), radius=treesRadius, innerradius=treesInnerRadius, position=[0,0,0], prefix=prefix, seed=seed, thermalObjectBehaviour=treesThermalObjectBehaviour, thermalObjectOverride=True if treesThermalObjectBehaviour != None else False)
+	spawnRadiusGeneric(['city/buildings'], partsNames=buildingsPartsNames, segmentationClass=buildingsSegment, randomColors=buildings_colors, tags=buildingsTags, stickToGround=False, collisionCheck=False, limit=random.randint(buildingsLimit[0], buildingsLimit[1]), radius=buildingsRadius, innerradius=buildingsInnerRadius, position=[0,0,0], prefix=prefix, seed=seed, thermalObjectBehaviour=buildingsThermalObjectBehaviour, thermalObjectOverride=True if buildingsThermalObjectBehaviour != None else False)
 
 #	spawnRadiusGeneric(['buildings_001'], partsNames=buildingsPartsNames, segmentationClass=buildingsSegment, randomColors=buildings_colors, tags=buildingsTags, stickToGround=False, collisionCheck=False, limit=random.randint(buildingsLimit[0], buildingsLimit[1]), radius=buildingsRadius, innerradius=buildingsInnerRadius, position=[0,0,0], prefix=prefix, seed=seed)
 #	spawnRadiusGeneric(['buildings_002'], partsNames=buildingsPartsNames, segmentationClass=buildingsSegment, randomColors=buildings_colors, tags=buildingsTags, stickToGround=False, collisionCheck=False, limit=random.randint(buildingsLimit[0], buildingsLimit[1]), radius=buildingsRadius, innerradius=buildingsInnerRadius, position=[0,0,0], prefix=prefix, seed=seed)
 #	spawnRadiusGeneric(['buildings_003'], partsNames=buildingsPartsNames, segmentationClass=buildingsSegment, randomColors=buildings_colors, tags=buildingsTags, stickToGround=False, collisionCheck=False, limit=random.randint(buildingsLimit[0], buildingsLimit[1]), radius=buildingsRadius, innerradius=buildingsInnerRadius, position=[0,0,0], prefix=prefix, seed=seed)
 
-	spawnRadiusGeneric(['animals/birds'], partsNames=birdsPartsNames, segmentationClass=birdsSegment, randomColors=birds_colors, tags=birdsTags, limit=random.randint(birdsLimit[0], birdsLimit[1]), radius=birdsRadius, innerradius=birdsInnerRadius, position=[0,random.randint(15,95),0], prefix=prefix, seed=seed)
-	spawnRadiusGeneric(['cars'], partsNames=carsPartsNames, segmentationClass=carsSegment, randomColors=cars_colors, tags=carsTags, collisionCheck=False, limit=random.randint(carsLimit[0], carsLimit[1]), radius=carsRadius, innerradius=carsInnerRadius, position=[0,0,0], prefix=prefix, seed=seed)
-	spawnRadiusGeneric(['roadsigns'], tags=['roadsign'], limit=250, radius=80, collisionCheck=False, innerradius=15, position=[0,0,0], prefix=prefix, seed=seed)
+	spawnRadiusGeneric(['animals/birds'], partsNames=birdsPartsNames, container=container, segmentationClass=birdsSegment, randomColors=birds_colors, tags=birdsTags, limit=random.randint(birdsLimit[0], birdsLimit[1]), radius=birdsRadius, innerradius=birdsInnerRadius, position=[0,random.randint(15,95),0], prefix=prefix, seed=seed, thermalObjectBehaviour=birdsThermalObjectBehaviour, thermalObjectOverride=True if birdsThermalObjectBehaviour != None and not any('thermal' in s for s in birdsTags) and birdsLimit[1] > 0else False)
+	spawnRadiusGeneric(['cars'], partsNames=carsPartsNames, container=container, segmentationClass=carsSegment, randomColors=cars_colors, tags=carsTags, collisionCheck=False, limit=random.randint(carsLimit[0], carsLimit[1]), radius=carsRadius, innerradius=carsInnerRadius, position=[0,0,0], prefix=prefix, seed=seed, thermalObjectBehaviour=carsThermalObjectBehaviour, thermalObjectOverride=True if carsThermalObjectBehaviour != None and not any('thermal' in s for s in carsTags) and carsLimit[1] > 0 else False)
+	spawnRadiusGeneric(['roadsigns'], tags=['roadsign'], container=container, limit=250, radius=80, collisionCheck=False, innerradius=15, position=[0,0,0], prefix=prefix, seed=seed, thermalObjectBehaviour=signsThermalObjectBehaviour, thermalObjectOverride=True if signsThermalObjectBehaviour != None else False)
 	
 	if dronesLimit[1] > 0:
 		# spawnRadiusGeneric(['drones'], segmentationClass=dronesSegment, randomColors=dronesColors, tags=dronesTags, uglyFix=False, limit=random.randint(dronesLimit[0], dronesLimit[1]), radius=random.randint(30,50), innerradius=0, position=[0,0,0], prefix=prefix, seed=seed)
@@ -2423,46 +2573,20 @@ def spawnDroneObjs(
 			position=None,
 			prefix='cameras/spawner',
 			seed=seed,
+			container=container,
 			method='Frustum',
 			methodParameters={'cam': '"cameras/cameraRGB"'},
 			minDistance=2.5,
-			maxDistance=5
+			maxDistance=5,
+			thermalObjectBehaviour=dronesThermalObjectBehaviour,
+			thermalObjectOverride=True if groundThermalObjectBehaviour != None and not any('thermal' in s for s in dronesTags) and dronesLimit[1] > 0 else False
 		)
 	
-	if thermal != None:
-		if groundLimit > 0:
-			common.sendData([
-				'"city" ADD Thermal.ThermalObjectBehaviour',
-				'"city" SET Thermal.ThermalObjectBehaviour profile "{}"'.format(thermal)
-			], read=False)
-		
-		"""
-		if (
-			(not any('thermal' in s for s in birdsTags) and birdsLimit[1] > 0) or
-			(not any('thermal' in s for s in carsTags) and carsLimit[1] > 0) or
-			(not any('thermal' in s for s in dronesTags) and dronesLimit[1] > 0)
-		):
-		"""
-		
+	if cityThermalObjectBehaviour != None:
 		common.sendData([
-			'"{}" ADD Thermal.ThermalObjectBehaviour'.format(prefix),
-			'"{}" SET Thermal.ThermalObjectBehaviour profile "{}"'.format(prefix, thermal)
+			'"city" ADD Thermal.ThermalObjectBehaviour',
+			'"city" SET Thermal.ThermalObjectBehaviour profile "{}"'.format(cityThermalObjectBehaviour)
 		], read=False)
-		
-		if not any('thermal' in s for s in birdsTags) and birdsLimit[1] > 0:
-			common.sendData([
-				'"{}/animals" ADD Thermal.ThermalObjectOverride'.format(prefix)
-			], read=False)
-		
-		if not any('thermal' in s for s in carsTags) and carsLimit[1] > 0:
-			common.sendData([
-				'"{}/cars" ADD Thermal.ThermalObjectOverride'.format(prefix)
-			], read=False)
-		
-		if not any('thermal' in s for s in dronesTags) and dronesLimit[1] > 0:
-			common.sendData([
-				'"{}/drones" ADD Thermal.ThermalObjectOverride'.format(prefix)
-			], read=False)
 	
 	common.sendData([
 		'"city" SET active true'
@@ -2471,7 +2595,7 @@ def spawnDroneObjs(
 def spawnDroneObjs_alt(
 	destroy=False, groundLimit=204,
 	distH=120, distV=120, distLimit=1000,
-	pX=-20, pZ=-1000, pY=0, prefix='spawner',
+	pX=-20, pZ=-1000, pY=0, prefix='spawner', container='container',
 	seed=None
 ):
 	if destroy == True:
@@ -2510,6 +2634,7 @@ def spawnDroneObjs_alt(
 		position=[0,0,0],
 		collisionCheck=False,
 		prefix=prefix,
+		container=container,
 		seed=seed
 	)
 	
@@ -2522,6 +2647,7 @@ def spawnDroneObjs_alt(
 		position=[0,0,0],
 		collisionCheck=False,
 		prefix=prefix,
+		container=container,
 		seed=seed
 	)
 	
@@ -2533,6 +2659,7 @@ def spawnDroneObjs_alt(
 		innerradius=0,
 		position=[0, [15, 95], 0],
 		prefix=prefix,
+		container=container,
 		seed=seed
 	)
 	
@@ -2544,6 +2671,7 @@ def spawnDroneObjs_alt(
 		innerradius=5,
 		position=[0,0,0],
 		prefix=prefix,
+		container=container,
 		seed=seed
 	)
 	
@@ -2555,12 +2683,13 @@ def spawnDroneObjs_alt(
 		position=[0, [15, 65], 0],
 		segmentationClass="Car",
 		prefix=prefix,
+		container=container,
 		seed=seed
 	)
 	
 	common.flushBuffer()
 
-def spawnAnimalsObjs(destroy=False, prefix='spawner', seed=None):
+def spawnAnimalsObjs(destroy=False, prefix='spawner', container='container', seed=None):
 	"""
 	Spawns trees and animals
 	
@@ -2586,6 +2715,7 @@ def spawnAnimalsObjs(destroy=False, prefix='spawner', seed=None):
 		innerradius=[30, 50],
 		position=[0,5,0],
 		prefix=prefix,
+		container=container,
 		seed=seed
 	)
 	
@@ -2600,6 +2730,7 @@ def spawnAnimalsObjs(destroy=False, prefix='spawner', seed=None):
 		position=[0,5,0],
 		orbit=True,
 		prefix=prefix,
+		container=container,
 		seed=seed
 	)
 	

@@ -5,14 +5,14 @@ settings = settings_manager.Singleton()
 
 def help():
 	return '''\
-360 object
+Output format
 	- Creates a RGB camera
 	- Creates a Segmentation camera
 	- Creates a Depth camera
 	- Spawns a single object and rotates around it
 	- Exports RGB images
-	- Exports Segmentation images
-	- Exports Depth map images
+	- Exports segmentation maps
+	- Exports depth camera in several formats
 	- Exits leaving all objects exposed
 '''
 
@@ -21,7 +21,11 @@ def run():
 	mycams = [
 		'cameras/cameraRGB',
 		'cameras/segmentation',
-		'cameras/depth'
+		'cameras/depth_blob',
+		'cameras/depth_depth',
+		'cameras/depth_rgb',
+		'cameras/depth_jpg',
+		'cameras/depth_tif',
 	]
 	
 	obj = 'Cars/VW_Golf_V/VW_Golf_V'
@@ -35,14 +39,41 @@ def run():
 		# NOTE: This could be optimized by adding the same camera target on
 		# multiple RenderCameraLink components.
 		
-		helpers.addCameraDepth(label=mycams[2], width=1024, height=768)
+		helpers.addCameraDepth(label=mycams[2:7], width=1024, height=768)
 		
 		helpers.globalDiskSetup()
 		helpers.addDiskOutput(mycams)
 		
+		# pixel sizes:
+		# 1 8bit
+		# 2 16bit
+		# 4 32bit
+		
 		common.sendData([
+			# BLOB is 32bit raw binary
+			'"disk1/Cameras/depth_blob" SET Sensors.RenderCameraLink outputType "BLOB"',
+			
 			# DEPTH shortcut to 1 channel 16bit png
 			'"disk1/Cameras/depth_depth" SET Sensors.RenderCameraLink outputType "DEPTH"',
+			
+			# RGB shortcut to 3 channels 8bit jpg
+			'"disk1/Cameras/depth_rgb" SET Sensors.RenderCameraLink outputType "RGB"',
+			
+			# 3 channels 8bit, this is the same of RGB shortcut
+			'''"disk1/Cameras/depth_jpg" SET Sensors.RenderCameraLink
+					outputType "CUSTOM"
+					outputChannels 3
+					outputPixelSize 1
+					outputExtension "jpg"
+			''',
+			
+			# 1 channel 16bit tif
+			'''"disk1/Cameras/depth_tif" SET Sensors.RenderCameraLink
+				outputType "CUSTOM"
+				outputChannels 1
+				outputPixelSize 2
+				outputExtension "tif"
+			''',
 			
 			# 'CREATE "{}" FROM "drones" AS "obj/subject"'.format(obj),
 			'CREATE "{}" FROM "cars" AS "obj/subject"'.format(obj),

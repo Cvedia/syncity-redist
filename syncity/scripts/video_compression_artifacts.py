@@ -5,14 +5,13 @@ settings = settings_manager.Singleton()
 
 def help():
 	return '''\
-360 object
+Video compression artifacts
 	- Creates a RGB camera
 	- Creates a Segmentation camera
 	- Creates a Depth camera
 	- Spawns a single object and rotates around it
-	- Exports RGB images
-	- Exports Segmentation images
-	- Exports Depth map images
+	- Exports RGB images with video compression artifacts
+	- Exports segmentation maps in several formats
 	- Exits leaving all objects exposed
 '''
 
@@ -41,6 +40,13 @@ def run():
 		helpers.addDiskOutput(mycams)
 		
 		common.sendData([
+			# Add video compression artifacts to rgb output
+			# WARNING: This is a hack, might be deprecated on the next versions of the simulator
+			'"disk1/Cameras/camerargb" SET active false',
+			'"disk1/Cameras/camerargb" SET Sensors.RenderCameraLink videoFilter true',
+			'"disk1/Cameras/camerargb" ADD Sensors.Augmentations',
+			'"disk1/Cameras/camerargb" SET active true',
+			
 			# DEPTH shortcut to 1 channel 16bit png
 			'"disk1/Cameras/depth_depth" SET Sensors.RenderCameraLink outputType "DEPTH"',
 			

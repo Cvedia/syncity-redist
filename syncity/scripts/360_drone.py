@@ -44,7 +44,8 @@ def run():
 		helpers.spawnRectangleGeneric(
 			['drone'],
 			segmentationClass="Drone",
-			tags=['drone'],
+			# tags=['drone'],
+			tags=['blurred'],
 			limit=3,
 			a=10,
 			b=10,

@@ -90,6 +90,10 @@ def initTelnet(ip, port, retries=3, wait=.5, timeout=30, ka_interval=3, ka_fail=
 			settings._simulator_version = sendData(['VERSION', 'NOOP'], read=True)[0].replace('"', '')
 			output('Simulator Version: {}'.format(settings._simulator_version))
 			
+			if settings.version:
+				output('SDK Version: {}'.format(settings._version))
+				sys.exit(0)
+			
 			if int(settings._simulator_version.replace('.', '')[0:10]) < int(settings._simulator_min_version.replace('.', '')[0:10]):
 				output('The version of the simulator you\'re connecting with is deprecated and most likely not compatible with the version of this SDK.', 'ERROR')
 				output('You should use a old branch of the SDK or update the simulator.', 'ERROR')
@@ -124,6 +128,31 @@ def initTelnet(ip, port, retries=3, wait=.5, timeout=30, ka_interval=3, ka_fail=
 			else:
 				output('Waiting for retry #{} ...'.format(retry))
 				time.sleep(wait)
+
+def resetSimulator():
+	"""
+	Resets simulator and reconnects to telnet
+	
+	"""
+	global tn, _telnet
+	
+	if _telnet == True:
+		output('Resetting simulator...')
+		settings.obj = []
+		sendData('RESET', read=True, flush=True)
+		
+		try:
+			tn.close()
+		except:
+			pass
+		
+		_telnet = False
+		time.sleep(5)
+		
+		output('Reconnecting...')
+		initTelnet(settings.ip, settings.port, retries=10)
+	else:
+		raise 'No active telnet connection!'
 
 def init():
 	"""
@@ -351,7 +380,6 @@ def shapeData(l):
 	string: UTF-8 Data
 	"""
 	try:
-		# l = str(l).rstrip()
 		l = str(l.decode('utf-8')).rstrip()
 	except TypeError as e:
 		output('Error {} decoding: {}'.format(e, l), 'ERROR')
@@ -389,11 +417,15 @@ def gracefullShutdown(a=None, b=None):
 	if _telnet == True:
 		if settings.keep == False:
 			time.sleep(1)
-			for o in settings.obj:
-				sendData('DELETE "{}"'.format(o), read=False)
 			
-			flushBuffer()
-			time.sleep(5)
+			try:
+				for o in settings.obj:
+					sendData('DELETE "{}"'.format(o), read=False)
+				
+				flushBuffer()
+				time.sleep(5)
+			except:
+				pass
 		else:
 			output('Keeping objects in scene')
 		

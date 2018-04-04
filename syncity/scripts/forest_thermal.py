@@ -21,7 +21,9 @@ Human walker at forest
 '''
 
 def args(parser):
-	parser.add_argument('--loop_limit', type=int, default=500, help='Defines a limit of iterations for exporting')
+	try:
+		parser.add_argument('--loop_limit', type=int, default=500, help='Defines a limit of iterations for exporting')
+	except: pass
 
 def run():
 	settings.keep = True
