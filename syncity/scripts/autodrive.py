@@ -8,9 +8,13 @@ def help():
 Autodrive
 	- Spawns autodrive track
 	- Setups envirosky postprocessing filters
+	- Creates a RGB camera on bumper
+	- Creates a Segmentation map camera following RGB output
+	- Creates a Depth map camera following RGB output
+	- Setup segmentation classes
 	- Setup lidar device
 	- Setup multiple ROS2 ios for driving car
-	- Setup ROS2 image output
+	- Setup ROS2 image output for each of the cameras
 	- Exits leaving all objects exposed
 '''
 
@@ -38,14 +42,14 @@ def run():
 	camera_mount = '{}/cameras'.format(car_obj)
 	mycams = [
 		'{}/Front'.format(camera_mount),
-		'{}/Depth'.format(camera_mount)
+		'{}/Depth'.format(camera_mount),
+		'{}/Segment'.format(camera_mount)
 	]
 	
 	if settings.skip_setup == False:
 		common.sendData([
 			'CREATE "autodrive/autodrive_tile" FROM "autodrive" AS "autodrive"',
-			'CREATE "autodrive/SyncityJPickup" FROM "autodrive" AS "{}"'.format(car_obj),
-			'"autodrive" SET active true'
+			'CREATE "autodrive/SyncityJPickup" FROM "autodrive" AS "{}"'.format(car_obj)
 		])
 		
 		helpers.addWindzone(target='autodrive')
@@ -53,6 +57,19 @@ def run():
 		helpers.globalCameraSetup(labelRoot=camera_mount)
 		helpers.addCameraRGB(width=640, height=480, pp='EnviroFX', label=mycams[0], labelRoot=camera_mount, audio=False)
 		helpers.addCameraDepth(width=640, height=480, label=mycams[1])
+		helpers.addCameraSeg(
+			width=640, height=480,
+			label=mycams[2],
+			segments=['LINES', 'DIRT', 'ROAD', 'PROPS', 'SIGNS'],
+			lookupTable=[
+				['LINES', 'white'],
+				['DIRT', 'blue'],
+				['ROAD', '#838383'],
+				['PROPS', '#09FF00'],
+				['SIGNS', 'red']
+			]
+		)
+		
 		helpers.globalDiskSetup()
 		helpers.addDiskOutput(mycams)
 		
@@ -60,6 +77,23 @@ def run():
 			# flycam
 			# '"{}" ADD FlyCamera'.format(mycams[0]),
 			# '"{}" SET FlyCamera enabled true'.format(mycams[0]),
+			
+			# segment setup
+			'"autodrive/Road/Lines" ADD Segmentation.ClassGroup',
+			'"autodrive/Road/Lines" SET Segmentation.ClassGroup itemsClassName "LINES"',
+			'"autodrive/Road/Dirt" ADD Segmentation.ClassGroup',
+			'"autodrive/Road/Dirt" SET Segmentation.ClassGroup itemsClassName "DIRT"',
+			'"autodrive/Road/Props" ADD Segmentation.ClassGroup',
+			'"autodrive/Road/Props" SET Segmentation.ClassGroup itemsClassName "PROPS"',
+			'"autodrive/Road/Signs" ADD Segmentation.ClassGroup',
+			'"autodrive/Road/Signs" SET Segmentation.ClassGroup itemsClassName "SIGNS"',
+			'"autodrive/Road/Road floor Signs" ADD Segmentation.ClassGroup',
+			'"autodrive/Road/Road floor Signs" SET Segmentation.ClassGroup itemsClassName "SIGNS"',
+			
+			'"autodrive/Terrain New" ADD Segmentation.ClassInfo',
+			'"autodrive/Terrain New" SET Segmentation.ClassInfo itemClass "DIRT"',
+			'"autodrive/Road/Autodrive Road" ADD Segmentation.ClassInfo',
+			'"autodrive/Road/Autodrive Road" SET Segmentation.ClassInfo itemClass "ROAD"',
 			
 			# reset cameras
 			'"{}" SET Transform localPosition (0 0.872 2.318) localEulerAngles (0 0 0)'.format(camera_mount),
@@ -106,8 +140,9 @@ def run():
 				profile.motionBlur.settings.shutterAngle 180
 				profile.motionBlur.settings.sampleCount 4
 				profile.motionBlur.settings.frameBlending 0.5
-			'''.format(mycams[0])
+			'''.format(mycams[0]),
 			
+			'"autodrive" SET active true'
 		], read=False)
 		
 		# add 1x1x1 meter cube 1 meter away from front camera mount
@@ -131,8 +166,10 @@ def run():
 		common.sendData([
 			'"{}" SET Sensors.RenderCamera alwaysOn true'.format(mycams[0]),
 			'"{}" SET Sensors.RenderCamera alwaysOn true'.format(mycams[1]),
+			'"{}" SET Sensors.RenderCamera alwaysOn true'.format(mycams[2]),
 			'"{}" SET Camera enabled true'.format(mycams[0]),
 			'"{}" SET Camera enabled true'.format(mycams[1]),
+			'"{}" SET Camera enabled true'.format(mycams[2]),
 			'"{}" SET active true'.format(car_obj),
 			'"EnviroSky" EXECUTE EnviroSky ChangeWeather "Cloudy 1"'
 		], read=False)
@@ -219,6 +256,14 @@ def run():
 					"label": "front_camera",
 					"topic": "syncity/front_camera",
 					"target": mycams[0],
+					"component": "Camera",
+					"field": "targetTexture",
+					"interval": 1
+				},
+				{
+					"label": "segmentation_camera",
+					"topic": "syncity/segmentation_camera",
+					"target": mycams[2],
 					"component": "Camera",
 					"field": "targetTexture",
 					"interval": 1
