@@ -236,7 +236,7 @@ def run():
 			common.sendData([
 				'"cameras/spawner/drones/container" SET active false',
 				'"cameras/spawner/drones/container" SET RandomProps.PropArea rotationStep {}~{}'.format(0, 180),
-				'"cameras/spawner/drones/container" SET RandomProps.PropArea propScale ({}~{} {}~{} {}~{})'.format(0.6, 1.5, 0.6, 1.5, 0.6, 1.5),
+				# '"cameras/spawner/drones/container" SET RandomProps.PropArea propScale ({}~{} {}~{} {}~{})'.format(0.6, 1.5, 0.6, 1.5, 0.6, 1.5),
 				'"cameras/spawner/drones/container" SET active true'
 			], read=False)
 		
