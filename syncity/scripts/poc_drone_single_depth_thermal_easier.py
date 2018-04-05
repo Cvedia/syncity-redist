@@ -11,7 +11,7 @@ settings = settings_manager.Singleton()
 def help():
 	return '''\
 POC Drone single scene
-	- Creates a RGB camera
+	- Creates a RGB camera with video compression artifacts
 	- Creates a Segmentation camera
 	- Creates a Depth camera
 	- Creates a Thermal camera
@@ -51,16 +51,25 @@ def run():
 		helpers.globalDiskSetup()
 		helpers.addDiskOutput(mycams)
 		
-		# HACK: if you want to return BLOBs instead of DEPTH maps use this:
+		# if you want to return BLOBs instead of DEPTH maps use this:
 		common.sendData([ '"disk1/Cameras/depth" SET Sensors.RenderCameraLink outputType "BLOB"' ])
 		
-		# chromatic aberration setup
+		# chromatic aberration on red channel
 		helpers.LCP(
 			camera=mycams[0],
-			redParam1=0.1,
-			redParam2=0.1,
-			redParam3=-1
+			redParam1=0.05,
+			redParam2=0.05
 		)
+		
+		# video compression artifacts
+		common.sendData([
+			# Add video compression artifacts to rgb output
+			# WARNING: This is a hack, might be deprecated on the next versions of the simulator
+			'"disk1/Cameras/camerargb" SET active false',
+			'"disk1/Cameras/camerargb" SET Sensors.RenderCameraLink videoFilter true',
+			'"disk1/Cameras/camerargb" ADD Sensors.Augmentations',
+			'"disk1/Cameras/camerargb" SET active true'
+		], read=False)
 		
 		helpers.spawnDroneObjs(
 			dronesLimit=[2,2],
@@ -174,40 +183,40 @@ def run():
 		
 		if loop % 100 == 0 and loop > 0:
 			common.sendData([
-				'"spawner/city/ground" SET active false',
-				'"spawner/city/ground" SET RandomProps.PropArea numberOfProps {}~{}'.format(500, 1000),
-				'"spawner/city/ground" SET active true',
+				'"spawner/city/ground/container" SET active false',
+				'"spawner/city/ground/container" SET RandomProps.PropArea numberOfProps {}~{}'.format(500, 1000),
+				'"spawner/city/ground/container" SET active true',
 				
-				'"spawner/cars" SET active false',
-				'"spawner/cars" SET RandomProps.PropArea numberOfProps {}~{}'.format(35, 75),
-				'"spawner/cars" SET active true',
+				'"spawner/cars/container" SET active false',
+				'"spawner/cars/container" SET RandomProps.PropArea numberOfProps {}~{}'.format(35, 75),
+				'"spawner/cars/container" SET active true',
 
-				'"spawner/city/nature/trees" SET active false',
-				'"spawner/city/nature/trees" SET RandomProps.PropArea numberOfProps {}~{}'.format(70, 200),
-				'"spawner/city/nature/trees" SET active true',
+				'"spawner/city/nature/trees/container" SET active false',
+				'"spawner/city/nature/trees/container" SET RandomProps.PropArea numberOfProps {}~{}'.format(70, 200),
+				'"spawner/city/nature/trees/container" SET active true',
 
-				'"spawner/city/buildings" SET active false',
-				'"spawner/city/buildings" SET RandomProps.PropArea numberOfProps {}~{}'.format(100, 150),
-				'"spawner/city/buildings" SET RandomProps.Torus innerRadius {}~{}'.format(30, 100),
-				'"spawner/city/buildings" SET active true',
+				'"spawner/city/buildings/container" SET active false',
+				'"spawner/city/buildings/container" SET RandomProps.PropArea numberOfProps {}~{}'.format(100, 150),
+				'"spawner/city/buildings/container" SET RandomProps.Torus innerRadius {}~{}'.format(30, 100),
+				'"spawner/city/buildings/container" SET active true',
 
-				'"spawner/roadsigns" SET active false',
-				'"spawner/roadsigns" SET RandomProps.PropArea numberOfProps {}~{}'.format(160, 250),
-				'"spawner/roadsigns" SET active true',
+				'"spawner/roadsigns/container" SET active false',
+				'"spawner/roadsigns/container" SET RandomProps.PropArea numberOfProps {}~{}'.format(160, 250),
+				'"spawner/roadsigns/container" SET active true',
 
-				'"spawner/humans_0" SET active false',
-				'"spawner/humans_0" SET RandomProps.PropArea numberOfProps {}~{}'.format(50, 70),
-				'"spawner/humans_0" SET active true',
+				'"spawner/humans_0/container" SET active false',
+				'"spawner/humans_0/container" SET RandomProps.PropArea numberOfProps {}~{}'.format(50, 70),
+				'"spawner/humans_0/container" SET active true',
 			], read=False)
 		elif loop % 10 == 0:
 			common.sendData([
-				'"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle',
-				'"spawner/cars" EXECUTE RandomProps.PropArea Shuffle',
-				'"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle',
-				'"spawner/animals/birds" EXECUTE RandomProps.PropArea Shuffle',
-				'"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle',
-				'"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle',
-				'"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle',
+				'"spawner/city/ground/container" EXECUTE RandomProps.PropArea Shuffle',
+				'"spawner/cars/container" EXECUTE RandomProps.PropArea Shuffle',
+				'"spawner/city/nature/trees/container" EXECUTE RandomProps.PropArea Shuffle',
+				'"spawner/animals/birds/container" EXECUTE RandomProps.PropArea Shuffle',
+				'"spawner/city/buildings/container" EXECUTE RandomProps.PropArea Shuffle',
+				'"spawner/roadsigns/container" EXECUTE RandomProps.PropArea Shuffle',
+				'"spawner/humans_0/container" EXECUTE RandomProps.PropArea Shuffle',
 			], read=False)
 			
 			common.sendData([
@@ -225,15 +234,15 @@ def run():
 		
 		if loop % 10 == 0:
 			common.sendData([
-				'"cameras/spawner/drones" SET active false',
-				'"cameras/spawner/drones" SET RandomProps.PropArea rotationStep {}~{}'.format(0, 180),
-				'"cameras/spawner/drones" SET RandomProps.PropArea propScale ({}~{} {}~{} {}~{})'.format(0.6, 1.5, 0.6, 1.5, 0.6, 1.5),
-				'"cameras/spawner/drones" SET active true'
+				'"cameras/spawner/drones/container" SET active false',
+				'"cameras/spawner/drones/container" SET RandomProps.PropArea rotationStep {}~{}'.format(0, 180),
+				'"cameras/spawner/drones/container" SET RandomProps.PropArea propScale ({}~{} {}~{} {}~{})'.format(0.6, 1.5, 0.6, 1.5, 0.6, 1.5),
+				'"cameras/spawner/drones/container" SET active true'
 			], read=False)
 		
 		common.sendData([
 			# randomize drone positions
-			'"cameras/spawner/drones" EXECUTE RandomProps.PropArea Shuffle',
+			'"cameras/spawner/drones/container" EXECUTE RandomProps.PropArea Shuffle',
 			# move drone container a bit further away
 			'"cameras/spawner" SET Transform localPosition (0 0 {}~{})'.format(.5, 1.5),
 			# enable rendering for motion blur

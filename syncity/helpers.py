@@ -251,6 +251,7 @@ def addCameraRGB(
 				envirosky = False
 		
 		buf.append('"{}" SET active true'.format(l))
+		
 		idx += 1
 	
 	buf.append('"{}" SET active true'.format(labelRoot))
@@ -2577,22 +2578,23 @@ def spawnDroneObjs(
 			seed=seed,
 			container=container,
 			method='Frustum',
-			methodParameters={'cam': '"cameras/cameraRGB"', 'scaleBack': 0.5},
-			minDistance=2.5,
-			maxDistance=5,
+			methodParameters={'cam': '"cameras/cameraRGB"', 'scaleBack': 0.45},
+			minDistance=2,
+			maxDistance=6,
 			thermalObjectBehaviour=dronesThermalObjectBehaviour,
 			thermalObjectOverride=True if groundThermalObjectBehaviour != None and not any('thermal' in s for s in dronesTags) and dronesLimit[1] > 0 else False
 		)
 	
-	if cityThermalObjectBehaviour != None:
+	if groundLimit > 0:
+		if cityThermalObjectBehaviour != None:
+			common.sendData([
+				'"city" ADD Thermal.ThermalObjectBehaviour',
+				'"city" SET Thermal.ThermalObjectBehaviour profile "{}"'.format(cityThermalObjectBehaviour)
+			], read=False)
+		
 		common.sendData([
-			'"city" ADD Thermal.ThermalObjectBehaviour',
-			'"city" SET Thermal.ThermalObjectBehaviour profile "{}"'.format(cityThermalObjectBehaviour)
-		], read=False)
-	
-	common.sendData([
-		'"city" SET active true'
-	], read=True)
+			'"city" SET active true'
+		], read=True)
 
 def spawnDroneObjs_alt(
 	destroy=False, groundLimit=204,

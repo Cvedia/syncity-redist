@@ -42,7 +42,7 @@ def run():
 			prefix='cameras/spawner',
 			method='Frustum',
 			methodParameters={'cam': '"cameras/cameraRGB"', 'scaleBack': 0.5},
-			minDistance=2.5,
+			minDistance=2,
 			maxDistance=5
 		)
 	
