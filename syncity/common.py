@@ -50,7 +50,7 @@ def initTelnet(ip, port, retries=3, wait=.5, timeout=30, ka_interval=3, ka_fail=
 	global tn, _telnet
 	
 	if _telnet == True:
-		if settings.shutdown == True:
+		if settings._shutdown == True:
 			return
 		output('Connection is already active, trying to reconnect...')
 		
@@ -181,17 +181,17 @@ def init2():
 
 def init_logging(head=None):
 	if settings.log == True:
-		settings.lfh = open('{}log_{}.txt'.format(settings.local_path, settings._start), 'wb+')
+		settings._lfh = open('{}log_{}.txt'.format(settings.local_path, settings._start), 'wb+')
 		
 		if head != None:
-			settings.lfh.write(head)
+			settings._lfh.write(head)
 
 def init_recording(head=None):
 	if settings.record == True:
-		settings.fh = open('{}record_{}.txt'.format(settings.local_path, settings._start), 'wb+')
+		settings._rfh = open('{}record_{}.txt'.format(settings.local_path, settings._start), 'wb+')
 		
 		if head != None:
-			settings.fh.write(head)
+			settings._rfh.write(head)
 
 def output(s, level='INFO'):
 	"""
@@ -223,9 +223,9 @@ def output(s, level='INFO'):
 	if settings.log:
 		try:
 			if settings.no_color == False:
-				settings.lfh.write(('[{}] {} {}{}'.format(datetime.now().strftime("%H:%M:%S.%f"), os.getpid(), '[{}] '.format(level), s)).encode('ascii') + b"\n")
+				settings._lfh.write(('[{}] {} {}{}'.format(datetime.now().strftime("%H:%M:%S.%f"), os.getpid(), '[{}] '.format(level), s)).encode('ascii') + b"\n")
 			else:
-				settings.lfh.write(x.encode('ascii') + b"\n")
+				settings._lfh.write(x.encode('ascii') + b"\n")
 		except:
 			pass
 	
@@ -275,7 +275,7 @@ def sendData(v, read=None, flush=None, timeout=3):
 		s = s.encode('ascii') + b"\r\n"
 		
 		if settings.record:
-			settings.fh.write(s)
+			settings._rfh.write(s)
 		
 		if settings.debug:
 			output('Telnet Writing: `{}` {} bytes'.format(s, len(s)), 'DEBUG')
@@ -406,13 +406,16 @@ def gracefullShutdown(a=None, b=None):
 		code.interact(local=locals())
 		return
 	
-	if settings.shutdown == True:
+	if settings._shutdown == True:
 		output('Abort!')
 		sys.exit(0)
 		return
 	
-	settings.shutdown = True
+	settings._shutdown = True
 	output('Shutdown sequence...')
+	
+	if settings.save_config:
+		saveConfig()
 	
 	if _telnet == True:
 		if settings.keep == False:
@@ -448,13 +451,13 @@ def gracefullShutdown(a=None, b=None):
 	
 	try:
 		if settings.record:
-			settings.fh.close()
+			settings._rfh.close()
 	except:
 		pass
 	
 	try:
 		if settings.log:
-			settings.lfh.close()
+			settings._lfh.close()
 	except:
 		pass
 
@@ -517,6 +520,44 @@ def modulesArgs(module, parser):
 				import_script.args(parser)
 			except:
 				pass
+
+def loadConfig():
+	if not os.path.isfile(settings.config):
+		return
+	
+	output('Loading config from: `{}` ...'.format(settings.config))
+	
+	with open(settings.config, encoding='utf-8') as data:
+		cfg = json.loads(data.read())
+	
+	for c in cfg:
+		if settings.isset(c) == False:
+			settings[c] = cfg[c]
+
+def saveConfig():
+	output('Saving config to: `{}` ...'.format(settings.config))
+	data = settings.getData()
+	blacklist =  [ 'run', 'script', 'tool', 'save_config' ]
+	dellist = []
+	
+	# remove privates
+	for key in data:
+		if key[0:1] == '_':
+			dellist.append(key)
+	
+	if len(dellist) > 0:
+		for key in dellist:
+			del data[key]
+	
+	# remove blacklist
+	for key in blacklist:
+		try:
+			del data[key]
+		except:
+			pass
+	
+	with open(settings.config, "w", encoding='utf-8') as fh:
+		fh.write(json.dumps(data, indent=4, sort_keys=True))
 
 def localTimeOffset(t=None):
 	"""

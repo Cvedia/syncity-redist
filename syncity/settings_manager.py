@@ -13,6 +13,12 @@ class Singleton:
 	def getData(self):
 		return self.__data
 	
+	def isset(self, key):
+		if key in self.__data:
+			return True
+		
+		return False
+	
 	def __init__(self):
 		pass
 	

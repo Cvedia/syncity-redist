@@ -22,7 +22,7 @@ def run():
 		
 		time.sleep(5)
 		
-		if settings.shutdown == False:
+		if settings._shutdown == False:
 			common.output('Running...')
 			result = subprocess.run([
 				'reg', 'delete', 'HKEY_CURRENT_USER\Software\Syncity', '/f'

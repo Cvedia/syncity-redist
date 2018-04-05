@@ -30,7 +30,10 @@ POC Drone single scene
 '''
 
 def args(parser):
-	parser.add_argument('--loop_limit', type=int, default=100, help='Defines a limit of iterations for exporting')
+	try:
+		parser.add_argument('--loop_limit', type=int, default=100, help='Defines a limit of iterations for exporting')
+	except:
+		pass
 
 def run():
 	settings.keep = True

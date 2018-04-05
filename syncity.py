@@ -1,4 +1,5 @@
 #!/usr/bin/python
+# -*- coding: UTF-8 -*-
 
 from __future__ import division
 
@@ -72,6 +73,10 @@ parser.add_argument('--skip_init', action='store_true', default=False, help='Dis
 parser.add_argument('--skip_disk', action='store_true', help='Disables disk export completly')
 parser.add_argument('--skip_setup', action='store_true', help='Skip script setup and go straight to data extraction')
 
+parser.add_argument('-c', '--config', default='syncity.conf', help='Defines a path/filename for syncity.conf')
+parser.add_argument('--skip_config', action='store_true', help='Skips SDK default config file')
+parser.add_argument('--save_config', action='store_true', help='Save sent parameters as SDK config file -- WARNING: This will not save the stack parameters (-r, -s and -t)')
+
 parser.add_argument('--setup_only', action='store_true', help='Runs script setup and exits')
 parser.add_argument('--enable_physics', action='store_true', default=False, help='Enable Physics, mainly affects objects with rigidbodies.')
 parser.add_argument('--disable_envirosky', action='store_true', help='Disables Envirosky -- NOT RECOMMENDED')
@@ -106,7 +111,7 @@ settings._version = SYNCITY_VERSION
 settings._simulator_min_version = SIMULATOR_MIN_VERSION
 
 settings._root = os.path.dirname(os.path.realpath(__file__))
-settings.shutdown = False
+settings._shutdown = False
 settings._interactive = False
 
 syncity.common.init()
@@ -126,6 +131,9 @@ if stack_size == 0:
 for k in args.__dict__:
 	# print('{}: {}'.format(k, args.__dict__[k]))
 	settings[k] = args.__dict__[k]
+
+if settings.skip_config == False:
+	common.loadConfig()
 
 if platform.system() == 'Windows':
 	if settings.local_path.find('/') != -1:

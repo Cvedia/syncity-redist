@@ -23,7 +23,7 @@ def run():
 		
 		time.sleep(5)
 		
-		if settings.shutdown == False:
+		if settings._shutdown == False:
 			appdata = '{}Low\\Syncity'.format(os.getenv('LOCALAPPDATA'))
 			common.output('Deleting AppData ({}) for Syncity...'.format(appdata))
 			

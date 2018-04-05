@@ -198,7 +198,7 @@ def addCameraRGB(
 		label = [ label ]
 	
 	buf = []
-	
+	idx = 0
 	for l in label:
 		buf.extend([
 			'CREATE "{}"'.format(l),
@@ -219,37 +219,39 @@ def addCameraRGB(
 				# 'cameras/cameraRGB SET active true',
 			])
 		
-		if audio:
-			buf.append('"{}" ADD AudioListener'.format(l))
-		
-		if flycam:
-			buf.extend([
-				'"{}" ADD FlyCamera'.format(l),
-				'"{}" SET FlyCamera enabled true'.format(l)
-			])
-		
-		if envirosky:
-			buf.extend([
-				# NOTE: This is a prefab that already contains the EnviroSky default profile
-				# NOTE: You can only have one camera bound to envirosky, if you set multiple this script will bind to the first only
-				'CREATE "EnviroSky" AS "EnviroSky"',
-				'''"EnviroSky" SET EnviroSky
-					Player "{}"
-					PlayerCamera "{}"
-					GameTime.ProgressTime "{}"
-					weatherSettings.cloudTransitionSpeed {}
-					weatherSettings.effectTransitionSpeed {}
-					weatherSettings.fogTransitionSpeed {}
-				'''.format(
-					labelRoot, l, enviroskyProgressTime, enviroskyCloudTransitionSpeed,
-					enviroskyEffectTransitionSpeed, enviroskyFogTransitionSpeed
-				),
-				'"EnviroSky" EXECUTE EnviroSky AssignAndStart "{}" "{}"'.format(l, l),
-				'"EnviroSky" SET active true'
-			])
-			envirosky = False
+		if idx == 0:
+			if audio:
+				buf.append('"{}" ADD AudioListener'.format(l))
+			
+			if flycam:
+				buf.extend([
+					'"{}" ADD FlyCamera'.format(l),
+					'"{}" SET FlyCamera enabled true'.format(l)
+				])
+			
+			if envirosky:
+				buf.extend([
+					# NOTE: This is a prefab that already contains the EnviroSky default profile
+					# NOTE: You can only have one camera bound to envirosky, if you set multiple this script will bind to the first only
+					'CREATE "EnviroSky" AS "EnviroSky"',
+					'''"EnviroSky" SET EnviroSky
+						Player "{}"
+						PlayerCamera "{}"
+						GameTime.ProgressTime "{}"
+						weatherSettings.cloudTransitionSpeed {}
+						weatherSettings.effectTransitionSpeed {}
+						weatherSettings.fogTransitionSpeed {}
+					'''.format(
+						labelRoot, l, enviroskyProgressTime, enviroskyCloudTransitionSpeed,
+						enviroskyEffectTransitionSpeed, enviroskyFogTransitionSpeed
+					),
+					'"EnviroSky" EXECUTE EnviroSky AssignAndStart "{}" "{}"'.format(l, l),
+					'"EnviroSky" SET active true'
+				])
+				envirosky = False
 		
 		buf.append('"{}" SET active true'.format(l))
+		idx += 1
 	
 	buf.append('"{}" SET active true'.format(labelRoot))
 	common.sendData(buf, read=False)
@@ -377,7 +379,7 @@ def addCameraThermal(
 				'"{}" ADD Thermal.GlobalTreeSettings'.format(l),
 				'"{}" SET Thermal.GlobalTreeSettings temperature {} temperatureBandwidth {} temperatureMedian {} treeLeafsHeatVariance {} enabled true'.format(l, treesBase, treesBandwidth, treesMedian, treesLeafsVariance)
 			]);
-
+		
 		buf.extend([
 			'"{}" ADD UnityEngine.PostProcessing.PostProcessingBehaviour'.format(l),
 			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile "Thermal"'.format(l),
@@ -2575,7 +2577,7 @@ def spawnDroneObjs(
 			seed=seed,
 			container=container,
 			method='Frustum',
-			methodParameters={'cam': '"cameras/cameraRGB"'},
+			methodParameters={'cam': '"cameras/cameraRGB"', 'scaleBack': 0.5},
 			minDistance=2.5,
 			maxDistance=5,
 			thermalObjectBehaviour=dronesThermalObjectBehaviour,
