@@ -1,0 +1,17 @@
+--------------------------------------------------------------------------------
+This change log follows YYMMDD timestamps which are also the version number for
+both the SDK and the simulator.
+--------------------------------------------------------------------------------
+
+180504:
+
+- Video compression artifacts support
+- Chromatic aberration and SDK helper added
+- LCP support and SDK helper added
+- Spherical camera support and SDK helper added
+- Physical camera parameter settings and SDK helper added
+- Frustum spawner scale back feature
+- Thermal profiles properly set
+- Several fixes and additions on SDK sample scripts
+
+--------------------------------------------------------------------------------
