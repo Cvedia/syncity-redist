@@ -271,5 +271,7 @@ def run():
 			helpers.kickSeg(mycams[1])
 			kick = False
 		
-		helpers.takeSnapshot(mycams, True)
+		helpers.takeSnapshot(mycams, autoSegment=True)
+		
 		loop = loop + 1
+		common.output('Loop {} ({}%)'.format(loop, round(100 * (loop / settings.loop_limit),2)))
