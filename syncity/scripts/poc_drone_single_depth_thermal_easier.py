@@ -43,16 +43,19 @@ def run():
 	blurring_method = 'embedded'
 	
 	if settings.skip_setup == False:
+		camera_size = [ 1024, 1024 ]
+		
 		helpers.globalCameraSetup(orbit=False)
-		helpers.addCameraSeg(width=1024, height=1024, segments=['DRONE'], lookupTable=[['DRONE', 'red']])
-		helpers.addCameraDepth(width=1024, height=768)
-		helpers.addCameraRGB(width=1024, height=1024, pp='EnviroFX')
+		helpers.addCameraSeg(width=camera_size[0], height=camera_size[1], segments=['DRONE'], lookupTable=[['DRONE', 'red']])
+		helpers.addCameraDepth(width=camera_size[0], height=camera_size[1])
+		helpers.addCameraRGB(width=camera_size[0], height=camera_size[1], pp='EnviroFX')
 		
 		helpers.globalDiskSetup()
 		helpers.addDiskOutput(mycams)
 		
 		# if you want to return BLOBs instead of DEPTH maps use this:
-		common.sendData([ '"disk1/Cameras/depth" SET Sensors.RenderCameraLink outputType "BLOB"' ])
+		# common.sendData([ '"disk1/Cameras/depth" SET Sensors.RenderCameraLink outputType "BLOB"' ])
+		common.sendData([ '"disk1/Cameras/depth" SET Sensors.RenderCameraLink outputType "DEPTH"' ])
 		
 		# chromatic aberration on red channel
 		helpers.LCP(
@@ -165,6 +168,12 @@ def run():
 	], read=False)
 	
 	common.flushBuffer()
+	helpers.kickSeg(mycams[1])
+	
+	if settings.setup_only == True:
+		return
+	
+	kick = False
 	
 	while loop < settings.loop_limit:
 		"""
@@ -182,6 +191,7 @@ def run():
 		"""
 		
 		if loop % 100 == 0 and loop > 0:
+		# if loop == 0:
 			common.sendData([
 				'"spawner/city/ground/container" SET active false',
 				'"spawner/city/ground/container" SET RandomProps.PropArea numberOfProps {}~{}'.format(500, 1000),
@@ -208,6 +218,8 @@ def run():
 				'"spawner/humans_0/container" SET RandomProps.PropArea numberOfProps {}~{}'.format(50, 70),
 				'"spawner/humans_0/container" SET active true',
 			], read=False)
+			
+			kick = True
 		elif loop % 10 == 0:
 			common.sendData([
 				'"spawner/city/ground/container" EXECUTE RandomProps.PropArea Shuffle',
@@ -228,6 +240,8 @@ def run():
 				'"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity {}~{}'.format(0.0, 0.3)
 			], read=False)
 			
+			kick = True
+			
 		common.sendData([
 			'"cameras" SET Transform position ({} {}~{} {}) eulerAngles ({}~{} {} {})'.format(0, 5, 20, 0, -20, 70, 0, 0)
 		], read=False)
@@ -239,6 +253,7 @@ def run():
 				# '"cameras/spawner/drones/container" SET RandomProps.PropArea propScale ({}~{} {}~{} {}~{})'.format(0.6, 1.5, 0.6, 1.5, 0.6, 1.5),
 				'"cameras/spawner/drones/container" SET active true'
 			], read=False)
+			kick = True
 		
 		common.sendData([
 			# randomize drone positions
@@ -251,6 +266,10 @@ def run():
 		
 		if blurring_method != 'embedded':
 			time.sleep(.5)
+		
+		if kick == True:
+			helpers.kickSeg(mycams[1])
+			kick = False
 		
 		helpers.takeSnapshot(mycams, True)
 		loop = loop + 1

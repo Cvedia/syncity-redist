@@ -91,7 +91,7 @@ def globalCameraSetup(
 			'"{}" SET FlyCamera enabled true'.format(labelRoot)
 		], read=False)
 	
-	settings.obj.append(labelRoot)
+	settings._obj.append(labelRoot)
 
 def addCameraDepth(
 	width=2048, height=1536,
@@ -148,7 +148,7 @@ def addCameraDepth(
 	
 	common.sendData(buf, read=False)
 	common.flushBuffer()
-	settings.obj.extend(label)
+	settings._obj.extend(label)
 
 def addCameraRGB(
 	width=2048, height=1536, audio=True, envirosky=None, flycam=False,
@@ -261,7 +261,7 @@ def addCameraRGB(
 	if pp != None:
 		addCameraRGBPP(profile=pp, label=label)
 	
-	settings.obj.append(label)
+	settings._obj.append(label)
 
 def addCameraThermal(
 	width=2048, height=1536, audio=False,
@@ -391,7 +391,7 @@ def addCameraThermal(
 	
 	common.sendData(buf, read=False)
 	common.flushBuffer()
-	settings.obj.extend(label)
+	settings._obj.extend(label)
 
 def cameraPPThermal(label='cameras/cameraRGB'):
 	"""
@@ -463,7 +463,7 @@ def addCameraRGBPP(profile='Profile2', scion=False, label='cameras/cameraRGB'):
 	
 	common.sendData(buf, read=False)
 	common.flushBuffer()
-	settings.obj.extend(label)
+	settings._obj.extend(label)
 
 def cameraRGBPPRandom(label='cameras/cameraRGB'):
 	""""
@@ -1145,7 +1145,7 @@ def addCameraSeg(
 	
 	common.sendData(buf, read=False)
 	common.flushBuffer()
-	settings.obj.append(label)
+	settings._obj.append(label)
 
 def addLight(position=[34,-22.53,0], intensity=1.7, label='light'):
 	"""
@@ -1173,7 +1173,7 @@ def addLight(position=[34,-22.53,0], intensity=1.7, label='light'):
 	], read=False)
 	
 	common.flushBuffer()
-	settings.obj.append(label)
+	settings._obj.append(label)
 
 def globalDiskSetup(label='disk1', outputPath=None):
 	"""
@@ -1200,7 +1200,21 @@ def globalDiskSetup(label='disk1', outputPath=None):
 	], read=False)
 	
 	common.flushBuffer()
-	settings.obj.append(label)
+	settings._obj.append(label)
+
+def kickSeg(label='cameras/segmentation'):
+	common.output('Kicking segmentation camera', 'DEBUG')
+	common.flushBuffer()
+	common.sendData([
+		'"{}" EXECUTE Sensors.RenderCamera RenderFrame'.format(label),
+		'"{}" GET Segmentation.Segmentation boundingBoxes'.format(label),
+		'NOOP',
+		'"{}" EXECUTE Sensors.RenderCamera RenderFrame'.format(label),
+		'"{}" GET Segmentation.Segmentation boundingBoxes'.format(label),
+		'NOOP'
+	], read=True)
+	common.flushBuffer()
+	time.sleep(3)
 
 def doRender(lst):
 	"""
@@ -1244,10 +1258,9 @@ def takeSnapshot(lst, autoSegment=False, label='disk1', forceNoop=False):
 		else:
 			
 			# DEPRECATED: This is no longer needed
-			# doRender(lst)
+			doRender(lst)
 			
 			common.flushBuffer()
-			
 			r = common.sendData([
 				'"{}" EXECUTE Sensors.Disk Snapshot'.format(label),
 				'"{}" GET Segmentation.Segmentation boundingBoxes'.format(lst[idx[0]]),
@@ -1293,7 +1306,6 @@ def seqSave(pref, rawData):
 	noops = 0
 	data = []
 	while len(data) == 0:
-		
 		f = [False, False]
 		rawData = ('\n'.join(rawData)).split('\n')
 		
@@ -1323,7 +1335,7 @@ def seqSave(pref, rawData):
 						f[1] = False
 		
 		if len(data) == 0:
-			common.output('Unable to fetch bounding box, retrying...', 'DEBUG')
+			common.output('Unable to fetch bounding box #{}, retrying...'.format(settings._seqSave_i), 'WARN')
 			time.sleep(.5)
 			rawData = common.sendData('NOOP', read=True)
 		else:
@@ -1332,7 +1344,7 @@ def seqSave(pref, rawData):
 				json.loads(''.join(data))
 				break
 			except:
-				common.output('Partially received json object, waiting for more...', 'DEBUG')
+				common.output('Partially received json object, waiting for more...', 'WARN')
 				time.sleep(.5)
 				rawData = common.sendData('NOOP', read=True)
 		
@@ -1340,12 +1352,12 @@ def seqSave(pref, rawData):
 		
 		if noops > 100:
 			common.output('Limit reached while waiting for json object, skipping index!', 'ERROR')
-			settings.seqSave_i = settings.seqSave_i + 1
+			settings._seqSave_i = settings._seqSave_i + 1
 			return
 	
 	data = ''.join(data)
 	
-	fn = '{}{}_{}.json'.format(settings.local_path, pref, settings.seqSave_i)
+	fn = '{}{}_{}.json'.format(settings.local_path, pref, settings._seqSave_i)
 	
 	if settings.debug:
 		common.output('SEQ Save path: {} prefix: {} data: {}'.format(fn, pref, data), 'DEBUG')
@@ -1356,8 +1368,8 @@ def seqSave(pref, rawData):
 	f = open(fn, 'w')
 	f.write(data)
 	f.close()
-	common.output('Wrote: {}{}_{}.json'.format(settings.local_path, pref, settings.seqSave_i))
-	settings.seqSave_i = settings.seqSave_i + 1
+	common.output('Wrote: {}{}_{}.json'.format(settings.local_path, pref, settings._seqSave_i))
+	settings._seqSave_i = settings._seqSave_i + 1
 
 def addDiskOutput(lst, label='disk1'):
 	"""
@@ -2256,7 +2268,7 @@ def spawner(
 		common.sendData('"{}" SET active true'.format(obj))
 		common.sendData('"{}/{}" SET active true'.format(prefix, n))
 		
-		settings.obj.append('{}'.format(obj))
+		settings._obj.append('{}'.format(obj))
 		i = i + 1
 	
 	if flush:
@@ -2400,7 +2412,7 @@ def spawnFlatGrid(types=[], size=[1000,1000], position=[0,0,0], scale=[1,1,1], p
 			'"{}/{}" SET Transform localScale ({} {} {})'.format(prefix, n, scale[0], scale[1], scale[2])
 		], read=False)
 		
-		settings.obj.append('{}/{}'.format(prefix, t))
+		settings._obj.append('{}/{}'.format(prefix, t))
 	
 	common.flushBuffer()
 
@@ -2454,7 +2466,7 @@ def spawnParkingLot(
 			'"{}/car_{}" SET active true'.format(prefix, k)
 		], read=False)
 		
-		settings.obj.append('{}/car_{}'.format(prefix, k))
+		settings._obj.append('{}/car_{}'.format(prefix, k))
 		k += 1
 		pZ += distH
 		
@@ -2540,7 +2552,7 @@ def spawnDroneObjs(
 				'"city/ground_{}" SET Transform localScale ({} {} {})'.format(k, 3, 3, 3),
 				'"city/ground_{}" SET active true'.format(k)
 			], read=False)
-			settings.obj.append('city/ground_{}'.format(k))
+			settings._obj.append('city/ground_{}'.format(k))
 			k += 1
 			pZ += distH
 			
@@ -2578,7 +2590,7 @@ def spawnDroneObjs(
 			seed=seed,
 			container=container,
 			method='Frustum',
-			methodParameters={'cam': '"cameras/cameraRGB"', 'scaleBack': 0.45},
+			methodParameters={'cam': '"cameras/cameraRGB"', 'scaleBack': 0.25, 'allowEdge': 'false'},
 			minDistance=2,
 			maxDistance=6,
 			thermalObjectBehaviour=dronesThermalObjectBehaviour,
@@ -2621,7 +2633,7 @@ def spawnDroneObjs_alt(
 				'"city/ground_{}" SET Transform localScale ({} {} {})'.format(k, 12, 12, 12),
 				'"city/ground_{}" SET active true'.format(k)
 			], read=False)
-			settings.obj.append('city/ground_{}'.format(k))
+			settings._obj.append('city/ground_{}'.format(k))
 			k += 1
 			pZ += distH
 			

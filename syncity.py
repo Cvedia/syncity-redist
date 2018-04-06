@@ -189,8 +189,8 @@ for s in stack:
 			syncity.common.output('Running python script: {} {}'.format(subject, syncity.common.md5('syncity/scripts/{}.py'.format(subject))))
 			
 			# track objects created by script to remove them from scene later on
-			settings.obj = []
-			settings.seqSave_i = 1
+			settings._obj = []
+			settings._seqSave_i = 1
 			
 			# this should work with both python 2.7 and 3+
 			import_script = __import__('syncity.scripts.{}'.format(subject), fromlist=['syncity.scripts'])
