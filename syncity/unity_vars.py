@@ -1,3 +1,6 @@
+"""
+Contains a list of unity static values for various functions / translations.
+"""
 tonemappings = [ 'Filmic', 'Reinhard', 'LumaReinhard', 'Photographic' ]
 
 # https://docs.unity3d.com/ScriptReference/RenderingPath.html

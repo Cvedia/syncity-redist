@@ -1,7 +1,14 @@
 """
-This script generates a static gallery in html, that work locally straight from
-disk without any server. This allows visualization of exported data, from several
-cameras at the same time overlaying bounding boxes and other meta data.
+This script generates a static gallery in html, that work locally straight from disk without any server. This allows visualization of exported data, from several cameras at the same time overlaying bounding boxes and other meta data.
+
+## Running gallery generator
+
+`python syncity.py -t gallery -l E:\syncity\exported_images`
+
+## Notes:
+
+The `local_path` (`-l`) is where all your images and `.json` objects are, this script will combine both to generate a `.html` gallery that you can open in any browser.
+
 """
 import json
 import sys

@@ -173,6 +173,9 @@ def init():
 	colorama.init()
 
 def init2():
+	"""
+	Init second phase, after settings and loggers are ready.
+	"""
 	head = '// SDK v{}'.format(settings._version).encode('ascii') + b"\r\n"
 	head += '// ARGV {}'.format(' '.join(sys.argv)).encode('ascii') + b"\r\n"
 	# print(settings.getData())
@@ -184,6 +187,9 @@ def init2():
 		init_recording(head)
 
 def init_logging(head=None):
+	"""
+	Initalizes system logging
+	"""
 	if settings.log == True:
 		settings._lfh = open('{}log_{}.txt'.format(settings.local_path, settings._start), 'wb+')
 		
@@ -191,6 +197,9 @@ def init_logging(head=None):
 			settings._lfh.write(head)
 
 def init_recording(head=None):
+	"""
+	Initializes system recording
+	"""
 	if settings.record == True:
 		settings._rfh = open('{}record_{}.txt'.format(settings.local_path, settings._start), 'wb+')
 		
@@ -533,6 +542,9 @@ def modulesArgs(module, parser):
 				pass
 
 def loadConfig():
+	"""
+	Loads config from a file, this replaces / appends to `settings` singleton
+	"""
 	if not os.path.isfile(settings.config):
 		return
 	
@@ -546,6 +558,9 @@ def loadConfig():
 			settings[c] = cfg[c]
 
 def saveConfig():
+	"""
+	Saves config (`settings` singleton) to a file
+	"""
 	output('Saving config to: `{}` ...'.format(settings.config))
 	data = settings.getData()
 	
@@ -570,6 +585,9 @@ def readAll(fn):
 	return data
 
 def findArgOrder(aargs, argv=sys.argv):
+	"""
+	Figures out the stack argument order
+	"""
 	order = []
 	
 	for i in argv:
@@ -582,6 +600,9 @@ def findArgOrder(aargs, argv=sys.argv):
 	return order
 
 def mkdirP(path):
+	"""
+	Recursive folder creation
+	"""
 	try:
 		os.makedirs(path)
 	except OSError as exc:
