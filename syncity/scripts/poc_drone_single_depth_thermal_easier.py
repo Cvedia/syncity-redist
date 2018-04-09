@@ -91,8 +91,7 @@ def run():
 			#
 			# use 'car, +thermal' to spawn only cars with thermal profiles
 			#
-			carsTags=['car'],
-			seed=-1
+			carsTags=['car']
 		)
 		
 		"""

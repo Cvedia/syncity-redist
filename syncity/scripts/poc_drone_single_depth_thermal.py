@@ -40,14 +40,6 @@ def run():
 		helpers.addCameraRGB(width=1024, height=768, pp='EnviroFX')
 		helpers.addCameraDepth(width=1024, height=768)
 		
-		# chromatic aberration setup
-		helpers.LCP(
-			camera=mycams[0],
-			redParam1=0.1,
-			redParam2=0.1,
-			redParam3=-1
-		)
-		
 		# Note on bbox output:
 		# classId aligns with the order you define the segments, for example:
 		# segments=['drone0', 'drone1', 'drone2']
@@ -87,38 +79,20 @@ def run():
 		
 		if settings.segment_all:
 			helpers.spawnDroneObjs(
-				dronesLimit=[0,0], buildingsRadius=400, buildingsInnerRadius=300,
+				dronesLimit=[0,0], buildingsInnerRadius=300,
 				treesLimit=[300,600], treesInnerRadius=30, treesRadius=50, buildingsLimit=[50,80],
-				birdsThermalObjectBehaviour=True,
-				treesThermalObjectBehaviour=True,
-				buildingsThermalObjectBehaviour=True,
-				carsThermalObjectBehaviour=True,
-				groundThermalObjectBehaviour=True,
-				dronesThermalObjectBehaviour=True,
-				humansThermalObjectBehaviour=True,
-				signsThermalObjectBehaviour=True,
-				cityThermalObjectBehaviour=True,
+				thermal='DefaultThermalProfile',
 				carsColors=16,
 				carsTags=['car, +thermal'],
-				seed=666,
 				groundSegment='ground', treesSegment='tree', buildingsSegment='building', birdsSegment='bird', carsSegment='car'
 			)
 		else:
 			helpers.spawnDroneObjs(
-				dronesLimit=[0,0], buildingsRadius=400, buildingsInnerRadius=300,
+				dronesLimit=[0,0], buildingsInnerRadius=300,
 				treesLimit=[300,600], treesInnerRadius=30, treesRadius=50, buildingsLimit=[50,80],
-				birdsThermalObjectBehaviour=True,
-				treesThermalObjectBehaviour=True,
-				buildingsThermalObjectBehaviour=True,
-				carsThermalObjectBehaviour=True,
-				groundThermalObjectBehaviour=True,
-				dronesThermalObjectBehaviour=True,
-				humansThermalObjectBehaviour=True,
-				signsThermalObjectBehaviour=True,
-				cityThermalObjectBehaviour=True,
+				thermal='DefaultThermalProfile',
 				cars_colors=16,
-				carsTags=['car, +thermal'],
-				seed=666
+				carsTags=['car, +thermal']
 			)
 		
 		common.sendData([
