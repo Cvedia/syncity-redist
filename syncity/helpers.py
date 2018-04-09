@@ -2118,7 +2118,7 @@ def spawner(
 	container (string): Defines a container object name nested within `type`, defaults to `container`
 	names (list): Overrides type caption, must be aligned with the number of arguments on types, defaults to `None`
 	uglyFix (bool): Ugly fix for asset naming, defaults to `True`
-	seed (int): Defines a seed number, this forces random values to be equal on different instances, defaults to `None`
+	seed (int): Defines a seed number, this forces random values to be equal on different instances, defaults to `None` - WARNING: You shouldn't use this unless you want to seed this specific run, it's better to use the global seed via the command line argument if you want to create reproducible results.
 	randomColors (int): Defines a number of random colors to assign to spawner, when set to None disables feature, defaults to `None`, when set to `True` goes full random instead of predefined defined random colors
 	randomColorsWeights (int): Defines a weight for color switching, defaults to `14`
 	method (string): Defines spawner method, defaults to `None`
@@ -2311,7 +2311,7 @@ def spawnRadiusGeneric(
 	container (string): Defines a container object name nested within `type`, defaults to `container`
 	names (list): Overrides type caption, must be aligned with the number of arguments on types, defaults to `None`
 	uglyFix (bool): Ugly fix for asset naming, defaults to `True`
-	seed (int): Defines a seed number, this forces random values to be equal on different instances, defaults to `None`
+	seed (int): Defines a seed number, this forces random values to be equal on different instances, defaults to `None` - WARNING: You shouldn't use this unless you want to seed this specific run, it's better to use the global seed via the command line argument if you want to create reproducible results.
 	randomColors (int): Defines a number of random colors to assign to spawner, when set to None disables feature, defaults to `None`
 	randomColorsWeights (int): Defines a weight for color switching, defaults to `14`
 	partsNames (string): Defines a list of parts to be colorized, defaults to `None`
@@ -2363,7 +2363,7 @@ def spawnRectangleGeneric(
 	prefix (string): Defines a root game object to nest types into, defaults to `spawner`
 	container (string): Defines a container object name nested within `type`, defaults to `container`
 	names (list): Overrides type caption, must be aligned with the number of arguments on types, defaults to `None`
-	seed (int): Defines a seed number, this forces random values to be equal on different instances, defaults to `None`
+	seed (int): Defines a seed number, this forces random values to be equal on different instances, defaults to `None` - WARNING: You shouldn't use this unless you want to seed this specific run, it's better to use the global seed via the command line argument if you want to create reproducible results.
 	randomColors (int): Defines a number of random colors to assign to spawner, when set to None disables feature, defaults to `None`
 	randomColorsWeights (int): Defines a weight for color switching, defaults to `14`
 	partsNames (string): Defines a list of parts to be colorized, defaults to `None`
@@ -2491,7 +2491,7 @@ def spawnMiscObjs(destroy=False, prefix='spawner', container='container', seed=N
 	
 	destroy (bool): Destroy objects before creating them, defaults to `False`
 	prefix (string): Spawner root object where spawned objects will be nested within, defaults to `spawner`
-	seed (int): Defines a seed number, this forces random values to be equal on different instances, defaults to `None`
+	seed (int): Defines a seed number, this forces random values to be equal on different instances, defaults to `None` - WARNING: You shouldn't use this unless you want to seed this specific run, it's better to use the global seed via the command line argument if you want to create reproducible results.
 	
 	"""
 	if destroy == True:
@@ -2532,7 +2532,7 @@ def spawnDroneObjs(
 	
 	destroy (bool): Destroy objects before creating them, defaults to `False`
 	prefix (string): Spawner root object where spawned objects will be nested within, defaults to `spawner`
-	seed (int): Defines a seed number, this forces random values to be equal on different instances, defaults to `None`
+	seed (int): Defines a seed number, this forces random values to be equal on different instances, defaults to `None` - WARNING: You shouldn't use this unless you want to seed this specific run, it's better to use the global seed via the command line argument if you want to create reproducible results.
 	"""
 	if destroy == True:
 		common.sendData([
@@ -2720,7 +2720,7 @@ def spawnAnimalsObjs(destroy=False, prefix='spawner', container='container', see
 	
 	destroy (bool): Destroy objects before creating them, defaults to `False`
 	prefix (string): Spawner root object where spawned objects will be nested within, defaults to `spawner`
-	seed (int): Defines a seed number, this forces random values to be equal on different instances, defaults to `None`
+	seed (int): Defines a seed number, this forces random values to be equal on different instances, defaults to `None` - WARNING: You shouldn't use this unless you want to seed this specific run, it's better to use the global seed via the command line argument if you want to create reproducible results.
 	"""
 	if destroy == True:
 		common.sendData([
