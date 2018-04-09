@@ -15,7 +15,7 @@ import random
 
 from syncity import common, settings_manager
 
-SYNCITY_VERSION = '18.04.06.2215'
+SYNCITY_VERSION = '18.04.05.1828'
 SIMULATOR_MIN_VERSION = '18.03.15.0000'
 
 print ('SynCity toolbox - v{}\nCopyright (c) 2016-{} CVEDIA PVE Ltd\n'.format(SYNCITY_VERSION, datetime.date.today().year))
@@ -178,9 +178,9 @@ for s in stack:
 			with open(subject.name) as fp:
 				for line in fp:
 					syncity.common.sendData(line)
+			common.flushBuffer()
 		
 		idx['run'] += 1
-	
 	elif s == 'script':
 		for subject in settings.script[idx['script']]:
 			if subject[-3:] == '.py':
@@ -195,9 +195,9 @@ for s in stack:
 			# this should work with both python 2.7 and 3+
 			import_script = __import__('syncity.scripts.{}'.format(subject), fromlist=['syncity.scripts'])
 			import_script.run()
+			common.flushBuffer()
 		
 		idx['script'] += 1
-	
 	elif s == 'tool':
 		for subject in settings.tool[idx['tool']]:
 			if subject[-3:] == '.py':

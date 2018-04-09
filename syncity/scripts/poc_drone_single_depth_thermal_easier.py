@@ -168,11 +168,11 @@ def run():
 	], read=False)
 	
 	common.flushBuffer()
-	helpers.kickSeg(mycams[1])
 	
 	if settings.setup_only == True:
 		return
 	
+	helpers.kickSeg(mycams[1])
 	kick = False
 	
 	while loop < settings.loop_limit:

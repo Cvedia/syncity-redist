@@ -10,8 +10,19 @@ class Singleton:
 	__instance = None
 	__data = {}
 	
-	def getData(self):
+	def getDataRaw(self):
 		return self.__data
+	
+	def getData(self):
+		data = {}
+		blacklist =  [ 'run', 'script', 'tool', 'save_config' ]
+		
+		for key in self.__data:
+			if key[0:1] == '_' or key in blacklist:
+				continue
+			data[key] = self.__data[key]
+		
+		return data
 	
 	def isset(self, key):
 		if key in self.__data:

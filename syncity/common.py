@@ -173,7 +173,11 @@ def init():
 	colorama.init()
 
 def init2():
-	head = '// SDK v{}'.format(settings._version).encode('ascii') + b"\r\n" + '// ARGV {}'.format(' '.join(sys.argv)).encode('ascii') + b"\r\n" + '// SETTINGS {}'.format(json.dumps(settings.getData())).encode('ascii') + b"\r\n"
+	head = '// SDK v{}'.format(settings._version).encode('ascii') + b"\r\n"
+	head += '// ARGV {}'.format(' '.join(sys.argv)).encode('ascii') + b"\r\n"
+	# print(settings.getData())
+	head += '// SETTINGS {}'.format(json.dumps(settings.getData())).encode('ascii') + b"\r\n"
+	
 	init_logging(head)
 	
 	if settings.run != None or settings.script != None:
@@ -263,11 +267,16 @@ def sendData(v, read=None, flush=None, timeout=3):
 		output('[{}] Telnet sendData v: {} read: {} flush: {}'.format(counters['send'], v, 'True' if read == True else 'False', 'True' if flush != None else 'False'))
 	
 	r = []
+	abort = False
 	
 	for s in v:
 		s = re.sub(r'\s{2,}', ' ', s.strip('\n\r').replace('\t', ' '))
 		
 		if len(s) == 0 or len(s.strip(' ')) == 0:
+			continue
+		if s[0:2] == '//' or s[0:2] == '--':
+			if settings.quiet == False:
+				output('>> [COMMENT] {}'.format(s))
 			continue
 		if settings.quiet == False:
 			output('>> {}'.format(s))
@@ -447,19 +456,21 @@ def gracefullShutdown(a=None, b=None):
 	if settings.debug:
 		output('Telnet sent: {} recv: {} flush: {}'.format(counters['send'], counters['recv'], counters['flush']), 'DEBUG')
 	
-	output('Completed, wasted {}s ... BYE'.format(time.time() - settings._start))
-	
 	try:
 		if settings.record:
+			output('Recorded to: `{}`'.format(settings._rfh.name))
 			settings._rfh.close()
 	except:
 		pass
 	
 	try:
 		if settings.log:
+			output('Logged to: `{}`'.format(settings._lfh.name))
 			settings._lfh.close()
 	except:
 		pass
+	
+	output('Completed, wasted {}s ... BYE'.format(time.time() - settings._start))
 
 def flushBuffer():
 	"""
@@ -537,24 +548,6 @@ def loadConfig():
 def saveConfig():
 	output('Saving config to: `{}` ...'.format(settings.config))
 	data = settings.getData()
-	blacklist =  [ 'run', 'script', 'tool', 'save_config' ]
-	dellist = []
-	
-	# remove privates
-	for key in data:
-		if key[0:1] == '_':
-			dellist.append(key)
-	
-	if len(dellist) > 0:
-		for key in dellist:
-			del data[key]
-	
-	# remove blacklist
-	for key in blacklist:
-		try:
-			del data[key]
-		except:
-			pass
 	
 	with open(settings.config, "w", encoding='utf-8') as fh:
 		fh.write(json.dumps(data, indent=4, sort_keys=True))

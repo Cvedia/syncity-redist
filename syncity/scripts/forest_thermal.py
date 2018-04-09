@@ -15,6 +15,7 @@ Human walker at forest
 	- Creates a Depth camera
 	- Creates a Segmentation camera
 	- Creates a human walker spawner, this will create random body, random gender and random acessorized humans walking from a starting point to a goal
+	- Creates animals with thermal signature around areas humans will walk
 	- Flys around as a drone, rotating height , distance and azimuth
 	- Randomizes camera AGC min/max using API
 	- Exports depth maps, rgb images, thermal images, segmentation images and bounding boxes
@@ -66,7 +67,7 @@ def run():
 		helpers.addCameraSeg(
 			width=1024, height=768, fov=90, clippingFar=10000,
 			segments=['Human'],
-			lookupTable=[['Human', 'green'], ['ground', '#520000FF']]
+			lookupTable=[['Human', 'green'], ['ground', '#520000FF'], ['Animal', 'red']]
 		)
 		
 		helpers.addCameraRGB(
@@ -93,6 +94,20 @@ def run():
 		helpers.globalDiskSetup()
 		helpers.addDiskOutput(mycams)
 		
+		# create thermal animals around humans goal area
+		helpers.spawnRadiusGeneric(
+			['animals'],
+			tags=['+animal, +thermal'],
+			collisionCheck=True,
+			stickToGround=True,
+			limit=100,
+			radius=100,
+			innerradius=0,
+			position=[1696.21069, 250, 7000],
+			segmentationClass='Animal'
+		)
+		
+		# create thermal humans
 		helpers.humanSpawner(
 			goals=[[1696.21069, 215.3, 7000]],
 			spawners=[[1723.81311, 213.312, 6838.701], [1655.723, 211.563, 6797.911], [1528.34314, 219.4655, 7124.911]],
@@ -101,7 +116,7 @@ def run():
 		)
 		
 		helpers.addThermalProfileOverride(
-			target='spawner/human_walker/container',
+			target=[ 'spawner/human_walker/container', 'spawner/human_walker/container'],
 			heatinessMode='Absolute',
 			heatinessValue=60
 		)

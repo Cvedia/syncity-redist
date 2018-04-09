@@ -854,31 +854,36 @@ def addThermalProfileOverride(
 		reflectivityMode='Disabled', reflectivityValue=0,
 		ambientOffsetMode='Disabled', ambientOffsetValue=0
 	):
-	common.sendData([
-		'"{}" ADD Thermal.ThermalProfileOverride'.format(target),
-		'''"{}" SET Thermal.ThermalProfileOverride
-			temperatureMode "{}"
-			temperature {}
-			temperatureMedianMode "{}"
-			temperatureMedian {}
-			temperatureBandwidthMode "{}"
-			temperatureBandwidth {}
-			heatinessMode "{}"
-			heatiness {}
-			varianceMode "{}"
-			variance {}
-			reflectivityMode "{}"
-			reflectivity {}
-			ambientOffsetMode "{}"
-			ambientOffset {}
-		'''.format(
-			target, temperatureMode, temperatureValue,
-			temperatureMedianMode, temperatureMedianValue,
-			temperatureBandwidthMode, temperatureBandwidthValue,
-			heatinessMode, heatinessValue, reflectivityMode, reflectivityValue,
-			varianceMode, varianceValue, ambientOffsetMode, ambientOffsetValue
-		)
-	])
+	
+	if not isinstance(target, list):
+		target = [ target ]
+	
+	for t in target:
+		common.sendData([
+			'"{}" ADD Thermal.ThermalProfileOverride'.format(t),
+			'''"{}" SET Thermal.ThermalProfileOverride
+				temperatureMode "{}"
+				temperature {}
+				temperatureMedianMode "{}"
+				temperatureMedian {}
+				temperatureBandwidthMode "{}"
+				temperatureBandwidth {}
+				heatinessMode "{}"
+				heatiness {}
+				varianceMode "{}"
+				variance {}
+				reflectivityMode "{}"
+				reflectivity {}
+				ambientOffsetMode "{}"
+				ambientOffset {}
+			'''.format(
+				t, temperatureMode, temperatureValue,
+				temperatureMedianMode, temperatureMedianValue,
+				temperatureBandwidthMode, temperatureBandwidthValue,
+				heatinessMode, heatinessValue, reflectivityMode, reflectivityValue,
+				varianceMode, varianceValue, ambientOffsetMode, ambientOffsetValue
+			)
+		])
 
 def addThermalTerrain(target, ambientOffset=0, bandwidth=1, median=0, baseMapDistance=10000):
 	common.sendData([
@@ -1203,6 +1208,8 @@ def globalDiskSetup(label='disk1', outputPath=None):
 	settings._obj.append(label)
 
 def kickSeg(label='cameras/segmentation'):
+	return
+	
 	common.output('Kicking segmentation camera', 'DEBUG')
 	common.flushBuffer()
 	common.sendData([
