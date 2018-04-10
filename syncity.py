@@ -15,7 +15,7 @@ import random
 
 from syncity import common, settings_manager
 
-SYNCITY_VERSION = '18.04.05.1828'
+SYNCITY_VERSION = '18.04.10.2332'
 SIMULATOR_MIN_VERSION = '18.03.15.0000'
 
 print ('SynCity toolbox - v{}\nCopyright (c) 2016-{} CVEDIA PVE Ltd\n'.format(SYNCITY_VERSION, datetime.date.today().year))
