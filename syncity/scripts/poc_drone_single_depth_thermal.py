@@ -37,8 +37,16 @@ def run():
 	
 	if settings.skip_setup == False:
 		helpers.globalCameraSetup(orbit=False)
-		helpers.addCameraRGB(width=1024, height=768, pp='EnviroFX')
-		helpers.addCameraDepth(width=1024, height=768)
+		helpers.addCameraRGB(pp='EnviroFX')
+		helpers.addCameraDepth()
+		
+		# chromatic aberration setup
+		helpers.LCP(
+			camera=mycams[0],
+			redParam1=0.1,
+			redParam2=0.1,
+			redParam3=-1
+		)
 		
 		# Note on bbox output:
 		# classId aligns with the order you define the segments, for example:
@@ -47,13 +55,11 @@ def run():
 		
 		if settings.segment_all:
 			helpers.addCameraSeg(
-				width=4096, height=3072,
 				segments=['drone0', 'drone1', 'drone2'],
 				lookupTable=[['drone0', 'red'], ['drone1','blue'], ['drone2', 'green'], ['ground', '#C0CBE6FF'], ['tree', '#CFD83AFF'], ['building', '#7E0E62FF'], ['bird', '#33D45EFF'], ['car', '#00FD26FF']]
 			)
 		else:
 			helpers.addCameraSeg(
-				width=4096, height=3072,
 				segments=['drone0', 'drone1', 'drone2'],
 				lookupTable=[['drone0', 'red'], ['drone1','blue'], ['drone2', 'green']]
 			)
@@ -79,20 +85,38 @@ def run():
 		
 		if settings.segment_all:
 			helpers.spawnDroneObjs(
-				dronesLimit=[0,0], buildingsInnerRadius=300,
+				dronesLimit=[0,0], buildingsRadius=400, buildingsInnerRadius=300,
 				treesLimit=[300,600], treesInnerRadius=30, treesRadius=50, buildingsLimit=[50,80],
-				thermal='DefaultThermalProfile',
+				birdsThermalObjectBehaviour=True,
+				treesThermalObjectBehaviour=True,
+				buildingsThermalObjectBehaviour=True,
+				carsThermalObjectBehaviour=True,
+				groundThermalObjectBehaviour=True,
+				dronesThermalObjectBehaviour=True,
+				humansThermalObjectBehaviour=True,
+				signsThermalObjectBehaviour=True,
+				cityThermalObjectBehaviour=True,
 				carsColors=16,
 				carsTags=['car, +thermal'],
+				seed=666,
 				groundSegment='ground', treesSegment='tree', buildingsSegment='building', birdsSegment='bird', carsSegment='car'
 			)
 		else:
 			helpers.spawnDroneObjs(
-				dronesLimit=[0,0], buildingsInnerRadius=300,
+				dronesLimit=[0,0], buildingsRadius=400, buildingsInnerRadius=300,
 				treesLimit=[300,600], treesInnerRadius=30, treesRadius=50, buildingsLimit=[50,80],
-				thermal='DefaultThermalProfile',
+				birdsThermalObjectBehaviour=True,
+				treesThermalObjectBehaviour=True,
+				buildingsThermalObjectBehaviour=True,
+				carsThermalObjectBehaviour=True,
+				groundThermalObjectBehaviour=True,
+				dronesThermalObjectBehaviour=True,
+				humansThermalObjectBehaviour=True,
+				signsThermalObjectBehaviour=True,
+				cityThermalObjectBehaviour=True,
 				cars_colors=16,
-				carsTags=['car, +thermal']
+				carsTags=['car, +thermal'],
+				seed=666
 			)
 		
 		common.sendData([

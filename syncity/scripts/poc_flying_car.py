@@ -24,7 +24,7 @@ def run():
 	
 	if settings.skip_setup == False:
 		helpers.globalCameraSetup()
-		helpers.addCameraRGB(width=4096, height=3072, pp='EnviroFX')
+		helpers.addCameraRGB(pp='EnviroFX')
 		helpers.globalDiskSetup()
 		
 		helpers.addDiskOutput(mycams)

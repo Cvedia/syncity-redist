@@ -33,13 +33,13 @@ def run():
 	
 	if settings.skip_setup == False:
 		helpers.globalCameraSetup()
-		helpers.addCameraRGB(width=4096, height=3072, pp='EnviroFX')
+		helpers.addCameraRGB(pp='EnviroFX')
 		helpers.addCameraSeg(segments=['Car'], lookupTable=[['Car', 'red']])
 		
 		# NOTE: This could be optimized by adding the same camera target on
 		# multiple RenderCameraLink components.
 		
-		helpers.addCameraDepth(label=mycams[2:7], width=1024, height=768)
+		helpers.addCameraDepth(label=mycams[2:7])
 		
 		helpers.globalDiskSetup()
 		helpers.addDiskOutput(mycams)

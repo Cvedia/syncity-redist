@@ -23,7 +23,7 @@ def run():
 	
 	if settings.skip_setup == False:
 		helpers.globalCameraSetup()
-		helpers.addCameraRGB(width=4096, height=3072, flycam=settings.flycam, pp='EnviroFX')
+		helpers.addCameraRGB(flycam=settings.flycam, pp='EnviroFX')
 		helpers.addCameraSeg(segments=['Car'])
 		helpers.globalDiskSetup()
 		

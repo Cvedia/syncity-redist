@@ -10,8 +10,7 @@ def run():
 	
 	if settings.skip_setup == False:
 		helpers.globalCameraSetup()
-		# helpers.addCameraRGB(width=4096, height=3072, audio=True, envirosky=True)
-		helpers.addCameraRGB(width=1024, height=768, audio=True, envirosky=True)
+		helpers.addCameraRGB(audio=True, envirosky=True)
 		helpers.addCameraRGBPP('EnviroFX', scion=False)
 		helpers.addCameraSeg(segments=['Drone'])
 		# helpers.addLight()
