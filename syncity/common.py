@@ -27,9 +27,7 @@ from . import settings_manager
 from datetime import datetime
 from subprocess import PIPE, Popen, STDOUT
 
-_telnet = False
 settings = False
-counters = { 'send': 0, 'recv': 0, 'flush': 0 }
 
 def initTelnet(ip, port, retries=3, wait=.5, timeout=30, ka_interval=3, ka_fail=10, ka_idle=1):
 	"""
@@ -41,21 +39,14 @@ def initTelnet(ip, port, retries=3, wait=.5, timeout=30, ka_interval=3, ka_fail=
 	retries (int): Retry connection if failed, defaults to 3
 	wait (float): Time in seconds to wait between retries
 	
-	# Globals
-	
-	tn: Telnet instance
-	_telnet (bool): Connection flag
-	
 	"""
-	global tn, _telnet
-	
-	if _telnet == True:
+	if settings._telnet == True:
 		if settings._shutdown == True:
 			return
 		output('Connection is already active, trying to reconnect...')
 		
 		try:
-			tn.close()
+			settings._tn.close()
 		except:
 			pass
 	
@@ -65,10 +56,10 @@ def initTelnet(ip, port, retries=3, wait=.5, timeout=30, ka_interval=3, ka_fail=
 		output('Connecting to {}:{}...'.format(ip, port))
 		
 		try:
-			tn = telnetlib.Telnet(ip, port, timeout)
+			settings._tn = telnetlib.Telnet(ip, port, timeout)
 			
 			# set keep alive
-			sock = tn.get_socket()
+			sock = settings._tn.get_socket()
 			
 			if platform.system() == 'Windows':
 				sock.ioctl(socket.SIO_KEEPALIVE_VALS, (1, ka_interval*1000, ka_fail*1000))
@@ -83,9 +74,9 @@ def initTelnet(ip, port, retries=3, wait=.5, timeout=30, ka_interval=3, ka_fail=
 				sock.setsockopt(socket.IPPROTO_TCP, socket.TCP_KEEPCNT, ka_fail)
 			
 			if settings.debug:
-				tn.set_debuglevel(9)
+				settings._tn.set_debuglevel(9)
 			
-			_telnet = True
+			settings._telnet = True
 			output('Connected')
 			settings._simulator_version = sendData(['VERSION', 'NOOP'], read=True)[0].replace('"', '')
 			output('Simulator Version: {}'.format(settings._simulator_version))
@@ -134,19 +125,17 @@ def resetSimulator():
 	Resets simulator and reconnects to telnet
 	
 	"""
-	global tn, _telnet
-	
-	if _telnet == True:
+	if settings._telnet == True:
 		output('Resetting simulator...')
 		settings.obj = []
 		sendData('RESET', read=True, flush=True)
 		
 		try:
-			tn.close()
+			settings._tn.close()
 		except:
 			pass
 		
-		_telnet = False
+		settings._telnet = False
 		time.sleep(5)
 		
 		output('Reconnecting...')
@@ -165,17 +154,19 @@ def init():
 	global settings
 	
 	settings = settings_manager.Singleton()
+	
+	settings._telnet = False
+	settings._counters = { 'send': 0, 'recv': 0, 'flush': 0 }
+	
 	signal.signal(signal.SIGINT, gracefullShutdown)
 	atexit.register(gracefullShutdown)
 	
 	if settings.local_path:
 		mkdirP(settings.local_path)
+	
 	colorama.init()
 
 def init2():
-	"""
-	Init second phase, after settings and loggers are ready.
-	"""
 	head = '// SDK v{}'.format(settings._version).encode('ascii') + b"\r\n"
 	head += '// ARGV {}'.format(' '.join(sys.argv)).encode('ascii') + b"\r\n"
 	# print(settings.getData())
@@ -187,9 +178,6 @@ def init2():
 		init_recording(head)
 
 def init_logging(head=None):
-	"""
-	Initalizes system logging
-	"""
 	if settings.log == True:
 		settings._lfh = open('{}log_{}.txt'.format(settings.local_path, settings._start), 'wb+')
 		
@@ -197,9 +185,6 @@ def init_logging(head=None):
 			settings._lfh.write(head)
 
 def init_recording(head=None):
-	"""
-	Initializes system recording
-	"""
 	if settings.record == True:
 		settings._rfh = open('{}record_{}.txt'.format(settings.local_path, settings._start), 'wb+')
 		
@@ -272,8 +257,8 @@ def sendData(v, read=None, flush=None, timeout=3):
 		v = [ v ]
 	
 	if settings.debug:
-		counters['send'] += 1
-		output('[{}] Telnet sendData v: {} read: {} flush: {}'.format(counters['send'], v, 'True' if read == True else 'False', 'True' if flush != None else 'False'))
+		settings._counters['send'] += 1
+		output('[{}] Telnet sendData v: {} read: {} flush: {}'.format(settings._counters['send'], v, 'True' if read == True else 'False', 'True' if flush != None else 'False'))
 	
 	r = []
 	abort = False
@@ -298,16 +283,16 @@ def sendData(v, read=None, flush=None, timeout=3):
 		if settings.debug:
 			output('Telnet Writing: `{}` {} bytes'.format(s, len(s)), 'DEBUG')
 		
-		tn.write(s)
+		settings._tn.write(s)
 		
 		abort = False
 		
 		if read:
 			if settings.debug:
-				counters['recv'] += 1
-				output('[{}] Telnet Reading...'.format(counters['recv']), 'DEBUG')
+				settings._counters['recv'] += 1
+				output('[{}] Telnet Reading...'.format(settings._counters['recv']), 'DEBUG')
 			
-			l = tn.read_until(b"\r\n", timeout)
+			l = settings._tn.read_until(b"\r\n", timeout)
 			l = shapeData(l)
 			
 			if settings.abort_on_error == True and abort == False and 'ERROR' in l:
@@ -321,7 +306,7 @@ def sendData(v, read=None, flush=None, timeout=3):
 					output('Telnet Read Loop... buffer: {}'.format(r), 'DEBUG')
 				
 				try:
-					l = shapeData(tn.read_eager())
+					l = shapeData(settings._tn.read_eager())
 				except EOFError:
 					output('Error reading data from socket, reconnecting...', 'ERROR')
 					initTelnet(settings.ip, settings.port)
@@ -335,7 +320,7 @@ def sendData(v, read=None, flush=None, timeout=3):
 			"""
 			if flush:
 				time.sleep(.5)
-				l = tn.read_until(b"\r\n", 1)
+				l = settings._tn.read_until(b"\r\n", 1)
 				l = shapeData(l)
 				
 				if l != '':
@@ -435,7 +420,7 @@ def gracefullShutdown(a=None, b=None):
 	if settings.save_config:
 		saveConfig()
 	
-	if _telnet == True:
+	if settings._telnet == True:
 		if settings.keep == False:
 			time.sleep(1)
 			
@@ -458,12 +443,12 @@ def gracefullShutdown(a=None, b=None):
 		"""
 		
 		try:
-			tn.close()
+			settings._tn.close()
 		except:
 			pass
 	
 	if settings.debug:
-		output('Telnet sent: {} recv: {} flush: {}'.format(counters['send'], counters['recv'], counters['flush']), 'DEBUG')
+		output('Telnet sent: {} recv: {} flush: {}'.format(settings._counters['send'], settings._counters['recv'], settings._counters['flush']), 'DEBUG')
 	
 	try:
 		if settings.record:
@@ -486,7 +471,7 @@ def flushBuffer():
 	Forces a telnet command read by sending NOOP
 	"""
 	if settings.debug:
-		counters['flush'] += 1
+		settings._counters['flush'] += 1
 	
 	sendData('NOOP', read=True, flush=True)
 
@@ -542,9 +527,6 @@ def modulesArgs(module, parser):
 				pass
 
 def loadConfig():
-	"""
-	Loads config from a file, this replaces / appends to `settings` singleton
-	"""
 	if not os.path.isfile(settings.config):
 		return
 	
@@ -558,14 +540,28 @@ def loadConfig():
 			settings[c] = cfg[c]
 
 def saveConfig():
-	"""
-	Saves config (`settings` singleton) to a file
-	"""
 	output('Saving config to: `{}` ...'.format(settings.config))
 	data = settings.getData()
 	
 	with open(settings.config, "w", encoding='utf-8') as fh:
 		fh.write(json.dumps(data, indent=4, sort_keys=True))
+
+def runCL(path):
+	"""
+	Runs an arbitrary CL script
+	
+	# Arguments
+	
+	path (string): Path to file
+	
+	"""
+	if os.path.exists(path):
+		with open(path) as fp:
+			for line in fp:
+				sendData(line)
+		flushBuffer()
+	else:
+		raise 'File `{}` doesn\'t exists!'.format(path)
 
 def localTimeOffset(t=None):
 	"""
@@ -585,9 +581,6 @@ def readAll(fn):
 	return data
 
 def findArgOrder(aargs, argv=sys.argv):
-	"""
-	Figures out the stack argument order
-	"""
 	order = []
 	
 	for i in argv:
@@ -600,9 +593,6 @@ def findArgOrder(aargs, argv=sys.argv):
 	return order
 
 def mkdirP(path):
-	"""
-	Recursive folder creation
-	"""
 	try:
 		os.makedirs(path)
 	except OSError as exc:
