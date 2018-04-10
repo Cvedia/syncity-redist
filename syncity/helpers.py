@@ -1053,7 +1053,8 @@ def addCameraSeg(
 	clippingNear=0.3,
 	clippingFar=1000,
 	boundingBoxesExtensionAmount=0,
-	renderingPath=4, textureFormat=4,
+	renderingPath=4,
+	textureFormat=4,
 	minimumVisibility=0,
 	renderCamera=True,
 	lookupTable=True,
@@ -1068,11 +1069,12 @@ def addCameraSeg(
 	height (int): Resolution height, defaults to `1536`
 	segments (list|string): Defines one or more classes this camera will see, defaults to `None`
 	label (string|list): Game object path, defaults to `cameras/segmentation` - This should follow `labelRoot` from `globalCameraSetup`
-	renderingPath (int): Defines rendering path, defaults to `4` - This is defined on unity_vars lookup table
-	textureFormat (int): Defines texture format, defaults to `4` - This is defined on unity_vars lookup table
 	fov (int): Field of view, defaults to `60`
 	clippingNear (float): Near clipping distance, defaults to `0.3` - Objects closer than this distance won't appear
 	clippingFar (float): Far clipping distance, defaults to `1000` - Objects further from this distance won't appear
+	boundingBoxesExtensionAmount (float): Defines the bounding box scale up / down in %, defaults to `0`.
+	renderingPath (int): Defines rendering path, defaults to `4` - This is defined on `unity_vars` lookup table
+	textureFormat (int): Defines texture format, defaults to `4` - This is defined on `unity_vars` lookup table
 	renderCamera (bool): Binds a renderCamera component allowing for disk exports, defaults to `True`
 	lookupTable (list): Binds a color to a class, this is essential for outputting pixel dense images, this is an array of arrays like `[ [ Car , red ] , [ Person, blue ] .. ]`; Defaults to `True` which will automatically populate the segmentation lookup table based on the segments sent.
 	minimumVisibility (float): Defines minimum visibility of object in % (0 - 1), objects with less than % of it's total size visible won't appear on the segmentation maps neither yeild bounding boxes, defaults to `0`
@@ -1106,7 +1108,12 @@ def addCameraSeg(
 		buf.extend([
 			'"{}" SET Camera renderingPath "{}" targetTexture.filterMode "Point"'.format(l, unity_vars.renderingPath[renderingPath]),
 			'"{}" ADD Segmentation.Segmentation'.format(l),
-			'"{}" SET Segmentation.Segmentation minimumObjectVisibility {} outputType "{}" boundingBoxesExtensionAmount {} transparencyCutout {}'.format(l, minimumVisibility, output_type, boundingBoxesExtensionAmount, transparencyCutout),
+			'''"{}" SET Segmentation.Segmentation
+				minimumObjectVisibility {}
+				outputType "{}"
+				boundingBoxesExtensionAmount {}
+				transparencyCutout {}
+			'''.format(l, minimumVisibility, output_type, boundingBoxesExtensionAmount, transparencyCutout),
 			'"{}" EXECUTE Segmentation.Segmentation DefineClass "Void"'.format(l)
 		])
 		
