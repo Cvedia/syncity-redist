@@ -201,19 +201,11 @@ CREATE "disk1/mainCar/cameras/segment"
 "lidarVirtualCamera" SET AutoOrbit enabled true
 
 "mainCar" SET active true
-
+"mainCar/LidarPlaceholder" SET active true
 NOOP
 "disk1" SET active false
 NOOP
 "disk1" SET active true
 
-//"mainCar/LidarPlaceholder" SET active true
-
-
 // take a shot from all cameras
 // "disk1" EXECUTE Sensors.Disk Snapshot
-
-//"mainCar/LidarPlaceholder" SET active true
-//"disk1" EXECUTE Sensors.Disk Snapshot
-
-

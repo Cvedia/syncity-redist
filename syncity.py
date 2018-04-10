@@ -79,6 +79,7 @@ parser.add_argument('--save_config', action='store_true', help='Save sent parame
 
 parser.add_argument('--setup_only', action='store_true', help='Runs script setup and exits')
 parser.add_argument('--enable_physics', action='store_true', default=False, help='Enable Physics, mainly affects objects with rigidbodies.')
+parser.add_argument('--enable_console_log', action='store_true', default=False, help='Enable UI console log')
 parser.add_argument('--disable_envirosky', action='store_true', help='Disables Envirosky -- NOT RECOMMENDED')
 parser.add_argument('--disable_canvas', action='store_true', help='Disables client rendering visualization, better for performance, but you will only see outputs written to disk.')
 parser.add_argument('--use_old_depth_buffer', action='store_true', default=False, help='Uses old depth buffer component')
