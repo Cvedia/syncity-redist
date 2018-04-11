@@ -27,15 +27,7 @@ def run():
 			helpers.addLight()
 		
 		helpers.globalDiskSetup()
-		
 		helpers.addDiskOutput(mycams)
-		
-		# list all childs
-		common.sendData('"cameras" GET children')
-		# list all properties
-		common.sendData('"cameras" GET properties')
-		# list all properties from transform
-		common.sendData('"cameras" GET properties transform')
 	
 	# load all cars carsLimit times on scene
 	k = 0
@@ -46,7 +38,7 @@ def run():
 	distV = 4 # car side
 	dist_lim = 30 # z distance limit
 	
-	while k < settings.cars_limit:
+	while k < settings.carsLimit:
 		common.sendData([
 			'CREATE "Cars/?" FROM "cars" AS "mycar_{}"'.format(k),
 			'"mycar_{}" ADD Segmentation.ClassGroup'.format(k),
@@ -55,7 +47,7 @@ def run():
 			'"mycar_{}" SET active true'.format(k)
 		])
 		
-		settings.obj.append('mycar_{}'.format(k))
+		settings._obj.append('mycar_{}'.format(k))
 		pZ += distH
 		k += 1
 		
@@ -69,7 +61,7 @@ def run():
 		common.sendData('"camera" SET Transform eulerAngles (0 {} 0)'.format(a))
 		k = 0
 		
-		while k < carsLimit:
+		while k < settings.carsLimit:
 			# make sure car is on camera's fov
 			# common.sendData('mycar_{} FRUSTUM mycamera RIGHT {} DOWN {} DEPTH {}'.format(k, random.uniform(0, 1), random.uniform(0, 1), random.randint(5, 120)))
 			# rotate car at random

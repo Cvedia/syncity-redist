@@ -100,7 +100,7 @@ def run():
 		
 		# spawn objects in a rectangular shape
 		helpers.spawnRectangleGeneric(
-			['+animal, +thermal, +savannah', '+carthermal', '+humans' ],
+			['+animal, +thermal', '+car, +thermal', '+humans' ],
 			names=['animals0', 'cars0', 'humans0'],
 			segmentationClass=['Animal', 'Car', 'Human'],
 			limit=50, a=1000, b=1000, position=[1685, 591, 7894],
@@ -115,16 +115,15 @@ def run():
 			'"Savannah/Main Terrain" SET Thermal.ThermalTerrain median {}'.format(terrain_ambient_median),
 			
 			# HACK: set profiles heatiness to high values so objects are visible
-			'"spawner/cars0/RangeRover(Clone)" SET Thermal.ThermalObjectBehaviour profile.heatiness.value 50',
-			
-			'"spawner/animals0/Rino(Clone)" SET Thermal.ThermalObjectBehaviour profile.heatiness.value 100',
-			'"spawner/animals0/giraffe(Clone)" SET Thermal.ThermalObjectBehaviour profile.heatiness.value 75',
-			'"spawner/animals0/Buffalo(Clone)" SET Thermal.ThermalObjectBehaviour profile.heatiness.value 100',
-			'"spawner/animals0/Pelican(Clone)" SET Thermal.ThermalObjectBehaviour profile.heatiness.value 100',
-			'"spawner/animals0/Flamingo(Clone)" SET Thermal.ThermalObjectBehaviour profile.heatiness.value 100',
-			'"spawner/animals0/Vulture_Red(Clone)" SET Thermal.ThermalObjectBehaviour profile.heatiness.value 100',
-			'"spawner/animals0/Vulture_White(Clone)" SET Thermal.ThermalObjectBehaviour profile.heatiness.value 100',
-			'"spawner/animals0/Elef(Clone)" SET Thermal.ThermalObjectBehaviour profile.heatiness.value 90',
+			'"spawner/cars0/container/RangeRover(Clone)" SET Thermal.ThermalObjectBehaviour profile.heatiness.value 50',
+			'"spawner/animals0/container/Rino(Clone)" SET Thermal.ThermalObjectBehaviour profile.heatiness.value 50',
+			'"spawner/animals0/container/giraffe(Clone)" SET Thermal.ThermalObjectBehaviour profile.heatiness.value 35',
+			'"spawner/animals0/container/Buffalo(Clone)" SET Thermal.ThermalObjectBehaviour profile.heatiness.value 50',
+			'"spawner/animals0/container/Pelican(Clone)" SET Thermal.ThermalObjectBehaviour profile.heatiness.value 50',
+			'"spawner/animals0/container/Flamingo(Clone)" SET Thermal.ThermalObjectBehaviour profile.heatiness.value 50',
+			'"spawner/animals0/container/Vulture_Red(Clone)" SET Thermal.ThermalObjectBehaviour profile.heatiness.value 50',
+			'"spawner/animals0/container/Vulture_White(Clone)" SET Thermal.ThermalObjectBehaviour profile.heatiness.value 50',
+			'"spawner/animals0/container/Elef(Clone)" SET Thermal.ThermalObjectBehaviour profile.heatiness.value 40',
 			
 			# respawn assets to update thermal profiles properly
 			'"spawner" SET active false',
@@ -134,7 +133,7 @@ def run():
 			'"spawner/animals0" SET RandomProps.PropArea numberOfProps 250',
 			'"spawner/humans0" SET RandomProps.PropArea numberOfProps 250',
 			
-			'spawner SET active true'
+			'"spawner" SET active true'
 		], read=False)
 	
 	# warm up

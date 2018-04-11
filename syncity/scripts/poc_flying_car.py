@@ -52,9 +52,6 @@ def run():
 				pX += distV
 				col = 0
 		
-		# helpers.spawnRadiusGeneric(['Buildings_001/'], limit=350, radius=350, innerradius=0, collisionCheck=True, stickToGround=True)
-		# helpers.spawnRadiusGeneric(['Buildings_002/'], limit=350, radius=350, innerradius=0, collisionCheck=True, stickToGround=True)
-		# helpers.spawnRadiusGeneric(['Buildings_003/'], limit=350, radius=350, innerradius=0, collisionCheck=True, stickToGround=True)
 		helpers.spawnRadiusGeneric(['Buildings_001/'], limit=350, radius=350, innerradius=0)
 		helpers.spawnRadiusGeneric(['Buildings_002/'], limit=350, radius=350, innerradius=0)
 		helpers.spawnRadiusGeneric(['Buildings_003/'], limit=350, radius=350, innerradius=0)

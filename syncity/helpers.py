@@ -2327,11 +2327,6 @@ def spawnRadiusGeneric(
 	thermalObjectOverride (bool): Adds a thermalObjectOverride component to the `container`. You must have `thermalObjectBehaviour` on the parent object in order for this work; Defaults to `False`
 	
 	"""
-	if radius <= 0:
-		raise 'Invalid radius'
-	if innerradius >= radius:
-		raise 'Inner radius is equal or greater than radius'
-	
 	return spawner(
 		types=types, tags=tags, scale=scale, position=position,
 		rotation=rotation, limit=limit, segmentationClass=segmentationClass, orbit=orbit,

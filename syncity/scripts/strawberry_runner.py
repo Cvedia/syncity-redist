@@ -6,6 +6,7 @@ settings = settings_manager.Singleton()
 def help():
 	return '''\
 Strawberry field runner
+	Note: This depends on the strawberry scene
 	- Runs harvester around the strawberry fields
 '''
 

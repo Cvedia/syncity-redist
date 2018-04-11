@@ -76,7 +76,7 @@ def run():
 		
 		helpers.addCameraDepth(width=1024, height=768, fov=90)
 		helpers.spawnRectangleGeneric(
-			['+animal, +thermal, +savannah', '+animal, +thermal, +savannah', '+animal, +thermal, +savannah'],
+			['+animal, +thermal', '+animal, +thermal', '+animal, +thermal'],
 			names=['animals0', 'animals1', 'animals2'],
 			
 			collisionCheck=True,

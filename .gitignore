@@ -5,3 +5,4 @@ assets-*
 _*.sh
 .vs/*
 syncity.conf
+syncity/scripts/*_test*

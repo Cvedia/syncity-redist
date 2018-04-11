@@ -24,14 +24,14 @@ def run():
 	
 	if settings.skip_setup == False:
 		helpers.globalCameraSetup()
-		helpers.addCameraRGB(width=1024, height=768, flycam=settings.flycam, pp='Savannah')
+		helpers.addCameraRGB(flycam=settings.flycam, pp='Savannah')
 		# addLight(position=[-684.8,532.5,262.466])
 		helpers.globalDiskSetup()
 		
 		helpers.addDiskOutput(mycams)
 		common.sendData([
 			'"cameras/cameraRGB" SET Transform position ({} {} {})'.format(0, -10, 0),
-			'CREATE "test" Terrains/Savannah/Savannah',
+			'CREATE "Savannah" FROM "savannah" AS "test"',
 			'"cameras/cameraRGB" ADD EnviroCamera',
 			'"test" SET Transform position ({} {} {})'.format(-5000,-180,-5000),
 			'"test" SET Terrain basemapDistance 2000',

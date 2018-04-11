@@ -106,7 +106,7 @@ def initTelnet(ip, port, retries=3, wait=.5, timeout=30, ka_interval=3, ka_fail=
 				
 				sendData([
 					'"Config.instance" SET physicsEnabled {}'.format('false' if settings.enable_physics == False else 'true'),
-					'"Canvas/ConsolePanel SET active {}'.format('false' if settings.enable_console_log == False else 'true')
+					'"Canvas/ConsolePanel" SET active {}'.format('false' if settings.enable_console_log == False else 'true')
 				])
 				
 				if settings.seed_api:

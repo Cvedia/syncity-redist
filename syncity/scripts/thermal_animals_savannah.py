@@ -8,6 +8,12 @@ from random import randint
 
 settings = settings_manager.Singleton()
 
+def args(parser):
+	try:
+		parser.add_argument('--loop_limit', type=int, default=100, help='Defines a limit of iterations for exporting')
+	except:
+		pass
+
 def help():
 	return '''\
 Animals thermal in Savannah scene
@@ -21,7 +27,7 @@ Animals thermal in Savannah scene
 
 def run():
 	settings.keep = True
-	mycams = ['cameras/cameraRGB', 'cameras/segmentation', 'cameras/depth']
+	mycams = ['cameras/cameraRGB', 'cameras/segmentation', 'cameras/depth', 'cameras/thermal']
 	
 	dist = [ 260, 320 ]
 	azimuth = 0
@@ -83,7 +89,7 @@ def run():
 		helpers.addDiskOutput(mycams)
 		
 		helpers.spawnRectangleGeneric(
-			['+carthermal', '+animal, +thermal, +savannah', '+animal, +thermal, +savannah', '+animal, +thermal, +savannah' ,'+animal, +thermal, +savannah'],
+			['+car, +thermal', '+animal, +thermal', '+animal, +thermal', '+animal, +thermal' ,'+animal, +thermal'],
 			names=['cars0', 'animals0', 'animals1', 'animals2', 'animals3'],
 			segmentationClass=['Car', 'Animal', 'Animal', 'Animal', 'Animal'],
 			limit=50, a=5000, b=625, position=[2519, 591, 9630],
@@ -93,7 +99,7 @@ def run():
 		)
 		
 		helpers.spawnRectangleGeneric(
-			['+animal, +thermal, +savannah' ],
+			['+animal, +thermal' ],
 			names=['animalsF'],
 			segmentationClass=['Animal'],
 			limit=50, a=100, b=100, position=[1685, 591, 9856],
@@ -107,16 +113,16 @@ def run():
 			'"Savannah/Main Terrain" SET Thermal.ThermalTerrain bandwidth {}'.format(terrain_ambient_bandwidth),
 			'"Savannah/Main Terrain" SET Thermal.ThermalTerrain median {}'.format(terrain_ambient_median),
 			
-			# set profiles heatiness
-			'"spawner/cars0/RangeRover(Clone)" SET Thermal.ThermalObjectBehaviour profile.heatiness.value 50',
-			'"spawner/animals0/Rino(Clone)" SET Thermal.ThermalObjectBehaviour profile.heatiness.value 50',
-			'"spawner/animals0/giraffe(Clone)" SET Thermal.ThermalObjectBehaviour profile.heatiness.value 35',
-			'"spawner/animals0/Buffalo(Clone)" SET Thermal.ThermalObjectBehaviour profile.heatiness.value 50',
-			'"spawner/animals0/Pelican(Clone)" SET Thermal.ThermalObjectBehaviour profile.heatiness.value 50',
-			'"spawner/animals0/Flamingo(Clone)" SET Thermal.ThermalObjectBehaviour profile.heatiness.value 50',
-			'"spawner/animals0/Vulture_Red(Clone)" SET Thermal.ThermalObjectBehaviour profile.heatiness.value 50',
-			'"spawner/animals0/Vulture_White(Clone)" SET Thermal.ThermalObjectBehaviour profile.heatiness.value 50',
-			'"spawner/animals0/Elef(Clone)" SET Thermal.ThermalObjectBehaviour profile.heatiness.value 40',
+			# HACK: set profiles heatiness
+			'"spawner/cars0/container/RangeRover(Clone)" SET Thermal.ThermalObjectBehaviour profile.heatiness.value 50',
+			'"spawner/animals0/container/Rino(Clone)" SET Thermal.ThermalObjectBehaviour profile.heatiness.value 50',
+			'"spawner/animals0/container/giraffe(Clone)" SET Thermal.ThermalObjectBehaviour profile.heatiness.value 35',
+			'"spawner/animals0/container/Buffalo(Clone)" SET Thermal.ThermalObjectBehaviour profile.heatiness.value 50',
+			'"spawner/animals0/container/Pelican(Clone)" SET Thermal.ThermalObjectBehaviour profile.heatiness.value 50',
+			'"spawner/animals0/container/Flamingo(Clone)" SET Thermal.ThermalObjectBehaviour profile.heatiness.value 50',
+			'"spawner/animals0/container/Vulture_Red(Clone)" SET Thermal.ThermalObjectBehaviour profile.heatiness.value 50',
+			'"spawner/animals0/container/Vulture_White(Clone)" SET Thermal.ThermalObjectBehaviour profile.heatiness.value 50',
+			'"spawner/animals0/container/Elef(Clone)" SET Thermal.ThermalObjectBehaviour profile.heatiness.value 40',
 			
 			# respawn them to update profiles properly
 			'"spawner" SET active false',
@@ -132,11 +138,12 @@ def run():
 	# warm up
 	helpers.doRender(mycams)
 	
-	while dist > 0:
+	loop = 0
+	while loop < settings.loop_limit:
 		common.sendData([
-			'"cameras" SET Transform position.z {}'.format(z_pos),
-			'"cameras/cameraRGB" SET Thermal.ThermalCamera temperatureRange ({} {})'.format(min_agc, max_agc),
-			'"cameras" SET Orbit distance {} elevation {} azimuth {} snapOffset (0 {}~{} 0)'.format(dist, elevation, azimuth, snapOffset[0], snapOffset[1])
+			'"cameras" SET Transform position.z {}~{}'.format(z_pos[0], z_pos[1]),
+			'"cameras/thermal" SET Thermal.ThermalCamera temperatureRange ({} {})'.format(min_agc, max_agc),
+			'"cameras" SET Orbit distance {}~{} elevation {} azimuth {} snapOffset (0 {}~{} 0)'.format(dist[0], dist[1], elevation, azimuth, snapOffset_range[0], snapOffset_range[1])
 		], read=False)
 		
 		helpers.takeSnapshot(mycams, True)
@@ -145,14 +152,12 @@ def run():
 		min_agc = randint(-9, 2)
 		max_agc = randint(25, 35)
 		
-		# snapOffset = snapOffset + incr_s
 		elevation = elevation + incr_e
 		azimuth += incr_a
-		z_pos += incr_z
 		
 		if elevation >= elevation_range[1] or elevation <= elevation_range[0]:
 			incr_e = incr_e * -1
-		if snapOffset >= snapOffset_range[1] or snapOffset <= snapOffset_range[0]:
-			incr_s = incr_s * -1
 		if azimuth >= 360:
 			azimuth = 0
+		
+		loop += 1
