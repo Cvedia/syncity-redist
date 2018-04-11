@@ -2265,7 +2265,7 @@ def spawner(
 				], read=False)
 		
 		if orbit == True:
-			common.sendData('cameras SET Orbit target {}'.format(obj), read=False)
+			common.sendData('"cameras" SET Orbit target "{}"'.format(obj), read=False)
 		
 		if randomColors != None:
 			if randomColors == True:
