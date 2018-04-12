@@ -56,7 +56,7 @@ CREATE "disk1/Cameras/segmentation"
 "disk1/Cameras/segmentation" SET Sensors.RenderCameraLink target "cameras/segmentation"
 "disk1/Cameras/segmentation" SET active true
 "disk1" SET active true
-"cameras" SET Transform position (0 9 -30)
+"cameras" SET Transform position (0 10 -30)
 CREATE "Savannah" FROM "savannah" AS "test"
 "test" SET Transform position (-5000 -180 -5000)
 "test" SET active true
@@ -66,8 +66,8 @@ CREATE "spawner/city/nature/trees/container"
 "spawner/city/nature/trees/container" ADD RandomProps.PropArea
 "spawner/city/nature/trees/container" SET RandomProps.PropArea tags "tree"
 "spawner/city/nature/trees/container" SET RandomProps.PropArea async false numberOfProps 150~400 collisionCheck true stickToGround true 
-"spawner/city/nature/trees/container" SET RandomProps.Torus radius 80
 "spawner/city/nature/trees/container" SET RandomProps.Torus innerRadius 30~50
+"spawner/city/nature/trees/container" SET RandomProps.Torus radius 80
 "spawner/city/nature/trees/container" SET Transform position (0 5 0) eulerAngles (0 0 0) localScale (1 1 1)
 "spawner/city/nature/trees/container" SET active true
 "spawner/city/nature/trees" SET active true
@@ -77,8 +77,8 @@ CREATE "spawner/animals/container"
 "spawner/animals/container" ADD RandomProps.PropArea
 "spawner/animals/container" SET RandomProps.PropArea tags "animal"
 "spawner/animals/container" SET RandomProps.PropArea async false numberOfProps 200~350 collisionCheck true stickToGround true 
-"spawner/animals/container" SET RandomProps.Torus radius 40~80
 "spawner/animals/container" SET RandomProps.Torus innerRadius 0
+"spawner/animals/container" SET RandomProps.Torus radius 40~80
 "spawner/animals/container" SET Transform position (0 5 0) eulerAngles (0 0 0) localScale (1 1 1)
 "cameras" SET Orbit target "spawner/animals/container"
 "spawner/animals/container" SET active true
@@ -88,9 +88,9 @@ CREATE "spawner/drones/Parrot_Disco/container"
 "spawner/drones/Parrot_Disco/container" ADD RandomProps.Torus
 "spawner/drones/Parrot_Disco/container" ADD RandomProps.PropArea
 "spawner/drones/Parrot_Disco/container" SET RandomProps.PropArea tags "Parrot Disco"
-"spawner/drones/Parrot_Disco/container" SET RandomProps.PropArea async false numberOfProps 42 collisionCheck true stickToGround false 
-"spawner/drones/Parrot_Disco/container" SET RandomProps.Torus radius 28
+"spawner/drones/Parrot_Disco/container" SET RandomProps.PropArea async false numberOfProps 44 collisionCheck true stickToGround false 
 "spawner/drones/Parrot_Disco/container" SET RandomProps.Torus innerRadius 5
+"spawner/drones/Parrot_Disco/container" SET RandomProps.Torus radius 27
 "spawner/drones/Parrot_Disco/container" SET Transform position (0 0 0) eulerAngles (0 0 0) localScale (1 1 1)
 "spawner/drones/Parrot_Disco/container" ADD Segmentation.ClassGroup
 "spawner/drones/Parrot_Disco/container" SET Segmentation.ClassGroup itemsClassName "Drone"
