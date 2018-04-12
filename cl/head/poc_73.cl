@@ -56,7 +56,7 @@ CREATE "disk1/Cameras/segmentation"
 "disk1/Cameras/segmentation" SET Sensors.RenderCameraLink target "cameras/segmentation"
 "disk1/Cameras/segmentation" SET active true
 "disk1" SET active true
-"cameras" SET Transform position (0 5 -30)
+"cameras" SET Transform position (0 4 -30)
 CREATE "Savannah" FROM "savannah" AS "test"
 "test" SET Transform position (-5000 -180 -5000)
 "test" SET active true
@@ -88,9 +88,9 @@ CREATE "spawner/drones/Parrot_Disco/container"
 "spawner/drones/Parrot_Disco/container" ADD RandomProps.Torus
 "spawner/drones/Parrot_Disco/container" ADD RandomProps.PropArea
 "spawner/drones/Parrot_Disco/container" SET RandomProps.PropArea tags "Parrot Disco"
-"spawner/drones/Parrot_Disco/container" SET RandomProps.PropArea async false numberOfProps 40 collisionCheck true stickToGround false 
+"spawner/drones/Parrot_Disco/container" SET RandomProps.PropArea async false numberOfProps 39 collisionCheck true stickToGround false 
 "spawner/drones/Parrot_Disco/container" SET RandomProps.Torus innerRadius 5
-"spawner/drones/Parrot_Disco/container" SET RandomProps.Torus radius 21
+"spawner/drones/Parrot_Disco/container" SET RandomProps.Torus radius 23
 "spawner/drones/Parrot_Disco/container" SET Transform position (0 0 0) eulerAngles (0 0 0) localScale (1 1 1)
 "spawner/drones/Parrot_Disco/container" ADD Segmentation.ClassGroup
 "spawner/drones/Parrot_Disco/container" SET Segmentation.ClassGroup itemsClassName "Drone"
