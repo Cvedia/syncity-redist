@@ -47,6 +47,10 @@ def write_filtered(line):
 	fh.close()
 
 def run():
+	if settings.dry_run:
+		common.output('This script cannot run on dry run mode, exiting...', 'WARNING')
+		return
+	
 	settings.keep = True
 	mycams = ['cameras/cameraRGB']
 	obj = 'Cars/VW_Golf_V/VW_Golf_V'
@@ -54,7 +58,7 @@ def run():
 	
 	if settings.skip_setup == False:
 		helpers.globalCameraSetup()
-		helpers.addCameraRGB(pp='EnviroFX')
+		helpers.addCameraRGB(width=4096, height=3072, pp='EnviroFX')
 		# helpers.addCameraSeg(segments=['Car'])
 		helpers.globalDiskSetup()
 		helpers.addDiskOutput(mycams)

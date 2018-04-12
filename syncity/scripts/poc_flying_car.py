@@ -81,6 +81,9 @@ def run():
 		'"EnviroSky" SET EnviroSky cloudsMode "{}"'.format('Volume')
 	])
 	
+	if settings.setup_only:
+		return
+	
 	while hour < 19:
 		common.sendData([
 			'"spawner/drones" SET Transform position ({} {} {})'.format(0, random.randint(2, 25), 0),

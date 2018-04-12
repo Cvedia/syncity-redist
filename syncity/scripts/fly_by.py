@@ -41,6 +41,9 @@ def run():
 		'"cameras/segmentation" SET Transform eulerAngles (90 0 0)'
 	])
 	
+	if settings.setup_only:
+		return
+	
 	for x in range(-40, 40):
 		for z in range(-40, 40):
 			common.sendData([

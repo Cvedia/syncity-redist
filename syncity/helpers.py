@@ -1287,7 +1287,8 @@ def takeSnapshot(lst, autoSegment=False, label='disk1', forceNoop=False):
 		
 		common.sendData('"{}" EXECUTE Sensors.Disk Snapshot'.format(label))
 	
-	time.sleep(settings.cooldown)
+	if settings.cooldown > 0:
+		common.sendData('SLEEP {}'.format(settings.cooldown), read=True);
 
 def takeSegSnapshot(lst):
 	"""
@@ -1317,6 +1318,9 @@ def seqSave(pref, rawData):
 	rawData (list): Data to write
 	
 	"""
+	if settings.dry_run:
+		return
+	
 	noops = 0
 	data = []
 	while len(data) == 0:
@@ -1998,7 +2002,8 @@ def humanSpawner(
 		container='container',
 		prefix='spawner',
 		segmentationClass='Human',
-		requireThermalClothing=False
+		requireThermalClothing=False,
+		playRandomAnimations=None
 	):
 	"""
 	Creates a human walker spawner.
@@ -2018,6 +2023,24 @@ def humanSpawner(
 	container (string): Defines a game object name / path where spawned humans will reside, those game objects are dynamic and will be cycled after reaching the goal. Defaults to `container`, when set to `None` will spawn on root.
 	prefix (string): Defines a game object name / path where the human spawner game object and childs will be created, defaults to `spawner`
 	segmentationClass (string): Defines a segmentation class for the spawned objects; Defaults to `Human`, disable this by setting it to `None`. Note that this will be bound to the `container`, if you set `container` to `None` this parameter will be ignored.
+	playRandomAnimations (dict): A list of configurables and animations to be added to a playRandomAnimation component, defaults to `None`, example dictionary:
+	
+	```json
+	{
+		"animations": [
+										'ASSET "Humans/content/common/animations/Waving" FROM "humans"',
+										'ASSET "Humans/content/common/animations/Walking" FROM "humans"',
+										'ASSET "Humans/content/common/animations/Running" FROM "humans"'
+									],
+		"minAnimationDuration": 1,
+		"maxAnimationDuration": 5,
+		"minDelayBetweenAnimations": 1,
+		"maxDelayBetweenAnimations": 5,
+		"animationFadeDuration": 0.4
+	}
+	
+	```
+	
 	"""
 	
 	if goals == None or len(goals) == 0:
@@ -2084,6 +2107,23 @@ def humanSpawner(
 			'"{}humanSpawner" PUSH Humans.Locomotion.WalkerSpawner spawnPoints "{}points/spawners/s_{}"'.format(prefix, prefix, i)
 		])
 		i += 1
+	
+	if playRandomAnimations != None:
+		s = [ '"{}humanSpawner" SET Humans.Animation.PlayRandomAnimations'.format(prefix) ]
+		a = []
+		
+		for k in playRandomAnimations:
+			if k == 'animations':
+				a.push(playRandomAnimations[k])
+			else:
+				s.push('{} {}'.format(k, playRandomAnimations[k]))
+		
+		buf.append('"{}humanSpawner" ADD Humans.Animation.PlayRandomAnimations'.format(prefix))
+		
+		if len(s) > 1:
+			buf.append(' '.join(s))
+		if len(a) > 0:
+			buf.append('"{}humanSpawner" PUSH Humans.Animation.PlayRandomAnimations {}'.format(prefix, ' '.join(a)))
 	
 	buf.extend([
 		'"{}humanSpawner" SET active true'.format(prefix),

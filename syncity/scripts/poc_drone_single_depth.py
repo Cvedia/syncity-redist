@@ -191,8 +191,10 @@ def run():
 		# motion blur correctly made, we need to allow the system to render a few
 		# frames, before taking the screenshot
 		if motionblur == 'true':
-			common.sendData('"cameras/cameraRGB" SET Camera enabled true', read=True)
-			time.sleep(0.5)
+			common.sendData([
+				'"cameras/cameraRGB" SET Camera enabled true',
+				'SLEEP 0.5'
+			], read=True)
 		
 		helpers.takeSnapshot(mycams, True)
 		

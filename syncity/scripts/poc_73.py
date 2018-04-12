@@ -28,6 +28,9 @@ def run():
 	helpers.spawnAnimalsObjs()
 	helpers.spawnRadiusGeneric(['drones/Parrot Disco'], limit=random.randint(30,50), radius=random.randint(20,35), innerradius=5, position=[0,0,0], segmentationClass="Drone")
 	
+	if settings.setup_only:
+		return
+	
 	for c in range(2):
 		for w in range(8):
 			for fov in range(100, 9, -20):

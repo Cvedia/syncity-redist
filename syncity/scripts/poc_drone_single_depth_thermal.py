@@ -181,6 +181,9 @@ def run():
 			'"drone/drone2/drone2" SET active true',
 		], read=False)
 	
+	if settings.setup_only:
+		return
+	
 	pX_r = [-3, 3]
 	pY_r = [1.5, 8]
 	pZ_r = [3, 9]

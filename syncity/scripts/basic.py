@@ -16,6 +16,9 @@ Basic simple scene
 '''
 
 def run():
+	if settings.dry_run:
+		return
+	
 	settings.keep = True
 	mycams = ['cameras/cameraRGB', 'cameras/segmentation']
 	

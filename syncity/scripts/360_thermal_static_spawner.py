@@ -70,5 +70,5 @@ def run():
 		
 		common.sendData('"{}" SET active true'.format(obj), read=False)
 		helpers.takeSnapshot(mycams, True)
-	
-	loop += 1
+		
+		loop += 1

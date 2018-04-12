@@ -1,55 +1,70 @@
 "Config.instance" SET physicsEnabled true
-
-// disable default canvas
 "Canvas" SET active false
-CREATE "Pickup" FROM "highway" AS "mainCar"
+
+// load highway scene ----------------------------------------------------------
 
 LOAD "highway" FROM "highway_scene"
-"mainCar" LISTEN CollisionDetector OnCollision TRIGGER "Canvas/CollisionInfo" CollisionListener Collided
-
+CREATE "Pickup" FROM "highway" AS "mainCar"
 
 "mainCar" SET Transform position (1390.49 98.121 1958.68) eulerAngles (0 84.42 0)
-"mainCar" ADD MainCar OSVehicle OSBHVehicleDriver Highway.ToggleBetweenAutoDriveAndUserControl CollisionDetector
+"mainCar" ADD OSVehicle OSBHVehicleDriver Highway.ToggleBetweenAutoDriveAndUserControl
 "mainCar" SET OSVehicle externControl true
 "mainCar" SET OSBHVehicleDriver smoothAdjust 100.0
+"mainCar" SET Highway.ToggleBetweenAutoDriveAndUserControl button "J"
 
-// -----------------------------------------------------------------------------
+// front / bumper camera -------------------------------------------------------
 
-// setup bumper, depth and segmentation cameras
 CREATE "mainCar/cameras"
 "mainCar/cameras" SET active false
-"mainCar/cameras" SET Transform position (-6 1 -50)
-"mainCar/cameras" SET Transform eulerAngles (0 0 0)
-"mainCar/cameras" ADD Orbit
+"mainCar/cameras" SET Transform position (-6 1 -50) eulerAngles (0 0 0) localPosition (0 0.872 2.318) localEulerAngles (0 0 0)
 
 CREATE "mainCar/cameras/Front"
 "mainCar/cameras/Front" SET active false
 "mainCar/cameras/Front" ADD Camera
-"mainCar/cameras/Front" SET Camera near 0.3 far 1000 fieldOfView 60
+"mainCar/cameras/Front" SET Camera near 0.3 far 1000 fieldOfView 60 allowMSAA false
+
+// postprocessing stack matching what's on the driver camera
+"mainCar/cameras/Front" ADD EnviroSkyRendering
+"mainCar/cameras/Front" ADD EnviroLightShafts
+"mainCar/cameras/Front" ADD Postprocessing.EnviroMerged
+"mainCar/cameras/Front" SET Postprocessing.EnviroMerged dayProfile ASSET "Highway/Resources/Day" FROM "highway" dayProfile ASSET "Highway/Resources/Night" FROM "highway"
+
+"mainCar/cameras/Front" ADD UnityEngine.Rendering.PostProcessing.PostProcessLayer
+"mainCar/cameras/Front" SET UnityEngine.Rendering.PostProcessing.PostProcessLayer antialiasingMode "SubpixelMorphologicalAntialiasing" fog.enabled 0 volumeTrigger "mainCar/cameras/Front"
+
 "mainCar/cameras/Front" ADD Sensors.RenderCamera
-"mainCar/cameras/Front" SET Sensors.RenderCamera format "ARGB32" resolution (640 480)
-"mainCar/cameras/Front" SET Camera renderingPath "UsePlayerSettings"
+
+// WARNING: This camera must be `alwaysOn` because is has motionBlur enabled on postprocessing
+// otherwise motion blur would just blur the interleaving images
+"mainCar/cameras/Front" SET Sensors.RenderCamera format "ARGB32" resolution (1024 768) alwaysOn true
+
+"mainCar/cameras/Front" SET Camera renderingPath "DeferredShading"
 "mainCar/cameras/Front" SET active true
+
+// depth camera ----------------------------------------------------------------
 
 CREATE "mainCar/cameras/Depth"
 "mainCar/cameras/Depth" SET active false
 "mainCar/cameras/Depth" ADD Camera
-"mainCar/cameras/Depth" SET Camera near 0.3 far 1000 fieldOfView 60 renderingPath "DeferredShading"
+"mainCar/cameras/Depth" SET Camera near 0.3 far 1000 fieldOfView 60 renderingPath "DeferredShading" allowMSAA false
 "mainCar/cameras/Depth" ADD Sensors.RenderCamera
-"mainCar/cameras/Depth" SET Sensors.RenderCamera format "RFloat" resolution (640 480)
+//"mainCar/cameras/Depth" SET Sensors.RenderCamera format "RFloat" resolution (1024 768) alwaysOn false
+"mainCar/cameras/Depth" SET Sensors.RenderCamera format "RFloat" resolution (1024 768) alwaysOn true
 "mainCar/cameras/Depth" ADD Cameras.RenderDepthBufferSimple
 "mainCar/cameras/Depth" SET Cameras.RenderDepthBufferSimple outputMode "Linear01Depth" transparencyCutout 0
 "mainCar/cameras/Depth" SET active true
 
+// segmentation camera ---------------------------------------------------------
+
 CREATE "mainCar/cameras/Segment"
 "mainCar/cameras/Segment" SET active false
 "mainCar/cameras/Segment" ADD Camera
-"mainCar/cameras/Segment" SET Camera near 0.3 far 1000 fieldOfView 60
+"mainCar/cameras/Segment" SET Camera near 0.3 far 1000 fieldOfView 60 allowMSAA false
 "mainCar/cameras/Segment" ADD Sensors.RenderCamera
-"mainCar/cameras/Segment" SET Sensors.RenderCamera format "ARGB32" resolution (640 480)
-"mainCar/cameras/Segment" SET Camera renderingPath "UsePlayerSettings" targetTexture.filterMode "Point"
+"mainCar/cameras/Segment" SET Sensors.RenderCamera format "ARGB32" resolution (1024 768) alwaysOn true
+"mainCar/cameras/Segment" SET Camera renderingPath "DeferredShading" targetTexture.filterMode "Point"
 "mainCar/cameras/Segment" ADD Segmentation.Segmentation
-"mainCar/cameras/Segment" SET Segmentation.Segmentation minimumObjectVisibility 0 outputType "Auto" boundingBoxesExtensionAmount 0 transparencyCutout 0 
+"mainCar/cameras/Segment" SET Segmentation.Segmentation minimumObjectVisibility 0 outputType "Auto" boundingBoxesExtensionAmount 0 transparencyCutout 0
 "mainCar/cameras/Segment" EXECUTE Segmentation.Segmentation DefineClass "Void"
 
 "mainCar/cameras/Segment" PUSH Segmentation.Segmentation boundingBoxesFilter "SHOULDER"
@@ -93,10 +108,39 @@ CREATE "mainCar/cameras/Segment"
 
 "mainCar/cameras" SET active true
 
+"RoadArchitectSystem1/Road1/MainMeshes/RoadMesh" ADD Segmentation.ClassGroup
+"RoadArchitectSystem1/Road1/MainMeshes/RoadMesh" EXECUTE Segmentation.ClassGroup UpdateClass "ROAD"
+"RoadArchitectSystem1/Road1/MainMeshes/ShoulderR" ADD Segmentation.ClassGroup
+"RoadArchitectSystem1/Road1/MainMeshes/ShoulderR" EXECUTE Segmentation.ClassGroup UpdateClass "SHOULDER"
+"RoadArchitectSystem1/Road1/MainMeshes/ShoulderL" ADD Segmentation.ClassGroup
+"RoadArchitectSystem1/Road1/MainMeshes/ShoulderL" EXECUTE Segmentation.ClassGroup UpdateClass "SHOULDER"
+
+// TODO: Break components apart
+"Road meshes 1" ADD Segmentation.ClassGroup
+"Road meshes 1" EXECUTE Segmentation.ClassGroup UpdateClass "STRUCT"
+"Road meshes 3" ADD Segmentation.ClassGroup
+"Road meshes 3" EXECUTE Segmentation.ClassGroup UpdateClass "STRUCT"
+
+"Road meshes 2" ADD Segmentation.ClassGroup
+"Road meshes 2" EXECUTE Segmentation.ClassGroup UpdateClass "BILLBOARD"
+
+"Road trees" ADD Segmentation.ClassGroup
+"Road trees" EXECUTE Segmentation.ClassGroup UpdateClass "TREE"
+
+"spawner" ADD Segmentation.ClassGroup
+"spawner" EXECUTE Segmentation.ClassGroup UpdateClass "CAR"
+"spawner/Active" ADD Segmentation.ClassGroup
+"spawner/Active" EXECUTE Segmentation.ClassGroup UpdateClass "CAR"
+
+// main camera misc ------------------------------------------------------------
+
 "Camera" ADD Sensors.RenderCamera
-"Camera" SET Sensors.RenderCamera format "ARGB32" resolution (1024 768)
-"Camera" SET Sensors.RenderCamera alwaysOn true
+"Camera" SET Sensors.RenderCamera format "ARGB32" resolution (1024 768) alwaysOn true
 "Camera" SET Camera enabled true
+
+"Camera" SET FlyCamera enabled false
+"Camera" SET VPCameraController target "mainCar/DriverHeadPivot/DriverHead" 
+"Camera" SET VPCameraController enabled true
 
 // disk ------------------------------------------------------------------------
 
@@ -105,10 +149,10 @@ CREATE "disk1"
 "disk1" ADD Sensors.Disk
 "disk1" SET Sensors.Disk path "E:\tmp\"
 
-//CREATE "disk1/mainCar/cameras/driver"
-//"disk1/mainCar/cameras/driver" ADD Sensors.RenderCameraLink
-//"disk1/mainCar/cameras/driver" SET Sensors.RenderCameraLink target "Camera"
-//"disk1/mainCar/cameras/driver" SET active true
+CREATE "disk1/mainCar/cameras/driver"
+"disk1/mainCar/cameras/driver" ADD Sensors.RenderCameraLink
+"disk1/mainCar/cameras/driver" SET Sensors.RenderCameraLink target "Camera"
+"disk1/mainCar/cameras/driver" SET active true
 
 CREATE "disk1/mainCar/cameras/front"
 "disk1/mainCar/cameras/front" ADD Sensors.RenderCameraLink
@@ -125,93 +169,21 @@ CREATE "disk1/mainCar/cameras/segment"
 "disk1/mainCar/cameras/segment" ADD Sensors.RenderCameraLink
 "disk1/mainCar/cameras/segment" SET Sensors.RenderCameraLink target "mainCar/cameras/Segment"
 "disk1/mainCar/cameras/segment" SET active true
-"disk1" SET active true
-
-// segment ---------------------------------------------------------------------
-
-"RoadArchitectSystem1/Road1/MainMeshes/RoadMesh" ADD Segmentation.ClassGroup
-"RoadArchitectSystem1/Road1/MainMeshes/RoadMesh" SET Segmentation.ClassGroup itemsClassName "ROAD"
-"RoadArchitectSystem1/Road1/MainMeshes/ShoulderR" ADD Segmentation.ClassGroup
-"RoadArchitectSystem1/Road1/MainMeshes/ShoulderR" SET Segmentation.ClassGroup itemsClassName "SHOULDER"
-"RoadArchitectSystem1/Road1/MainMeshes/ShoulderL" ADD Segmentation.ClassGroup
-"RoadArchitectSystem1/Road1/MainMeshes/ShoulderL" SET Segmentation.ClassGroup itemsClassName "SHOULDER"
-
-// TODO: Break components apart
-"Road meshes 1" ADD Segmentation.ClassGroup
-"Road meshes 1" SET Segmentation.ClassGroup itemsClassName "STRUCT"
-"Road meshes 3" ADD Segmentation.ClassGroup
-"Road meshes 3" SET Segmentation.ClassGroup itemsClassName "STRUCT"
-
-"Road meshes 2" ADD Segmentation.ClassGroup
-"Road meshes 2" SET Segmentation.ClassGroup itemsClassName "BILLBOARD"
-
-"Road trees" ADD Segmentation.ClassGroup
-"Road trees" SET Segmentation.ClassGroup itemsClassName "TREE"
-
-"spawner" ADD Segmentation.ClassGroup
-"spawner" SET Segmentation.ClassGroup itemsClassName "CAR"
-
-"mainCar/cameras" SET Transform localPosition (0 0.872 2.318) localEulerAngles (0 0 0)
-"mainCar/cameras/Front" ADD UnityEngine.PostProcessing.PostProcessingBehaviour
-"mainCar/cameras/Front" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile "EnviroFX"
-"mainCar/cameras/Front" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.eyeAdaptation.enabled true
-"mainCar/cameras/Front" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.tonemapping.tonemapper "1"
-"mainCar/cameras/Front" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.antialiasing.enabled true profile.antialiasing.settings.method 1 profile.antialiasing.settings.taaSettings.jitterSpread 1.0 profile.antialiasing.settings.taaSettings.sharpen 0.8 profile.antialiasing.settings.taaSettings.stationaryBlending 0.99 profile.antialiasing.settings.taaSettings.motionBlending 0.8 
-"mainCar/cameras/Front" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.ambientOcclusion.enabled true profile.ambientOcclusion.settings.intensity 1.3 profile.ambientOcclusion.settings.radius 0.3 profile.ambientOcclusion.settings.sampleCount 10 profile.ambientOcclusion.settings.downsampling 1 profile.ambientOcclusion.settings.forceForwardCompatibility 0 profile.ambientOcclusion.settings.ambientOnly 0 profile.ambientOcclusion.settings.highPrecision 0 
-"mainCar/cameras/Front" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
-
-//"mainCar/cameras/Front" SET Sensors.RenderCamera alwaysOn true
-//"mainCar/cameras/Depth" SET Sensors.RenderCamera alwaysOn true
-//"mainCar/cameras/Segment" SET Sensors.RenderCamera alwaysOn true
-//"mainCar/cameras/Front" SET Camera enabled true
-//"mainCar/cameras/Depth" SET Camera enabled true
-//"mainCar/cameras/Segment" SET Camera enabled true
 
 // -----------------------------------------------------------------------------
 
-"Camera" SET FlyCamera enabled false
-"Camera" SET VPCameraController target "mainCar/DriverHeadPivot/DriverHead" 
-"Camera" SET VPCameraController enabled true
-
-// keys
-"mainCar" SET Highway.ToggleBetweenAutoDriveAndUserControl button "J"
-
-// original lidar
-// "mainCar/LidarPlaceholder" SET active false
-// "mainCar/LidarPlaceholder" ADD Sensors.Lidar
-// "mainCar/LidarPlaceholder" SET Sensors.Lidar model "VLP_16" dataType "Intensity" accuracy "HIGH" timingAccuracy "LOW"
-// "mainCar/LidarPlaceholder" ADD Sensors.LidarComponents.TextureVisualizer
-// "mainCar/LidarPlaceholder" SET Sensors.LidarComponents.TextureVisualizer virtualCamera "lidarVirtualCamera" targetFps 20
-
-"mainCar/LidarPlaceholder" SET active false
-"mainCar/LidarPlaceholder" ADD Sensors.Lidar
-"mainCar/LidarPlaceholder" SET Sensors.Lidar model "VLP_16" minAz -180 maxAz 180 minEl -30 maxEl 30 rpm 900 minimumIntensity 0 timingAccuracy "ULTRA" accuracy "HIGH" ipAddressOverride "192.168.1.100" disableUDPBroadcast false 
-
-// CRASH!
-// "mainCar/LidarPlaceholder" ADD Sensors.LidarComponents.TextureVisualizer
-// "mainCar/LidarPlaceholder" SET Sensors.LidarComponents.TextureVisualizer virtualCamera "lidarVirtualCamera" targetFps 20
-
-"Canvas/PIP" ADD RenderToTexture
-"Canvas/PIP" SET RenderToTexture width 1920 height 1080
-"Canvas/PIP" LISTEN RenderToTexture onRenderTexture TRIGGER "Canvas/PIP" UI.RawImage texture
-"Canvas/PIP" LISTEN RenderToTexture onRenderTexture TRIGGER "Camera" Camera targetTexture
-"Canvas/PIP" SET active true
-
-"Canvas/FullScreen" ADD RenderToTexture
-"Canvas/FullScreen" SET RenderToTexture width 1024 height 768
-"Canvas/FullScreen" LISTEN RenderToTexture onRenderTexture TRIGGER "Canvas/FullScreen" UI.RawImage texture
-// "Canvas/FullScreen" LISTEN RenderToTexture onRenderTexture TRIGGER "mainCar/LidarPlaceholder" Sensors.LidarComponents.TextureVisualizer outputTexture
-"Canvas/FullScreen" SET active true
+// #include "highway_lidar.cl"
+// #include "highway_pip.cl"
 
 "lidarVirtualCamera" SET AutoOrbit enabled true
 
 "mainCar" SET active true
-"mainCar/LidarPlaceholder" SET active true
-NOOP
-"disk1" SET active false
-NOOP
+"spawner" SET OSVehicleSpawner enabled true
+
 "disk1" SET active true
 NOOP
+
+// #include "highway_ros.cl"
 
 // take a shot from all cameras
 // "disk1" EXECUTE Sensors.Disk Snapshot

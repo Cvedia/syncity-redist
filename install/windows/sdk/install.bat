@@ -3,6 +3,7 @@
 :: windows python usually is called python.exe, regardless of the version
 :: so we check for the binary then try to match it's version
 
+cd ..\..\..
 where /q python
 
 if errorlevel 1 (

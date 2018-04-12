@@ -76,5 +76,4 @@ def run():
 			dist_y *= -1
 		
 		helpers.takeSnapshot(mycams, True)
-	
-	loop += 1
+		loop += 1

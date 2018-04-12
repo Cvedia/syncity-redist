@@ -40,6 +40,8 @@ def initTelnet(ip, port, retries=3, wait=.5, timeout=30, ka_interval=3, ka_fail=
 	wait (float): Time in seconds to wait between retries
 	
 	"""
+	if settings.dry_run:
+		return
 	if settings._telnet == True:
 		if settings._shutdown == True:
 			return
@@ -170,10 +172,13 @@ def init():
 	colorama.init()
 
 def init2():
-	head = '// SDK v{}'.format(settings._version).encode('ascii') + b"\r\n"
-	head += '// ARGV {}'.format(' '.join(sys.argv)).encode('ascii') + b"\r\n"
-	# print(settings.getData())
-	head += '// SETTINGS {}'.format(json.dumps(settings.getData())).encode('ascii') + b"\r\n"
+	if settings.nohead:
+		head=None
+	else:
+		head = '// SDK v{}'.format(settings._version).encode('ascii') + b"\r\n"
+		head += '// ARGV {}'.format(' '.join(sys.argv)).encode('ascii') + b"\r\n"
+		# print(settings.getData())
+		head += '// SETTINGS {}'.format(json.dumps(settings.getData())).encode('ascii') + b"\r\n"
 	
 	init_logging(head)
 	
@@ -181,18 +186,38 @@ def init2():
 		init_recording(head)
 
 def init_logging(head=None):
-	if settings.log == True:
-		settings._lfh = open('{}log_{}.txt'.format(settings.local_path, settings._start), 'wb+')
+	if settings.log == None:
+		settings.log = '{}log_{}.txt'.format(settings.local_path, settings._start)
+	if settings.log:
+		settings._lfh = open(settings.log, 'wb+')
 		
 		if head != None:
 			settings._lfh.write(head)
 
 def init_recording(head=None):
-	if settings.record == True:
-		settings._rfh = open('{}record_{}.txt'.format(settings.local_path, settings._start), 'wb+')
+	if settings.record == None:
+		settings.record = '{}record_{}.txt'.format(settings.local_path, settings._start)
+	if settings.record:
+		settings._rfh = open(settings.record, 'wb+')
 		
 		if head != None:
 			settings._rfh.write(head)
+
+def shouldLog(level):
+	l = {
+		'ERROR': 1,
+		'ERR': 1,
+		'WARNING': 2,
+		'WARN': 2,
+		'INFO': 4,
+		'DEBUG': 8,
+		'TRACE': 16
+	}
+	
+	if l[settings.loglevel] >= l[level]:
+		return True
+	
+	return False
 
 def output(s, level='INFO'):
 	"""
@@ -201,8 +226,15 @@ def output(s, level='INFO'):
 	# Arguments
 	s (string): output string
 	level (string): log level
-	"""
 	
+	# Note
+	
+	This function is subject to `settings.loglevel`, if the `level` is lower
+	than the desired, it will be skipped.
+	
+	"""
+	if shouldLog(level) == False:
+		return
 	if settings.no_color == True:
 		x = '[{}] {}{}'.format(datetime.now().strftime("%H:%M:%S.%f"), '[{}] '.format(level), s)
 	else:
@@ -262,7 +294,6 @@ def sendData(v, read=None, flush=None, timeout=3):
 	if settings.debug:
 		settings._counters['send'] += 1
 		output('[{}] Telnet sendData v: {} read: {} flush: {}'.format(settings._counters['send'], v, 'True' if read == True else 'False', 'True' if flush != None else 'False'))
-	
 	r = []
 	abort = False
 	
@@ -273,7 +304,7 @@ def sendData(v, read=None, flush=None, timeout=3):
 			continue
 		if s[0:2] == '//' or s[0:2] == '--':
 			if settings.quiet == False:
-				output('>> [COMMENT] {}'.format(s))
+				output('>> {}'.format(s), 'DEBUG')
 			continue
 		if settings.quiet == False:
 			output('>> {}'.format(s))
@@ -285,6 +316,11 @@ def sendData(v, read=None, flush=None, timeout=3):
 		
 		if settings.debug:
 			output('Telnet Writing: `{}` {} bytes'.format(s, len(s)), 'DEBUG')
+		
+		if settings.benchmark:
+			settings._benchts = time.time()
+		if settings.dry_run:
+			continue
 		
 		settings._tn.write(s)
 		
@@ -391,7 +427,15 @@ def shapeData(l):
 		output('Error {} decoding: {}'.format(e, l), 'ERROR')
 	
 	if settings.quiet == False and l != '':
-		output('<< {}'.format(l), 'WARN' if 'ERROR:' in l else 'INFO')
+		f = l
+		try:
+			if settings.benchmark and isinstance(settings._benchts, float):
+				f = '[{:7.4f}s] {}'.format(time.time() - settings._benchts, l)
+		except:
+			f = l
+			pass
+		
+		output('<< {}'.format(f), 'WARN' if 'ERROR:' in l else 'INFO')
 	
 	return l
 
@@ -418,7 +462,7 @@ def gracefullShutdown(a=None, b=None):
 		return
 	
 	settings._shutdown = True
-	output('Shutdown sequence...')
+	output('Shutdown sequence...', 'DEBUG')
 	
 	if settings.save_config:
 		saveConfig()
@@ -436,7 +480,7 @@ def gracefullShutdown(a=None, b=None):
 			except:
 				pass
 		else:
-			output('Keeping objects in scene')
+			output('Keeping objects in scene', 'DEBUG')
 		
 		""""
 		try:
@@ -467,12 +511,14 @@ def gracefullShutdown(a=None, b=None):
 	except:
 		pass
 	
-	output('Completed, wasted {}s ... BYE'.format(time.time() - settings._start))
+	output('Completed, wasted {:6.4f}s ... BYE'.format(time.time() - settings._start))
 
 def flushBuffer():
 	"""
 	Forces a telnet command read by sending NOOP
 	"""
+	if settings.dry_run:
+		return
 	if settings.debug:
 		settings._counters['flush'] += 1
 	
@@ -557,14 +603,24 @@ def runCL(path):
 	
 	path (string): Path to file
 	
+	# Note
+	
+	This function support `#include "<path/to/cl>"` where path is relative to the initial path
+	
 	"""
 	if os.path.exists(path):
+		e = r'^\#include "(.*?)"'
+		
 		with open(path) as fp:
 			for line in fp:
-				sendData(line)
+				if re.match(e, line) != None:
+					output('Loading CL include from `{}`'.format(line), 'DEBUG')
+					runCL(re.sub(e, lambda match: '{}/{}'.format(os.path.dirname(path), match.group(1)), line.strip('\n\r')))
+				else:
+					sendData(line)
 		flushBuffer()
 	else:
-		raise 'File `{}` doesn\'t exists!'.format(path)
+		raise Exception('File `{}` doesn\'t exists!'.format(path))
 
 def localTimeOffset(t=None):
 	"""

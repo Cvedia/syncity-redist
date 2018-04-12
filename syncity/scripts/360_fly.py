@@ -50,6 +50,9 @@ def run():
 	
 	common.flushBuffer()
 	
+	if settings.setup_only:
+		return
+	
 	displ_h = .5
 	displ_y = 4
 	c_y = 1

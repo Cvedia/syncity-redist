@@ -30,6 +30,9 @@ def run():
 		helpers.addDiskOutput(mycams)
 		helpers.spawnMiscObjs()
 	
+	if settings.setup_only:
+		return
+	
 	dist = -60
 	dist_e = 5 # elevation increment
 	dist_a = 10 # azimuth increment

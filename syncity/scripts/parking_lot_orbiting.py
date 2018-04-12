@@ -39,6 +39,9 @@ def run():
 	elevation = 15
 	common.sendData('"cameras" SET Orbit target "cars/car_{}"'.format(int(settings.cars_limit / 2))) # get a car roughtly on the center
 	
+	if settings.setup_only:
+		return
+	
 	# orbit car in the center
 	while elevation < 90:
 		azimuth = 0

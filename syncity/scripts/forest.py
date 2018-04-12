@@ -49,6 +49,9 @@ def run():
 	loops = 0
 	reroll = 50
 	
+	if settings.setup_only:
+		return
+	
 	while elevation < 60:
 		azimuth = 0
 		

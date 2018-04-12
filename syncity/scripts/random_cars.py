@@ -38,6 +38,9 @@ def run():
 	distV = 4 # car side
 	dist_lim = 30 # z distance limit
 	
+	if settings.setup_only:
+		return
+	
 	while k < settings.carsLimit:
 		common.sendData([
 			'CREATE "Cars/?" FROM "cars" AS "mycar_{}"'.format(k),

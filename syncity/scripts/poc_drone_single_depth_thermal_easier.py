@@ -91,7 +91,8 @@ def run():
 			#
 			# use 'car, +thermal' to spawn only cars with thermal profiles
 			#
-			carsTags=['car']
+			carsTags=['car'],
+			seed=-1
 		)
 		
 		"""
@@ -264,7 +265,7 @@ def run():
 		])
 		
 		if blurring_method != 'embedded':
-			time.sleep(.5)
+			common.sendData('SLEEP 1', read=True)
 		
 		if kick == True:
 			helpers.kickSeg(mycams[1])

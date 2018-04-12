@@ -38,6 +38,9 @@ def run():
 		'"EnviroSky" SET EnviroSky cloudsMode "{}"'.format(random.choice(helpers.clouds_lst))
 	])
 	
+	if settings.setup_only:
+		return
+	
 	y = 24
 	loop = 0
 	reroll = 100

@@ -3,6 +3,7 @@ This is a sample template module for scripts.
 """
 
 import random
+import json
 from .. import common, helpers, settings_manager
 
 settings = settings_manager.Singleton()
@@ -48,7 +49,7 @@ def run():
 		# basic camera setup
 		helpers.globalCameraSetup()
 		# creates a camera with envirofx postprocessing
-		helpers.addCameraRGB(flycam=flycam, pp='EnviroFX')
+		helpers.addCameraRGB(pp='EnviroFX')
 		# creates a segmentation camera
 		helpers.addCameraSeg(segments=['Car'])
 		# disk output setup
@@ -57,10 +58,10 @@ def run():
 		helpers.addDiskOutput(mycams)
 		
 		# spawn something, ideally you'd have this methods within this script instead of placing them on helpers
-		helpers.spawnParkingLot(settings.cars_limit)
+		helpers.spawnParkingLot(settings.carsLimit)
 	
 	# get position of the car in the center
-	x = common.sendData('"cars/car_{}" GET Transform position'.format(int(settings.cars_limit / 2)))
+	x = common.sendData('"cars/car_{}" GET Transform position'.format(int(settings.carsLimit / 2)))
 	
 	# this will return OK and a LIST, which we will parse as JSON to use as center of our spawning point
 	pos = json.loads(x[1])

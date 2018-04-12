@@ -20,6 +20,9 @@ def run():
 		helpers.addDiskOutput([mycams[0]])
 		helpers.spawnDroneObjs(pX=-500, distLimit=500, pZ=-500)
 	
+	if settings.setup_only:
+		return
+	
 	for c in range(4):
 		for w in range(8):
 			

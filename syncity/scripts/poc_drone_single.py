@@ -19,6 +19,11 @@ POC Drone single scene
 	- Exits leaving all objects exposed
 '''
 
+def args(parser):
+	try:
+		parser.add_argument('--loop_limit', type=int, default=500, help='Defines a limit of iterations for exporting')
+	except: pass
+
 def run():
 	settings.keep = True
 	mycams = ['cameras/cameraRGB', 'cameras/segmentation']
@@ -100,7 +105,10 @@ def run():
 	common.flushBuffer()
 	loop = 0
 	
-	while loop < 100:
+	if settings.setup_only:
+		return
+	
+	while loop < settings.loop_limit:
 		if random.uniform(0,1) > .9:
 			motionblur = 'true'
 		else:

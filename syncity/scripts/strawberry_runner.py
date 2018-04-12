@@ -11,6 +11,9 @@ Strawberry field runner
 '''
 
 def run():
+	if settings.setup_only: # this scene has no setup!
+		return
+	
 	obj = 'Harvester'
 	s_x = x = -35.65
 	s_z = z = 33.56

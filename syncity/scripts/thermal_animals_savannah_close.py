@@ -99,6 +99,9 @@ def run():
 		'"cameras" SET Transform eulerAngles ({} {} {})'.format(13, 0, 0)
 	], read=False)
 	
+	if settings.setup_only:
+		return
+	
 	while y_rot < 360:
 		common.sendData([
 			'"cameras/cameraRGB" SET Thermal.ThermalCamera temperatureRange ({} {})'.format(min_agc, max_agc),

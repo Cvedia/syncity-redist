@@ -37,6 +37,9 @@ def run():
 		for i in range(0,9):
 			helpers.spawnRadiusGeneric(['city/ground'], suffix='_{}'.format(i), limit=3, radius=50, innerradius=0, scale=[2,2,2], position=[0,i,0], collisionCheck=False)
 	
+	if settings.setup_only:
+		return
+	
 	dist = -60
 	dist_e = 5 # elevation increment
 	dist_a = 10 # azimuth increment

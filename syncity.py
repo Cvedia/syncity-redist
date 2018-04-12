@@ -15,7 +15,7 @@ import random
 
 from syncity import common, settings_manager
 
-SYNCITY_VERSION = '18.04.11.1331'
+SYNCITY_VERSION = '18.04.05.1828'
 SIMULATOR_MIN_VERSION = '18.03.15.0000'
 
 print ('SynCity toolbox - v{}\nCopyright (c) 2016-{} CVEDIA PVE Ltd\n'.format(SYNCITY_VERSION, datetime.date.today().year))
@@ -54,36 +54,40 @@ else:
 	parser.add_argument('-l', '--local_path', default='/tmp/', action=syncity.common.readableDir, help='Defines local output path for recordings, json exports, etc; This path is relative to the machine running this script, defaults to /tmp/', dest='local_path')
 
 # misc
-parser.add_argument('-q', '--quiet', action='store_true', help='Quiet mode')
+parser.add_argument('-q', '--quiet', action='store_true', default=False, help='Quiet mode')
 parser.add_argument('-n', '--no_color', action='store_true', default=False, help='Disable color output')
 parser.add_argument('-Z', '--abort_on_error', action='store_true', default=False, help='Abort execution on error')
 parser.add_argument('-A', '--assets', help='Defines assets folder name')
 parser.add_argument('--db', help='Defines database folder name, if not set will follow --assets, if --assets is not defined, this value will not be touched')
 parser.add_argument('--seed_py', help='Defines a seed number for random methods on python layer. Note that this will be treated as a string.', default=None)
 parser.add_argument('--seed_api', type=int, help='Defines a seed number for random methods on api layer.', default=None)
-parser.add_argument('--interactive', action='store_true', help='Drops to a interactive shell after executing stack or when interrupted.', default=False)
-parser.add_argument('--keep', default=False, action='store_true', help='Keep created assets on scene')
-parser.add_argument('-R', '--reset', action='store_true', help='Resets simulator before running anything on stack')
-parser.add_argument('--record', action='store_true', help='Record commands sent to API using --local_path as output path')
-parser.add_argument('--debug', action='store_true', help='Defines a global debug flag, this will cause a lot of outputs')
-parser.add_argument('-L', '--log', action='store_true', help='Log all IOs')
-parser.add_argument('--async', action='store_true', help='Send some telnet commands asyncronously -- EXPERIMENTAL')
+parser.add_argument('--interactive', action='store_true', default=False, help='Drops to a interactive shell after executing stack or when interrupted.')
+parser.add_argument('--keep', action='store_true', default=False, help='Keep created assets on scene')
+parser.add_argument('-R', '--reset', action='store_true', default=False, help='Resets simulator before running anything on stack')
+parser.add_argument('--record', default=False, nargs='?', help='Record commands sent to API using --local_path as output path when no parameters sent, or defines a filename to write to')
+parser.add_argument('-b', '--benchmark', action='store_true', default=False, help='Enables benchmarking on API reply time')
+parser.add_argument('-d', '--dry_run', action='store_true', default=False, help='Pretends to run, but never send any command thuru telnet')
+parser.add_argument('-L', '--loglevel', default='DEBUG', help='Minimum log level to display / log.')
+parser.add_argument('--debug', action='store_true', default=False, help='Defines a global debug flag, this will cause a lot of outputs')
+parser.add_argument('--log', default=False, nargs='?', help='Log all IOs, if a parameter is specified this will log to a specific file')
+parser.add_argument('--async', action='store_true', default=False, help='Send some telnet commands asyncronously -- EXPERIMENTAL')
 
 parser.add_argument('--skip_init', action='store_true', default=False, help='Disables telnet init sequence')
-parser.add_argument('--skip_disk', action='store_true', help='Disables disk export completly')
-parser.add_argument('--skip_setup', action='store_true', help='Skip script setup and go straight to data extraction')
+parser.add_argument('--skip_disk', action='store_true', default=False, help='Disables disk export completly')
+parser.add_argument('--skip_setup', action='store_true', default=False, help='Skip script setup and go straight to data extraction')
 
 parser.add_argument('-c', '--config', default='syncity.conf', help='Defines a path/filename for syncity.conf')
-parser.add_argument('--skip_config', action='store_true', help='Skips SDK default config file')
-parser.add_argument('--save_config', action='store_true', help='Save sent parameters as SDK config file -- WARNING: This will not save the stack parameters (-r, -s and -t)')
+parser.add_argument('--skip_config', action='store_true', default=False, help='Skips SDK default config file')
+parser.add_argument('--save_config', action='store_true', default=False, help='Save sent parameters as SDK config file -- WARNING: This will not save the stack parameters (-r, -s and -t)')
 
-parser.add_argument('--setup_only', action='store_true', help='Runs script setup and exits')
+parser.add_argument('--setup_only', action='store_true', default=False, help='Runs script setup and exits')
 parser.add_argument('--enable_physics', action='store_true', default=False, help='Enable Physics, mainly affects objects with rigidbodies.')
 parser.add_argument('--enable_console_log', action='store_true', default=False, help='Enable UI console log')
-parser.add_argument('--disable_envirosky', action='store_true', help='Disables Envirosky -- NOT RECOMMENDED')
-parser.add_argument('--disable_canvas', action='store_true', help='Disables client rendering visualization, better for performance, but you will only see outputs written to disk.')
+parser.add_argument('--disable_envirosky', action='store_true', default=False, help='Disables Envirosky -- NOT RECOMMENDED')
+parser.add_argument('--disable_canvas', action='store_true', default=False, help='Disables client rendering visualization, better for performance, but you will only see outputs written to disk.')
 parser.add_argument('--use_old_depth_buffer', action='store_true', default=False, help='Uses old depth buffer component')
-parser.add_argument('--flycam', action='store_true', help='Spawns fly cam, controllable via simulator')
+parser.add_argument('--flycam', action='store_true', default=False, help='Spawns fly cam, controllable via simulator')
+parser.add_argument('--nohead', action='store_true', default=False, help='Disables header outputs on log / record')
 
 parser.add_argument('--carsLimit', type=int, default=50, help='Spawn cars into scene, defaults to 100')
 parser.add_argument('--propsLimit', type=int, default=250, help='Spawn props into scene, defaults to 250')

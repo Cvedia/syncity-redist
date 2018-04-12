@@ -4,6 +4,8 @@ if [ "$USER" != "root" ] ; then
 	echo "WARNING: You should run this script as root"
 fi
 
+cd ../../..
+
 # check if python3 is install and contains pip module
 python3 -c "import pip" 2> /dev/null
 RT=$?

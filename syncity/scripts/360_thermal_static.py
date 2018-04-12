@@ -92,5 +92,5 @@ def run():
 		])
 		
 		helpers.takeSnapshot(mycams, True)
-	
-	loop += 1
+		
+		loop += 1
