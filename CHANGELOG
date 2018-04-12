@@ -3,6 +3,23 @@ This change log follows YYMMDD timestamps which are also the version number for
 both the SDK and the simulator.
 --------------------------------------------------------------------------------
 
+180412:
+
+- Fixed issue with spawners TypeErrors
+- runCL standarization
+- Global configurable camera size
+- Dry run support
+- Benchmark support
+- Folder reorganization
+- script to cl on `etc/tools`
+- Removed hardcoded camera sizes from examples
+- Misc example reviews
+- `#include "<path/to/file.ext>"` support
+- Fixes segmentation scaleback argument
+- Several misc fixes / documentation additions
+- Added CL head examples
+- Added automated CL head builder / scripts self-testing git hook
+
 180504:
 
 - Video compression artifacts support

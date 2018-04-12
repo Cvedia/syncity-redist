@@ -33,12 +33,12 @@ CREATE "cameras/segmentation"
 "cameras/segmentation" ADD Segmentation.Segmentation
 "cameras/segmentation" SET Segmentation.Segmentation minimumObjectVisibility 0 outputType "Auto" boundingBoxesExtensionAmount 0 transparencyCutout 0 
 "cameras/segmentation" EXECUTE Segmentation.Segmentation DefineClass "Void"
-"cameras/segmentation" PUSH Segmentation.Segmentation boundingBoxesFilter "Drone"
+"cameras/segmentation" PUSH Segmentation.Segmentation boundingBoxesFilter "Car"
 "cameras/segmentation" ADD Segmentation.LookUpTable
 "cameras/segmentation" PUSH Segmentation.LookUpTable classes "Void"
 "cameras/segmentation" PUSH Segmentation.LookUpTable colors "black"
-"cameras/segmentation" EXECUTE Segmentation.Segmentation DefineClass "Drone"
-"cameras/segmentation" PUSH Segmentation.LookUpTable classes "Drone"
+"cameras/segmentation" EXECUTE Segmentation.Segmentation DefineClass "Car"
+"cameras/segmentation" PUSH Segmentation.LookUpTable classes "Car"
 "cameras/segmentation" PUSH Segmentation.LookUpTable colors "red"
 "cameras/segmentation" EXECUTE Segmentation.LookUpTable MarkTextureDirty
 "cameras/segmentation" SET active true
@@ -80,20 +80,16 @@ CREATE "disk1/Cameras/thermal"
 "disk1/Cameras/thermal" SET Sensors.RenderCameraLink target "cameras/thermal"
 "disk1/Cameras/thermal" SET active true
 "disk1" SET active true
-CREATE "spawner/drone/container"
-"spawner/drone/container" SET active false
-"spawner/drone/container" ADD RandomProps.Torus
-"spawner/drone/container" ADD RandomProps.PropArea
-"spawner/drone" ADD Thermal.ThermalObjectBehaviour
-"spawner/drone" SET Thermal.ThermalObjectBehaviour profile "DefaultThermalProfile"
-"spawner/drone/container" ADD Thermal.ThermalObjectOverride
-"spawner/drone/container" SET RandomProps.PropArea tags "drone"
-"spawner/drone/container" SET RandomProps.PropArea async false numberOfProps 25 collisionCheck true stickToGround false 
-"spawner/drone/container" SET RandomProps.Torus radius 15
-"spawner/drone/container" SET RandomProps.Torus innerRadius 0
-"spawner/drone/container" SET Transform position (-6 0 -9) eulerAngles (0 0 0) localScale (1 1 1)
-"spawner/drone/container" ADD Segmentation.ClassGroup
-"spawner/drone/container" SET Segmentation.ClassGroup itemsClassName "Drone"
-"spawner/drone/container" SET active true
-"spawner/drone" SET active true
-"cameras" SET Transform position (-1.3375 6.09948 -15.169) eulerAngles (48.75 -35.75 0) 
+CREATE "obj"
+"obj" ADD Segmentation.ClassGroup
+"obj" SET Segmentation.ClassGroup itemsClassName "Car"
+CREATE "Cars/VW_Golf_V/VW_Golf_V" FROM "cars" AS "obj/subject"
+"obj" ADD Thermal.ThermalObjectBehaviour
+"obj" SET Thermal.ThermalObjectBehaviour profile "DefaultThermalProfile"
+"obj/subject" ADD Thermal.ThermalObjectOverride
+"obj/subject" SET Transform position (0 0 0) eulerAngles (0 0 0)
+"obj" SET Transform position (-6 0 -9) eulerAngles (0 0 0)
+"obj/subject" SET active true
+"obj" SET active true
+"cameras/cameraRGB" SET Camera enabled true
+"cameras" SET Transform position (0 1 -16) eulerAngles (0 -40 0)

@@ -1,11 +1,32 @@
 #!/bin/bash
 
 cd "$1"
+blacklist=( __init__ template )
+
+in_array() {
+	local e match="$1"
+	shift
+	
+	for e in "$@"; do
+		[[ "$e" == "$match" ]] && return 0
+	done
+	
+	return 1
+}
 
 for f in $(git diff-index --cached --name-only f2ed90f8932e9525f41006420f55943f1fb1a8d2 | grep "syncity/scripts/" --color=never); do
 	b=${f##*/}
 	b=${b%.*}
 	ofn=cl/head/$b.cl
+	
+	in_array $b "${blacklist[@]}"
+	RT=$?
+	
+	if [ "$RT" -eq "0" ] ; then
+		echo "*** Skipping: $b ..."
+		continue
+	fi
+	
 	echo "*** Compliling $b to head cl..."
 	
 	python3 syncity.py -L ERR -q -d --nohead --setup_only --record $ofn -s $b > /dev/null

@@ -112,7 +112,7 @@ def initTelnet(ip, port, retries=3, wait=.5, timeout=30, ka_interval=3, ka_fail=
 				])
 				
 				if settings.seed_api:
-					sendData('"RandomProps.Random.instance" SET seed {}'.format(settings.seed_api))
+					setAPISeed(settings.seed_api)
 			break
 		except Exception as e:
 			output('Error connecting: {}'.format(e), 'ERROR')
@@ -124,6 +124,9 @@ def initTelnet(ip, port, retries=3, wait=.5, timeout=30, ka_interval=3, ka_fail=
 			else:
 				output('Waiting for retry #{} ...'.format(retry))
 				time.sleep(wait)
+
+def setAPISeed(seed):
+	sendData('"RandomProps.Random.instance" SET seed {}'.format(seed))
 
 def resetSimulator():
 	"""
