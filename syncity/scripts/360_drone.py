@@ -94,8 +94,9 @@ def run():
 		common.sendData([
 			# 'cameras/cameraRGB SET UnityStandardAssets.ImageEffects.motionBlur enabled false',
 			'"{}" SET Transform eulerAngles ({} {} {})'.format(obj, a_x, a_y, 0),
-			# 'cameras/cameraRGB SET UnityStandardAssets.ImageEffects.motionBlur enabled true'
+			# 'cameras/cameraRGB SET UnityStandardAssets.ImageEffects.motionBlur enabled true',
+			'SLEEP 0.5'
 		])
+		
 		a_y = a_y + displ_y
-		time.sleep(.5)
 		helpers.takeSnapshot(mycams, True)
