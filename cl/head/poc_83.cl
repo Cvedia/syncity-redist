@@ -1,18 +1,13 @@
 CREATE "cameras"
 "cameras" SET active false
-"cameras" SET Transform position (-6 1 -50)
-"cameras" SET Transform eulerAngles (0 0 0)
-"cameras" ADD Orbit
+"cameras" SET Transform position (-6 1 -50) eulerAngles (0 0 0)
 "Canvas/Cameras/Viewport/Content" SET UI.GridLayoutGroup cellSize (1024 768)
 "Canvas" SET active false
 CREATE "cameras/cameraRGB"
 "cameras/cameraRGB" SET active false
-"cameras/cameraRGB" ADD Camera
-"cameras/cameraRGB" SET Camera near 0.3 far 1000 fieldOfView 60
-"cameras/cameraRGB" ADD Sensors.RenderCamera
+"cameras/cameraRGB" ADD Camera Sensors.RenderCamera AudioListener
+"cameras/cameraRGB" SET Camera near 0.3 far 1000 fieldOfView 60 renderingPath "UsePlayerSettings"
 "cameras/cameraRGB" SET Sensors.RenderCamera format "ARGB32" resolution (2048 1536)
-"cameras/cameraRGB" SET Camera renderingPath "UsePlayerSettings"
-"cameras/cameraRGB" ADD AudioListener
 CREATE "EnviroSky" AS "EnviroSky"
 "EnviroSky" SET EnviroSky Player "cameras" PlayerCamera "cameras/cameraRGB" GameTime.ProgressTime "None" weatherSettings.cloudTransitionSpeed 100 weatherSettings.effectTransitionSpeed 100 weatherSettings.fogTransitionSpeed 100 
 "EnviroSky" EXECUTE EnviroSky AssignAndStart "cameras/cameraRGB" "cameras/cameraRGB"
@@ -24,21 +19,15 @@ CREATE "EnviroSky" AS "EnviroSky"
 "cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
 CREATE "cameras/segmentation"
 "cameras/segmentation" SET active false
-"cameras/segmentation" ADD Camera
-"cameras/segmentation" SET Camera near 0.3 far 1000 fieldOfView 60
-"cameras/segmentation" ADD Sensors.RenderCamera
+"cameras/segmentation" ADD Camera Segmentation.Segmentation Segmentation.LookUpTable Sensors.RenderCamera
+"cameras/segmentation" SET Camera near 0.3 far 1000 fieldOfView 60 renderingPath "UsePlayerSettings" targetTexture.filterMode "Point" 
 "cameras/segmentation" SET Sensors.RenderCamera format "ARGB32" resolution (1024 768)
-"cameras/segmentation" SET Camera renderingPath "UsePlayerSettings" targetTexture.filterMode "Point"
-"cameras/segmentation" ADD Segmentation.Segmentation
 "cameras/segmentation" SET Segmentation.Segmentation minimumObjectVisibility 0 outputType "Auto" boundingBoxesExtensionAmount 0 transparencyCutout 0 
 "cameras/segmentation" EXECUTE Segmentation.Segmentation DefineClass "Void"
 "cameras/segmentation" PUSH Segmentation.Segmentation boundingBoxesFilter "Drone"
-"cameras/segmentation" ADD Segmentation.LookUpTable
-"cameras/segmentation" PUSH Segmentation.LookUpTable classes "Void"
-"cameras/segmentation" PUSH Segmentation.LookUpTable colors "black"
 "cameras/segmentation" EXECUTE Segmentation.Segmentation DefineClass "Drone"
-"cameras/segmentation" PUSH Segmentation.LookUpTable classes "Drone"
-"cameras/segmentation" PUSH Segmentation.LookUpTable colors "blue"
+"cameras/segmentation" PUSH Segmentation.LookUpTable classes "Void" "Drone"
+"cameras/segmentation" PUSH Segmentation.LookUpTable colors "black" "blue"
 "cameras/segmentation" EXECUTE Segmentation.LookUpTable MarkTextureDirty
 "cameras/segmentation" SET active true
 CREATE "disk1"
@@ -79,7 +68,7 @@ CREATE "spawner/city/nature/trees/container"
 "spawner/city/nature/trees/container" ADD RandomProps.Torus
 "spawner/city/nature/trees/container" ADD RandomProps.PropArea
 "spawner/city/nature/trees/container" SET RandomProps.PropArea tags "tree"
-"spawner/city/nature/trees/container" SET RandomProps.PropArea async false numberOfProps 188 collisionCheck false stickToGround false 
+"spawner/city/nature/trees/container" SET RandomProps.PropArea async false numberOfProps 156 collisionCheck false stickToGround false 
 "spawner/city/nature/trees/container" SET RandomProps.Torus radius 80
 "spawner/city/nature/trees/container" SET RandomProps.Torus innerRadius 10
 "spawner/city/nature/trees/container" SET Transform position (0 0 0) eulerAngles (0 0 0) localScale (1 1 1)
@@ -101,10 +90,10 @@ CREATE "spawner/animals/birds/container"
 "spawner/animals/birds/container" ADD RandomProps.Torus
 "spawner/animals/birds/container" ADD RandomProps.PropArea
 "spawner/animals/birds/container" SET RandomProps.PropArea tags "bird"
-"spawner/animals/birds/container" SET RandomProps.PropArea async false numberOfProps 50 collisionCheck true stickToGround false 
+"spawner/animals/birds/container" SET RandomProps.PropArea async false numberOfProps 27 collisionCheck true stickToGround false 
 "spawner/animals/birds/container" SET RandomProps.Torus radius 120
 "spawner/animals/birds/container" SET RandomProps.Torus innerRadius 0
-"spawner/animals/birds/container" SET Transform position (0 74 0) eulerAngles (0 0 0) localScale (1 1 1)
+"spawner/animals/birds/container" SET Transform position (0 73 0) eulerAngles (0 0 0) localScale (1 1 1)
 "spawner/animals/birds/container" SET active true
 "spawner/animals/birds" SET active true
 CREATE "spawner/cars/container"
@@ -136,10 +125,10 @@ CREATE "cameras/spawner/drones/container"
 "cameras/spawner/drones/container" SET RandomProps.PropArea tags "drones"
 "cameras/spawner/drones/container" SET RandomProps.Frustum minDistance 2
 "cameras/spawner/drones/container" SET RandomProps.Frustum maxDistance 6
-"cameras/spawner/drones/container" SET RandomProps.PropArea async false numberOfProps 199 collisionCheck true stickToGround false 
+"cameras/spawner/drones/container" SET RandomProps.PropArea async false numberOfProps 111 collisionCheck true stickToGround false 
 "cameras/spawner/drones/container" SET RandomProps.Frustum cam "cameras/cameraRGB"
-"cameras/spawner/drones/container" SET RandomProps.Frustum allowEdge false
 "cameras/spawner/drones/container" SET RandomProps.Frustum scaleBack 0.25
+"cameras/spawner/drones/container" SET RandomProps.Frustum allowEdge false
 "cameras/spawner/drones/container" SET Transform eulerAngles (0 0 0) localScale (1 1 1)
 "cameras/spawner/drones/container" ADD Segmentation.ClassGroup
 "cameras/spawner/drones/container" SET Segmentation.ClassGroup itemsClassName "DRONE"
