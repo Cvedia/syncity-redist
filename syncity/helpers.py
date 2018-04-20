@@ -36,7 +36,7 @@ settings = settings_manager.Singleton()
 
 def globalCameraSetup(
 	labelRoot='cameras', canvasWidth=1024, canvasHeight=768, canvas=None,
-	orbit=True, orbitOffset=None, orbitGround=None, orbitSnap=None, position=None,
+	orbit=False, orbitOffset=None, orbitGround=None, orbitSnap=None, position=None,
 	rotation=None, flycam=False
 ):
 	"""
@@ -68,29 +68,48 @@ def globalCameraSetup(
 		common.output('Warning: Canvas has been disabled, you will not see output on simulator')
 		canvas = 'false'
 	
-	common.sendData([
+	s = []
+	if position == None:
+		s.append('position ({} {} {})'.format(settings.X_COMP -6, settings.Y_COMP, settings.Z_COMP -50))
+	else:
+		s.append('position ({} {} {})'.format(position[0], position[1], position[2]))
+	if rotation == None:
+		s.append('eulerAngles ({} {} {})'.format(0, 0, 0))
+	else:
+		s.append('eulerAngles ({} {} {})'.format(rotation[0], rotation[1], rotation[2]))
+	
+	buf = [
 		'CREATE "{}"'.format(labelRoot),
 		'"{}" SET active false'.format(labelRoot),
-		'"{}" SET Transform position ({} {} {})'.format(labelRoot, settings.X_COMP -6, settings.Y_COMP, settings.Z_COMP -50) if position == None else '"{}" SET Transform position ({} {} {})'.format(labelRoot, position[0], position[1], position[2]),
-		'"{}" SET Transform eulerAngles ({} {} {})'.format(labelRoot, 0, 0, 0) if rotation == None else '"{}" SET Transform eulerAngles ({} {} {})'.format(labelRoot, rotation[0], rotation[1], rotation[2]),
-		
-		# orbit
-		'"{}" ADD Orbit'.format(labelRoot) if orbit == True else '',
-		'"{}" SET Orbit target "{}"'.format(labelRoot, orbitGround) if orbitGround != None else '',
-		'"{}" SET Orbit targetOffset ({} {} {})'.format(labelRoot, orbitOffset[0], orbitOffset[1], orbitOffset[2]) if orbitOffset != None else '',
-		'"{}" SET Orbit snapOffset (0 {} 0)'.format(labelRoot, orbitSnap) if orbitSnap != None else '',
-		
+		'"{}" SET Transform {}'.format(labelRoot, ' '.join(s))
+	]
+	
+	if orbit == True:
+		buf.append('"{}" ADD Orbit'.format(labelRoot))
+	
+	s = []
+	if orbitGround != None:
+		s.append('target "{}"'.format(orbitGround))
+	if orbitOffset != None:
+		s.append('targetOffset ({} {} {})'.format(orbitOffset[0], orbitOffset[1], orbitOffset[2]))
+	if orbitSnap != None:
+		s.append('snapOffset (0 {} 0)'.format(orbitSnap))
+	if len(s) > 0:
+		buf.append('"{}" SET Orbit {}'.format(labelRoot, ' '.join(s)))
+	
+	buf.extend([
 		# resize camera display on app, this is relative to the size of the window
 		'"Canvas/Cameras/Viewport/Content" SET UI.GridLayoutGroup cellSize ({} {})'.format(canvasWidth, canvasHeight),
 		'"Canvas" SET active {}'.format(canvas)
-	], read=False)
+	])
 	
 	if flycam:
-		common.sendData([
+		buf.extend([
 			'"{}" ADD FlyCamera'.format(labelRoot),
 			'"{}" SET FlyCamera enabled true'.format(labelRoot)
-		], read=False)
+		])
 	
+	common.sendData(buf, read=False)
 	settings._obj.append(labelRoot)
 
 def addCameraDepth(
@@ -127,9 +146,8 @@ def addCameraDepth(
 		buf.extend([
 			'CREATE "{}"'.format(l),
 			'"{}" SET active false'.format(l),
-			'"{}" ADD Camera'.format(l),
+			'"{}" ADD Camera Sensors.RenderCamera'.format(l),
 			'"{}" SET Camera near {} far {} fieldOfView {} renderingPath "DeferredShading"'.format(l, clippingNear, clippingFar, fov),
-			'"{}" ADD Sensors.RenderCamera'.format(l),
 			'"{}" SET Sensors.RenderCamera format "RFloat" resolution ({} {})'.format(l, width, height)
 		])
 		
@@ -200,37 +218,28 @@ def addCameraRGB(
 	buf = []
 	idx = 0
 	for l in label:
-		buf.extend([
-			'CREATE "{}"'.format(l),
-			'"{}" SET active false'.format(l),
-			'"{}" ADD Camera'.format(l),
-			'"{}" SET Camera near {} far {} fieldOfView {}'.format(l, clippingNear, clippingFar, fov),
-		])
+		addStack = [ 'Camera' ]
+		b = []
 		
 		if renderCamera:
-			buf.extend([
-				'"{}" ADD Sensors.RenderCamera'.format(l),
-				
+			addStack.append('Sensors.RenderCamera')
+			b.extend([
 				# '"{}" SET Sensors.RenderCamera sRGB true'.format(l),
 				'"{}" SET Sensors.RenderCamera format "{}" resolution ({} {})'.format(l, unity_vars.textureFormat[textureFormat], width, height),
-				'"{}" SET Camera renderingPath "{}"'.format(l, unity_vars.renderingPath[renderingPath]),
-				
 				# 'cameras/cameraRGB SET Camera targetTexture.antiAliasing 8',
 				# 'cameras/cameraRGB SET active true',
 			])
 		
 		if idx == 0:
 			if audio:
-				buf.append('"{}" ADD AudioListener'.format(l))
+				addStack.append('AudioListener')
 			
 			if flycam:
-				buf.extend([
-					'"{}" ADD FlyCamera'.format(l),
-					'"{}" SET FlyCamera enabled true'.format(l)
-				])
+				addStack.append('FlyCamera')
+				b.append('"{}" SET FlyCamera enabled true'.format(l))
 			
 			if envirosky:
-				buf.extend([
+				b.extend([
 					# NOTE: This is a prefab that already contains the EnviroSky default profile
 					# NOTE: You can only have one camera bound to envirosky, if you set multiple this script will bind to the first only
 					'CREATE "EnviroSky" AS "EnviroSky"',
@@ -250,11 +259,18 @@ def addCameraRGB(
 				])
 				envirosky = False
 		
-		buf.append('"{}" SET active true'.format(l))
-		
 		idx += 1
-	
+		
+		buf.extend([
+			'CREATE "{}"'.format(l),
+			'"{}" SET active false'.format(l),
+			'"{}" ADD {}'.format(l, ' '.join(addStack)),
+			'"{}" SET Camera near {} far {} fieldOfView {} renderingPath "{}"'.format(l, clippingNear, clippingFar, fov, unity_vars.renderingPath[renderingPath])
+		])
+		buf.extend(b)
+		buf.append('"{}" SET active true'.format(l))
 	buf.append('"{}" SET active true'.format(labelRoot))
+	
 	common.sendData(buf, read=False)
 	common.flushBuffer()
 	
@@ -339,52 +355,60 @@ def addCameraThermal(
 	buf = []
 	
 	for l in label:
-		buf.extend([
-			'CREATE "{}"'.format(l),
-			'"{}" SET active false'.format(l),
-			'"{}" ADD Camera'.format(l),
-			'"{}" SET Camera near {} far {} fieldOfView {}'.format(l, clippingNear, clippingFar, fov),
-		])
+		addStack = [ 'Camera', 'Thermal.ThermalCamera', 'UnityEngine.PostProcessing.PostProcessingBehaviour' ]
+		b = []
 		
 		if renderCamera:
-			buf.extend([
-				'"{}" ADD Sensors.RenderCamera'.format(l),
-				
+			addStack.append('Sensors.RenderCamera')
+			b.extend([
 				'"{}" SET Sensors.RenderCamera format "{}" resolution ({} {})'.format(l, unity_vars.textureFormat[textureFormat], width, height),
 				'"{}" SET Camera renderingPath "{}"'.format(l, unity_vars.renderingPath[renderingPath])
 			])
 		
 		if audio:
-			buf.extend(['"{}" ADD AudioListener'.format(l)])
+			addStack.append('AudioListener')
 		
-		buf.extend([
-			'"{}" ADD Thermal.ThermalCamera'.format(l),
-			'"{}" SET Thermal.ThermalCamera enabled false'.format(l)
-		])
+		b.append('"{}" SET Thermal.ThermalCamera enabled false'.format(l))
 		
 		if patchyness:
-			buf.extend([
-				'"{}" ADD CameraFilterPack_Pixelisation_DeepOilPaintHQ'.format(l),
+			addStack.append('CameraFilterPack_Pixelisation_DeepOilPaintHQ')
+			b.extend([
 				'"{}" SET CameraFilterPack_Pixelisation_DeepOilPaintHQ enabled false'.format(l),
 				'"{}" SET CameraFilterPack_Pixelisation_DeepOilPaintHQ _FixDistance {} _Distance {} _Size {} Intensity {} enabled true'.format(l, patchyness_fixDistance, patchyness_distance, patchyness_size, patchyness_intensity)
 			])
 		
 		if blur:
-			buf.extend([
-				'"{}" ADD CameraFilterPack_Blur_Noise'.format(l),
-				'"{}" SET CameraFilterPack_Blur_Noise Distance ({} {}) enabled true'.format(l, blurNoise[0], blurNoise[1])
-			])
+			addStack.append('CameraFilterPack_Blur_Noise')
+			b.append('"{}" SET CameraFilterPack_Blur_Noise Distance ({} {}) enabled true'.format(l, blurNoise[0], blurNoise[1]))
 		
 		if trees:
-			buf.extend([
-				'"{}" ADD Thermal.GlobalTreeSettings'.format(l),
-				'"{}" SET Thermal.GlobalTreeSettings temperature {} temperatureBandwidth {} temperatureMedian {} treeLeafsHeatVariance {} enabled true'.format(l, treesBase, treesBandwidth, treesMedian, treesLeafsVariance)
-			]);
+			addStack.append('Thermal.GlobalTreeSettings')
+			b.append('''"{}" SET Thermal.GlobalTreeSettings
+				temperature {}
+				temperatureBandwidth {}
+				temperatureMedian {}
+				treeLeafsHeatVariance {}
+				enabled true
+			'''.format(l, treesBase, treesBandwidth, treesMedian, treesLeafsVariance))
 		
 		buf.extend([
-			'"{}" ADD UnityEngine.PostProcessing.PostProcessingBehaviour'.format(l),
+			'CREATE "{}"'.format(l),
+			'"{}" SET active false'.format(l),
+			'"{}" ADD {}'.format(l, ' '.join(addStack)),
+			'"{}" SET Camera near {} far {} fieldOfView {}'.format(l, clippingNear, clippingFar, fov),
+		])
+		
+		buf.extend(b)
+		
+		buf.extend([
 			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile "Thermal"'.format(l),
-			'"{}" SET Thermal.ThermalCamera ambientTemperature {} temperatureRange ({} {}) maxDistanceForProbeUpdate {} useAGC {} enabled true'.format(l, ambientTemperature, minimumTemperature, maximumTemperature, maxDistanceForProbeUpdate, useAGC),
+			'''"{}" SET Thermal.ThermalCamera
+				ambientTemperature {}
+				temperatureRange ({} {})
+				maxDistanceForProbeUpdate {}
+				useAGC {}
+				enabled true
+			'''.format(l, ambientTemperature, minimumTemperature, maximumTemperature, maxDistanceForProbeUpdate, useAGC),
 			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.grain.enabled false'.format(l),
 			'"{}" SET active true'.format(l)
 		])
@@ -1095,37 +1119,32 @@ def addCameraSeg(
 		buf.extend([
 			'CREATE "{}"'.format(l),
 			'"{}" SET active false'.format(l),
-			'"{}" ADD Camera'.format(l),
-			'"{}" SET Camera near {} far {} fieldOfView {}'.format(l, clippingNear, clippingFar, fov),
+			'"{}" ADD Camera Segmentation.Segmentation Segmentation.LookUpTable {}'.format(l, 'Sensors.RenderCamera' if renderCamera else ''),
+			'''"{}" SET Camera
+				near {} far {} fieldOfView {}
+				renderingPath "{}" targetTexture.filterMode "Point"
+			'''.format(l, clippingNear, clippingFar, fov, unity_vars.renderingPath[renderingPath]),
 		])
 		
 		if renderCamera:
-			buf.extend([
-				'"{}" ADD Sensors.RenderCamera'.format(l),
-				'"{}" SET Sensors.RenderCamera format "{}" resolution ({} {})'.format(l, unity_vars.textureFormat[textureFormat], width, height),
-			])
+			buf.append('"{}" SET Sensors.RenderCamera format "{}" resolution ({} {})'.format(l, unity_vars.textureFormat[textureFormat], width, height))
 		
 		buf.extend([
-			'"{}" SET Camera renderingPath "{}" targetTexture.filterMode "Point"'.format(l, unity_vars.renderingPath[renderingPath]),
-			'"{}" ADD Segmentation.Segmentation'.format(l),
 			'''"{}" SET Segmentation.Segmentation
 				minimumObjectVisibility {}
 				outputType "{}"
 				boundingBoxesExtensionAmount {}
 				transparencyCutout {}
 			'''.format(l, minimumVisibility, output_type, boundingBoxesExtensionAmount, transparencyCutout),
+			
 			'"{}" EXECUTE Segmentation.Segmentation DefineClass "Void"'.format(l)
 		])
 		
 		if segments != None:
 			buf.extend(addCameraSegFilter(segments, label=l, ret=True))
 		
-		# add default class
-		buf.extend([
-			'"{}" ADD Segmentation.LookUpTable'.format(l),
-			'"{}" PUSH Segmentation.LookUpTable classes "Void"'.format(l),
-			'"{}" PUSH Segmentation.LookUpTable colors "black"'.format(l)
-		])
+		classes = []
+		colors = []
 		
 		if lookupTable == True and segments != None:
 			idx = 0
@@ -1135,22 +1154,24 @@ def addCameraSeg(
 					color = '"{}"'.format(getRandomColor())
 				else:
 					color = unity_vars.colors[idx]
-				buf.extend([
-					'"{}" EXECUTE Segmentation.Segmentation DefineClass "{}"'.format(l, i),
-					'"{}" PUSH Segmentation.LookUpTable classes "{}"'.format(l, i),
-					'"{}" PUSH Segmentation.LookUpTable colors "{}"'.format(l, color)
-				])
+				
+				classes.append('"{}"'.format(i))
+				colors.append('"{}"'.format(color))
+				
+				buf.append('"{}" EXECUTE Segmentation.Segmentation DefineClass "{}"'.format(l, i))
 				idx += 1
 			
 		elif isinstance(lookupTable, list):
 			for i in lookupTable:
-				buf.extend([
-					'"{}" EXECUTE Segmentation.Segmentation DefineClass "{}"'.format(l, i[0]),
-					'"{}" PUSH Segmentation.LookUpTable classes "{}"'.format(l, i[0]),
-					'"{}" PUSH Segmentation.LookUpTable colors "{}"'.format(l, i[1])
-				])
+				classes.append('"{}"'.format(i[0]))
+				colors.append('"{}"'.format(i[1]))
+				
+				buf.append('"{}" EXECUTE Segmentation.Segmentation DefineClass "{}"'.format(l, i[0]))
 		
 		buf.extend([
+			'"{}" PUSH Segmentation.LookUpTable classes "Void" {}'.format(l, ' '.join(classes)),
+			'"{}" PUSH Segmentation.LookUpTable colors "black" {}'.format(l, ' '.join(colors)),
+			
 			'"{}" EXECUTE Segmentation.LookUpTable MarkTextureDirty'.format(l),
 			'"{}" SET active true'.format(l)
 		])
@@ -1159,7 +1180,7 @@ def addCameraSeg(
 	common.flushBuffer()
 	settings._obj.append(label)
 
-def addLight(position=[34,-22.53,0], intensity=1.7, label='light'):
+def addLight(position=[34,-22.53,0], intensity=1.7, label='light', shadows='Soft'):
 	"""
 	Creates a light object
 	
@@ -1171,16 +1192,18 @@ def addLight(position=[34,-22.53,0], intensity=1.7, label='light'):
 	position (list): X,Y,Z position, defaults to `[32,-22.53,0]`
 	intensity (float): Light intensity, defaults to `1.7`
 	label (string): Game object name, defaults to `light`
-	
+	shadows (string): Shadowing type, defaults to `Soft`
 	"""
+	
 	common.sendData([
 		'CREATE "{}"'.format(label),
 		'"{}" ADD Light'.format(label),
-		'"{}" SET Light type "Directional"'.format(label),
+		'''"{}" SET Light
+			type "Directional"
+			intensity {}
+			shadows "{}"
+		'''.format(label, intensity, shadows),
 		'"{}" SET Transform eulerAngles ({} {} {})'.format(label, position[0], position[1], position[2]),
-		'"{}" SET Light intensity {}'.format(label, intensity),
-		# '"{}" SET Light color #'.format(label),
-		'"{}" SET Light shadows "Soft"'.format(label),
 		'"{}" SET active true'.format(label)
 	], read=False)
 	

@@ -37,7 +37,7 @@ def args(parser):
 
 def run():
 	settings.keep = True
-	mycams = ['cameras/cameraRGB', 'cameras/segmentation', 'cameras/depth']
+	mycams = ['cameras/cameraRGB', 'cameras/segmentation', 'cameras/depth', 'cameras/thermal']
 	# set to `embedded` for rotors that are blurred textures
 	# set to `motion` for rotors that will be blurred by render camera's motion blur
 	blurring_method = 'embedded'
@@ -49,6 +49,11 @@ def run():
 		helpers.addCameraSeg(width=camera_size[0], height=camera_size[1], segments=['DRONE'], lookupTable=[['DRONE', 'red']])
 		helpers.addCameraDepth(width=camera_size[0], height=camera_size[1])
 		helpers.addCameraRGB(width=camera_size[0], height=camera_size[1], pp='EnviroFX')
+		helpers.addCameraThermal(
+			trees=True,
+			ambientTemperature=15, minimumTemperature=9, maximumTemperature=35,
+			treesBase=8, treesBandwidth=50, treesMedian=0, treesLeafsVariance=10
+		)
 		
 		helpers.globalDiskSetup()
 		helpers.addDiskOutput(mycams)
@@ -80,6 +85,15 @@ def run():
 			dronesTags=['blurred' if blurring_method == 'embedded' else 'phantom'],
 			dronesPartsNames='chassis,legs,motors,battery,bolts,sensors_caps,sensors,camera,blades',
 			
+			birdsThermalObjectBehaviour=True,
+			treesThermalObjectBehaviour=True,
+			buildingsThermalObjectBehaviour=True,
+			carsThermalObjectBehaviour=True,
+			groundThermalObjectBehaviour=True,
+			dronesThermalObjectBehaviour=True,
+			humansThermalObjectBehaviour=True,
+			signsThermalObjectBehaviour=True,
+			cityThermalObjectBehaviour=True,
 			buildingsInnerRadius=80,
 			treesLimit=[150,200], treesInnerRadius=15, treesRadius=60, buildingsLimit=[100,100],
 			#
@@ -91,7 +105,7 @@ def run():
 			#
 			# use 'car, +thermal' to spawn only cars with thermal profiles
 			#
-			carsTags=['car'],
+			carsTags=['car, +thermal'],
 			seed=-1
 		)
 		
@@ -124,6 +138,10 @@ def run():
 #				'"cameras/drone/drone{}/drone{} PUSH RandomProps.RandomColor availableColors "#101010"'.format(x,x),
 			], read=False)
 		"""
+		common.sendData('"cameras/spawner/drones" SET active false')
+		# helpers.addThermalProfileOverride(target='cameras/spawner/drones/container', heatinessMode='Absolute', heatinessValue=250, temperatureMode='Absolute', temperatureValue=300)
+		helpers.setThermalProps(objs='cameras/spawner/drones/container', heatiness=250, temperatureValue=300)
+		common.sendData('"cameras/spawner/drones" SET active true')
 		
 	pX_r = [-5, 5]
 	pY_r = [1.5, 8]
