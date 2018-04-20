@@ -1,8 +1,7 @@
 LOAD "Forest" FROM "tile"
 "Forest" SET active false
-"Forest" ADD Segmentation.ClassInfo
+"Forest" ADD Segmentation.ClassInfo Segmentation.ClassGroup
 "Forest" SET Segmentation.ClassInfo itemClass "ground"
-"Forest" ADD Segmentation.ClassGroup
 "Forest" SET Segmentation.ClassGroup itemsClassName "ground"
 "Forest" SET Segmentation.ClassInfo itemClass "ground"
 "Forest" ADD Thermal.ThermalTerrain
@@ -99,8 +98,8 @@ CREATE "spawner/animals/container"
 "spawner/animals/container" ADD RandomProps.PropArea
 "spawner/animals/container" SET RandomProps.PropArea tags "+animal, +thermal"
 "spawner/animals/container" SET RandomProps.PropArea async false numberOfProps 100 collisionCheck true stickToGround true 
-"spawner/animals/container" SET RandomProps.Torus radius 100
 "spawner/animals/container" SET RandomProps.Torus innerRadius 0
+"spawner/animals/container" SET RandomProps.Torus radius 100
 "spawner/animals/container" SET Transform position (1696.21069 250 7000) eulerAngles (0 0 0) localScale (1 1 1)
 "spawner/animals/container" ADD Segmentation.ClassGroup
 "spawner/animals/container" SET Segmentation.ClassGroup itemsClassName "Animal"
