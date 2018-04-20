@@ -1,19 +1,15 @@
 CREATE "cameras"
 "cameras" SET active false
-"cameras" SET Transform position (-6 1 -50)
-"cameras" SET Transform eulerAngles (0 0 0)
+"cameras" SET Transform position (-6 1 -50) eulerAngles (0 0 0)
 "Canvas/Cameras/Viewport/Content" SET UI.GridLayoutGroup cellSize (1024 768)
 "Canvas" SET active true
 "cameras" ADD FlyCamera
 "cameras" SET FlyCamera enabled true
 CREATE "cameras/cameraRGB0"
 "cameras/cameraRGB0" SET active false
-"cameras/cameraRGB0" ADD Camera
-"cameras/cameraRGB0" SET Camera near 0.3 far 1000 fieldOfView 60
-"cameras/cameraRGB0" ADD Sensors.RenderCamera
+"cameras/cameraRGB0" ADD Camera Sensors.RenderCamera AudioListener
+"cameras/cameraRGB0" SET Camera near 0.3 far 1000 fieldOfView 60 renderingPath "UsePlayerSettings"
 "cameras/cameraRGB0" SET Sensors.RenderCamera format "ARGB32" resolution (2048 1536)
-"cameras/cameraRGB0" SET Camera renderingPath "UsePlayerSettings"
-"cameras/cameraRGB0" ADD AudioListener
 CREATE "EnviroSky" AS "EnviroSky"
 "EnviroSky" SET EnviroSky Player "cameras" PlayerCamera "cameras/cameraRGB0" GameTime.ProgressTime "None" weatherSettings.cloudTransitionSpeed 100 weatherSettings.effectTransitionSpeed 100 weatherSettings.fogTransitionSpeed 100 
 "EnviroSky" EXECUTE EnviroSky AssignAndStart "cameras/cameraRGB0" "cameras/cameraRGB0"
@@ -21,43 +17,33 @@ CREATE "EnviroSky" AS "EnviroSky"
 "cameras/cameraRGB0" SET active true
 CREATE "cameras/cameraRGB1"
 "cameras/cameraRGB1" SET active false
-"cameras/cameraRGB1" ADD Camera
-"cameras/cameraRGB1" SET Camera near 0.3 far 1000 fieldOfView 60
-"cameras/cameraRGB1" ADD Sensors.RenderCamera
+"cameras/cameraRGB1" ADD Camera Sensors.RenderCamera
+"cameras/cameraRGB1" SET Camera near 0.3 far 1000 fieldOfView 60 renderingPath "UsePlayerSettings"
 "cameras/cameraRGB1" SET Sensors.RenderCamera format "ARGB32" resolution (2048 1536)
-"cameras/cameraRGB1" SET Camera renderingPath "UsePlayerSettings"
 "cameras/cameraRGB1" SET active true
 CREATE "cameras/cameraRGB2"
 "cameras/cameraRGB2" SET active false
-"cameras/cameraRGB2" ADD Camera
-"cameras/cameraRGB2" SET Camera near 0.3 far 1000 fieldOfView 60
-"cameras/cameraRGB2" ADD Sensors.RenderCamera
+"cameras/cameraRGB2" ADD Camera Sensors.RenderCamera
+"cameras/cameraRGB2" SET Camera near 0.3 far 1000 fieldOfView 60 renderingPath "UsePlayerSettings"
 "cameras/cameraRGB2" SET Sensors.RenderCamera format "ARGB32" resolution (2048 1536)
-"cameras/cameraRGB2" SET Camera renderingPath "UsePlayerSettings"
 "cameras/cameraRGB2" SET active true
 CREATE "cameras/cameraRGB3"
 "cameras/cameraRGB3" SET active false
-"cameras/cameraRGB3" ADD Camera
-"cameras/cameraRGB3" SET Camera near 0.3 far 1000 fieldOfView 60
-"cameras/cameraRGB3" ADD Sensors.RenderCamera
+"cameras/cameraRGB3" ADD Camera Sensors.RenderCamera
+"cameras/cameraRGB3" SET Camera near 0.3 far 1000 fieldOfView 60 renderingPath "UsePlayerSettings"
 "cameras/cameraRGB3" SET Sensors.RenderCamera format "ARGB32" resolution (2048 1536)
-"cameras/cameraRGB3" SET Camera renderingPath "UsePlayerSettings"
 "cameras/cameraRGB3" SET active true
 CREATE "cameras/cameraRGB4"
 "cameras/cameraRGB4" SET active false
-"cameras/cameraRGB4" ADD Camera
-"cameras/cameraRGB4" SET Camera near 0.3 far 1000 fieldOfView 60
-"cameras/cameraRGB4" ADD Sensors.RenderCamera
+"cameras/cameraRGB4" ADD Camera Sensors.RenderCamera
+"cameras/cameraRGB4" SET Camera near 0.3 far 1000 fieldOfView 60 renderingPath "UsePlayerSettings"
 "cameras/cameraRGB4" SET Sensors.RenderCamera format "ARGB32" resolution (2048 1536)
-"cameras/cameraRGB4" SET Camera renderingPath "UsePlayerSettings"
 "cameras/cameraRGB4" SET active true
 CREATE "cameras/cameraRGB5"
 "cameras/cameraRGB5" SET active false
-"cameras/cameraRGB5" ADD Camera
-"cameras/cameraRGB5" SET Camera near 0.3 far 1000 fieldOfView 60
-"cameras/cameraRGB5" ADD Sensors.RenderCamera
+"cameras/cameraRGB5" ADD Camera Sensors.RenderCamera
+"cameras/cameraRGB5" SET Camera near 0.3 far 1000 fieldOfView 60 renderingPath "UsePlayerSettings"
 "cameras/cameraRGB5" SET Sensors.RenderCamera format "ARGB32" resolution (2048 1536)
-"cameras/cameraRGB5" SET Camera renderingPath "UsePlayerSettings"
 "cameras/cameraRGB5" SET active true
 "cameras" SET active true
 "cameras/cameraRGB0" ADD UnityEngine.PostProcessing.PostProcessingBehaviour
