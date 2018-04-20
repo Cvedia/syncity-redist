@@ -89,7 +89,7 @@ CREATE "spawner/city/nature/trees/container"
 "spawner/city/nature/trees/container" ADD RandomProps.Torus
 "spawner/city/nature/trees/container" ADD RandomProps.PropArea
 "spawner/city/nature/trees/container" SET RandomProps.PropArea tags "tree"
-"spawner/city/nature/trees/container" SET RandomProps.PropArea async false numberOfProps 174 collisionCheck false stickToGround false 
+"spawner/city/nature/trees/container" SET RandomProps.PropArea async false numberOfProps 195 collisionCheck false stickToGround false 
 "spawner/city/nature/trees/container" SET RandomProps.Torus radius 100
 "spawner/city/nature/trees/container" SET RandomProps.Torus innerRadius 60
 "spawner/city/nature/trees/container" SET Transform position (0 0 0) eulerAngles (0 0 0) localScale (1 1 1)
@@ -100,21 +100,32 @@ CREATE "spawner/city/buildings/container"
 "spawner/city/buildings/container" ADD RandomProps.Torus
 "spawner/city/buildings/container" ADD RandomProps.PropArea
 "spawner/city/buildings/container" SET RandomProps.PropArea tags "building"
-"spawner/city/buildings/container" SET RandomProps.PropArea async false numberOfProps 53 collisionCheck false stickToGround false 
+"spawner/city/buildings/container" SET RandomProps.PropArea async false numberOfProps 73 collisionCheck false stickToGround false 
 "spawner/city/buildings/container" SET RandomProps.Torus radius 120
 "spawner/city/buildings/container" SET RandomProps.Torus innerRadius 300
 "spawner/city/buildings/container" SET Transform position (0 0 0) eulerAngles (0 0 0) localScale (1 1 1)
 "spawner/city/buildings/container" SET active true
 "spawner/city/buildings" SET active true
+CREATE "spawner/animals/generic/container"
+"spawner/animals/generic/container" SET active false
+"spawner/animals/generic/container" ADD RandomProps.Torus
+"spawner/animals/generic/container" ADD RandomProps.PropArea
+"spawner/animals/generic/container" SET RandomProps.PropArea tags "animal"
+"spawner/animals/generic/container" SET RandomProps.PropArea async false numberOfProps 39 collisionCheck false stickToGround false 
+"spawner/animals/generic/container" SET RandomProps.Torus radius 50
+"spawner/animals/generic/container" SET RandomProps.Torus innerRadius 5
+"spawner/animals/generic/container" SET Transform position (0 0 0) eulerAngles (0 0 0) localScale (1 1 1)
+"spawner/animals/generic/container" SET active true
+"spawner/animals/generic" SET active true
 CREATE "spawner/animals/birds/container"
 "spawner/animals/birds/container" SET active false
 "spawner/animals/birds/container" ADD RandomProps.Torus
 "spawner/animals/birds/container" ADD RandomProps.PropArea
 "spawner/animals/birds/container" SET RandomProps.PropArea tags "bird"
-"spawner/animals/birds/container" SET RandomProps.PropArea async false numberOfProps 89 collisionCheck true stickToGround false 
+"spawner/animals/birds/container" SET RandomProps.PropArea async false numberOfProps 66 collisionCheck true stickToGround false 
 "spawner/animals/birds/container" SET RandomProps.Torus radius 120
 "spawner/animals/birds/container" SET RandomProps.Torus innerRadius 0
-"spawner/animals/birds/container" SET Transform position (0 86 0) eulerAngles (0 0 0) localScale (1 1 1)
+"spawner/animals/birds/container" SET Transform position (0 24 0) eulerAngles (0 0 0) localScale (1 1 1)
 "spawner/animals/birds/container" SET active true
 "spawner/animals/birds" SET active true
 CREATE "spawner/cars/container"
