@@ -9,45 +9,31 @@ LOAD "Forest" FROM "tile"
 "Forest" SET Thermal.ThermalTerrain ambientOffset 0 bandwidth -15.88 median 0.094 baseMapDistance 10000 
 CREATE "cameras"
 "cameras" SET active false
-"cameras" SET Transform position (1600 246 6829)
-"cameras" SET Transform eulerAngles (31.971 60.161 0)
-"cameras" ADD Orbit
+"cameras" SET Transform position (1600 246 6829) eulerAngles (31.971 60.161 0)
 "Canvas/Cameras/Viewport/Content" SET UI.GridLayoutGroup cellSize (1024 768)
 "Canvas" SET active true
 "cameras" ADD FlyCamera
 "cameras" SET FlyCamera enabled true
 CREATE "cameras/segmentation"
 "cameras/segmentation" SET active false
-"cameras/segmentation" ADD Camera
-"cameras/segmentation" SET Camera near 0.3 far 10000 fieldOfView 90
-"cameras/segmentation" ADD Sensors.RenderCamera
+"cameras/segmentation" ADD Camera Segmentation.Segmentation Segmentation.LookUpTable Sensors.RenderCamera
+"cameras/segmentation" SET Camera near 0.3 far 10000 fieldOfView 90 renderingPath "UsePlayerSettings" targetTexture.filterMode "Point" 
 "cameras/segmentation" SET Sensors.RenderCamera format "ARGB32" resolution (1024 768)
-"cameras/segmentation" SET Camera renderingPath "UsePlayerSettings" targetTexture.filterMode "Point"
-"cameras/segmentation" ADD Segmentation.Segmentation
 "cameras/segmentation" SET Segmentation.Segmentation minimumObjectVisibility 0 outputType "Auto" boundingBoxesExtensionAmount 0 transparencyCutout 0 
 "cameras/segmentation" EXECUTE Segmentation.Segmentation DefineClass "Void"
 "cameras/segmentation" PUSH Segmentation.Segmentation boundingBoxesFilter "Human"
-"cameras/segmentation" ADD Segmentation.LookUpTable
-"cameras/segmentation" PUSH Segmentation.LookUpTable classes "Void"
-"cameras/segmentation" PUSH Segmentation.LookUpTable colors "black"
 "cameras/segmentation" EXECUTE Segmentation.Segmentation DefineClass "Human"
-"cameras/segmentation" PUSH Segmentation.LookUpTable classes "Human"
-"cameras/segmentation" PUSH Segmentation.LookUpTable colors "green"
 "cameras/segmentation" EXECUTE Segmentation.Segmentation DefineClass "ground"
-"cameras/segmentation" PUSH Segmentation.LookUpTable classes "ground"
-"cameras/segmentation" PUSH Segmentation.LookUpTable colors "#520000FF"
 "cameras/segmentation" EXECUTE Segmentation.Segmentation DefineClass "Animal"
-"cameras/segmentation" PUSH Segmentation.LookUpTable classes "Animal"
-"cameras/segmentation" PUSH Segmentation.LookUpTable colors "red"
+"cameras/segmentation" PUSH Segmentation.LookUpTable classes "Void" "Human" "ground" "Animal"
+"cameras/segmentation" PUSH Segmentation.LookUpTable colors "black" "green" "#520000FF" "red"
 "cameras/segmentation" EXECUTE Segmentation.LookUpTable MarkTextureDirty
 "cameras/segmentation" SET active true
 CREATE "cameras/cameraRGB"
 "cameras/cameraRGB" SET active false
-"cameras/cameraRGB" ADD Camera
-"cameras/cameraRGB" SET Camera near 0.3 far 10000 fieldOfView 90
-"cameras/cameraRGB" ADD Sensors.RenderCamera
+"cameras/cameraRGB" ADD Camera Sensors.RenderCamera
+"cameras/cameraRGB" SET Camera near 0.3 far 10000 fieldOfView 90 renderingPath "UsePlayerSettings"
 "cameras/cameraRGB" SET Sensors.RenderCamera format "ARGB32" resolution (1024 768)
-"cameras/cameraRGB" SET Camera renderingPath "UsePlayerSettings"
 CREATE "EnviroSky" AS "EnviroSky"
 "EnviroSky" SET EnviroSky Player "cameras" PlayerCamera "cameras/cameraRGB" GameTime.ProgressTime "None" weatherSettings.cloudTransitionSpeed 100 weatherSettings.effectTransitionSpeed 100 weatherSettings.fogTransitionSpeed 100 
 "EnviroSky" EXECUTE EnviroSky AssignAndStart "cameras/cameraRGB" "cameras/cameraRGB"
@@ -59,9 +45,8 @@ CREATE "EnviroSky" AS "EnviroSky"
 "cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
 CREATE "cameras/depth"
 "cameras/depth" SET active false
-"cameras/depth" ADD Camera
+"cameras/depth" ADD Camera Sensors.RenderCamera
 "cameras/depth" SET Camera near 0.3 far 1000 fieldOfView 90 renderingPath "DeferredShading"
-"cameras/depth" ADD Sensors.RenderCamera
 "cameras/depth" SET Sensors.RenderCamera format "RFloat" resolution (1024 768)
 "cameras/depth" ADD Cameras.RenderDepthBufferSimple
 "cameras/depth" SET Cameras.RenderDepthBufferSimple outputMode "Linear01Depth" transparencyCutout 0
@@ -71,23 +56,17 @@ CREATE "cameras/depth"
 "Forest" SET active true
 CREATE "cameras/thermal"
 "cameras/thermal" SET active false
-"cameras/thermal" ADD Camera
+"cameras/thermal" ADD Camera Thermal.ThermalCamera UnityEngine.PostProcessing.PostProcessingBehaviour Sensors.RenderCamera CameraFilterPack_Pixelisation_DeepOilPaintHQ CameraFilterPack_Blur_Noise Thermal.GlobalTreeSettings
 "cameras/thermal" SET Camera near 0.3 far 10000 fieldOfView 90
-"cameras/thermal" ADD Sensors.RenderCamera
 "cameras/thermal" SET Sensors.RenderCamera format "ARGB32" resolution (1024 768)
 "cameras/thermal" SET Camera renderingPath "UsePlayerSettings"
-"cameras/thermal" ADD Thermal.ThermalCamera
 "cameras/thermal" SET Thermal.ThermalCamera enabled false
-"cameras/thermal" ADD CameraFilterPack_Pixelisation_DeepOilPaintHQ
 "cameras/thermal" SET CameraFilterPack_Pixelisation_DeepOilPaintHQ enabled false
 "cameras/thermal" SET CameraFilterPack_Pixelisation_DeepOilPaintHQ _FixDistance 10.6 _Distance 0.06 _Size 0.481 Intensity 0.6 enabled true
-"cameras/thermal" ADD CameraFilterPack_Blur_Noise
 "cameras/thermal" SET CameraFilterPack_Blur_Noise Distance (2 1) enabled true
-"cameras/thermal" ADD Thermal.GlobalTreeSettings
-"cameras/thermal" SET Thermal.GlobalTreeSettings temperature 6.41 temperatureBandwidth 50 temperatureMedian 0.18 treeLeafsHeatVariance 10 enabled true
-"cameras/thermal" ADD UnityEngine.PostProcessing.PostProcessingBehaviour
+"cameras/thermal" SET Thermal.GlobalTreeSettings temperature 6.41 temperatureBandwidth 50 temperatureMedian 0.18 treeLeafsHeatVariance 10 enabled true 
 "cameras/thermal" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile "Thermal"
-"cameras/thermal" SET Thermal.ThermalCamera ambientTemperature 4.3 temperatureRange (4.5 35) maxDistanceForProbeUpdate 100 useAGC true enabled true
+"cameras/thermal" SET Thermal.ThermalCamera ambientTemperature 4.3 temperatureRange (4.5 35) maxDistanceForProbeUpdate 100 useAGC true enabled true 
 "cameras/thermal" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.grain.enabled false
 "cameras/thermal" SET active true
 CREATE "disk1"

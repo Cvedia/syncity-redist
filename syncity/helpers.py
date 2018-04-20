@@ -2580,14 +2580,15 @@ def spawnDroneObjs(
 	destroy=False, ground_position=[84,0,0], groundLimit=0,
 	distH=25, distV=25, distLimit=150, pX=-150, pZ=-350, pY=0,
 	birdsRadius=120, birdsInnerRadius=0, carsRadius=50, carsInnerRadius=5,
-	treesLimit=[150,200], buildingsRadius=120, buildingsInnerRadius=60, treesRadius=80, treesInnerRadius=10,
-	buildingsLimit=[150,150], birdsLimit=[25,100], carsLimit=[75,75], dronesLimit=[80,200], prefix='spawner', container='container',
-	treesTags=['tree'], buildingsTags=['building'], birdsTags=['bird'], carsTags=['car'], dronesTags=['drones'],
-	trees_colors=None, buildings_colors=None, birds_colors=None, cars_colors=None, dronesColors=None,
-	treesPartsNames=None, buildingsPartsNames=None, birdsPartsNames=None, carsPartsNames=None, dronesPartsNames=None,
-	groundSegment=None, treesSegment=None, buildingsSegment=None, birdsSegment=None, carsSegment=None, dronesSegment='DRONE',
+	treesLimit=[150,200], buildingsRadius=120, buildingsInnerRadius=60, treesRadius=80, treesInnerRadius=10, animalsRadius=50, animalsInnerRadius=5,
+	buildingsLimit=[150,150], birdsLimit=[25,100], carsLimit=[75,75], dronesLimit=[80,200], animalsLimit=[10,50],
+	prefix='spawner', container='container',
+	animalsTags=['animal'], treesTags=['tree'], buildingsTags=['building'], birdsTags=['bird'], carsTags=['car'], dronesTags=['drones'],
+	animals_colors=None, trees_colors=None, buildings_colors=None, birds_colors=None, cars_colors=None, dronesColors=None,
+	animalsPartsNames=None, treesPartsNames=None, buildingsPartsNames=None, birdsPartsNames=None, carsPartsNames=None, dronesPartsNames=None,
+	groundSegment=None, treesSegment=None, buildingsSegment=None, birdsSegment=None, carsSegment=None, dronesSegment='DRONE', animalsSegment=None,
 	birdsThermalObjectBehaviour=None, treesThermalObjectBehaviour=None, buildingsThermalObjectBehaviour=None, carsThermalObjectBehaviour=None, groundThermalObjectBehaviour=None, dronesThermalObjectBehaviour=None,
-	humansThermalObjectBehaviour=None, signsThermalObjectBehaviour=None, cityThermalObjectBehaviour=None,
+	humansThermalObjectBehaviour=None, signsThermalObjectBehaviour=None, cityThermalObjectBehaviour=None, animalsThermalObjectBehaviour=None,
 	seed=None
 ):
 	"""
@@ -2604,6 +2605,7 @@ def spawnDroneObjs(
 			'DELETE "{}/city/nature/trees"'.format(prefix),
 			'DELETE "{}/city/buildings"'.format(prefix),
 			'DELETE "{}/animals/birds"'.format(prefix),
+			'DELETE "{}/animals/generic"'.format(prefix),
 			'DELETE "{}/drones"'.format(prefix),
 			'DELETE "{}/cars"'.format(prefix)
 		], read=False)
@@ -2642,7 +2644,8 @@ def spawnDroneObjs(
 	spawnRadiusGeneric(['humans'], tags=['human, +random'], suffix='_0', limit=40, radius=30, innerradius=2, position=[0,0,0], collisionCheck=False, prefix=prefix, seed=seed, thermalObjectBehaviour=humansThermalObjectBehaviour, thermalObjectOverride=True if humansThermalObjectBehaviour != None else False)
 	spawnRadiusGeneric(['city/nature/trees'], partsNames=treesPartsNames, segmentationClass=treesSegment, randomColors=trees_colors, tags=treesTags, collisionCheck=False, limit=random.randint(treesLimit[0], treesLimit[1]), radius=treesRadius, innerradius=treesInnerRadius, position=[0,0,0], prefix=prefix, seed=seed, thermalObjectBehaviour=treesThermalObjectBehaviour, thermalObjectOverride=True if treesThermalObjectBehaviour != None else False)
 	spawnRadiusGeneric(['city/buildings'], partsNames=buildingsPartsNames, segmentationClass=buildingsSegment, randomColors=buildings_colors, tags=buildingsTags, stickToGround=False, collisionCheck=False, limit=random.randint(buildingsLimit[0], buildingsLimit[1]), radius=buildingsRadius, innerradius=buildingsInnerRadius, position=[0,0,0], prefix=prefix, seed=seed, thermalObjectBehaviour=buildingsThermalObjectBehaviour, thermalObjectOverride=True if buildingsThermalObjectBehaviour != None else False)
-
+	spawnRadiusGeneric(['animals/generic'], partsNames=animalsPartsNames, segmentationClass=animalsSegment, randomColors=animals_colors, tags=animalsTags, stickToGround=False, collisionCheck=False, limit=random.randint(animalsLimit[0], animalsLimit[1]), radius=animalsRadius, innerradius=animalsInnerRadius, position=[0,0,0], prefix=prefix, seed=seed, thermalObjectBehaviour=animalsThermalObjectBehaviour, thermalObjectOverride=True if animalsThermalObjectBehaviour != None else False)
+	
 #	spawnRadiusGeneric(['buildings_001'], partsNames=buildingsPartsNames, segmentationClass=buildingsSegment, randomColors=buildings_colors, tags=buildingsTags, stickToGround=False, collisionCheck=False, limit=random.randint(buildingsLimit[0], buildingsLimit[1]), radius=buildingsRadius, innerradius=buildingsInnerRadius, position=[0,0,0], prefix=prefix, seed=seed)
 #	spawnRadiusGeneric(['buildings_002'], partsNames=buildingsPartsNames, segmentationClass=buildingsSegment, randomColors=buildings_colors, tags=buildingsTags, stickToGround=False, collisionCheck=False, limit=random.randint(buildingsLimit[0], buildingsLimit[1]), radius=buildingsRadius, innerradius=buildingsInnerRadius, position=[0,0,0], prefix=prefix, seed=seed)
 #	spawnRadiusGeneric(['buildings_003'], partsNames=buildingsPartsNames, segmentationClass=buildingsSegment, randomColors=buildings_colors, tags=buildingsTags, stickToGround=False, collisionCheck=False, limit=random.randint(buildingsLimit[0], buildingsLimit[1]), radius=buildingsRadius, innerradius=buildingsInnerRadius, position=[0,0,0], prefix=prefix, seed=seed)

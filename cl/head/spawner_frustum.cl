@@ -1,19 +1,15 @@
 CREATE "cameras"
 "cameras" SET active false
-"cameras" SET Transform position (-6 1 -50)
-"cameras" SET Transform eulerAngles (0 0 0)
+"cameras" SET Transform position (-6 1 -50) eulerAngles (0 0 0)
 "Canvas/Cameras/Viewport/Content" SET UI.GridLayoutGroup cellSize (1024 768)
 "Canvas" SET active true
 "cameras" ADD FlyCamera
 "cameras" SET FlyCamera enabled true
 CREATE "cameras/cameraRGB"
 "cameras/cameraRGB" SET active false
-"cameras/cameraRGB" ADD Camera
-"cameras/cameraRGB" SET Camera near 0.3 far 1000 fieldOfView 60
-"cameras/cameraRGB" ADD Sensors.RenderCamera
+"cameras/cameraRGB" ADD Camera Sensors.RenderCamera AudioListener
+"cameras/cameraRGB" SET Camera near 0.3 far 1000 fieldOfView 60 renderingPath "UsePlayerSettings"
 "cameras/cameraRGB" SET Sensors.RenderCamera format "ARGB32" resolution (1024 768)
-"cameras/cameraRGB" SET Camera renderingPath "UsePlayerSettings"
-"cameras/cameraRGB" ADD AudioListener
 CREATE "EnviroSky" AS "EnviroSky"
 "EnviroSky" SET EnviroSky Player "cameras" PlayerCamera "cameras/cameraRGB" GameTime.ProgressTime "None" weatherSettings.cloudTransitionSpeed 100 weatherSettings.effectTransitionSpeed 100 weatherSettings.fogTransitionSpeed 100 
 "EnviroSky" EXECUTE EnviroSky AssignAndStart "cameras/cameraRGB" "cameras/cameraRGB"
@@ -25,28 +21,21 @@ CREATE "EnviroSky" AS "EnviroSky"
 "cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
 CREATE "cameras/segmentation"
 "cameras/segmentation" SET active false
-"cameras/segmentation" ADD Camera
-"cameras/segmentation" SET Camera near 0.3 far 1000 fieldOfView 60
-"cameras/segmentation" ADD Sensors.RenderCamera
+"cameras/segmentation" ADD Camera Segmentation.Segmentation Segmentation.LookUpTable Sensors.RenderCamera
+"cameras/segmentation" SET Camera near 0.3 far 1000 fieldOfView 60 renderingPath "UsePlayerSettings" targetTexture.filterMode "Point" 
 "cameras/segmentation" SET Sensors.RenderCamera format "ARGB32" resolution (1024 768)
-"cameras/segmentation" SET Camera renderingPath "UsePlayerSettings" targetTexture.filterMode "Point"
-"cameras/segmentation" ADD Segmentation.Segmentation
 "cameras/segmentation" SET Segmentation.Segmentation minimumObjectVisibility 0 outputType "Auto" boundingBoxesExtensionAmount 0 transparencyCutout 0 
 "cameras/segmentation" EXECUTE Segmentation.Segmentation DefineClass "Void"
 "cameras/segmentation" PUSH Segmentation.Segmentation boundingBoxesFilter "Drone"
-"cameras/segmentation" ADD Segmentation.LookUpTable
-"cameras/segmentation" PUSH Segmentation.LookUpTable classes "Void"
-"cameras/segmentation" PUSH Segmentation.LookUpTable colors "black"
 "cameras/segmentation" EXECUTE Segmentation.Segmentation DefineClass "Drone"
-"cameras/segmentation" PUSH Segmentation.LookUpTable classes "Drone"
-"cameras/segmentation" PUSH Segmentation.LookUpTable colors "red"
+"cameras/segmentation" PUSH Segmentation.LookUpTable classes "Void" "Drone"
+"cameras/segmentation" PUSH Segmentation.LookUpTable colors "black" "red"
 "cameras/segmentation" EXECUTE Segmentation.LookUpTable MarkTextureDirty
 "cameras/segmentation" SET active true
 CREATE "cameras/depth"
 "cameras/depth" SET active false
-"cameras/depth" ADD Camera
+"cameras/depth" ADD Camera Sensors.RenderCamera
 "cameras/depth" SET Camera near 0.3 far 1000 fieldOfView 60 renderingPath "DeferredShading"
-"cameras/depth" ADD Sensors.RenderCamera
 "cameras/depth" SET Sensors.RenderCamera format "RFloat" resolution (1024 768)
 "cameras/depth" ADD Cameras.RenderDepthBufferSimple
 "cameras/depth" SET Cameras.RenderDepthBufferSimple outputMode "Linear01Depth" transparencyCutout 0
@@ -79,9 +68,9 @@ CREATE "cameras/spawner/drones/container"
 "cameras/spawner/drones/container" SET RandomProps.Frustum minDistance 2
 "cameras/spawner/drones/container" SET RandomProps.Frustum maxDistance 5
 "cameras/spawner/drones/container" SET RandomProps.PropArea async false numberOfProps 10 collisionCheck true stickToGround false 
+"cameras/spawner/drones/container" SET RandomProps.Frustum allowEdge false
 "cameras/spawner/drones/container" SET RandomProps.Frustum scaleBack 0.25
 "cameras/spawner/drones/container" SET RandomProps.Frustum cam "cameras/cameraRGB"
-"cameras/spawner/drones/container" SET RandomProps.Frustum allowEdge false
 "cameras/spawner/drones/container" SET Transform eulerAngles (0 0 0) localScale (1 1 1)
 "cameras/spawner/drones/container" ADD Segmentation.ClassGroup
 "cameras/spawner/drones/container" SET Segmentation.ClassGroup itemsClassName "Drone"

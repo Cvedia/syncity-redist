@@ -85,6 +85,7 @@ def run():
 			dronesTags=['blurred' if blurring_method == 'embedded' else 'phantom'],
 			dronesPartsNames='chassis,legs,motors,battery,bolts,sensors_caps,sensors,camera,blades',
 			
+			animalsThermalObjectBehaviour=True,
 			birdsThermalObjectBehaviour=True,
 			treesThermalObjectBehaviour=True,
 			buildingsThermalObjectBehaviour=True,
@@ -105,8 +106,8 @@ def run():
 			#
 			# use 'car, +thermal' to spawn only cars with thermal profiles
 			#
-			carsTags=['car, +thermal'],
-			seed=-1
+			carsTags=['+car, +thermal'],
+			animalsTags=['+animal, +thermal']
 		)
 		
 		"""
@@ -161,6 +162,7 @@ def run():
 	# reset camera
 	common.sendData([
 		'"cameras/cameraRGB" SET Camera enabled true',
+		'"cameras/thermal" SET Camera enabled true',
 		'"cameras" SET Transform position ({} {} {}) eulerAngles ({}~{} {} {})'.format(0, 5, 0, -20, 0, 0, 0),
 		'"EnviroSky" EXECUTE EnviroSky ChangeWeather "{}"'.format(helpers.weather_lst[2]),
 		'"EnviroSky" SET EnviroSky cloudsMode "{}" fogSettings.heightFog false fogSettings.distanceFog false cloudsSettings.globalCloudCoverage {}'.format(helpers.clouds_lst[2], -0.04),

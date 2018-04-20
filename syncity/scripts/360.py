@@ -42,18 +42,16 @@ def run():
 		
 		common.sendData([
 			# DEPTH shortcut to 1 channel 16bit png
-			'"disk1/Cameras/depth_depth" SET Sensors.RenderCameraLink outputType "DEPTH"',
+			'"disk1/Cameras/depth" SET Sensors.RenderCameraLink outputType "DEPTH"',
 			
 			# 'CREATE "{}" FROM "drones" AS "obj/subject"'.format(obj),
 			'CREATE "{}" FROM "cars" AS "obj/subject"'.format(obj),
 			'"obj" SET active false',
-			'"obj/subject" SET Transform position ({} {} {})'.format(0, 0, 0),
-			'"obj/subject" SET Transform eulerAngles ({} {} {})'.format(0, 0, 0),
+			'"obj/subject" SET Transform position ({} {} {}) eulerAngles ({} {} {})'.format(0, 0, 0, 0, 0, 0),
 			
 			'"obj" ADD Segmentation.ClassGroup',
 			'"obj" SET Segmentation.ClassGroup itemsClassName "Car"',
-			'"obj" SET Transform position ({} {} {})'.format(-6, 0, -9),
-			'"obj" SET Transform eulerAngles ({} {} {})'.format(0, 0, 0),
+			'"obj" SET Transform position ({} {} {}) eulerAngles ({} {} {})'.format(-6, 0, -9, 0, 0, 0),
 			
 			# 'CREATE "city/ground_0" "city/ground/Grass"',
 			# '"city/ground_0" SET Transform position (0 0 0)',
@@ -68,10 +66,8 @@ def run():
 		'"cameras/cameraRGB" SET Camera enabled true',
 		'"cameras/segmentation" SET Camera enabled true',
 		
-		'"cameras" SET Transform position ({} {} {})'.format(0, 1, -16),
-		'"cameras" SET Transform eulerAngles ({} {} {})'.format(0, -40, 0),
-		'"EnviroSky" SET EnviroSky cloudsMode "{}"'.format('Volume'),
-		'"EnviroSky" SET EnviroSky cloudsSettings.globalCloudCoverage {}'.format(-0.04),
+		'"cameras" SET Transform position ({} {} {}) eulerAngles ({} {} {})'.format(0, 1, -16, 0, -40, 0),
+		'"EnviroSky" SET EnviroSky cloudsMode "{}" cloudsSettings.globalCloudCoverage {}'.format('Volume', -0.04),
 		'"EnviroSky" EXECUTE EnviroSky ChangeWeather "{}"'.format(helpers.weather_lst[1])
 	], read=False)
 	

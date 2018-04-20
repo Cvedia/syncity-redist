@@ -20,37 +20,26 @@ CREATE "mainCar/cameras"
 
 CREATE "mainCar/cameras/Front"
 "mainCar/cameras/Front" SET active false
-"mainCar/cameras/Front" ADD Camera
-"mainCar/cameras/Front" SET Camera near 0.3 far 1000 fieldOfView 60 allowMSAA false
+"mainCar/cameras/Front" ADD Camera EnviroSkyRendering EnviroLightShafts Postprocessing.EnviroMerged UnityEngine.Rendering.PostProcessing.PostProcessLayer Sensors.RenderCamera
+"mainCar/cameras/Front" SET Camera near 0.3 far 1000 fieldOfView 60 allowMSAA false renderingPath "DeferredShading"
 
 // postprocessing stack matching what's on the driver camera
-"mainCar/cameras/Front" ADD EnviroSkyRendering
-"mainCar/cameras/Front" ADD EnviroLightShafts
-"mainCar/cameras/Front" ADD Postprocessing.EnviroMerged
 "mainCar/cameras/Front" SET Postprocessing.EnviroMerged dayProfile ASSET "Highway/Resources/Day" FROM "highway" dayProfile ASSET "Highway/Resources/Night" FROM "highway"
-
-"mainCar/cameras/Front" ADD UnityEngine.Rendering.PostProcessing.PostProcessLayer
 "mainCar/cameras/Front" SET UnityEngine.Rendering.PostProcessing.PostProcessLayer antialiasingMode "SubpixelMorphologicalAntialiasing" fog.enabled 0 volumeTrigger "mainCar/cameras/Front"
-
-"mainCar/cameras/Front" ADD Sensors.RenderCamera
 
 // WARNING: This camera must be `alwaysOn` because is has motionBlur enabled on postprocessing
 // otherwise motion blur would just blur the interleaving images
 "mainCar/cameras/Front" SET Sensors.RenderCamera format "ARGB32" resolution (1024 768) alwaysOn true
 
-"mainCar/cameras/Front" SET Camera renderingPath "DeferredShading"
 "mainCar/cameras/Front" SET active true
 
 // depth camera ----------------------------------------------------------------
 
 CREATE "mainCar/cameras/Depth"
 "mainCar/cameras/Depth" SET active false
-"mainCar/cameras/Depth" ADD Camera
+"mainCar/cameras/Depth" ADD Camera Sensors.RenderCamera Cameras.RenderDepthBufferSimple
 "mainCar/cameras/Depth" SET Camera near 0.3 far 1000 fieldOfView 60 renderingPath "DeferredShading" allowMSAA false
-"mainCar/cameras/Depth" ADD Sensors.RenderCamera
-//"mainCar/cameras/Depth" SET Sensors.RenderCamera format "RFloat" resolution (1024 768) alwaysOn false
 "mainCar/cameras/Depth" SET Sensors.RenderCamera format "RFloat" resolution (1024 768) alwaysOn true
-"mainCar/cameras/Depth" ADD Cameras.RenderDepthBufferSimple
 "mainCar/cameras/Depth" SET Cameras.RenderDepthBufferSimple outputMode "Linear01Depth" transparencyCutout 0
 "mainCar/cameras/Depth" SET active true
 
@@ -58,55 +47,30 @@ CREATE "mainCar/cameras/Depth"
 
 CREATE "mainCar/cameras/Segment"
 "mainCar/cameras/Segment" SET active false
-"mainCar/cameras/Segment" ADD Camera
-"mainCar/cameras/Segment" SET Camera near 0.3 far 1000 fieldOfView 60 allowMSAA false
-"mainCar/cameras/Segment" ADD Sensors.RenderCamera
+"mainCar/cameras/Segment" ADD Camera Sensors.RenderCamera Segmentation.Segmentation Segmentation.LookUpTable
+"mainCar/cameras/Segment" SET Camera near 0.3 far 1000 fieldOfView 60 allowMSAA false renderingPath "DeferredShading" targetTexture.filterMode "Point"
 "mainCar/cameras/Segment" SET Sensors.RenderCamera format "ARGB32" resolution (1024 768) alwaysOn true
-"mainCar/cameras/Segment" SET Camera renderingPath "DeferredShading" targetTexture.filterMode "Point"
-"mainCar/cameras/Segment" ADD Segmentation.Segmentation
 "mainCar/cameras/Segment" SET Segmentation.Segmentation minimumObjectVisibility 0 outputType "Auto" boundingBoxesExtensionAmount 0 transparencyCutout 0
 "mainCar/cameras/Segment" EXECUTE Segmentation.Segmentation DefineClass "Void"
 
-"mainCar/cameras/Segment" PUSH Segmentation.Segmentation boundingBoxesFilter "SHOULDER"
-"mainCar/cameras/Segment" PUSH Segmentation.Segmentation boundingBoxesFilter "STRUCT"
-"mainCar/cameras/Segment" PUSH Segmentation.Segmentation boundingBoxesFilter "ROAD"
-"mainCar/cameras/Segment" PUSH Segmentation.Segmentation boundingBoxesFilter "TREE"
-"mainCar/cameras/Segment" PUSH Segmentation.Segmentation boundingBoxesFilter "BILLBOARD"
-"mainCar/cameras/Segment" PUSH Segmentation.Segmentation boundingBoxesFilter "CAR"
-
-"mainCar/cameras/Segment" ADD Segmentation.LookUpTable
-
-"mainCar/cameras/Segment" PUSH Segmentation.LookUpTable classes "Void"
-"mainCar/cameras/Segment" PUSH Segmentation.LookUpTable colors "black"
+"mainCar/cameras/Segment" PUSH Segmentation.Segmentation boundingBoxesFilter "SHOULDER" "STRUCT" "ROAD" "TREE" "BILLBOARD" "CAR"
 
 "mainCar/cameras/Segment" EXECUTE Segmentation.Segmentation DefineClass "SHOULDER"
-"mainCar/cameras/Segment" PUSH Segmentation.LookUpTable classes "SHOULDER"
-"mainCar/cameras/Segment" PUSH Segmentation.LookUpTable colors "white"
-
 "mainCar/cameras/Segment" EXECUTE Segmentation.Segmentation DefineClass "STRUCT"
-"mainCar/cameras/Segment" PUSH Segmentation.LookUpTable classes "STRUCT"
-"mainCar/cameras/Segment" PUSH Segmentation.LookUpTable colors "blue"
-
 "mainCar/cameras/Segment" EXECUTE Segmentation.Segmentation DefineClass "ROAD"
-"mainCar/cameras/Segment" PUSH Segmentation.LookUpTable classes "ROAD"
-"mainCar/cameras/Segment" PUSH Segmentation.LookUpTable colors "#838383"
-
 "mainCar/cameras/Segment" EXECUTE Segmentation.Segmentation DefineClass "TREE"
-"mainCar/cameras/Segment" PUSH Segmentation.LookUpTable classes "TREE"
-"mainCar/cameras/Segment" PUSH Segmentation.LookUpTable colors "green"
-
 "mainCar/cameras/Segment" EXECUTE Segmentation.Segmentation DefineClass "BILLBOARD"
-"mainCar/cameras/Segment" PUSH Segmentation.LookUpTable classes "BILLBOARD"
-"mainCar/cameras/Segment" PUSH Segmentation.LookUpTable colors "red"
-
 "mainCar/cameras/Segment" EXECUTE Segmentation.Segmentation DefineClass "CAR"
-"mainCar/cameras/Segment" PUSH Segmentation.LookUpTable classes "CAR"
-"mainCar/cameras/Segment" PUSH Segmentation.LookUpTable colors "#FF00FF"
+
+"mainCar/cameras/Segment" PUSH Segmentation.LookUpTable classes "Void" "SHOULDER" "STRUCT" "ROAD" "TREE" "BILLBOARD" "CAR"
+"mainCar/cameras/Segment" PUSH Segmentation.LookUpTable colors "black" "white" "blue" "#838383" "green" "red" "#FF00FF"
 
 "mainCar/cameras/Segment" EXECUTE Segmentation.LookUpTable MarkTextureDirty
 "mainCar/cameras/Segment" SET active true
 
 "mainCar/cameras" SET active true
+
+// TODO: Break components apart
 
 "RoadArchitectSystem1/Road1/MainMeshes/RoadMesh" ADD Segmentation.ClassGroup
 "RoadArchitectSystem1/Road1/MainMeshes/RoadMesh" EXECUTE Segmentation.ClassGroup UpdateClass "ROAD"
@@ -115,7 +79,6 @@ CREATE "mainCar/cameras/Segment"
 "RoadArchitectSystem1/Road1/MainMeshes/ShoulderL" ADD Segmentation.ClassGroup
 "RoadArchitectSystem1/Road1/MainMeshes/ShoulderL" EXECUTE Segmentation.ClassGroup UpdateClass "SHOULDER"
 
-// TODO: Break components apart
 "Road meshes 1" ADD Segmentation.ClassGroup
 "Road meshes 1" EXECUTE Segmentation.ClassGroup UpdateClass "STRUCT"
 "Road meshes 3" ADD Segmentation.ClassGroup
@@ -176,12 +139,9 @@ CREATE "disk1/mainCar/cameras/segment"
 // #include "highway_pip.cl"
 
 "lidarVirtualCamera" SET AutoOrbit enabled true
-
 "mainCar" SET active true
 "spawner" SET OSVehicleSpawner enabled true
-
 "disk1" SET active true
-NOOP
 
 // #include "highway_ros.cl"
 

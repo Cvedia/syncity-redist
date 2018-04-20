@@ -4,18 +4,14 @@ CREATE "autodrive/SyncityJPickup" FROM "autodrive" AS "SyncityJPickup"
 "autodrive" SET WindZone mode "Directional" radius 0 windMain 1 windTurbulence 1 windPulseMagnitude 0.5 windPulseFrequency 0.01 
 CREATE "SyncityJPickup/cameras"
 "SyncityJPickup/cameras" SET active false
-"SyncityJPickup/cameras" SET Transform position (-6 1 -50)
-"SyncityJPickup/cameras" SET Transform eulerAngles (0 0 0)
-"SyncityJPickup/cameras" ADD Orbit
+"SyncityJPickup/cameras" SET Transform position (-6 1 -50) eulerAngles (0 0 0)
 "Canvas/Cameras/Viewport/Content" SET UI.GridLayoutGroup cellSize (1024 768)
 "Canvas" SET active true
 CREATE "SyncityJPickup/cameras/Front"
 "SyncityJPickup/cameras/Front" SET active false
-"SyncityJPickup/cameras/Front" ADD Camera
-"SyncityJPickup/cameras/Front" SET Camera near 0.3 far 1000 fieldOfView 60
-"SyncityJPickup/cameras/Front" ADD Sensors.RenderCamera
+"SyncityJPickup/cameras/Front" ADD Camera Sensors.RenderCamera
+"SyncityJPickup/cameras/Front" SET Camera near 0.3 far 1000 fieldOfView 60 renderingPath "UsePlayerSettings"
 "SyncityJPickup/cameras/Front" SET Sensors.RenderCamera format "ARGB32" resolution (640 480)
-"SyncityJPickup/cameras/Front" SET Camera renderingPath "UsePlayerSettings"
 CREATE "EnviroSky" AS "EnviroSky"
 "EnviroSky" SET EnviroSky Player "SyncityJPickup/cameras" PlayerCamera "SyncityJPickup/cameras/Front" GameTime.ProgressTime "None" weatherSettings.cloudTransitionSpeed 100 weatherSettings.effectTransitionSpeed 100 weatherSettings.fogTransitionSpeed 100 
 "EnviroSky" EXECUTE EnviroSky AssignAndStart "SyncityJPickup/cameras/Front" "SyncityJPickup/cameras/Front"
@@ -27,21 +23,17 @@ CREATE "EnviroSky" AS "EnviroSky"
 "SyncityJPickup/cameras/Front" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
 CREATE "SyncityJPickup/cameras/Depth"
 "SyncityJPickup/cameras/Depth" SET active false
-"SyncityJPickup/cameras/Depth" ADD Camera
+"SyncityJPickup/cameras/Depth" ADD Camera Sensors.RenderCamera
 "SyncityJPickup/cameras/Depth" SET Camera near 0.3 far 1000 fieldOfView 60 renderingPath "DeferredShading"
-"SyncityJPickup/cameras/Depth" ADD Sensors.RenderCamera
 "SyncityJPickup/cameras/Depth" SET Sensors.RenderCamera format "RFloat" resolution (640 480)
 "SyncityJPickup/cameras/Depth" ADD Cameras.RenderDepthBufferSimple
 "SyncityJPickup/cameras/Depth" SET Cameras.RenderDepthBufferSimple outputMode "Linear01Depth" transparencyCutout 0
 "SyncityJPickup/cameras/Depth" SET active true
 CREATE "SyncityJPickup/cameras/Segment"
 "SyncityJPickup/cameras/Segment" SET active false
-"SyncityJPickup/cameras/Segment" ADD Camera
-"SyncityJPickup/cameras/Segment" SET Camera near 0.3 far 1000 fieldOfView 60
-"SyncityJPickup/cameras/Segment" ADD Sensors.RenderCamera
+"SyncityJPickup/cameras/Segment" ADD Camera Segmentation.Segmentation Segmentation.LookUpTable Sensors.RenderCamera
+"SyncityJPickup/cameras/Segment" SET Camera near 0.3 far 1000 fieldOfView 60 renderingPath "UsePlayerSettings" targetTexture.filterMode "Point" 
 "SyncityJPickup/cameras/Segment" SET Sensors.RenderCamera format "ARGB32" resolution (640 480)
-"SyncityJPickup/cameras/Segment" SET Camera renderingPath "UsePlayerSettings" targetTexture.filterMode "Point"
-"SyncityJPickup/cameras/Segment" ADD Segmentation.Segmentation
 "SyncityJPickup/cameras/Segment" SET Segmentation.Segmentation minimumObjectVisibility 0 outputType "Auto" boundingBoxesExtensionAmount 0 transparencyCutout 0 
 "SyncityJPickup/cameras/Segment" EXECUTE Segmentation.Segmentation DefineClass "Void"
 "SyncityJPickup/cameras/Segment" PUSH Segmentation.Segmentation boundingBoxesFilter "LINES"
@@ -49,24 +41,13 @@ CREATE "SyncityJPickup/cameras/Segment"
 "SyncityJPickup/cameras/Segment" PUSH Segmentation.Segmentation boundingBoxesFilter "ROAD"
 "SyncityJPickup/cameras/Segment" PUSH Segmentation.Segmentation boundingBoxesFilter "PROPS"
 "SyncityJPickup/cameras/Segment" PUSH Segmentation.Segmentation boundingBoxesFilter "SIGNS"
-"SyncityJPickup/cameras/Segment" ADD Segmentation.LookUpTable
-"SyncityJPickup/cameras/Segment" PUSH Segmentation.LookUpTable classes "Void"
-"SyncityJPickup/cameras/Segment" PUSH Segmentation.LookUpTable colors "black"
 "SyncityJPickup/cameras/Segment" EXECUTE Segmentation.Segmentation DefineClass "LINES"
-"SyncityJPickup/cameras/Segment" PUSH Segmentation.LookUpTable classes "LINES"
-"SyncityJPickup/cameras/Segment" PUSH Segmentation.LookUpTable colors "white"
 "SyncityJPickup/cameras/Segment" EXECUTE Segmentation.Segmentation DefineClass "DIRT"
-"SyncityJPickup/cameras/Segment" PUSH Segmentation.LookUpTable classes "DIRT"
-"SyncityJPickup/cameras/Segment" PUSH Segmentation.LookUpTable colors "blue"
 "SyncityJPickup/cameras/Segment" EXECUTE Segmentation.Segmentation DefineClass "ROAD"
-"SyncityJPickup/cameras/Segment" PUSH Segmentation.LookUpTable classes "ROAD"
-"SyncityJPickup/cameras/Segment" PUSH Segmentation.LookUpTable colors "#838383"
 "SyncityJPickup/cameras/Segment" EXECUTE Segmentation.Segmentation DefineClass "PROPS"
-"SyncityJPickup/cameras/Segment" PUSH Segmentation.LookUpTable classes "PROPS"
-"SyncityJPickup/cameras/Segment" PUSH Segmentation.LookUpTable colors "#09FF00"
 "SyncityJPickup/cameras/Segment" EXECUTE Segmentation.Segmentation DefineClass "SIGNS"
-"SyncityJPickup/cameras/Segment" PUSH Segmentation.LookUpTable classes "SIGNS"
-"SyncityJPickup/cameras/Segment" PUSH Segmentation.LookUpTable colors "red"
+"SyncityJPickup/cameras/Segment" PUSH Segmentation.LookUpTable classes "Void" "LINES" "DIRT" "ROAD" "PROPS" "SIGNS"
+"SyncityJPickup/cameras/Segment" PUSH Segmentation.LookUpTable colors "black" "white" "blue" "#838383" "#09FF00" "red"
 "SyncityJPickup/cameras/Segment" EXECUTE Segmentation.LookUpTable MarkTextureDirty
 "SyncityJPickup/cameras/Segment" SET active true
 CREATE "disk1"

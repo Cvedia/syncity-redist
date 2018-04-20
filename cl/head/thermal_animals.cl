@@ -1,18 +1,13 @@
 CREATE "cameras"
 "cameras" SET active false
-"cameras" SET Transform position (-6 1 -50)
-"cameras" SET Transform eulerAngles (0 0 0)
-"cameras" ADD Orbit
+"cameras" SET Transform position (-6 1 -50) eulerAngles (0 0 0)
 "Canvas/Cameras/Viewport/Content" SET UI.GridLayoutGroup cellSize (1024 768)
 "Canvas" SET active true
 CREATE "cameras/cameraRGB"
 "cameras/cameraRGB" SET active false
-"cameras/cameraRGB" ADD Camera
-"cameras/cameraRGB" SET Camera near 0.3 far 1000 fieldOfView 60
-"cameras/cameraRGB" ADD Sensors.RenderCamera
+"cameras/cameraRGB" ADD Camera Sensors.RenderCamera AudioListener
+"cameras/cameraRGB" SET Camera near 0.3 far 1000 fieldOfView 60 renderingPath "UsePlayerSettings"
 "cameras/cameraRGB" SET Sensors.RenderCamera format "ARGB32" resolution (2048 1536)
-"cameras/cameraRGB" SET Camera renderingPath "UsePlayerSettings"
-"cameras/cameraRGB" ADD AudioListener
 CREATE "EnviroSky" AS "EnviroSky"
 "EnviroSky" SET EnviroSky Player "cameras" PlayerCamera "cameras/cameraRGB" GameTime.ProgressTime "None" weatherSettings.cloudTransitionSpeed 100 weatherSettings.effectTransitionSpeed 100 weatherSettings.fogTransitionSpeed 100 
 "EnviroSky" EXECUTE EnviroSky AssignAndStart "cameras/cameraRGB" "cameras/cameraRGB"
@@ -24,23 +19,17 @@ CREATE "EnviroSky" AS "EnviroSky"
 "cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
 CREATE "cameras/thermal"
 "cameras/thermal" SET active false
-"cameras/thermal" ADD Camera
+"cameras/thermal" ADD Camera Thermal.ThermalCamera UnityEngine.PostProcessing.PostProcessingBehaviour Sensors.RenderCamera CameraFilterPack_Pixelisation_DeepOilPaintHQ CameraFilterPack_Blur_Noise Thermal.GlobalTreeSettings
 "cameras/thermal" SET Camera near 0.3 far 10000 fieldOfView 60
-"cameras/thermal" ADD Sensors.RenderCamera
 "cameras/thermal" SET Sensors.RenderCamera format "ARGB32" resolution (2048 1536)
 "cameras/thermal" SET Camera renderingPath "UsePlayerSettings"
-"cameras/thermal" ADD Thermal.ThermalCamera
 "cameras/thermal" SET Thermal.ThermalCamera enabled false
-"cameras/thermal" ADD CameraFilterPack_Pixelisation_DeepOilPaintHQ
 "cameras/thermal" SET CameraFilterPack_Pixelisation_DeepOilPaintHQ enabled false
 "cameras/thermal" SET CameraFilterPack_Pixelisation_DeepOilPaintHQ _FixDistance 10.6 _Distance 0.06 _Size 0.481 Intensity 0.6 enabled true
-"cameras/thermal" ADD CameraFilterPack_Blur_Noise
 "cameras/thermal" SET CameraFilterPack_Blur_Noise Distance (2 1) enabled true
-"cameras/thermal" ADD Thermal.GlobalTreeSettings
-"cameras/thermal" SET Thermal.GlobalTreeSettings temperature 8 temperatureBandwidth 50 temperatureMedian 0 treeLeafsHeatVariance 10 enabled true
-"cameras/thermal" ADD UnityEngine.PostProcessing.PostProcessingBehaviour
+"cameras/thermal" SET Thermal.GlobalTreeSettings temperature 8 temperatureBandwidth 50 temperatureMedian 0 treeLeafsHeatVariance 10 enabled true 
 "cameras/thermal" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile "Thermal"
-"cameras/thermal" SET Thermal.ThermalCamera ambientTemperature 15 temperatureRange (9 35) maxDistanceForProbeUpdate 100 useAGC true enabled true
+"cameras/thermal" SET Thermal.ThermalCamera ambientTemperature 15 temperatureRange (9 35) maxDistanceForProbeUpdate 100 useAGC true enabled true 
 "cameras/thermal" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.grain.enabled false
 "cameras/thermal" SET active true
 CREATE "disk1"
@@ -64,8 +53,8 @@ CREATE "spawner/animal___thermal/container"
 "spawner/animal___thermal/container" ADD RandomProps.PropArea
 "spawner/animal___thermal/container" SET RandomProps.PropArea tags "animal, +thermal"
 "spawner/animal___thermal/container" SET RandomProps.PropArea async false numberOfProps 10 collisionCheck true stickToGround false 
-"spawner/animal___thermal/container" SET RandomProps.Torus innerRadius 0
 "spawner/animal___thermal/container" SET RandomProps.Torus radius 50
+"spawner/animal___thermal/container" SET RandomProps.Torus innerRadius 0
 "spawner/animal___thermal/container" SET Transform position (0 0 0) eulerAngles (0 0 0) localScale (1 1 1)
 "spawner/animal___thermal/container" SET active true
 "spawner/animal___thermal" SET active true
