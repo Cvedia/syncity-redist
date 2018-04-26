@@ -1,36 +1,28 @@
 LOAD "Forest" FROM "tile"
 "Forest" SET active false
-"Forest" ADD Segmentation.ClassInfo Segmentation.ClassGroup
-"Forest" SET Segmentation.ClassInfo itemClass "ground"
-"Forest" SET Segmentation.ClassGroup itemsClassName "ground"
-"Forest" SET Segmentation.ClassInfo itemClass "ground"
+"Forest" ADD Segmentation.Class
+"Forest" SET Segmentation.Class className "ground"
 "Forest" ADD Thermal.ThermalTerrain
 "Forest" SET Thermal.ThermalTerrain ambientOffset 0 bandwidth -15.88 median 0.094 baseMapDistance 10000 
 CREATE "cameras"
 "cameras" SET active false
 "cameras" SET Transform position (1600 246 6829) eulerAngles (31.971 60.161 0)
-"Canvas/Cameras/Viewport/Content" SET UI.GridLayoutGroup cellSize (1024 768)
-"Canvas" SET active true
 "cameras" ADD FlyCamera
 "cameras" SET FlyCamera enabled true
 CREATE "cameras/segmentation"
 "cameras/segmentation" SET active false
-"cameras/segmentation" ADD Camera Segmentation.Segmentation Segmentation.LookUpTable Sensors.RenderCamera
+"cameras/segmentation" ADD Camera SegmentationCamera Segmentation.Output.ClassColors Sensors.RenderCamera registerCamera
+"cameras/segmentation" SET SegmentationCamera transparencyCutout 0
 "cameras/segmentation" SET Camera near 0.3 far 10000 fieldOfView 90 renderingPath "UsePlayerSettings" targetTexture.filterMode "Point" 
 "cameras/segmentation" SET Sensors.RenderCamera format "ARGB32" resolution (1024 768)
-"cameras/segmentation" SET Segmentation.Segmentation minimumObjectVisibility 0 outputType "Auto" boundingBoxesExtensionAmount 0 transparencyCutout 0 
-"cameras/segmentation" EXECUTE Segmentation.Segmentation DefineClass "Void"
-"cameras/segmentation" PUSH Segmentation.Segmentation boundingBoxesFilter "Human"
-"cameras/segmentation" EXECUTE Segmentation.Segmentation DefineClass "Human"
-"cameras/segmentation" EXECUTE Segmentation.Segmentation DefineClass "ground"
-"cameras/segmentation" EXECUTE Segmentation.Segmentation DefineClass "Animal"
-"cameras/segmentation" PUSH Segmentation.LookUpTable classes "Void" "Human" "ground" "Animal"
-"cameras/segmentation" PUSH Segmentation.LookUpTable colors "black" "green" "#520000FF" "red"
-"cameras/segmentation" EXECUTE Segmentation.LookUpTable MarkTextureDirty
+"cameras/segmentation" SET Segmentation.BoundingBoxes minimumObjectVisibility 0 boundingBoxesExtensionAmount 0 minimumPixelsCount 1 
+"cameras/segmentation" ADD Segmentation.Output.FilteredBoundingBoxes
+"cameras/segmentation" EXECUTE Segmentation.Output.FilteredBoundingBoxes EnableClasses "Human"
+"cameras/segmentation" EXECUTE Segmentation.Output.ClassColors lookUpTable.SetClassColor "Human->green" "ground->#520000FF" "Animal->red"
 "cameras/segmentation" SET active true
 CREATE "cameras/cameraRGB"
 "cameras/cameraRGB" SET active false
-"cameras/cameraRGB" ADD Camera Sensors.RenderCamera
+"cameras/cameraRGB" ADD Camera registerCamera Sensors.RenderCamera
 "cameras/cameraRGB" SET Camera near 0.3 far 10000 fieldOfView 90 renderingPath "UsePlayerSettings"
 "cameras/cameraRGB" SET Sensors.RenderCamera format "ARGB32" resolution (1024 768)
 CREATE "EnviroSky" AS "EnviroSky"
@@ -44,10 +36,9 @@ CREATE "EnviroSky" AS "EnviroSky"
 "cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
 CREATE "cameras/depth"
 "cameras/depth" SET active false
-"cameras/depth" ADD Camera Sensors.RenderCamera
+"cameras/depth" ADD Camera Sensors.RenderCamera registerCamera Cameras.RenderDepthBufferSimple
 "cameras/depth" SET Camera near 0.3 far 1000 fieldOfView 90 renderingPath "DeferredShading"
 "cameras/depth" SET Sensors.RenderCamera format "RFloat" resolution (1024 768)
-"cameras/depth" ADD Cameras.RenderDepthBufferSimple
 "cameras/depth" SET Cameras.RenderDepthBufferSimple outputMode "Linear01Depth" transparencyCutout 0
 "cameras/depth" SET active true
 "Forest" ADD WindZone
@@ -55,7 +46,7 @@ CREATE "cameras/depth"
 "Forest" SET active true
 CREATE "cameras/thermal"
 "cameras/thermal" SET active false
-"cameras/thermal" ADD Camera Thermal.ThermalCamera UnityEngine.PostProcessing.PostProcessingBehaviour Sensors.RenderCamera CameraFilterPack_Pixelisation_DeepOilPaintHQ CameraFilterPack_Blur_Noise Thermal.GlobalTreeSettings
+"cameras/thermal" ADD Camera Thermal.ThermalCamera UnityEngine.PostProcessing.PostProcessingBehaviour Sensors.RenderCamera registerCamera CameraFilterPack_Pixelisation_DeepOilPaintHQ CameraFilterPack_Blur_Noise Thermal.GlobalTreeSettings
 "cameras/thermal" SET Camera near 0.3 far 10000 fieldOfView 90
 "cameras/thermal" SET Sensors.RenderCamera format "ARGB32" resolution (1024 768)
 "cameras/thermal" SET Camera renderingPath "UsePlayerSettings"
@@ -98,11 +89,11 @@ CREATE "spawner/animals/container"
 "spawner/animals/container" ADD RandomProps.PropArea
 "spawner/animals/container" SET RandomProps.PropArea tags "+animal, +thermal"
 "spawner/animals/container" SET RandomProps.PropArea async false numberOfProps 100 collisionCheck true stickToGround true 
-"spawner/animals/container" SET RandomProps.Torus innerRadius 0
 "spawner/animals/container" SET RandomProps.Torus radius 100
+"spawner/animals/container" SET RandomProps.Torus innerRadius 0
 "spawner/animals/container" SET Transform position (1696.21069 250 7000) eulerAngles (0 0 0) localScale (1 1 1)
-"spawner/animals/container" ADD Segmentation.ClassGroup
-"spawner/animals/container" SET Segmentation.ClassGroup itemsClassName "Animal"
+"spawner/animals/container" ADD Segmentation.Class
+"spawner/animals/container" SET Segmentation.Class className "Animal"
 "spawner/animals/container" SET active true
 "spawner/animals" SET active true
 CREATE "spawner/human_walker"
@@ -115,8 +106,8 @@ CREATE "spawner/human_walker/container"
 "spawner/human_walker/humanSpawner" ADD Humans.Locomotion.WalkerSpawner
 "spawner/human_walker/humanSpawner" SET Humans.Locomotion.WalkerSpawner minimumDelayBetweenSpawns 0.01 maximumDelayBetweenSpawns 0.3 minimumSpeed 0.5 maximumSpeed 5 maximumHumans 50 arriveDistance 5 genderRestriction "None" requireThermalClothing true 
 "spawner/human_walker/humanSpawner" SET Humans.Locomotion.WalkerSpawner container "spawner/human_walker/container"
-"spawner/human_walker/container" ADD Segmentation.ClassGroup
-"spawner/human_walker/container" SET Segmentation.ClassGroup itemsClassName "Human"
+"spawner/human_walker/container" ADD Segmentation.Class
+"spawner/human_walker/container" SET Segmentation.Class className "Human"
 CREATE "spawner/human_walker/points/goals/g_0"
 "spawner/human_walker/points/goals/g_0" SET Transform position (1696.21069 215.3 7000)
 "spawner/human_walker/points/goals/g_0" SET active true
@@ -150,3 +141,7 @@ CREATE "spawner/human_walker/points/spawners/s_2"
 "cameras/thermal" EXECUTE Sensors.RenderCamera RenderFrame
 "cameras/segmentation" EXECUTE Sensors.RenderCamera RenderFrame
 "cameras/depth" EXECUTE Sensors.RenderCamera RenderFrame
+"cameras/cameraRGB" SET Camera enabled true
+"cameras/thermal" SET Camera enabled true
+"cameras/segmentation" SET Camera enabled true
+"cameras/depth" SET Camera enabled true
