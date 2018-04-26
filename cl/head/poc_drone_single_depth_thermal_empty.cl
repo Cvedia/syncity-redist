@@ -1,24 +1,20 @@
 CREATE "cameras"
 "cameras" SET active false
 "cameras" SET Transform position (-6 1 -50) eulerAngles (0 0 0)
-"Canvas/Cameras/Viewport/Content" SET UI.GridLayoutGroup cellSize (1024 768)
-"Canvas" SET active true
 CREATE "cameras/segmentation"
 "cameras/segmentation" SET active false
-"cameras/segmentation" ADD Camera Segmentation.Segmentation Segmentation.LookUpTable Sensors.RenderCamera
+"cameras/segmentation" ADD Camera SegmentationCamera Segmentation.Output.ClassColors Sensors.RenderCamera registerCamera
+"cameras/segmentation" SET SegmentationCamera transparencyCutout 0
 "cameras/segmentation" SET Camera near 0.3 far 1000 fieldOfView 60 renderingPath "UsePlayerSettings" targetTexture.filterMode "Point" 
 "cameras/segmentation" SET Sensors.RenderCamera format "ARGB32" resolution (1536 1152)
-"cameras/segmentation" SET Segmentation.Segmentation minimumObjectVisibility 0 outputType "Auto" boundingBoxesExtensionAmount 0 transparencyCutout 0 
-"cameras/segmentation" EXECUTE Segmentation.Segmentation DefineClass "Void"
-"cameras/segmentation" PUSH Segmentation.Segmentation boundingBoxesFilter "drone0"
-"cameras/segmentation" EXECUTE Segmentation.Segmentation DefineClass "drone0"
-"cameras/segmentation" PUSH Segmentation.LookUpTable classes "Void" "drone0"
-"cameras/segmentation" PUSH Segmentation.LookUpTable colors "black" "red"
-"cameras/segmentation" EXECUTE Segmentation.LookUpTable MarkTextureDirty
+"cameras/segmentation" SET Segmentation.BoundingBoxes minimumObjectVisibility 0 boundingBoxesExtensionAmount 0 minimumPixelsCount 1 
+"cameras/segmentation" ADD Segmentation.Output.FilteredBoundingBoxes
+"cameras/segmentation" EXECUTE Segmentation.Output.FilteredBoundingBoxes EnableClasses "drone0"
+"cameras/segmentation" EXECUTE Segmentation.Output.ClassColors lookUpTable.SetClassColor "drone0->red"
 "cameras/segmentation" SET active true
 CREATE "cameras/cameraRGB"
 "cameras/cameraRGB" SET active false
-"cameras/cameraRGB" ADD Camera Sensors.RenderCamera AudioListener
+"cameras/cameraRGB" ADD Camera registerCamera Sensors.RenderCamera AudioListener
 "cameras/cameraRGB" SET Camera near 0.3 far 1000 fieldOfView 60 renderingPath "UsePlayerSettings"
 "cameras/cameraRGB" SET Sensors.RenderCamera format "ARGB32" resolution (1536 1152)
 CREATE "EnviroSky" AS "EnviroSky"
@@ -72,7 +68,7 @@ CREATE "spawner/city/nature/trees/container"
 "spawner/city/nature/trees/container" ADD RandomProps.Torus
 "spawner/city/nature/trees/container" ADD RandomProps.PropArea
 "spawner/city/nature/trees/container" SET RandomProps.PropArea tags "tree"
-"spawner/city/nature/trees/container" SET RandomProps.PropArea async false numberOfProps 152 collisionCheck false stickToGround false 
+"spawner/city/nature/trees/container" SET RandomProps.PropArea async false numberOfProps 160 collisionCheck false stickToGround false 
 "spawner/city/nature/trees/container" SET RandomProps.Torus radius 60
 "spawner/city/nature/trees/container" SET RandomProps.Torus innerRadius 15
 "spawner/city/nature/trees/container" SET Transform position (0 0 0) eulerAngles (0 0 0) localScale (1 1 1)
@@ -94,7 +90,7 @@ CREATE "spawner/animals/generic/container"
 "spawner/animals/generic/container" ADD RandomProps.Torus
 "spawner/animals/generic/container" ADD RandomProps.PropArea
 "spawner/animals/generic/container" SET RandomProps.PropArea tags "animal"
-"spawner/animals/generic/container" SET RandomProps.PropArea async false numberOfProps 21 collisionCheck false stickToGround false 
+"spawner/animals/generic/container" SET RandomProps.PropArea async false numberOfProps 27 collisionCheck false stickToGround false 
 "spawner/animals/generic/container" SET RandomProps.Torus radius 50
 "spawner/animals/generic/container" SET RandomProps.Torus innerRadius 5
 "spawner/animals/generic/container" SET Transform position (0 0 0) eulerAngles (0 0 0) localScale (1 1 1)
@@ -105,10 +101,10 @@ CREATE "spawner/animals/birds/container"
 "spawner/animals/birds/container" ADD RandomProps.Torus
 "spawner/animals/birds/container" ADD RandomProps.PropArea
 "spawner/animals/birds/container" SET RandomProps.PropArea tags "bird"
-"spawner/animals/birds/container" SET RandomProps.PropArea async false numberOfProps 28 collisionCheck true stickToGround false 
+"spawner/animals/birds/container" SET RandomProps.PropArea async false numberOfProps 35 collisionCheck true stickToGround false 
 "spawner/animals/birds/container" SET RandomProps.Torus radius 120
 "spawner/animals/birds/container" SET RandomProps.Torus innerRadius 0
-"spawner/animals/birds/container" SET Transform position (0 53 0) eulerAngles (0 0 0) localScale (1 1 1)
+"spawner/animals/birds/container" SET Transform position (0 28 0) eulerAngles (0 0 0) localScale (1 1 1)
 "spawner/animals/birds/container" SET active true
 "spawner/animals/birds" SET active true
 CREATE "spawner/cars/container"
@@ -151,7 +147,7 @@ CREATE ccameras/drone/drone1/drone1v "Drones/DJI_Phantom_4_Pro/DJI_Phantom_4_Pro
 "cameras/drone/drone1/drone1" SET Transform localPosition (0 0 0)
 "cameras/cameraRGB" SET Camera enabled true
 "cameras" SET Transform position (0 5 0)
-"cameras" SET Transform eulerAngles (-16.585236432367832 0 0)
+"cameras" SET Transform eulerAngles (-3.165899125046373 0 0)
 "EnviroSky" EXECUTE EnviroSky ChangeWeather "Cloudy 2"
 "EnviroSky" SET EnviroSky cloudsMode "Volume"
 "EnviroSky" SET EnviroSky fogSettings.heightFog false
