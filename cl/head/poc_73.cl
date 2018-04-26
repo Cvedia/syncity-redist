@@ -1,13 +1,11 @@
 CREATE "cameras"
 "cameras" SET active false
 "cameras" SET Transform position (-6 1 -50) eulerAngles (0 0 0)
-"Canvas/Cameras/Viewport/Content" SET UI.GridLayoutGroup cellSize (1024 768)
-"Canvas" SET active true
 CREATE "cameras/cameraRGB"
 "cameras/cameraRGB" SET active false
-"cameras/cameraRGB" ADD Camera Sensors.RenderCamera AudioListener
+"cameras/cameraRGB" ADD Camera registerCamera Sensors.RenderCamera AudioListener
 "cameras/cameraRGB" SET Camera near 0.3 far 1000 fieldOfView 60 renderingPath "UsePlayerSettings"
-"cameras/cameraRGB" SET Sensors.RenderCamera format "ARGB32" resolution (2048 1536)
+"cameras/cameraRGB" SET Sensors.RenderCamera format "ARGB32" resolution (1024 768)
 CREATE "EnviroSky" AS "EnviroSky"
 "EnviroSky" SET EnviroSky Player "cameras" PlayerCamera "cameras/cameraRGB" GameTime.ProgressTime "None" weatherSettings.cloudTransitionSpeed 100 weatherSettings.effectTransitionSpeed 100 weatherSettings.fogTransitionSpeed 100 
 "EnviroSky" EXECUTE EnviroSky AssignAndStart "cameras/cameraRGB" "cameras/cameraRGB"
@@ -19,16 +17,13 @@ CREATE "EnviroSky" AS "EnviroSky"
 "cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
 CREATE "cameras/segmentation"
 "cameras/segmentation" SET active false
-"cameras/segmentation" ADD Camera Segmentation.Segmentation Segmentation.LookUpTable Sensors.RenderCamera
+"cameras/segmentation" ADD Camera SegmentationCamera Segmentation.Output.ClassColors Sensors.RenderCamera registerCamera
+"cameras/segmentation" SET SegmentationCamera transparencyCutout 0
 "cameras/segmentation" SET Camera near 0.3 far 1000 fieldOfView 60 renderingPath "UsePlayerSettings" targetTexture.filterMode "Point" 
 "cameras/segmentation" SET Sensors.RenderCamera format "ARGB32" resolution (1024 768)
-"cameras/segmentation" SET Segmentation.Segmentation minimumObjectVisibility 0 outputType "Auto" boundingBoxesExtensionAmount 0 transparencyCutout 0 
-"cameras/segmentation" EXECUTE Segmentation.Segmentation DefineClass "Void"
-"cameras/segmentation" PUSH Segmentation.Segmentation boundingBoxesFilter "Drone"
-"cameras/segmentation" EXECUTE Segmentation.Segmentation DefineClass "Drone"
-"cameras/segmentation" PUSH Segmentation.LookUpTable classes "Void" "Drone"
-"cameras/segmentation" PUSH Segmentation.LookUpTable colors "black" "blue"
-"cameras/segmentation" EXECUTE Segmentation.LookUpTable MarkTextureDirty
+"cameras/segmentation" SET Segmentation.BoundingBoxes minimumObjectVisibility 0 boundingBoxesExtensionAmount 0 minimumPixelsCount 1 
+"cameras/segmentation" ADD Segmentation.Output.FilteredBoundingBoxes
+"cameras/segmentation" EXECUTE Segmentation.Output.FilteredBoundingBoxes EnableClasses "Drone"
 "cameras/segmentation" SET active true
 CREATE "disk1"
 "disk1" SET active false
@@ -45,7 +40,7 @@ CREATE "disk1/Cameras/segmentation"
 "disk1/Cameras/segmentation" SET Sensors.RenderCameraLink target "cameras/segmentation"
 "disk1/Cameras/segmentation" SET active true
 "disk1" SET active true
-"cameras" SET Transform position (0 7 -30)
+"cameras" SET Transform position (0 4 -30)
 CREATE "Savannah" FROM "savannah" AS "test"
 "test" SET Transform position (-5000 -180 -5000)
 "test" SET active true
@@ -77,11 +72,11 @@ CREATE "spawner/drones/Parrot_Disco/container"
 "spawner/drones/Parrot_Disco/container" ADD RandomProps.Torus
 "spawner/drones/Parrot_Disco/container" ADD RandomProps.PropArea
 "spawner/drones/Parrot_Disco/container" SET RandomProps.PropArea tags "Parrot Disco"
-"spawner/drones/Parrot_Disco/container" SET RandomProps.PropArea async false numberOfProps 47 collisionCheck true stickToGround false 
-"spawner/drones/Parrot_Disco/container" SET RandomProps.Torus radius 24
+"spawner/drones/Parrot_Disco/container" SET RandomProps.PropArea async false numberOfProps 38 collisionCheck true stickToGround false 
+"spawner/drones/Parrot_Disco/container" SET RandomProps.Torus radius 35
 "spawner/drones/Parrot_Disco/container" SET RandomProps.Torus innerRadius 5
 "spawner/drones/Parrot_Disco/container" SET Transform position (0 0 0) eulerAngles (0 0 0) localScale (1 1 1)
-"spawner/drones/Parrot_Disco/container" ADD Segmentation.ClassGroup
-"spawner/drones/Parrot_Disco/container" SET Segmentation.ClassGroup itemsClassName "Drone"
+"spawner/drones/Parrot_Disco/container" ADD Segmentation.Class
+"spawner/drones/Parrot_Disco/container" SET Segmentation.Class className "Drone"
 "spawner/drones/Parrot_Disco/container" SET active true
 "spawner/drones/Parrot_Disco" SET active true
