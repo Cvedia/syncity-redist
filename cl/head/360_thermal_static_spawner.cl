@@ -1,15 +1,13 @@
 CREATE "cameras"
 "cameras" SET active false
 "cameras" SET Transform position (-6 1 -50) eulerAngles (0 0 0)
-"Canvas/Cameras/Viewport/Content" SET UI.GridLayoutGroup cellSize (1024 768)
-"Canvas" SET active true
 "cameras" ADD FlyCamera
 "cameras" SET FlyCamera enabled true
 CREATE "cameras/cameraRGB"
 "cameras/cameraRGB" SET active false
-"cameras/cameraRGB" ADD Camera Sensors.RenderCamera AudioListener
+"cameras/cameraRGB" ADD Camera registerCamera Sensors.RenderCamera AudioListener
 "cameras/cameraRGB" SET Camera near 0.3 far 1000 fieldOfView 60 renderingPath "UsePlayerSettings"
-"cameras/cameraRGB" SET Sensors.RenderCamera format "ARGB32" resolution (2048 1536)
+"cameras/cameraRGB" SET Sensors.RenderCamera format "ARGB32" resolution (1024 768)
 CREATE "EnviroSky" AS "EnviroSky"
 "EnviroSky" SET EnviroSky Player "cameras" PlayerCamera "cameras/cameraRGB" GameTime.ProgressTime "None" weatherSettings.cloudTransitionSpeed 100 weatherSettings.effectTransitionSpeed 100 weatherSettings.fogTransitionSpeed 100 
 "EnviroSky" EXECUTE EnviroSky AssignAndStart "cameras/cameraRGB" "cameras/cameraRGB"
@@ -21,22 +19,20 @@ CREATE "EnviroSky" AS "EnviroSky"
 "cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
 CREATE "cameras/segmentation"
 "cameras/segmentation" SET active false
-"cameras/segmentation" ADD Camera Segmentation.Segmentation Segmentation.LookUpTable Sensors.RenderCamera
+"cameras/segmentation" ADD Camera SegmentationCamera Segmentation.Output.ClassColors Sensors.RenderCamera registerCamera
+"cameras/segmentation" SET SegmentationCamera transparencyCutout 0
 "cameras/segmentation" SET Camera near 0.3 far 1000 fieldOfView 60 renderingPath "UsePlayerSettings" targetTexture.filterMode "Point" 
 "cameras/segmentation" SET Sensors.RenderCamera format "ARGB32" resolution (1024 768)
-"cameras/segmentation" SET Segmentation.Segmentation minimumObjectVisibility 0 outputType "Auto" boundingBoxesExtensionAmount 0 transparencyCutout 0 
-"cameras/segmentation" EXECUTE Segmentation.Segmentation DefineClass "Void"
-"cameras/segmentation" PUSH Segmentation.Segmentation boundingBoxesFilter "Drone"
-"cameras/segmentation" EXECUTE Segmentation.Segmentation DefineClass "Drone"
-"cameras/segmentation" PUSH Segmentation.LookUpTable classes "Void" "Drone"
-"cameras/segmentation" PUSH Segmentation.LookUpTable colors "black" "red"
-"cameras/segmentation" EXECUTE Segmentation.LookUpTable MarkTextureDirty
+"cameras/segmentation" SET Segmentation.BoundingBoxes minimumObjectVisibility 0 boundingBoxesExtensionAmount 0 minimumPixelsCount 1 
+"cameras/segmentation" ADD Segmentation.Output.FilteredBoundingBoxes
+"cameras/segmentation" EXECUTE Segmentation.Output.FilteredBoundingBoxes EnableClasses "Drone"
+"cameras/segmentation" EXECUTE Segmentation.Output.ClassColors lookUpTable.SetClassColor "Drone->red"
 "cameras/segmentation" SET active true
 CREATE "cameras/thermal"
 "cameras/thermal" SET active false
-"cameras/thermal" ADD Camera Thermal.ThermalCamera UnityEngine.PostProcessing.PostProcessingBehaviour Sensors.RenderCamera CameraFilterPack_Pixelisation_DeepOilPaintHQ CameraFilterPack_Blur_Noise
+"cameras/thermal" ADD Camera Thermal.ThermalCamera UnityEngine.PostProcessing.PostProcessingBehaviour Sensors.RenderCamera registerCamera CameraFilterPack_Pixelisation_DeepOilPaintHQ CameraFilterPack_Blur_Noise
 "cameras/thermal" SET Camera near 0.3 far 1000 fieldOfView 60
-"cameras/thermal" SET Sensors.RenderCamera format "ARGB32" resolution (2048 1536)
+"cameras/thermal" SET Sensors.RenderCamera format "ARGB32" resolution (1024 768)
 "cameras/thermal" SET Camera renderingPath "UsePlayerSettings"
 "cameras/thermal" SET Thermal.ThermalCamera enabled false
 "cameras/thermal" SET CameraFilterPack_Pixelisation_DeepOilPaintHQ enabled false
@@ -77,8 +73,8 @@ CREATE "spawner/drone/container"
 "spawner/drone/container" SET RandomProps.Torus innerRadius 0
 "spawner/drone/container" SET RandomProps.Torus radius 15
 "spawner/drone/container" SET Transform position (-6 0 -9) eulerAngles (0 0 0) localScale (1 1 1)
-"spawner/drone/container" ADD Segmentation.ClassGroup
-"spawner/drone/container" SET Segmentation.ClassGroup itemsClassName "Drone"
+"spawner/drone/container" ADD Segmentation.Class
+"spawner/drone/container" SET Segmentation.Class className "Drone"
 "spawner/drone/container" SET active true
 "spawner/drone" SET active true
 "cameras" SET Transform position (-1.3375 6.09948 -15.169) eulerAngles (48.75 -35.75 0) 
