@@ -1,15 +1,13 @@
 CREATE "cameras"
 "cameras" SET active false
 "cameras" SET Transform position (-6 1 -50) eulerAngles (0 0 0)
-"Canvas/Cameras/Viewport/Content" SET UI.GridLayoutGroup cellSize (1024 768)
-"Canvas" SET active true
 "cameras" ADD FlyCamera
 "cameras" SET FlyCamera enabled true
 CREATE "cameras/cameraRGB0"
 "cameras/cameraRGB0" SET active false
-"cameras/cameraRGB0" ADD Camera Sensors.RenderCamera AudioListener
+"cameras/cameraRGB0" ADD Camera registerCamera Sensors.RenderCamera AudioListener
 "cameras/cameraRGB0" SET Camera near 0.3 far 1000 fieldOfView 60 renderingPath "UsePlayerSettings"
-"cameras/cameraRGB0" SET Sensors.RenderCamera format "ARGB32" resolution (2048 1536)
+"cameras/cameraRGB0" SET Sensors.RenderCamera format "ARGB32" resolution (1024 768)
 CREATE "EnviroSky" AS "EnviroSky"
 "EnviroSky" SET EnviroSky Player "cameras" PlayerCamera "cameras/cameraRGB0" GameTime.ProgressTime "None" weatherSettings.cloudTransitionSpeed 100 weatherSettings.effectTransitionSpeed 100 weatherSettings.fogTransitionSpeed 100 
 "EnviroSky" EXECUTE EnviroSky AssignAndStart "cameras/cameraRGB0" "cameras/cameraRGB0"
@@ -17,33 +15,33 @@ CREATE "EnviroSky" AS "EnviroSky"
 "cameras/cameraRGB0" SET active true
 CREATE "cameras/cameraRGB1"
 "cameras/cameraRGB1" SET active false
-"cameras/cameraRGB1" ADD Camera Sensors.RenderCamera
+"cameras/cameraRGB1" ADD Camera registerCamera Sensors.RenderCamera
 "cameras/cameraRGB1" SET Camera near 0.3 far 1000 fieldOfView 60 renderingPath "UsePlayerSettings"
-"cameras/cameraRGB1" SET Sensors.RenderCamera format "ARGB32" resolution (2048 1536)
+"cameras/cameraRGB1" SET Sensors.RenderCamera format "ARGB32" resolution (1024 768)
 "cameras/cameraRGB1" SET active true
 CREATE "cameras/cameraRGB2"
 "cameras/cameraRGB2" SET active false
-"cameras/cameraRGB2" ADD Camera Sensors.RenderCamera
+"cameras/cameraRGB2" ADD Camera registerCamera Sensors.RenderCamera
 "cameras/cameraRGB2" SET Camera near 0.3 far 1000 fieldOfView 60 renderingPath "UsePlayerSettings"
-"cameras/cameraRGB2" SET Sensors.RenderCamera format "ARGB32" resolution (2048 1536)
+"cameras/cameraRGB2" SET Sensors.RenderCamera format "ARGB32" resolution (1024 768)
 "cameras/cameraRGB2" SET active true
 CREATE "cameras/cameraRGB3"
 "cameras/cameraRGB3" SET active false
-"cameras/cameraRGB3" ADD Camera Sensors.RenderCamera
+"cameras/cameraRGB3" ADD Camera registerCamera Sensors.RenderCamera
 "cameras/cameraRGB3" SET Camera near 0.3 far 1000 fieldOfView 60 renderingPath "UsePlayerSettings"
-"cameras/cameraRGB3" SET Sensors.RenderCamera format "ARGB32" resolution (2048 1536)
+"cameras/cameraRGB3" SET Sensors.RenderCamera format "ARGB32" resolution (1024 768)
 "cameras/cameraRGB3" SET active true
 CREATE "cameras/cameraRGB4"
 "cameras/cameraRGB4" SET active false
-"cameras/cameraRGB4" ADD Camera Sensors.RenderCamera
+"cameras/cameraRGB4" ADD Camera registerCamera Sensors.RenderCamera
 "cameras/cameraRGB4" SET Camera near 0.3 far 1000 fieldOfView 60 renderingPath "UsePlayerSettings"
-"cameras/cameraRGB4" SET Sensors.RenderCamera format "ARGB32" resolution (2048 1536)
+"cameras/cameraRGB4" SET Sensors.RenderCamera format "ARGB32" resolution (1024 768)
 "cameras/cameraRGB4" SET active true
 CREATE "cameras/cameraRGB5"
 "cameras/cameraRGB5" SET active false
-"cameras/cameraRGB5" ADD Camera Sensors.RenderCamera
+"cameras/cameraRGB5" ADD Camera registerCamera Sensors.RenderCamera
 "cameras/cameraRGB5" SET Camera near 0.3 far 1000 fieldOfView 60 renderingPath "UsePlayerSettings"
-"cameras/cameraRGB5" SET Sensors.RenderCamera format "ARGB32" resolution (2048 1536)
+"cameras/cameraRGB5" SET Sensors.RenderCamera format "ARGB32" resolution (1024 768)
 "cameras/cameraRGB5" SET active true
 "cameras" SET active true
 "cameras/cameraRGB0" ADD UnityEngine.PostProcessing.PostProcessingBehaviour
@@ -104,8 +102,8 @@ CREATE "spawner/drone/container"
 "spawner/drone/container" SET RandomProps.Torus innerRadius 0
 "spawner/drone/container" SET RandomProps.Torus radius 15
 "spawner/drone/container" SET Transform position (-6 0 -9) eulerAngles (0 0 0) localScale (1 1 1)
-"spawner/drone/container" ADD Segmentation.ClassGroup
-"spawner/drone/container" SET Segmentation.ClassGroup itemsClassName "Drone"
+"spawner/drone/container" ADD Segmentation.Class
+"spawner/drone/container" SET Segmentation.Class className "Drone"
 "spawner/drone/container" SET active true
 "spawner/drone" SET active true
 "cameras/cameraRGB0" ADD LCP
