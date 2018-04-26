@@ -88,10 +88,10 @@ def initTelnet(ip, port, retries=3, wait=.5, timeout=30, ka_interval=3, ka_fail=
 				sys.exit(0)
 			
 			if int(settings._simulator_version.replace('.', '')[0:10]) < int(settings._simulator_min_version.replace('.', '')[0:10]):
-				output('The version of the simulator you\'re connecting with is deprecated and most likely not compatible with the version of this SDK.', 'ERROR')
-				output('You should use a old branch of the SDK or update the simulator.', 'ERROR')
-				output('SDK minimum supported simulator version: {}'.format(settings._simulator_min_version), 'ERROR')
-				output('Simulator version: {}'.format(settings._simulator_version), 'ERROR')
+				output('The version of the simulator you\'re connecting with is deprecated and most likely not compatible with the version of this SDK.', 'ERROR', permissive=True)
+				output('You should use a old branch of the SDK or update the simulator.', 'ERROR', permissive=True)
+				output('SDK minimum supported simulator version: {}'.format(settings._simulator_min_version), 'ERROR', permissive=True)
+				output('Simulator version: {}'.format(settings._simulator_version), 'ERROR', permissive=True)
 			
 			if settings.skip_init == True:
 				ouptut('Skipping init sequence')
@@ -108,18 +108,19 @@ def initTelnet(ip, port, retries=3, wait=.5, timeout=30, ka_interval=3, ka_fail=
 				
 				sendData([
 					'"Config.instance" SET physicsEnabled {}'.format('false' if settings.enable_physics == False else 'true'),
-					'"Canvas/ConsolePanel" SET active {}'.format('false' if settings.enable_console_log == False else 'true')
+					'"Canvas/ConsolePanel" SET active {}'.format('false' if settings.enable_console_log == False else 'true'),
+					'{}'.format('DELETE "Canvas"' if settings.enable_canvas == False else '')
 				])
 				
 				if settings.seed_api:
 					setAPISeed(settings.seed_api)
 			break
 		except Exception as e:
-			output('Error connecting: {}'.format(e), 'ERROR')
+			output('Error connecting: {}'.format(e), 'ERROR', permissive=True)
 			retry += 1
 			
 			if retry >= retries:
-				output('Ran out of retries, unable to connect. Aborting!')
+				output('Ran out of retries, unable to connect. Aborting!', 'ERROR')
 				sys.exit(1)
 			else:
 				output('Waiting for retry #{} ...'.format(retry))
@@ -222,7 +223,7 @@ def shouldLog(level):
 	
 	return False
 
-def output(s, level='INFO'):
+def output(s, level='INFO', permissive=False):
 	"""
 	Prints data to terminal with fancy formatting and ascii assurance.
 	
@@ -265,7 +266,7 @@ def output(s, level='INFO'):
 		except:
 			pass
 	
-	if settings.abort_on_error == True and (level == 'ERROR' or level == 'WARN' or level == 'WARNING'):
+	if permissive == False and settings.abort_on_error == True and (level == 'ERROR' or level == 'WARN' or level == 'WARNING'):
 		output('Aborting on error!')
 		sys.exit(1)
 	

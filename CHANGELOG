@@ -3,6 +3,25 @@ This change log follows YYMMDD timestamps which are also the version number for
 both the SDK and the simulator.
 --------------------------------------------------------------------------------
 
+180425:
+
+- New segmentation api implementation and profiles
+- New UI implementation (enabled by default)
+- Added fallback to old canvas simple UI
+- Finalized camera method changes for build `ADD` and `SET`
+- Highway CL scripts review
+- CL script refresh
+- Minimum simulator version bump
+- Unity 2018 upgrade
+- Disk module fixes
+- ROS no longer crashes the simulator when the component is removed
+- Several optimizations
+- Memory leak fixed
+- Missing boundingbox problems fixed
+- Segmentation fixes for mesh types
+- Segmentation refactoring
+- Segmentation pixel filtering
+
 180412:
 
 - Fixed issue with spawners TypeErrors

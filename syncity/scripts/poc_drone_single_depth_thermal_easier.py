@@ -280,6 +280,8 @@ def run():
 			'"cameras/spawner/drones/container" EXECUTE RandomProps.PropArea Shuffle',
 			# move drone container a bit further away
 			'"cameras/spawner" SET Transform localPosition (0 0 {}~{})'.format(.5, 1.5),
+			# randomize prop rotations on all axis
+			'"cameras/spawner/drones/container" EXECUTE RandomProps.PropArea RandomizeRotations (0 360) (0 360) (0 360)',
 			# enable rendering for motion blur
 			'"{}" SET Camera enabled true'.format(mycams[0]) if blurring_method != 'embedded' else ''
 		])

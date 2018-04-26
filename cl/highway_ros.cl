@@ -1,6 +1,9 @@
 CREATE "ROS2"
 "ROS2" SET active false
 "ROS2" ADD Sensors.ROS2
+
+// IMU data broadcast and write fields for controlling the car -----------------
+
 CREATE "ROS2/throttle"
 "ROS2/throttle" ADD Sensors.WriteFieldLink
 "ROS2/throttle" SET Sensors.WriteFieldLink topicName "syncity/throttle" target "mainCar" componentName "VPCustomInput" fieldName "externalThrottle" intervalSeconds 0.5 
@@ -37,6 +40,9 @@ CREATE "ROS2/rotation"
 "ROS2/rotation" ADD Sensors.ReadFieldLink
 "ROS2/rotation" SET Sensors.ReadFieldLink topicName "syncity/rotation" target "mainCar" componentName "Transform" fieldName "eulerAngles" intervalSeconds 0.5 onChange true 
 "ROS2/rotation" SET active true
+
+// broadcast cameras -----------------------------------------------------------
+
 CREATE "ROS2/front_camera"
 "ROS2/front_camera" ADD Sensors.ReadFieldLink
 "ROS2/front_camera" SET Sensors.ReadFieldLink topicName "syncity/front_camera" target "mainCar/cameras/Front" componentName "Camera" fieldName "targetTexture" intervalSeconds 1 onChange true 
@@ -52,5 +58,8 @@ CREATE "ROS2/depth_camera"
 "ROS2/depth_camera" SET Sensors.ReadFieldLink topicName "syncity/depth_camera" target "mainCar/cameras/Depth" componentName "Camera" fieldName "targetTexture" intervalSeconds 1 onChange true 
 "ROS2/depth_camera" SET active true
 "mainCar/cameras/Depth" SET Sensors.RenderCamera alwaysOn true
+
+// -----------------------------------------------------------------------------
+
 "ROS2" SET active true
-NOOP
+

@@ -47,10 +47,8 @@ def run():
 		common.sendData([
 			'LOAD "Forest" FROM "tile"',
 			'"Forest" SET active false',
-			'"Forest" ADD Segmentation.ClassInfo Segmentation.ClassGroup',
-			'"Forest" SET Segmentation.ClassInfo itemClass "{}"'.format('ground'),
-			'"Forest" SET Segmentation.ClassGroup itemsClassName "{}"'.format('ground'),
-			'"Forest" SET Segmentation.ClassInfo itemClass "ground"'
+			'"Forest" ADD Segmentation.Class',
+			'"Forest" SET Segmentation.Class className  "{}"'.format('ground')
 		])
 		
 		helpers.addThermalTerrain(
@@ -122,6 +120,7 @@ def run():
 	
 	# warm up
 	helpers.doRender(mycams)
+	helpers.enableAll(mycams, 'Camera')
 	
 	if settings.setup_only == True:
 		return

@@ -10,7 +10,10 @@ import json
 
 from . import common, settings_manager, unity_vars
 
-# some hardcoded values, this depends on the asset packages you've been given,
+settings = settings_manager.Singleton()
+
+### HARCODED VALUES - This should be used only by the example scripts ##########
+
 # this should be used only for the examples
 ground_lst = [ 'Intersection', 'Grass', 'Asphalt', 'RoadSection2', 'DirtBrown', 'ForestFloor', 'Concrete', 'RoadSection3', 'RoadSection' ]
 cars_lst = [ 'auditts','audi_a2','audi_q7','audi_s3','bentley_arnage','bmw','bmw6_series_650i','bmw_760li','bmw_m3','bmw_m5','bmw_m_limousine','cadillac_escalade_ext','caterpillar_bulldozer_d9','chevrolet_cruze_2011','chevrolet_s10','chevrolet_tornado','fiat500_new','fiat_131','fiat_500','ford_crown_victoria_taxi','ford_fiesta','ford_fire_department','ford_focus','ford_mustang_gt_eleanor','ford_shelby_cobra','ford_transit_jumbo','freightliner_aerodyne','honda_civic_sedan','hummer_h2','international_ambulance_fdny','international_school_bus','kenworth_t600','lamborghini_gallardo','lancia_delta','mack_dumper','mercedes_class_g_500','mercedes_slk','mercedes_vario_brinks','mini_coopers','nissan_elgrand','nissan_murano','peugeot_406','rangerover','renault_420','renault_g210','renault_megane','renault_trm_2000','scania_400_concretemixer','scania_450_dumpster_hauler','truck_v010_008','volvo_th5','vw_caravelle','vw_golf_v','vw_touareg','vw_touran_2007','vw_transporter' ]
@@ -32,7 +35,7 @@ drones_lst = [
 # lite asset package
 drones_lite_lst = [ 'Drones/buzz/buzz', 'Drones/splinter/splinter', 'Drones/red/red', 'Drones/white/white' ]
 
-settings = settings_manager.Singleton()
+################################################################################
 
 def globalCameraSetup(
 	labelRoot='cameras', canvasWidth=1024, canvasHeight=768, canvas=None,
@@ -57,15 +60,14 @@ def globalCameraSetup(
 	flycam (bool): Adds a fly cam component that will move any nested cameras among with it
 	"""
 	if canvas == None:
-		if settings.disable_canvas:
-			canvas = False
-		else:
+		if settings.enable_canvas:
 			canvas = True
+		else:
+			canvas = False
 	
 	if canvas == True:
 		canvas = 'true'
 	else:
-		common.output('Warning: Canvas has been disabled, you will not see output on simulator')
 		canvas = 'false'
 	
 	s = []
@@ -97,11 +99,12 @@ def globalCameraSetup(
 	if len(s) > 0:
 		buf.append('"{}" SET Orbit {}'.format(labelRoot, ' '.join(s)))
 	
-	buf.extend([
-		# resize camera display on app, this is relative to the size of the window
-		'"Canvas/Cameras/Viewport/Content" SET UI.GridLayoutGroup cellSize ({} {})'.format(canvasWidth, canvasHeight),
-		'"Canvas" SET active {}'.format(canvas)
-	])
+	if settings.enable_canvas == True:
+		buf.extend([
+			# resize camera display on app, this is relative to the size of the window
+			'"Canvas/Cameras/Viewport/Content" SET UI.GridLayoutGroup cellSize ({} {})'.format(canvasWidth, canvasHeight),
+			'"Canvas" SET active {}'.format(canvas)
+		])
 	
 	if flycam:
 		buf.extend([
@@ -112,28 +115,36 @@ def globalCameraSetup(
 	common.sendData(buf, read=False)
 	settings._obj.append(labelRoot)
 
+### CAMERA TYPE SETUP METHODS ##################################################
+
 def addCameraDepth(
-	width=2048, height=1536,
+	width=1024, height=768,
 	label='cameras/depth',
 	fov=60,
 	clippingNear=0.3,
 	clippingFar=1000,
 	depthBuffer='simple',
-	transparencyCutout=0
+	transparencyCutout=0,
+	registerCamera=True
 ):
 	"""
 	Creates a depth camera
 	
 	# Arguments
 	
-	width (int): Resolution width, defaults to `2048`
-	height (int): Resolution height, defaults to `1536`
+	width (int): Resolution width, defaults to `1024`
+	height (int): Resolution height, defaults to `768`
 	label (string|list): Game object path, defaults to `cameras/depth` - This should follow `labelRoot` from `globalCameraSetup`
 	fov (int): Field of view, defaults to `60`
 	clippingNear (float): Near clipping distance, defaults to `0.3` - Objects closer than this distance won't appear
 	clippingFar (float): Far clipping distance, defaults to `1000` - Objects further from this distance won't appear
 	depthBuffer (string): Defines a specific depth buffer configuration to use, if not set fallsback to default, default `None`
 	transparencyCutout (float): Defines a cutout percentage for transparent objects, defaults to `0` that will show transparent objects at full extent, when set to 1 will hide them completly.
+	registerCamera (bool): Register camera on the UI making it visible
+	
+	# Note
+	
+	Different from the other cameras, depth camera must have a renderCamera in order to work.
 	
 	"""
 	
@@ -143,25 +154,31 @@ def addCameraDepth(
 	buf = []
 	
 	for l in label:
-		buf.extend([
-			'CREATE "{}"'.format(l),
-			'"{}" SET active false'.format(l),
-			'"{}" ADD Camera Sensors.RenderCamera'.format(l),
-			'"{}" SET Camera near {} far {} fieldOfView {} renderingPath "DeferredShading"'.format(l, clippingNear, clippingFar, fov),
-			'"{}" SET Sensors.RenderCamera format "RFloat" resolution ({} {})'.format(l, width, height)
-		])
+		addStack = [ 'Camera', 'Sensors.RenderCamera' ]
+		b = []
+		
+		if registerCamera:
+			addStack.append('registerCamera')
 		
 		if depthBuffer == None:
-			buf.append('"{}" ADD Sensors.Lidar_Internal.RenderDepthBufferOld'.format(l) if settings.use_old_depth_buffer else '"{}" ADD CameraDepthOutput'.format(l))
+			addStack.append('Sensors.Lidar_Internal.RenderDepthBufferOld' if settings.use_old_depth_buffer else 'CameraDepthOutput')
 		elif depthBuffer == 'simple':
-			buf.extend([
-				'"{}" ADD Cameras.RenderDepthBufferSimple'.format(l),
+			addStack.append('Cameras.RenderDepthBufferSimple')
+			b.extend([
 				'"{}" SET Cameras.RenderDepthBufferSimple outputMode "Linear01Depth" transparencyCutout {}'.format(l, transparencyCutout)
 				#'"{}" Cameras.RenderDepthBufferSimple drawTransparentObjectsDepth false'.format(l)
 			])
 		else:
 			raise 'Unknown depthBuffer: {}'.format(depthBuffer)
 		
+		buf.extend([
+			'CREATE "{}"'.format(l),
+			'"{}" SET active false'.format(l),
+			'"{}" ADD {}'.format(l, ' '.join(addStack)),
+			'"{}" SET Camera near {} far {} fieldOfView {} renderingPath "DeferredShading"'.format(l, clippingNear, clippingFar, fov),
+			'"{}" SET Sensors.RenderCamera format "RFloat" resolution ({} {})'.format(l, width, height)
+		])
+		buf.extend(b)
 		buf.append('"{}" SET active true'.format(l))
 	
 	common.sendData(buf, read=False)
@@ -169,7 +186,7 @@ def addCameraDepth(
 	settings._obj.extend(label)
 
 def addCameraRGB(
-	width=2048, height=1536, audio=True, envirosky=None, flycam=False,
+	width=1024, height=768, audio=True, envirosky=None, flycam=False,
 	labelRoot='cameras', label='cameras/cameraRGB', pp=None,
 	renderingPath=4, textureFormat=4,
 	
@@ -179,15 +196,15 @@ def addCameraRGB(
 	
 	enviroskyCloudTransitionSpeed=100, enviroskyEffectTransitionSpeed=100,
 	enviroskyFogTransitionSpeed=100, enviroskyProgressTime='None',
-	renderCamera=True
+	renderCamera=True, registerCamera=True
 ):
 	"""
 	Creates a RGB camera with optional postprocessing options
 	
 	# Arguments
 	
-	width (int): Resolution width, defaults to `2048`
-	height (int): Resolution height, defaults to `1536`
+	width (int): Resolution width, defaults to `1024`
+	height (int): Resolution height, defaults to `768`
 	audio (bool): Audio listener, defaults to `True` - You must have at one audio listener on the scene
 	envirosky (bool): Enables envirosky stack, defaults to `None`
 	flycam (bool): Enables wasd interactive controllable fly cam, defaults to `False`
@@ -204,6 +221,7 @@ def addCameraRGB(
 	enviroskyFogTransitionSpeed (int): Defines fog deposition speed, defaults to `100` which is instant
 	enviroskyProgressTime (string): Defines time progression, defaults to `None` avoiding time to change
 	renderCamera (bool): Binds a renderCamera component allowing for disk exports, defaults to `True`
+	registerCamera (bool): Register camera on the UI making it visible
 	
 	"""
 	if envirosky == None:
@@ -217,12 +235,17 @@ def addCameraRGB(
 	
 	buf = []
 	idx = 0
+	
 	for l in label:
 		addStack = [ 'Camera' ]
 		b = []
 		
+		if registerCamera:
+			addStack.append('registerCamera')
+		
 		if renderCamera:
 			addStack.append('Sensors.RenderCamera')
+			
 			b.extend([
 				# '"{}" SET Sensors.RenderCamera sRGB true'.format(l),
 				'"{}" SET Sensors.RenderCamera format "{}" resolution ({} {})'.format(l, unity_vars.textureFormat[textureFormat], width, height),
@@ -279,8 +302,137 @@ def addCameraRGB(
 	
 	settings._obj.append(label)
 
+def addCameraSeg(
+	width=1024, height=768, segments=None,
+	outputType='ClassColors',
+	label='cameras/segmentation',
+	fov=60,
+	clippingNear=0.3,
+	clippingFar=1000,
+	boundingBoxesExtensionAmount=0,
+	renderingPath=4,
+	textureFormat=4,
+	minimumVisibility=0,
+	renderCamera=True,
+	registerCamera=True,
+	lookupTable=True,
+	transparencyCutout=0,
+	minimumPixelsCount=1
+):
+	"""
+	Creates a Segmentation camera
+	
+	# Arguments
+	
+	width (int): Resolution width, defaults to `1024`
+	height (int): Resolution height, defaults to `768`
+	segments (list|string): Defines one or more classes this camera will see, defaults to `None`
+	outputType (string): defines how output should be shaped, possible options: `ClassIds`, `InstanceIds`, `ClassColors`, `Raw`, defaults to `ClassColors`
+	label (string|list): Game object path, defaults to `cameras/segmentation` - This should follow `labelRoot` from `globalCameraSetup`
+	fov (int): Field of view, defaults to `60`
+	clippingNear (float): Near clipping distance, defaults to `0.3` - Objects closer than this distance won't appear
+	clippingFar (float): Far clipping distance, defaults to `1000` - Objects further from this distance won't appear
+	boundingBoxesExtensionAmount (float): Defines the bounding box scale up / down in %, defaults to `0`.
+	renderingPath (int): Defines rendering path, defaults to `4` - This is defined on `unity_vars` lookup table
+	textureFormat (int): Defines texture format, defaults to `4` - This is defined on `unity_vars` lookup table
+	renderCamera (bool): Binds a renderCamera component allowing for disk exports, defaults to `True`
+	registerCamera (bool): Register camera on the UI making it visible
+	lookupTable (list|bool|string): Binds a color to a class, this is essential for outputting pixel dense images, this is an array of arrays like `[ [ Car , red ] , [ Person, blue ] .. ]`; Defaults to `True` which will automatically populate the segmentation lookup table based on the segments sent. If this is set as `string` we will assume it's a existing profile.
+	minimumVisibility (float): Defines minimum visibility of object in % (0 - 1), objects with less than % of it's total size visible won't appear on the segmentation maps neither yeild bounding boxes, defaults to `0`
+	transparencyCutout (float): Defines a cutout percentage for transparent objects, defaults to `0` that will show transparent objects at full extent, when set to 1 will hide them completly.
+	minimumPixelsCount (int): Defines a minimum number of pixels to be active in order to create a bounding box and show a segmentation color
+	"""
+	
+	if not isinstance(label, list):
+		label = [ label ]
+	
+	buf = []
+	
+	for l in label:
+		# addStack = [ 'Camera', 'RenderToTexture', 'SegmentationCamera', 'Segmentation.Output.{}'.format(outputType) ]
+		addStack = [ 'Camera', 'SegmentationCamera', 'Segmentation.Output.{}'.format(outputType) ]
+		b = []
+		
+		if renderCamera:
+			addStack.append('Sensors.RenderCamera')
+			b.append('"{}" SET Sensors.RenderCamera format "{}" resolution ({} {})'.format(l, unity_vars.textureFormat[textureFormat], width, height))
+		if registerCamera:
+			addStack.append('registerCamera')
+		
+		b.extend([
+			'''"{}" SET Segmentation.BoundingBoxes
+				minimumObjectVisibility {}
+				boundingBoxesExtensionAmount {}
+				minimumPixelsCount {}
+			'''.format(l, minimumVisibility, boundingBoxesExtensionAmount, minimumPixelsCount),
+			
+			# '"{}" EXECUTE Segmentation.Segmentation DefineClass "Void"'.format(l)
+		])
+		
+		if segments != None:
+			b.extend(addCameraSegFilter(segments, label=l, ret=True))
+		
+		classes = []
+		colors = []
+		
+		# adds random colors for the defined segments
+		if lookupTable == True and segments != None:
+			idx = 0
+			
+			for i in segments:
+				if idx > len(unity_vars.colors):
+					color = '"{}"'.format(getRandomColor())
+				else:
+					color = unity_vars.colors[idx]
+				
+				classes.append('"{}"'.format(i))
+				colors.append('"{}"'.format(color))
+				
+				# b.append('"{}" EXECUTE Segmentation.Segmentation DefineClass "{}"'.format(l, i))
+				idx += 1
+		# assumes it's a [ <class>, <color> ]
+		elif isinstance(lookupTable, list):
+			c = []
+			
+			for i in lookupTable:
+				c.append('"{}->{}"'.format(i[0], i[1]))
+				# classes.append('"{}"'.format(i[0]))
+				# colors.append('"{}"'.format(i[1]))
+				# b.append('"{}" EXECUTE Segmentation.Segmentation DefineClass "{}"'.format(l, i[0]))
+			
+			b.append('"{}" EXECUTE Segmentation.Output.{} lookUpTable.SetClassColor {}'.format(l, outputType, ' '.join(c)))
+		# assumes it's a profile name
+		elif isinstance(lookupTable, str):
+			b.append('"{}" SET Segmentation.Output.{} lookUpTable "{}"'.format(l, outputType, lookupTable))
+		
+		buf.extend([
+			'CREATE "{}"'.format(l),
+			'"{}" SET active false'.format(l),
+			'"{}" ADD {}'.format(l, ' '.join(addStack)),
+			'"{}" SET SegmentationCamera transparencyCutout {}'.format(l, transparencyCutout),
+			'''"{}" SET Camera
+				near {} far {} fieldOfView {}
+				renderingPath "{}" targetTexture.filterMode "Point"
+			'''.format(l, clippingNear, clippingFar, fov, unity_vars.renderingPath[renderingPath]),
+			# is this really needed?
+			# '"{}" EXECUTE RenderToTexture SetTextureOnCamera "{}"'.format(l, l),
+			# '"{}" EXECUTE RenderToTexture SetTextureOnImage "{}"'.format(l, 'Canvas/RawImage')
+		])
+		buf.extend(b)
+		
+		buf.extend([
+			# '"{}" PUSH Segmentation.LookUpTable classes "Void" {}'.format(l, ' '.join(classes)),
+			# '"{}" PUSH Segmentation.LookUpTable colors "black" {}'.format(l, ' '.join(colors)),
+			# '"{}" EXECUTE Segmentation.LookUpTable MarkTextureDirty'.format(l),
+			'"{}" SET active true'.format(l)
+		])
+	
+	common.sendData(buf, read=False)
+	common.flushBuffer()
+	settings._obj.append(label)
+
 def addCameraThermal(
-	width=2048, height=1536, audio=False,
+	width=1024, height=768, audio=False,
 	label='cameras/thermal',
 	renderingPath=4, textureFormat=4,
 	
@@ -303,15 +455,16 @@ def addCameraThermal(
 	blur=True,
 	blurNoise=[2, 1],
 	
-	renderCamera=True
+	renderCamera=True,
+	registerCamera=True
 ):
 	"""
 	Creates a Thermal camera with special postprocessing features
 	
 	# Arguments
 	
-	width (int): Resolution width, defaults to `2048`
-	height (int): Resolution height, defaults to `1536`
+	width (int): Resolution width, defaults to `1024`
+	height (int): Resolution height, defaults to `768`
 	audio (bool): Audio listener, defaults to `False` - You must have at one audio listener on the scene
 	label (string|list): Game object path, defaults to `cameras/cameraRGB` - This should follow `labelRoot` from `globalCameraSetup`
 	renderingPath (int): Defines rendering path, defaults to `4` - This is defined on unity_vars lookup table
@@ -365,6 +518,8 @@ def addCameraThermal(
 				'"{}" SET Camera renderingPath "{}"'.format(l, unity_vars.renderingPath[renderingPath])
 			])
 		
+		if registerCamera:
+			addStack.append('registerCamera')
 		if audio:
 			addStack.append('AudioListener')
 		
@@ -416,6 +571,8 @@ def addCameraThermal(
 	common.sendData(buf, read=False)
 	common.flushBuffer()
 	settings._obj.extend(label)
+
+################################################################################
 
 def cameraPPThermal(label='cameras/cameraRGB'):
 	"""
@@ -1042,14 +1199,14 @@ def setDiskTexture(lst, label='disk1'):
 			'"{}/{}" SET Sensors.RenderCameraLink target "{}"'.format(label, l.capitalize(), l)
 		], read=False)
 
-def addCameraSegFilter(segments=['Car'], label='cameras/segmentation', unoccluded=None, ret=False):
+def addCameraSegFilter(segments=None, label='cameras/segmentation', unoccluded=None, ret=False):
 	"""
 	Creates a filterable bounding boxes with unoccluded option enabled by default.
 	This allows you to export json objects containig segmented classes.
 	
 	# Arguments
 	
-	segments (list): Defines one or more classes, defaults to `['Car']`
+	segments (list): Defines one or more classes, defaults to `None`
 	label (string): Defines a segmentation camera as source, defaults to `cameras/segmentation`
 	unoccluded (list): Defines one or more classes to be unoccluded, defaults to `None`
 	ret (bool): Return the commands instead of sending them, defaults to `False`
@@ -1058,127 +1215,22 @@ def addCameraSegFilter(segments=['Car'], label='cameras/segmentation', unocclude
 	
 	buf = []
 	
-	for s in segments:
-		buf.append('"{}" PUSH Segmentation.Segmentation boundingBoxesFilter "{}"'.format(label, s))
+	if segments != None:
+		buf.extend([
+			'"{}" ADD Segmentation.Output.FilteredBoundingBoxes'.format(label),
+			'"{}" EXECUTE Segmentation.Output.FilteredBoundingBoxes EnableClasses {}'.format(label, ' '.join('"{0}"'.format(s) for s in segments))
+		])
 	
 	if unoccluded != None:
-		for s in segments:
-			buf.append('"{}" PUSH Segmentation.Segmentation unoccludedClasses "{}"'.format(label, s))
+		buf.extend([
+			'"{}" ADD Segmentation.Output.UnoccludedClasses'.format(label),
+			'"{}" EXECUTE Segmentation.Output.UnoccludedClasses EnableClasses {}'.format(label, ' '.join('"{0}"'.format(u) for u in unoccluded))
+		])
 	
 	if ret:
 		return buf
 	
 	common.sendData(buf, read=False)
-
-# output_type options: Auto, ClassIds, InstanceIds, ClassColors, Raw
-def addCameraSeg(
-	width=1024, height=768, segments=None, output_type='Auto', label='cameras/segmentation',
-	fov=60,
-	clippingNear=0.3,
-	clippingFar=1000,
-	boundingBoxesExtensionAmount=0,
-	renderingPath=4,
-	textureFormat=4,
-	minimumVisibility=0,
-	renderCamera=True,
-	lookupTable=True,
-	transparencyCutout=0
-):
-	"""
-	Creates a Segmentation camera
-	
-	# Arguments
-	
-	width (int): Resolution width, defaults to `2048`
-	height (int): Resolution height, defaults to `1536`
-	segments (list|string): Defines one or more classes this camera will see, defaults to `None`
-	label (string|list): Game object path, defaults to `cameras/segmentation` - This should follow `labelRoot` from `globalCameraSetup`
-	fov (int): Field of view, defaults to `60`
-	clippingNear (float): Near clipping distance, defaults to `0.3` - Objects closer than this distance won't appear
-	clippingFar (float): Far clipping distance, defaults to `1000` - Objects further from this distance won't appear
-	boundingBoxesExtensionAmount (float): Defines the bounding box scale up / down in %, defaults to `0`.
-	renderingPath (int): Defines rendering path, defaults to `4` - This is defined on `unity_vars` lookup table
-	textureFormat (int): Defines texture format, defaults to `4` - This is defined on `unity_vars` lookup table
-	renderCamera (bool): Binds a renderCamera component allowing for disk exports, defaults to `True`
-	lookupTable (list): Binds a color to a class, this is essential for outputting pixel dense images, this is an array of arrays like `[ [ Car , red ] , [ Person, blue ] .. ]`; Defaults to `True` which will automatically populate the segmentation lookup table based on the segments sent.
-	minimumVisibility (float): Defines minimum visibility of object in % (0 - 1), objects with less than % of it's total size visible won't appear on the segmentation maps neither yeild bounding boxes, defaults to `0`
-	transparencyCutout (float): Defines a cutout percentage for transparent objects, defaults to `0` that will show transparent objects at full extent, when set to 1 will hide them completly.
-	
-	# Notes
-	
-	- patchyness effects mimic thermal cameras averaging feature from mid / long distance focal points
-	- blur effects mimics noise around object edges, more visible when close by
-	
-	"""
-	if not isinstance(label, list):
-		label = [ label ]
-	
-	buf = []
-	
-	for l in label:
-		buf.extend([
-			'CREATE "{}"'.format(l),
-			'"{}" SET active false'.format(l),
-			'"{}" ADD Camera Segmentation.Segmentation Segmentation.LookUpTable {}'.format(l, 'Sensors.RenderCamera' if renderCamera else ''),
-			'''"{}" SET Camera
-				near {} far {} fieldOfView {}
-				renderingPath "{}" targetTexture.filterMode "Point"
-			'''.format(l, clippingNear, clippingFar, fov, unity_vars.renderingPath[renderingPath]),
-		])
-		
-		if renderCamera:
-			buf.append('"{}" SET Sensors.RenderCamera format "{}" resolution ({} {})'.format(l, unity_vars.textureFormat[textureFormat], width, height))
-		
-		buf.extend([
-			'''"{}" SET Segmentation.Segmentation
-				minimumObjectVisibility {}
-				outputType "{}"
-				boundingBoxesExtensionAmount {}
-				transparencyCutout {}
-			'''.format(l, minimumVisibility, output_type, boundingBoxesExtensionAmount, transparencyCutout),
-			
-			'"{}" EXECUTE Segmentation.Segmentation DefineClass "Void"'.format(l)
-		])
-		
-		if segments != None:
-			buf.extend(addCameraSegFilter(segments, label=l, ret=True))
-		
-		classes = []
-		colors = []
-		
-		if lookupTable == True and segments != None:
-			idx = 0
-			
-			for i in segments:
-				if idx > len(unity_vars.colors):
-					color = '"{}"'.format(getRandomColor())
-				else:
-					color = unity_vars.colors[idx]
-				
-				classes.append('"{}"'.format(i))
-				colors.append('"{}"'.format(color))
-				
-				buf.append('"{}" EXECUTE Segmentation.Segmentation DefineClass "{}"'.format(l, i))
-				idx += 1
-			
-		elif isinstance(lookupTable, list):
-			for i in lookupTable:
-				classes.append('"{}"'.format(i[0]))
-				colors.append('"{}"'.format(i[1]))
-				
-				buf.append('"{}" EXECUTE Segmentation.Segmentation DefineClass "{}"'.format(l, i[0]))
-		
-		buf.extend([
-			'"{}" PUSH Segmentation.LookUpTable classes "Void" {}'.format(l, ' '.join(classes)),
-			'"{}" PUSH Segmentation.LookUpTable colors "black" {}'.format(l, ' '.join(colors)),
-			
-			'"{}" EXECUTE Segmentation.LookUpTable MarkTextureDirty'.format(l),
-			'"{}" SET active true'.format(l)
-		])
-	
-	common.sendData(buf, read=False)
-	common.flushBuffer()
-	settings._obj.append(label)
 
 def addLight(position=[34,-22.53,0], intensity=1.7, label='light', shadows='Soft'):
 	"""
@@ -1914,6 +1966,16 @@ def getRandomColor(alpha='FF'):
 	
 	return '#' + o + alpha
 
+def enableAll(objs, component):
+	if not isinstance(objs, list):
+		objs = [ objs ]
+	
+	buf = []
+	for o in objs:
+		buf.append('"{}" SET {} enabled true'.format(o, component))
+	
+	common.sendData(buf, read=True)
+
 def setThermalProps(
 	objs,
 	
@@ -2106,8 +2168,8 @@ def humanSpawner(
 	
 	if container != None and segmentationClass != None:
 		buf.extend([
-			'"{}{}" ADD Segmentation.ClassGroup'.format(prefix, container),
-			'"{}{}" SET Segmentation.ClassGroup itemsClassName "{}"'.format(prefix, container, segmentationClass)
+			'"{}{}" ADD Segmentation.Class'.format(prefix, container),
+			'"{}{}" SET Segmentation.Class className "{}"'.format(prefix, container, segmentationClass)
 		])
 	
 	i = 0
@@ -2318,13 +2380,13 @@ def spawner(
 		if segmentationClass != None:
 			if isinstance(segmentationClass, list):
 				common.sendData([
-					'"{}" ADD Segmentation.ClassGroup'.format(obj),
-					'"{}" SET Segmentation.ClassGroup itemsClassName "{}"'.format(obj, segmentationClass[i])
+					'"{}" ADD Segmentation.Class'.format(obj),
+					'"{}" SET Segmentation.Class className "{}"'.format(obj, segmentationClass[i])
 				], read=False)
 			else:
 				common.sendData([
-					'"{}" ADD Segmentation.ClassGroup'.format(obj),
-					'"{}" SET Segmentation.ClassGroup itemsClassName "{}"'.format(obj, segmentationClass)
+					'"{}" ADD Segmentation.Class'.format(obj),
+					'"{}" SET Segmentation.Class className "{}"'.format(obj, segmentationClass)
 				], read=False)
 		
 		if orbit == True:
@@ -2532,8 +2594,8 @@ def spawnParkingLot(
 		
 		common.sendData([
 			'CREATE "Cars/{}" FROM "cars" AS "{}/car_{}"'.format(carID, prefix, k),
-			'"{}/car_{}" ADD Segmentation.ClassGroup'.format(prefix, k),
-			'"{}/car_{}" SET Segmentation.ClassGroup itemsClassName "{}"'.format(prefix, k, segment),
+			'"{}/car_{}" ADD Segmentation.Class'.format(prefix, k),
+			'"{}/car_{}" SET Segmentation.Class className "{}"'.format(prefix, k, segment),
 			'"{}/car_{}" SET Transform position ({} {} {})'.format(prefix, k, pX + settings.X_COMP, pY, pZ + settings.Z_COMP),
 			'"{}/car_{}" SET active true'.format(prefix, k)
 		], read=False)
@@ -2636,8 +2698,8 @@ def spawnDroneObjs(
 	
 	if groundSegment != None:
 		common.sendData([
-			'"{}" ADD Segmentation.ClassGroup'.format('city'),
-			'"{}" SET Segmentation.ClassGroup itemsClassName "{}"'.format('city', groundSegment)
+			'"{}" ADD Segmentation.Class'.format('city'),
+			'"{}" SET Segmentation.Class className "{}"'.format('city', groundSegment)
 		])
 	
 	spawnRadiusGeneric(['city/ground'], tags=['ground'], limit=300, radius=150, innerradius=0, scale=[3,3,3], position=[0,0,0], collisionCheck=False, prefix=prefix, seed=seed, thermalObjectBehaviour=groundThermalObjectBehaviour, thermalObjectOverride=True if groundThermalObjectBehaviour != None else False)
