@@ -1,13 +1,11 @@
 CREATE "cameras"
 "cameras" SET active false
 "cameras" SET Transform position (-6 1 -50) eulerAngles (0 0 0)
-"Canvas/Cameras/Viewport/Content" SET UI.GridLayoutGroup cellSize (1024 768)
-"Canvas" SET active true
 CREATE "cameras/cameraRGB"
 "cameras/cameraRGB" SET active false
-"cameras/cameraRGB" ADD Camera Sensors.RenderCamera AudioListener
+"cameras/cameraRGB" ADD Camera registerCamera Sensors.RenderCamera AudioListener
 "cameras/cameraRGB" SET Camera near 0.3 far 1000 fieldOfView 60 renderingPath "UsePlayerSettings"
-"cameras/cameraRGB" SET Sensors.RenderCamera format "ARGB32" resolution (2048 1536)
+"cameras/cameraRGB" SET Sensors.RenderCamera format "ARGB32" resolution (1024 768)
 CREATE "EnviroSky" AS "EnviroSky"
 "EnviroSky" SET EnviroSky Player "cameras" PlayerCamera "cameras/cameraRGB" GameTime.ProgressTime "None" weatherSettings.cloudTransitionSpeed 100 weatherSettings.effectTransitionSpeed 100 weatherSettings.fogTransitionSpeed 100 
 "EnviroSky" EXECUTE EnviroSky AssignAndStart "cameras/cameraRGB" "cameras/cameraRGB"
@@ -66,7 +64,7 @@ CREATE "spawner/city/buildings/container"
 "spawner/city/buildings/container" ADD RandomProps.Torus
 "spawner/city/buildings/container" ADD RandomProps.PropArea
 "spawner/city/buildings/container" SET RandomProps.PropArea tags "building"
-"spawner/city/buildings/container" SET RandomProps.PropArea async false numberOfProps 120 collisionCheck false stickToGround false 
+"spawner/city/buildings/container" SET RandomProps.PropArea async false numberOfProps 150 collisionCheck false stickToGround false 
 "spawner/city/buildings/container" SET RandomProps.Torus innerRadius 60
 "spawner/city/buildings/container" SET RandomProps.Torus radius 120
 "spawner/city/buildings/container" SET Transform position (0 0 0) eulerAngles (0 0 0) localScale (1 1 1)
@@ -77,7 +75,7 @@ CREATE "spawner/animals/generic/container"
 "spawner/animals/generic/container" ADD RandomProps.Torus
 "spawner/animals/generic/container" ADD RandomProps.PropArea
 "spawner/animals/generic/container" SET RandomProps.PropArea tags "animal"
-"spawner/animals/generic/container" SET RandomProps.PropArea async false numberOfProps 49 collisionCheck false stickToGround false 
+"spawner/animals/generic/container" SET RandomProps.PropArea async false numberOfProps 30 collisionCheck false stickToGround false 
 "spawner/animals/generic/container" SET RandomProps.Torus innerRadius 5
 "spawner/animals/generic/container" SET RandomProps.Torus radius 50
 "spawner/animals/generic/container" SET Transform position (0 0 0) eulerAngles (0 0 0) localScale (1 1 1)
@@ -88,10 +86,10 @@ CREATE "spawner/animals/birds/container"
 "spawner/animals/birds/container" ADD RandomProps.Torus
 "spawner/animals/birds/container" ADD RandomProps.PropArea
 "spawner/animals/birds/container" SET RandomProps.PropArea tags "bird"
-"spawner/animals/birds/container" SET RandomProps.PropArea async false numberOfProps 212 collisionCheck true stickToGround false 
+"spawner/animals/birds/container" SET RandomProps.PropArea async false numberOfProps 209 collisionCheck true stickToGround false 
 "spawner/animals/birds/container" SET RandomProps.Torus innerRadius 0
 "spawner/animals/birds/container" SET RandomProps.Torus radius 120
-"spawner/animals/birds/container" SET Transform position (0 52 0) eulerAngles (0 0 0) localScale (1 1 1)
+"spawner/animals/birds/container" SET Transform position (0 60 0) eulerAngles (0 0 0) localScale (1 1 1)
 "spawner/animals/birds/container" SET active true
 "spawner/animals/birds" SET active true
 CREATE "spawner/cars/container"
@@ -99,7 +97,7 @@ CREATE "spawner/cars/container"
 "spawner/cars/container" ADD RandomProps.Torus
 "spawner/cars/container" ADD RandomProps.PropArea
 "spawner/cars/container" SET RandomProps.PropArea tags "car"
-"spawner/cars/container" SET RandomProps.PropArea async false numberOfProps 77 collisionCheck false stickToGround false 
+"spawner/cars/container" SET RandomProps.PropArea async false numberOfProps 65 collisionCheck false stickToGround false 
 "spawner/cars/container" SET RandomProps.Torus innerRadius 5
 "spawner/cars/container" SET RandomProps.Torus radius 50
 "spawner/cars/container" SET Transform position (0 0 0) eulerAngles (0 0 0) localScale (1 1 1)
@@ -123,13 +121,13 @@ CREATE "cameras/spawner/drones/container"
 "cameras/spawner/drones/container" SET RandomProps.PropArea tags "drones"
 "cameras/spawner/drones/container" SET RandomProps.Frustum minDistance 2
 "cameras/spawner/drones/container" SET RandomProps.Frustum maxDistance 6
-"cameras/spawner/drones/container" SET RandomProps.PropArea async false numberOfProps 179 collisionCheck true stickToGround false 
+"cameras/spawner/drones/container" SET RandomProps.PropArea async false numberOfProps 156 collisionCheck true stickToGround false 
+"cameras/spawner/drones/container" SET RandomProps.Frustum allowEdge false
 "cameras/spawner/drones/container" SET RandomProps.Frustum scaleBack 0.25
 "cameras/spawner/drones/container" SET RandomProps.Frustum cam "cameras/cameraRGB"
-"cameras/spawner/drones/container" SET RandomProps.Frustum allowEdge false
 "cameras/spawner/drones/container" SET Transform eulerAngles (0 0 0) localScale (1 1 1)
-"cameras/spawner/drones/container" ADD Segmentation.ClassGroup
-"cameras/spawner/drones/container" SET Segmentation.ClassGroup itemsClassName "DRONE"
+"cameras/spawner/drones/container" ADD Segmentation.Class
+"cameras/spawner/drones/container" SET Segmentation.Class className "DRONE"
 "cameras/spawner/drones/container" SET active true
 "cameras/spawner/drones" SET active true
 "cameras/cameraRGB" SET Camera enabled true
