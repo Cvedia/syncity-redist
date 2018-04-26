@@ -4,24 +4,20 @@ LOAD "Savannah" FROM "tile"
 CREATE "cameras"
 "cameras" SET active false
 "cameras" SET Transform position (-6 1 -50) eulerAngles (0 0 0)
-"Canvas/Cameras/Viewport/Content" SET UI.GridLayoutGroup cellSize (1024 768)
-"Canvas" SET active true
 CREATE "cameras/segmentation"
 "cameras/segmentation" SET active false
-"cameras/segmentation" ADD Camera Segmentation.Segmentation Segmentation.LookUpTable Sensors.RenderCamera
+"cameras/segmentation" ADD Camera SegmentationCamera Segmentation.Output.ClassColors Sensors.RenderCamera registerCamera
+"cameras/segmentation" SET SegmentationCamera transparencyCutout 0
 "cameras/segmentation" SET Camera near 0.3 far 10000 fieldOfView 90 renderingPath "UsePlayerSettings" targetTexture.filterMode "Point" 
 "cameras/segmentation" SET Sensors.RenderCamera format "ARGB32" resolution (1024 768)
-"cameras/segmentation" SET Segmentation.Segmentation minimumObjectVisibility 0 outputType "Auto" boundingBoxesExtensionAmount 0 transparencyCutout 0 
-"cameras/segmentation" EXECUTE Segmentation.Segmentation DefineClass "Void"
-"cameras/segmentation" PUSH Segmentation.Segmentation boundingBoxesFilter "Animal"
-"cameras/segmentation" EXECUTE Segmentation.Segmentation DefineClass "Animal"
-"cameras/segmentation" PUSH Segmentation.LookUpTable classes "Void" "Animal"
-"cameras/segmentation" PUSH Segmentation.LookUpTable colors "black" "blue"
-"cameras/segmentation" EXECUTE Segmentation.LookUpTable MarkTextureDirty
+"cameras/segmentation" SET Segmentation.BoundingBoxes minimumObjectVisibility 0 boundingBoxesExtensionAmount 0 minimumPixelsCount 1 
+"cameras/segmentation" ADD Segmentation.Output.FilteredBoundingBoxes
+"cameras/segmentation" EXECUTE Segmentation.Output.FilteredBoundingBoxes EnableClasses "Animal"
+"cameras/segmentation" EXECUTE Segmentation.Output.ClassColors lookUpTable.SetClassColor "Animal->blue"
 "cameras/segmentation" SET active true
 CREATE "cameras/cameraRGB"
 "cameras/cameraRGB" SET active false
-"cameras/cameraRGB" ADD Camera Sensors.RenderCamera AudioListener
+"cameras/cameraRGB" ADD Camera registerCamera Sensors.RenderCamera AudioListener
 "cameras/cameraRGB" SET Camera near 0.3 far 10000 fieldOfView 90 renderingPath "UsePlayerSettings"
 "cameras/cameraRGB" SET Sensors.RenderCamera format "ARGB32" resolution (1024 768)
 CREATE "EnviroSky" AS "EnviroSky"
@@ -35,9 +31,9 @@ CREATE "EnviroSky" AS "EnviroSky"
 "cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
 CREATE "cameras/thermal"
 "cameras/thermal" SET active false
-"cameras/thermal" ADD Camera Thermal.ThermalCamera UnityEngine.PostProcessing.PostProcessingBehaviour Sensors.RenderCamera CameraFilterPack_Pixelisation_DeepOilPaintHQ CameraFilterPack_Blur_Noise Thermal.GlobalTreeSettings
+"cameras/thermal" ADD Camera Thermal.ThermalCamera UnityEngine.PostProcessing.PostProcessingBehaviour Sensors.RenderCamera registerCamera CameraFilterPack_Pixelisation_DeepOilPaintHQ CameraFilterPack_Blur_Noise Thermal.GlobalTreeSettings
 "cameras/thermal" SET Camera near 0.3 far 10000 fieldOfView 90
-"cameras/thermal" SET Sensors.RenderCamera format "ARGB32" resolution (2048 1536)
+"cameras/thermal" SET Sensors.RenderCamera format "ARGB32" resolution (1024 768)
 "cameras/thermal" SET Camera renderingPath "UsePlayerSettings"
 "cameras/thermal" SET Thermal.ThermalCamera enabled false
 "cameras/thermal" SET CameraFilterPack_Pixelisation_DeepOilPaintHQ enabled false
@@ -50,10 +46,9 @@ CREATE "cameras/thermal"
 "cameras/thermal" SET active true
 CREATE "cameras/depth"
 "cameras/depth" SET active false
-"cameras/depth" ADD Camera Sensors.RenderCamera
+"cameras/depth" ADD Camera Sensors.RenderCamera registerCamera Cameras.RenderDepthBufferSimple
 "cameras/depth" SET Camera near 0.3 far 1000 fieldOfView 90 renderingPath "DeferredShading"
 "cameras/depth" SET Sensors.RenderCamera format "RFloat" resolution (1024 768)
-"cameras/depth" ADD Cameras.RenderDepthBufferSimple
 "cameras/depth" SET Cameras.RenderDepthBufferSimple outputMode "Linear01Depth" transparencyCutout 0
 "cameras/depth" SET active true
 CREATE "spawner/animals0/container"
@@ -64,8 +59,8 @@ CREATE "spawner/animals0/container"
 "spawner/animals0/container" SET RandomProps.PropArea async false numberOfProps 100 collisionCheck true stickToGround true 
 "spawner/animals0/container" SET RandomProps.Rectangle size (100 100)
 "spawner/animals0/container" SET Transform position (3193 374.7158 8161) eulerAngles (0 0 0) localScale (1 1 1)
-"spawner/animals0/container" ADD Segmentation.ClassGroup
-"spawner/animals0/container" SET Segmentation.ClassGroup itemsClassName "Animal"
+"spawner/animals0/container" ADD Segmentation.Class
+"spawner/animals0/container" SET Segmentation.Class className "Animal"
 "spawner/animals0/container" SET active true
 "spawner/animals0" SET active true
 CREATE "spawner/animals1/container"
@@ -76,8 +71,8 @@ CREATE "spawner/animals1/container"
 "spawner/animals1/container" SET RandomProps.PropArea async false numberOfProps 100 collisionCheck true stickToGround true 
 "spawner/animals1/container" SET RandomProps.Rectangle size (100 100)
 "spawner/animals1/container" SET Transform position (3193 374.7158 8161) eulerAngles (0 0 0) localScale (1 1 1)
-"spawner/animals1/container" ADD Segmentation.ClassGroup
-"spawner/animals1/container" SET Segmentation.ClassGroup itemsClassName "Animal"
+"spawner/animals1/container" ADD Segmentation.Class
+"spawner/animals1/container" SET Segmentation.Class className "Animal"
 "spawner/animals1/container" SET active true
 "spawner/animals1" SET active true
 CREATE "spawner/animals2/container"
@@ -88,8 +83,8 @@ CREATE "spawner/animals2/container"
 "spawner/animals2/container" SET RandomProps.PropArea async false numberOfProps 100 collisionCheck true stickToGround true 
 "spawner/animals2/container" SET RandomProps.Rectangle size (100 100)
 "spawner/animals2/container" SET Transform position (3193 374.7158 8161) eulerAngles (0 0 0) localScale (1 1 1)
-"spawner/animals2/container" ADD Segmentation.ClassGroup
-"spawner/animals2/container" SET Segmentation.ClassGroup itemsClassName "Animal"
+"spawner/animals2/container" ADD Segmentation.Class
+"spawner/animals2/container" SET Segmentation.Class className "Animal"
 "spawner/animals2/container" SET active true
 "spawner/animals2" SET active true
 CREATE "disk1"
