@@ -1,6 +1,6 @@
-Please refeer to [https://docs.syncity.com/](https://docs.syncity.com/) for the full documentation.
+Please refeer to [https://docs.syncity.com/](https://docs.syncity.com/) for the full updated documentation.
 
-## SDK
+## Syncity Toolbox
 
 ### Introduction
 
@@ -12,36 +12,43 @@ You don't necessarly need to develop your solution in python as the command line
 
 ### File Structure
 
-- syncity.py
-	- cl/
+- **[syncity.py](https://github.com/Cvedia/syncity-redist/blob/master/syncity.py)**
+	- **[cl/](https://github.com/Cvedia/syncity-redist/tree/master/cl)**
 		*command line repository*
-		- head/
-		*all `syncity/scripts` scene setup outputs in command line format*
-	- syncity/
-		- scripts/
+		- **[head/](https://github.com/Cvedia/syncity-redist/tree/master/cl/head)**
+			*all `syncity/scripts` scene setup outputs in command line format*
+	- **[syncity/](https://github.com/Cvedia/syncity-redist/tree/master/syncity)**
+		- **[scripts/](https://github.com/Cvedia/syncity-redist/tree/master/syncity/scripts)**
 			*scripts repository, this is where your custom code should go*
-		- tools/
+		- **[tools/](https://github.com/Cvedia/syncity-redist/tree/master/syncity/tools)**
 			*custom tools assortment for reporting and assessing problems with the simulation*
-		- helpers.py
+		- **[helpers.py](https://github.com/Cvedia/syncity-redist/blob/master/syncity/helpers.py)**
 			*A collection of helper functions*
-		- common.py
+		- **[common.py](https://github.com/Cvedia/syncity-redist/blob/master/syncity/common.py)**
 			*Telnet and common functions*
-		- settings_manager.py
+		- **[settings_manager.py](https://github.com/Cvedia/syncity-redist/blob/master/syncity/settings_manager.py)**
 			*settings singleton controller*
-		- unity_vars.py
+		- **[unity_vars.py](https://github.com/Cvedia/syncity-redist/blob/master/syncity/unity_vars.py)**
 			*static unity variables repository*
-	- etc/
-		*repository of misc files*
-	- install/
+	- **[etc/](https://github.com/Cvedia/syncity-redist/tree/master/etc)**
+			*repository of misc files*
+	- **[install/](https://github.com/Cvedia/syncity-redist/tree/master/install)**
 		*per platform / implementation easy install scripts*
+	- **[tests/](https://github.com/Cvedia/syncity-redist/tree/master/tests)**
+		*simulator / sdk pytest scripts*
 
 ### How to install
 
-You can clone or download the SDK at [github](https://github.com/Cvedia/syncity-redist).
+You can clone or download the SDK at [github](https://github.com/Cvedia/syncity-redist), or by command line:
+
+```bash
+git clone https://github.com/Cvedia/syncity-redist syncity-redist
+```
 
 #### Linux install
 
 Run `install/linux/sdk/install.sh`, this should automatically detect and install all packages you need.
+
 
 #### Windows install
 
@@ -51,6 +58,7 @@ Run `install/linux/sdk/install.sh`, this should automatically detect and install
 ```bash
 install/windows/sdk/install.bat
 ```
+
 
 ### Running
 
@@ -147,10 +155,10 @@ usage: syncity.py [-h] [-p PORT] [-i IP] [-s SCRIPT [SCRIPT ...]]
                   [--record [RECORD]] [-b] [-d] [-L LOGLEVEL] [--debug]
                   [--log [LOG]] [--async] [--skip_init] [--skip_disk]
                   [--skip_setup] [-c CONFIG] [--skip_config] [--save_config]
-                  [--setup_only] [--enable_physics] [--enable_console_log]
-                  [--disable_envirosky] [--disable_canvas]
-                  [--use_old_depth_buffer] [--flycam] [--nohead]
-                  [--carsLimit CARSLIMIT] [--propsLimit PROPSLIMIT]
+                  [--skip_shutdown] [--test] [--setup_only] [--enable_physics]
+                  [--enable_console_log] [--enable_canvas]
+                  [--disable_envirosky] [--use_old_depth_buffer] [--flycam]
+                  [--nohead] [--carsLimit CARSLIMIT] [--propsLimit PROPSLIMIT]
                   [--signsLimit SIGNSLIMIT] [--treesLimit TREESLIMIT]
                   [--backdropsLimit BACKDROPSLIMIT] [--X_COMP X_COMP]
                   [--Y_COMP Y_COMP] [--Z_COMP Z_COMP] [-v]
@@ -227,14 +235,15 @@ optional arguments:
   --save_config         Save sent parameters as SDK config file -- WARNING:
                         This will not save the stack parameters (-r, -s and
                         -t)
+  --skip_shutdown       Skips shutdown sequence
+  --test                Enables test suite flag
   --setup_only          Runs script setup and exits
   --enable_physics      Enable Physics, mainly affects objects with
                         rigidbodies.
   --enable_console_log  Enable UI console log
+  --enable_canvas       Enable client rendering visualization, this is the
+                        legacy interface
   --disable_envirosky   Disables Envirosky -- NOT RECOMMENDED
-  --disable_canvas      Disables client rendering visualization, better for
-                        performance, but you will only see outputs written to
-                        disk.
   --use_old_depth_buffer
                         Uses old depth buffer component
   --flycam              Spawns fly cam, controllable via simulator
@@ -256,5 +265,31 @@ optional arguments:
                         -p to get simulator version
 
 
+```
+
+## [pytest](https://docs.pytest.org/en/latest/) scripts
+
+This is a test suite for both the SDK and the simulator itself, a typical enduser wouldn't need this.
+
+Keep in mind that some of this tests might take a long time and require specific assets and features your binary might not have.
+
+### Installing
+
+Run the install script under `install/<platform>/test` this will install all required dependencies.
+
+### Running
+
+To run all tests:
+
+```bash
+cd tests
+python -m pytest -vv
+```
+
+You can run a specific test by specifying a test file, for example:
+
+```bash
+cd tests
+python -m pytest -vv test_export.py
 ```
 

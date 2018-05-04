@@ -157,8 +157,8 @@ def addCameraDepth(
 		addStack = [ 'Camera', 'Sensors.RenderCamera' ]
 		b = []
 		
-		if registerCamera:
-			addStack.append('registerCamera')
+		# if registerCamera:
+		#	addStack.append('registerCamera')
 		
 		if depthBuffer == None:
 			addStack.append('Sensors.Lidar_Internal.RenderDepthBufferOld' if settings.use_old_depth_buffer else 'CameraDepthOutput')
@@ -240,8 +240,8 @@ def addCameraRGB(
 		addStack = [ 'Camera' ]
 		b = []
 		
-		if registerCamera:
-			addStack.append('registerCamera')
+		# if registerCamera:
+		#	addStack.append('registerCamera')
 		
 		if renderCamera:
 			addStack.append('Sensors.RenderCamera')
@@ -356,8 +356,8 @@ def addCameraSeg(
 		if renderCamera:
 			addStack.append('Sensors.RenderCamera')
 			b.append('"{}" SET Sensors.RenderCamera format "{}" resolution ({} {})'.format(l, unity_vars.textureFormat[textureFormat], width, height))
-		if registerCamera:
-			addStack.append('registerCamera')
+		# if registerCamera:
+		#	addStack.append('registerCamera')
 		
 		b.extend([
 			'''"{}" SET Segmentation.BoundingBoxes
@@ -518,8 +518,8 @@ def addCameraThermal(
 				'"{}" SET Camera renderingPath "{}"'.format(l, unity_vars.renderingPath[renderingPath])
 			])
 		
-		if registerCamera:
-			addStack.append('registerCamera')
+		#if registerCamera:
+		#	addStack.append('registerCamera')
 		if audio:
 			addStack.append('AudioListener')
 		
@@ -1378,6 +1378,7 @@ def takeSegSnapshot(lst):
 	
 	for l in lst:
 		r = common.sendData(['"{}" GET Segmentation.Segmentation boundingBoxes'.format(l), 'NOOP'], read=True)
+		# "cam" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 		seqSave('bbox', r)
 
 def seqSave(pref, rawData):
@@ -2230,7 +2231,7 @@ def spawner(
 	partsNames=None, autoSegment=False, thermalObjectBehaviour=None, thermalObjectOverride=False
 ):
 	"""
-	Creates a torus shaped object spawner
+	Creates a object spawner
 	
 	# Arguments
 	

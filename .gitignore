@@ -1,6 +1,7 @@
 _debug/*
 *.pyc
 __pycache__
+.pytest*
 assets-*
 _*.sh
 .vs/*

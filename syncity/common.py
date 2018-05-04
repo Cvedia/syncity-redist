@@ -29,28 +29,39 @@ from subprocess import PIPE, Popen, STDOUT
 
 settings = False
 
-def initTelnet(ip, port, retries=3, wait=.5, timeout=30, ka_interval=3, ka_fail=10, ka_idle=1):
+def initTelnet(ip, port, retries=3, wait=.5, timeout=30, ka_interval=3, ka_fail=10, ka_idle=1, return_fail=False):
 	"""
 	Telnet initalizator
 	
 	# Arguments
 	ip (string): Ip address of target machine
-	port (int): Port of target machine, usually 10200
-	retries (int): Retry connection if failed, defaults to 3
-	wait (float): Time in seconds to wait between retries
+	port (int): Port of target machine, usually `10200`
+	retries (int): Retry connection if failed, defaults to `3`
+	wait (float): Time in seconds to wait between retries, defaults to `.5`
+	timeout(float): Timeout in seconds for socket connection, defaults to `30`
+	ka_interval (float): Keep alive interval in seconds, defaults to `3`
+	ka_fail (int): Max number of failed keep alive packages to consider a fail, defaults to `10`
+	ka_idle (int): Send keep alives when idle to keep connection alive, defaults to `1`
+	return_fail (bool): Return bool instead of sys.exit when critical errors happens, defaults to `False`
 	
 	"""
 	if settings.dry_run:
-		return
+		return False
+	
 	if settings._telnet == True:
 		if settings._shutdown == True:
-			return
+			return False
+		elif settings._tn != None and settings._telnet == True and settings.test == True:
+			return True
+		
 		output('Connection is already active, trying to reconnect...')
 		
 		try:
 			settings._tn.close()
 		except:
 			pass
+		
+		settings._tn = None
 	
 	retry = 0
 	
@@ -83,15 +94,16 @@ def initTelnet(ip, port, retries=3, wait=.5, timeout=30, ka_interval=3, ka_fail=
 			settings._simulator_version = sendData(['VERSION', 'NOOP'], read=True)[0].replace('"', '')
 			output('Simulator Version: {}'.format(settings._simulator_version))
 			
-			if settings.version:
-				output('SDK Version: {}'.format(settings._version))
-				sys.exit(0)
-			
-			if int(settings._simulator_version.replace('.', '')[0:10]) < int(settings._simulator_min_version.replace('.', '')[0:10]):
-				output('The version of the simulator you\'re connecting with is deprecated and most likely not compatible with the version of this SDK.', 'ERROR', permissive=True)
-				output('You should use a old branch of the SDK or update the simulator.', 'ERROR', permissive=True)
-				output('SDK minimum supported simulator version: {}'.format(settings._simulator_min_version), 'ERROR', permissive=True)
-				output('Simulator version: {}'.format(settings._simulator_version), 'ERROR', permissive=True)
+			if settings.test == False:
+				if settings.version:
+					output('SDK Version: {}'.format(settings._version))
+					sys.exit(0)
+				
+				if int(settings._simulator_version.replace('.', '')[0:10]) < int(settings._simulator_min_version.replace('.', '')[0:10]):
+					output('The version of the simulator you\'re connecting with is deprecated and most likely not compatible with the version of this SDK.', 'ERROR', permissive=True)
+					output('You should use a old branch of the SDK or update the simulator.', 'ERROR', permissive=True)
+					output('SDK minimum supported simulator version: {}'.format(settings._simulator_min_version), 'ERROR', permissive=True)
+					output('Simulator version: {}'.format(settings._simulator_version), 'ERROR', permissive=True)
 			
 			if settings.skip_init == True:
 				ouptut('Skipping init sequence')
@@ -121,10 +133,17 @@ def initTelnet(ip, port, retries=3, wait=.5, timeout=30, ka_interval=3, ka_fail=
 			
 			if retry >= retries:
 				output('Ran out of retries, unable to connect. Aborting!', 'ERROR')
+				
+				if return_fail:
+					return False
+				
 				sys.exit(1)
 			else:
 				output('Waiting for retry #{} ...'.format(retry))
 				time.sleep(wait)
+	
+	flushBuffer()
+	return True
 
 def setAPISeed(seed):
 	sendData('"RandomProps.Random.instance" SET seed {}'.format(seed))
@@ -144,6 +163,7 @@ def resetSimulator():
 		except:
 			pass
 		
+		settings._tn = None
 		settings._telnet = False
 		time.sleep(5)
 		
@@ -167,8 +187,9 @@ def init():
 	settings._telnet = False
 	settings._counters = { 'send': 0, 'recv': 0, 'flush': 0 }
 	
-	signal.signal(signal.SIGINT, gracefullShutdown)
-	atexit.register(gracefullShutdown)
+	if settings.skip_shutdown == False:
+		signal.signal(signal.SIGINT, gracefullShutdown)
+		atexit.register(gracefullShutdown)
 	
 	if settings.local_path:
 		mkdirP(settings.local_path)
@@ -209,6 +230,7 @@ def init_recording(head=None):
 
 def shouldLog(level):
 	l = {
+		'NONE': 0,
 		'ERROR': 1,
 		'ERR': 1,
 		'WARNING': 2,
@@ -218,8 +240,11 @@ def shouldLog(level):
 		'TRACE': 16
 	}
 	
-	if l[settings.loglevel] >= l[level]:
-		return True
+	try:
+		if l[settings.loglevel] >= l[level]:
+			return True
+	except:
+		pass
 	
 	return False
 
@@ -498,6 +523,7 @@ def gracefullShutdown(a=None, b=None):
 		except:
 			pass
 	
+	settings._tn = None
 	if settings.debug:
 		output('Telnet sent: {} recv: {} flush: {}'.format(settings._counters['send'], settings._counters['recv'], settings._counters['flush']), 'DEBUG')
 	
