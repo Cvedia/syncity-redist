@@ -3,7 +3,7 @@ CREATE "cameras"
 "cameras" SET Transform position (-6 1 -50) eulerAngles (0 0 0)
 CREATE "cameras/cameraRGB"
 "cameras/cameraRGB" SET active false
-"cameras/cameraRGB" ADD Camera registerCamera Sensors.RenderCamera AudioListener
+"cameras/cameraRGB" ADD Camera Sensors.RenderCamera AudioListener
 "cameras/cameraRGB" SET Camera near 0.3 far 1000 fieldOfView 60 renderingPath "UsePlayerSettings"
 "cameras/cameraRGB" SET Sensors.RenderCamera format "ARGB32" resolution (1024 768)
 CREATE "EnviroSky" AS "EnviroSky"
@@ -17,7 +17,7 @@ CREATE "EnviroSky" AS "EnviroSky"
 "cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
 CREATE "cameras/segmentation"
 "cameras/segmentation" SET active false
-"cameras/segmentation" ADD Camera SegmentationCamera Segmentation.Output.ClassColors Sensors.RenderCamera registerCamera
+"cameras/segmentation" ADD Camera SegmentationCamera Segmentation.Output.ClassColors Sensors.RenderCamera
 "cameras/segmentation" SET SegmentationCamera transparencyCutout 0
 "cameras/segmentation" SET Camera near 0.3 far 1000 fieldOfView 60 renderingPath "UsePlayerSettings" targetTexture.filterMode "Point" 
 "cameras/segmentation" SET Sensors.RenderCamera format "ARGB32" resolution (1024 768)
@@ -40,7 +40,7 @@ CREATE "disk1/Cameras/segmentation"
 "disk1/Cameras/segmentation" SET Sensors.RenderCameraLink target "cameras/segmentation"
 "disk1/Cameras/segmentation" SET active true
 "disk1" SET active true
-"cameras" SET Transform position (0 4 -30)
+"cameras" SET Transform position (0 6 -30)
 CREATE "Savannah" FROM "savannah" AS "test"
 "test" SET Transform position (-5000 -180 -5000)
 "test" SET active true
@@ -50,8 +50,8 @@ CREATE "spawner/city/nature/trees/container"
 "spawner/city/nature/trees/container" ADD RandomProps.PropArea
 "spawner/city/nature/trees/container" SET RandomProps.PropArea tags "tree"
 "spawner/city/nature/trees/container" SET RandomProps.PropArea async false numberOfProps 150~400 collisionCheck true stickToGround true 
-"spawner/city/nature/trees/container" SET RandomProps.Torus innerRadius 30~50
 "spawner/city/nature/trees/container" SET RandomProps.Torus radius 80
+"spawner/city/nature/trees/container" SET RandomProps.Torus innerRadius 30~50
 "spawner/city/nature/trees/container" SET Transform position (0 5 0) eulerAngles (0 0 0) localScale (1 1 1)
 "spawner/city/nature/trees/container" SET active true
 "spawner/city/nature/trees" SET active true
@@ -61,8 +61,8 @@ CREATE "spawner/animals/container"
 "spawner/animals/container" ADD RandomProps.PropArea
 "spawner/animals/container" SET RandomProps.PropArea tags "animal"
 "spawner/animals/container" SET RandomProps.PropArea async false numberOfProps 200~350 collisionCheck true stickToGround true 
-"spawner/animals/container" SET RandomProps.Torus innerRadius 0
 "spawner/animals/container" SET RandomProps.Torus radius 40~80
+"spawner/animals/container" SET RandomProps.Torus innerRadius 0
 "spawner/animals/container" SET Transform position (0 5 0) eulerAngles (0 0 0) localScale (1 1 1)
 "cameras" SET Orbit target "spawner/animals/container"
 "spawner/animals/container" SET active true
@@ -72,9 +72,9 @@ CREATE "spawner/drones/Parrot_Disco/container"
 "spawner/drones/Parrot_Disco/container" ADD RandomProps.Torus
 "spawner/drones/Parrot_Disco/container" ADD RandomProps.PropArea
 "spawner/drones/Parrot_Disco/container" SET RandomProps.PropArea tags "Parrot Disco"
-"spawner/drones/Parrot_Disco/container" SET RandomProps.PropArea async false numberOfProps 31 collisionCheck true stickToGround false 
-"spawner/drones/Parrot_Disco/container" SET RandomProps.Torus innerRadius 5
+"spawner/drones/Parrot_Disco/container" SET RandomProps.PropArea async false numberOfProps 43 collisionCheck true stickToGround false 
 "spawner/drones/Parrot_Disco/container" SET RandomProps.Torus radius 27
+"spawner/drones/Parrot_Disco/container" SET RandomProps.Torus innerRadius 5
 "spawner/drones/Parrot_Disco/container" SET Transform position (0 0 0) eulerAngles (0 0 0) localScale (1 1 1)
 "spawner/drones/Parrot_Disco/container" ADD Segmentation.Class
 "spawner/drones/Parrot_Disco/container" SET Segmentation.Class className "Drone"
