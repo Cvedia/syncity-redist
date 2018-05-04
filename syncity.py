@@ -15,7 +15,7 @@ import random
 
 from syncity import common, settings_manager
 
-SYNCITY_VERSION = '18.04.25.1228'
+SYNCITY_VERSION = '18.05.04.1749'
 SIMULATOR_MIN_VERSION = '18.04.23.0000'
 
 print ('SynCity toolbox - v{}\nCopyright (c) 2016-{} CVEDIA PVE Ltd\n'.format(SYNCITY_VERSION, datetime.date.today().year))
@@ -80,6 +80,9 @@ parser.add_argument('-c', '--config', default='syncity.conf', help='Defines a pa
 parser.add_argument('--skip_config', action='store_true', default=False, help='Skips SDK default config file')
 parser.add_argument('--save_config', action='store_true', default=False, help='Save sent parameters as SDK config file -- WARNING: This will not save the stack parameters (-r, -s and -t)')
 
+parser.add_argument('--skip_shutdown', action='store_true', default=False, help='Skips shutdown sequence')
+parser.add_argument('--test', action='store_true', default=False, help='Enables test suite flag')
+
 parser.add_argument('--setup_only', action='store_true', default=False, help='Runs script setup and exits')
 parser.add_argument('--enable_physics', action='store_true', default=False, help='Enable Physics, mainly affects objects with rigidbodies.')
 parser.add_argument('--enable_console_log', action='store_true', default=False, help='Enable UI console log')
@@ -112,6 +115,7 @@ args = parser.parse_args()
 
 settings = syncity.settings_manager.Singleton()
 settings._start = time.time()
+settings._tn = None
 
 settings._version = SYNCITY_VERSION
 settings._simulator_min_version = SIMULATOR_MIN_VERSION
