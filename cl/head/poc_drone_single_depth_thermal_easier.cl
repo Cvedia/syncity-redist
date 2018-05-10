@@ -3,15 +3,16 @@ CREATE "cameras"
 "cameras" SET Transform position (-6 1 -50) eulerAngles (0 0 0)
 CREATE "cameras/segmentation"
 "cameras/segmentation" SET active false
-"cameras/segmentation" ADD Camera SegmentationCamera Segmentation.Output.ClassColors Sensors.RenderCamera
+"cameras/segmentation" ADD Camera SegmentationCamera Segmentation.Output.BoundingBoxes Segmentation.Output.ClassColors Sensors.RenderCamera
 "cameras/segmentation" SET SegmentationCamera transparencyCutout 0
 "cameras/segmentation" SET Camera near 0.3 far 1000 fieldOfView 60 renderingPath "UsePlayerSettings" targetTexture.filterMode "Point" 
 "cameras/segmentation" SET Sensors.RenderCamera format "ARGB32" resolution (1024 1024)
-"cameras/segmentation" SET Segmentation.BoundingBoxes minimumObjectVisibility 0 boundingBoxesExtensionAmount 0 minimumPixelsCount 1 
+"cameras/segmentation" SET Segmentation.Output.BoundingBoxes minimumObjectVisibility 0 extensionAmount 0 minimumPixelsCount 1 
+"cameras/segmentation" EXECUTE Segmentation.Output.ClassColors lookUpTable.SetClassColor "DRONE->red"
 "cameras/segmentation" ADD Segmentation.Output.FilteredBoundingBoxes
 "cameras/segmentation" EXECUTE Segmentation.Output.FilteredBoundingBoxes EnableClasses "DRONE"
-"cameras/segmentation" EXECUTE Segmentation.Output.ClassColors lookUpTable.SetClassColor "DRONE->red"
 "cameras/segmentation" SET active true
+[UI.Window] ShowFromCamera "cameras/segmentation" AS "segmentation" WITH 1024 1024 24 "ARGB32" "Default"
 CREATE "cameras/depth"
 "cameras/depth" SET active false
 "cameras/depth" ADD Camera Sensors.RenderCamera Cameras.RenderDepthBufferSimple
@@ -19,6 +20,7 @@ CREATE "cameras/depth"
 "cameras/depth" SET Sensors.RenderCamera format "RFloat" resolution (1024 1024)
 "cameras/depth" SET Cameras.RenderDepthBufferSimple outputMode "Linear01Depth" transparencyCutout 0
 "cameras/depth" SET active true
+[UI.Window] ShowFromCamera "cameras/depth" AS "depth" WITH 1024 1024 32 "RFloat" "Default"
 CREATE "cameras/cameraRGB"
 "cameras/cameraRGB" SET active false
 "cameras/cameraRGB" ADD Camera Sensors.RenderCamera AudioListener
@@ -29,6 +31,7 @@ CREATE "EnviroSky" AS "EnviroSky"
 "EnviroSky" EXECUTE EnviroSky AssignAndStart "cameras/cameraRGB" "cameras/cameraRGB"
 "EnviroSky" SET active true
 "cameras/cameraRGB" SET active true
+[UI.Window] ShowFromCamera "cameras/cameraRGB" AS "cameraRGB" WITH 1024 1024 24 "ARGB32" "Default"
 "cameras" SET active true
 "cameras/cameraRGB" ADD UnityEngine.PostProcessing.PostProcessingBehaviour
 "cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile "EnviroFX"
@@ -48,6 +51,7 @@ CREATE "cameras/thermal"
 "cameras/thermal" SET Thermal.ThermalCamera ambientTemperature 15 temperatureRange (9 35) maxDistanceForProbeUpdate 100 useAGC true enabled true 
 "cameras/thermal" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.grain.enabled false
 "cameras/thermal" SET active true
+[UI.Window] ShowFromCamera "cameras/thermal" AS "thermal" WITH 1024 768 24 "ARGB32" "Default"
 CREATE "disk1"
 "disk1" SET active false
 "disk1" ADD Sensors.Disk
@@ -115,7 +119,7 @@ CREATE "spawner/city/nature/trees/container"
 "spawner/city/nature/trees" SET Thermal.ThermalObjectBehaviour profile "DefaultThermalProfile"
 "spawner/city/nature/trees/container" ADD Thermal.ThermalObjectOverride
 "spawner/city/nature/trees/container" SET RandomProps.PropArea tags "tree"
-"spawner/city/nature/trees/container" SET RandomProps.PropArea async false numberOfProps 178 collisionCheck false stickToGround false 
+"spawner/city/nature/trees/container" SET RandomProps.PropArea async false numberOfProps 199 collisionCheck false stickToGround false 
 "spawner/city/nature/trees/container" SET RandomProps.Torus innerRadius 15
 "spawner/city/nature/trees/container" SET RandomProps.Torus radius 60
 "spawner/city/nature/trees/container" SET Transform position (0 0 0) eulerAngles (0 0 0) localScale (1 1 1)
@@ -143,7 +147,7 @@ CREATE "spawner/animals/generic/container"
 "spawner/animals/generic" SET Thermal.ThermalObjectBehaviour profile "DefaultThermalProfile"
 "spawner/animals/generic/container" ADD Thermal.ThermalObjectOverride
 "spawner/animals/generic/container" SET RandomProps.PropArea tags "+animal, +thermal"
-"spawner/animals/generic/container" SET RandomProps.PropArea async false numberOfProps 29 collisionCheck false stickToGround false 
+"spawner/animals/generic/container" SET RandomProps.PropArea async false numberOfProps 16 collisionCheck false stickToGround false 
 "spawner/animals/generic/container" SET RandomProps.Torus innerRadius 5
 "spawner/animals/generic/container" SET RandomProps.Torus radius 50
 "spawner/animals/generic/container" SET Transform position (0 0 0) eulerAngles (0 0 0) localScale (1 1 1)
@@ -157,10 +161,10 @@ CREATE "spawner/animals/birds/container"
 "spawner/animals/birds" SET Thermal.ThermalObjectBehaviour profile "DefaultThermalProfile"
 "spawner/animals/birds/container" ADD Thermal.ThermalObjectOverride
 "spawner/animals/birds/container" SET RandomProps.PropArea tags "bird"
-"spawner/animals/birds/container" SET RandomProps.PropArea async false numberOfProps 27 collisionCheck true stickToGround false 
+"spawner/animals/birds/container" SET RandomProps.PropArea async false numberOfProps 70 collisionCheck true stickToGround false 
 "spawner/animals/birds/container" SET RandomProps.Torus innerRadius 0
 "spawner/animals/birds/container" SET RandomProps.Torus radius 120
-"spawner/animals/birds/container" SET Transform position (0 67 0) eulerAngles (0 0 0) localScale (1 1 1)
+"spawner/animals/birds/container" SET Transform position (0 26 0) eulerAngles (0 0 0) localScale (1 1 1)
 "spawner/animals/birds/container" SET active true
 "spawner/animals/birds" SET active true
 CREATE "spawner/cars/container"
@@ -201,15 +205,15 @@ CREATE "cameras/spawner/drones/container"
 "cameras/spawner/drones/container" SET RandomProps.Frustum minDistance 2
 "cameras/spawner/drones/container" SET RandomProps.Frustum maxDistance 6
 "cameras/spawner/drones/container" SET RandomProps.PropArea async false numberOfProps 2 collisionCheck true stickToGround false 
-"cameras/spawner/drones/container" SET RandomProps.Frustum allowEdge false
-"cameras/spawner/drones/container" SET RandomProps.Frustum scaleBack 0.25
 "cameras/spawner/drones/container" SET RandomProps.Frustum cam "cameras/cameraRGB"
+"cameras/spawner/drones/container" SET RandomProps.Frustum scaleBack 0.25
+"cameras/spawner/drones/container" SET RandomProps.Frustum allowEdge false
 "cameras/spawner/drones/container" SET Transform eulerAngles (0 0 0) localScale (1 1 1)
 "cameras/spawner/drones/container" ADD Segmentation.Class
 "cameras/spawner/drones/container" SET Segmentation.Class className "DRONE"
 "cameras/spawner/drones/container" ADD RandomProps.SpawnerRandomizers.RandomColor
 "cameras/spawner/drones/container" SET RandomProps.SpawnerRandomizers.RandomColor randomMethod "Random"
-"cameras/spawner/drones/container" PUSH RandomProps.SpawnerRandomizers.RandomColor availableColors "#04C55DFF"
+"cameras/spawner/drones/container" PUSH RandomProps.SpawnerRandomizers.RandomColor availableColors "#02B357FF"
 "cameras/spawner/drones/container" SET RandomProps.SpawnerRandomizers.RandomColor partsNames "chassis,legs,motors,battery,bolts,sensors_caps,sensors,camera,blades"
 "cameras/spawner/drones/container" PUSH RandomProps.SpawnerRandomizers.RandomColor colorsWeights 14
 "cameras/spawner/drones/container" SET active true
