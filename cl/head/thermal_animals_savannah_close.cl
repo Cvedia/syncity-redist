@@ -6,15 +6,16 @@ CREATE "cameras"
 "cameras" SET Transform position (-6 1 -50) eulerAngles (0 0 0)
 CREATE "cameras/segmentation"
 "cameras/segmentation" SET active false
-"cameras/segmentation" ADD Camera SegmentationCamera Segmentation.Output.ClassColors Sensors.RenderCamera
+"cameras/segmentation" ADD Camera SegmentationCamera Segmentation.Output.BoundingBoxes Segmentation.Output.ClassColors Sensors.RenderCamera
 "cameras/segmentation" SET SegmentationCamera transparencyCutout 0
 "cameras/segmentation" SET Camera near 0.3 far 10000 fieldOfView 90 renderingPath "UsePlayerSettings" targetTexture.filterMode "Point" 
 "cameras/segmentation" SET Sensors.RenderCamera format "ARGB32" resolution (1024 768)
-"cameras/segmentation" SET Segmentation.BoundingBoxes minimumObjectVisibility 0 boundingBoxesExtensionAmount 0 minimumPixelsCount 1 
+"cameras/segmentation" SET Segmentation.Output.BoundingBoxes minimumObjectVisibility 0 extensionAmount 0 minimumPixelsCount 1 
+"cameras/segmentation" EXECUTE Segmentation.Output.ClassColors lookUpTable.SetClassColor "Animal->blue"
 "cameras/segmentation" ADD Segmentation.Output.FilteredBoundingBoxes
 "cameras/segmentation" EXECUTE Segmentation.Output.FilteredBoundingBoxes EnableClasses "Animal"
-"cameras/segmentation" EXECUTE Segmentation.Output.ClassColors lookUpTable.SetClassColor "Animal->blue"
 "cameras/segmentation" SET active true
+[UI.Window] ShowFromCamera "cameras/segmentation" AS "segmentation" WITH 1024 768 24 "ARGB32" "Default"
 CREATE "cameras/cameraRGB"
 "cameras/cameraRGB" SET active false
 "cameras/cameraRGB" ADD Camera Sensors.RenderCamera AudioListener
@@ -25,6 +26,7 @@ CREATE "EnviroSky" AS "EnviroSky"
 "EnviroSky" EXECUTE EnviroSky AssignAndStart "cameras/cameraRGB" "cameras/cameraRGB"
 "EnviroSky" SET active true
 "cameras/cameraRGB" SET active true
+[UI.Window] ShowFromCamera "cameras/cameraRGB" AS "cameraRGB" WITH 1024 768 24 "ARGB32" "Default"
 "cameras" SET active true
 "cameras/cameraRGB" ADD UnityEngine.PostProcessing.PostProcessingBehaviour
 "cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile "EnviroFX"
@@ -44,6 +46,7 @@ CREATE "cameras/thermal"
 "cameras/thermal" SET Thermal.ThermalCamera ambientTemperature 15 temperatureRange (9 35) maxDistanceForProbeUpdate 100 useAGC true enabled true 
 "cameras/thermal" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.grain.enabled false
 "cameras/thermal" SET active true
+[UI.Window] ShowFromCamera "cameras/thermal" AS "thermal" WITH 1024 768 24 "ARGB32" "Default"
 CREATE "cameras/depth"
 "cameras/depth" SET active false
 "cameras/depth" ADD Camera Sensors.RenderCamera Cameras.RenderDepthBufferSimple
@@ -51,6 +54,7 @@ CREATE "cameras/depth"
 "cameras/depth" SET Sensors.RenderCamera format "RFloat" resolution (1024 768)
 "cameras/depth" SET Cameras.RenderDepthBufferSimple outputMode "Linear01Depth" transparencyCutout 0
 "cameras/depth" SET active true
+[UI.Window] ShowFromCamera "cameras/depth" AS "depth" WITH 1024 768 32 "RFloat" "Default"
 CREATE "spawner/animals0/container"
 "spawner/animals0/container" SET active false
 "spawner/animals0/container" ADD RandomProps.Rectangle
