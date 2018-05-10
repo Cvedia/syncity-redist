@@ -11,20 +11,22 @@ CREATE "EnviroSky" AS "EnviroSky"
 "EnviroSky" EXECUTE EnviroSky AssignAndStart "cameras/cameraRGB" "cameras/cameraRGB"
 "EnviroSky" SET active true
 "cameras/cameraRGB" SET active true
+[UI.Window] ShowFromCamera "cameras/cameraRGB" AS "cameraRGB" WITH 1024 768 24 "ARGB32" "Default"
 "cameras" SET active true
 "cameras/cameraRGB" ADD UnityEngine.PostProcessing.PostProcessingBehaviour
 "cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile "EnviroFX"
 "cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
 CREATE "cameras/segmentation"
 "cameras/segmentation" SET active false
-"cameras/segmentation" ADD Camera SegmentationCamera Segmentation.Output.ClassColors Sensors.RenderCamera
+"cameras/segmentation" ADD Camera SegmentationCamera Segmentation.Output.BoundingBoxes Segmentation.Output.ClassColors Sensors.RenderCamera
 "cameras/segmentation" SET SegmentationCamera transparencyCutout 0
 "cameras/segmentation" SET Camera near 0.3 far 1000 fieldOfView 60 renderingPath "UsePlayerSettings" targetTexture.filterMode "Point" 
 "cameras/segmentation" SET Sensors.RenderCamera format "ARGB32" resolution (1024 768)
-"cameras/segmentation" SET Segmentation.BoundingBoxes minimumObjectVisibility 0 boundingBoxesExtensionAmount 0 minimumPixelsCount 1 
+"cameras/segmentation" SET Segmentation.Output.BoundingBoxes minimumObjectVisibility 0 extensionAmount 0 minimumPixelsCount 1 
 "cameras/segmentation" ADD Segmentation.Output.FilteredBoundingBoxes
 "cameras/segmentation" EXECUTE Segmentation.Output.FilteredBoundingBoxes EnableClasses "Car"
 "cameras/segmentation" SET active true
+[UI.Window] ShowFromCamera "cameras/segmentation" AS "segmentation" WITH 1024 768 24 "ARGB32" "Default"
 CREATE "disk1"
 "disk1" SET active false
 "disk1" ADD Sensors.Disk
@@ -67,7 +69,7 @@ CREATE "spawner/city/nature/trees/container"
 "spawner/city/nature/trees/container" ADD RandomProps.Torus
 "spawner/city/nature/trees/container" ADD RandomProps.PropArea
 "spawner/city/nature/trees/container" SET RandomProps.PropArea tags "tree"
-"spawner/city/nature/trees/container" SET RandomProps.PropArea async false numberOfProps 160 collisionCheck false stickToGround false 
+"spawner/city/nature/trees/container" SET RandomProps.PropArea async false numberOfProps 162 collisionCheck false stickToGround false 
 "spawner/city/nature/trees/container" SET RandomProps.Torus innerRadius 10
 "spawner/city/nature/trees/container" SET RandomProps.Torus radius 80
 "spawner/city/nature/trees/container" SET Transform position (0 0 0) eulerAngles (0 0 0) localScale (1 1 1)
@@ -89,7 +91,7 @@ CREATE "spawner/animals/generic/container"
 "spawner/animals/generic/container" ADD RandomProps.Torus
 "spawner/animals/generic/container" ADD RandomProps.PropArea
 "spawner/animals/generic/container" SET RandomProps.PropArea tags "animal"
-"spawner/animals/generic/container" SET RandomProps.PropArea async false numberOfProps 45 collisionCheck false stickToGround false 
+"spawner/animals/generic/container" SET RandomProps.PropArea async false numberOfProps 33 collisionCheck false stickToGround false 
 "spawner/animals/generic/container" SET RandomProps.Torus innerRadius 5
 "spawner/animals/generic/container" SET RandomProps.Torus radius 50
 "spawner/animals/generic/container" SET Transform position (0 0 0) eulerAngles (0 0 0) localScale (1 1 1)
@@ -100,10 +102,10 @@ CREATE "spawner/animals/birds/container"
 "spawner/animals/birds/container" ADD RandomProps.Torus
 "spawner/animals/birds/container" ADD RandomProps.PropArea
 "spawner/animals/birds/container" SET RandomProps.PropArea tags "bird"
-"spawner/animals/birds/container" SET RandomProps.PropArea async false numberOfProps 34 collisionCheck true stickToGround false 
+"spawner/animals/birds/container" SET RandomProps.PropArea async false numberOfProps 39 collisionCheck true stickToGround false 
 "spawner/animals/birds/container" SET RandomProps.Torus innerRadius 0
 "spawner/animals/birds/container" SET RandomProps.Torus radius 120
-"spawner/animals/birds/container" SET Transform position (0 55 0) eulerAngles (0 0 0) localScale (1 1 1)
+"spawner/animals/birds/container" SET Transform position (0 87 0) eulerAngles (0 0 0) localScale (1 1 1)
 "spawner/animals/birds/container" SET active true
 "spawner/animals/birds" SET active true
 CREATE "spawner/cars/container"
@@ -129,44 +131,44 @@ CREATE "spawner/roadsigns/container"
 "spawner/roadsigns/container" SET active true
 "spawner/roadsigns" SET active true
 CREATE "drone/dr_0" "Drones/splinter/splinter"
-"drone/dr_0" ADD Segmentation.ClassGroup
-"drone/dr_0" SET Segmentation.ClassGroup itemsClassName "Car"
+"drone/dr_0" ADD Segmentation.Entity Segmentation.Class
+"drone/dr_0" SET Segmentation.Class className "Car"
 "drone/dr_0" SET Transform position (0 1 0)
 CREATE "drone/dr_1" "Drones/DJI_Inspire-2/DJI_Inspire_2"
-"drone/dr_1" ADD Segmentation.ClassGroup
-"drone/dr_1" SET Segmentation.ClassGroup itemsClassName "Car"
+"drone/dr_1" ADD Segmentation.Entity Segmentation.Class
+"drone/dr_1" SET Segmentation.Class className "Car"
 "drone/dr_1" SET Transform position (1 1 0)
 CREATE "drone/dr_2" "Drones/DJI_Mavic_Pro/DJI_Mavic_Pro"
-"drone/dr_2" ADD Segmentation.ClassGroup
-"drone/dr_2" SET Segmentation.ClassGroup itemsClassName "Car"
+"drone/dr_2" ADD Segmentation.Entity Segmentation.Class
+"drone/dr_2" SET Segmentation.Class className "Car"
 "drone/dr_2" SET Transform position (2 1 0)
 CREATE "drone/dr_3" "Drones/red/red"
-"drone/dr_3" ADD Segmentation.ClassGroup
-"drone/dr_3" SET Segmentation.ClassGroup itemsClassName "Car"
+"drone/dr_3" ADD Segmentation.Entity Segmentation.Class
+"drone/dr_3" SET Segmentation.Class className "Car"
 "drone/dr_3" SET Transform position (3 1 0)
 CREATE "drone/dr_4" "Drones/DJI Spreading Wings S1000 Professional Octocopter/Spreading_Wings_S1000"
-"drone/dr_4" ADD Segmentation.ClassGroup
-"drone/dr_4" SET Segmentation.ClassGroup itemsClassName "Car"
+"drone/dr_4" ADD Segmentation.Entity Segmentation.Class
+"drone/dr_4" SET Segmentation.Class className "Car"
 "drone/dr_4" SET Transform position (4 1 0)
 CREATE "drone/dr_5" "Drones/white/white"
-"drone/dr_5" ADD Segmentation.ClassGroup
-"drone/dr_5" SET Segmentation.ClassGroup itemsClassName "Car"
+"drone/dr_5" ADD Segmentation.Entity Segmentation.Class
+"drone/dr_5" SET Segmentation.Class className "Car"
 "drone/dr_5" SET Transform position (5 1 0)
 CREATE "drone/dr_6" "Drones/DJI_Phantom_4_Pro/DJI_Phantom_4_Pron"
-"drone/dr_6" ADD Segmentation.ClassGroup
-"drone/dr_6" SET Segmentation.ClassGroup itemsClassName "Car"
+"drone/dr_6" ADD Segmentation.Entity Segmentation.Class
+"drone/dr_6" SET Segmentation.Class className "Car"
 "drone/dr_6" SET Transform position (6 1 0)
 CREATE "drone/dr_7" "Drones/Parrot Disco Drone/Parrot_Disco"
-"drone/dr_7" ADD Segmentation.ClassGroup
-"drone/dr_7" SET Segmentation.ClassGroup itemsClassName "Car"
+"drone/dr_7" ADD Segmentation.Entity Segmentation.Class
+"drone/dr_7" SET Segmentation.Class className "Car"
 "drone/dr_7" SET Transform position (7 1 0)
 CREATE "drone/dr_8" "Drones/DJI_Phantom_3_Pro/DJI_Phantom_3_Pro"
-"drone/dr_8" ADD Segmentation.ClassGroup
-"drone/dr_8" SET Segmentation.ClassGroup itemsClassName "Car"
+"drone/dr_8" ADD Segmentation.Entity Segmentation.Class
+"drone/dr_8" SET Segmentation.Class className "Car"
 "drone/dr_8" SET Transform position (8 1 0)
 CREATE "drone/dr_9" "Drones/DJI_Phantom_4_Pro_obsidian/DJI_Phantom_4_Pro_obsidian"
-"drone/dr_9" ADD Segmentation.ClassGroup
-"drone/dr_9" SET Segmentation.ClassGroup itemsClassName "Car"
+"drone/dr_9" ADD Segmentation.Entity Segmentation.Class
+"drone/dr_9" SET Segmentation.Class className "Car"
 "drone/dr_9" SET Transform position (9 1 0)
 "cameras/cameraRGB" SET Camera enabled true
 "cameras" SET Transform position (0 1 0)
