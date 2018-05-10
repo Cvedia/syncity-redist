@@ -1,8 +1,6 @@
 CREATE "cameras"
 "cameras" SET active false
 "cameras" SET Transform position (-6 1 -50) eulerAngles (0 0 0)
-"Canvas/Cameras/Viewport/Content" SET UI.GridLayoutGroup cellSize (1024 768)
-"Canvas" SET active true
 CREATE "cameras/cameraRGB"
 "cameras/cameraRGB" SET active false
 "cameras/cameraRGB" ADD Camera Sensors.RenderCamera AudioListener
@@ -13,39 +11,28 @@ CREATE "EnviroSky" AS "EnviroSky"
 "EnviroSky" EXECUTE EnviroSky AssignAndStart "cameras/cameraRGB" "cameras/cameraRGB"
 "EnviroSky" SET active true
 "cameras/cameraRGB" SET active true
+[UI.Window] ShowFromCamera "cameras/cameraRGB" AS "cameraRGB" WITH 1024 768 24 "ARGB32" "Default"
 "cameras" SET active true
 "cameras/cameraRGB" ADD UnityEngine.PostProcessing.PostProcessingBehaviour
 "cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile "EnviroFX"
 "cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
 CREATE "cameras/segmentation"
 "cameras/segmentation" SET active false
-"cameras/segmentation" ADD Camera Segmentation.Segmentation Segmentation.LookUpTable Sensors.RenderCamera
+"cameras/segmentation" ADD Camera SegmentationCamera Segmentation.Output.BoundingBoxes Segmentation.Output.ClassColors Sensors.RenderCamera
+"cameras/segmentation" SET SegmentationCamera transparencyCutout 0
 "cameras/segmentation" SET Camera near 0.3 far 1000 fieldOfView 60 renderingPath "UsePlayerSettings" targetTexture.filterMode "Point" 
 "cameras/segmentation" SET Sensors.RenderCamera format "ARGB32" resolution (1024 768)
-"cameras/segmentation" SET Segmentation.Segmentation minimumObjectVisibility 0 outputType "Auto" boundingBoxesExtensionAmount 0 transparencyCutout 0 
-"cameras/segmentation" EXECUTE Segmentation.Segmentation DefineClass "Void"
-"cameras/segmentation" PUSH Segmentation.Segmentation boundingBoxesFilter "Car"
-"cameras/segmentation" PUSH Segmentation.Segmentation boundingBoxesFilter "Drone"
-"cameras/segmentation" EXECUTE Segmentation.Segmentation DefineClass "Car"
-"cameras/segmentation" EXECUTE Segmentation.Segmentation DefineClass "Drone"
-"cameras/segmentation" PUSH Segmentation.LookUpTable classes "Void" "Car" "Drone"
-"cameras/segmentation" PUSH Segmentation.LookUpTable colors "black" "red" "blue"
-"cameras/segmentation" EXECUTE Segmentation.LookUpTable MarkTextureDirty
+"cameras/segmentation" SET Segmentation.Output.BoundingBoxes minimumObjectVisibility 0 extensionAmount 0 minimumPixelsCount 1 
+"cameras/segmentation" EXECUTE Segmentation.Output.ClassColors lookUpTable.SetClassColor "Car->red" "Drone->blue"
+"cameras/segmentation" ADD Segmentation.Output.FilteredBoundingBoxes
+"cameras/segmentation" EXECUTE Segmentation.Output.FilteredBoundingBoxes EnableClasses "Car" "Drone"
 "cameras/segmentation" SET active true
+[UI.Window] ShowFromCamera "cameras/segmentation" AS "segmentation" WITH 1024 768 24 "ARGB32" "Default"
 CREATE "cameras/depth"
 "cameras/depth" SET active false
-"cameras/depth" ADD Camera Sensors.RenderCamera
+"cameras/depth" ADD Camera Sensors.RenderCamera Cameras.RenderDepthBufferSimple
 "cameras/depth" SET Camera near 0.3 far 1000 fieldOfView 60 renderingPath "DeferredShading"
 "cameras/depth" SET Sensors.RenderCamera format "RFloat" resolution (1024 768)
-"cameras/depth" ADD Cameras.RenderDepthBufferSimple
-"cameras/depth" SET Cameras.RenderDepthBufferSimple outputMode "Linear01Depth" transparencyCutout 0
-"cameras/depth" SET active true
-CREATE "cameras/depth"
-"cameras/depth" SET active false
-"cameras/depth" ADD Camera Sensors.RenderCamera
-"cameras/depth" SET Camera near 0.3 far 1000 fieldOfView 60 renderingPath "DeferredShading"
-"cameras/depth" SET Sensors.RenderCamera format "RFloat" resolution (1024 768)
-"cameras/depth" ADD Cameras.RenderDepthBufferSimple
 "cameras/depth" SET Cameras.RenderDepthBufferSimple outputMode "Linear01Depth" transparencyCutout 0
 "cameras/depth" SET active true
 CREATE "disk1"
@@ -72,13 +59,13 @@ CREATE "disk1/Cameras/depth"
 CREATE "Cars/VW_Golf_V/VW_Golf_V" FROM "cars" AS "obj/subject0"
 "obj" SET active false
 "obj/subject0" SET Transform position (0 0 0) eulerAngles (0 0 0)
-"obj/subject0" ADD Segmentation.ClassInfo
-"obj/subject0" SET Segmentation.ClassInfo itemClass "Car"
+"obj/subject0" ADD Segmentation.Entity Segmentation.Class
+"obj/subject0" SET Segmentation.Class className "Car"
 CREATE "Drones/DJI_Phantom_4_Pro/DJI_Phantom_4_Pron" FROM "drones" AS "obj/subject1"
 "obj" SET active false
 "obj/subject1" SET Transform position (0 2 0) eulerAngles (0 0 0)
-"obj/subject1" ADD Segmentation.ClassInfo
-"obj/subject1" SET Segmentation.ClassInfo itemClass "Drone"
+"obj/subject1" ADD Segmentation.Entity Segmentation.Class
+"obj/subject1" SET Segmentation.Class className "Drone"
 "obj" SET Transform position (-6 0 -9) eulerAngles (0 0 0)
 "obj" SET active true
 "obj/subject0" SET active true
