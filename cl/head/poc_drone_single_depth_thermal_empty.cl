@@ -1,23 +1,22 @@
 CREATE "cameras"
 "cameras" SET active false
 "cameras" SET Transform position (-6 1 -50) eulerAngles (0 0 0)
+"Segmentation.Profile.instance" PUSH classes "Void" "drone0"
 CREATE "cameras/segmentation"
 "cameras/segmentation" SET active false
-"cameras/segmentation" ADD Camera SegmentationCamera Segmentation.Output.BoundingBoxes Segmentation.Output.ClassColors Sensors.RenderCamera
+"cameras/segmentation" ADD Camera SegmentationCamera Segmentation.Output.BoundingBoxes Segmentation.Output.ClassColors
 "cameras/segmentation" SET SegmentationCamera transparencyCutout 0
 "cameras/segmentation" SET Camera near 0.3 far 1000 fieldOfView 60 renderingPath "UsePlayerSettings" targetTexture.filterMode "Point" 
-"cameras/segmentation" SET Sensors.RenderCamera format "ARGB32" resolution (1536 1152)
 "cameras/segmentation" SET Segmentation.Output.BoundingBoxes minimumObjectVisibility 0 extensionAmount 0 minimumPixelsCount 1 
-"cameras/segmentation" EXECUTE Segmentation.Output.ClassColors lookUpTable.SetClassColor "drone0->red"
+"cameras/segmentation" EXECUTE Segmentation.Output.ClassColors lookUpTable.SetClassColor "Void->black" "drone0->red"
 "cameras/segmentation" ADD Segmentation.Output.FilteredBoundingBoxes
 "cameras/segmentation" EXECUTE Segmentation.Output.FilteredBoundingBoxes EnableClasses "drone0"
 "cameras/segmentation" SET active true
 [UI.Window] ShowFromCamera "cameras/segmentation" AS "segmentation" WITH 1536 1152 24 "ARGB32" "Default"
 CREATE "cameras/cameraRGB"
 "cameras/cameraRGB" SET active false
-"cameras/cameraRGB" ADD Camera Sensors.RenderCamera AudioListener
+"cameras/cameraRGB" ADD Camera AudioListener
 "cameras/cameraRGB" SET Camera near 0.3 far 1000 fieldOfView 60 renderingPath "UsePlayerSettings"
-"cameras/cameraRGB" SET Sensors.RenderCamera format "ARGB32" resolution (1536 1152)
 CREATE "EnviroSky" AS "EnviroSky"
 "EnviroSky" SET EnviroSky Player "cameras" PlayerCamera "cameras/cameraRGB" GameTime.ProgressTime "None" weatherSettings.cloudTransitionSpeed 100 weatherSettings.effectTransitionSpeed 100 weatherSettings.fogTransitionSpeed 100 
 "EnviroSky" EXECUTE EnviroSky AssignAndStart "cameras/cameraRGB" "cameras/cameraRGB"
@@ -35,12 +34,13 @@ CREATE "disk1"
 "disk1" SET active true
 "disk1" SET active false
 CREATE "disk1/Cameras/camerargb"
-"disk1/Cameras/camerargb" ADD Sensors.RenderCameraLink
-"disk1/Cameras/camerargb" SET Sensors.RenderCameraLink target "cameras/cameraRGB"
+"disk1/Cameras/camerargb" ADD Sensors.RenderTextureLink
+"disk1/Cameras/camerargb" SET Sensors.RenderTextureLink target "cameraRGB"
 "disk1/Cameras/camerargb" SET active true
 CREATE "disk1/Cameras/segmentation"
-"disk1/Cameras/segmentation" ADD Sensors.RenderCameraLink
-"disk1/Cameras/segmentation" SET Sensors.RenderCameraLink target "cameras/segmentation"
+"disk1/Cameras/segmentation" ADD Sensors.RenderTextureLink
+"disk1/Cameras/segmentation" SET Sensors.RenderTextureLink target "segmentation"
+"disk1/Cameras/segmentation" SET Sensors.RenderTextureLink outputType "LOSSLESS"
 "disk1/Cameras/segmentation" SET active true
 "disk1" SET active true
 CREATE "spawner/city/ground/container"
@@ -70,7 +70,7 @@ CREATE "spawner/city/nature/trees/container"
 "spawner/city/nature/trees/container" ADD RandomProps.Torus
 "spawner/city/nature/trees/container" ADD RandomProps.PropArea
 "spawner/city/nature/trees/container" SET RandomProps.PropArea tags "tree"
-"spawner/city/nature/trees/container" SET RandomProps.PropArea async false numberOfProps 182 collisionCheck false stickToGround false 
+"spawner/city/nature/trees/container" SET RandomProps.PropArea async false numberOfProps 179 collisionCheck false stickToGround false 
 "spawner/city/nature/trees/container" SET RandomProps.Torus innerRadius 15
 "spawner/city/nature/trees/container" SET RandomProps.Torus radius 60
 "spawner/city/nature/trees/container" SET Transform position (0 0 0) eulerAngles (0 0 0) localScale (1 1 1)
@@ -92,7 +92,7 @@ CREATE "spawner/animals/generic/container"
 "spawner/animals/generic/container" ADD RandomProps.Torus
 "spawner/animals/generic/container" ADD RandomProps.PropArea
 "spawner/animals/generic/container" SET RandomProps.PropArea tags "animal"
-"spawner/animals/generic/container" SET RandomProps.PropArea async false numberOfProps 46 collisionCheck false stickToGround false 
+"spawner/animals/generic/container" SET RandomProps.PropArea async false numberOfProps 37 collisionCheck false stickToGround false 
 "spawner/animals/generic/container" SET RandomProps.Torus innerRadius 5
 "spawner/animals/generic/container" SET RandomProps.Torus radius 50
 "spawner/animals/generic/container" SET Transform position (0 0 0) eulerAngles (0 0 0) localScale (1 1 1)
@@ -103,10 +103,10 @@ CREATE "spawner/animals/birds/container"
 "spawner/animals/birds/container" ADD RandomProps.Torus
 "spawner/animals/birds/container" ADD RandomProps.PropArea
 "spawner/animals/birds/container" SET RandomProps.PropArea tags "bird"
-"spawner/animals/birds/container" SET RandomProps.PropArea async false numberOfProps 27 collisionCheck true stickToGround false 
+"spawner/animals/birds/container" SET RandomProps.PropArea async false numberOfProps 76 collisionCheck true stickToGround false 
 "spawner/animals/birds/container" SET RandomProps.Torus innerRadius 0
 "spawner/animals/birds/container" SET RandomProps.Torus radius 120
-"spawner/animals/birds/container" SET Transform position (0 49 0) eulerAngles (0 0 0) localScale (1 1 1)
+"spawner/animals/birds/container" SET Transform position (0 27 0) eulerAngles (0 0 0) localScale (1 1 1)
 "spawner/animals/birds/container" SET active true
 "spawner/animals/birds" SET active true
 CREATE "spawner/cars/container"
@@ -149,7 +149,7 @@ CREATE ccameras/drone/drone1/drone1v "Drones/DJI_Phantom_4_Pro/DJI_Phantom_4_Pro
 "cameras/drone/drone1/drone1" SET Transform localPosition (0 0 0)
 "cameras/cameraRGB" SET Camera enabled true
 "cameras" SET Transform position (0 5 0)
-"cameras" SET Transform eulerAngles (-4.7059528942903555 0 0)
+"cameras" SET Transform eulerAngles (-14.852962455284331 0 0)
 "EnviroSky" EXECUTE EnviroSky ChangeWeather "Cloudy 2"
 "EnviroSky" SET EnviroSky cloudsMode "Volume"
 "EnviroSky" SET EnviroSky fogSettings.heightFog false
