@@ -7,9 +7,8 @@ CREATE "SyncityJPickup/cameras"
 "SyncityJPickup/cameras" SET Transform position (-6 1 -50) eulerAngles (0 0 0)
 CREATE "SyncityJPickup/cameras/Front"
 "SyncityJPickup/cameras/Front" SET active false
-"SyncityJPickup/cameras/Front" ADD Camera Sensors.RenderCamera
+"SyncityJPickup/cameras/Front" ADD Camera
 "SyncityJPickup/cameras/Front" SET Camera near 0.3 far 1000 fieldOfView 60 renderingPath "UsePlayerSettings"
-"SyncityJPickup/cameras/Front" SET Sensors.RenderCamera format "ARGB32" resolution (640 480)
 CREATE "EnviroSky" AS "EnviroSky"
 "EnviroSky" SET EnviroSky Player "SyncityJPickup/cameras" PlayerCamera "SyncityJPickup/cameras/Front" GameTime.ProgressTime "None" weatherSettings.cloudTransitionSpeed 100 weatherSettings.effectTransitionSpeed 100 weatherSettings.fogTransitionSpeed 100 
 "EnviroSky" EXECUTE EnviroSky AssignAndStart "SyncityJPickup/cameras/Front" "SyncityJPickup/cameras/Front"
@@ -22,20 +21,24 @@ CREATE "EnviroSky" AS "EnviroSky"
 "SyncityJPickup/cameras/Front" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
 CREATE "SyncityJPickup/cameras/Depth"
 "SyncityJPickup/cameras/Depth" SET active false
-"SyncityJPickup/cameras/Depth" ADD Camera Sensors.RenderCamera Cameras.RenderDepthBufferSimple
+"SyncityJPickup/cameras/Depth" ADD Camera Cameras.RenderDepthBufferSimple Sensors.RenderCamera
 "SyncityJPickup/cameras/Depth" SET Camera near 0.3 far 1000 fieldOfView 60 renderingPath "DeferredShading"
-"SyncityJPickup/cameras/Depth" SET Sensors.RenderCamera format "RFloat" resolution (640 480)
 "SyncityJPickup/cameras/Depth" SET Cameras.RenderDepthBufferSimple outputMode "Linear01Depth" transparencyCutout 0
+CREATE RenderTexture 640 480 32 "RFloat" "Default" AS "SyncityJPickup_cameras_Depth_RT"
+"SyncityJPickup_cameras_Depth_RT" SET name "SyncityJPickup/cameras/Depth"
+"SyncityJPickup_cameras_Depth_RT" EXECUTE @Create
+"SyncityJPickup/cameras/Depth" SET Camera targetTexture "SyncityJPickup_cameras_Depth_RT"
+"SyncityJPickup/cameras/Depth" SET Sensors.RenderCamera format "RFloat" resolution (640 480)
 "SyncityJPickup/cameras/Depth" SET active true
-[UI.Window] ShowFromCamera "SyncityJPickup/cameras/Depth" AS "Depth" WITH 640 480 32 "RFloat" "Default"
+[UI.Window] ShowFromRenderTexture "SyncityJPickup_cameras_Depth_RT"
+"Segmentation.Profile.instance" PUSH classes "Void" "LINES" "DIRT" "ROAD" "PROPS" "SIGNS"
 CREATE "SyncityJPickup/cameras/Segment"
 "SyncityJPickup/cameras/Segment" SET active false
-"SyncityJPickup/cameras/Segment" ADD Camera SegmentationCamera Segmentation.Output.BoundingBoxes Segmentation.Output.ClassColors Sensors.RenderCamera
+"SyncityJPickup/cameras/Segment" ADD Camera SegmentationCamera Segmentation.Output.BoundingBoxes Segmentation.Output.ClassColors
 "SyncityJPickup/cameras/Segment" SET SegmentationCamera transparencyCutout 0
 "SyncityJPickup/cameras/Segment" SET Camera near 0.3 far 1000 fieldOfView 60 renderingPath "UsePlayerSettings" targetTexture.filterMode "Point" 
-"SyncityJPickup/cameras/Segment" SET Sensors.RenderCamera format "ARGB32" resolution (640 480)
 "SyncityJPickup/cameras/Segment" SET Segmentation.Output.BoundingBoxes minimumObjectVisibility 0 extensionAmount 0 minimumPixelsCount 1 
-"SyncityJPickup/cameras/Segment" EXECUTE Segmentation.Output.ClassColors lookUpTable.SetClassColor "LINES->white" "DIRT->blue" "ROAD->#838383" "PROPS->#09FF00" "SIGNS->red"
+"SyncityJPickup/cameras/Segment" EXECUTE Segmentation.Output.ClassColors lookUpTable.SetClassColor "Void->black" "LINES->white" "DIRT->blue" "ROAD->#838383" "PROPS->#09FF00" "SIGNS->red"
 "SyncityJPickup/cameras/Segment" ADD Segmentation.Output.FilteredBoundingBoxes
 "SyncityJPickup/cameras/Segment" EXECUTE Segmentation.Output.FilteredBoundingBoxes EnableClasses "LINES" "DIRT" "ROAD" "PROPS" "SIGNS"
 "SyncityJPickup/cameras/Segment" SET active true
@@ -47,16 +50,17 @@ CREATE "disk1"
 "disk1" SET active true
 "disk1" SET active false
 CREATE "disk1/Syncityjpickup/cameras/front"
-"disk1/Syncityjpickup/cameras/front" ADD Sensors.RenderCameraLink
-"disk1/Syncityjpickup/cameras/front" SET Sensors.RenderCameraLink target "SyncityJPickup/cameras/Front"
+"disk1/Syncityjpickup/cameras/front" ADD Sensors.RenderTextureLink
+"disk1/Syncityjpickup/cameras/front" SET Sensors.RenderTextureLink target "Front"
 "disk1/Syncityjpickup/cameras/front" SET active true
 CREATE "disk1/Syncityjpickup/cameras/depth"
-"disk1/Syncityjpickup/cameras/depth" ADD Sensors.RenderCameraLink
-"disk1/Syncityjpickup/cameras/depth" SET Sensors.RenderCameraLink target "SyncityJPickup/cameras/Depth"
+"disk1/Syncityjpickup/cameras/depth" ADD Sensors.RenderTextureLink
+"disk1/Syncityjpickup/cameras/depth" SET Sensors.RenderTextureLink target "Depth"
+"disk1/Syncityjpickup/cameras/depth" SET Sensors.RenderTextureLink outputType "DEPTH"
 "disk1/Syncityjpickup/cameras/depth" SET active true
 CREATE "disk1/Syncityjpickup/cameras/segment"
-"disk1/Syncityjpickup/cameras/segment" ADD Sensors.RenderCameraLink
-"disk1/Syncityjpickup/cameras/segment" SET Sensors.RenderCameraLink target "SyncityJPickup/cameras/Segment"
+"disk1/Syncityjpickup/cameras/segment" ADD Sensors.RenderTextureLink
+"disk1/Syncityjpickup/cameras/segment" SET Sensors.RenderTextureLink target "Segment"
 "disk1/Syncityjpickup/cameras/segment" SET active true
 "disk1" SET active true
 "autodrive/Road/Lines" ADD Segmentation.Entity Segmentation.Class
