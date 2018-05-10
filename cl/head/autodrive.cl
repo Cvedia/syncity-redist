@@ -5,8 +5,6 @@ CREATE "autodrive/SyncityJPickup" FROM "autodrive" AS "SyncityJPickup"
 CREATE "SyncityJPickup/cameras"
 "SyncityJPickup/cameras" SET active false
 "SyncityJPickup/cameras" SET Transform position (-6 1 -50) eulerAngles (0 0 0)
-"Canvas/Cameras/Viewport/Content" SET UI.GridLayoutGroup cellSize (1024 768)
-"Canvas" SET active true
 CREATE "SyncityJPickup/cameras/Front"
 "SyncityJPickup/cameras/Front" SET active false
 "SyncityJPickup/cameras/Front" ADD Camera Sensors.RenderCamera
@@ -17,39 +15,31 @@ CREATE "EnviroSky" AS "EnviroSky"
 "EnviroSky" EXECUTE EnviroSky AssignAndStart "SyncityJPickup/cameras/Front" "SyncityJPickup/cameras/Front"
 "EnviroSky" SET active true
 "SyncityJPickup/cameras/Front" SET active true
+[UI.Window] ShowFromCamera "SyncityJPickup/cameras/Front" AS "Front" WITH 640 480 24 "ARGB32" "Default"
 "SyncityJPickup/cameras" SET active true
 "SyncityJPickup/cameras/Front" ADD UnityEngine.PostProcessing.PostProcessingBehaviour
 "SyncityJPickup/cameras/Front" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile "EnviroFX"
 "SyncityJPickup/cameras/Front" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
 CREATE "SyncityJPickup/cameras/Depth"
 "SyncityJPickup/cameras/Depth" SET active false
-"SyncityJPickup/cameras/Depth" ADD Camera Sensors.RenderCamera
+"SyncityJPickup/cameras/Depth" ADD Camera Sensors.RenderCamera Cameras.RenderDepthBufferSimple
 "SyncityJPickup/cameras/Depth" SET Camera near 0.3 far 1000 fieldOfView 60 renderingPath "DeferredShading"
 "SyncityJPickup/cameras/Depth" SET Sensors.RenderCamera format "RFloat" resolution (640 480)
-"SyncityJPickup/cameras/Depth" ADD Cameras.RenderDepthBufferSimple
 "SyncityJPickup/cameras/Depth" SET Cameras.RenderDepthBufferSimple outputMode "Linear01Depth" transparencyCutout 0
 "SyncityJPickup/cameras/Depth" SET active true
+[UI.Window] ShowFromCamera "SyncityJPickup/cameras/Depth" AS "Depth" WITH 640 480 32 "RFloat" "Default"
 CREATE "SyncityJPickup/cameras/Segment"
 "SyncityJPickup/cameras/Segment" SET active false
-"SyncityJPickup/cameras/Segment" ADD Camera Segmentation.Segmentation Segmentation.LookUpTable Sensors.RenderCamera
+"SyncityJPickup/cameras/Segment" ADD Camera SegmentationCamera Segmentation.Output.BoundingBoxes Segmentation.Output.ClassColors Sensors.RenderCamera
+"SyncityJPickup/cameras/Segment" SET SegmentationCamera transparencyCutout 0
 "SyncityJPickup/cameras/Segment" SET Camera near 0.3 far 1000 fieldOfView 60 renderingPath "UsePlayerSettings" targetTexture.filterMode "Point" 
 "SyncityJPickup/cameras/Segment" SET Sensors.RenderCamera format "ARGB32" resolution (640 480)
-"SyncityJPickup/cameras/Segment" SET Segmentation.Segmentation minimumObjectVisibility 0 outputType "Auto" boundingBoxesExtensionAmount 0 transparencyCutout 0 
-"SyncityJPickup/cameras/Segment" EXECUTE Segmentation.Segmentation DefineClass "Void"
-"SyncityJPickup/cameras/Segment" PUSH Segmentation.Segmentation boundingBoxesFilter "LINES"
-"SyncityJPickup/cameras/Segment" PUSH Segmentation.Segmentation boundingBoxesFilter "DIRT"
-"SyncityJPickup/cameras/Segment" PUSH Segmentation.Segmentation boundingBoxesFilter "ROAD"
-"SyncityJPickup/cameras/Segment" PUSH Segmentation.Segmentation boundingBoxesFilter "PROPS"
-"SyncityJPickup/cameras/Segment" PUSH Segmentation.Segmentation boundingBoxesFilter "SIGNS"
-"SyncityJPickup/cameras/Segment" EXECUTE Segmentation.Segmentation DefineClass "LINES"
-"SyncityJPickup/cameras/Segment" EXECUTE Segmentation.Segmentation DefineClass "DIRT"
-"SyncityJPickup/cameras/Segment" EXECUTE Segmentation.Segmentation DefineClass "ROAD"
-"SyncityJPickup/cameras/Segment" EXECUTE Segmentation.Segmentation DefineClass "PROPS"
-"SyncityJPickup/cameras/Segment" EXECUTE Segmentation.Segmentation DefineClass "SIGNS"
-"SyncityJPickup/cameras/Segment" PUSH Segmentation.LookUpTable classes "Void" "LINES" "DIRT" "ROAD" "PROPS" "SIGNS"
-"SyncityJPickup/cameras/Segment" PUSH Segmentation.LookUpTable colors "black" "white" "blue" "#838383" "#09FF00" "red"
-"SyncityJPickup/cameras/Segment" EXECUTE Segmentation.LookUpTable MarkTextureDirty
+"SyncityJPickup/cameras/Segment" SET Segmentation.Output.BoundingBoxes minimumObjectVisibility 0 extensionAmount 0 minimumPixelsCount 1 
+"SyncityJPickup/cameras/Segment" EXECUTE Segmentation.Output.ClassColors lookUpTable.SetClassColor "LINES->white" "DIRT->blue" "ROAD->#838383" "PROPS->#09FF00" "SIGNS->red"
+"SyncityJPickup/cameras/Segment" ADD Segmentation.Output.FilteredBoundingBoxes
+"SyncityJPickup/cameras/Segment" EXECUTE Segmentation.Output.FilteredBoundingBoxes EnableClasses "LINES" "DIRT" "ROAD" "PROPS" "SIGNS"
 "SyncityJPickup/cameras/Segment" SET active true
+[UI.Window] ShowFromCamera "SyncityJPickup/cameras/Segment" AS "Segment" WITH 640 480 24 "ARGB32" "Default"
 CREATE "disk1"
 "disk1" SET active false
 "disk1" ADD Sensors.Disk
@@ -69,20 +59,20 @@ CREATE "disk1/Syncityjpickup/cameras/segment"
 "disk1/Syncityjpickup/cameras/segment" SET Sensors.RenderCameraLink target "SyncityJPickup/cameras/Segment"
 "disk1/Syncityjpickup/cameras/segment" SET active true
 "disk1" SET active true
-"autodrive/Road/Lines" ADD Segmentation.ClassGroup
-"autodrive/Road/Lines" SET Segmentation.ClassGroup itemsClassName "LINES"
-"autodrive/Road/Dirt" ADD Segmentation.ClassGroup
-"autodrive/Road/Dirt" SET Segmentation.ClassGroup itemsClassName "DIRT"
-"autodrive/Road/Props" ADD Segmentation.ClassGroup
-"autodrive/Road/Props" SET Segmentation.ClassGroup itemsClassName "PROPS"
-"autodrive/Road/Signs" ADD Segmentation.ClassGroup
-"autodrive/Road/Signs" SET Segmentation.ClassGroup itemsClassName "SIGNS"
-"autodrive/Road/Road floor Signs" ADD Segmentation.ClassGroup
-"autodrive/Road/Road floor Signs" SET Segmentation.ClassGroup itemsClassName "SIGNS"
-"autodrive/Terrain New" ADD Segmentation.ClassInfo
-"autodrive/Terrain New" SET Segmentation.ClassInfo itemClass "DIRT"
-"autodrive/Road/Autodrive Road" ADD Segmentation.ClassInfo
-"autodrive/Road/Autodrive Road" SET Segmentation.ClassInfo itemClass "ROAD"
+"autodrive/Road/Lines" ADD Segmentation.Entity Segmentation.Class
+"autodrive/Road/Lines" SET Segmentation.Class className "LINES"
+"autodrive/Road/Dirt" ADD Segmentation.Entity Segmentation.Class
+"autodrive/Road/Dirt" SET Segmentation.Class className "DIRT"
+"autodrive/Road/Props" ADD Segmentation.Entity Segmentation.Class
+"autodrive/Road/Props" SET Segmentation.Class className "PROPS"
+"autodrive/Road/Signs" ADD Segmentation.Entity Segmentation.Class
+"autodrive/Road/Signs" SET Segmentation.Class className "SIGNS"
+"autodrive/Road/Road floor Signs" ADD Segmentation.Entity Segmentation.Class
+"autodrive/Road/Road floor Signs" SET Segmentation.Class className "SIGNS"
+"autodrive/Terrain New" ADD Segmentation.Class
+"autodrive/Terrain New" SET Segmentation.Class className "DIRT"
+"autodrive/Road/Autodrive Road" ADD Segmentation.Class
+"autodrive/Road/Autodrive Road" SET Segmentation.Class className "ROAD"
 "SyncityJPickup/cameras" SET Transform localPosition (0 0.872 2.318) localEulerAngles (0 0 0)
 "SyncityJPickup" SET Transform position (-100.76 2.25 -415.57) eulerAngles (0.274 37.499 0)
 "SyncityJPickup" SET VPCustomInput enabled true
