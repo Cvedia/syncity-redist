@@ -4,9 +4,8 @@ CREATE "cameras"
 "cameras" SET Transform position (-6 1 -50) eulerAngles (0 0 0)
 CREATE "cameras/cameraRGB"
 "cameras/cameraRGB" SET active false
-"cameras/cameraRGB" ADD Camera Sensors.RenderCamera AudioListener
+"cameras/cameraRGB" ADD Camera AudioListener
 "cameras/cameraRGB" SET Camera near 0.3 far 1000 fieldOfView 60 renderingPath "UsePlayerSettings"
-"cameras/cameraRGB" SET Sensors.RenderCamera format "ARGB32" resolution (1024 768)
 CREATE "EnviroSky" AS "EnviroSky"
 "EnviroSky" SET EnviroSky Player "cameras" PlayerCamera "cameras/cameraRGB" GameTime.ProgressTime "None" weatherSettings.cloudTransitionSpeed 100 weatherSettings.effectTransitionSpeed 100 weatherSettings.fogTransitionSpeed 100 
 "EnviroSky" EXECUTE EnviroSky AssignAndStart "cameras/cameraRGB" "cameras/cameraRGB"
@@ -24,8 +23,8 @@ CREATE "disk1"
 "disk1" SET active true
 "disk1" SET active false
 CREATE "disk1/Cameras/camerargb"
-"disk1/Cameras/camerargb" ADD Sensors.RenderCameraLink
-"disk1/Cameras/camerargb" SET Sensors.RenderCameraLink target "cameras/cameraRGB"
+"disk1/Cameras/camerargb" ADD Sensors.RenderTextureLink
+"disk1/Cameras/camerargb" SET Sensors.RenderTextureLink target "cameraRGB"
 "disk1/Cameras/camerargb" SET active true
 "disk1" SET active true
 CREATE "spawner/drone/container"
@@ -34,8 +33,8 @@ CREATE "spawner/drone/container"
 "spawner/drone/container" ADD RandomProps.PropArea
 "spawner/drone/container" SET RandomProps.PropArea tags "drone"
 "spawner/drone/container" SET RandomProps.PropArea async false numberOfProps 25 collisionCheck false stickToGround false 
-"spawner/drone/container" SET RandomProps.Torus radius 10
 "spawner/drone/container" SET RandomProps.Torus innerRadius 0
+"spawner/drone/container" SET RandomProps.Torus radius 10
 "spawner/drone/container" SET Transform position (0 0 0) eulerAngles (0 0 0) localScale (1 1 1)
 "spawner/drone/container" SET active true
 "spawner/drone" SET active true
