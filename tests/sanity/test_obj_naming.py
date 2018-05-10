@@ -10,7 +10,6 @@ from syncity import common, settings_manager
 def test_alpha():
 	assert tcommon.telnet() == True
 	for x in range(0, 10):
-		common.output('Create/destroy loop {}'.format(x), 'DEBUG')
 		prefix = tcommon.getRandStr(chars=string.ascii_uppercase + string.ascii_lowercase)
 		assert common.sendData('CREATE "{}/obj"'.format(prefix)) == ["OK"] # create empty object
 		assert common.sendData('DELETE "{}/obj"'.format(prefix)) == ["OK"] # destroy object
@@ -18,7 +17,6 @@ def test_alpha():
 
 def test_alpha_long():
 	for x in range(0, 10):
-		common.output('Create/destroy loop {}'.format(x), 'DEBUG')
 		prefix = tcommon.getRandStr(size=257, chars=string.ascii_uppercase + string.ascii_lowercase)
 		assert common.sendData('CREATE "{}/obj"'.format(prefix)) == ["OK"] # create empty object
 		assert common.sendData('DELETE "{}/obj"'.format(prefix)) == ["OK"] # destroy object
@@ -26,7 +24,6 @@ def test_alpha_long():
 
 def test_digits():
 	for x in range(0, 10):
-		common.output('Create/destroy loop {}'.format(x), 'DEBUG')
 		prefix = tcommon.getRandStr(chars=string.digits)
 		assert common.sendData('CREATE "{}/obj"'.format(prefix)) == ["OK"] # create empty object
 		assert common.sendData('DELETE "{}/obj"'.format(prefix)) == ["OK"] # destroy object
@@ -34,7 +31,6 @@ def test_digits():
 
 def test_space_nested():
 	for x in range(0, 10):
-		common.output('Create/destroy loop {}'.format(x), 'DEBUG')
 		root = tcommon.getRandStr(chars=' ')
 		prefix = root
 		
@@ -47,7 +43,6 @@ def test_space_nested():
 
 def test_digits_long():
 	for x in range(0, 10):
-		common.output('Create/destroy loop {}'.format(x), 'DEBUG')
 		prefix = tcommon.getRandStr(size=257, chars=string.digits)
 		assert common.sendData('CREATE "{}/obj"'.format(prefix)) == ["OK"] # create empty object
 		assert common.sendData('DELETE "{}/obj"'.format(prefix)) == ["OK"] # destroy object
@@ -55,7 +50,6 @@ def test_digits_long():
 
 def test_create_del():
 	for x in range(0, 10):
-		common.output('Create/destroy loop {}'.format(x), 'DEBUG')
 		prefix = tcommon.getRandStr()
 		assert common.sendData('CREATE "{}/obj"'.format(prefix)) == ["OK"] # create empty object
 		assert common.sendData('DELETE "{}/obj"'.format(prefix)) == ["OK"] # destroy object
@@ -63,7 +57,6 @@ def test_create_del():
 
 def test_create_del_longnames():
 	for x in range(0, 10):
-		common.output('Create/destroy loop {}'.format(x), 'DEBUG')
 		prefix = tcommon.getRandStr(size=257)
 		assert common.sendData('CREATE "{}/obj"'.format(prefix)) == ["OK"] # create empty object
 		assert common.sendData('DELETE "{}/obj"'.format(prefix)) == ["OK"] # destroy object
@@ -75,7 +68,6 @@ def test_create_del_longnames_nested():
 	root = tcommon.getRandStr(size=65)
 	
 	for x in range(0, 10):
-		common.output('Create/destroy loop {}'.format(x), 'DEBUG')
 		prefix = root
 		
 		# create 32 nested levels, each one with a 65 char length empty object name

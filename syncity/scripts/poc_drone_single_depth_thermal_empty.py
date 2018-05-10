@@ -61,10 +61,10 @@ def run():
 		for x in range(0,2):
 			common.sendData([
 				'CREATE ccameras/drone/drone{}/drone{}v "{}"'.format(x,x,helpers.drones_lst[6]), # Drones/DJI Phantom 4 Pro/DJI_Phantom_4_Pro
-				'"cameras/drone/drone{}" ADD Segmentation.ClassGroup'.format(x),
+				'"cameras/drone/drone{}" ADD Segmentation.Entity Segmentation.Class'.format(x),
 				'"cameras/drone/drone{}" SET active false'.format(x),
 				
-				'"cameras/drone/drone{}" SET Segmentation.ClassGroup itemsClassName "drone0"'.format(x),
+				'"cameras/drone/drone{}" SET Segmentation.Class className "drone0"'.format(x),
 				'"cameras/drone/drone{}/drone{}" SET Transform position ({} {} {})'.format(x, x, 0, 1, 0),
 			], read=False)
 			

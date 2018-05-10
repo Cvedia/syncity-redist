@@ -1,2 +1,3 @@
 @echo off
-python -m pytest -vv
+python -m pytest
+pause

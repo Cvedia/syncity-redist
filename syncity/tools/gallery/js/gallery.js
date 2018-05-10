@@ -146,11 +146,17 @@ function ImagesGallery() {
 		
 		boxes.find('.bbox').remove();
 		for (var i = 0; i < arr.length; i++) {
+			if (typeof arr[i].boxMin == 'string')
+				arr[i].boxMin = arr[i].boxMin.split(',');
+			if (typeof arr[i].boxMax == 'string')
+				arr[i].boxMax = arr[i].boxMax.split(',');
+			
 			l = arr[i].boxMin[0]*100;
 			t = arr[i].boxMin[1]*100;
 			r = arr[i].boxMax[0]*100;
 			b = arr[i].boxMax[1]*100;
 			c = classColors[arr[i].classId];
+			
 			boxes.append(
 				'<div class="bbox tooltip" data-tooltip="id: '+arr[i].id+', classId: '+
 				arr[i].classId+', numPoints: '+arr[i].numPoints+

@@ -2,18 +2,12 @@
 
 // load highway scene ----------------------------------------------------------
 
+[Highway.Car] CreateCar "mainCar" AT (1390.49 98.121 1958.68) (0 84.42 0)
+
 LOAD "highway" FROM "highway_scene"
 
 "EnviroSky" SET EnviroSky profile ASSET "Enviro - Dynamic Enviroment/Profiles/Enviro Profile 2.0" FROM "Highway"
 "EnviroSky" SET active true
-//CREATE "pickup" FROM "highway" AS "mainCar"
-//"mainCar" SET Transform position (1390.49 98.121 1958.68) eulerAngles (0 84.42 0)
-
-[Highway.Car] CreateCar "mainCar" AT (1390.49 98.121 1958.68) (0 84.42 0)
-
-//"mainCar" ADD OSVehicle OSBHVehicleDriver Highway.ToggleBetweenAutoDriveAndUserControl
-//"mainCar" SET OSVehicle externControl true
-//"mainCar" SET OSBHVehicleDriver smoothAdjust 100.0
 
 "mainCar" SET Highway.ToggleBetweenAutoDriveAndUserControl button "J"
 

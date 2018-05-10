@@ -2,6 +2,7 @@ import os
 import syncity
 import string
 import random
+import time
 
 from PIL import Image
 from syncity import common, settings_manager
@@ -12,7 +13,6 @@ settings.skip_shutdown = True
 settings._root = os.path.dirname(os.path.realpath(__file__))
 settings._shutdown = False
 settings._interactive = False
-settings.loglevel = "NONE" # for quiet startup
 settings.test = True
 
 common.init()
@@ -20,6 +20,15 @@ common.loadConfig()
 settings.force_sync = True
 
 def telnet():
+	# close files if already open
+	common.close_logging()
+	common.close_recording()
+	
+	# reset timestamp
+	settings._start = time.time()
+	
+	common.init2()
+	
 	return common.initTelnet(settings.ip, settings.port, return_fail=True)
 
 def getRandStr(size=16, chars=string.ascii_uppercase + string.ascii_lowercase + string.digits + "()<>{}-_+ `~;.,!@#$%^='"):
@@ -70,3 +79,10 @@ def parametrizeInstances(name, params):
 			r.append(p)
 	
 	return r
+
+def setConfig(path=None, databasePath=None, physics=False):
+	common.sendData([
+		'"Config.instance" SET assetBundlesCache "{}"'.format(settings.assets if path == None else path),
+		'"Config.instance" SET databaseFolderPath "{}"'.format(settings.assets if databasePath == None else databasePath),
+		'"Config.instance" SET physicsEnabled {}'.format('false' if physics == False else 'true')
+	])

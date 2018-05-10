@@ -95,7 +95,7 @@ def initTelnet(ip, port, retries=3, wait=.5, timeout=30, ka_interval=3, ka_fail=
 			output('Simulator Version: {}'.format(settings._simulator_version))
 			
 			if settings.test == False:
-				if settings.version:
+				if settings.version == True:
 					output('SDK Version: {}'.format(settings._version))
 					sys.exit(0)
 				
@@ -118,11 +118,15 @@ def initTelnet(ip, port, retries=3, wait=.5, timeout=30, ka_interval=3, ka_fail=
 				elif settings.assets:
 					sendData('"Config.instance" SET databaseFolderPath "{}"'.format(settings.assets))
 				
+				"""
 				sendData([
 					'"Config.instance" SET physicsEnabled {}'.format('false' if settings.enable_physics == False else 'true'),
 					'"Canvas/ConsolePanel" SET active {}'.format('false' if settings.enable_console_log == False else 'true'),
 					'{}'.format('DELETE "Canvas"' if settings.enable_canvas == False else '')
 				])
+				"""
+				
+				sendData('"Config.instance" SET physicsEnabled {}'.format('false' if settings.enable_physics == False else 'true'))
 				
 				if settings.seed_api:
 					setAPISeed(settings.seed_api)
@@ -207,7 +211,7 @@ def init2():
 	
 	init_logging(head)
 	
-	if settings.run != None or settings.script != None:
+	if settings.run != None or settings.script != None or settings.test == True:
 		init_recording(head)
 
 def init_logging(head=None):
@@ -227,6 +231,28 @@ def init_recording(head=None):
 		
 		if head != None:
 			settings._rfh.write(head)
+
+def close_logging():
+	if settings.log == None:
+		return
+	try:
+		settings._lfh.write('// Completed in {:6.4f}s'.format(time.time() - settings._start))
+		settings._lfh.close()
+	except:
+		pass
+	
+	settings.log = None
+
+def close_recording():
+	if settings.record == None:
+		return
+	try:
+		settings._rfh.write('// Completed in {:6.4f}s'.format(time.time() - settings._start))
+		settings._rfh.close()
+	except:
+		pass
+	
+	settings.record = None
 
 def shouldLog(level):
 	l = {
@@ -530,14 +556,14 @@ def gracefullShutdown(a=None, b=None):
 	try:
 		if settings.record:
 			output('Recorded to: `{}`'.format(settings._rfh.name))
-			settings._rfh.close()
+			close_recording()
 	except:
 		pass
 	
 	try:
 		if settings.log:
 			output('Logged to: `{}`'.format(settings._lfh.name))
-			settings._lfh.close()
+			close_logging()
 	except:
 		pass
 	
@@ -668,6 +694,14 @@ def readAll(fn):
 	with open(fn, "r") as fh:
 		data = fh.read()
 	return data
+
+def argExists(aargs, argv=sys.argv):
+	for i in argv:
+		if i[0:1] != '-':
+			continue
+		if i in aargs:
+			return True
+	return False
 
 def findArgOrder(aargs, argv=sys.argv):
 	order = []

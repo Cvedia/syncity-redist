@@ -7,3 +7,5 @@ _*.sh
 .vs/*
 syncity.conf
 syncity/scripts/*_test*
+tests/logs/*
+tests/__pycache__

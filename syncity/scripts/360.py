@@ -49,8 +49,8 @@ def run():
 			'"obj" SET active false',
 			'"obj/subject" SET Transform position ({} {} {}) eulerAngles ({} {} {})'.format(0, 0, 0, 0, 0, 0),
 			
-			'"obj" ADD Segmentation.ClassGroup',
-			'"obj" SET Segmentation.ClassGroup itemsClassName "Car"',
+			'"obj" ADD Segmentation.Entity Segmentation.Class',
+			'"obj" SET Segmentation.Class className "Car"',
 			'"obj" SET Transform position ({} {} {}) eulerAngles ({} {} {})'.format(-6, 0, -9, 0, 0, 0),
 			
 			# 'CREATE "city/ground_0" "city/ground/Grass"',

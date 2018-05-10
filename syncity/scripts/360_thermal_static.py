@@ -34,8 +34,8 @@ def run():
 		common.sendData([
 			# bind object to segmentation Drone
 			'CREATE "obj"',
-			'"obj" ADD Segmentation.ClassGroup',
-			'"obj" SET Segmentation.ClassGroup itemsClassName "Drone"',
+			'"obj" ADD Segmentation.Entity Segmentation.Class',
+			'"obj" SET Segmentation.Class className "Drone"',
 			
 			'CREATE "{}" FROM "drones" AS "obj/subject"'.format(obj),
 			

@@ -1,2 +1,2 @@
 #!/bin/bash
-python -m pytest -vv
+python -m pytest

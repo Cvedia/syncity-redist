@@ -32,12 +32,7 @@ def run():
 		
 		helpers.addCameraRGB(width=camera_size[0], height=camera_size[1], pp='EnviroFX')
 		helpers.addCameraSeg(width=camera_size[0], height=camera_size[1], segments=['Car', 'Drone'], lookupTable=[['Car', 'red'], ['Drone', 'blue']])
-		helpers.addCameraDepth(label=mycams[2], width=camera_size[0], height=camera_size[1])
-		
-		# NOTE: This could be optimized by adding the same camera target on
-		# multiple RenderCameraLink components.
-		
-		helpers.addCameraDepth(label=mycams[2], width=1024, height=768)
+		helpers.addCameraDepth(label=mycams[2], width=camera_size[0], height=camera_size[1], registerCamera=False)
 		
 		helpers.globalDiskSetup()
 		helpers.addDiskOutput(mycams)
@@ -51,16 +46,16 @@ def run():
 			'"obj" SET active false',
 			'"obj/subject0" SET Transform position ({} {} {}) eulerAngles ({} {} {})'.format(0, 0, 0, 0, 0, 0),
 			
-			'"obj/subject0" ADD Segmentation.ClassInfo',
-			'"obj/subject0" SET Segmentation.ClassInfo itemClass "Car"',
+			'"obj/subject0" ADD Segmentation.Entity Segmentation.Class',
+			'"obj/subject0" SET Segmentation.Class className "Car"',
 			
 			# object 1
 			'CREATE "{}" FROM "drones" AS "obj/subject1"'.format(obj[1]),
 			'"obj" SET active false',
 			'"obj/subject1" SET Transform position ({} {} {}) eulerAngles ({} {} {})'.format(0, 2, 0, 0, 0, 0),
 			
-			'"obj/subject1" ADD Segmentation.ClassInfo',
-			'"obj/subject1" SET Segmentation.ClassInfo itemClass "Drone"',
+			'"obj/subject1" ADD Segmentation.Entity Segmentation.Class',
+			'"obj/subject1" SET Segmentation.Class className "Drone"',
 			
 			# container setup
 			'"obj" SET Transform position ({} {} {}) eulerAngles ({} {} {})'.format(-6, 0, -9, 0, 0, 0),

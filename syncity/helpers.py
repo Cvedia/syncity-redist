@@ -125,6 +125,7 @@ def addCameraDepth(
 	clippingFar=1000,
 	depthBuffer='simple',
 	transparencyCutout=0,
+	textureFormat=14,
 	registerCamera=True
 ):
 	"""
@@ -141,7 +142,7 @@ def addCameraDepth(
 	depthBuffer (string): Defines a specific depth buffer configuration to use, if not set fallsback to default, default `None`
 	transparencyCutout (float): Defines a cutout percentage for transparent objects, defaults to `0` that will show transparent objects at full extent, when set to 1 will hide them completly.
 	registerCamera (bool): Register camera on the UI making it visible
-	
+	textureFormat (int): Defines texture format, defaults to `16` - This is defined on unity_vars lookup table
 	# Note
 	
 	Different from the other cameras, depth camera must have a renderCamera in order to work.
@@ -156,9 +157,6 @@ def addCameraDepth(
 	for l in label:
 		addStack = [ 'Camera', 'Sensors.RenderCamera' ]
 		b = []
-		
-		# if registerCamera:
-		#	addStack.append('registerCamera')
 		
 		if depthBuffer == None:
 			addStack.append('Sensors.Lidar_Internal.RenderDepthBufferOld' if settings.use_old_depth_buffer else 'CameraDepthOutput')
@@ -176,10 +174,13 @@ def addCameraDepth(
 			'"{}" SET active false'.format(l),
 			'"{}" ADD {}'.format(l, ' '.join(addStack)),
 			'"{}" SET Camera near {} far {} fieldOfView {} renderingPath "DeferredShading"'.format(l, clippingNear, clippingFar, fov),
-			'"{}" SET Sensors.RenderCamera format "RFloat" resolution ({} {})'.format(l, width, height)
+			'"{}" SET Sensors.RenderCamera format "{}" resolution ({} {})'.format(l, unity_vars.textureFormat[textureFormat], width, height)
 		])
 		buf.extend(b)
 		buf.append('"{}" SET active true'.format(l))
+		
+		if registerCamera == True:
+			buf.extend(uiWindow(objs=l, width=width, height=height, depth=32, textureFormat=textureFormat, ret=True))
 	
 	common.sendData(buf, read=False)
 	common.flushBuffer()
@@ -240,9 +241,6 @@ def addCameraRGB(
 		addStack = [ 'Camera' ]
 		b = []
 		
-		# if registerCamera:
-		#	addStack.append('registerCamera')
-		
 		if renderCamera:
 			addStack.append('Sensors.RenderCamera')
 			
@@ -292,6 +290,10 @@ def addCameraRGB(
 		])
 		buf.extend(b)
 		buf.append('"{}" SET active true'.format(l))
+		
+		if registerCamera == True:
+			buf.extend(uiWindow(objs=l, width=width, height=height, textureFormat=textureFormat, ret=True))
+	
 	buf.append('"{}" SET active true'.format(labelRoot))
 	
 	common.sendData(buf, read=False)
@@ -316,6 +318,7 @@ def addCameraSeg(
 	renderCamera=True,
 	registerCamera=True,
 	lookupTable=True,
+	drawBoundingBoxesToTexture=False,
 	transparencyCutout=0,
 	minimumPixelsCount=1
 ):
@@ -338,6 +341,7 @@ def addCameraSeg(
 	renderCamera (bool): Binds a renderCamera component allowing for disk exports, defaults to `True`
 	registerCamera (bool): Register camera on the UI making it visible
 	lookupTable (list|bool|string): Binds a color to a class, this is essential for outputting pixel dense images, this is an array of arrays like `[ [ Car , red ] , [ Person, blue ] .. ]`; Defaults to `True` which will automatically populate the segmentation lookup table based on the segments sent. If this is set as `string` we will assume it's a existing profile.
+	drawBoundingBoxesToTexture (bool): Draw bounding boxes on the segmentation image, defaults to `None`
 	minimumVisibility (float): Defines minimum visibility of object in % (0 - 1), objects with less than % of it's total size visible won't appear on the segmentation maps neither yeild bounding boxes, defaults to `0`
 	transparencyCutout (float): Defines a cutout percentage for transparent objects, defaults to `0` that will show transparent objects at full extent, when set to 1 will hide them completly.
 	minimumPixelsCount (int): Defines a minimum number of pixels to be active in order to create a bounding box and show a segmentation color
@@ -349,28 +353,30 @@ def addCameraSeg(
 	buf = []
 	
 	for l in label:
-		# addStack = [ 'Camera', 'RenderToTexture', 'SegmentationCamera', 'Segmentation.Output.{}'.format(outputType) ]
-		addStack = [ 'Camera', 'SegmentationCamera', 'Segmentation.Output.{}'.format(outputType) ]
+		addStack = [
+			'Camera',
+			'SegmentationCamera',
+			'Segmentation.Output.BoundingBoxes',
+			'Segmentation.Output.{}'.format(outputType)
+		]
+		
+		if drawBoundingBoxesToTexture == True:
+			addStack.append('Segmentation.Output.BoundingBoxesOnTexture')
 		b = []
 		
 		if renderCamera:
 			addStack.append('Sensors.RenderCamera')
 			b.append('"{}" SET Sensors.RenderCamera format "{}" resolution ({} {})'.format(l, unity_vars.textureFormat[textureFormat], width, height))
-		# if registerCamera:
-		#	addStack.append('registerCamera')
 		
 		b.extend([
-			'''"{}" SET Segmentation.BoundingBoxes
+			'''"{}" SET Segmentation.Output.BoundingBoxes
 				minimumObjectVisibility {}
-				boundingBoxesExtensionAmount {}
+				extensionAmount {}
 				minimumPixelsCount {}
 			'''.format(l, minimumVisibility, boundingBoxesExtensionAmount, minimumPixelsCount),
 			
 			# '"{}" EXECUTE Segmentation.Segmentation DefineClass "Void"'.format(l)
 		])
-		
-		if segments != None:
-			b.extend(addCameraSegFilter(segments, label=l, ret=True))
 		
 		classes = []
 		colors = []
@@ -405,6 +411,9 @@ def addCameraSeg(
 		elif isinstance(lookupTable, str):
 			b.append('"{}" SET Segmentation.Output.{} lookUpTable "{}"'.format(l, outputType, lookupTable))
 		
+		if segments != None:
+			b.extend(addCameraSegFilter(segments, label=l, ret=True))
+		
 		buf.extend([
 			'CREATE "{}"'.format(l),
 			'"{}" SET active false'.format(l),
@@ -426,6 +435,9 @@ def addCameraSeg(
 			# '"{}" EXECUTE Segmentation.LookUpTable MarkTextureDirty'.format(l),
 			'"{}" SET active true'.format(l)
 		])
+		
+		if registerCamera == True:
+			buf.extend(uiWindow(objs=l, width=width, height=height, textureFormat=textureFormat, ret=True))
 	
 	common.sendData(buf, read=False)
 	common.flushBuffer()
@@ -518,8 +530,6 @@ def addCameraThermal(
 				'"{}" SET Camera renderingPath "{}"'.format(l, unity_vars.renderingPath[renderingPath])
 			])
 		
-		#if registerCamera:
-		#	addStack.append('registerCamera')
 		if audio:
 			addStack.append('AudioListener')
 		
@@ -567,6 +577,9 @@ def addCameraThermal(
 			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.grain.enabled false'.format(l),
 			'"{}" SET active true'.format(l)
 		])
+		
+		if registerCamera == True:
+			buf.extend(uiWindow(objs=l, width=width, height=height, textureFormat=textureFormat, ret=True))
 	
 	common.sendData(buf, read=False)
 	common.flushBuffer()
@@ -1290,20 +1303,22 @@ def globalDiskSetup(label='disk1', outputPath=None):
 	settings._obj.append(label)
 
 def kickSeg(label='cameras/segmentation'):
-	return
-	
+	"""
 	common.output('Kicking segmentation camera', 'DEBUG')
 	common.flushBuffer()
 	common.sendData([
 		'"{}" EXECUTE Sensors.RenderCamera RenderFrame'.format(label),
-		'"{}" GET Segmentation.Segmentation boundingBoxes'.format(label),
+		'"{}" GET Segmentation.Output.BoundingBoxes boundingBoxes'.format(label),
 		'NOOP',
 		'"{}" EXECUTE Sensors.RenderCamera RenderFrame'.format(label),
-		'"{}" GET Segmentation.Segmentation boundingBoxes'.format(label),
+		'"{}" GET Segmentation.Output.BoundingBoxes boundingBoxes'.format(label),
 		'NOOP'
 	], read=True)
 	common.flushBuffer()
 	time.sleep(3)
+	"""
+	
+	return
 
 def doRender(lst):
 	"""
@@ -1325,12 +1340,14 @@ def takeSnapshot(lst, autoSegment=False, label='disk1', forceNoop=False):
 	
 	# Arguments
 	
-	lst (list): List of cameras
+	lst (string|list): List of cameras
 	autoSegment (bool): Automatic guess which cameras are segmentation and export json objects among with the pixel dense image, defaults to `None`
 	label (string): Game object name, defaults to `disk1`
 	forceNoop (bool): Force a buffer flush before snapshot happens, this ensures that any queued commands are executed before doing the render. Defaults to `False`
 	
 	"""
+	if not isinstance(lst, list):
+		lst = [ lst ]
 	if settings.skip_disk and autoSegment == False:
 		if forceNoop:
 			common.sendData('NOOP', read=True);
@@ -1346,13 +1363,13 @@ def takeSnapshot(lst, autoSegment=False, label='disk1', forceNoop=False):
 			common.output('No camera with segmentation name found, skipping autoSegment', 'WARNING')
 		else:
 			
-			# DEPRECATED: This is no longer needed
+			# DEPRECATED: This *might be* no longer needed
 			doRender(lst)
 			
 			common.flushBuffer()
 			r = common.sendData([
 				'"{}" EXECUTE Sensors.Disk Snapshot'.format(label),
-				'"{}" GET Segmentation.Segmentation boundingBoxes'.format(lst[idx[0]]),
+				'"{}" GET Segmentation.Output.BoundingBoxes boundingBoxes'.format(lst[idx[0]]),
 				'NOOP'
 			], read=True)
 			seqSave('bbox', r)
@@ -1371,13 +1388,16 @@ def takeSegSnapshot(lst):
 	
 	# Attributes
 	
-	lst (list): List of cameras with segmentation component
+	lst (string|list): List of cameras with segmentation component
 	
 	"""
+	if not isinstance(lst, list):
+		lst = [ lst ]
+	
 	common.flushBuffer()
 	
 	for l in lst:
-		r = common.sendData(['"{}" GET Segmentation.Segmentation boundingBoxes'.format(l), 'NOOP'], read=True)
+		r = common.sendData(['"{}" GET Segmentation.Output.BoundingBoxes boundingBoxes'.format(l), 'NOOP'], read=True)
 		# "cam" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 		seqSave('bbox', r)
 
@@ -1966,6 +1986,19 @@ def getRandomColor(alpha='FF'):
 		o += str(random.choice(s))
 	
 	return '#' + o + alpha
+
+def uiWindow(objs, width=1024, height=768, depth=24, textureFormat=4, mode="Default", ret=False):
+	if not isinstance(objs, list):
+		objs = [ objs ]
+	
+	cmd = []
+	for obj in objs:
+		cmd.append('[UI.Window] ShowFromCamera "{}" AS "{}" WITH {} {} {} "{}" "{}"'.format(obj, obj.split('/')[-1], width, height, depth, unity_vars.textureFormat[textureFormat], mode))
+	
+	if ret == True:
+		return cmd
+	
+	common.sendData(cmd)
 
 def enableAll(objs, component):
 	if not isinstance(objs, list):

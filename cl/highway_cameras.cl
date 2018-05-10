@@ -2,9 +2,6 @@ CREATE "mainCar/cameras"
 "mainCar/cameras" SET active false
 "mainCar/cameras" SET Transform position (-6 1 -50) eulerAngles (0 0 0) localPosition (0 0.872 2.318) localEulerAngles (0 0 0)
 
-// !!! workaround for broken floats !!!
-"mainCar/cameras" SET Transform position (-6 1 -50) eulerAngles (0 0 0) localPosition (0 1 3) localEulerAngles (0 0 0)
-
 // front / bumper camera -------------------------------------------------------
 
 CREATE "mainCar/cameras/Front"

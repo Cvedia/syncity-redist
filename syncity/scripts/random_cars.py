@@ -44,8 +44,8 @@ def run():
 	while k < settings.carsLimit:
 		common.sendData([
 			'CREATE "Cars/?" FROM "cars" AS "mycar_{}"'.format(k),
-			'"mycar_{}" ADD Segmentation.ClassGroup'.format(k),
-			'"mycar_{}" SET Segmentation.ClassGroup itemsClassName "Car"'.format(k),
+			'"mycar_{}" ADD Segmentation.Entity Segmentation.Class'.format(k),
+			'"mycar_{}" SET Segmentation.Class className "Car"'.format(k),
 			'"mycar_{}" SET Transform position ({} {} {})'.format(k, pX + settings.X_COMP, 5 + settings.Y_COMP, pZ + settings.Z_COMP),
 			'"mycar_{}" SET active true'.format(k)
 		])

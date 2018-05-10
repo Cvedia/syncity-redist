@@ -121,7 +121,7 @@ def run():
 		
 		common.sendData([
 			'CREATE "{}" FROM "drones" AS "drone/drone0/drone0"'.format(helpers.drones_lst[6]), # Drones/DJI Phantom 4 Pro/DJI_Phantom_4_Pro
-			'"drone/drone0" ADD Segmentation.ClassGroup',
+			'"drone/drone0" ADD Segmentation.Entity Segmentation.Class',
 			'"drone/drone0" SET active false',
 			
 			'"drone/drone0" ADD Thermal.ThermalObjectBehaviour',
@@ -131,11 +131,11 @@ def run():
 			'"drone/drone0/drone0/motors" ADD Thermal.ThermalObjectOverride',
 			'"drone/drone0/drone0" ADD Thermal.ThermalObjectOverride',
 			
-			'"drone/drone0" SET Segmentation.ClassGroup itemsClassName "drone0"',
+			'"drone/drone0" SET Segmentation.Class className "drone0"',
 			'"drone/drone0/drone0" SET Transform position ({} {} {})'.format(0, 1, 0),
 			
 			'CREATE "{}" FROM "drones" AS "drone/drone1/drone1"'.format(helpers.drones_lst[4]), # Drones/DJI S1000/DJI S1000
-			'"drone/drone1" ADD Segmentation.ClassGroup',
+			'"drone/drone1" ADD Segmentation.Entity Segmentation.Class',
 			'"drone/drone1" SET active false',
 			
 			'"drone/drone1" ADD Thermal.ThermalObjectBehaviour',
@@ -151,11 +151,11 @@ def run():
 			'"drone/drone1/drone1/Motor_08" ADD Thermal.ThermalObjectOverride',
 			'"drone/drone1/drone1" ADD Thermal.ThermalObjectOverride',
 			
-			'"drone/drone1" SET Segmentation.ClassGroup itemsClassName "drone1"',
+			'"drone/drone1" SET Segmentation.Class className "drone1"',
 			'"drone/drone1/drone1" SET Transform position ({} {} {})'.format(0, 2, 0),
 			
 			'CREATE "{}" FROM "drones" AS "drone/drone2/drone2"'.format(helpers.drones_lst[7]), # Drones/Parrot Disco/Parrot Disco
-			'"drone/drone2" ADD Segmentation.ClassGroup',
+			'"drone/drone2" ADD Segmentation.Entity Segmentation.Class',
 			'"drone/drone2" SET active false',
 			
 			'"drone/drone2/drone2" ADD Thermal.ThermalObjectBehaviour',
@@ -165,7 +165,7 @@ def run():
 			'"drone/drone2/drone2/Engine_Element" ADD Thermal.ThermalObjectOverride',
 			'"drone/drone2/drone2" ADD Thermal.ThermalObjectOverride',
 			
-			'"drone/drone2" SET Segmentation.ClassGroup itemsClassName "drone2"',
+			'"drone/drone2" SET Segmentation.Class className "drone2"',
 			'"drone/drone2/drone2" SET Transform position ({} {} {})'.format(0, 3, 0),
 		], read=False)
 		

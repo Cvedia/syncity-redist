@@ -27,8 +27,8 @@ def run():
 		helpers.addDiskOutput(mycams)
 		common.sendData([
 			'CREATE "{}" FROM "cars" AS "obj"'.format(obj),
-			'"obj" ADD Segmentation.ClassGroup',
-			'"obj" SET Segmentation.ClassGroup itemsClassName "Car"',
+			'"obj" ADD Segmentation.Entity Segmentation.Class',
+			'"obj" SET Segmentation.Class className "Car"',
 			'"obj" SET Transform position ({} {} {})'.format(-6, 0, -9),
 			'"obj" SET Transform eulerAngles ({} {} {})'.format(0, 0, 0),
 			
