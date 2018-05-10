@@ -121,7 +121,7 @@ CREATE "spawner/city/nature/trees/container"
 "spawner/city/nature/trees" SET Thermal.ThermalObjectBehaviour profile "DefaultThermalProfile"
 "spawner/city/nature/trees/container" ADD Thermal.ThermalObjectOverride
 "spawner/city/nature/trees/container" SET RandomProps.PropArea tags "tree"
-"spawner/city/nature/trees/container" SET RandomProps.PropArea async false numberOfProps 154 collisionCheck false stickToGround false 
+"spawner/city/nature/trees/container" SET RandomProps.PropArea async false numberOfProps 196 collisionCheck false stickToGround false 
 "spawner/city/nature/trees/container" SET RandomProps.Torus radius 60
 "spawner/city/nature/trees/container" SET RandomProps.Torus innerRadius 15
 "spawner/city/nature/trees/container" SET Transform position (0 0 0) eulerAngles (0 0 0) localScale (1 1 1)
@@ -149,7 +149,7 @@ CREATE "spawner/animals/generic/container"
 "spawner/animals/generic" SET Thermal.ThermalObjectBehaviour profile "DefaultThermalProfile"
 "spawner/animals/generic/container" ADD Thermal.ThermalObjectOverride
 "spawner/animals/generic/container" SET RandomProps.PropArea tags "+animal, +thermal"
-"spawner/animals/generic/container" SET RandomProps.PropArea async false numberOfProps 23 collisionCheck false stickToGround false 
+"spawner/animals/generic/container" SET RandomProps.PropArea async false numberOfProps 25 collisionCheck false stickToGround false 
 "spawner/animals/generic/container" SET RandomProps.Torus radius 50
 "spawner/animals/generic/container" SET RandomProps.Torus innerRadius 5
 "spawner/animals/generic/container" SET Transform position (0 0 0) eulerAngles (0 0 0) localScale (1 1 1)
@@ -163,10 +163,10 @@ CREATE "spawner/animals/birds/container"
 "spawner/animals/birds" SET Thermal.ThermalObjectBehaviour profile "DefaultThermalProfile"
 "spawner/animals/birds/container" ADD Thermal.ThermalObjectOverride
 "spawner/animals/birds/container" SET RandomProps.PropArea tags "bird"
-"spawner/animals/birds/container" SET RandomProps.PropArea async false numberOfProps 54 collisionCheck true stickToGround false 
+"spawner/animals/birds/container" SET RandomProps.PropArea async false numberOfProps 70 collisionCheck true stickToGround false 
 "spawner/animals/birds/container" SET RandomProps.Torus radius 120
 "spawner/animals/birds/container" SET RandomProps.Torus innerRadius 0
-"spawner/animals/birds/container" SET Transform position (0 34 0) eulerAngles (0 0 0) localScale (1 1 1)
+"spawner/animals/birds/container" SET Transform position (0 65 0) eulerAngles (0 0 0) localScale (1 1 1)
 "spawner/animals/birds/container" SET active true
 "spawner/animals/birds" SET active true
 CREATE "spawner/cars/container"
@@ -207,15 +207,15 @@ CREATE "cameras/spawner/drones/container"
 "cameras/spawner/drones/container" SET RandomProps.Frustum minDistance 2
 "cameras/spawner/drones/container" SET RandomProps.Frustum maxDistance 6
 "cameras/spawner/drones/container" SET RandomProps.PropArea async false numberOfProps 2 collisionCheck true stickToGround false 
+"cameras/spawner/drones/container" SET RandomProps.Frustum cam "cameras/cameraRGB"
 "cameras/spawner/drones/container" SET RandomProps.Frustum scaleBack 0.25
 "cameras/spawner/drones/container" SET RandomProps.Frustum allowEdge false
-"cameras/spawner/drones/container" SET RandomProps.Frustum cam "cameras/cameraRGB"
 "cameras/spawner/drones/container" SET Transform eulerAngles (0 0 0) localScale (1 1 1)
 "cameras/spawner/drones/container" ADD Segmentation.Class
 "cameras/spawner/drones/container" SET Segmentation.Class className "DRONE"
 "cameras/spawner/drones/container" ADD RandomProps.SpawnerRandomizers.RandomColor
 "cameras/spawner/drones/container" SET RandomProps.SpawnerRandomizers.RandomColor randomMethod "Random"
-"cameras/spawner/drones/container" PUSH RandomProps.SpawnerRandomizers.RandomColor availableColors "#5A6D65FF"
+"cameras/spawner/drones/container" PUSH RandomProps.SpawnerRandomizers.RandomColor availableColors "#6D55A3FF"
 "cameras/spawner/drones/container" SET RandomProps.SpawnerRandomizers.RandomColor partsNames "chassis,legs,motors,battery,bolts,sensors_caps,sensors,camera,blades"
 "cameras/spawner/drones/container" PUSH RandomProps.SpawnerRandomizers.RandomColor colorsWeights 14
 "cameras/spawner/drones/container" SET active true
