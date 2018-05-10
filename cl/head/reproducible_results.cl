@@ -12,6 +12,7 @@ CREATE "EnviroSky" AS "EnviroSky"
 "EnviroSky" EXECUTE EnviroSky AssignAndStart "cameras/cameraRGB" "cameras/cameraRGB"
 "EnviroSky" SET active true
 "cameras/cameraRGB" SET active true
+[UI.Window] ShowFromCamera "cameras/cameraRGB" AS "cameraRGB" WITH 1024 768 24 "ARGB32" "Default"
 "cameras" SET active true
 "cameras/cameraRGB" ADD UnityEngine.PostProcessing.PostProcessingBehaviour
 "cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile "EnviroFX"
@@ -33,8 +34,8 @@ CREATE "spawner/drone/container"
 "spawner/drone/container" ADD RandomProps.PropArea
 "spawner/drone/container" SET RandomProps.PropArea tags "drone"
 "spawner/drone/container" SET RandomProps.PropArea async false numberOfProps 25 collisionCheck false stickToGround false 
-"spawner/drone/container" SET RandomProps.Torus innerRadius 0
 "spawner/drone/container" SET RandomProps.Torus radius 10
+"spawner/drone/container" SET RandomProps.Torus innerRadius 0
 "spawner/drone/container" SET Transform position (0 0 0) eulerAngles (0 0 0) localScale (1 1 1)
 "spawner/drone/container" SET active true
 "spawner/drone" SET active true
