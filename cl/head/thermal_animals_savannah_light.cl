@@ -4,23 +4,22 @@ CREATE "cameras"
 "cameras" SET active false
 "cameras" SET Transform position (-6 1 -50) eulerAngles (0 0 0)
 "cameras" SET Orbit target "Savannah/Main Terrain" targetOffset (1667.05 32.37876 1000) snapOffset (0 60 0)
+"Segmentation.Profile.instance" PUSH classes "Void" "Car" "Animal" "Human"
 CREATE "cameras/segmentation"
 "cameras/segmentation" SET active false
-"cameras/segmentation" ADD Camera SegmentationCamera Segmentation.Output.BoundingBoxes Segmentation.Output.ClassColors Sensors.RenderCamera
+"cameras/segmentation" ADD Camera SegmentationCamera Segmentation.Output.BoundingBoxes Segmentation.Output.ClassColors
 "cameras/segmentation" SET SegmentationCamera transparencyCutout 0
 "cameras/segmentation" SET Camera near 0.3 far 10000 fieldOfView 90 renderingPath "UsePlayerSettings" targetTexture.filterMode "Point" 
-"cameras/segmentation" SET Sensors.RenderCamera format "ARGB32" resolution (1024 768)
 "cameras/segmentation" SET Segmentation.Output.BoundingBoxes minimumObjectVisibility 0 extensionAmount 0 minimumPixelsCount 1 
-"cameras/segmentation" EXECUTE Segmentation.Output.ClassColors lookUpTable.SetClassColor "Car->red" "Animal->blue" "Human->green" "ground->#807C00FF"
+"cameras/segmentation" EXECUTE Segmentation.Output.ClassColors lookUpTable.SetClassColor "Void->black" "Car->red" "Animal->blue" "Human->green" "ground->#807C00FF"
 "cameras/segmentation" ADD Segmentation.Output.FilteredBoundingBoxes
 "cameras/segmentation" EXECUTE Segmentation.Output.FilteredBoundingBoxes EnableClasses "Car" "Animal" "Human"
 "cameras/segmentation" SET active true
 [UI.Window] ShowFromCamera "cameras/segmentation" AS "segmentation" WITH 1024 768 24 "ARGB32" "Default"
 CREATE "cameras/cameraRGB"
 "cameras/cameraRGB" SET active false
-"cameras/cameraRGB" ADD Camera Sensors.RenderCamera AudioListener
+"cameras/cameraRGB" ADD Camera AudioListener
 "cameras/cameraRGB" SET Camera near 0.3 far 10000 fieldOfView 90 renderingPath "UsePlayerSettings"
-"cameras/cameraRGB" SET Sensors.RenderCamera format "ARGB32" resolution (1024 768)
 CREATE "EnviroSky" AS "EnviroSky"
 "EnviroSky" SET EnviroSky Player "cameras" PlayerCamera "cameras/cameraRGB" GameTime.ProgressTime "None" weatherSettings.cloudTransitionSpeed 100 weatherSettings.effectTransitionSpeed 100 weatherSettings.fogTransitionSpeed 100 
 "EnviroSky" EXECUTE EnviroSky AssignAndStart "cameras/cameraRGB" "cameras/cameraRGB"
@@ -33,12 +32,16 @@ CREATE "EnviroSky" AS "EnviroSky"
 "cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
 CREATE "cameras/depth"
 "cameras/depth" SET active false
-"cameras/depth" ADD Camera Sensors.RenderCamera Cameras.RenderDepthBufferSimple
+"cameras/depth" ADD Camera Cameras.RenderDepthBufferSimple Sensors.RenderCamera
 "cameras/depth" SET Camera near 0.3 far 1000 fieldOfView 90 renderingPath "DeferredShading"
-"cameras/depth" SET Sensors.RenderCamera format "RFloat" resolution (1024 768)
 "cameras/depth" SET Cameras.RenderDepthBufferSimple outputMode "Linear01Depth" transparencyCutout 0
+CREATE RenderTexture 1024 768 32 "RFloat" "Default" AS "cameras_depth_RT"
+"cameras_depth_RT" SET name "cameras/depth"
+"cameras_depth_RT" EXECUTE @Create
+"cameras/depth" SET Camera targetTexture "cameras_depth_RT"
+"cameras/depth" SET Sensors.RenderCamera format "RFloat" resolution (1024 768)
 "cameras/depth" SET active true
-[UI.Window] ShowFromCamera "cameras/depth" AS "depth" WITH 1024 768 32 "RFloat" "Default"
+[UI.Window] ShowFromRenderTexture "cameras_depth_RT"
 "Savannah" SET active true
 "Savannah" ADD Segmentation.Entity Segmentation.Class
 "Savannah" SET Segmentation.Class className "ground"
@@ -49,10 +52,8 @@ CREATE "cameras/depth"
 "Savannah" SET active true
 CREATE "cameras/thermal"
 "cameras/thermal" SET active false
-"cameras/thermal" ADD Camera Thermal.ThermalCamera UnityEngine.PostProcessing.PostProcessingBehaviour Sensors.RenderCamera CameraFilterPack_Pixelisation_DeepOilPaintHQ CameraFilterPack_Blur_Noise Thermal.GlobalTreeSettings
+"cameras/thermal" ADD Camera Thermal.ThermalCamera UnityEngine.PostProcessing.PostProcessingBehaviour CameraFilterPack_Pixelisation_DeepOilPaintHQ CameraFilterPack_Blur_Noise Thermal.GlobalTreeSettings
 "cameras/thermal" SET Camera near 0.3 far 10000 fieldOfView 90
-"cameras/thermal" SET Sensors.RenderCamera format "ARGB32" resolution (1024 768)
-"cameras/thermal" SET Camera renderingPath "UsePlayerSettings"
 "cameras/thermal" SET Thermal.ThermalCamera enabled false
 "cameras/thermal" SET CameraFilterPack_Pixelisation_DeepOilPaintHQ enabled false
 "cameras/thermal" SET CameraFilterPack_Pixelisation_DeepOilPaintHQ _FixDistance 10.6 _Distance 0.06 _Size 0.481 Intensity 0.6 enabled true
@@ -70,21 +71,22 @@ CREATE "disk1"
 "disk1" SET active true
 "disk1" SET active false
 CREATE "disk1/Cameras/camerargb"
-"disk1/Cameras/camerargb" ADD Sensors.RenderCameraLink
-"disk1/Cameras/camerargb" SET Sensors.RenderCameraLink target "cameras/cameraRGB"
+"disk1/Cameras/camerargb" ADD Sensors.RenderTextureLink
+"disk1/Cameras/camerargb" SET Sensors.RenderTextureLink target "cameraRGB"
 "disk1/Cameras/camerargb" SET active true
 CREATE "disk1/Cameras/thermal"
-"disk1/Cameras/thermal" ADD Sensors.RenderCameraLink
-"disk1/Cameras/thermal" SET Sensors.RenderCameraLink target "cameras/thermal"
+"disk1/Cameras/thermal" ADD Sensors.RenderTextureLink
+"disk1/Cameras/thermal" SET Sensors.RenderTextureLink target "thermal"
 "disk1/Cameras/thermal" SET active true
 CREATE "disk1/Cameras/segmentation"
-"disk1/Cameras/segmentation" ADD Sensors.RenderCameraLink
-"disk1/Cameras/segmentation" SET Sensors.RenderCameraLink target "cameras/segmentation"
+"disk1/Cameras/segmentation" ADD Sensors.RenderTextureLink
+"disk1/Cameras/segmentation" SET Sensors.RenderTextureLink target "segmentation"
+"disk1/Cameras/segmentation" SET Sensors.RenderTextureLink outputType "LOSSLESS"
 "disk1/Cameras/segmentation" SET active true
 CREATE "disk1/Cameras/depth"
-"disk1/Cameras/depth" ADD Sensors.RenderCameraLink
-"disk1/Cameras/depth" SET Sensors.RenderCameraLink target "cameras/depth"
-"disk1/Cameras/depth" SET Sensors.RenderCameraLink outputType "DEPTH"
+"disk1/Cameras/depth" ADD Sensors.RenderTextureLink
+"disk1/Cameras/depth" SET Sensors.RenderTextureLink target "depth"
+"disk1/Cameras/depth" SET Sensors.RenderTextureLink outputType "DEPTH"
 "disk1/Cameras/depth" SET active true
 "disk1" SET active true
 CREATE "spawner/animals0/container"
