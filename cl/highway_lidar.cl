@@ -1,6 +1,7 @@
 // lidar visualizer ------------------------------------------------------------
 
 [Cameras.Orbit] CreateAutoOrbit "lidarVirtualCamera" distance 12 elevation 14 speed 5
+// "lidarVirtualCamera" SET Orbit target "mainCar"
 "lidarVirtualCamera" SET active true
 
 [Cameras.RenderTexture] CreateNew "PCL texture" 1024 768

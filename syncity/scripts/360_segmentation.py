@@ -32,7 +32,7 @@ def run():
 		
 		helpers.addCameraRGB(width=camera_size[0], height=camera_size[1], pp='EnviroFX')
 		helpers.addCameraSeg(width=camera_size[0], height=camera_size[1], segments=['Car', 'Drone'], lookupTable=[['Car', 'red'], ['Drone', 'blue']])
-		helpers.addCameraDepth(label=mycams[2], width=camera_size[0], height=camera_size[1], registerCamera=False)
+		helpers.addCameraDepth(label=mycams[2], width=camera_size[0], height=camera_size[1])
 		
 		helpers.globalDiskSetup()
 		helpers.addDiskOutput(mycams)
