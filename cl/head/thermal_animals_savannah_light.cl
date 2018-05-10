@@ -4,26 +4,18 @@ CREATE "cameras"
 "cameras" SET active false
 "cameras" SET Transform position (-6 1 -50) eulerAngles (0 0 0)
 "cameras" SET Orbit target "Savannah/Main Terrain" targetOffset (1667.05 32.37876 1000) snapOffset (0 60 0)
-"Canvas/Cameras/Viewport/Content" SET UI.GridLayoutGroup cellSize (1024 768)
-"Canvas" SET active true
 CREATE "cameras/segmentation"
 "cameras/segmentation" SET active false
-"cameras/segmentation" ADD Camera Segmentation.Segmentation Segmentation.LookUpTable Sensors.RenderCamera
+"cameras/segmentation" ADD Camera SegmentationCamera Segmentation.Output.BoundingBoxes Segmentation.Output.ClassColors Sensors.RenderCamera
+"cameras/segmentation" SET SegmentationCamera transparencyCutout 0
 "cameras/segmentation" SET Camera near 0.3 far 10000 fieldOfView 90 renderingPath "UsePlayerSettings" targetTexture.filterMode "Point" 
 "cameras/segmentation" SET Sensors.RenderCamera format "ARGB32" resolution (1024 768)
-"cameras/segmentation" SET Segmentation.Segmentation minimumObjectVisibility 0 outputType "Auto" boundingBoxesExtensionAmount 0 transparencyCutout 0 
-"cameras/segmentation" EXECUTE Segmentation.Segmentation DefineClass "Void"
-"cameras/segmentation" PUSH Segmentation.Segmentation boundingBoxesFilter "Car"
-"cameras/segmentation" PUSH Segmentation.Segmentation boundingBoxesFilter "Animal"
-"cameras/segmentation" PUSH Segmentation.Segmentation boundingBoxesFilter "Human"
-"cameras/segmentation" EXECUTE Segmentation.Segmentation DefineClass "Car"
-"cameras/segmentation" EXECUTE Segmentation.Segmentation DefineClass "Animal"
-"cameras/segmentation" EXECUTE Segmentation.Segmentation DefineClass "Human"
-"cameras/segmentation" EXECUTE Segmentation.Segmentation DefineClass "ground"
-"cameras/segmentation" PUSH Segmentation.LookUpTable classes "Void" "Car" "Animal" "Human" "ground"
-"cameras/segmentation" PUSH Segmentation.LookUpTable colors "black" "red" "blue" "green" "#807C00FF"
-"cameras/segmentation" EXECUTE Segmentation.LookUpTable MarkTextureDirty
+"cameras/segmentation" SET Segmentation.Output.BoundingBoxes minimumObjectVisibility 0 extensionAmount 0 minimumPixelsCount 1 
+"cameras/segmentation" EXECUTE Segmentation.Output.ClassColors lookUpTable.SetClassColor "Car->red" "Animal->blue" "Human->green" "ground->#807C00FF"
+"cameras/segmentation" ADD Segmentation.Output.FilteredBoundingBoxes
+"cameras/segmentation" EXECUTE Segmentation.Output.FilteredBoundingBoxes EnableClasses "Car" "Animal" "Human"
 "cameras/segmentation" SET active true
+[UI.Window] ShowFromCamera "cameras/segmentation" AS "segmentation" WITH 1024 768 24 "ARGB32" "Default"
 CREATE "cameras/cameraRGB"
 "cameras/cameraRGB" SET active false
 "cameras/cameraRGB" ADD Camera Sensors.RenderCamera AudioListener
@@ -34,31 +26,32 @@ CREATE "EnviroSky" AS "EnviroSky"
 "EnviroSky" EXECUTE EnviroSky AssignAndStart "cameras/cameraRGB" "cameras/cameraRGB"
 "EnviroSky" SET active true
 "cameras/cameraRGB" SET active true
+[UI.Window] ShowFromCamera "cameras/cameraRGB" AS "cameraRGB" WITH 1024 768 24 "ARGB32" "Default"
 "cameras" SET active true
 "cameras/cameraRGB" ADD UnityEngine.PostProcessing.PostProcessingBehaviour
 "cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile "EnviroFX"
 "cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
 CREATE "cameras/depth"
 "cameras/depth" SET active false
-"cameras/depth" ADD Camera Sensors.RenderCamera
+"cameras/depth" ADD Camera Sensors.RenderCamera Cameras.RenderDepthBufferSimple
 "cameras/depth" SET Camera near 0.3 far 1000 fieldOfView 90 renderingPath "DeferredShading"
 "cameras/depth" SET Sensors.RenderCamera format "RFloat" resolution (1024 768)
-"cameras/depth" ADD Cameras.RenderDepthBufferSimple
 "cameras/depth" SET Cameras.RenderDepthBufferSimple outputMode "Linear01Depth" transparencyCutout 0
 "cameras/depth" SET active true
+[UI.Window] ShowFromCamera "cameras/depth" AS "depth" WITH 1024 768 32 "RFloat" "Default"
 "Savannah" SET active true
-"Savannah" ADD Segmentation.ClassGroup
-"Savannah" SET Segmentation.ClassGroup itemsClassName "ground"
+"Savannah" ADD Segmentation.Entity Segmentation.Class
+"Savannah" SET Segmentation.Class className "ground"
 "Savannah" SET active false
-"Savannah/Main Terrain" SET Segmentation.ClassInfo itemClass "ground"
-"Savannah/Main Terrain/SubMeshes" ADD Segmentation.ClassInfo
-"Savannah/Main Terrain/SubMeshes" SET Segmentation.ClassInfo itemClass "ground"
+"Savannah/Main Terrain" SET Segmentation.Class className "ground"
+"Savannah/Main Terrain/SubMeshes" ADD Segmentation.Class
+"Savannah/Main Terrain/SubMeshes" SET Segmentation.Class className "ground"
 "Savannah" SET active true
 CREATE "cameras/thermal"
 "cameras/thermal" SET active false
 "cameras/thermal" ADD Camera Thermal.ThermalCamera UnityEngine.PostProcessing.PostProcessingBehaviour Sensors.RenderCamera CameraFilterPack_Pixelisation_DeepOilPaintHQ CameraFilterPack_Blur_Noise Thermal.GlobalTreeSettings
 "cameras/thermal" SET Camera near 0.3 far 10000 fieldOfView 90
-"cameras/thermal" SET Sensors.RenderCamera format "ARGB32" resolution (2048 1536)
+"cameras/thermal" SET Sensors.RenderCamera format "ARGB32" resolution (1024 768)
 "cameras/thermal" SET Camera renderingPath "UsePlayerSettings"
 "cameras/thermal" SET Thermal.ThermalCamera enabled false
 "cameras/thermal" SET CameraFilterPack_Pixelisation_DeepOilPaintHQ enabled false
@@ -69,6 +62,7 @@ CREATE "cameras/thermal"
 "cameras/thermal" SET Thermal.ThermalCamera ambientTemperature 15 temperatureRange (9 35) maxDistanceForProbeUpdate 100 useAGC true enabled true 
 "cameras/thermal" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.grain.enabled false
 "cameras/thermal" SET active true
+[UI.Window] ShowFromCamera "cameras/thermal" AS "thermal" WITH 1024 768 24 "ARGB32" "Default"
 CREATE "disk1"
 "disk1" SET active false
 "disk1" ADD Sensors.Disk
@@ -101,8 +95,8 @@ CREATE "spawner/animals0/container"
 "spawner/animals0/container" SET RandomProps.PropArea async false numberOfProps 50 collisionCheck true stickToGround true 
 "spawner/animals0/container" SET RandomProps.Rectangle size (1000 1000)
 "spawner/animals0/container" SET Transform position (1685 591 7894) eulerAngles (0 0 0) localScale (1 1 1)
-"spawner/animals0/container" ADD Segmentation.ClassGroup
-"spawner/animals0/container" SET Segmentation.ClassGroup itemsClassName "Animal"
+"spawner/animals0/container" ADD Segmentation.Class
+"spawner/animals0/container" SET Segmentation.Class className "Animal"
 "spawner/animals0/container" SET active true
 "spawner/animals0" SET active true
 CREATE "spawner/cars0/container"
@@ -113,8 +107,8 @@ CREATE "spawner/cars0/container"
 "spawner/cars0/container" SET RandomProps.PropArea async false numberOfProps 50 collisionCheck true stickToGround true 
 "spawner/cars0/container" SET RandomProps.Rectangle size (1000 1000)
 "spawner/cars0/container" SET Transform position (1685 591 7894) eulerAngles (0 0 0) localScale (1 1 1)
-"spawner/cars0/container" ADD Segmentation.ClassGroup
-"spawner/cars0/container" SET Segmentation.ClassGroup itemsClassName "Car"
+"spawner/cars0/container" ADD Segmentation.Class
+"spawner/cars0/container" SET Segmentation.Class className "Car"
 "spawner/cars0/container" SET active true
 "spawner/cars0" SET active true
 CREATE "spawner/humans0/container"
@@ -125,8 +119,8 @@ CREATE "spawner/humans0/container"
 "spawner/humans0/container" SET RandomProps.PropArea async false numberOfProps 50 collisionCheck true stickToGround true 
 "spawner/humans0/container" SET RandomProps.Rectangle size (1000 1000)
 "spawner/humans0/container" SET Transform position (1685 591 7894) eulerAngles (0 0 0) localScale (1 1 1)
-"spawner/humans0/container" ADD Segmentation.ClassGroup
-"spawner/humans0/container" SET Segmentation.ClassGroup itemsClassName "Human"
+"spawner/humans0/container" ADD Segmentation.Class
+"spawner/humans0/container" SET Segmentation.Class className "Human"
 "spawner/humans0/container" SET active true
 "spawner/humans0" SET active true
 "Savannah/Main Terrain" SET Thermal.ThermalTerrain ambientOffset 0
