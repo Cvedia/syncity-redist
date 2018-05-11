@@ -37,16 +37,11 @@ CREATE "EnviroSky" AS "EnviroSky"
 "cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
 CREATE "cameras/depth"
 "cameras/depth" SET active false
-"cameras/depth" ADD Camera Cameras.RenderDepthBufferSimple Sensors.RenderCamera
+"cameras/depth" ADD Camera Cameras.RenderDepthBufferSimple
 "cameras/depth" SET Camera near 0.3 far 1000 fieldOfView 90 renderingPath "DeferredShading"
 "cameras/depth" SET Cameras.RenderDepthBufferSimple outputMode "Linear01Depth" transparencyCutout 0
-CREATE RenderTexture 1024 768 32 "RFloat" "Default" AS "cameras_depth_RT"
-"cameras_depth_RT" SET name "cameras/depth"
-"cameras_depth_RT" EXECUTE @Create
-"cameras/depth" SET Camera targetTexture "cameras_depth_RT"
-"cameras/depth" SET Sensors.RenderCamera format "RFloat" resolution (1024 768)
 "cameras/depth" SET active true
-[UI.Window] ShowFromRenderTexture "cameras_depth_RT"
+[UI.Window] ShowFromCamera "cameras/depth" AS "depth" WITH 1024 768 32 "RFloat" "Default"
 "Forest" ADD WindZone
 "Forest" SET WindZone mode "Directional" radius 0 windMain 0.12 windTurbulence 0.5 windPulseMagnitude 0.5 windPulseFrequency 0.01 
 "Forest" SET active true
