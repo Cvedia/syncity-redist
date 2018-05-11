@@ -31,16 +31,11 @@ CREATE "cameras/segmentation"
 [UI.Window] ShowFromCamera "cameras/segmentation" AS "segmentation" WITH 1024 768 24 "ARGB32" "Default"
 CREATE "cameras/depth"
 "cameras/depth" SET active false
-"cameras/depth" ADD Camera Cameras.RenderDepthBufferSimple Sensors.RenderCamera
+"cameras/depth" ADD Camera Cameras.RenderDepthBufferSimple
 "cameras/depth" SET Camera near 0.3 far 1000 fieldOfView 60 renderingPath "DeferredShading"
 "cameras/depth" SET Cameras.RenderDepthBufferSimple outputMode "Linear01Depth" transparencyCutout 0
-CREATE RenderTexture 1024 768 32 "RFloat" "Default" AS "cameras_depth_RT"
-"cameras_depth_RT" SET name "cameras/depth"
-"cameras_depth_RT" EXECUTE @Create
-"cameras/depth" SET Camera targetTexture "cameras_depth_RT"
-"cameras/depth" SET Sensors.RenderCamera format "RFloat" resolution (1024 768)
 "cameras/depth" SET active true
-[UI.Window] ShowFromRenderTexture "cameras_depth_RT"
+[UI.Window] ShowFromCamera "cameras/depth" AS "depth" WITH 1024 768 32 "RFloat" "Default"
 CREATE "disk1"
 "disk1" SET active false
 "disk1" ADD Sensors.Disk
