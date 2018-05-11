@@ -34,7 +34,7 @@ CREATE "light"
 CREATE "disk1"
 "disk1" SET active false
 "disk1" ADD Sensors.Disk
-"disk1" SET Sensors.Disk path "/tmp/"
+"disk1" SET Sensors.Disk path "/tmp/" counter 1
 "disk1" SET active true
 "disk1" SET active false
 CREATE "disk1/Cameras/camerargb"
