@@ -10,6 +10,7 @@ LOAD "highway" FROM "highway_scene"
 "EnviroSky" SET active true
 
 "mainCar" SET Highway.ToggleBetweenAutoDriveAndUserControl button "J"
+"mainCar" SET OSBHVehicleDriver driverSpeed 60
 
 // disk output setup -----------------------------------------------------------
 
@@ -21,7 +22,7 @@ CREATE "disk1"
 // main camera misc ------------------------------------------------------------
 
 "Camera" ADD Sensors.RenderCamera
-"Camera" SET Sensors.RenderCamera format "ARGB32" resolution (640 480) alwaysOn true
+"Camera" SET Sensors.RenderCamera format "ARGB32" resolution (1024 768) alwaysOn true
 "Camera" SET Postprocessing.EnviroMerged dayProfile ASSET "Highway/Resources/Day" FROM "highway" nightProfile ASSET "Highway/Resources/Night" FROM "highway"
 //"Camera" SET registerCamera windowName "Driver"
 "Camera" SET Camera enabled true
@@ -40,20 +41,6 @@ CREATE "disk1/mainCar/cameras/driver"
 //"EnviroSky" SET active true
 "Camera" SET active true
 
-[UI.Window] ShowFromCamera "Camera" AS "Driver" WITH 640 480 24 "ARGB32" "Default"
+[UI.Window] ShowFromCamera "Camera" AS "Driver" WITH 1024 768 24 "ARGB32" "Default"
 
 // -----------------------------------------------------------------------------
-
-// #include "highway_lidar.cl"
-// #include "highway_pip.cl"
-
-// "lidarVirtualCamera" SET AutoOrbit enabled true
-
-// #include "highway_ros.cl"
-
-// "mainCar/cameras/Front" SET Camera enabled true
-// "mainCar/cameras/Depth" SET Camera enabled true
-// "mainCar/cameras/Segment" SET Camera enabled true
-
-// take a shot from all cameras
-// "disk1" EXECUTE Sensors.Disk Snapshot

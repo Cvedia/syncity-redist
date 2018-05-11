@@ -13,7 +13,7 @@ CREATE "mainCar/cameras/Front"
 "mainCar/cameras/Front" SET Postprocessing.EnviroMerged dayProfile ASSET "Highway/Resources/Day" FROM "highway" nightProfile ASSET "Highway/Resources/Night" FROM "highway"
 "mainCar/cameras/Front" SET UnityEngine.Rendering.PostProcessing.PostProcessLayer antialiasingMode "SubpixelMorphologicalAntialiasing" fog.enabled 0 volumeTrigger "mainCar/cameras/Front"
 
-"mainCar/cameras/Front" SET Sensors.RenderCamera format "ARGB32" resolution (640 480) alwaysOn true
+"mainCar/cameras/Front" SET Sensors.RenderCamera format "ARGB32" resolution (1024 768) alwaysOn true
 
 "mainCar/cameras/Front" SET active true
 
@@ -22,7 +22,7 @@ CREATE "disk1/mainCar/cameras/front"
 "disk1/mainCar/cameras/front" SET Sensors.RenderCameraLink target "mainCar/cameras/Front"
 "disk1/mainCar/cameras/front" SET active true
 
-[UI.Window] ShowFromCamera "mainCar/cameras/Front" AS "Front" WITH 640 480 24 "ARGB32" "Default"
+[UI.Window] ShowFromCamera "mainCar/cameras/Front" AS "Front" WITH 1024 768 24 "ARGB32" "Default"
 
 // depth camera ----------------------------------------------------------------
 

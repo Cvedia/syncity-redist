@@ -29,14 +29,14 @@ from subprocess import PIPE, Popen, STDOUT
 
 settings = False
 
-def initTelnet(ip, port, retries=3, wait=.5, timeout=30, ka_interval=3, ka_fail=10, ka_idle=1, return_fail=False):
+def initTelnet(ip, port, retries=-1, wait=.5, timeout=30, ka_interval=3, ka_fail=10, ka_idle=1, return_fail=False):
 	"""
 	Telnet initalizator
 	
 	# Arguments
 	ip (string): Ip address of target machine
 	port (int): Port of target machine, usually `10200`
-	retries (int): Retry connection if failed, defaults to `3`
+	retries (int): Retry connection if failed, defaults to `-1`, when negative will retry forever
 	wait (float): Time in seconds to wait between retries, defaults to `.5`
 	timeout(float): Timeout in seconds for socket connection, defaults to `30`
 	ka_interval (float): Keep alive interval in seconds, defaults to `3`
@@ -65,7 +65,7 @@ def initTelnet(ip, port, retries=3, wait=.5, timeout=30, ka_interval=3, ka_fail=
 	
 	retry = 0
 	
-	while retry < retries:
+	while retries < 0 or retry < retries:
 		output('Connecting to {}:{}...'.format(ip, port))
 		
 		try:
@@ -135,7 +135,7 @@ def initTelnet(ip, port, retries=3, wait=.5, timeout=30, ka_interval=3, ka_fail=
 			output('Error connecting: {}'.format(e), 'ERROR', permissive=True)
 			retry += 1
 			
-			if retry >= retries:
+			if retries > 0 and retry >= retries:
 				output('Ran out of retries, unable to connect. Aborting!', 'ERROR')
 				
 				if return_fail:
