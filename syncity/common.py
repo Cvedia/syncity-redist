@@ -377,7 +377,10 @@ def sendData(v, read=None, flush=None, timeout=3):
 		if settings.dry_run:
 			continue
 		
-		settings._tn.write(s)
+		try:
+			settings._tn.write(s)
+		except:
+			pass
 		
 		abort = False
 		
@@ -392,7 +395,10 @@ def sendData(v, read=None, flush=None, timeout=3):
 			if settings.abort_on_error == True and abort == False and 'ERROR' in l:
 				abort = True
 			
-			r.append(l)
+			if isinstance(l, list):
+				r.extend(l)
+			else:
+				r.append(l)
 			
 			# multi return hack, ideally first response would have a line count attached to it
 			while True:
@@ -409,7 +415,10 @@ def sendData(v, read=None, flush=None, timeout=3):
 				if l is '' or not l:
 					break
 				
-				r.append(l)
+				if isinstance(l, list):
+					r.extend(l)
+				else:
+					r.append(l)
 			
 			"""
 			if flush:
@@ -491,6 +500,13 @@ def shapeData(l):
 			pass
 		
 		output('<< {}'.format(f), 'WARN' if 'ERROR:' in l else 'INFO')
+	
+	if "\r\n" in l:
+		try:
+			x = l.split("\r\n")
+			l = x
+		except:
+			pass
 	
 	return l
 
@@ -723,6 +739,40 @@ def mkdirP(path):
 			pass
 		else:
 			raise
+
+def waitQueue(threshold=0, wait=3):
+	"""
+	Blocks new CL commands until queue is above a threshold.
+	
+	# Arguments
+	
+	threshold (int): Maximum items on queue, defaults to `0`
+	wait (int): Time in seconds to wait until asking again, defaults to `3`
+	
+	"""
+	
+	flushBuffer()
+	
+	b = False
+	while b == False:
+		res = sendData('"API" GET API.Manager queueCount', read=True)
+		for r in res:
+			s = str(r).lower()
+			
+			if s == 'ok' or 'error' in s:
+				continue
+			
+			q = int(s)
+			
+			if q <= threshold:
+				b = True
+				break
+			
+			output('Waiting for queue to flush, {} pending...'.format(q))
+		
+		if b == False:
+			time.sleep(wait)
+
 
 def getAllFiles(base, ignore_path=['.git', '__pycache__'], ignore_ext=['.md', 'pyc'], recursive=True):
 	"""
