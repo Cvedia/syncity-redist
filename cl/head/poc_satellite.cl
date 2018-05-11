@@ -27,7 +27,7 @@ CREATE "cameras/segmentation"
 CREATE "disk1"
 "disk1" SET active false
 "disk1" ADD Sensors.Disk
-"disk1" SET Sensors.Disk path "/tmp/"
+"disk1" SET Sensors.Disk path "/tmp/" counter 1
 "disk1" SET active true
 "disk1" SET active false
 CREATE "disk1/Cameras/camerargb"
@@ -47,80 +47,19 @@ CREATE "disk1/Cameras/segmentation"
 "EnviroSky" SET EnviroSky cloudsMode "Volume"
 "EnviroSky" SET EnviroSky cloudsSettings.globalCloudCoverage -0.04
 cameras/segmentation SET Segmentation.Segmentation OutputType "InstanceIds"
-"EnviroSky" SET EnviroSky GameTime.Hours 8
+"EnviroSky" SET EnviroSky GameTime.Hours 9
 "cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
 "cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
 "cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
 NOOP
-"EnviroSky" SET EnviroSky GameTime.Hours 11
+"EnviroSky" SET EnviroSky GameTime.Hours 12
 "cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
 "cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
 "cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
-NOOP
-"EnviroSky" SET EnviroSky GameTime.Hours 10
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
-NOOP
-"EnviroSky" SET EnviroSky GameTime.Hours 11
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
-NOOP
-"EnviroSky" SET EnviroSky GameTime.Hours 8
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
-NOOP
-"EnviroSky" SET EnviroSky GameTime.Hours 11
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
-NOOP
-"EnviroSky" SET EnviroSky GameTime.Hours 10
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
-NOOP
-"EnviroSky" SET EnviroSky GameTime.Hours 10
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
-NOOP
-"EnviroSky" SET EnviroSky GameTime.Hours 8
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
-NOOP
-"EnviroSky" SET EnviroSky GameTime.Hours 8
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled true
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
-NOOP
-"EnviroSky" SET EnviroSky GameTime.Hours 8
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
 NOOP
@@ -128,20 +67,7 @@ NOOP
 "cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
 "cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
 "cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
-NOOP
-"EnviroSky" SET EnviroSky GameTime.Hours 9
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
-NOOP
-"EnviroSky" SET EnviroSky GameTime.Hours 12
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
 NOOP
@@ -149,174 +75,7 @@ NOOP
 "cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
 "cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
 "cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
-NOOP
-"EnviroSky" SET EnviroSky GameTime.Hours 12
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
-NOOP
-"EnviroSky" SET EnviroSky GameTime.Hours 11
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
-NOOP
-"EnviroSky" SET EnviroSky GameTime.Hours 12
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
-NOOP
-"EnviroSky" SET EnviroSky GameTime.Hours 9
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
-NOOP
-"EnviroSky" SET EnviroSky GameTime.Hours 12
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
-NOOP
-"EnviroSky" SET EnviroSky GameTime.Hours 10
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
-NOOP
-"EnviroSky" SET EnviroSky GameTime.Hours 10
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
-NOOP
-"EnviroSky" SET EnviroSky GameTime.Hours 12
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
-NOOP
-"EnviroSky" SET EnviroSky GameTime.Hours 9
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled true
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
-NOOP
-"EnviroSky" SET EnviroSky GameTime.Hours 9
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
-NOOP
-"EnviroSky" SET EnviroSky GameTime.Hours 10
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
-NOOP
-"EnviroSky" SET EnviroSky GameTime.Hours 12
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
-NOOP
-"EnviroSky" SET EnviroSky GameTime.Hours 11
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
-NOOP
-"EnviroSky" SET EnviroSky GameTime.Hours 9
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
-NOOP
-"EnviroSky" SET EnviroSky GameTime.Hours 11
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled true
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
-NOOP
-"EnviroSky" SET EnviroSky GameTime.Hours 11
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
-NOOP
-"EnviroSky" SET EnviroSky GameTime.Hours 12
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
-NOOP
-"EnviroSky" SET EnviroSky GameTime.Hours 12
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
-NOOP
-"EnviroSky" SET EnviroSky GameTime.Hours 11
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled true
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
-NOOP
-"EnviroSky" SET EnviroSky GameTime.Hours 8
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
-NOOP
-"EnviroSky" SET EnviroSky GameTime.Hours 8
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
-NOOP
-"EnviroSky" SET EnviroSky GameTime.Hours 8
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
-NOOP
-"EnviroSky" SET EnviroSky GameTime.Hours 11
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
-NOOP
-"EnviroSky" SET EnviroSky GameTime.Hours 11
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
 NOOP
@@ -324,69 +83,7 @@ NOOP
 "cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled true
 "cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
 "cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
-NOOP
-"EnviroSky" SET EnviroSky GameTime.Hours 9
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
-NOOP
-"EnviroSky" SET EnviroSky GameTime.Hours 9
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
-NOOP
-"EnviroSky" SET EnviroSky GameTime.Hours 9
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
-NOOP
-"EnviroSky" SET EnviroSky GameTime.Hours 8
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
-NOOP
-"EnviroSky" SET EnviroSky GameTime.Hours 9
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
-NOOP
-"EnviroSky" SET EnviroSky GameTime.Hours 9
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
-NOOP
-"EnviroSky" SET EnviroSky GameTime.Hours 11
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
-NOOP
-"EnviroSky" SET EnviroSky GameTime.Hours 8
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
-NOOP
-"EnviroSky" SET EnviroSky GameTime.Hours 8
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
 NOOP
@@ -394,6 +91,31 @@ NOOP
 "cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
 "cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
 "cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
+NOOP
+"EnviroSky" SET EnviroSky GameTime.Hours 11
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
+NOOP
+"EnviroSky" SET EnviroSky GameTime.Hours 10
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
+NOOP
+"EnviroSky" SET EnviroSky GameTime.Hours 11
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
 NOOP
@@ -401,6 +123,7 @@ NOOP
 "cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
 "cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
 "cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
 NOOP
@@ -408,6 +131,7 @@ NOOP
 "cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
 "cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
 "cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
 NOOP
@@ -415,202 +139,7 @@ NOOP
 "cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
 "cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
 "cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
-NOOP
-"EnviroSky" SET EnviroSky GameTime.Hours 11
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
-NOOP
-"EnviroSky" SET EnviroSky GameTime.Hours 11
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
-NOOP
-"EnviroSky" SET EnviroSky GameTime.Hours 11
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
-NOOP
-"EnviroSky" SET EnviroSky GameTime.Hours 8
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled true
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
-NOOP
-"EnviroSky" SET EnviroSky GameTime.Hours 11
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
-NOOP
-"EnviroSky" SET EnviroSky GameTime.Hours 10
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
-NOOP
-"EnviroSky" SET EnviroSky GameTime.Hours 8
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
-NOOP
-"EnviroSky" SET EnviroSky GameTime.Hours 11
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
-NOOP
-"EnviroSky" SET EnviroSky GameTime.Hours 11
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
-NOOP
-"EnviroSky" SET EnviroSky GameTime.Hours 12
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
-NOOP
-"EnviroSky" SET EnviroSky GameTime.Hours 8
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
-NOOP
-"EnviroSky" SET EnviroSky GameTime.Hours 8
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
-NOOP
-"EnviroSky" SET EnviroSky GameTime.Hours 11
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
-NOOP
-"EnviroSky" SET EnviroSky GameTime.Hours 8
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
-NOOP
-"EnviroSky" SET EnviroSky GameTime.Hours 10
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled true
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
-NOOP
-"EnviroSky" SET EnviroSky GameTime.Hours 8
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
-NOOP
-"EnviroSky" SET EnviroSky GameTime.Hours 11
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
-NOOP
-"EnviroSky" SET EnviroSky GameTime.Hours 11
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
-NOOP
-"EnviroSky" SET EnviroSky GameTime.Hours 10
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled true
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
-NOOP
-"EnviroSky" SET EnviroSky GameTime.Hours 12
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
-NOOP
-"EnviroSky" SET EnviroSky GameTime.Hours 9
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled true
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
-NOOP
-"EnviroSky" SET EnviroSky GameTime.Hours 11
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
-NOOP
-"EnviroSky" SET EnviroSky GameTime.Hours 8
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
-NOOP
-"EnviroSky" SET EnviroSky GameTime.Hours 10
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
-NOOP
-"EnviroSky" SET EnviroSky GameTime.Hours 11
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
-NOOP
-"EnviroSky" SET EnviroSky GameTime.Hours 12
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
-NOOP
-"EnviroSky" SET EnviroSky GameTime.Hours 12
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
-NOOP
-"EnviroSky" SET EnviroSky GameTime.Hours 12
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
 NOOP
@@ -618,76 +147,7 @@ NOOP
 "cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
 "cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
 "cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
-NOOP
-"EnviroSky" SET EnviroSky GameTime.Hours 8
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
-NOOP
-"EnviroSky" SET EnviroSky GameTime.Hours 12
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled true
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
-NOOP
-"EnviroSky" SET EnviroSky GameTime.Hours 12
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
-NOOP
-"EnviroSky" SET EnviroSky GameTime.Hours 9
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
-NOOP
-"EnviroSky" SET EnviroSky GameTime.Hours 12
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
-NOOP
-"EnviroSky" SET EnviroSky GameTime.Hours 8
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
-NOOP
-"EnviroSky" SET EnviroSky GameTime.Hours 12
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
-NOOP
-"EnviroSky" SET EnviroSky GameTime.Hours 12
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
-NOOP
-"EnviroSky" SET EnviroSky GameTime.Hours 12
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
-NOOP
-"EnviroSky" SET EnviroSky GameTime.Hours 8
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled true
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
 NOOP
@@ -695,6 +155,7 @@ NOOP
 "cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
 "cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
 "cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
 NOOP
@@ -702,13 +163,15 @@ NOOP
 "cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
 "cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
 "cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
 NOOP
-"EnviroSky" SET EnviroSky GameTime.Hours 8
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled true
+"EnviroSky" SET EnviroSky GameTime.Hours 10
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
 "cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
 "cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
 NOOP
@@ -716,6 +179,15 @@ NOOP
 "cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
 "cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
 "cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
+NOOP
+"EnviroSky" SET EnviroSky GameTime.Hours 10
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
 NOOP
@@ -723,20 +195,39 @@ NOOP
 "cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
 "cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
 "cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
 NOOP
-"EnviroSky" SET EnviroSky GameTime.Hours 11
+"EnviroSky" SET EnviroSky GameTime.Hours 12
 "cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
 "cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
 "cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
 NOOP
-"EnviroSky" SET EnviroSky GameTime.Hours 8
+"EnviroSky" SET EnviroSky GameTime.Hours 9
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled true
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
+NOOP
+"EnviroSky" SET EnviroSky GameTime.Hours 10
 "cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
 "cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
 "cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
+NOOP
+"EnviroSky" SET EnviroSky GameTime.Hours 10
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
 NOOP
@@ -744,6 +235,615 @@ NOOP
 "cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
 "cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
 "cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
+NOOP
+"EnviroSky" SET EnviroSky GameTime.Hours 11
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
+NOOP
+"EnviroSky" SET EnviroSky GameTime.Hours 11
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
+NOOP
+"EnviroSky" SET EnviroSky GameTime.Hours 11
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
+NOOP
+"EnviroSky" SET EnviroSky GameTime.Hours 10
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
+NOOP
+"EnviroSky" SET EnviroSky GameTime.Hours 12
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
+NOOP
+"EnviroSky" SET EnviroSky GameTime.Hours 10
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
+NOOP
+"EnviroSky" SET EnviroSky GameTime.Hours 8
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
+NOOP
+"EnviroSky" SET EnviroSky GameTime.Hours 10
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
+NOOP
+"EnviroSky" SET EnviroSky GameTime.Hours 11
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
+NOOP
+"EnviroSky" SET EnviroSky GameTime.Hours 10
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
+NOOP
+"EnviroSky" SET EnviroSky GameTime.Hours 10
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
+NOOP
+"EnviroSky" SET EnviroSky GameTime.Hours 8
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
+NOOP
+"EnviroSky" SET EnviroSky GameTime.Hours 11
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
+NOOP
+"EnviroSky" SET EnviroSky GameTime.Hours 9
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled true
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
+NOOP
+"EnviroSky" SET EnviroSky GameTime.Hours 8
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
+NOOP
+"EnviroSky" SET EnviroSky GameTime.Hours 10
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
+NOOP
+"EnviroSky" SET EnviroSky GameTime.Hours 10
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
+NOOP
+"EnviroSky" SET EnviroSky GameTime.Hours 11
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
+NOOP
+"EnviroSky" SET EnviroSky GameTime.Hours 12
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
+NOOP
+"EnviroSky" SET EnviroSky GameTime.Hours 9
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
+NOOP
+"EnviroSky" SET EnviroSky GameTime.Hours 10
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
+NOOP
+"EnviroSky" SET EnviroSky GameTime.Hours 10
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
+NOOP
+"EnviroSky" SET EnviroSky GameTime.Hours 11
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
+NOOP
+"EnviroSky" SET EnviroSky GameTime.Hours 9
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
+NOOP
+"EnviroSky" SET EnviroSky GameTime.Hours 9
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
+NOOP
+"EnviroSky" SET EnviroSky GameTime.Hours 8
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
+NOOP
+"EnviroSky" SET EnviroSky GameTime.Hours 8
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
+NOOP
+"EnviroSky" SET EnviroSky GameTime.Hours 10
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
+NOOP
+"EnviroSky" SET EnviroSky GameTime.Hours 8
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
+NOOP
+"EnviroSky" SET EnviroSky GameTime.Hours 12
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
+NOOP
+"EnviroSky" SET EnviroSky GameTime.Hours 10
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
+NOOP
+"EnviroSky" SET EnviroSky GameTime.Hours 10
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
+NOOP
+"EnviroSky" SET EnviroSky GameTime.Hours 11
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
+NOOP
+"EnviroSky" SET EnviroSky GameTime.Hours 9
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
+NOOP
+"EnviroSky" SET EnviroSky GameTime.Hours 12
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
+NOOP
+"EnviroSky" SET EnviroSky GameTime.Hours 10
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
+NOOP
+"EnviroSky" SET EnviroSky GameTime.Hours 12
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
+NOOP
+"EnviroSky" SET EnviroSky GameTime.Hours 10
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
+NOOP
+"EnviroSky" SET EnviroSky GameTime.Hours 8
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled true
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
+NOOP
+"EnviroSky" SET EnviroSky GameTime.Hours 9
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
+NOOP
+"EnviroSky" SET EnviroSky GameTime.Hours 8
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
+NOOP
+"EnviroSky" SET EnviroSky GameTime.Hours 8
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
+NOOP
+"EnviroSky" SET EnviroSky GameTime.Hours 8
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
+NOOP
+"EnviroSky" SET EnviroSky GameTime.Hours 8
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
+NOOP
+"EnviroSky" SET EnviroSky GameTime.Hours 9
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
+NOOP
+"EnviroSky" SET EnviroSky GameTime.Hours 10
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
+NOOP
+"EnviroSky" SET EnviroSky GameTime.Hours 10
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
+NOOP
+"EnviroSky" SET EnviroSky GameTime.Hours 12
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
+NOOP
+"EnviroSky" SET EnviroSky GameTime.Hours 8
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
+NOOP
+"EnviroSky" SET EnviroSky GameTime.Hours 10
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
+NOOP
+"EnviroSky" SET EnviroSky GameTime.Hours 12
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
+NOOP
+"EnviroSky" SET EnviroSky GameTime.Hours 10
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
+NOOP
+"EnviroSky" SET EnviroSky GameTime.Hours 8
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
+NOOP
+"EnviroSky" SET EnviroSky GameTime.Hours 10
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled true
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
+NOOP
+"EnviroSky" SET EnviroSky GameTime.Hours 8
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled true
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
+NOOP
+"EnviroSky" SET EnviroSky GameTime.Hours 8
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
+NOOP
+"EnviroSky" SET EnviroSky GameTime.Hours 8
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled true
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
+NOOP
+"EnviroSky" SET EnviroSky GameTime.Hours 12
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
+NOOP
+"EnviroSky" SET EnviroSky GameTime.Hours 9
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
+NOOP
+"EnviroSky" SET EnviroSky GameTime.Hours 8
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
+NOOP
+"EnviroSky" SET EnviroSky GameTime.Hours 11
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
+NOOP
+"EnviroSky" SET EnviroSky GameTime.Hours 8
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
+NOOP
+"EnviroSky" SET EnviroSky GameTime.Hours 8
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled true
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
+NOOP
+"EnviroSky" SET EnviroSky GameTime.Hours 12
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
+NOOP
+"EnviroSky" SET EnviroSky GameTime.Hours 8
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
+NOOP
+"EnviroSky" SET EnviroSky GameTime.Hours 11
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
+NOOP
+"EnviroSky" SET EnviroSky GameTime.Hours 12
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
+NOOP
+"EnviroSky" SET EnviroSky GameTime.Hours 9
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
+NOOP
+"EnviroSky" SET EnviroSky GameTime.Hours 8
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
+NOOP
+"EnviroSky" SET EnviroSky GameTime.Hours 8
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
+NOOP
+"EnviroSky" SET EnviroSky GameTime.Hours 8
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
+NOOP
+"EnviroSky" SET EnviroSky GameTime.Hours 11
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
+NOOP
+"EnviroSky" SET EnviroSky GameTime.Hours 10
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
+NOOP
+"EnviroSky" SET EnviroSky GameTime.Hours 10
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
+NOOP
+"EnviroSky" SET EnviroSky GameTime.Hours 12
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
+NOOP
+"EnviroSky" SET EnviroSky GameTime.Hours 10
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.sampleCount 1
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.settings.frameBlending 0.004
+"disk1" GET Sensors.Disk counter
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes
 NOOP
