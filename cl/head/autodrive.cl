@@ -7,8 +7,9 @@ CREATE "SyncityJPickup/cameras"
 "SyncityJPickup/cameras" SET Transform position (-6 1 -50) eulerAngles (0 0 0)
 CREATE "SyncityJPickup/cameras/Front"
 "SyncityJPickup/cameras/Front" SET active false
-"SyncityJPickup/cameras/Front" ADD Camera
+"SyncityJPickup/cameras/Front" ADD Camera Sensors.RenderCamera
 "SyncityJPickup/cameras/Front" SET Camera near 0.3 far 1000 fieldOfView 60 renderingPath "UsePlayerSettings"
+"SyncityJPickup/cameras/Front" SET Sensors.RenderCamera format "ARGB32" resolution (640 480)
 CREATE "EnviroSky" AS "EnviroSky"
 "EnviroSky" SET EnviroSky Player "SyncityJPickup/cameras" PlayerCamera "SyncityJPickup/cameras/Front" GameTime.ProgressTime "None" weatherSettings.cloudTransitionSpeed 100 weatherSettings.effectTransitionSpeed 100 weatherSettings.fogTransitionSpeed 100 
 "EnviroSky" EXECUTE EnviroSky AssignAndStart "SyncityJPickup/cameras/Front" "SyncityJPickup/cameras/Front"
@@ -30,13 +31,14 @@ CREATE RenderTexture 640 480 32 "RFloat" "Default" AS "SyncityJPickup_cameras_De
 "SyncityJPickup/cameras/Depth" SET Camera targetTexture "SyncityJPickup_cameras_Depth_RT"
 "SyncityJPickup/cameras/Depth" SET Sensors.RenderCamera format "RFloat" resolution (640 480)
 "SyncityJPickup/cameras/Depth" SET active true
-[UI.Window] ShowFromRenderTexture "SyncityJPickup_cameras_Depth_RT"
+[UI.Window] ShowFromRenderTexture "SyncityJPickup_cameras_Depth_RT" AS "Depth"
 "Segmentation.Profile.instance" PUSH classes "Void" "LINES" "DIRT" "ROAD" "PROPS" "SIGNS"
 CREATE "SyncityJPickup/cameras/Segment"
 "SyncityJPickup/cameras/Segment" SET active false
-"SyncityJPickup/cameras/Segment" ADD Camera SegmentationCamera Segmentation.Output.BoundingBoxes Segmentation.Output.ClassColors
+"SyncityJPickup/cameras/Segment" ADD Camera SegmentationCamera Segmentation.Output.BoundingBoxes Segmentation.Output.ClassColors Sensors.RenderCamera
 "SyncityJPickup/cameras/Segment" SET SegmentationCamera transparencyCutout 0
 "SyncityJPickup/cameras/Segment" SET Camera near 0.3 far 1000 fieldOfView 60 renderingPath "UsePlayerSettings" targetTexture.filterMode "Point" 
+"SyncityJPickup/cameras/Segment" SET Sensors.RenderCamera format "ARGB32" resolution (640 480)
 "SyncityJPickup/cameras/Segment" SET Segmentation.Output.BoundingBoxes minimumObjectVisibility 0 extensionAmount 0 minimumPixelsCount 1 
 "SyncityJPickup/cameras/Segment" EXECUTE Segmentation.Output.ClassColors lookUpTable.SetClassColor "Void->black" "LINES->white" "DIRT->blue" "ROAD->#838383" "PROPS->#09FF00" "SIGNS->red"
 "SyncityJPickup/cameras/Segment" ADD Segmentation.Output.FilteredBoundingBoxes
@@ -79,8 +81,7 @@ CREATE "disk1/Syncityjpickup/cameras/segment"
 "autodrive/Road/Autodrive Road" SET Segmentation.Class className "ROAD"
 "SyncityJPickup/cameras" SET Transform localPosition (0 0.872 2.318) localEulerAngles (0 0 0)
 "SyncityJPickup" SET Transform position (-100.76 2.25 -415.57) eulerAngles (0.274 37.499 0)
-"SyncityJPickup" SET VPCustomInput enabled true
-"SyncityJPickup/cameras/Front" ADD UnityEngine.PostProcessing.PostProcessingBehaviour
+"SyncityJPickup" SET VPCustomInput enabled false
 "SyncityJPickup/cameras/Front" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile "EnviroFX"
 "SyncityJPickup/cameras/Front" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.eyeAdaptation.enabled true
 "SyncityJPickup/cameras/Front" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.tonemapping.tonemapper "1"
