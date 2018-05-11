@@ -157,7 +157,6 @@ def run():
 	pZ_d = 1
 	
 	loop = 0
-	settings.seqSave_i = loop;
 	
 	# reset camera
 	common.sendData([

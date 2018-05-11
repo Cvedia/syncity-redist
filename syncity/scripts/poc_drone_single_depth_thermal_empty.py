@@ -61,10 +61,10 @@ def run():
 		for x in range(0,2):
 			common.sendData([
 				'CREATE ccameras/drone/drone{}/drone{}v "{}"'.format(x,x,helpers.drones_lst[6]), # Drones/DJI Phantom 4 Pro/DJI_Phantom_4_Pro
-				'"cameras/drone/drone{}" ADD Segmentation.Entity Segmentation.Class'.format(x),
+				'"cameras/drone/drone{}" ADD Segmentation.ClassGroup'.format(x),
 				'"cameras/drone/drone{}" SET active false'.format(x),
 				
-				'"cameras/drone/drone{}" SET Segmentation.Class className "drone0"'.format(x),
+				'"cameras/drone/drone{}" SET Segmentation.ClassGroup itemsClassName "drone0"'.format(x),
 				'"cameras/drone/drone{}/drone{}" SET Transform position ({} {} {})'.format(x, x, 0, 1, 0),
 			], read=False)
 			
@@ -90,7 +90,6 @@ def run():
 	pZ_d = 1
 	
 	loop = 0
-	settings.seqSave_i = loop;
 	
 	# reset camera
 	common.sendData([
@@ -126,10 +125,7 @@ def run():
 	# helpers.setThermalProps('spawner/animals', temperatureValue=22, temperatureBandwidth=20, temperatureMedian=1, variance=15, heatiness=1)
 	#helpers.setThermalProps('spawner/cars', temperatureValue=25, temperatureBandwidth=10, temperatureMedian=0, variance=15, heatiness=0)
 	#helpers.setThermalProps(['drone/drone0/drone0'], temperatureValue=0, temperatureBandwidth=0, temperatureMedian=0, variance=0, reflectivity=0, heatiness=-5)
-	
-	if settings.setup_only:
-		return
-	
+
 	common.flushBuffer()
 	
 	while loop < settings.loop_limit:

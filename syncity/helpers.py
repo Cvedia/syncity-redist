@@ -1295,7 +1295,7 @@ def globalDiskSetup(label='disk1', outputPath=None):
 		'CREATE "{}"'.format(label),
 		'"{}" SET active false'.format(label),
 		'"{}" ADD Sensors.Disk'.format(label),
-		'"{}" SET Sensors.Disk path "{}"'.format(label, outputPath),
+		'"{}" SET Sensors.Disk path "{}" counter 1'.format(label, outputPath),
 		'"{}" SET active true'.format(label)
 	], read=False)
 	
@@ -1356,6 +1356,8 @@ def takeSnapshot(lst, autoSegment=False, label='disk1', forceNoop=False, forceRe
 			doRender(lst)
 		return
 	
+	seqSaveSync(label=label)
+	
 	if autoSegment:
 		idx = [i for i, s in enumerate(lst) if 'segment' in s.lower()]
 		
@@ -1371,7 +1373,7 @@ def takeSnapshot(lst, autoSegment=False, label='disk1', forceNoop=False, forceRe
 				'"{}" GET Segmentation.Output.BoundingBoxes boundingBoxes'.format(lst[idx[0]]),
 				'NOOP'
 			], read=True)
-			seqSave('bbox', r)
+			seqSave('bbox', r, label=label)
 	else:
 		if forceNoop:
 			common.sendData('NOOP', read=True);
@@ -1381,7 +1383,7 @@ def takeSnapshot(lst, autoSegment=False, label='disk1', forceNoop=False, forceRe
 	if settings.cooldown > 0:
 		common.sendData('SLEEP {}'.format(settings.cooldown), read=True);
 
-def takeSegSnapshot(lst):
+def takeSegSnapshot(lst, label='disk1'):
 	"""
 	Creates a segmentation snapshot with json output from a list of cameras
 	
@@ -1394,13 +1396,28 @@ def takeSegSnapshot(lst):
 		lst = [ lst ]
 	
 	common.flushBuffer()
-	
+	seqSaveSync(label=label)
 	for l in lst:
 		r = common.sendData(['"{}" GET Segmentation.Output.BoundingBoxes boundingBoxes'.format(l), 'NOOP'], read=True)
 		# "cam" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
-		seqSave('bbox', r)
+		seqSave('bbox', r, label=label)
 
-def seqSave(pref, rawData):
+def seqSaveSync(label='disk1', force=False):
+	common.flushBuffer()
+	res = common.sendData('"{}" GET Sensors.Disk counter'.format(label), read=True)
+	counter = 1
+	
+	for r in res:
+		s = str(r).lower()
+		
+		if s == 'ok' or 'error' in s:
+			continue
+		
+		counter = int(s)
+	
+	settings._seqSave[label] = counter
+
+def seqSave(pref, rawData, label='disk1'):
 	"""
 	Helper function to mutate raw telnet outputs into json objects
 	
@@ -1415,6 +1432,14 @@ def seqSave(pref, rawData):
 	"""
 	if settings.dry_run:
 		return
+	
+	try:
+		meh = settings._seqSave[label]
+	except AttributeError:
+		settings._seqSave = {}
+		settings._seqSave[label] = 1
+	except KeyError:
+		settings._seqSave[label] = 1
 	
 	noops = 0
 	data = []
@@ -1448,7 +1473,7 @@ def seqSave(pref, rawData):
 						f[1] = False
 		
 		if len(data) == 0:
-			common.output('Unable to fetch bounding box #{}, retrying...'.format(settings._seqSave_i), 'WARN')
+			common.output('Unable to fetch bounding box #{}, retrying...'.format(settings._seqSave[label]), 'WARN')
 			time.sleep(.5)
 			rawData = common.sendData('NOOP', read=True)
 		else:
@@ -1465,12 +1490,13 @@ def seqSave(pref, rawData):
 		
 		if noops > 100:
 			common.output('Limit reached while waiting for json object, skipping index!', 'ERROR')
-			settings._seqSave_i = settings._seqSave_i + 1
+			settings._seqSave[label] = settings._seqSave[label] + 1
 			return
 	
 	data = ''.join(data)
 	
-	fn = '{}{}_{}.json'.format(settings.local_path, pref, settings._seqSave_i)
+	# TODO: Filename should take the `label` in consideration
+	fn = '{}{}_{}.json'.format(settings.local_path, pref, settings._seqSave[label])
 	
 	if settings.debug:
 		common.output('SEQ Save path: {} prefix: {} data: {}'.format(fn, pref, data), 'DEBUG')
@@ -1481,8 +1507,8 @@ def seqSave(pref, rawData):
 	f = open(fn, 'w')
 	f.write(data)
 	f.close()
-	common.output('Wrote: {}{}_{}.json'.format(settings.local_path, pref, settings._seqSave_i))
-	settings._seqSave_i = settings._seqSave_i + 1
+	common.output('Wrote: {}'.format(fn))
+	settings._seqSave[label] = settings._seqSave[label] + 1
 
 def addDiskOutput(lst, label='disk1', component='RenderTextureLink'):
 	"""

@@ -190,6 +190,7 @@ def init():
 	
 	settings._telnet = False
 	settings._counters = { 'send': 0, 'recv': 0, 'flush': 0 }
+	settings._seqSave = {}
 	
 	if settings.skip_shutdown == False:
 		signal.signal(signal.SIGINT, gracefullShutdown)

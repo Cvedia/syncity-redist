@@ -48,6 +48,7 @@ def run():
 	
 	if settings.skip_setup == False:
 		common.sendData([
+			'"Config.instance" SET physicsEnabled true',
 			'CREATE "autodrive/autodrive_tile" FROM "autodrive" AS "autodrive"',
 			'CREATE "autodrive/SyncityJPickup" FROM "autodrive" AS "{}"'.format(car_obj)
 		])
