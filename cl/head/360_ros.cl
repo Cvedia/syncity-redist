@@ -29,16 +29,11 @@ CREATE "cameras/segmentation"
 [UI.Window] ShowFromCamera "cameras/segmentation" AS "segmentation" WITH 640 480 24 "ARGB32" "Default"
 CREATE "cameras/depth"
 "cameras/depth" SET active false
-"cameras/depth" ADD Camera Cameras.RenderDepthBufferSimple Sensors.RenderCamera
+"cameras/depth" ADD Camera Cameras.RenderDepthBufferSimple
 "cameras/depth" SET Camera near 0.3 far 1000 fieldOfView 60 renderingPath "DeferredShading"
 "cameras/depth" SET Cameras.RenderDepthBufferSimple outputMode "Linear01Depth" transparencyCutout 0
-CREATE RenderTexture 640 480 32 "RFloat" "Default" AS "cameras_depth_RT"
-"cameras_depth_RT" SET name "cameras/depth"
-"cameras_depth_RT" EXECUTE @Create
-"cameras/depth" SET Camera targetTexture "cameras_depth_RT"
-"cameras/depth" SET Sensors.RenderCamera format "RFloat" resolution (640 480)
 "cameras/depth" SET active true
-[UI.Window] ShowFromRenderTexture "cameras_depth_RT"
+[UI.Window] ShowFromCamera "cameras/depth" AS "depth" WITH 640 480 32 "RFloat" "Default"
 CREATE "disk1"
 "disk1" SET active false
 "disk1" ADD Sensors.Disk
@@ -64,8 +59,8 @@ CREATE "Cars/VW_Golf_V/VW_Golf_V" FROM "cars" AS "obj/subject"
 "obj" SET active false
 "obj/subject" SET Transform position (0 0 0)
 "obj/subject" SET Transform eulerAngles (0 0 0)
-"obj" ADD Segmentation.Entity Segmentation.Class
-"obj" SET Segmentation.Class className "Car"
+"obj" ADD Segmentation.ClassGroup
+"obj" SET Segmentation.ClassGroup itemsClassName "Car"
 "obj" SET Transform position (-6 0 -9)
 "obj" SET Transform eulerAngles (0 0 0)
 "obj" SET active true
