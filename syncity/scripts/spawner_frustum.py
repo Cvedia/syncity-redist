@@ -59,7 +59,7 @@ def run():
 	if settings.setup_only == True:
 		return
 	
-	common.flushBuffer()
+	common.waitQueue()
 	loop = 0
 	
 	while loop < settings.loop_limit:

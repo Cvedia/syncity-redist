@@ -31,6 +31,8 @@ def run():
 	if settings.setup_only:
 		return
 	
+	common.waitQueue()
+	
 	for c in range(2):
 		for w in range(8):
 			for fov in range(100, 9, -20):
@@ -97,3 +99,4 @@ def run():
 						])
 						helpers.spawnRadiusGeneric(['drones/Parrot Disco/'], limit=random.randint(30,50), radius=random.randint(20,35), innerradius=5, position=[0,0,0], segmentationClass="Drone")
 						loop = 0
+						common.waitQueue()

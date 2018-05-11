@@ -21,12 +21,14 @@ def run():
 	loop = 0
 	mycams = ['Camera/rgb', 'Camera/Thermal', 'Camera/Segmentation']
 	
+	common.waitQueue()
+	
 	# loop changing camera positions with random agc bounduaries
 	while loop < settings.loop_limit:
 		# "disk1" EXECUTE Sensors.Disk Snapshot
 		# "Camera/Segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 		
-		helpers.takeSnapshot(mycams, autoSegment=True, skipRender=True)
+		helpers.takeSnapshot(mycams, autoSegment=True)
 		
 		common.sendData([
 			'"Camera" SET Transform localPosition (-10~10 0.5~2 -50~0)',

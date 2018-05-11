@@ -48,10 +48,10 @@ def run():
 		'"EnviroSky" EXECUTE EnviroSky ChangeWeather "{}"'.format(helpers.weather_lst[1])
 	], read=False)
 	
-	common.flushBuffer()
-	
 	if settings.setup_only:
 		return
+	
+	common.waitQueue()
 	
 	displ_h = .5
 	displ_y = 4

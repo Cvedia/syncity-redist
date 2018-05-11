@@ -77,3 +77,17 @@ def run():
 	
 	# force a render to visualize on the ui
 	helpers.doRender(mycams)
+	
+	# make sure there's nothing waiting on queue before processing into loop
+	common.waitQueue()
+	
+	loop = 0
+	
+	# loop changing camera positions with random agc bounduaries
+	while loop < settings.loop_limit:
+		helpers.takeSnapshot(mycams, autoSegment=True)
+		
+		# do something
+		
+		loop += 1
+		common.output('Loop {} ({}%)'.format(loop, round(100 * (loop / settings.loop_limit),2)))

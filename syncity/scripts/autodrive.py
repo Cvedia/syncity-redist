@@ -55,8 +55,8 @@ def run():
 		helpers.addWindzone(target='autodrive')
 		
 		helpers.globalCameraSetup(labelRoot=camera_mount)
-		helpers.addCameraRGB(width=640, height=480, pp='EnviroFX', label=mycams[0], labelRoot=camera_mount, audio=False)
-		helpers.addCameraDepth(width=640, height=480, label=mycams[1])
+		helpers.addCameraRGB(width=640, height=480, pp='EnviroFX', label=mycams[0], labelRoot=camera_mount, audio=False, renderCamera=True)
+		helpers.addCameraDepth(width=640, height=480, label=mycams[1], renderCamera=True)
 		helpers.addCameraSeg(
 			width=640, height=480,
 			label=mycams[2],
@@ -67,7 +67,8 @@ def run():
 				['ROAD', '#838383'],
 				['PROPS', '#09FF00'],
 				['SIGNS', 'red']
-			]
+			],
+			renderCamera=True
 		)
 		
 		helpers.globalDiskSetup()
@@ -103,9 +104,10 @@ def run():
 			
 			# add custom inputs for ros bridge
 			# WARNING: When VPCustomInput is enabled, you won't be able to drive using the keys
-			'"{}" SET VPCustomInput enabled true'.format(car_obj),
+			# '"{}" ADD VPCustomInput'.format(car_obj),
+			'"{}" SET VPCustomInput enabled false'.format(car_obj),
 			
-			'"{}" ADD UnityEngine.PostProcessing.PostProcessingBehaviour'.format(mycams[0]),
+			# '"{}" ADD UnityEngine.PostProcessing.PostProcessingBehaviour'.format(mycams[0]),
 			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile "EnviroFX"'.format(mycams[0]),
 			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.eyeAdaptation.enabled true'.format(mycams[0]),
 			
@@ -280,4 +282,4 @@ def run():
 			]
 		)
 	
-	common.flushBuffer()
+	common.waitQueue()

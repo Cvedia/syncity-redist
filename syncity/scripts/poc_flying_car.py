@@ -84,6 +84,8 @@ def run():
 	if settings.setup_only:
 		return
 	
+	common.waitQueue()
+	
 	while hour < 19:
 		common.sendData([
 			'"spawner/drones" SET Transform position ({} {} {})'.format(0, random.randint(2, 25), 0),

@@ -8,12 +8,11 @@
 
 // lidar device ----------------------------------------------------------------
 
-// [Sensors.Lidar] CreateLidar "mainCar/LidarPlaceholder/vlp_16" model "VLP_16" minAz -180 maxAz 180 minEl -30 maxEl 30 rpm 900 minimumIntensity 0 dataType "Segmentation" accuracy "HIGH" timingAccuracy "LOW" disableUDPBroadcast false
-[Sensors.Lidar] CreateLidar "mainCar/LidarPlaceholder/vlp_16" model "VLP_16" minAz -180 maxAz 180 minEl -30 maxEl 30 rpm 300 minimumIntensity 0 accuracy "HIGH" timingAccuracy "LOW" disableUDPBroadcast true
+[Sensors.Lidar] CreateLidar "mainCar/LidarPlaceholder/vlp_16" model "VLP_16" minAz -180 maxAz 180 minEl -30 maxEl 30 rpm 900 minimumIntensity 0 dataType "Segmentation" accuracy "HIGH" timingAccuracy "LOW" disableUDPBroadcast false
 "mainCar/LidarPlaceholder/vlp_16" ADD Sensors.LidarComponents.TextureVisualizer
 "mainCar/LidarPlaceholder/vlp_16" SET Sensors.LidarComponents.TextureVisualizer outputTexture "PCL texture" virtualCamera "lidarVirtualCamera"
 "mainCar/LidarPlaceholder/vlp_16" SET active true
 
 // lidar ui hook ---------------------------------------------------------------
 
-[UI.Window] ShowFromRenderTexture "PCL texture"
+[UI.Window] ShowFromRenderTexture "PCL texture" AS "PCL"

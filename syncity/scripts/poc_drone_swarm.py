@@ -77,7 +77,7 @@ def run():
 	if settings.setup_only:
 		return
 	
-	common.flushBuffer()
+	common.waitQueue()
 	
 	while loop < settings.loop_limit:
 		if random.uniform(0,1) > .8:

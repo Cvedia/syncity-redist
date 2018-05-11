@@ -58,7 +58,9 @@ def run():
 			pZ = -dist_lim
 			pX += distV
 	
+	common.waitQueue()
 	a = 0
+	
 	while a < 360:
 		# one dimension camera sweep in 10 degrees steps
 		common.sendData('"camera" SET Transform eulerAngles (0 {} 0)'.format(a))

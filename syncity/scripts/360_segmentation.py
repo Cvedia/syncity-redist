@@ -38,8 +38,8 @@ def run():
 		helpers.addDiskOutput(mycams)
 		
 		common.sendData([
-			# DEPTH shortcut to 1 channel 16bit png
-			'"disk1/Cameras/depth" SET Sensors.RenderCameraLink outputType "DEPTH"',
+			# DEPTH shortcut to 1 channel 16bit png (default)
+			'"disk1/Cameras/depth" SET Sensors.RenderTextureLink outputType "DEPTH"',
 			
 			# object 0
 			'CREATE "{}" FROM "cars" AS "obj/subject0"'.format(obj[0]),
@@ -80,7 +80,7 @@ def run():
 	if settings.setup_only == True:
 		return
 	
-	common.flushBuffer()
+	common.waitQueue()
 	
 	displ_x = 5
 	displ_y = 2

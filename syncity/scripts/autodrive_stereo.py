@@ -100,4 +100,4 @@ def run():
 			'"EnviroSky" EXECUTE EnviroSky ChangeWeather "Cloudy 1"'
 		], read=False)
 	
-	common.flushBuffer()
+	common.waitQueue()

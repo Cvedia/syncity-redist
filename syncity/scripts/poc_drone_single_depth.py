@@ -143,7 +143,7 @@ def run():
 		'DELETE "drone/drone2/drone2/Propeller"'
 	], read=False)
 	
-	common.flushBuffer()
+	common.waitQueue()
 	loop = 0
 	
 	while loop < 100:
@@ -195,6 +195,7 @@ def run():
 				'"cameras/cameraRGB" SET Camera enabled true',
 				'SLEEP 0.5'
 			], read=True)
+			common.waitQueue()
 		
 		helpers.takeSnapshot(mycams, True)
 		

@@ -147,6 +147,7 @@ def run():
 	if settings.setup_only == True:
 		return
 	
+	common.waitQueue()
 	a_y = 0
 	dist_y = 5
 	loop = 0

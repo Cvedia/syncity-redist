@@ -23,6 +23,8 @@ def run():
 	if settings.setup_only:
 		return
 	
+	common.waitQueue()
+	
 	for c in range(4):
 		for w in range(8):
 			
@@ -93,3 +95,4 @@ def run():
 					if loop == reroll:
 						helpers.spawnDroneObjs(destroy=True, pX=-500, distLimit=500, pZ=-500)
 						loop = 0
+						common.waitQueue()

@@ -84,7 +84,7 @@ def run():
 	if settings.setup_only == True:
 		return
 	
-	common.flushBuffer()
+	common.waitQueue()
 	
 	displ_x = 5
 	displ_y = 2

@@ -59,7 +59,7 @@ def run():
 		'cameras/segmentation SET Segmentation.Segmentation OutputType "InstanceIds"'
 	], read=False)
 	
-	common.flushBuffer()
+	common.waitQueue()
 	loop = 0
 	
 	while loop < 100:

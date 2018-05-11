@@ -13,8 +13,6 @@ CREATE "mainCar/cameras/Front"
 "mainCar/cameras/Front" SET Postprocessing.EnviroMerged dayProfile ASSET "Highway/Resources/Day" FROM "highway" nightProfile ASSET "Highway/Resources/Night" FROM "highway"
 "mainCar/cameras/Front" SET UnityEngine.Rendering.PostProcessing.PostProcessLayer antialiasingMode "SubpixelMorphologicalAntialiasing" fog.enabled 0 volumeTrigger "mainCar/cameras/Front"
 
-// WARNING: This camera must be `alwaysOn` because is has motionBlur enabled on postprocessing
-// otherwise motion blur would just blur the interleaving images
 "mainCar/cameras/Front" SET Sensors.RenderCamera format "ARGB32" resolution (640 480) alwaysOn true
 
 "mainCar/cameras/Front" SET active true
@@ -75,8 +73,6 @@ CREATE "mainCar/cameras/mirrorL"
 "mainCar/cameras/mirrorL" SET Postprocessing.EnviroMerged dayProfile ASSET "Highway/Resources/Day" FROM "highway" nightProfile ASSET "Highway/Resources/Night" FROM "highway"
 "mainCar/cameras/mirrorL" SET UnityEngine.Rendering.PostProcessing.PostProcessLayer antialiasingMode "SubpixelMorphologicalAntialiasing" fog.enabled 0 volumeTrigger "mainCar/cameras/mirrorL"
 
-// WARNING: This camera must be `alwaysOn` because is has motionBlur enabled on postprocessing
-// otherwise motion blur would just blur the interleaving images
 "mainCar/cameras/mirrorL" SET Sensors.RenderCamera format "ARGB32" resolution (320 240) alwaysOn true
 
 "mainCar/cameras/mirrorL" SET active true
@@ -101,8 +97,6 @@ CREATE "mainCar/cameras/mirrorR"
 "mainCar/cameras/mirrorR" SET Postprocessing.EnviroMerged dayProfile ASSET "Highway/Resources/Day" FROM "highway" nightProfile ASSET "Highway/Resources/Night" FROM "highway"
 "mainCar/cameras/mirrorR" SET UnityEngine.Rendering.PostProcessing.PostProcessLayer antialiasingMode "SubpixelMorphologicalAntialiasing" fog.enabled 0 volumeTrigger "mainCar/cameras/mirrorR"
 
-// WARNING: This camera must be `alwaysOn` because is has motionBlur enabled on postprocessing
-// otherwise motion blur would just blur the interleaving images
 "mainCar/cameras/mirrorR" SET Sensors.RenderCamera format "ARGB32" resolution (320 240) alwaysOn true
 
 "mainCar/cameras/mirrorR" SET active true

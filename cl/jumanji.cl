@@ -1,5 +1,3 @@
-[API.Telnet] Setup port 10200
-
 CREATE "Camera"
 "Camera" SET Transform localPosition (-10~10 0.5~2 -50~0)
 "Camera" SET Transform localEulerAngles (-15~-10 -40~40 -10~10)

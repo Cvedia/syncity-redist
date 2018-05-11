@@ -133,6 +133,7 @@ def run():
 		return
 	
 	loop = 0
+	common.waitQueue()
 	
 	# loop changing camera positions with random agc bounduaries
 	while loop < settings.loop_limit:

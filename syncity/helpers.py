@@ -126,7 +126,7 @@ def addCameraDepth(
 	depthBuffer='simple',
 	transparencyCutout=0,
 	textureFormat=14,
-	renderCamera=True,
+	renderCamera=False,
 	registerCamera=True
 ):
 	"""
@@ -258,7 +258,7 @@ def addCameraRGB(
 		
 		if renderCamera == True:
 			addStack.append('Sensors.RenderCamera')
-			b.extend('"{}" SET Sensors.RenderCamera format "{}" resolution ({} {})'.format(l, unity_vars.textureFormat[textureFormat], width, height))
+			b.append('"{}" SET Sensors.RenderCamera format "{}" resolution ({} {})'.format(l, unity_vars.textureFormat[textureFormat], width, height))
 		
 		if idx == 0:
 			if audio:
@@ -1334,7 +1334,7 @@ def doRender(lst):
 	for l in lst:
 		common.sendData('"{}" EXECUTE Sensors.RenderCamera RenderFrame'.format(l))
 
-def takeSnapshot(lst, autoSegment=False, label='disk1', forceNoop=False, skipRender=False):
+def takeSnapshot(lst, autoSegment=False, label='disk1', forceNoop=False, forceRender=False):
 	"""
 	Creates a image snapshot from a set of cameras using a disk component
 	
@@ -1344,27 +1344,25 @@ def takeSnapshot(lst, autoSegment=False, label='disk1', forceNoop=False, skipRen
 	autoSegment (bool): Automatic guess which cameras are segmentation and export json objects among with the pixel dense image, defaults to `None`
 	label (string): Game object name, defaults to `disk1`
 	forceNoop (bool): Force a buffer flush before snapshot happens, this ensures that any queued commands are executed before doing the render. Defaults to `False`
-	
+	forceRender (bool): Forces rendering frame before taking the snapshot, defaults to `False`
 	"""
 	if not isinstance(lst, list):
 		lst = [ lst ]
-	if skipRender == False or (settings.skip_disk and autoSegment == False):
+	if settings.skip_disk and autoSegment == False:
 		if forceNoop:
 			common.sendData('NOOP', read=True);
 		
-		# NOTE: This is not needed, but we will force it
-		doRender(lst)
+		if forceRender:
+			doRender(lst)
 		return
 	
 	if autoSegment:
-		idx = [i for i, s in enumerate(lst) if 'segmentation' in s.lower()]
+		idx = [i for i, s in enumerate(lst) if 'segment' in s.lower()]
 		
 		if len(idx) == 0:
 			common.output('No camera with segmentation name found, skipping autoSegment', 'WARNING')
 		else:
-			
-			# DEPRECATED: This *might be* no longer needed
-			if skipRender == False:
+			if forceRender:
 				doRender(lst)
 			
 			common.flushBuffer()
@@ -2022,9 +2020,7 @@ def uiWindow(objs, width=1024, height=768, depth=24, textureFormat=4, link="Show
 		if link == 'ShowFromCamera':
 			cmd.append('[UI.Window] ShowFromCamera "{}" AS "{}" WITH {} {} {} "{}" "{}"'.format(obj, obj.split('/')[-1], width, height, depth, unity_vars.textureFormat[textureFormat], mode))
 		elif link == 'ShowFromRenderTexture':
-			cmd.append('[UI.Window] ShowFromRenderTexture "{}"'.format(targetTexture))
-			# #598
-			# cmd.append('[UI.Window] ShowFromRenderTexture "{}" AS "{}"'.format(targetTexture, obj.split('/')[-1]))
+			cmd.append('[UI.Window] ShowFromRenderTexture "{}" AS "{}"'.format(targetTexture, obj.split('/')[-1]))
 		else:
 			raise 'Unknown link mode'
 	
