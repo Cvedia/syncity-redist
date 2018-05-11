@@ -34,4 +34,4 @@ def run():
 		helpers.takeSnapshot(mycams, autoSegment=False)
 		loop += 1
 		common.output('Loop {} ({}%)'.format(loop, round(100 * (loop / settings.loop_limit),2)))
-		time.sleep(1)
+		common.sendData('SLEEP 1', read=True)

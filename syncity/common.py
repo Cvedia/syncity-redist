@@ -751,6 +751,9 @@ def waitQueue(threshold=0, wait=3):
 	
 	"""
 	
+	if settings._tn == None:
+		return
+	
 	flushBuffer()
 	
 	b = False
