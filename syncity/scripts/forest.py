@@ -52,6 +52,8 @@ def run():
 	if settings.setup_only:
 		return
 	
+	common.waitQueue()
+	
 	while elevation < 60:
 		azimuth = 0
 		
@@ -69,6 +71,7 @@ def run():
 			if loops == reroll:
 				loops = 0
 				helpers.spawnMiscObjs(True)
+				common.waitQueue()
 			
 			azimuth += dist_a
 		

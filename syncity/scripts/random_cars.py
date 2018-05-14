@@ -44,8 +44,8 @@ def run():
 	while k < settings.carsLimit:
 		common.sendData([
 			'CREATE "Cars/?" FROM "cars" AS "mycar_{}"'.format(k),
-			'"mycar_{}" ADD Segmentation.ClassGroup'.format(k),
-			'"mycar_{}" SET Segmentation.ClassGroup itemsClassName "Car"'.format(k),
+			'"mycar_{}" ADD Segmentation.Entity Segmentation.Class'.format(k),
+			'"mycar_{}" SET Segmentation.Class className "Car"'.format(k),
 			'"mycar_{}" SET Transform position ({} {} {})'.format(k, pX + settings.X_COMP, 5 + settings.Y_COMP, pZ + settings.Z_COMP),
 			'"mycar_{}" SET active true'.format(k)
 		])
@@ -58,7 +58,9 @@ def run():
 			pZ = -dist_lim
 			pX += distV
 	
+	common.waitQueue()
 	a = 0
+	
 	while a < 360:
 		# one dimension camera sweep in 10 degrees steps
 		common.sendData('"camera" SET Transform eulerAngles (0 {} 0)'.format(a))

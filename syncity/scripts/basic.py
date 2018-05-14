@@ -50,5 +50,7 @@ def run():
 		'"cameras" SET Transform eulerAngles (20 0 0)'
 	])
 	
+	common.waitQueue()
+	
 	# force a render to visualize on the ui
 	helpers.doRender(mycams)

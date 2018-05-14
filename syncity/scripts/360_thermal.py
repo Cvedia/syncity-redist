@@ -33,8 +33,8 @@ def run():
 		common.sendData([
 			# bind object to segmentation Car
 			'CREATE "obj"',
-			'"obj" ADD Segmentation.ClassGroup',
-			'"obj" SET Segmentation.ClassGroup itemsClassName "Car"',
+			'"obj" ADD Segmentation.Entity Segmentation.Class',
+			'"obj" SET Segmentation.Class className "Car"',
 			
 			'CREATE "{}" FROM "cars" AS "obj/subject"'.format(obj),
 			

@@ -137,6 +137,7 @@ def run():
 	
 	# warm up
 	helpers.doRender(mycams)
+	common.waitQueue()
 	
 	loop = 0
 	while loop < settings.loop_limit:

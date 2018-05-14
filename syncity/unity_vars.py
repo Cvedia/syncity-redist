@@ -71,4 +71,6 @@ textureFormat = [
 	'R8'								# 54 Scalar (R) render texture format, 8 bit fixed point.
 ]
 
+# TODO: Add textureFormatDepth
+
 colors = [ 'blue', 'cyan', 'gray', 'green', 'magenta', 'red', 'white', 'yellow' ]

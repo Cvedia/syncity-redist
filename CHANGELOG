@@ -3,6 +3,15 @@ This change log follows YYMMDD timestamps which are also the version number for
 both the SDK and the simulator.
 --------------------------------------------------------------------------------
 
+180504:
+
+- Lexicon changes
+- Added several tests for pytest
+- Documentation changes
+- New 360_rgb example
+- Refactoring
+- Misc fixes
+
 180425:
 
 - New segmentation api implementation and profiles
@@ -39,7 +48,7 @@ both the SDK and the simulator.
 - Added CL head examples
 - Added automated CL head builder / scripts self-testing git hook
 
-180504:
+180405:
 
 - Video compression artifacts support
 - Chromatic aberration and SDK helper added

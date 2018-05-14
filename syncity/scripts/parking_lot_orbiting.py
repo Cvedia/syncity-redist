@@ -42,6 +42,8 @@ def run():
 	if settings.setup_only:
 		return
 	
+	common.waitQueue()
+	
 	# orbit car in the center
 	while elevation < 90:
 		azimuth = 0

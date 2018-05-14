@@ -77,12 +77,12 @@ def run():
 		
 		common.sendData([
 			'"Savannah" SET active true',
-			'"Savannah" ADD Segmentation.ClassGroup',
-			'"Savannah" SET Segmentation.ClassGroup itemsClassName "{}"'.format('ground'),
+			'"Savannah" ADD Segmentation.Entity Segmentation.Class',
+			'"Savannah" SET Segmentation.Class className "{}"'.format('ground'),
 			'"Savannah" SET active false',
-			'"Savannah/Main Terrain" SET Segmentation.ClassInfo itemClass "ground"',
-			'"Savannah/Main Terrain/SubMeshes" ADD Segmentation.ClassInfo',
-			'"Savannah/Main Terrain/SubMeshes" SET Segmentation.ClassInfo itemClass "ground"',
+			'"Savannah/Main Terrain" SET Segmentation.Class className "ground"',
+			'"Savannah/Main Terrain/SubMeshes" ADD Segmentation.Class',
+			'"Savannah/Main Terrain/SubMeshes" SET Segmentation.Class className "ground"',
 			'"Savannah" SET active true'
 		])
 		
@@ -143,6 +143,7 @@ def run():
 		return
 	
 	loop = 0
+	common.waitQueue()
 	
 	# loop changing camera positions with random agc bounduaries
 	while loop < settings.loop_limit:

@@ -90,7 +90,6 @@ def run():
 	pZ_d = 1
 	
 	loop = 0
-	settings.seqSave_i = loop;
 	
 	# reset camera
 	common.sendData([
@@ -126,10 +125,7 @@ def run():
 	# helpers.setThermalProps('spawner/animals', temperatureValue=22, temperatureBandwidth=20, temperatureMedian=1, variance=15, heatiness=1)
 	#helpers.setThermalProps('spawner/cars', temperatureValue=25, temperatureBandwidth=10, temperatureMedian=0, variance=15, heatiness=0)
 	#helpers.setThermalProps(['drone/drone0/drone0'], temperatureValue=0, temperatureBandwidth=0, temperatureMedian=0, variance=0, reflectivity=0, heatiness=-5)
-	
-	if settings.setup_only:
-		return
-	
+
 	common.flushBuffer()
 	
 	while loop < settings.loop_limit:

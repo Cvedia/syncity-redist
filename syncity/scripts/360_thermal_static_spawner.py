@@ -57,6 +57,7 @@ def run():
 	
 	loop = 0
 	loop_limit = 100
+	common.waitQueue()
 	
 	while loop < loop_limit:
 		common.sendData('"{}" SET active false'.format(obj), read=False)

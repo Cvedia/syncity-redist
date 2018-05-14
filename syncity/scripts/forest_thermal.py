@@ -123,9 +123,17 @@ def run():
 	helpers.enableAll(mycams, 'Camera')
 	
 	if settings.setup_only == True:
+		common.sendData([
+			'"cameras/thermal" SET Thermal.ThermalCamera temperatureRange ({}~{} {}~{})'.format(-3, 5, 30, 35),
+			'"cameras" SET Transform position ({} {} {}) eulerAngles ({} {} {})'.format(
+				position[0], position[1], position[2],
+				rotation[0], rotation[1], rotation[2]
+			)
+		])
 		return
 	
 	loop = 0
+	common.waitQueue()
 	
 	# loop changing camera positions with random agc bounduaries
 	while loop < settings.loop_limit:

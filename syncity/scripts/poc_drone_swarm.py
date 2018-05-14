@@ -38,8 +38,8 @@ def run():
 		for d in helpers.drones_lst:
 			common.sendData([
 				'CREATE "drone/dr_{}" "{}"'.format(i, d),
-				'"drone/dr_{}" ADD Segmentation.ClassGroup'.format(i),
-				'"drone/dr_{}" SET Segmentation.ClassGroup itemsClassName "Car"'.format(i),
+				'"drone/dr_{}" ADD Segmentation.Entity Segmentation.Class'.format(i),
+				'"drone/dr_{}" SET Segmentation.Class className "Car"'.format(i),
 				'"drone/dr_{}" SET Transform position ({} {} {})'.format(i, i, 1, 0)
 			], read=False)
 			i = i + 1
@@ -77,7 +77,7 @@ def run():
 	if settings.setup_only:
 		return
 	
-	common.flushBuffer()
+	common.waitQueue()
 	
 	while loop < settings.loop_limit:
 		if random.uniform(0,1) > .8:

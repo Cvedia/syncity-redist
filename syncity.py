@@ -15,7 +15,7 @@ import random
 
 from syncity import common, settings_manager
 
-SYNCITY_VERSION = '18.04.25.1228'
+SYNCITY_VERSION = '18.05.11.1914'
 SIMULATOR_MIN_VERSION = '18.04.23.0000'
 
 print ('SynCity toolbox - v{}\nCopyright (c) 2016-{} CVEDIA PVE Ltd\n'.format(SYNCITY_VERSION, datetime.date.today().year))
@@ -80,9 +80,12 @@ parser.add_argument('-c', '--config', default='syncity.conf', help='Defines a pa
 parser.add_argument('--skip_config', action='store_true', default=False, help='Skips SDK default config file')
 parser.add_argument('--save_config', action='store_true', default=False, help='Save sent parameters as SDK config file -- WARNING: This will not save the stack parameters (-r, -s and -t)')
 
+parser.add_argument('--skip_shutdown', action='store_true', default=False, help='Skips shutdown sequence')
+parser.add_argument('--test', action='store_true', default=False, help='Enables test suite flag')
+
 parser.add_argument('--setup_only', action='store_true', default=False, help='Runs script setup and exits')
 parser.add_argument('--enable_physics', action='store_true', default=False, help='Enable Physics, mainly affects objects with rigidbodies.')
-parser.add_argument('--enable_console_log', action='store_true', default=False, help='Enable UI console log')
+# parser.add_argument('--enable_console_log', action='store_true', default=False, help='Enable UI console log')
 parser.add_argument('--enable_canvas', action='store_true', default=False, help='Enable client rendering visualization, this is the legacy interface')
 parser.add_argument('--disable_envirosky', action='store_true', default=False, help='Disables Envirosky -- NOT RECOMMENDED')
 
@@ -100,7 +103,7 @@ parser.add_argument('--X_COMP', type=float, default=0, help='Spawner X Compensat
 parser.add_argument('--Y_COMP', type=float, default=1, help='Spawner Y Compensation, defaults to 1')
 parser.add_argument('--Z_COMP', type=float, default=0, help='Spawner Z Compensation, defaults to 0')
 
-parser.add_argument('-v', '--version', action='store_true', default=False, help='Shows current SDK version, can be combined with -i and -p to get simulator version')
+parser.add_argument('-v', '--version', action='store_true', default=False, help='Shows current SDK version, by explicitly combining with -i, --ip and / or -p, --port will also return the simulator version')
 
 scripts_parser = parser.add_argument_group('Scripts specific options')
 common.modulesArgs('scripts', parser=scripts_parser)
@@ -112,6 +115,7 @@ args = parser.parse_args()
 
 settings = syncity.settings_manager.Singleton()
 settings._start = time.time()
+settings._tn = None
 
 settings._version = SYNCITY_VERSION
 settings._simulator_min_version = SIMULATOR_MIN_VERSION
@@ -130,10 +134,6 @@ stack = common.findArgOrder([
 
 stack_size = len(stack)
 
-if stack_size == 0:
-	common.output('Nothing to run, aborting!', 'ERROR')
-	sys.exit(0)
-
 for k in args.__dict__:
 	# print('{}: {}'.format(k, args.__dict__[k]))
 	settings[k] = args.__dict__[k]
@@ -150,6 +150,16 @@ if platform.system() == 'Windows':
 else:
 	if settings.local_path[-1:] != '/':
 		settings.local_path = settings.local_path + '/'
+
+if stack_size == 0 and settings.version == False:
+	common.output('Nothing to run, aborting!', 'ERROR')
+	sys.exit(0)
+elif settings.version == True:
+	if common.argExists(['-i', '--ip', '-p', '--port']) == True:
+		syncity.common.initTelnet(settings.ip, settings.port)
+	else:
+		syncity.common.output('SDK Version: {}'.format(settings._version))
+	sys.exit(0)
 
 syncity.common.init2()
 

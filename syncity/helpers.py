@@ -125,6 +125,8 @@ def addCameraDepth(
 	clippingFar=1000,
 	depthBuffer='simple',
 	transparencyCutout=0,
+	textureFormat=14,
+	renderCamera=False,
 	registerCamera=True
 ):
 	"""
@@ -140,8 +142,9 @@ def addCameraDepth(
 	clippingFar (float): Far clipping distance, defaults to `1000` - Objects further from this distance won't appear
 	depthBuffer (string): Defines a specific depth buffer configuration to use, if not set fallsback to default, default `None`
 	transparencyCutout (float): Defines a cutout percentage for transparent objects, defaults to `0` that will show transparent objects at full extent, when set to 1 will hide them completly.
+	renderCamera (bool): Binds a renderCamera component, defaults to `True`
 	registerCamera (bool): Register camera on the UI making it visible
-	
+	textureFormat (int): Defines texture format, defaults to `14` - This is defined on unity_vars lookup table
 	# Note
 	
 	Different from the other cameras, depth camera must have a renderCamera in order to work.
@@ -154,11 +157,8 @@ def addCameraDepth(
 	buf = []
 	
 	for l in label:
-		addStack = [ 'Camera', 'Sensors.RenderCamera' ]
+		addStack = [ 'Camera' ]
 		b = []
-		
-		if registerCamera:
-			addStack.append('registerCamera')
 		
 		if depthBuffer == None:
 			addStack.append('Sensors.Lidar_Internal.RenderDepthBufferOld' if settings.use_old_depth_buffer else 'CameraDepthOutput')
@@ -171,15 +171,31 @@ def addCameraDepth(
 		else:
 			raise 'Unknown depthBuffer: {}'.format(depthBuffer)
 		
+		if renderCamera == True:
+			addStack.append('Sensors.RenderCamera')
+			lrt = '{}_RT'.format(l.replace('/','_'))
+			b.extend([
+				'CREATE RenderTexture {} {} {} "{}" "Default" AS "{}"'.format(width, height, 32, unity_vars.textureFormat[textureFormat], lrt),
+				'"{}" SET name "{}"'.format(lrt, l),
+				'"{}" EXECUTE @Create'.format(lrt),
+				'"{}" SET Camera targetTexture "{}"'.format(l, lrt),
+				'"{}" SET Sensors.RenderCamera format "{}" resolution ({} {})'.format(l, unity_vars.textureFormat[textureFormat], width, height)
+			])
+		else:
+			lrt = None
+		
 		buf.extend([
 			'CREATE "{}"'.format(l),
 			'"{}" SET active false'.format(l),
 			'"{}" ADD {}'.format(l, ' '.join(addStack)),
-			'"{}" SET Camera near {} far {} fieldOfView {} renderingPath "DeferredShading"'.format(l, clippingNear, clippingFar, fov),
-			'"{}" SET Sensors.RenderCamera format "RFloat" resolution ({} {})'.format(l, width, height)
+			'"{}" SET Camera near {} far {} fieldOfView {} renderingPath "DeferredShading"'.format(l, clippingNear, clippingFar, fov)
 		])
+		
 		buf.extend(b)
 		buf.append('"{}" SET active true'.format(l))
+		
+		if registerCamera == True:
+			buf.extend(uiWindow(objs=l, width=width, height=height, depth=32, textureFormat=textureFormat, targetTexture=lrt, link='ShowFromCamera' if renderCamera == False else 'ShowFromRenderTexture', ret=True))
 	
 	common.sendData(buf, read=False)
 	common.flushBuffer()
@@ -196,7 +212,7 @@ def addCameraRGB(
 	
 	enviroskyCloudTransitionSpeed=100, enviroskyEffectTransitionSpeed=100,
 	enviroskyFogTransitionSpeed=100, enviroskyProgressTime='None',
-	renderCamera=True, registerCamera=True
+	renderCamera=False, registerCamera=True
 ):
 	"""
 	Creates a RGB camera with optional postprocessing options
@@ -220,7 +236,7 @@ def addCameraRGB(
 	enviroskyEffectTransitionSpeed (int): Defines weather transition speed, defaults to `100` which is instant
 	enviroskyFogTransitionSpeed (int): Defines fog deposition speed, defaults to `100` which is instant
 	enviroskyProgressTime (string): Defines time progression, defaults to `None` avoiding time to change
-	renderCamera (bool): Binds a renderCamera component allowing for disk exports, defaults to `True`
+	renderCamera (bool): Binds a renderCamera component, defaults to `False`
 	registerCamera (bool): Register camera on the UI making it visible
 	
 	"""
@@ -240,18 +256,9 @@ def addCameraRGB(
 		addStack = [ 'Camera' ]
 		b = []
 		
-		if registerCamera:
-			addStack.append('registerCamera')
-		
-		if renderCamera:
+		if renderCamera == True:
 			addStack.append('Sensors.RenderCamera')
-			
-			b.extend([
-				# '"{}" SET Sensors.RenderCamera sRGB true'.format(l),
-				'"{}" SET Sensors.RenderCamera format "{}" resolution ({} {})'.format(l, unity_vars.textureFormat[textureFormat], width, height),
-				# 'cameras/cameraRGB SET Camera targetTexture.antiAliasing 8',
-				# 'cameras/cameraRGB SET active true',
-			])
+			b.append('"{}" SET Sensors.RenderCamera format "{}" resolution ({} {})'.format(l, unity_vars.textureFormat[textureFormat], width, height))
 		
 		if idx == 0:
 			if audio:
@@ -292,6 +299,10 @@ def addCameraRGB(
 		])
 		buf.extend(b)
 		buf.append('"{}" SET active true'.format(l))
+		
+		if registerCamera == True:
+			buf.extend(uiWindow(objs=l, width=width, height=height, textureFormat=textureFormat, ret=True))
+	
 	buf.append('"{}" SET active true'.format(labelRoot))
 	
 	common.sendData(buf, read=False)
@@ -313,9 +324,11 @@ def addCameraSeg(
 	renderingPath=4,
 	textureFormat=4,
 	minimumVisibility=0,
-	renderCamera=True,
+	renderCamera=False,
 	registerCamera=True,
 	lookupTable=True,
+	autoLookupTable=True,
+	drawBoundingBoxesToTexture=False,
 	transparencyCutout=0,
 	minimumPixelsCount=1
 ):
@@ -338,6 +351,8 @@ def addCameraSeg(
 	renderCamera (bool): Binds a renderCamera component allowing for disk exports, defaults to `True`
 	registerCamera (bool): Register camera on the UI making it visible
 	lookupTable (list|bool|string): Binds a color to a class, this is essential for outputting pixel dense images, this is an array of arrays like `[ [ Car , red ] , [ Person, blue ] .. ]`; Defaults to `True` which will automatically populate the segmentation lookup table based on the segments sent. If this is set as `string` we will assume it's a existing profile.
+	autoLookupTable (bool): Automatically pushes classes to default lookupTable instance, default `True`
+	drawBoundingBoxesToTexture (bool): Draw bounding boxes on the segmentation image, defaults to `None`
 	minimumVisibility (float): Defines minimum visibility of object in % (0 - 1), objects with less than % of it's total size visible won't appear on the segmentation maps neither yeild bounding boxes, defaults to `0`
 	transparencyCutout (float): Defines a cutout percentage for transparent objects, defaults to `0` that will show transparent objects at full extent, when set to 1 will hide them completly.
 	minimumPixelsCount (int): Defines a minimum number of pixels to be active in order to create a bounding box and show a segmentation color
@@ -348,29 +363,32 @@ def addCameraSeg(
 	
 	buf = []
 	
+	if autoLookupTable == True:
+		buf.append('"Segmentation.Profile.instance" PUSH classes "Void" {}'.format(' '.join('"{0}"'.format(s) for s in segments) if segments != None else ''))
+	
 	for l in label:
-		# addStack = [ 'Camera', 'RenderToTexture', 'SegmentationCamera', 'Segmentation.Output.{}'.format(outputType) ]
-		addStack = [ 'Camera', 'SegmentationCamera', 'Segmentation.Output.{}'.format(outputType) ]
+		addStack = [
+			'Camera',
+			'SegmentationCamera',
+			'Segmentation.Output.BoundingBoxes',
+			'Segmentation.Output.{}'.format(outputType)
+		]
+		
+		if drawBoundingBoxesToTexture == True:
+			addStack.append('Segmentation.Output.BoundingBoxesOnTexture')
 		b = []
 		
-		if renderCamera:
+		if renderCamera == True:
 			addStack.append('Sensors.RenderCamera')
 			b.append('"{}" SET Sensors.RenderCamera format "{}" resolution ({} {})'.format(l, unity_vars.textureFormat[textureFormat], width, height))
-		if registerCamera:
-			addStack.append('registerCamera')
 		
 		b.extend([
-			'''"{}" SET Segmentation.BoundingBoxes
+			'''"{}" SET Segmentation.Output.BoundingBoxes
 				minimumObjectVisibility {}
-				boundingBoxesExtensionAmount {}
+				extensionAmount {}
 				minimumPixelsCount {}
-			'''.format(l, minimumVisibility, boundingBoxesExtensionAmount, minimumPixelsCount),
-			
-			# '"{}" EXECUTE Segmentation.Segmentation DefineClass "Void"'.format(l)
+			'''.format(l, minimumVisibility, boundingBoxesExtensionAmount, minimumPixelsCount)
 		])
-		
-		if segments != None:
-			b.extend(addCameraSegFilter(segments, label=l, ret=True))
 		
 		classes = []
 		colors = []
@@ -387,23 +405,22 @@ def addCameraSeg(
 				
 				classes.append('"{}"'.format(i))
 				colors.append('"{}"'.format(color))
-				
-				# b.append('"{}" EXECUTE Segmentation.Segmentation DefineClass "{}"'.format(l, i))
 				idx += 1
 		# assumes it's a [ <class>, <color> ]
 		elif isinstance(lookupTable, list):
-			c = []
+			# c = []
+			c = ['"{}->{}"'.format('Void', 'black')]
 			
 			for i in lookupTable:
 				c.append('"{}->{}"'.format(i[0], i[1]))
-				# classes.append('"{}"'.format(i[0]))
-				# colors.append('"{}"'.format(i[1]))
-				# b.append('"{}" EXECUTE Segmentation.Segmentation DefineClass "{}"'.format(l, i[0]))
 			
 			b.append('"{}" EXECUTE Segmentation.Output.{} lookUpTable.SetClassColor {}'.format(l, outputType, ' '.join(c)))
 		# assumes it's a profile name
 		elif isinstance(lookupTable, str):
 			b.append('"{}" SET Segmentation.Output.{} lookUpTable "{}"'.format(l, outputType, lookupTable))
+		
+		if segments != None:
+			b.extend(addCameraSegFilter(segments, label=l, ret=True))
 		
 		buf.extend([
 			'CREATE "{}"'.format(l),
@@ -413,19 +430,14 @@ def addCameraSeg(
 			'''"{}" SET Camera
 				near {} far {} fieldOfView {}
 				renderingPath "{}" targetTexture.filterMode "Point"
-			'''.format(l, clippingNear, clippingFar, fov, unity_vars.renderingPath[renderingPath]),
-			# is this really needed?
-			# '"{}" EXECUTE RenderToTexture SetTextureOnCamera "{}"'.format(l, l),
-			# '"{}" EXECUTE RenderToTexture SetTextureOnImage "{}"'.format(l, 'Canvas/RawImage')
+			'''.format(l, clippingNear, clippingFar, fov, unity_vars.renderingPath[renderingPath])
 		])
-		buf.extend(b)
 		
-		buf.extend([
-			# '"{}" PUSH Segmentation.LookUpTable classes "Void" {}'.format(l, ' '.join(classes)),
-			# '"{}" PUSH Segmentation.LookUpTable colors "black" {}'.format(l, ' '.join(colors)),
-			# '"{}" EXECUTE Segmentation.LookUpTable MarkTextureDirty'.format(l),
-			'"{}" SET active true'.format(l)
-		])
+		buf.extend(b)
+		buf.append('"{}" SET active true'.format(l))
+		
+		if registerCamera == True:
+			buf.extend(uiWindow(objs=l, width=width, height=height, textureFormat=textureFormat, ret=True))
 	
 	common.sendData(buf, read=False)
 	common.flushBuffer()
@@ -455,7 +467,7 @@ def addCameraThermal(
 	blur=True,
 	blurNoise=[2, 1],
 	
-	renderCamera=True,
+	renderCamera=False,
 	registerCamera=True
 ):
 	"""
@@ -511,15 +523,13 @@ def addCameraThermal(
 		addStack = [ 'Camera', 'Thermal.ThermalCamera', 'UnityEngine.PostProcessing.PostProcessingBehaviour' ]
 		b = []
 		
-		if renderCamera:
+		if renderCamera == True:
 			addStack.append('Sensors.RenderCamera')
 			b.extend([
 				'"{}" SET Sensors.RenderCamera format "{}" resolution ({} {})'.format(l, unity_vars.textureFormat[textureFormat], width, height),
 				'"{}" SET Camera renderingPath "{}"'.format(l, unity_vars.renderingPath[renderingPath])
 			])
 		
-		if registerCamera:
-			addStack.append('registerCamera')
 		if audio:
 			addStack.append('AudioListener')
 		
@@ -567,6 +577,9 @@ def addCameraThermal(
 			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.grain.enabled false'.format(l),
 			'"{}" SET active true'.format(l)
 		])
+		
+		if registerCamera == True:
+			buf.extend(uiWindow(objs=l, width=width, height=height, textureFormat=textureFormat, ret=True))
 	
 	common.sendData(buf, read=False)
 	common.flushBuffer()
@@ -1282,7 +1295,7 @@ def globalDiskSetup(label='disk1', outputPath=None):
 		'CREATE "{}"'.format(label),
 		'"{}" SET active false'.format(label),
 		'"{}" ADD Sensors.Disk'.format(label),
-		'"{}" SET Sensors.Disk path "{}"'.format(label, outputPath),
+		'"{}" SET Sensors.Disk path "{}" counter 1'.format(label, outputPath),
 		'"{}" SET active true'.format(label)
 	], read=False)
 	
@@ -1290,20 +1303,22 @@ def globalDiskSetup(label='disk1', outputPath=None):
 	settings._obj.append(label)
 
 def kickSeg(label='cameras/segmentation'):
-	return
-	
+	"""
 	common.output('Kicking segmentation camera', 'DEBUG')
 	common.flushBuffer()
 	common.sendData([
 		'"{}" EXECUTE Sensors.RenderCamera RenderFrame'.format(label),
-		'"{}" GET Segmentation.Segmentation boundingBoxes'.format(label),
+		'"{}" GET Segmentation.Output.BoundingBoxes boundingBoxes'.format(label),
 		'NOOP',
 		'"{}" EXECUTE Sensors.RenderCamera RenderFrame'.format(label),
-		'"{}" GET Segmentation.Segmentation boundingBoxes'.format(label),
+		'"{}" GET Segmentation.Output.BoundingBoxes boundingBoxes'.format(label),
 		'NOOP'
 	], read=True)
 	common.flushBuffer()
 	time.sleep(3)
+	"""
+	
+	return
 
 def doRender(lst):
 	"""
@@ -1319,43 +1334,46 @@ def doRender(lst):
 	for l in lst:
 		common.sendData('"{}" EXECUTE Sensors.RenderCamera RenderFrame'.format(l))
 
-def takeSnapshot(lst, autoSegment=False, label='disk1', forceNoop=False):
+def takeSnapshot(lst, autoSegment=False, label='disk1', forceNoop=False, forceRender=False):
 	"""
 	Creates a image snapshot from a set of cameras using a disk component
 	
 	# Arguments
 	
-	lst (list): List of cameras
+	lst (string|list): List of cameras
 	autoSegment (bool): Automatic guess which cameras are segmentation and export json objects among with the pixel dense image, defaults to `None`
 	label (string): Game object name, defaults to `disk1`
 	forceNoop (bool): Force a buffer flush before snapshot happens, this ensures that any queued commands are executed before doing the render. Defaults to `False`
-	
+	forceRender (bool): Forces rendering frame before taking the snapshot, defaults to `False`
 	"""
+	if not isinstance(lst, list):
+		lst = [ lst ]
 	if settings.skip_disk and autoSegment == False:
 		if forceNoop:
 			common.sendData('NOOP', read=True);
 		
-		# NOTE: This is not needed, but we will force it
-		doRender(lst)
+		if forceRender:
+			doRender(lst)
 		return
 	
+	seqSaveSync(label=label)
+	
 	if autoSegment:
-		idx = [i for i, s in enumerate(lst) if 'segmentation' in s]
+		idx = [i for i, s in enumerate(lst) if 'segment' in s.lower()]
 		
 		if len(idx) == 0:
 			common.output('No camera with segmentation name found, skipping autoSegment', 'WARNING')
 		else:
-			
-			# DEPRECATED: This is no longer needed
-			doRender(lst)
+			if forceRender:
+				doRender(lst)
 			
 			common.flushBuffer()
 			r = common.sendData([
 				'"{}" EXECUTE Sensors.Disk Snapshot'.format(label),
-				'"{}" GET Segmentation.Segmentation boundingBoxes'.format(lst[idx[0]]),
+				'"{}" GET Segmentation.Output.BoundingBoxes boundingBoxes'.format(lst[idx[0]]),
 				'NOOP'
 			], read=True)
-			seqSave('bbox', r)
+			seqSave('bbox', r, label=label)
 	else:
 		if forceNoop:
 			common.sendData('NOOP', read=True);
@@ -1365,22 +1383,41 @@ def takeSnapshot(lst, autoSegment=False, label='disk1', forceNoop=False):
 	if settings.cooldown > 0:
 		common.sendData('SLEEP {}'.format(settings.cooldown), read=True);
 
-def takeSegSnapshot(lst):
+def takeSegSnapshot(lst, label='disk1'):
 	"""
 	Creates a segmentation snapshot with json output from a list of cameras
 	
 	# Attributes
 	
-	lst (list): List of cameras with segmentation component
+	lst (string|list): List of cameras with segmentation component
 	
 	"""
-	common.flushBuffer()
+	if not isinstance(lst, list):
+		lst = [ lst ]
 	
+	common.flushBuffer()
+	seqSaveSync(label=label)
 	for l in lst:
-		r = common.sendData(['"{}" GET Segmentation.Segmentation boundingBoxes'.format(l), 'NOOP'], read=True)
-		seqSave('bbox', r)
+		r = common.sendData(['"{}" GET Segmentation.Output.BoundingBoxes boundingBoxes'.format(l), 'NOOP'], read=True)
+		# "cam" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
+		seqSave('bbox', r, label=label)
 
-def seqSave(pref, rawData):
+def seqSaveSync(label='disk1', force=False):
+	common.flushBuffer()
+	res = common.sendData('"{}" GET Sensors.Disk counter'.format(label), read=True)
+	counter = 1
+	
+	for r in res:
+		s = str(r).lower()
+		
+		if s == 'ok' or 'error' in s:
+			continue
+		
+		counter = int(s)
+	
+	settings._seqSave[label] = counter
+
+def seqSave(pref, rawData, label='disk1'):
 	"""
 	Helper function to mutate raw telnet outputs into json objects
 	
@@ -1395,6 +1432,14 @@ def seqSave(pref, rawData):
 	"""
 	if settings.dry_run:
 		return
+	
+	try:
+		meh = settings._seqSave[label]
+	except AttributeError:
+		settings._seqSave = {}
+		settings._seqSave[label] = 1
+	except KeyError:
+		settings._seqSave[label] = 1
 	
 	noops = 0
 	data = []
@@ -1428,7 +1473,7 @@ def seqSave(pref, rawData):
 						f[1] = False
 		
 		if len(data) == 0:
-			common.output('Unable to fetch bounding box #{}, retrying...'.format(settings._seqSave_i), 'WARN')
+			common.output('Unable to fetch bounding box #{}, retrying...'.format(settings._seqSave[label]), 'WARN')
 			time.sleep(.5)
 			rawData = common.sendData('NOOP', read=True)
 		else:
@@ -1445,12 +1490,13 @@ def seqSave(pref, rawData):
 		
 		if noops > 100:
 			common.output('Limit reached while waiting for json object, skipping index!', 'ERROR')
-			settings._seqSave_i = settings._seqSave_i + 1
+			settings._seqSave[label] = settings._seqSave[label] + 1
 			return
 	
 	data = ''.join(data)
 	
-	fn = '{}{}_{}.json'.format(settings.local_path, pref, settings._seqSave_i)
+	# TODO: Filename should take the `label` in consideration
+	fn = '{}{}_{}.json'.format(settings.local_path, pref, settings._seqSave[label])
 	
 	if settings.debug:
 		common.output('SEQ Save path: {} prefix: {} data: {}'.format(fn, pref, data), 'DEBUG')
@@ -1461,10 +1507,10 @@ def seqSave(pref, rawData):
 	f = open(fn, 'w')
 	f.write(data)
 	f.close()
-	common.output('Wrote: {}{}_{}.json'.format(settings.local_path, pref, settings._seqSave_i))
-	settings._seqSave_i = settings._seqSave_i + 1
+	common.output('Wrote: {}'.format(fn))
+	settings._seqSave[label] = settings._seqSave[label] + 1
 
-def addDiskOutput(lst, label='disk1'):
+def addDiskOutput(lst, label='disk1', component='RenderTextureLink'):
 	"""
 	Creates a image output from a existing disk component
 	
@@ -1472,6 +1518,7 @@ def addDiskOutput(lst, label='disk1'):
 	
 	lst (list): List of cameras
 	label (string): Existing disk component game object name
+	component (string): `RenderCameraLink` or `RenderTextureLink`, defaults to `RenderTextureLink`
 	
 	# Note
 	
@@ -1486,15 +1533,17 @@ def addDiskOutput(lst, label='disk1'):
 	for l in lst:
 		common.sendData([
 			'CREATE "{}/{}"'.format(label, l.capitalize()),
-			'"{}/{}" ADD Sensors.RenderCameraLink'.format(label, l.capitalize()),
-			'"{}/{}" SET Sensors.RenderCameraLink target "{}"'.format(label, l.capitalize(), l),
-			
-			# TEMPORARY HACK
-			'"{}/{}" SET Sensors.RenderCameraLink outputType "DEPTH"'.format(label, l.capitalize()) if "depth" in l else '',
-			
-			'"{}/{}" SET active true'.format(label, l.capitalize())
+			'"{}/{}" ADD Sensors.{}'.format(label, l.capitalize(), component),
+			'"{}/{}" SET Sensors.{} target "{}"'.format(label, l.capitalize(), component, l.split('/')[-1] if component == 'RenderTextureLink' else l)
 		], read=False)
-	
+		
+		# automatic macros
+		if "depth" in l.lower():
+			common.sendData('"{}/{}" SET Sensors.{} outputType "DEPTH"'.format(label, l.capitalize(), component), read=False)
+		elif "segmentation" in l.lower():
+			common.sendData('"{}/{}" SET Sensors.{} outputType "LOSSLESS"'.format(label, l.capitalize(), component), read=False)
+		
+		common.sendData('"{}/{}" SET active true'.format(label, l.capitalize()), read=False)
 	common.sendData('"{}" SET active true'.format(label))
 
 def uglyTagFix(tag):
@@ -1966,6 +2015,46 @@ def getRandomColor(alpha='FF'):
 	
 	return '#' + o + alpha
 
+def uiWindow(objs, width=1024, height=768, depth=24, textureFormat=4, link="ShowFromCamera", mode="Default", targetTexture=None, ret=False):
+	"""
+	Creates a UI Window rendering a target
+	
+	# Arguments
+	
+	objs (string|list): Path to objects
+	width (int): renderTexture width, defaults to `1024`
+	height (int): renderTexture height, defaults to `768`
+	depth (int): renderTexture color depth, defaults to `24`
+	textureFormat (int): Defines texture format, defaults to `4` - This is defined on unity_vars lookup table
+	link (string): Link mode, possible options: `ShowFromCamera`, `ShowFromRenderTexture`, defaults to `ShowFromCamera`
+	mode (string): UI Window texture mode, defaults to `Default`
+	ret (bool): Return commands instead of sending it to telnet, defaults to `False`
+	
+	# Notes
+	
+	When `link` is set to `ShowFromCamera` a renderTexture might be created, this
+	means that if you happen to have a `renderCamera` component bound to this camera
+	it might not work anymore as both will fight for the renderTexture. If that's the
+	case you should use `ShowFromRenderTexture` as `link` instead.
+	
+	"""
+	if not isinstance(objs, list):
+		objs = [ objs ]
+	
+	cmd = []
+	for obj in objs:
+		if link == 'ShowFromCamera':
+			cmd.append('[UI.Window] ShowFromCamera "{}" AS "{}" WITH {} {} {} "{}" "{}"'.format(obj, obj.split('/')[-1], width, height, depth, unity_vars.textureFormat[textureFormat], mode))
+		elif link == 'ShowFromRenderTexture':
+			cmd.append('[UI.Window] ShowFromRenderTexture "{}" AS "{}"'.format(targetTexture, obj.split('/')[-1]))
+		else:
+			raise 'Unknown link mode'
+	
+	if ret == True:
+		return cmd
+	
+	common.sendData(cmd)
+
 def enableAll(objs, component):
 	if not isinstance(objs, list):
 		objs = [ objs ]
@@ -2230,7 +2319,7 @@ def spawner(
 	partsNames=None, autoSegment=False, thermalObjectBehaviour=None, thermalObjectOverride=False
 ):
 	"""
-	Creates a torus shaped object spawner
+	Creates a object spawner
 	
 	# Arguments
 	

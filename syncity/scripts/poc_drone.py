@@ -41,6 +41,8 @@ def run():
 	if settings.setup_only:
 		return
 	
+	common.waitQueue()
+	
 	y = 24
 	loop = 0
 	reroll = 100
@@ -82,3 +84,4 @@ def run():
 		if loop == reroll:
 			helpers.spawnDroneObjs(True)
 			loop = 0
+			common.waitQueue()

@@ -3,14 +3,14 @@ CREATE "cameras"
 "cameras" SET Transform position (-6 1 -50) eulerAngles (0 0 0)
 CREATE "cameras/cameraRGB"
 "cameras/cameraRGB" SET active false
-"cameras/cameraRGB" ADD Camera registerCamera Sensors.RenderCamera AudioListener
+"cameras/cameraRGB" ADD Camera AudioListener
 "cameras/cameraRGB" SET Camera near 0.3 far 1000 fieldOfView 60 renderingPath "UsePlayerSettings"
-"cameras/cameraRGB" SET Sensors.RenderCamera format "ARGB32" resolution (1024 768)
 CREATE "EnviroSky" AS "EnviroSky"
 "EnviroSky" SET EnviroSky Player "cameras" PlayerCamera "cameras/cameraRGB" GameTime.ProgressTime "None" weatherSettings.cloudTransitionSpeed 100 weatherSettings.effectTransitionSpeed 100 weatherSettings.fogTransitionSpeed 100 
 "EnviroSky" EXECUTE EnviroSky AssignAndStart "cameras/cameraRGB" "cameras/cameraRGB"
 "EnviroSky" SET active true
 "cameras/cameraRGB" SET active true
+[UI.Window] ShowFromCamera "cameras/cameraRGB" AS "cameraRGB" WITH 1024 768 24 "ARGB32" "Default"
 "cameras" SET active true
 "cameras/cameraRGB" ADD UnityEngine.PostProcessing.PostProcessingBehaviour
 "cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile "Savannah"
@@ -18,12 +18,12 @@ CREATE "EnviroSky" AS "EnviroSky"
 CREATE "disk1"
 "disk1" SET active false
 "disk1" ADD Sensors.Disk
-"disk1" SET Sensors.Disk path "/tmp/"
+"disk1" SET Sensors.Disk path "/tmp/" counter 1
 "disk1" SET active true
 "disk1" SET active false
 CREATE "disk1/Cameras/camerargb"
-"disk1/Cameras/camerargb" ADD Sensors.RenderCameraLink
-"disk1/Cameras/camerargb" SET Sensors.RenderCameraLink target "cameras/cameraRGB"
+"disk1/Cameras/camerargb" ADD Sensors.RenderTextureLink
+"disk1/Cameras/camerargb" SET Sensors.RenderTextureLink target "cameraRGB"
 "disk1/Cameras/camerargb" SET active true
 "disk1" SET active true
 "cameras/cameraRGB" SET Transform position (0 -10 0)

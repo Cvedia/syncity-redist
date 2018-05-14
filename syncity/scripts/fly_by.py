@@ -44,6 +44,8 @@ def run():
 	if settings.setup_only:
 		return
 	
+	common.waitQueue()
+	
 	for x in range(-40, 40):
 		for z in range(-40, 40):
 			common.sendData([

@@ -48,6 +48,7 @@ def run():
 	
 	if settings.skip_setup == False:
 		common.sendData([
+			'"Config.instance" SET physicsEnabled true',
 			'CREATE "autodrive/autodrive_tile" FROM "autodrive" AS "autodrive"',
 			'CREATE "autodrive/SyncityJPickup" FROM "autodrive" AS "{}"'.format(car_obj)
 		])
@@ -55,8 +56,8 @@ def run():
 		helpers.addWindzone(target='autodrive')
 		
 		helpers.globalCameraSetup(labelRoot=camera_mount)
-		helpers.addCameraRGB(width=640, height=480, pp='EnviroFX', label=mycams[0], labelRoot=camera_mount, audio=False)
-		helpers.addCameraDepth(width=640, height=480, label=mycams[1])
+		helpers.addCameraRGB(width=640, height=480, pp='EnviroFX', label=mycams[0], labelRoot=camera_mount, audio=False, renderCamera=True)
+		helpers.addCameraDepth(width=640, height=480, label=mycams[1], renderCamera=True)
 		helpers.addCameraSeg(
 			width=640, height=480,
 			label=mycams[2],
@@ -67,7 +68,8 @@ def run():
 				['ROAD', '#838383'],
 				['PROPS', '#09FF00'],
 				['SIGNS', 'red']
-			]
+			],
+			renderCamera=True
 		)
 		
 		helpers.globalDiskSetup()
@@ -79,21 +81,21 @@ def run():
 			# '"{}" SET FlyCamera enabled true'.format(mycams[0]),
 			
 			# segment setup
-			'"autodrive/Road/Lines" ADD Segmentation.ClassGroup',
-			'"autodrive/Road/Lines" SET Segmentation.ClassGroup itemsClassName "LINES"',
-			'"autodrive/Road/Dirt" ADD Segmentation.ClassGroup',
-			'"autodrive/Road/Dirt" SET Segmentation.ClassGroup itemsClassName "DIRT"',
-			'"autodrive/Road/Props" ADD Segmentation.ClassGroup',
-			'"autodrive/Road/Props" SET Segmentation.ClassGroup itemsClassName "PROPS"',
-			'"autodrive/Road/Signs" ADD Segmentation.ClassGroup',
-			'"autodrive/Road/Signs" SET Segmentation.ClassGroup itemsClassName "SIGNS"',
-			'"autodrive/Road/Road floor Signs" ADD Segmentation.ClassGroup',
-			'"autodrive/Road/Road floor Signs" SET Segmentation.ClassGroup itemsClassName "SIGNS"',
+			'"autodrive/Road/Lines" ADD Segmentation.Entity Segmentation.Class',
+			'"autodrive/Road/Lines" SET Segmentation.Class className "LINES"',
+			'"autodrive/Road/Dirt" ADD Segmentation.Entity Segmentation.Class',
+			'"autodrive/Road/Dirt" SET Segmentation.Class className "DIRT"',
+			'"autodrive/Road/Props" ADD Segmentation.Entity Segmentation.Class',
+			'"autodrive/Road/Props" SET Segmentation.Class className "PROPS"',
+			'"autodrive/Road/Signs" ADD Segmentation.Entity Segmentation.Class',
+			'"autodrive/Road/Signs" SET Segmentation.Class className "SIGNS"',
+			'"autodrive/Road/Road floor Signs" ADD Segmentation.Entity Segmentation.Class',
+			'"autodrive/Road/Road floor Signs" SET Segmentation.Class className "SIGNS"',
 			
-			'"autodrive/Terrain New" ADD Segmentation.ClassInfo',
-			'"autodrive/Terrain New" SET Segmentation.ClassInfo itemClass "DIRT"',
-			'"autodrive/Road/Autodrive Road" ADD Segmentation.ClassInfo',
-			'"autodrive/Road/Autodrive Road" SET Segmentation.ClassInfo itemClass "ROAD"',
+			'"autodrive/Terrain New" ADD Segmentation.Class',
+			'"autodrive/Terrain New" SET Segmentation.Class className "DIRT"',
+			'"autodrive/Road/Autodrive Road" ADD Segmentation.Class',
+			'"autodrive/Road/Autodrive Road" SET Segmentation.Class className "ROAD"',
 			
 			# reset cameras
 			'"{}" SET Transform localPosition (0 0.872 2.318) localEulerAngles (0 0 0)'.format(camera_mount),
@@ -103,9 +105,10 @@ def run():
 			
 			# add custom inputs for ros bridge
 			# WARNING: When VPCustomInput is enabled, you won't be able to drive using the keys
-			'"{}" SET VPCustomInput enabled true'.format(car_obj),
+			# '"{}" ADD VPCustomInput'.format(car_obj),
+			'"{}" SET VPCustomInput enabled false'.format(car_obj),
 			
-			'"{}" ADD UnityEngine.PostProcessing.PostProcessingBehaviour'.format(mycams[0]),
+			# '"{}" ADD UnityEngine.PostProcessing.PostProcessingBehaviour'.format(mycams[0]),
 			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile "EnviroFX"'.format(mycams[0]),
 			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.eyeAdaptation.enabled true'.format(mycams[0]),
 			
@@ -280,4 +283,4 @@ def run():
 			]
 		)
 	
-	common.flushBuffer()
+	common.waitQueue()

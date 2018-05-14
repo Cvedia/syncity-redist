@@ -41,16 +41,16 @@ def run():
 		helpers.addCameraSegFilter(['drone'])
 		common.sendData([
 			'CREATE drone/drone0/drone0 "{}"'.format(random.choice(helpers.drones_lst)),
-			'drone/drone0" ADD Segmentation.ClassGroup',
-			'drone/drone0" SET Segmentation.ClassGroup itemsClassName Drone'
+			'drone/drone0" ADD Segmentation.Entity Segmentation.Class',
+			'drone/drone0" SET Segmentation.Class className Drone'
 		], read=False)
 		'''
 		
 		common.sendData([
 			'CREATE "{}" FROM "drones" AS "drone/drone0/drone0"'.format(helpers.drones_lst[6]), # Drones/DJI Phantom 4 Pro/DJI_Phantom_4_Pro
 			'"drone/drone0" SET active false',
-			'"drone/drone0" ADD Segmentation.ClassGroup',
-			'"drone/drone0" SET Segmentation.ClassGroup itemsClassName "drone0"',
+			'"drone/drone0" ADD Segmentation.Entity Segmentation.Class',
+			'"drone/drone0" SET Segmentation.Class className "drone0"',
 			'"drone/drone0/drone0" SET Transform position ({} {} {})'.format(0, 1, 0),
 			'"drone/drone0/drone0" SET Transform eulerAngles ({} {} {})'.format(0, 0, 0),
 			'"drone/drone0" SET active true',
@@ -58,8 +58,8 @@ def run():
 			
 			'CREATE "{}" FROM "drones" AS "drone/drone1/drone1"'.format(helpers.drones_lst[4]), # Drones/DJI S1000/DJI S1000
 			'"drone/drone1" SET active false',
-			'"drone/drone1" ADD Segmentation.ClassGroup',
-			'"drone/drone1" SET Segmentation.ClassGroup itemsClassName "drone1"',
+			'"drone/drone1" ADD Segmentation.Entity Segmentation.Class',
+			'"drone/drone1" SET Segmentation.Class className "drone1"',
 			'"drone/drone1/drone1" SET Transform position ({} {} {})'.format(0, 2, 0),
 			'"drone/drone1/drone1" SET Transform eulerAngles ({} {} {})'.format(0, 0, 0),
 			'"drone/drone1" SET active true',
@@ -67,8 +67,8 @@ def run():
 			
 			'CREATE "{}" FROM "drones" AS "drone/drone2/drone2"'.format(helpers.drones_lst[7]), # Drones/Parrot Disco/Parrot Disco
 			'"drone/drone2" SET active false',
-			'"drone/drone2" ADD Segmentation.ClassGroup',
-			'"drone/drone2" SET Segmentation.ClassGroup itemsClassName "drone2"',
+			'"drone/drone2" ADD Segmentation.Entity Segmentation.Class',
+			'"drone/drone2" SET Segmentation.Class className "drone2"',
 			'"drone/drone2/drone2" SET Transform position ({} {} {})'.format(0, 3, 0),
 			'"drone/drone2/drone2" SET Transform eulerAngles ({} {} {})'.format(0, 0, 0),
 			'"drone/drone2" SET active true',
@@ -143,7 +143,7 @@ def run():
 		'DELETE "drone/drone2/drone2/Propeller"'
 	], read=False)
 	
-	common.flushBuffer()
+	common.waitQueue()
 	loop = 0
 	
 	while loop < 100:
@@ -195,6 +195,7 @@ def run():
 				'"cameras/cameraRGB" SET Camera enabled true',
 				'SLEEP 0.5'
 			], read=True)
+			common.waitQueue()
 		
 		helpers.takeSnapshot(mycams, True)
 		

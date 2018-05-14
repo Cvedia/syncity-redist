@@ -29,32 +29,43 @@ from subprocess import PIPE, Popen, STDOUT
 
 settings = False
 
-def initTelnet(ip, port, retries=3, wait=.5, timeout=30, ka_interval=3, ka_fail=10, ka_idle=1):
+def initTelnet(ip, port, retries=-1, wait=.5, timeout=30, ka_interval=3, ka_fail=10, ka_idle=1, return_fail=False):
 	"""
 	Telnet initalizator
 	
 	# Arguments
 	ip (string): Ip address of target machine
-	port (int): Port of target machine, usually 10200
-	retries (int): Retry connection if failed, defaults to 3
-	wait (float): Time in seconds to wait between retries
+	port (int): Port of target machine, usually `10200`
+	retries (int): Retry connection if failed, defaults to `-1`, when negative will retry forever
+	wait (float): Time in seconds to wait between retries, defaults to `.5`
+	timeout(float): Timeout in seconds for socket connection, defaults to `30`
+	ka_interval (float): Keep alive interval in seconds, defaults to `3`
+	ka_fail (int): Max number of failed keep alive packages to consider a fail, defaults to `10`
+	ka_idle (int): Send keep alives when idle to keep connection alive, defaults to `1`
+	return_fail (bool): Return bool instead of sys.exit when critical errors happens, defaults to `False`
 	
 	"""
 	if settings.dry_run:
-		return
+		return False
+	
 	if settings._telnet == True:
 		if settings._shutdown == True:
-			return
+			return False
+		elif settings._tn != None and settings._telnet == True and settings.test == True:
+			return True
+		
 		output('Connection is already active, trying to reconnect...')
 		
 		try:
 			settings._tn.close()
 		except:
 			pass
+		
+		settings._tn = None
 	
 	retry = 0
 	
-	while retry < retries:
+	while retries < 0 or retry < retries:
 		output('Connecting to {}:{}...'.format(ip, port))
 		
 		try:
@@ -83,15 +94,16 @@ def initTelnet(ip, port, retries=3, wait=.5, timeout=30, ka_interval=3, ka_fail=
 			settings._simulator_version = sendData(['VERSION', 'NOOP'], read=True)[0].replace('"', '')
 			output('Simulator Version: {}'.format(settings._simulator_version))
 			
-			if settings.version:
-				output('SDK Version: {}'.format(settings._version))
-				sys.exit(0)
-			
-			if int(settings._simulator_version.replace('.', '')[0:10]) < int(settings._simulator_min_version.replace('.', '')[0:10]):
-				output('The version of the simulator you\'re connecting with is deprecated and most likely not compatible with the version of this SDK.', 'ERROR', permissive=True)
-				output('You should use a old branch of the SDK or update the simulator.', 'ERROR', permissive=True)
-				output('SDK minimum supported simulator version: {}'.format(settings._simulator_min_version), 'ERROR', permissive=True)
-				output('Simulator version: {}'.format(settings._simulator_version), 'ERROR', permissive=True)
+			if settings.test == False:
+				if settings.version == True:
+					output('SDK Version: {}'.format(settings._version))
+					sys.exit(0)
+				
+				if int(settings._simulator_version.replace('.', '')[0:10]) < int(settings._simulator_min_version.replace('.', '')[0:10]):
+					output('The version of the simulator you\'re connecting with is deprecated and most likely not compatible with the version of this SDK.', 'ERROR', permissive=True)
+					output('You should use a old branch of the SDK or update the simulator.', 'ERROR', permissive=True)
+					output('SDK minimum supported simulator version: {}'.format(settings._simulator_min_version), 'ERROR', permissive=True)
+					output('Simulator version: {}'.format(settings._simulator_version), 'ERROR', permissive=True)
 			
 			if settings.skip_init == True:
 				ouptut('Skipping init sequence')
@@ -106,11 +118,15 @@ def initTelnet(ip, port, retries=3, wait=.5, timeout=30, ka_interval=3, ka_fail=
 				elif settings.assets:
 					sendData('"Config.instance" SET databaseFolderPath "{}"'.format(settings.assets))
 				
+				"""
 				sendData([
 					'"Config.instance" SET physicsEnabled {}'.format('false' if settings.enable_physics == False else 'true'),
 					'"Canvas/ConsolePanel" SET active {}'.format('false' if settings.enable_console_log == False else 'true'),
 					'{}'.format('DELETE "Canvas"' if settings.enable_canvas == False else '')
 				])
+				"""
+				
+				sendData('"Config.instance" SET physicsEnabled {}'.format('false' if settings.enable_physics == False else 'true'))
 				
 				if settings.seed_api:
 					setAPISeed(settings.seed_api)
@@ -119,12 +135,19 @@ def initTelnet(ip, port, retries=3, wait=.5, timeout=30, ka_interval=3, ka_fail=
 			output('Error connecting: {}'.format(e), 'ERROR', permissive=True)
 			retry += 1
 			
-			if retry >= retries:
+			if retries > 0 and retry >= retries:
 				output('Ran out of retries, unable to connect. Aborting!', 'ERROR')
+				
+				if return_fail:
+					return False
+				
 				sys.exit(1)
 			else:
 				output('Waiting for retry #{} ...'.format(retry))
 				time.sleep(wait)
+	
+	flushBuffer()
+	return True
 
 def setAPISeed(seed):
 	sendData('"RandomProps.Random.instance" SET seed {}'.format(seed))
@@ -144,6 +167,7 @@ def resetSimulator():
 		except:
 			pass
 		
+		settings._tn = None
 		settings._telnet = False
 		time.sleep(5)
 		
@@ -166,9 +190,11 @@ def init():
 	
 	settings._telnet = False
 	settings._counters = { 'send': 0, 'recv': 0, 'flush': 0 }
+	settings._seqSave = {}
 	
-	signal.signal(signal.SIGINT, gracefullShutdown)
-	atexit.register(gracefullShutdown)
+	if settings.skip_shutdown == False:
+		signal.signal(signal.SIGINT, gracefullShutdown)
+		atexit.register(gracefullShutdown)
 	
 	if settings.local_path:
 		mkdirP(settings.local_path)
@@ -186,7 +212,7 @@ def init2():
 	
 	init_logging(head)
 	
-	if settings.run != None or settings.script != None:
+	if settings.run != None or settings.script != None or settings.test == True:
 		init_recording(head)
 
 def init_logging(head=None):
@@ -207,8 +233,31 @@ def init_recording(head=None):
 		if head != None:
 			settings._rfh.write(head)
 
+def close_logging():
+	if settings.log == None:
+		return
+	try:
+		settings._lfh.write('// Completed in {:6.4f}s'.format(time.time() - settings._start))
+		settings._lfh.close()
+	except:
+		pass
+	
+	settings.log = None
+
+def close_recording():
+	if settings.record == None:
+		return
+	try:
+		settings._rfh.write('// Completed in {:6.4f}s'.format(time.time() - settings._start))
+		settings._rfh.close()
+	except:
+		pass
+	
+	settings.record = None
+
 def shouldLog(level):
 	l = {
+		'NONE': 0,
 		'ERROR': 1,
 		'ERR': 1,
 		'WARNING': 2,
@@ -218,8 +267,11 @@ def shouldLog(level):
 		'TRACE': 16
 	}
 	
-	if l[settings.loglevel] >= l[level]:
-		return True
+	try:
+		if l[settings.loglevel] >= l[level]:
+			return True
+	except:
+		pass
 	
 	return False
 
@@ -326,7 +378,10 @@ def sendData(v, read=None, flush=None, timeout=3):
 		if settings.dry_run:
 			continue
 		
-		settings._tn.write(s)
+		try:
+			settings._tn.write(s)
+		except:
+			pass
 		
 		abort = False
 		
@@ -341,7 +396,10 @@ def sendData(v, read=None, flush=None, timeout=3):
 			if settings.abort_on_error == True and abort == False and 'ERROR' in l:
 				abort = True
 			
-			r.append(l)
+			if isinstance(l, list):
+				r.extend(l)
+			else:
+				r.append(l)
 			
 			# multi return hack, ideally first response would have a line count attached to it
 			while True:
@@ -358,7 +416,10 @@ def sendData(v, read=None, flush=None, timeout=3):
 				if l is '' or not l:
 					break
 				
-				r.append(l)
+				if isinstance(l, list):
+					r.extend(l)
+				else:
+					r.append(l)
 			
 			"""
 			if flush:
@@ -441,6 +502,13 @@ def shapeData(l):
 		
 		output('<< {}'.format(f), 'WARN' if 'ERROR:' in l else 'INFO')
 	
+	if "\r\n" in l:
+		try:
+			x = l.split("\r\n")
+			l = x
+		except:
+			pass
+	
 	return l
 
 def gracefullShutdown(a=None, b=None):
@@ -498,20 +566,21 @@ def gracefullShutdown(a=None, b=None):
 		except:
 			pass
 	
+	settings._tn = None
 	if settings.debug:
 		output('Telnet sent: {} recv: {} flush: {}'.format(settings._counters['send'], settings._counters['recv'], settings._counters['flush']), 'DEBUG')
 	
 	try:
 		if settings.record:
 			output('Recorded to: `{}`'.format(settings._rfh.name))
-			settings._rfh.close()
+			close_recording()
 	except:
 		pass
 	
 	try:
 		if settings.log:
 			output('Logged to: `{}`'.format(settings._lfh.name))
-			settings._lfh.close()
+			close_logging()
 	except:
 		pass
 	
@@ -643,6 +712,14 @@ def readAll(fn):
 		data = fh.read()
 	return data
 
+def argExists(aargs, argv=sys.argv):
+	for i in argv:
+		if i[0:1] != '-':
+			continue
+		if i in aargs:
+			return True
+	return False
+
 def findArgOrder(aargs, argv=sys.argv):
 	order = []
 	
@@ -663,6 +740,43 @@ def mkdirP(path):
 			pass
 		else:
 			raise
+
+def waitQueue(threshold=0, wait=3):
+	"""
+	Blocks new CL commands until queue is above a threshold.
+	
+	# Arguments
+	
+	threshold (int): Maximum items on queue, defaults to `0`
+	wait (int): Time in seconds to wait until asking again, defaults to `3`
+	
+	"""
+	
+	if settings._tn == None:
+		return
+	
+	flushBuffer()
+	
+	b = False
+	while b == False:
+		res = sendData('"API" GET API.Manager queueCount', read=True)
+		for r in res:
+			s = str(r).lower()
+			
+			if s == 'ok' or 'error' in s:
+				continue
+			
+			q = int(s)
+			
+			if q <= threshold:
+				b = True
+				break
+			
+			output('Waiting for queue to flush, {} pending...'.format(q))
+		
+		if b == False:
+			time.sleep(wait)
+
 
 def getAllFiles(base, ignore_path=['.git', '__pycache__'], ignore_ext=['.md', 'pyc'], recursive=True):
 	"""

@@ -44,6 +44,8 @@ def run():
 		'"cameras/cameraRGB" SET active true'
 	]);
 	
+	common.waitQueue()
+	
 	dist = 55
 	azimuth = 0
 	elevation = 6.95

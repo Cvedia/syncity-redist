@@ -40,8 +40,8 @@ def run():
 		buf = []
 		for i in cbuildings:
 			buf.append('CREATE "buildings/buildings_{}" "{}"'.format(k, i))
-			buf.append('"buildings/buildings_{}" ADD Segmentation.ClassGroup'.format(k))
-			buf.append('"buildings/buildings_{}" SET Segmentation.ClassGroup itemsClassName "Car"'.format(k))
+			buf.append('"buildings/buildings_{}" ADD Segmentation.Entity Segmentation.Class'.format(k))
+			buf.append('"buildings/buildings_{}" SET Segmentation.Class className "Car"'.format(k))
 			buf.append('"buildings/buildings_{}" SET Transform position ({} {} {})'.format(k, pX, pY, pZ))
 			k = k + 1
 			col = col + 1
@@ -83,6 +83,8 @@ def run():
 	
 	if settings.setup_only:
 		return
+	
+	common.waitQueue()
 	
 	while hour < 19:
 		common.sendData([
