@@ -15,8 +15,8 @@ CREATE "EnviroSky" AS "EnviroSky"
 "EnviroSky" SET EnviroSky Player "SyncityJPickup/cameras" PlayerCamera "SyncityJPickup/cameras/Front" GameTime.ProgressTime "None" weatherSettings.cloudTransitionSpeed 100 weatherSettings.effectTransitionSpeed 100 weatherSettings.fogTransitionSpeed 100 
 "EnviroSky" EXECUTE EnviroSky AssignAndStart "SyncityJPickup/cameras/Front" "SyncityJPickup/cameras/Front"
 "EnviroSky" SET active true
-"SyncityJPickup/cameras/Front" SET active true
 [UI.Window] ShowFromCamera "SyncityJPickup/cameras/Front" AS "Front" WITH 640 480 24 "ARGB32" "Default"
+"SyncityJPickup/cameras/Front" SET active true
 "SyncityJPickup/cameras" SET active true
 "SyncityJPickup/cameras/Front" ADD UnityEngine.PostProcessing.PostProcessingBehaviour
 "SyncityJPickup/cameras/Front" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile "EnviroFX"
@@ -31,8 +31,8 @@ CREATE RenderTexture 640 480 32 "RFloat" "Default" AS "SyncityJPickup_cameras_De
 "SyncityJPickup_cameras_Depth_RT" EXECUTE @Create
 "SyncityJPickup/cameras/Depth" SET Camera targetTexture "SyncityJPickup_cameras_Depth_RT"
 "SyncityJPickup/cameras/Depth" SET Sensors.RenderCamera format "RFloat" resolution (640 480)
-"SyncityJPickup/cameras/Depth" SET active true
 [UI.Window] ShowFromRenderTexture "SyncityJPickup_cameras_Depth_RT" AS "Depth"
+"SyncityJPickup/cameras/Depth" SET active true
 "Segmentation.Profile.instance" PUSH classes "Void" "LINES" "DIRT" "ROAD" "PROPS" "SIGNS"
 CREATE "SyncityJPickup/cameras/Segment"
 "SyncityJPickup/cameras/Segment" SET active false
@@ -44,8 +44,8 @@ CREATE "SyncityJPickup/cameras/Segment"
 "SyncityJPickup/cameras/Segment" EXECUTE Segmentation.Output.ClassColors lookUpTable.SetClassColor "Void->black" "LINES->white" "DIRT->blue" "ROAD->#838383" "PROPS->#09FF00" "SIGNS->red"
 "SyncityJPickup/cameras/Segment" ADD Segmentation.Output.FilteredBoundingBoxes
 "SyncityJPickup/cameras/Segment" EXECUTE Segmentation.Output.FilteredBoundingBoxes EnableClasses "LINES" "DIRT" "ROAD" "PROPS" "SIGNS"
-"SyncityJPickup/cameras/Segment" SET active true
 [UI.Window] ShowFromCamera "SyncityJPickup/cameras/Segment" AS "Segment" WITH 640 480 24 "ARGB32" "Default"
+"SyncityJPickup/cameras/Segment" SET active true
 CREATE "disk1"
 "disk1" SET active false
 "disk1" ADD Sensors.Disk
