@@ -1403,19 +1403,26 @@ def takeSegSnapshot(lst, label='disk1'):
 		seqSave('bbox', r, label=label)
 
 def seqSaveSync(label='disk1', force=False):
-	common.flushBuffer()
-	res = common.sendData('"{}" GET Sensors.Disk counter'.format(label), read=True)
-	counter = 1
+	if force == False:
+		try:
+			meh = settings._seqSave[label]
+		except:
+			settings._seqSave[label] = 1
+			force = True
+			pass
 	
-	for r in res:
-		s = str(r).lower()
+	if force == True:
+		common.flushBuffer()
+		res = common.sendData('"{}" GET Sensors.Disk counter'.format(label), read=True)
+		for r in res:
+			s = str(r).lower()
+			
+			if s == 'ok' or 'error' in s:
+				continue
+			
+			counter = int(s)
 		
-		if s == 'ok' or 'error' in s:
-			continue
-		
-		counter = int(s)
-	
-	settings._seqSave[label] = counter
+		settings._seqSave[label] = counter
 
 def seqSave(pref, rawData, label='disk1'):
 	"""
