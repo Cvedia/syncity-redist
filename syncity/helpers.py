@@ -1370,7 +1370,8 @@ def takeSnapshot(lst, autoSegment=False, label='disk1', forceNoop=False, forceRe
 			common.flushBuffer()
 			r = common.sendData([
 				'"{}" EXECUTE Sensors.Disk Snapshot'.format(label),
-				'"{}" GET Segmentation.Output.BoundingBoxes boundingBoxes'.format(lst[idx[0]]),
+				# '"{}" GET Segmentation.Output.BoundingBoxes boundingBoxes'.format(lst[idx[0]]),
+				'"{}" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes'.format(lst[idx[0]]),
 				'NOOP'
 			], read=True)
 			seqSave('bbox', r, label=label)
