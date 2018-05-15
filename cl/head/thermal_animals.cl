@@ -50,8 +50,8 @@ CREATE "spawner/animal___thermal/container"
 "spawner/animal___thermal/container" ADD RandomProps.PropArea
 "spawner/animal___thermal/container" SET RandomProps.PropArea tags "animal, +thermal"
 "spawner/animal___thermal/container" SET RandomProps.PropArea async false numberOfProps 10 collisionCheck true stickToGround false 
-"spawner/animal___thermal/container" SET RandomProps.Torus radius 50
 "spawner/animal___thermal/container" SET RandomProps.Torus innerRadius 0
+"spawner/animal___thermal/container" SET RandomProps.Torus radius 50
 "spawner/animal___thermal/container" SET Transform position (0 0 0) eulerAngles (0 0 0) localScale (1 1 1)
 "spawner/animal___thermal/container" SET active true
 "spawner/animal___thermal" SET active true
