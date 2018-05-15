@@ -192,10 +192,9 @@ def addCameraDepth(
 		])
 		
 		buf.extend(b)
-		buf.append('"{}" SET active true'.format(l))
-		
 		if registerCamera == True:
 			buf.extend(uiWindow(objs=l, width=width, height=height, depth=32, textureFormat=textureFormat, targetTexture=lrt, link='ShowFromCamera' if renderCamera == False else 'ShowFromRenderTexture', ret=True))
+		buf.append('"{}" SET active true'.format(l))
 	
 	common.sendData(buf, read=False)
 	common.flushBuffer()
@@ -298,10 +297,9 @@ def addCameraRGB(
 			'"{}" SET Camera near {} far {} fieldOfView {} renderingPath "{}"'.format(l, clippingNear, clippingFar, fov, unity_vars.renderingPath[renderingPath])
 		])
 		buf.extend(b)
-		buf.append('"{}" SET active true'.format(l))
-		
 		if registerCamera == True:
 			buf.extend(uiWindow(objs=l, width=width, height=height, textureFormat=textureFormat, ret=True))
+		buf.append('"{}" SET active true'.format(l))
 	
 	buf.append('"{}" SET active true'.format(labelRoot))
 	
@@ -434,10 +432,9 @@ def addCameraSeg(
 		])
 		
 		buf.extend(b)
-		buf.append('"{}" SET active true'.format(l))
-		
 		if registerCamera == True:
 			buf.extend(uiWindow(objs=l, width=width, height=height, textureFormat=textureFormat, ret=True))
+		buf.append('"{}" SET active true'.format(l))
 	
 	common.sendData(buf, read=False)
 	common.flushBuffer()
@@ -575,11 +572,12 @@ def addCameraThermal(
 				enabled true
 			'''.format(l, ambientTemperature, minimumTemperature, maximumTemperature, maxDistanceForProbeUpdate, useAGC),
 			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.grain.enabled false'.format(l),
-			'"{}" SET active true'.format(l)
 		])
 		
 		if registerCamera == True:
 			buf.extend(uiWindow(objs=l, width=width, height=height, textureFormat=textureFormat, ret=True))
+		
+		buf.append('"{}" SET active true'.format(l))
 	
 	common.sendData(buf, read=False)
 	common.flushBuffer()
@@ -1415,6 +1413,8 @@ def seqSaveSync(label='disk1', force=False):
 	if force == True:
 		common.flushBuffer()
 		res = common.sendData('"{}" GET Sensors.Disk counter'.format(label), read=True)
+		counter = 1
+		
 		for r in res:
 			s = str(r).lower()
 			

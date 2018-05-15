@@ -758,6 +758,8 @@ def waitQueue(threshold=0, wait=3):
 	flushBuffer()
 	
 	b = False
+	wTrigger = False
+	
 	while b == False:
 		res = sendData('"API" GET API.Manager queueCount', read=True)
 		for r in res:
@@ -773,9 +775,17 @@ def waitQueue(threshold=0, wait=3):
 				break
 			
 			output('Waiting for queue to flush, {} pending...'.format(q))
+			wTrigger = True
 		
 		if b == False:
 			time.sleep(wait)
+	
+	# NOTE: When a wait has been triggered, we will assure that there's nothing
+	# else pending, so we run the wait again until there's no more fluctuations
+	# on the queue. This is a issue that will only be resolved when the API 
+	# async problem is solved.
+	if wTrigger == True:
+		waitQueue(threshold=threshold, wait=wait)
 
 
 def getAllFiles(base, ignore_path=['.git', '__pycache__'], ignore_ext=['.md', 'pyc'], recursive=True):

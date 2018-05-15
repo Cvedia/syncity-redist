@@ -92,7 +92,7 @@ def test_segmentation_export(width, height, gprefix):
 	assert (sf.st_size > 0) == True # check if file is more than zero bytes
 	assert tcommon.imageColors(fn) == None # check if there's more than 256 colors on the image
 	assert tcommon.imageSize(fn) == (width, height) # check export image size
-	output = common.sendData('"{}/cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes'.format(gprefix))
+	output = common.sendData('"{}/cameras/segmentation" GET Segmentation.Output.BoundingBoxes boundingBoxes'.format(gprefix), read=True)
 	assert len(output) == 2 # output length
 	output[0] = re.sub('"id":\d+,', '', output[0])
 	assert output == ['[{"classId":1,"numPoints":43268,"boxMin":[0.3773216, 0.3116036],"boxMax":[0.6226784, 0.6036506],"visibility":"Infinity"},{"classId":2,"numPoints":425,"boxMin":[0.4770283, 0.6440678],"boxMax":[0.5229716, 0.6779661],"visibility":"Infinity"}]', "OK"]

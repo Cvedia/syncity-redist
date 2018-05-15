@@ -1,6 +1,7 @@
 import pytest
 import pytest_dependency
 import tcommon
+from syncity import common, settings_manager
 
 @pytest.mark.first
 def test_assert():
