@@ -297,3 +297,5 @@ CREATE "disk1/Cameras/thermal"
 "disk1/Cameras/thermal" SET Sensors.RenderTextureLink outputType "Thermal"
 "disk1/Cameras/thermal" SET active true
 "disk1" SET active true
+
+"Camera/Thermal" SET CameraFilterPack_Blur_Movie Radius 5
