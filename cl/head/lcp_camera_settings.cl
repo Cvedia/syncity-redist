@@ -11,38 +11,38 @@ CREATE "EnviroSky" AS "EnviroSky"
 "EnviroSky" SET EnviroSky Player "cameras" PlayerCamera "cameras/cameraRGB0" GameTime.ProgressTime "None" weatherSettings.cloudTransitionSpeed 100 weatherSettings.effectTransitionSpeed 100 weatherSettings.fogTransitionSpeed 100 
 "EnviroSky" EXECUTE EnviroSky AssignAndStart "cameras/cameraRGB0" "cameras/cameraRGB0"
 "EnviroSky" SET active true
-"cameras/cameraRGB0" SET active true
 [UI.Window] ShowFromCamera "cameras/cameraRGB0" AS "cameraRGB0" WITH 1024 768 24 "ARGB32" "Default"
+"cameras/cameraRGB0" SET active true
 CREATE "cameras/cameraRGB1"
 "cameras/cameraRGB1" SET active false
 "cameras/cameraRGB1" ADD Camera
 "cameras/cameraRGB1" SET Camera near 0.3 far 1000 fieldOfView 60 renderingPath "UsePlayerSettings"
-"cameras/cameraRGB1" SET active true
 [UI.Window] ShowFromCamera "cameras/cameraRGB1" AS "cameraRGB1" WITH 1024 768 24 "ARGB32" "Default"
+"cameras/cameraRGB1" SET active true
 CREATE "cameras/cameraRGB2"
 "cameras/cameraRGB2" SET active false
 "cameras/cameraRGB2" ADD Camera
 "cameras/cameraRGB2" SET Camera near 0.3 far 1000 fieldOfView 60 renderingPath "UsePlayerSettings"
-"cameras/cameraRGB2" SET active true
 [UI.Window] ShowFromCamera "cameras/cameraRGB2" AS "cameraRGB2" WITH 1024 768 24 "ARGB32" "Default"
+"cameras/cameraRGB2" SET active true
 CREATE "cameras/cameraRGB3"
 "cameras/cameraRGB3" SET active false
 "cameras/cameraRGB3" ADD Camera
 "cameras/cameraRGB3" SET Camera near 0.3 far 1000 fieldOfView 60 renderingPath "UsePlayerSettings"
-"cameras/cameraRGB3" SET active true
 [UI.Window] ShowFromCamera "cameras/cameraRGB3" AS "cameraRGB3" WITH 1024 768 24 "ARGB32" "Default"
+"cameras/cameraRGB3" SET active true
 CREATE "cameras/cameraRGB4"
 "cameras/cameraRGB4" SET active false
 "cameras/cameraRGB4" ADD Camera
 "cameras/cameraRGB4" SET Camera near 0.3 far 1000 fieldOfView 60 renderingPath "UsePlayerSettings"
-"cameras/cameraRGB4" SET active true
 [UI.Window] ShowFromCamera "cameras/cameraRGB4" AS "cameraRGB4" WITH 1024 768 24 "ARGB32" "Default"
+"cameras/cameraRGB4" SET active true
 CREATE "cameras/cameraRGB5"
 "cameras/cameraRGB5" SET active false
 "cameras/cameraRGB5" ADD Camera
 "cameras/cameraRGB5" SET Camera near 0.3 far 1000 fieldOfView 60 renderingPath "UsePlayerSettings"
-"cameras/cameraRGB5" SET active true
 [UI.Window] ShowFromCamera "cameras/cameraRGB5" AS "cameraRGB5" WITH 1024 768 24 "ARGB32" "Default"
+"cameras/cameraRGB5" SET active true
 "cameras" SET active true
 "cameras/cameraRGB0" ADD UnityEngine.PostProcessing.PostProcessingBehaviour
 "cameras/cameraRGB0" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile "EnviroFX"
@@ -99,8 +99,8 @@ CREATE "spawner/drone/container"
 "spawner/drone/container" ADD RandomProps.PropArea
 "spawner/drone/container" SET RandomProps.PropArea tags "drone"
 "spawner/drone/container" SET RandomProps.PropArea async false numberOfProps 25 collisionCheck true stickToGround false 
-"spawner/drone/container" SET RandomProps.Torus radius 15
 "spawner/drone/container" SET RandomProps.Torus innerRadius 0
+"spawner/drone/container" SET RandomProps.Torus radius 15
 "spawner/drone/container" SET Transform position (-6 0 -9) eulerAngles (0 0 0) localScale (1 1 1)
 "spawner/drone/container" ADD Segmentation.Class
 "spawner/drone/container" SET Segmentation.Class className "Drone"
