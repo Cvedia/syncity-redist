@@ -9,8 +9,8 @@ CREATE "EnviroSky" AS "EnviroSky"
 "EnviroSky" SET EnviroSky Player "cameras" PlayerCamera "cameras/cameraRGB" GameTime.ProgressTime "None" weatherSettings.cloudTransitionSpeed 100 weatherSettings.effectTransitionSpeed 100 weatherSettings.fogTransitionSpeed 100 
 "EnviroSky" EXECUTE EnviroSky AssignAndStart "cameras/cameraRGB" "cameras/cameraRGB"
 "EnviroSky" SET active true
-"cameras/cameraRGB" SET active true
 [UI.Window] ShowFromCamera "cameras/cameraRGB" AS "cameraRGB" WITH 1024 768 24 "ARGB32" "Default"
+"cameras/cameraRGB" SET active true
 "cameras" SET active true
 "cameras/cameraRGB" ADD UnityEngine.PostProcessing.PostProcessingBehaviour
 "cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile "Savannah"
@@ -24,8 +24,8 @@ CREATE "cameras/segmentation"
 "cameras/segmentation" SET Segmentation.Output.BoundingBoxes minimumObjectVisibility 0 extensionAmount 0 minimumPixelsCount 1 
 "cameras/segmentation" ADD Segmentation.Output.FilteredBoundingBoxes
 "cameras/segmentation" EXECUTE Segmentation.Output.FilteredBoundingBoxes EnableClasses "Drone"
-"cameras/segmentation" SET active true
 [UI.Window] ShowFromCamera "cameras/segmentation" AS "segmentation" WITH 1024 768 24 "ARGB32" "Default"
+"cameras/segmentation" SET active true
 CREATE "disk1"
 "disk1" SET active false
 "disk1" ADD Sensors.Disk
@@ -42,7 +42,7 @@ CREATE "disk1/Cameras/segmentation"
 "disk1/Cameras/segmentation" SET Sensors.RenderTextureLink outputType "LOSSLESS"
 "disk1/Cameras/segmentation" SET active true
 "disk1" SET active true
-"cameras" SET Transform position (0 2 -30)
+"cameras" SET Transform position (0 8 -30)
 CREATE "Savannah" FROM "savannah" AS "test"
 "test" SET Transform position (-5000 -180 -5000)
 "test" SET active true
@@ -74,8 +74,8 @@ CREATE "spawner/drones/Parrot_Disco/container"
 "spawner/drones/Parrot_Disco/container" ADD RandomProps.Torus
 "spawner/drones/Parrot_Disco/container" ADD RandomProps.PropArea
 "spawner/drones/Parrot_Disco/container" SET RandomProps.PropArea tags "Parrot Disco"
-"spawner/drones/Parrot_Disco/container" SET RandomProps.PropArea async false numberOfProps 46 collisionCheck true stickToGround false 
-"spawner/drones/Parrot_Disco/container" SET RandomProps.Torus radius 26
+"spawner/drones/Parrot_Disco/container" SET RandomProps.PropArea async false numberOfProps 47 collisionCheck true stickToGround false 
+"spawner/drones/Parrot_Disco/container" SET RandomProps.Torus radius 28
 "spawner/drones/Parrot_Disco/container" SET RandomProps.Torus innerRadius 5
 "spawner/drones/Parrot_Disco/container" SET Transform position (0 0 0) eulerAngles (0 0 0) localScale (1 1 1)
 "spawner/drones/Parrot_Disco/container" ADD Segmentation.Class
