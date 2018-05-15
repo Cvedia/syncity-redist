@@ -74,8 +74,8 @@ CREATE "spawner/drones/Parrot_Disco/container"
 "spawner/drones/Parrot_Disco/container" ADD RandomProps.Torus
 "spawner/drones/Parrot_Disco/container" ADD RandomProps.PropArea
 "spawner/drones/Parrot_Disco/container" SET RandomProps.PropArea tags "Parrot Disco"
-"spawner/drones/Parrot_Disco/container" SET RandomProps.PropArea async false numberOfProps 42 collisionCheck true stickToGround false 
-"spawner/drones/Parrot_Disco/container" SET RandomProps.Torus radius 20
+"spawner/drones/Parrot_Disco/container" SET RandomProps.PropArea async false numberOfProps 48 collisionCheck true stickToGround false 
+"spawner/drones/Parrot_Disco/container" SET RandomProps.Torus radius 32
 "spawner/drones/Parrot_Disco/container" SET RandomProps.Torus innerRadius 5
 "spawner/drones/Parrot_Disco/container" SET Transform position (0 0 0) eulerAngles (0 0 0) localScale (1 1 1)
 "spawner/drones/Parrot_Disco/container" ADD Segmentation.Class
