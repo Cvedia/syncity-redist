@@ -10,8 +10,8 @@ CREATE "EnviroSky" AS "EnviroSky"
 "EnviroSky" SET EnviroSky Player "SyncityJPickup" PlayerCamera "SyncityJPickup/rgb1" GameTime.ProgressTime "None" weatherSettings.cloudTransitionSpeed 100 weatherSettings.effectTransitionSpeed 100 weatherSettings.fogTransitionSpeed 100 
 "EnviroSky" EXECUTE EnviroSky AssignAndStart "SyncityJPickup/rgb1" "SyncityJPickup/rgb1"
 "EnviroSky" SET active true
-"SyncityJPickup/rgb1" SET active true
 [UI.Window] ShowFromCamera "SyncityJPickup/rgb1" AS "rgb1" WITH 1024 768 24 "ARGB32" "Default"
+"SyncityJPickup/rgb1" SET active true
 "SyncityJPickup" SET active true
 "SyncityJPickup/rgb1" ADD UnityEngine.PostProcessing.PostProcessingBehaviour
 "SyncityJPickup/rgb1" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile "EnviroFX"
@@ -24,8 +24,8 @@ CREATE "EnviroSky" AS "EnviroSky"
 "EnviroSky" SET EnviroSky Player "SyncityJPickup" PlayerCamera "SyncityJPickup/rgb2" GameTime.ProgressTime "None" weatherSettings.cloudTransitionSpeed 100 weatherSettings.effectTransitionSpeed 100 weatherSettings.fogTransitionSpeed 100 
 "EnviroSky" EXECUTE EnviroSky AssignAndStart "SyncityJPickup/rgb2" "SyncityJPickup/rgb2"
 "EnviroSky" SET active true
-"SyncityJPickup/rgb2" SET active true
 [UI.Window] ShowFromCamera "SyncityJPickup/rgb2" AS "rgb2" WITH 1024 768 24 "ARGB32" "Default"
+"SyncityJPickup/rgb2" SET active true
 "SyncityJPickup" SET active true
 "SyncityJPickup/rgb2" ADD UnityEngine.PostProcessing.PostProcessingBehaviour
 "SyncityJPickup/rgb2" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile "EnviroFX"
@@ -38,8 +38,8 @@ CREATE "EnviroSky" AS "EnviroSky"
 "EnviroSky" SET EnviroSky Player "SyncityJPickup" PlayerCamera "SyncityJPickup/bumper" GameTime.ProgressTime "None" weatherSettings.cloudTransitionSpeed 100 weatherSettings.effectTransitionSpeed 100 weatherSettings.fogTransitionSpeed 100 
 "EnviroSky" EXECUTE EnviroSky AssignAndStart "SyncityJPickup/bumper" "SyncityJPickup/bumper"
 "EnviroSky" SET active true
-"SyncityJPickup/bumper" SET active true
 [UI.Window] ShowFromCamera "SyncityJPickup/bumper" AS "bumper" WITH 1024 768 24 "ARGB32" "Default"
+"SyncityJPickup/bumper" SET active true
 "SyncityJPickup" SET active true
 "SyncityJPickup/bumper" ADD UnityEngine.PostProcessing.PostProcessingBehaviour
 "SyncityJPickup/bumper" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile "EnviroFX"
@@ -49,22 +49,22 @@ CREATE "SyncityJPickup/depth1"
 "SyncityJPickup/depth1" ADD Camera Cameras.RenderDepthBufferSimple
 "SyncityJPickup/depth1" SET Camera near 0.3 far 300 fieldOfView 60 renderingPath "DeferredShading"
 "SyncityJPickup/depth1" SET Cameras.RenderDepthBufferSimple outputMode "Linear01Depth" transparencyCutout 0
-"SyncityJPickup/depth1" SET active true
 [UI.Window] ShowFromCamera "SyncityJPickup/depth1" AS "depth1" WITH 1024 768 32 "RFloat" "Default"
+"SyncityJPickup/depth1" SET active true
 CREATE "SyncityJPickup/depth2"
 "SyncityJPickup/depth2" SET active false
 "SyncityJPickup/depth2" ADD Camera Cameras.RenderDepthBufferSimple
 "SyncityJPickup/depth2" SET Camera near 0.3 far 300 fieldOfView 60 renderingPath "DeferredShading"
 "SyncityJPickup/depth2" SET Cameras.RenderDepthBufferSimple outputMode "Linear01Depth" transparencyCutout 0
-"SyncityJPickup/depth2" SET active true
 [UI.Window] ShowFromCamera "SyncityJPickup/depth2" AS "depth2" WITH 1024 768 32 "RFloat" "Default"
+"SyncityJPickup/depth2" SET active true
 CREATE "SyncityJPickup/bumper_depth"
 "SyncityJPickup/bumper_depth" SET active false
 "SyncityJPickup/bumper_depth" ADD Camera Cameras.RenderDepthBufferSimple
 "SyncityJPickup/bumper_depth" SET Camera near 0.3 far 300 fieldOfView 60 renderingPath "DeferredShading"
 "SyncityJPickup/bumper_depth" SET Cameras.RenderDepthBufferSimple outputMode "Linear01Depth" transparencyCutout 0
-"SyncityJPickup/bumper_depth" SET active true
 [UI.Window] ShowFromCamera "SyncityJPickup/bumper_depth" AS "bumper_depth" WITH 1024 768 32 "RFloat" "Default"
+"SyncityJPickup/bumper_depth" SET active true
 CREATE "disk1"
 "disk1" SET active false
 "disk1" ADD Sensors.Disk
