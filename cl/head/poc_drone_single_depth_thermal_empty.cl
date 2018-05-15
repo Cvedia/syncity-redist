@@ -49,8 +49,8 @@ CREATE "spawner/city/ground/container"
 "spawner/city/ground/container" ADD RandomProps.PropArea
 "spawner/city/ground/container" SET RandomProps.PropArea tags "ground"
 "spawner/city/ground/container" SET RandomProps.PropArea async false numberOfProps 300 collisionCheck false stickToGround false 
-"spawner/city/ground/container" SET RandomProps.Torus innerRadius 0
 "spawner/city/ground/container" SET RandomProps.Torus radius 150
+"spawner/city/ground/container" SET RandomProps.Torus innerRadius 0
 "spawner/city/ground/container" SET Transform position (0 0 0) eulerAngles (0 0 0) localScale (3 3 3)
 "spawner/city/ground/container" SET active true
 "spawner/city/ground" SET active true
@@ -60,8 +60,8 @@ CREATE "spawner/humans_0/container"
 "spawner/humans_0/container" ADD RandomProps.PropArea
 "spawner/humans_0/container" SET RandomProps.PropArea tags "human, +random"
 "spawner/humans_0/container" SET RandomProps.PropArea async false numberOfProps 40 collisionCheck false stickToGround false 
-"spawner/humans_0/container" SET RandomProps.Torus innerRadius 2
 "spawner/humans_0/container" SET RandomProps.Torus radius 30
+"spawner/humans_0/container" SET RandomProps.Torus innerRadius 2
 "spawner/humans_0/container" SET Transform position (0 0 0) eulerAngles (0 0 0) localScale (1 1 1)
 "spawner/humans_0/container" SET active true
 "spawner/humans_0" SET active true
@@ -70,9 +70,9 @@ CREATE "spawner/city/nature/trees/container"
 "spawner/city/nature/trees/container" ADD RandomProps.Torus
 "spawner/city/nature/trees/container" ADD RandomProps.PropArea
 "spawner/city/nature/trees/container" SET RandomProps.PropArea tags "tree"
-"spawner/city/nature/trees/container" SET RandomProps.PropArea async false numberOfProps 171 collisionCheck false stickToGround false 
-"spawner/city/nature/trees/container" SET RandomProps.Torus innerRadius 15
+"spawner/city/nature/trees/container" SET RandomProps.PropArea async false numberOfProps 168 collisionCheck false stickToGround false 
 "spawner/city/nature/trees/container" SET RandomProps.Torus radius 60
+"spawner/city/nature/trees/container" SET RandomProps.Torus innerRadius 15
 "spawner/city/nature/trees/container" SET Transform position (0 0 0) eulerAngles (0 0 0) localScale (1 1 1)
 "spawner/city/nature/trees/container" SET active true
 "spawner/city/nature/trees" SET active true
@@ -82,8 +82,8 @@ CREATE "spawner/city/buildings/container"
 "spawner/city/buildings/container" ADD RandomProps.PropArea
 "spawner/city/buildings/container" SET RandomProps.PropArea tags "building"
 "spawner/city/buildings/container" SET RandomProps.PropArea async false numberOfProps 100 collisionCheck false stickToGround false 
-"spawner/city/buildings/container" SET RandomProps.Torus innerRadius 80
 "spawner/city/buildings/container" SET RandomProps.Torus radius 120
+"spawner/city/buildings/container" SET RandomProps.Torus innerRadius 80
 "spawner/city/buildings/container" SET Transform position (0 0 0) eulerAngles (0 0 0) localScale (1 1 1)
 "spawner/city/buildings/container" SET active true
 "spawner/city/buildings" SET active true
@@ -92,9 +92,9 @@ CREATE "spawner/animals/generic/container"
 "spawner/animals/generic/container" ADD RandomProps.Torus
 "spawner/animals/generic/container" ADD RandomProps.PropArea
 "spawner/animals/generic/container" SET RandomProps.PropArea tags "animal"
-"spawner/animals/generic/container" SET RandomProps.PropArea async false numberOfProps 18 collisionCheck false stickToGround false 
-"spawner/animals/generic/container" SET RandomProps.Torus innerRadius 5
+"spawner/animals/generic/container" SET RandomProps.PropArea async false numberOfProps 23 collisionCheck false stickToGround false 
 "spawner/animals/generic/container" SET RandomProps.Torus radius 50
+"spawner/animals/generic/container" SET RandomProps.Torus innerRadius 5
 "spawner/animals/generic/container" SET Transform position (0 0 0) eulerAngles (0 0 0) localScale (1 1 1)
 "spawner/animals/generic/container" SET active true
 "spawner/animals/generic" SET active true
@@ -103,10 +103,10 @@ CREATE "spawner/animals/birds/container"
 "spawner/animals/birds/container" ADD RandomProps.Torus
 "spawner/animals/birds/container" ADD RandomProps.PropArea
 "spawner/animals/birds/container" SET RandomProps.PropArea tags "bird"
-"spawner/animals/birds/container" SET RandomProps.PropArea async false numberOfProps 86 collisionCheck true stickToGround false 
-"spawner/animals/birds/container" SET RandomProps.Torus innerRadius 0
+"spawner/animals/birds/container" SET RandomProps.PropArea async false numberOfProps 74 collisionCheck true stickToGround false 
 "spawner/animals/birds/container" SET RandomProps.Torus radius 120
-"spawner/animals/birds/container" SET Transform position (0 16 0) eulerAngles (0 0 0) localScale (1 1 1)
+"spawner/animals/birds/container" SET RandomProps.Torus innerRadius 0
+"spawner/animals/birds/container" SET Transform position (0 29 0) eulerAngles (0 0 0) localScale (1 1 1)
 "spawner/animals/birds/container" SET active true
 "spawner/animals/birds" SET active true
 CREATE "spawner/cars/container"
@@ -115,8 +115,8 @@ CREATE "spawner/cars/container"
 "spawner/cars/container" ADD RandomProps.PropArea
 "spawner/cars/container" SET RandomProps.PropArea tags "car"
 "spawner/cars/container" SET RandomProps.PropArea async false numberOfProps 75 collisionCheck false stickToGround false 
-"spawner/cars/container" SET RandomProps.Torus innerRadius 5
 "spawner/cars/container" SET RandomProps.Torus radius 50
+"spawner/cars/container" SET RandomProps.Torus innerRadius 5
 "spawner/cars/container" SET Transform position (0 0 0) eulerAngles (0 0 0) localScale (1 1 1)
 "spawner/cars/container" SET active true
 "spawner/cars" SET active true
@@ -126,8 +126,8 @@ CREATE "spawner/roadsigns/container"
 "spawner/roadsigns/container" ADD RandomProps.PropArea
 "spawner/roadsigns/container" SET RandomProps.PropArea tags "roadsign"
 "spawner/roadsigns/container" SET RandomProps.PropArea async false numberOfProps 250 collisionCheck false stickToGround false 
-"spawner/roadsigns/container" SET RandomProps.Torus innerRadius 15
 "spawner/roadsigns/container" SET RandomProps.Torus radius 80
+"spawner/roadsigns/container" SET RandomProps.Torus innerRadius 15
 "spawner/roadsigns/container" SET Transform position (0 0 0) eulerAngles (0 0 0) localScale (1 1 1)
 "spawner/roadsigns/container" SET active true
 "spawner/roadsigns" SET active true
@@ -149,7 +149,7 @@ CREATE ccameras/drone/drone1/drone1v "Drones/DJI_Phantom_4_Pro/DJI_Phantom_4_Pro
 "cameras/drone/drone1/drone1" SET Transform localPosition (0 0 0)
 "cameras/cameraRGB" SET Camera enabled true
 "cameras" SET Transform position (0 5 0)
-"cameras" SET Transform eulerAngles (-18.21601343132204 0 0)
+"cameras" SET Transform eulerAngles (-4.38345408396134 0 0)
 "EnviroSky" EXECUTE EnviroSky ChangeWeather "Cloudy 2"
 "EnviroSky" SET EnviroSky cloudsMode "Volume"
 "EnviroSky" SET EnviroSky fogSettings.heightFog false
@@ -173,7 +173,7 @@ CREATE ccameras/drone/drone1/drone1v "Drones/DJI_Phantom_4_Pro/DJI_Phantom_4_Pro
 "spawner/city/nature/trees" SET active false
 "spawner/city/buildings" SET active false
 "spawner/city/buildings" SET RandomProps.PropArea 0
-"spawner/city/buildings" SET RandomProps.Torus innerRadius 68
+"spawner/city/buildings" SET RandomProps.Torus innerRadius 50
 "spawner/city/buildings" SET active false
 "spawner/roadsigns" SET active false
 "spawner/roadsigns" SET RandomProps.PropArea 0
@@ -181,18 +181,18 @@ CREATE ccameras/drone/drone1/drone1v "Drones/DJI_Phantom_4_Pro/DJI_Phantom_4_Pro
 "spawner/humans_0" SET active false
 "spawner/humans_0" SET RandomProps.PropArea 0
 "spawner/humans_0" SET active false
-"cameras" SET Transform position (0 3.038311238430426 0)
-"cameras" SET Transform eulerAngles (-4.041192534340237 0 0)
-"EnviroSky" SET EnviroSky GameTime.Hours 18
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.2086571831314346
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.6181368303254682
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.2676858438399851
-"cameras/drone/drone0" SET Transform localPosition (0.2406127129144049 -0.2507157138414738 2.3)
-"cameras/drone/drone1" SET Transform localPosition (0.5695370371309643 1.1680012169829888 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (11 1 -2)
-"cameras/drone/drone0" SET Transform localScale (1.4471439438873963 1.4471439438873963 1.4471439438873963)
-"cameras/drone/drone1" SET Transform localEulerAngles (9 -1 -10)
-"cameras/drone/drone1" SET Transform localScale (0.9414727340102405 0.9414727340102405 0.9414727340102405)
+"cameras" SET Transform position (0 3.559092377983235 0)
+"cameras" SET Transform eulerAngles (-18.82530036826177 0 0)
+"EnviroSky" SET EnviroSky GameTime.Hours 16
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.534825059665935
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.3296550804240501
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.00374027988203034
+"cameras/drone/drone0" SET Transform localPosition (1.1111881009314708 0.20391155276786815 2.3)
+"cameras/drone/drone1" SET Transform localPosition (-0.1350568219853192 0.8123845175615984 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (9 -5 -9)
+"cameras/drone/drone0" SET Transform localScale (0.8181856282270934 0.8181856282270934 0.8181856282270934)
+"cameras/drone/drone1" SET Transform localEulerAngles (-5 9 20)
+"cameras/drone/drone1" SET Transform localScale (1.4597539586454396 1.4597539586454396 1.4597539586454396)
 "disk1" GET Sensors.Disk counter
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
@@ -203,39 +203,18 @@ NOOP
 "spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
 "spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
 "spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 4.135266413569295 0)
-"cameras" SET Transform eulerAngles (4.292552055502121 0 0)
-"EnviroSky" SET EnviroSky GameTime.Hours 16
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.400981000422175
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 0.9691859359907458
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.0778044216232733
-"cameras/drone/drone0" SET Transform localPosition (1.157549812872482 0.287700354931606 2.3)
-"cameras/drone/drone1" SET Transform localPosition (-0.6642724088615038 1.2359385648895032 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (-3 14 -1)
-"cameras/drone/drone0" SET Transform localScale (1.2625252107630043 1.2625252107630043 1.2625252107630043)
-"cameras/drone/drone1" SET Transform localEulerAngles (-11 18 5)
-"cameras/drone/drone1" SET Transform localScale (1.2705252031129701 1.2705252031129701 1.2705252031129701)
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
-NOOP
-"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
-"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
-"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
-"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 3.4928602894858534 0)
-"cameras" SET Transform eulerAngles (11.736365833065413 0 0)
+"cameras" SET Transform position (0 3.658888253028651 0)
+"cameras" SET Transform eulerAngles (2.9885417205869658 0 0)
 "EnviroSky" SET EnviroSky GameTime.Hours 9
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.9372949007642949
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.894381599782466
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.32230301357627583
-"cameras/drone/drone0" SET Transform localPosition (0.2629832822775455 0.5104838987009366 2.3)
-"cameras/drone/drone1" SET Transform localPosition (0.8387299427260968 1.2153728877583743 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (-17 -3 -3)
-"cameras/drone/drone0" SET Transform localScale (0.8265522123247462 0.8265522123247462 0.8265522123247462)
-"cameras/drone/drone1" SET Transform localEulerAngles (-9 -7 11)
-"cameras/drone/drone1" SET Transform localScale (0.6218665713340257 0.6218665713340257 0.6218665713340257)
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.551103222844314
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 0.9407327799398487
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.3926376414118178
+"cameras/drone/drone0" SET Transform localPosition (0.4208719097621709 0.2177603137469038 2.3)
+"cameras/drone/drone1" SET Transform localPosition (-0.18479281917874024 0.9830588351676176 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (18 20 5)
+"cameras/drone/drone0" SET Transform localScale (1.037414418882362 1.037414418882362 1.037414418882362)
+"cameras/drone/drone1" SET Transform localEulerAngles (-8 13 12)
+"cameras/drone/drone1" SET Transform localScale (1.0479497775902393 1.0479497775902393 1.0479497775902393)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
@@ -245,18 +224,18 @@ NOOP
 "spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
 "spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
 "spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 4.927998273426271 0)
-"cameras" SET Transform eulerAngles (-2.5433095576734708 0 0)
-"EnviroSky" SET EnviroSky GameTime.Hours 15
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.5271154099183646
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.4109453815822313
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.3465427061250643
-"cameras/drone/drone0" SET Transform localPosition (1.0458571871518398 0.0136672223673035 2.3)
-"cameras/drone/drone1" SET Transform localPosition (-0.010562045750725835 1.063645725036952 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (-16 3 -8)
-"cameras/drone/drone0" SET Transform localScale (1.2446666887016407 1.2446666887016407 1.2446666887016407)
-"cameras/drone/drone1" SET Transform localEulerAngles (8 -4 -4)
-"cameras/drone/drone1" SET Transform localScale (0.6733943320810095 0.6733943320810095 0.6733943320810095)
+"cameras" SET Transform position (0 3.7427855294425934 0)
+"cameras" SET Transform eulerAngles (18.655373707337723 0 0)
+"EnviroSky" SET EnviroSky GameTime.Hours 14
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.7858527906775934
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.4395613734988595
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.07618563604743067
+"cameras/drone/drone0" SET Transform localPosition (0.271166905527749 -0.18947059180527565 2.3)
+"cameras/drone/drone1" SET Transform localPosition (0.5125045124476322 1.2695068838339756 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (18 0 3)
+"cameras/drone/drone0" SET Transform localScale (1.2627056979722187 1.2627056979722187 1.2627056979722187)
+"cameras/drone/drone1" SET Transform localEulerAngles (-7 10 4)
+"cameras/drone/drone1" SET Transform localScale (0.8330134864297355 0.8330134864297355 0.8330134864297355)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
@@ -266,18 +245,81 @@ NOOP
 "spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
 "spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
 "spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 3.2970733039978106 0)
-"cameras" SET Transform eulerAngles (-0.45898928455893184 0 0)
+"cameras" SET Transform position (0 3.7547852436565394 0)
+"cameras" SET Transform eulerAngles (6.262543806991733 0 0)
+"EnviroSky" SET EnviroSky GameTime.Hours 16
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.41372418282595663
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.0985528270196023
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.06075419126410245
+"cameras/drone/drone0" SET Transform localPosition (0.2237926686492584 0.13731897254210018 2.3)
+"cameras/drone/drone1" SET Transform localPosition (-0.4794068066713263 1.2736346423618834 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (-8 17 12)
+"cameras/drone/drone0" SET Transform localScale (0.6414661427922242 0.6414661427922242 0.6414661427922242)
+"cameras/drone/drone1" SET Transform localEulerAngles (-1 0 7)
+"cameras/drone/drone1" SET Transform localScale (1.1968994496817025 1.1968994496817025 1.1968994496817025)
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
+NOOP
+"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
+"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
+"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
+"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
+"cameras" SET Transform position (0 4.4154638196008 0)
+"cameras" SET Transform eulerAngles (15.327021499583388 0 0)
+"EnviroSky" SET EnviroSky GameTime.Hours 13
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.4109660977494072
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.5422436909123065
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.2784920157614876
+"cameras/drone/drone0" SET Transform localPosition (-0.8436076447775303 0.6869014002705689 2.3)
+"cameras/drone/drone1" SET Transform localPosition (-0.6678833702472183 1.211272322953963 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (-8 3 17)
+"cameras/drone/drone0" SET Transform localScale (1.2239324826377402 1.2239324826377402 1.2239324826377402)
+"cameras/drone/drone1" SET Transform localEulerAngles (6 -6 3)
+"cameras/drone/drone1" SET Transform localScale (1.4841854102887067 1.4841854102887067 1.4841854102887067)
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
+NOOP
+"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
+"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
+"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
+"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
+"cameras" SET Transform position (0 3.7318358591231284 0)
+"cameras" SET Transform eulerAngles (-6.409790665505364 0 0)
+"EnviroSky" SET EnviroSky GameTime.Hours 18
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.409651285253977
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.080297093886974
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.017956533152897202
+"cameras/drone/drone0" SET Transform localPosition (-1.0784525440533692 -0.07524399506005014 2.3)
+"cameras/drone/drone1" SET Transform localPosition (0.5986470110202216 1.2767771011323594 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (9 13 8)
+"cameras/drone/drone0" SET Transform localScale (1.2508691085985835 1.2508691085985835 1.2508691085985835)
+"cameras/drone/drone1" SET Transform localEulerAngles (-18 1 7)
+"cameras/drone/drone1" SET Transform localScale (1.4584570644373231 1.4584570644373231 1.4584570644373231)
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
+NOOP
+"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
+"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
+"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
+"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
+"cameras" SET Transform position (0 3.2440504259977403 0)
+"cameras" SET Transform eulerAngles (-8.322133976325684 0 0)
 "EnviroSky" SET EnviroSky GameTime.Hours 17
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.4681760553486392
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.1745054402017208
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.02683759671224513
-"cameras/drone/drone0" SET Transform localPosition (-0.2567299137726635 0.6359743829419244 2.3)
-"cameras/drone/drone1" SET Transform localPosition (-0.6114179355833727 1.1515736463899233 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (-19 14 16)
-"cameras/drone/drone0" SET Transform localScale (1.45401329117306 1.45401329117306 1.45401329117306)
-"cameras/drone/drone1" SET Transform localEulerAngles (-15 -12 -1)
-"cameras/drone/drone1" SET Transform localScale (1.324952544600635 1.324952544600635 1.324952544600635)
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.0741405406111373
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.0512685565066873
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.24660675975361232
+"cameras/drone/drone0" SET Transform localPosition (0.40608170792538467 -0.24460668722473705 2.3)
+"cameras/drone/drone1" SET Transform localPosition (-0.6325901785654076 1.2532982250367943 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (18 3 16)
+"cameras/drone/drone0" SET Transform localScale (0.9977359104074708 0.9977359104074708 0.9977359104074708)
+"cameras/drone/drone1" SET Transform localEulerAngles (13 8 10)
+"cameras/drone/drone1" SET Transform localScale (0.791983416487767 0.791983416487767 0.791983416487767)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
@@ -287,18 +329,333 @@ NOOP
 "spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
 "spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
 "spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 4.775102019924991 0)
-"cameras" SET Transform eulerAngles (-1.6557370817733315 0 0)
+"cameras" SET Transform position (0 4.728122364371673 0)
+"cameras" SET Transform eulerAngles (-4.118240083632671 0 0)
+"EnviroSky" SET EnviroSky GameTime.Hours 10
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.080696860390022
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.7666588114174844
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.18109051088323974
+"cameras/drone/drone0" SET Transform localPosition (-0.11552372142618839 0.6488561695572306 2.3)
+"cameras/drone/drone1" SET Transform localPosition (0.5564165994846397 1.0806324814393369 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (-7 -1 -10)
+"cameras/drone/drone0" SET Transform localScale (1.2842800552669762 1.2842800552669762 1.2842800552669762)
+"cameras/drone/drone1" SET Transform localEulerAngles (9 -5 -15)
+"cameras/drone/drone1" SET Transform localScale (0.7571531224570894 0.7571531224570894 0.7571531224570894)
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
+NOOP
+"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
+"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
+"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
+"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
+"cameras" SET Transform position (0 4.55993697378322 0)
+"cameras" SET Transform eulerAngles (9.743182958828207 0 0)
+"EnviroSky" SET EnviroSky GameTime.Hours 10
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.885709386724727
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.1773262711038475
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.07457049744086817
+"cameras/drone/drone0" SET Transform localPosition (0.00652109406411272 0.33807984916489725 2.3)
+"cameras/drone/drone1" SET Transform localPosition (-0.987369474349459 1.2841317936385386 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (0 -7 -6)
+"cameras/drone/drone0" SET Transform localScale (1.077229191414664 1.077229191414664 1.077229191414664)
+"cameras/drone/drone1" SET Transform localEulerAngles (-2 -19 -16)
+"cameras/drone/drone1" SET Transform localScale (0.8029912254385592 0.8029912254385592 0.8029912254385592)
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
+NOOP
+"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
+"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
+"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
+"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
+"cameras" SET Transform position (0 3.104546112648492 0)
+"cameras" SET Transform eulerAngles (-2.747020944008508 0 0)
+"EnviroSky" SET EnviroSky GameTime.Hours 16
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.43941474227203375
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.411476926623301
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.2263797736650194
+"cameras/drone/drone0" SET Transform localPosition (-0.4594780094409219 0.020335074338525383 2.3)
+"cameras/drone/drone1" SET Transform localPosition (0.37058315671101405 1.10877005431733 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (11 2 -14)
+"cameras/drone/drone0" SET Transform localScale (1.3032109112135166 1.3032109112135166 1.3032109112135166)
+"cameras/drone/drone1" SET Transform localEulerAngles (12 -11 -13)
+"cameras/drone/drone1" SET Transform localScale (0.9942609776539889 0.9942609776539889 0.9942609776539889)
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
+NOOP
+"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
+"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
+"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
+"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
+"cameras" SET Transform position (0 4.987887514887076 0)
+"cameras" SET Transform eulerAngles (-2.1873386450881185 0 0)
+"EnviroSky" SET EnviroSky GameTime.Hours 9
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.1556760757413664
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.7731680030514636
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.3864426814109141
+"cameras/drone/drone0" SET Transform localPosition (-1.0598135404929703 -0.008238356201813846 2.3)
+"cameras/drone/drone1" SET Transform localPosition (-0.8133639303168967 1.2322620550671544 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (-4 15 1)
+"cameras/drone/drone0" SET Transform localScale (0.792877225202931 0.792877225202931 0.792877225202931)
+"cameras/drone/drone1" SET Transform localEulerAngles (7 0 12)
+"cameras/drone/drone1" SET Transform localScale (0.7190456690237172 0.7190456690237172 0.7190456690237172)
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
+NOOP
+"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
+"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
+"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
+"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
+"cameras" SET Transform position (0 4.001047758694095 0)
+"cameras" SET Transform eulerAngles (-10.51290145494988 0 0)
+"EnviroSky" SET EnviroSky GameTime.Hours 12
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.4727946091756112
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.0531199365899078
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.2341457078467185
+"cameras/drone/drone0" SET Transform localPosition (0.5771173743696345 -0.23527307027016248 2.3)
+"cameras/drone/drone1" SET Transform localPosition (-0.08569656705678197 1.0271857324529317 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (-19 -11 -6)
+"cameras/drone/drone0" SET Transform localScale (0.8349793752602561 0.8349793752602561 0.8349793752602561)
+"cameras/drone/drone1" SET Transform localEulerAngles (-6 11 3)
+"cameras/drone/drone1" SET Transform localScale (1.0478801485821725 1.0478801485821725 1.0478801485821725)
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
+NOOP
+"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
+"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
+"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
+"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
+"cameras" SET Transform position (0 4.0994979058947365 0)
+"cameras" SET Transform eulerAngles (18.8763863528118 0 0)
+"EnviroSky" SET EnviroSky GameTime.Hours 18
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.2041160920704945
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.0705605293539209
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.07193439598393954
+"cameras/drone/drone0" SET Transform localPosition (-1.188235283026381 0.6802653419379696 2.3)
+"cameras/drone/drone1" SET Transform localPosition (-0.07723589012917031 1.2745496127437168 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (15 17 5)
+"cameras/drone/drone0" SET Transform localScale (1.0680998797164452 1.0680998797164452 1.0680998797164452)
+"cameras/drone/drone1" SET Transform localEulerAngles (15 18 -11)
+"cameras/drone/drone1" SET Transform localScale (0.8750639678236384 0.8750639678236384 0.8750639678236384)
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
+NOOP
+"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
+"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
+"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
+"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
+"cameras" SET Transform position (0 4.5427361198661025 0)
+"cameras" SET Transform eulerAngles (2.265980142325759 0 0)
+"EnviroSky" SET EnviroSky GameTime.Hours 18
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.3348698552477647
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.0439547483689817
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.37062992358191
+"cameras/drone/drone0" SET Transform localPosition (0.34847537876549994 -0.049822310954660665 2.3)
+"cameras/drone/drone1" SET Transform localPosition (-0.8432048697303481 1.0331799547876521 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (-9 9 16)
+"cameras/drone/drone0" SET Transform localScale (1.1834264300038173 1.1834264300038173 1.1834264300038173)
+"cameras/drone/drone1" SET Transform localEulerAngles (4 0 20)
+"cameras/drone/drone1" SET Transform localScale (1.3319657511186311 1.3319657511186311 1.3319657511186311)
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
+NOOP
+"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
+"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
+"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
+"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
+"cameras" SET Transform position (0 3.072031074974616 0)
+"cameras" SET Transform eulerAngles (-6.298217705030535 0 0)
+"EnviroSky" SET EnviroSky GameTime.Hours 15
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.8089661345228478
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.2918887552788103
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.31529427385938347
+"cameras/drone/drone0" SET Transform localPosition (-0.4772594108969118 -0.10448378625488836 2.3)
+"cameras/drone/drone1" SET Transform localPosition (-1.1517789738738973 0.9493773472813731 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (-14 3 -20)
+"cameras/drone/drone0" SET Transform localScale (1.0249210424385158 1.0249210424385158 1.0249210424385158)
+"cameras/drone/drone1" SET Transform localEulerAngles (15 -4 9)
+"cameras/drone/drone1" SET Transform localScale (1.190357734508283 1.190357734508283 1.190357734508283)
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
+NOOP
+"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
+"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
+"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
+"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
+"cameras" SET Transform position (0 3.411588758584798 0)
+"cameras" SET Transform eulerAngles (-14.760044793201583 0 0)
+"EnviroSky" SET EnviroSky GameTime.Hours 11
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.2303266698245992
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.111112962672899
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.31685588359515854
+"cameras/drone/drone0" SET Transform localPosition (0.29684186390911327 0.41546813195473825 2.3)
+"cameras/drone/drone1" SET Transform localPosition (-0.959449898819567 0.8312178007529212 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (10 7 3)
+"cameras/drone/drone0" SET Transform localScale (0.9576113054838619 0.9576113054838619 0.9576113054838619)
+"cameras/drone/drone1" SET Transform localEulerAngles (15 19 9)
+"cameras/drone/drone1" SET Transform localScale (0.670666381543778 0.670666381543778 0.670666381543778)
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
+NOOP
+"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
+"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
+"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
+"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
+"cameras" SET Transform position (0 4.698199530172868 0)
+"cameras" SET Transform eulerAngles (0.7286933802196955 0 0)
+"EnviroSky" SET EnviroSky GameTime.Hours 18
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.6127692506053657
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.262286135908664
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.03218268502094812
+"cameras/drone/drone0" SET Transform localPosition (-0.868456723901158 0.3001152581772069 2.3)
+"cameras/drone/drone1" SET Transform localPosition (1.0226189903178928 0.8054492019720036 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (12 -9 9)
+"cameras/drone/drone0" SET Transform localScale (0.908349826054221 0.908349826054221 0.908349826054221)
+"cameras/drone/drone1" SET Transform localEulerAngles (-8 -17 -12)
+"cameras/drone/drone1" SET Transform localScale (1.458527498940529 1.458527498940529 1.458527498940529)
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
+NOOP
+"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
+"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
+"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
+"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
+"cameras" SET Transform position (0 3.488058387440824 0)
+"cameras" SET Transform eulerAngles (2.006407071311294 0 0)
+"EnviroSky" SET EnviroSky GameTime.Hours 11
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.0835723483785364
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.1745380170791713
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.3734105653306834
+"cameras/drone/drone0" SET Transform localPosition (0.6017254905710725 0.23458779025637405 2.3)
+"cameras/drone/drone1" SET Transform localPosition (0.4218845429094362 0.8438638025129368 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (-5 2 13)
+"cameras/drone/drone0" SET Transform localScale (1.044218907347045 1.044218907347045 1.044218907347045)
+"cameras/drone/drone1" SET Transform localEulerAngles (4 9 7)
+"cameras/drone/drone1" SET Transform localScale (0.7114557898964018 0.7114557898964018 0.7114557898964018)
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
+NOOP
+"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
+"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
+"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
+"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
+"cameras" SET Transform position (0 4.206698514334996 0)
+"cameras" SET Transform eulerAngles (10.066827871635695 0 0)
+"EnviroSky" SET EnviroSky GameTime.Hours 12
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.379561778891715
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.659555279994993
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.011277021159825385
+"cameras/drone/drone0" SET Transform localPosition (0.24497325260051062 0.543805534073788 2.3)
+"cameras/drone/drone1" SET Transform localPosition (0.8078332570389175 1.020332192005826 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (17 18 -5)
+"cameras/drone/drone0" SET Transform localScale (1.2350941830678814 1.2350941830678814 1.2350941830678814)
+"cameras/drone/drone1" SET Transform localEulerAngles (-3 -11 -1)
+"cameras/drone/drone1" SET Transform localScale (1.0193228106926393 1.0193228106926393 1.0193228106926393)
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
+NOOP
+"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
+"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
+"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
+"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
+"cameras" SET Transform position (0 3.418829329679197 0)
+"cameras" SET Transform eulerAngles (13.697114961417604 0 0)
+"EnviroSky" SET EnviroSky GameTime.Hours 11
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.2828010119259856
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.8339664514020266
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.38342218053103017
+"cameras/drone/drone0" SET Transform localPosition (-0.574579991711189 0.3399324218645771 2.3)
+"cameras/drone/drone1" SET Transform localPosition (0.9473909587699556 1.1388297281820647 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (-5 9 -10)
+"cameras/drone/drone0" SET Transform localScale (1.1483172204860819 1.1483172204860819 1.1483172204860819)
+"cameras/drone/drone1" SET Transform localEulerAngles (-8 14 -10)
+"cameras/drone/drone1" SET Transform localScale (1.3908358980654336 1.3908358980654336 1.3908358980654336)
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
+NOOP
+"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
+"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
+"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
+"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
+"cameras" SET Transform position (0 4.152513471106708 0)
+"cameras" SET Transform eulerAngles (-2.764948571716374 0 0)
+"EnviroSky" SET EnviroSky GameTime.Hours 12
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.1185191080097319
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.2018379719789285
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.08068569079050875
+"cameras/drone/drone0" SET Transform localPosition (0.7066126306250087 -0.1704773096870567 2.3)
+"cameras/drone/drone1" SET Transform localPosition (0.5473312862747657 1.262283531409028 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (-5 8 2)
+"cameras/drone/drone0" SET Transform localScale (0.7767330438177918 0.7767330438177918 0.7767330438177918)
+"cameras/drone/drone1" SET Transform localEulerAngles (19 11 3)
+"cameras/drone/drone1" SET Transform localScale (0.9243932809369293 0.9243932809369293 0.9243932809369293)
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
+NOOP
+"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
+"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
+"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
+"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
+"cameras" SET Transform position (0 4.21676456741377 0)
+"cameras" SET Transform eulerAngles (6.157586216073771 0 0)
+"EnviroSky" SET EnviroSky GameTime.Hours 11
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.133442657696474
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.1774006231848224
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.3294239648116221
+"cameras/drone/drone0" SET Transform localPosition (-0.6716080359813535 0.46525480950931436 2.3)
+"cameras/drone/drone1" SET Transform localPosition (0.5350961200866149 1.2555557273648417 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (-1 20 3)
+"cameras/drone/drone0" SET Transform localScale (1.0691193868984026 1.0691193868984026 1.0691193868984026)
+"cameras/drone/drone1" SET Transform localEulerAngles (16 7 -1)
+"cameras/drone/drone1" SET Transform localScale (1.2056824318345085 1.2056824318345085 1.2056824318345085)
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
+NOOP
+"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
+"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
+"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
+"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
+"cameras" SET Transform position (0 4.028987015446516 0)
+"cameras" SET Transform eulerAngles (16.633795053953797 0 0)
 "EnviroSky" SET EnviroSky GameTime.Hours 17
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.5425626120762206
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.3118698875518848
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.053275134043311835
-"cameras/drone/drone0" SET Transform localPosition (-0.17507046874313215 0.4160104960023115 2.3)
-"cameras/drone/drone1" SET Transform localPosition (-0.4314575360474857 0.8744067104485769 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (-13 7 -8)
-"cameras/drone/drone0" SET Transform localScale (1.128692920912124 1.128692920912124 1.128692920912124)
-"cameras/drone/drone1" SET Transform localEulerAngles (2 -1 -14)
-"cameras/drone/drone1" SET Transform localScale (1.3317123287545676 1.3317123287545676 1.3317123287545676)
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.819656982155638
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.196250819481547
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.3695915277951655
+"cameras/drone/drone0" SET Transform localPosition (0.023334729801125276 0.39607720518242523 2.3)
+"cameras/drone/drone1" SET Transform localPosition (0.7842837661663413 1.2073871739627042 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (11 -14 18)
+"cameras/drone/drone0" SET Transform localScale (1.2473489648854819 1.2473489648854819 1.2473489648854819)
+"cameras/drone/drone1" SET Transform localEulerAngles (4 -7 -10)
+"cameras/drone/drone1" SET Transform localScale (0.8506198286128344 0.8506198286128344 0.8506198286128344)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
@@ -308,438 +665,18 @@ NOOP
 "spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
 "spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
 "spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 4.2237837245650045 0)
-"cameras" SET Transform eulerAngles (-13.891817080696933 0 0)
-"EnviroSky" SET EnviroSky GameTime.Hours 12
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.8246668436505626
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.2525749258001992
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.07509208643546605
-"cameras/drone/drone0" SET Transform localPosition (0.5586462707417219 0.6710225936912877 2.3)
-"cameras/drone/drone1" SET Transform localPosition (0.09873338636373008 0.9291120709689252 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (17 2 0)
-"cameras/drone/drone0" SET Transform localScale (0.9811784327591033 0.9811784327591033 0.9811784327591033)
-"cameras/drone/drone1" SET Transform localEulerAngles (-16 -14 5)
-"cameras/drone/drone1" SET Transform localScale (0.8691569265060333 0.8691569265060333 0.8691569265060333)
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
-NOOP
-"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
-"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
-"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
-"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 4.916725330000355 0)
-"cameras" SET Transform eulerAngles (3.752444039361972 0 0)
-"EnviroSky" SET EnviroSky GameTime.Hours 9
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.5997814739940321
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.3059588286789108
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.07221150407708339
-"cameras/drone/drone0" SET Transform localPosition (-0.5200066213038125 0.4119353700627559 2.3)
-"cameras/drone/drone1" SET Transform localPosition (-0.8311738537960784 1.253587383514964 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (6 -4 11)
-"cameras/drone/drone0" SET Transform localScale (1.1352098868077714 1.1352098868077714 1.1352098868077714)
-"cameras/drone/drone1" SET Transform localEulerAngles (-19 -11 8)
-"cameras/drone/drone1" SET Transform localScale (1.0475607075660922 1.0475607075660922 1.0475607075660922)
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
-NOOP
-"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
-"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
-"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
-"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 4.277419952086089 0)
-"cameras" SET Transform eulerAngles (-4.561159720432411 0 0)
-"EnviroSky" SET EnviroSky GameTime.Hours 14
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.4113172406887822
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.1385808115176352
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.08217816030749132
-"cameras/drone/drone0" SET Transform localPosition (-0.4393876461617192 0.18335434649940846 2.3)
-"cameras/drone/drone1" SET Transform localPosition (0.9703477505256901 1.2348202774465897 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (-14 4 5)
-"cameras/drone/drone0" SET Transform localScale (0.839088018881333 0.839088018881333 0.839088018881333)
-"cameras/drone/drone1" SET Transform localEulerAngles (16 -8 -16)
-"cameras/drone/drone1" SET Transform localScale (0.6690872085188643 0.6690872085188643 0.6690872085188643)
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
-NOOP
-"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
-"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
-"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
-"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 3.9091110500927586 0)
-"cameras" SET Transform eulerAngles (12.839729323212758 0 0)
-"EnviroSky" SET EnviroSky GameTime.Hours 14
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.5552070738060615
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.514888265828457
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.07644897070711916
-"cameras/drone/drone0" SET Transform localPosition (-0.07919160907381073 0.2030727047183037 2.3)
-"cameras/drone/drone1" SET Transform localPosition (-0.5502725901531853 1.1720325428596954 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (1 17 -18)
-"cameras/drone/drone0" SET Transform localScale (1.1548796004196382 1.1548796004196382 1.1548796004196382)
-"cameras/drone/drone1" SET Transform localEulerAngles (5 19 -16)
-"cameras/drone/drone1" SET Transform localScale (1.2056984141897589 1.2056984141897589 1.2056984141897589)
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
-NOOP
-"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
-"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
-"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
-"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 4.798428532830252 0)
-"cameras" SET Transform eulerAngles (-17.436469405623995 0 0)
-"EnviroSky" SET EnviroSky GameTime.Hours 16
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.2860161161035226
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.7224892297166825
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.138012726155625
-"cameras/drone/drone0" SET Transform localPosition (0.5905266201686148 -0.20705890831167623 2.3)
-"cameras/drone/drone1" SET Transform localPosition (-0.4952983643376224 1.1592533983272724 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (5 -11 -19)
-"cameras/drone/drone0" SET Transform localScale (0.7602260492642426 0.7602260492642426 0.7602260492642426)
-"cameras/drone/drone1" SET Transform localEulerAngles (-2 -15 19)
-"cameras/drone/drone1" SET Transform localScale (1.1597613026433997 1.1597613026433997 1.1597613026433997)
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
-NOOP
-"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
-"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
-"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
-"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 4.1140888234171635 0)
-"cameras" SET Transform eulerAngles (-14.869430684849467 0 0)
-"EnviroSky" SET EnviroSky GameTime.Hours 10
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.5685980758057294
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.2984485940550594
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.27009786632799204
-"cameras/drone/drone0" SET Transform localPosition (0.28114483584803374 0.36094665756826066 2.3)
-"cameras/drone/drone1" SET Transform localPosition (-1.089991323020531 0.8768307063770111 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (8 -3 12)
-"cameras/drone/drone0" SET Transform localScale (1.168398877618454 1.168398877618454 1.168398877618454)
-"cameras/drone/drone1" SET Transform localEulerAngles (11 9 12)
-"cameras/drone/drone1" SET Transform localScale (0.6975318566874746 0.6975318566874746 0.6975318566874746)
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
-NOOP
-"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
-"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
-"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
-"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 4.045572277545251 0)
-"cameras" SET Transform eulerAngles (7.398351360125748 0 0)
-"EnviroSky" SET EnviroSky GameTime.Hours 9
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.7874609769743284
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.1878076371343491
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.19047682147436296
-"cameras/drone/drone0" SET Transform localPosition (0.010852369744058787 0.0460920837551671 2.3)
-"cameras/drone/drone1" SET Transform localPosition (-0.3894943213791874 0.9381036538393772 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (-4 10 11)
-"cameras/drone/drone0" SET Transform localScale (0.8194538421683424 0.8194538421683424 0.8194538421683424)
-"cameras/drone/drone1" SET Transform localEulerAngles (4 -6 -12)
-"cameras/drone/drone1" SET Transform localScale (0.6198550551677575 0.6198550551677575 0.6198550551677575)
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
-NOOP
-"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
-"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
-"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
-"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 3.5562080148166775 0)
-"cameras" SET Transform eulerAngles (14.967823900195526 0 0)
-"EnviroSky" SET EnviroSky GameTime.Hours 16
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.5924806320622988
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.890759994629318
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.044674438824572074
-"cameras/drone/drone0" SET Transform localPosition (0.36514990060254626 0.2468151267729723 2.3)
-"cameras/drone/drone1" SET Transform localPosition (-0.9846800999040188 1.063011775308722 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (19 17 -5)
-"cameras/drone/drone0" SET Transform localScale (0.6303424486885134 0.6303424486885134 0.6303424486885134)
-"cameras/drone/drone1" SET Transform localEulerAngles (2 -16 -16)
-"cameras/drone/drone1" SET Transform localScale (1.0276652721085295 1.0276652721085295 1.0276652721085295)
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
-NOOP
-"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
-"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
-"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
-"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 3.7648878682274427 0)
-"cameras" SET Transform eulerAngles (8.64693643716457 0 0)
-"EnviroSky" SET EnviroSky GameTime.Hours 11
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.4204075797980429
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.702958487756424
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.12253111896275067
-"cameras/drone/drone0" SET Transform localPosition (-0.014736936189305716 0.03046110564054144 2.3)
-"cameras/drone/drone1" SET Transform localPosition (-0.04587079656091042 1.1367327975654349 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (4 -3 -16)
-"cameras/drone/drone0" SET Transform localScale (1.3028707889433586 1.3028707889433586 1.3028707889433586)
-"cameras/drone/drone1" SET Transform localEulerAngles (15 15 13)
-"cameras/drone/drone1" SET Transform localScale (1.1251710166075792 1.1251710166075792 1.1251710166075792)
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
-NOOP
-"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
-"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
-"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
-"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 3.0506233704280445 0)
-"cameras" SET Transform eulerAngles (-18.846039760422123 0 0)
-"EnviroSky" SET EnviroSky GameTime.Hours 10
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.9979620394525767
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.354002909072717
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.13349508817839886
-"cameras/drone/drone0" SET Transform localPosition (-0.5287821383127148 -0.003009368394910339 2.3)
-"cameras/drone/drone1" SET Transform localPosition (0.9620508053039696 1.2870066414284222 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (-13 13 12)
-"cameras/drone/drone0" SET Transform localScale (1.16336554845729 1.16336554845729 1.16336554845729)
-"cameras/drone/drone1" SET Transform localEulerAngles (19 14 -16)
-"cameras/drone/drone1" SET Transform localScale (0.9375082801811743 0.9375082801811743 0.9375082801811743)
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
-NOOP
-"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
-"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
-"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
-"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 3.599152947417675 0)
-"cameras" SET Transform eulerAngles (6.278922188585657 0 0)
-"EnviroSky" SET EnviroSky GameTime.Hours 14
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.4842043824192719
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.4299458596560437
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.07147613520110303
-"cameras/drone/drone0" SET Transform localPosition (-0.41387028308995566 0.2666260880434333 2.3)
-"cameras/drone/drone1" SET Transform localPosition (0.3969084545398489 1.090618215746457 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (14 5 16)
-"cameras/drone/drone0" SET Transform localScale (0.7372849698105511 0.7372849698105511 0.7372849698105511)
-"cameras/drone/drone1" SET Transform localEulerAngles (-7 -11 -10)
-"cameras/drone/drone1" SET Transform localScale (0.9130900692268207 0.9130900692268207 0.9130900692268207)
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
-NOOP
-"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
-"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
-"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
-"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 4.205506037576632 0)
-"cameras" SET Transform eulerAngles (-15.402273988550125 0 0)
-"EnviroSky" SET EnviroSky GameTime.Hours 15
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.9424642955156101
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.2792837544675009
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.21995654417513721
-"cameras/drone/drone0" SET Transform localPosition (0.91986832086837 0.5128512584410401 2.3)
-"cameras/drone/drone1" SET Transform localPosition (0.30863636057269783 1.2533199636075303 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (15 -4 7)
-"cameras/drone/drone0" SET Transform localScale (1.335619872246618 1.335619872246618 1.335619872246618)
-"cameras/drone/drone1" SET Transform localEulerAngles (10 7 15)
-"cameras/drone/drone1" SET Transform localScale (0.755368739063945 0.755368739063945 0.755368739063945)
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
-NOOP
-"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
-"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
-"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
-"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 3.8454219149350344 0)
-"cameras" SET Transform eulerAngles (-13.48858680774233 0 0)
-"EnviroSky" SET EnviroSky GameTime.Hours 10
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.9036940715744682
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.646417898159127
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.05656016630425609
-"cameras/drone/drone0" SET Transform localPosition (0.6194757917074616 -0.08415425174431473 2.3)
-"cameras/drone/drone1" SET Transform localPosition (0.771319097174306 1.2626117522382527 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (8 -9 17)
-"cameras/drone/drone0" SET Transform localScale (0.7514563962857326 0.7514563962857326 0.7514563962857326)
-"cameras/drone/drone1" SET Transform localEulerAngles (-3 -18 9)
-"cameras/drone/drone1" SET Transform localScale (1.172847649397768 1.172847649397768 1.172847649397768)
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
-NOOP
-"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
-"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
-"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
-"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 4.688268843483838 0)
-"cameras" SET Transform eulerAngles (5.289394442245936 0 0)
-"EnviroSky" SET EnviroSky GameTime.Hours 11
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.5882994457786628
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.9007936416004299
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.09271700885204473
-"cameras/drone/drone0" SET Transform localPosition (0.04953586146561895 0.19377358379728388 2.3)
-"cameras/drone/drone1" SET Transform localPosition (1.0450233742779231 1.2289748447485314 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (-10 2 13)
-"cameras/drone/drone0" SET Transform localScale (1.2436080677723242 1.2436080677723242 1.2436080677723242)
-"cameras/drone/drone1" SET Transform localEulerAngles (-12 -10 -12)
-"cameras/drone/drone1" SET Transform localScale (0.9984960274188182 0.9984960274188182 0.9984960274188182)
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
-NOOP
-"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
-"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
-"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
-"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 4.547442263264118 0)
-"cameras" SET Transform eulerAngles (-8.202250179044848 0 0)
-"EnviroSky" SET EnviroSky GameTime.Hours 12
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.6613020645036447
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.8134504404181122
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.13817324740985804
-"cameras/drone/drone0" SET Transform localPosition (0.6786387395585225 0.6083444493617263 2.3)
-"cameras/drone/drone1" SET Transform localPosition (-0.5225027321306968 1.0709120784089863 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (3 -14 -14)
-"cameras/drone/drone0" SET Transform localScale (1.20342617343158 1.20342617343158 1.20342617343158)
-"cameras/drone/drone1" SET Transform localEulerAngles (-20 18 -4)
-"cameras/drone/drone1" SET Transform localScale (0.756743970367876 0.756743970367876 0.756743970367876)
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
-NOOP
-"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
-"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
-"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
-"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 3.114745489941142 0)
-"cameras" SET Transform eulerAngles (-1.1453896092345062 0 0)
-"EnviroSky" SET EnviroSky GameTime.Hours 10
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.2588104922846788
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.4340288436031936
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.0007172151386397818
-"cameras/drone/drone0" SET Transform localPosition (-0.6107207485761985 0.03552483538088075 2.3)
-"cameras/drone/drone1" SET Transform localPosition (-0.8646772400682756 0.8052453155750903 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (-1 -6 18)
-"cameras/drone/drone0" SET Transform localScale (1.3248766926151796 1.3248766926151796 1.3248766926151796)
-"cameras/drone/drone1" SET Transform localEulerAngles (3 15 -18)
-"cameras/drone/drone1" SET Transform localScale (1.3174639725381723 1.3174639725381723 1.3174639725381723)
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
-NOOP
-"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
-"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
-"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
-"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 4.911886582035804 0)
-"cameras" SET Transform eulerAngles (19.986904994811837 0 0)
-"EnviroSky" SET EnviroSky GameTime.Hours 9
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.2725486001212625
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 0.9790598580384752
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.22309780009311606
-"cameras/drone/drone0" SET Transform localPosition (-1.1018697843192544 -0.1680370334696732 2.3)
-"cameras/drone/drone1" SET Transform localPosition (0.971304765797065 1.176950948036417 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (-4 -14 -3)
-"cameras/drone/drone0" SET Transform localScale (1.287651665417893 1.287651665417893 1.287651665417893)
-"cameras/drone/drone1" SET Transform localEulerAngles (-13 17 0)
-"cameras/drone/drone1" SET Transform localScale (1.0810124917372113 1.0810124917372113 1.0810124917372113)
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
-NOOP
-"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
-"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
-"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
-"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 3.7600199758405717 0)
-"cameras" SET Transform eulerAngles (-16.72388255110068 0 0)
-"EnviroSky" SET EnviroSky GameTime.Hours 16
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.7997428138092715
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.3313135958420834
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.3135664624334371
-"cameras/drone/drone0" SET Transform localPosition (-1.1182973637406108 0.08427920930002125 2.3)
-"cameras/drone/drone1" SET Transform localPosition (-0.5874145258896658 0.95887572709321 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (8 4 20)
-"cameras/drone/drone0" SET Transform localScale (0.9417442234130855 0.9417442234130855 0.9417442234130855)
-"cameras/drone/drone1" SET Transform localEulerAngles (-18 -1 17)
-"cameras/drone/drone1" SET Transform localScale (0.7309389561250359 0.7309389561250359 0.7309389561250359)
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
-NOOP
-"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
-"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
-"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
-"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 3.515350918846204 0)
-"cameras" SET Transform eulerAngles (2.339397988238918 0 0)
-"EnviroSky" SET EnviroSky GameTime.Hours 13
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.522629939589509
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.4375625169091184
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.2410804284358445
-"cameras/drone/drone0" SET Transform localPosition (0.8189241973032086 0.14540805698133702 2.3)
-"cameras/drone/drone1" SET Transform localPosition (0.1259220029469481 1.0084084817291563 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (-18 16 1)
-"cameras/drone/drone0" SET Transform localScale (1.0566177842418667 1.0566177842418667 1.0566177842418667)
-"cameras/drone/drone1" SET Transform localEulerAngles (14 -14 -20)
-"cameras/drone/drone1" SET Transform localScale (0.8308772398261117 0.8308772398261117 0.8308772398261117)
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
-NOOP
-"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
-"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
-"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
-"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 3.772459353318517 0)
-"cameras" SET Transform eulerAngles (-18.665069219972562 0 0)
-"EnviroSky" SET EnviroSky GameTime.Hours 11
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.5282993149101447
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.1489109422694057
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.3965680170407787
-"cameras/drone/drone0" SET Transform localPosition (-0.2668647582510556 -0.07050271299418415 2.3)
-"cameras/drone/drone1" SET Transform localPosition (-0.1636287722612979 1.0973459358597413 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (-12 -9 7)
-"cameras/drone/drone0" SET Transform localScale (1.2698759388722305 1.2698759388722305 1.2698759388722305)
-"cameras/drone/drone1" SET Transform localEulerAngles (10 -1 -15)
-"cameras/drone/drone1" SET Transform localScale (1.494069028860247 1.494069028860247 1.494069028860247)
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
-NOOP
-"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
-"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
-"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
-"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 4.338171454864424 0)
-"cameras" SET Transform eulerAngles (-0.43555002324740144 0 0)
+"cameras" SET Transform position (0 3.2389794829490466 0)
+"cameras" SET Transform eulerAngles (18.203948622617702 0 0)
 "EnviroSky" SET EnviroSky GameTime.Hours 18
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.49992838457063654
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.709054779616241
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.25747872009934086
-"cameras/drone/drone0" SET Transform localPosition (-0.5246644717818975 0.6890409474621246 2.3)
-"cameras/drone/drone1" SET Transform localPosition (0.3199164448048637 1.0310237291223192 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (-1 4 15)
-"cameras/drone/drone0" SET Transform localScale (1.358511023894635 1.358511023894635 1.358511023894635)
-"cameras/drone/drone1" SET Transform localEulerAngles (11 -10 -11)
-"cameras/drone/drone1" SET Transform localScale (0.7571884214385507 0.7571884214385507 0.7571884214385507)
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.3575556113125495
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.3025483760303582
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.22948253630509982
+"cameras/drone/drone0" SET Transform localPosition (-0.1559707540845856 0.1990757385820467 2.3)
+"cameras/drone/drone1" SET Transform localPosition (0.3879414025880621 0.824568057585683 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (-8 -4 17)
+"cameras/drone/drone0" SET Transform localScale (1.3936465096964201 1.3936465096964201 1.3936465096964201)
+"cameras/drone/drone1" SET Transform localEulerAngles (-11 -5 5)
+"cameras/drone/drone1" SET Transform localScale (1.2977589524714472 1.2977589524714472 1.2977589524714472)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
@@ -749,18 +686,18 @@ NOOP
 "spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
 "spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
 "spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 4.39314627865741 0)
-"cameras" SET Transform eulerAngles (10.127480522761111 0 0)
-"EnviroSky" SET EnviroSky GameTime.Hours 11
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.7998269595545582
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.5718565921702652
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.07861905935064542
-"cameras/drone/drone0" SET Transform localPosition (-1.1541814308021159 0.19396686600844576 2.3)
-"cameras/drone/drone1" SET Transform localPosition (-0.5974280396880896 0.8791464265351456 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (8 -19 10)
-"cameras/drone/drone0" SET Transform localScale (0.759055133788699 0.759055133788699 0.759055133788699)
-"cameras/drone/drone1" SET Transform localEulerAngles (-12 17 16)
-"cameras/drone/drone1" SET Transform localScale (1.019026704573962 1.019026704573962 1.019026704573962)
+"cameras" SET Transform position (0 4.152294901615825 0)
+"cameras" SET Transform eulerAngles (15.373950682752323 0 0)
+"EnviroSky" SET EnviroSky GameTime.Hours 18
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.7177018035891174
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.799278140668014
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.06181913486299462
+"cameras/drone/drone0" SET Transform localPosition (0.01017308784043447 0.40857337311285463 2.3)
+"cameras/drone/drone1" SET Transform localPosition (0.2819036687546461 1.2277228430582163 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (3 -6 5)
+"cameras/drone/drone0" SET Transform localScale (1.302467121820027 1.302467121820027 1.302467121820027)
+"cameras/drone/drone1" SET Transform localEulerAngles (-6 -2 -3)
+"cameras/drone/drone1" SET Transform localScale (1.3729024690849676 1.3729024690849676 1.3729024690849676)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
@@ -770,39 +707,18 @@ NOOP
 "spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
 "spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
 "spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 3.623680903446834 0)
-"cameras" SET Transform eulerAngles (9.75503759334569 0 0)
-"EnviroSky" SET EnviroSky GameTime.Hours 16
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.4365404081908064
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.4710430837227624
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.38633001693693925
-"cameras/drone/drone0" SET Transform localPosition (0.4370074384369391 0.6063754586804442 2.3)
-"cameras/drone/drone1" SET Transform localPosition (-0.8721580577222294 0.8713144665883448 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (4 -10 10)
-"cameras/drone/drone0" SET Transform localScale (0.9577625735647874 0.9577625735647874 0.9577625735647874)
-"cameras/drone/drone1" SET Transform localEulerAngles (4 10 -13)
-"cameras/drone/drone1" SET Transform localScale (0.720426712742384 0.720426712742384 0.720426712742384)
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
-NOOP
-"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
-"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
-"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
-"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 3.188766298229686 0)
-"cameras" SET Transform eulerAngles (-1.184273180888475 0 0)
+"cameras" SET Transform position (0 4.2590409359688355 0)
+"cameras" SET Transform eulerAngles (-1.8988287441810137 0 0)
 "EnviroSky" SET EnviroSky GameTime.Hours 14
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.167253755110537
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.3919852977403029
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.16277838911497355
-"cameras/drone/drone0" SET Transform localPosition (-0.5696392812958626 0.024512650877701103 2.3)
-"cameras/drone/drone1" SET Transform localPosition (1.1426717886763293 1.073519418785075 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (14 -19 1)
-"cameras/drone/drone0" SET Transform localScale (0.7985296662863135 0.7985296662863135 0.7985296662863135)
-"cameras/drone/drone1" SET Transform localEulerAngles (-10 -2 -10)
-"cameras/drone/drone1" SET Transform localScale (1.4425516110706886 1.4425516110706886 1.4425516110706886)
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.5382137098222842
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.9235238195318969
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.39165740383274983
+"cameras/drone/drone0" SET Transform localPosition (-0.5584853089492171 0.18286427543780376 2.3)
+"cameras/drone/drone1" SET Transform localPosition (-0.6426893037039396 1.1663649126372007 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (10 -17 12)
+"cameras/drone/drone0" SET Transform localScale (1.2088273105930987 1.2088273105930987 1.2088273105930987)
+"cameras/drone/drone1" SET Transform localEulerAngles (-13 12 12)
+"cameras/drone/drone1" SET Transform localScale (1.4195298759917292 1.4195298759917292 1.4195298759917292)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
@@ -812,18 +728,18 @@ NOOP
 "spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
 "spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
 "spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 4.525808958140266 0)
-"cameras" SET Transform eulerAngles (-19.80320059902197 0 0)
-"EnviroSky" SET EnviroSky GameTime.Hours 13
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.4139526959846906
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 0.9378231380972271
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.14324441867004825
-"cameras/drone/drone0" SET Transform localPosition (-1.050962695486735 -0.0003226050913303635 2.3)
-"cameras/drone/drone1" SET Transform localPosition (0.0197329126488488 1.1129024664867795 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (-18 8 -11)
-"cameras/drone/drone0" SET Transform localScale (1.1424693068334009 1.1424693068334009 1.1424693068334009)
-"cameras/drone/drone1" SET Transform localEulerAngles (-4 8 -5)
-"cameras/drone/drone1" SET Transform localScale (0.9052173450708121 0.9052173450708121 0.9052173450708121)
+"cameras" SET Transform position (0 3.4670175543149613 0)
+"cameras" SET Transform eulerAngles (1.6764659188688498 0 0)
+"EnviroSky" SET EnviroSky GameTime.Hours 10
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.3452177386181663
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.663334970824378
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.17774623254780497
+"cameras/drone/drone0" SET Transform localPosition (0.7282533610619317 0.4931059232879043 2.3)
+"cameras/drone/drone1" SET Transform localPosition (-0.6257791628946002 1.2240499195677066 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (-20 -9 20)
+"cameras/drone/drone0" SET Transform localScale (1.2688022974483193 1.2688022974483193 1.2688022974483193)
+"cameras/drone/drone1" SET Transform localEulerAngles (19 -19 16)
+"cameras/drone/drone1" SET Transform localScale (1.0163592101479422 1.0163592101479422 1.0163592101479422)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
@@ -833,18 +749,18 @@ NOOP
 "spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
 "spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
 "spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 4.5872194608641434 0)
-"cameras" SET Transform eulerAngles (17.281746663342574 0 0)
-"EnviroSky" SET EnviroSky GameTime.Hours 15
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.0988195727082974
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.6962683753013477
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.1290988839052581
-"cameras/drone/drone0" SET Transform localPosition (-0.11763186907392775 0.6021832199333881 2.3)
-"cameras/drone/drone1" SET Transform localPosition (0.8844974795391549 0.9998639560620665 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (-8 18 14)
-"cameras/drone/drone0" SET Transform localScale (0.7791051120296273 0.7791051120296273 0.7791051120296273)
-"cameras/drone/drone1" SET Transform localEulerAngles (-2 -9 -15)
-"cameras/drone/drone1" SET Transform localScale (0.9475189354743201 0.9475189354743201 0.9475189354743201)
+"cameras" SET Transform position (0 4.086938452350355 0)
+"cameras" SET Transform eulerAngles (8.411305068311002 0 0)
+"EnviroSky" SET EnviroSky GameTime.Hours 10
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.380519295125391
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.2051258939127065
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.10763203159852211
+"cameras/drone/drone0" SET Transform localPosition (-0.9820953837963352 0.004874965541960152 2.3)
+"cameras/drone/drone1" SET Transform localPosition (0.19469708655389173 1.2084541216329545 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (-7 -18 -19)
+"cameras/drone/drone0" SET Transform localScale (0.9790560644078564 0.9790560644078564 0.9790560644078564)
+"cameras/drone/drone1" SET Transform localEulerAngles (10 -15 2)
+"cameras/drone/drone1" SET Transform localScale (0.6179426323902477 0.6179426323902477 0.6179426323902477)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
@@ -854,18 +770,18 @@ NOOP
 "spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
 "spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
 "spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 3.249203142990991 0)
-"cameras" SET Transform eulerAngles (16.572936783445385 0 0)
-"EnviroSky" SET EnviroSky GameTime.Hours 15
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.4735049983793801
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.0210714900795697
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.2726836909646014
-"cameras/drone/drone0" SET Transform localPosition (0.3525192022839123 0.675985441959106 2.3)
-"cameras/drone/drone1" SET Transform localPosition (-0.10692154054679026 0.9778833057717058 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (-6 -20 -2)
-"cameras/drone/drone0" SET Transform localScale (1.164885027628936 1.164885027628936 1.164885027628936)
-"cameras/drone/drone1" SET Transform localEulerAngles (-18 9 12)
-"cameras/drone/drone1" SET Transform localScale (1.401626926404672 1.401626926404672 1.401626926404672)
+"cameras" SET Transform position (0 3.5181668262841344 0)
+"cameras" SET Transform eulerAngles (-15.075215089029289 0 0)
+"EnviroSky" SET EnviroSky GameTime.Hours 14
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.6395352068800877
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.3298568231113654
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.05710227362251428
+"cameras/drone/drone0" SET Transform localPosition (-0.9288620431316195 0.23770943000729344 2.3)
+"cameras/drone/drone1" SET Transform localPosition (-0.25126912295069403 1.0798851996800458 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (-19 -4 -14)
+"cameras/drone/drone0" SET Transform localScale (0.9384746232854981 0.9384746232854981 0.9384746232854981)
+"cameras/drone/drone1" SET Transform localEulerAngles (17 -9 8)
+"cameras/drone/drone1" SET Transform localScale (0.9030599663656351 0.9030599663656351 0.9030599663656351)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
@@ -875,60 +791,18 @@ NOOP
 "spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
 "spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
 "spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 3.7197668405725093 0)
-"cameras" SET Transform eulerAngles (-6.281761669326876 0 0)
-"EnviroSky" SET EnviroSky GameTime.Hours 11
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.8862146296307143
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.928201975540902
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.377275965053572
-"cameras/drone/drone0" SET Transform localPosition (1.0176688277998458 0.022828021721292335 2.3)
-"cameras/drone/drone1" SET Transform localPosition (1.1151512042798377 0.8530511991359981 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (5 9 1)
-"cameras/drone/drone0" SET Transform localScale (0.907060369185509 0.907060369185509 0.907060369185509)
-"cameras/drone/drone1" SET Transform localEulerAngles (-3 3 -15)
-"cameras/drone/drone1" SET Transform localScale (1.2439318547756546 1.2439318547756546 1.2439318547756546)
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
-NOOP
-"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
-"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
-"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
-"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 4.427964589380195 0)
-"cameras" SET Transform eulerAngles (-3.3323190954200896 0 0)
-"EnviroSky" SET EnviroSky GameTime.Hours 13
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.7838975592708404
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.3432505878972987
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.2393589673895163
-"cameras/drone/drone0" SET Transform localPosition (0.28719025279148447 0.27159195961431365 2.3)
-"cameras/drone/drone1" SET Transform localPosition (0.7753604409880752 0.9695760035529642 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (-8 -17 18)
-"cameras/drone/drone0" SET Transform localScale (0.8480093438658849 0.8480093438658849 0.8480093438658849)
-"cameras/drone/drone1" SET Transform localEulerAngles (-3 20 -18)
-"cameras/drone/drone1" SET Transform localScale (0.9257821286285031 0.9257821286285031 0.9257821286285031)
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
-NOOP
-"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
-"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
-"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
-"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 3.1337940140648706 0)
-"cameras" SET Transform eulerAngles (19.235506995975896 0 0)
+"cameras" SET Transform position (0 3.176033368562215 0)
+"cameras" SET Transform eulerAngles (15.418923229562445 0 0)
 "EnviroSky" SET EnviroSky GameTime.Hours 17
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.6408034113089478
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.3817220939574795
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.11065646535792202
-"cameras/drone/drone0" SET Transform localPosition (-1.0620047926969567 -0.25310544809343044 2.3)
-"cameras/drone/drone1" SET Transform localPosition (0.9737976534067363 0.8525639305792331 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (-8 -1 -18)
-"cameras/drone/drone0" SET Transform localScale (0.6272716925107977 0.6272716925107977 0.6272716925107977)
-"cameras/drone/drone1" SET Transform localEulerAngles (-12 4 11)
-"cameras/drone/drone1" SET Transform localScale (1.4547538065328458 1.4547538065328458 1.4547538065328458)
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.2164642544742919
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.3105908064386367
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.025637329909252493
+"cameras/drone/drone0" SET Transform localPosition (-0.5274645417154846 0.40737677571022074 2.3)
+"cameras/drone/drone1" SET Transform localPosition (0.362140811596005 1.1357106482813137 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (18 -18 20)
+"cameras/drone/drone0" SET Transform localScale (0.7570336909271321 0.7570336909271321 0.7570336909271321)
+"cameras/drone/drone1" SET Transform localEulerAngles (-13 -19 -14)
+"cameras/drone/drone1" SET Transform localScale (0.8666086989181526 0.8666086989181526 0.8666086989181526)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
@@ -938,18 +812,39 @@ NOOP
 "spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
 "spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
 "spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 3.155189051481427 0)
-"cameras" SET Transform eulerAngles (-11.008762413500857 0 0)
+"cameras" SET Transform position (0 3.5773699915128487 0)
+"cameras" SET Transform eulerAngles (18.396151480412854 0 0)
+"EnviroSky" SET EnviroSky GameTime.Hours 12
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.4748868416170908
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.6922702589822447
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.08796247075334339
+"cameras/drone/drone0" SET Transform localPosition (0.05106142028662686 0.5290701116273251 2.3)
+"cameras/drone/drone1" SET Transform localPosition (0.16034443359673678 1.1067513327308713 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (-4 -7 11)
+"cameras/drone/drone0" SET Transform localScale (1.3501263387458586 1.3501263387458586 1.3501263387458586)
+"cameras/drone/drone1" SET Transform localEulerAngles (-1 16 -9)
+"cameras/drone/drone1" SET Transform localScale (1.2859421978198866 1.2859421978198866 1.2859421978198866)
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
+NOOP
+"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
+"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
+"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
+"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
+"cameras" SET Transform position (0 4.507622317463602 0)
+"cameras" SET Transform eulerAngles (17.568670791738924 0 0)
 "EnviroSky" SET EnviroSky GameTime.Hours 9
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.4751347086235311
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.723871484634235
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.10785566066557895
-"cameras/drone/drone0" SET Transform localPosition (-0.740576924366144 0.5998408447405856 2.3)
-"cameras/drone/drone1" SET Transform localPosition (-0.8766590586902392 1.2418076107118732 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (3 -11 -9)
-"cameras/drone/drone0" SET Transform localScale (0.9971745458976482 0.9971745458976482 0.9971745458976482)
-"cameras/drone/drone1" SET Transform localEulerAngles (-20 -6 -20)
-"cameras/drone/drone1" SET Transform localScale (1.0069447239245077 1.0069447239245077 1.0069447239245077)
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.4172360579815209
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.3231811265922133
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.01762377448146375
+"cameras/drone/drone0" SET Transform localPosition (0.9117812358171233 0.13474990411600246 2.3)
+"cameras/drone/drone1" SET Transform localPosition (0.622890982994595 1.0180925317819116 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (13 -6 1)
+"cameras/drone/drone0" SET Transform localScale (1.4439960440688715 1.4439960440688715 1.4439960440688715)
+"cameras/drone/drone1" SET Transform localEulerAngles (7 19 -12)
+"cameras/drone/drone1" SET Transform localScale (0.7043332378101128 0.7043332378101128 0.7043332378101128)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
@@ -959,18 +854,18 @@ NOOP
 "spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
 "spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
 "spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 3.0272439195235847 0)
-"cameras" SET Transform eulerAngles (-1.9957452266208477 0 0)
-"EnviroSky" SET EnviroSky GameTime.Hours 17
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.6309506260245539
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.3618781287856618
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.17010450412093545
-"cameras/drone/drone0" SET Transform localPosition (-0.05548420865442072 -0.10892897936625806 2.3)
-"cameras/drone/drone1" SET Transform localPosition (-0.3551628663278066 1.1110561186748988 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (-9 16 19)
-"cameras/drone/drone0" SET Transform localScale (0.9672816142676065 0.9672816142676065 0.9672816142676065)
-"cameras/drone/drone1" SET Transform localEulerAngles (-10 20 -17)
-"cameras/drone/drone1" SET Transform localScale (1.0958218633835979 1.0958218633835979 1.0958218633835979)
+"cameras" SET Transform position (0 4.42831307027819 0)
+"cameras" SET Transform eulerAngles (0.9629666740081113 0 0)
+"EnviroSky" SET EnviroSky GameTime.Hours 15
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.096063483716909
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.6545136586638607
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.3945820750319287
+"cameras/drone/drone0" SET Transform localPosition (1.1334612665417187 -0.1326010242015751 2.3)
+"cameras/drone/drone1" SET Transform localPosition (0.20198131940359487 0.8650811568262795 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (1 -15 -19)
+"cameras/drone/drone0" SET Transform localScale (1.4544820988328582 1.4544820988328582 1.4544820988328582)
+"cameras/drone/drone1" SET Transform localEulerAngles (6 -18 -1)
+"cameras/drone/drone1" SET Transform localScale (1.0402052817535064 1.0402052817535064 1.0402052817535064)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
@@ -980,18 +875,39 @@ NOOP
 "spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
 "spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
 "spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 4.131456487352812 0)
-"cameras" SET Transform eulerAngles (-11.973406196227598 0 0)
+"cameras" SET Transform position (0 4.840820363773053 0)
+"cameras" SET Transform eulerAngles (-5.866306840738984 0 0)
+"EnviroSky" SET EnviroSky GameTime.Hours 18
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.8510344991976817
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.5435702486857972
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.30846402898966596
+"cameras/drone/drone0" SET Transform localPosition (0.4967006948895438 -0.08623631398659087 2.3)
+"cameras/drone/drone1" SET Transform localPosition (1.0306289830402335 1.2910812757143029 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (-19 -11 -11)
+"cameras/drone/drone0" SET Transform localScale (1.447433791345782 1.447433791345782 1.447433791345782)
+"cameras/drone/drone1" SET Transform localEulerAngles (5 1 -16)
+"cameras/drone/drone1" SET Transform localScale (0.685309266910137 0.685309266910137 0.685309266910137)
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
+NOOP
+"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
+"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
+"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
+"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
+"cameras" SET Transform position (0 3.797128464880993 0)
+"cameras" SET Transform eulerAngles (-16.513477652991526 0 0)
 "EnviroSky" SET EnviroSky GameTime.Hours 10
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.9445357376280206
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.3742466451348556
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.19321643400927158
-"cameras/drone/drone0" SET Transform localPosition (0.767333445193598 -0.1908043117352614 2.3)
-"cameras/drone/drone1" SET Transform localPosition (0.9070575438838719 0.8593609839920722 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (12 13 20)
-"cameras/drone/drone0" SET Transform localScale (0.9928124100863378 0.9928124100863378 0.9928124100863378)
-"cameras/drone/drone1" SET Transform localEulerAngles (-11 -15 8)
-"cameras/drone/drone1" SET Transform localScale (1.2720730538785898 1.2720730538785898 1.2720730538785898)
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.8849553148533786
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.086670142488631
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.16123753641307592
+"cameras/drone/drone0" SET Transform localPosition (-0.6144834093757036 0.16346188597379335 2.3)
+"cameras/drone/drone1" SET Transform localPosition (-1.0948904206144465 1.2425197172164233 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (-5 20 -18)
+"cameras/drone/drone0" SET Transform localScale (0.8544486509208993 0.8544486509208993 0.8544486509208993)
+"cameras/drone/drone1" SET Transform localEulerAngles (-4 -18 -7)
+"cameras/drone/drone1" SET Transform localScale (1.372910992453419 1.372910992453419 1.372910992453419)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
@@ -1001,207 +917,18 @@ NOOP
 "spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
 "spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
 "spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 3.3122586097750704 0)
-"cameras" SET Transform eulerAngles (13.970431127409384 0 0)
-"EnviroSky" SET EnviroSky GameTime.Hours 18
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.3478811692570718
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.871426218141481
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.0956029952807283
-"cameras/drone/drone0" SET Transform localPosition (0.2565964451035623 0.6917097987546406 2.3)
-"cameras/drone/drone1" SET Transform localPosition (1.1637300827385781 0.8889790576545027 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (-20 0 -11)
-"cameras/drone/drone0" SET Transform localScale (0.6358608434655413 0.6358608434655413 0.6358608434655413)
-"cameras/drone/drone1" SET Transform localEulerAngles (-13 15 -4)
-"cameras/drone/drone1" SET Transform localScale (1.2541887318236842 1.2541887318236842 1.2541887318236842)
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
-NOOP
-"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
-"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
-"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
-"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 4.633290286837221 0)
-"cameras" SET Transform eulerAngles (-15.329460017099299 0 0)
-"EnviroSky" SET EnviroSky GameTime.Hours 9
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.7003501483045285
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.283177216911077
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.11517087520375822
-"cameras/drone/drone0" SET Transform localPosition (-0.021076147518226396 -0.08670908330130195 2.3)
-"cameras/drone/drone1" SET Transform localPosition (-0.8012827097700419 0.9961254998350874 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (-6 6 17)
-"cameras/drone/drone0" SET Transform localScale (0.9188985211540222 0.9188985211540222 0.9188985211540222)
-"cameras/drone/drone1" SET Transform localEulerAngles (-15 -11 18)
-"cameras/drone/drone1" SET Transform localScale (1.114143630425326 1.114143630425326 1.114143630425326)
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
-NOOP
-"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
-"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
-"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
-"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 3.1429520356959117 0)
-"cameras" SET Transform eulerAngles (12.712489355893375 0 0)
-"EnviroSky" SET EnviroSky GameTime.Hours 9
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.013878479060025
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.0767577048712857
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.34840126147383743
-"cameras/drone/drone0" SET Transform localPosition (0.9853571389983966 0.5606507952764903 2.3)
-"cameras/drone/drone1" SET Transform localPosition (-0.7596467973788708 1.0610973683955798 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (-18 -8 18)
-"cameras/drone/drone0" SET Transform localScale (1.236633897512087 1.236633897512087 1.236633897512087)
-"cameras/drone/drone1" SET Transform localEulerAngles (-20 13 11)
-"cameras/drone/drone1" SET Transform localScale (1.4847385476164607 1.4847385476164607 1.4847385476164607)
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
-NOOP
-"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
-"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
-"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
-"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 4.469225616676012 0)
-"cameras" SET Transform eulerAngles (5.305369646663316 0 0)
-"EnviroSky" SET EnviroSky GameTime.Hours 12
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.2911852931925596
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.6363598818388723
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.25973103220457844
-"cameras/drone/drone0" SET Transform localPosition (0.34553351605843363 0.28783758941045084 2.3)
-"cameras/drone/drone1" SET Transform localPosition (1.0955013131646136 0.9735222400715071 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (18 -14 -9)
-"cameras/drone/drone0" SET Transform localScale (1.1882591885869487 1.1882591885869487 1.1882591885869487)
-"cameras/drone/drone1" SET Transform localEulerAngles (-14 -1 13)
-"cameras/drone/drone1" SET Transform localScale (0.7520065181185214 0.7520065181185214 0.7520065181185214)
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
-NOOP
-"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
-"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
-"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
-"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 4.830928958864799 0)
-"cameras" SET Transform eulerAngles (1.0476754015126204 0 0)
-"EnviroSky" SET EnviroSky GameTime.Hours 16
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.5552295757430239
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.6740159324357455
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.07692708472793802
-"cameras/drone/drone0" SET Transform localPosition (0.14498465045493858 0.37911250695984994 2.3)
-"cameras/drone/drone1" SET Transform localPosition (1.0579000900167161 1.034286360254218 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (4 -18 15)
-"cameras/drone/drone0" SET Transform localScale (1.0784168226922288 1.0784168226922288 1.0784168226922288)
-"cameras/drone/drone1" SET Transform localEulerAngles (17 -20 3)
-"cameras/drone/drone1" SET Transform localScale (1.4739863072166206 1.4739863072166206 1.4739863072166206)
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
-NOOP
-"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
-"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
-"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
-"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 4.854000126775626 0)
-"cameras" SET Transform eulerAngles (6.631650095258422 0 0)
-"EnviroSky" SET EnviroSky GameTime.Hours 13
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.621890471447862
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.8685469323295343
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.30146682591300333
-"cameras/drone/drone0" SET Transform localPosition (0.5321433541669687 0.16951550650528996 2.3)
-"cameras/drone/drone1" SET Transform localPosition (0.6900275785611492 1.0816340942780402 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (-14 7 14)
-"cameras/drone/drone0" SET Transform localScale (0.6620794937617221 0.6620794937617221 0.6620794937617221)
-"cameras/drone/drone1" SET Transform localEulerAngles (-19 17 7)
-"cameras/drone/drone1" SET Transform localScale (1.0357310766469774 1.0357310766469774 1.0357310766469774)
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
-NOOP
-"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
-"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
-"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
-"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 3.524978158728624 0)
-"cameras" SET Transform eulerAngles (12.356291471301915 0 0)
-"EnviroSky" SET EnviroSky GameTime.Hours 18
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.5056563137647628
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.3743803513316728
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.22207271919977442
-"cameras/drone/drone0" SET Transform localPosition (0.33170186443563776 0.020396606084622848 2.3)
-"cameras/drone/drone1" SET Transform localPosition (0.9051198144664758 0.8093121330545978 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (9 2 2)
-"cameras/drone/drone0" SET Transform localScale (1.3640165202880525 1.3640165202880525 1.3640165202880525)
-"cameras/drone/drone1" SET Transform localEulerAngles (-15 3 10)
-"cameras/drone/drone1" SET Transform localScale (0.6525824834449767 0.6525824834449767 0.6525824834449767)
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
-NOOP
-"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
-"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
-"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
-"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 3.6014856544370906 0)
-"cameras" SET Transform eulerAngles (-6.426553523260665 0 0)
-"EnviroSky" SET EnviroSky GameTime.Hours 18
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.3334312082301618
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.0202634773832888
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.11914117359512773
-"cameras/drone/drone0" SET Transform localPosition (0.944964151451724 0.626425009940883 2.3)
-"cameras/drone/drone1" SET Transform localPosition (0.324024024467376 1.2185023663162924 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (-2 -3 6)
-"cameras/drone/drone0" SET Transform localScale (0.7247986125862286 0.7247986125862286 0.7247986125862286)
-"cameras/drone/drone1" SET Transform localEulerAngles (-15 11 -4)
-"cameras/drone/drone1" SET Transform localScale (1.2379266698648816 1.2379266698648816 1.2379266698648816)
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
-NOOP
-"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
-"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
-"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
-"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 3.357747800213303 0)
-"cameras" SET Transform eulerAngles (6.300789750379167 0 0)
-"EnviroSky" SET EnviroSky GameTime.Hours 12
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.1519796468443322
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.34512786349685
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.12952914312322283
-"cameras/drone/drone0" SET Transform localPosition (-1.0993421475049205 0.6872558727225238 2.3)
-"cameras/drone/drone1" SET Transform localPosition (-0.9870247670831982 0.9883926104106928 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (2 -13 19)
-"cameras/drone/drone0" SET Transform localScale (0.6289184292238545 0.6289184292238545 0.6289184292238545)
-"cameras/drone/drone1" SET Transform localEulerAngles (-6 16 -15)
-"cameras/drone/drone1" SET Transform localScale (1.2172225681226707 1.2172225681226707 1.2172225681226707)
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
-NOOP
-"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
-"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
-"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
-"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 3.720617245660878 0)
-"cameras" SET Transform eulerAngles (11.839704072331713 0 0)
+"cameras" SET Transform position (0 4.029245145624139 0)
+"cameras" SET Transform eulerAngles (-18.413381495279502 0 0)
 "EnviroSky" SET EnviroSky GameTime.Hours 17
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.2904352161609538
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.314282346521153
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.22852814973490113
-"cameras/drone/drone0" SET Transform localPosition (-0.3421353739000702 -0.017080183723566622 2.3)
-"cameras/drone/drone1" SET Transform localPosition (1.1479383847927866 0.8558383973548523 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (-18 13 1)
-"cameras/drone/drone0" SET Transform localScale (1.2833510239303139 1.2833510239303139 1.2833510239303139)
-"cameras/drone/drone1" SET Transform localEulerAngles (7 3 -6)
-"cameras/drone/drone1" SET Transform localScale (0.9746360056775047 0.9746360056775047 0.9746360056775047)
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.4495916283465301
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.0222490239374167
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.3136887975217437
+"cameras/drone/drone0" SET Transform localPosition (0.7291395361449822 0.6140628630789375 2.3)
+"cameras/drone/drone1" SET Transform localPosition (0.9560888090732511 1.1974311959243953 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (-14 4 -6)
+"cameras/drone/drone0" SET Transform localScale (1.3764906619523383 1.3764906619523383 1.3764906619523383)
+"cameras/drone/drone1" SET Transform localEulerAngles (-17 4 12)
+"cameras/drone/drone1" SET Transform localScale (1.3086421631717817 1.3086421631717817 1.3086421631717817)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
@@ -1211,501 +938,18 @@ NOOP
 "spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
 "spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
 "spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 3.8274383958969156 0)
-"cameras" SET Transform eulerAngles (-8.98719827763907 0 0)
-"EnviroSky" SET EnviroSky GameTime.Hours 11
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.8706040692962251
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.7564672171984053
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.061146729789054
-"cameras/drone/drone0" SET Transform localPosition (1.0171764200648046 -0.21134655215916404 2.3)
-"cameras/drone/drone1" SET Transform localPosition (0.28434465646000695 0.9804310496438974 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (16 18 10)
-"cameras/drone/drone0" SET Transform localScale (0.7542264656742366 0.7542264656742366 0.7542264656742366)
-"cameras/drone/drone1" SET Transform localEulerAngles (11 -19 14)
-"cameras/drone/drone1" SET Transform localScale (1.3699730950352809 1.3699730950352809 1.3699730950352809)
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
-NOOP
-"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
-"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
-"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
-"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 3.3814076836803584 0)
-"cameras" SET Transform eulerAngles (-15.337649079420705 0 0)
-"EnviroSky" SET EnviroSky GameTime.Hours 12
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.7457942617041792
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.2902805722656179
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.3791438372642889
-"cameras/drone/drone0" SET Transform localPosition (-0.238968426083491 0.26043830115297845 2.3)
-"cameras/drone/drone1" SET Transform localPosition (-0.5997423237069976 1.0132126439779534 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (-16 -9 10)
-"cameras/drone/drone0" SET Transform localScale (0.7369926727914584 0.7369926727914584 0.7369926727914584)
-"cameras/drone/drone1" SET Transform localEulerAngles (-20 15 -3)
-"cameras/drone/drone1" SET Transform localScale (0.8624044819758208 0.8624044819758208 0.8624044819758208)
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
-NOOP
-"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
-"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
-"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
-"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 3.2384498863630693 0)
-"cameras" SET Transform eulerAngles (7.457826245911654 0 0)
-"EnviroSky" SET EnviroSky GameTime.Hours 15
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.538137236384006
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.289499810353423
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.15125432195694205
-"cameras/drone/drone0" SET Transform localPosition (0.4614933471066145 0.18979847029960667 2.3)
-"cameras/drone/drone1" SET Transform localPosition (-0.6856045490955897 1.064211408685658 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (-18 -5 0)
-"cameras/drone/drone0" SET Transform localScale (0.84522555373291 0.84522555373291 0.84522555373291)
-"cameras/drone/drone1" SET Transform localEulerAngles (-4 11 4)
-"cameras/drone/drone1" SET Transform localScale (0.6955429111859691 0.6955429111859691 0.6955429111859691)
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
-NOOP
-"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
-"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
-"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
-"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 4.155995701140899 0)
-"cameras" SET Transform eulerAngles (-3.4736123456105794 0 0)
-"EnviroSky" SET EnviroSky GameTime.Hours 18
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.7176737102351144
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.9254233563024576
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.2575997438910295
-"cameras/drone/drone0" SET Transform localPosition (-0.7890416122535029 0.29887831905179946 2.3)
-"cameras/drone/drone1" SET Transform localPosition (-0.3682466490729239 1.1345431844076808 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (14 -1 -9)
-"cameras/drone/drone0" SET Transform localScale (0.896304007719839 0.896304007719839 0.896304007719839)
-"cameras/drone/drone1" SET Transform localEulerAngles (6 -20 -1)
-"cameras/drone/drone1" SET Transform localScale (0.7867195980786226 0.7867195980786226 0.7867195980786226)
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
-NOOP
-"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
-"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
-"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
-"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 4.3145439225655675 0)
-"cameras" SET Transform eulerAngles (4.142634188487776 0 0)
-"EnviroSky" SET EnviroSky GameTime.Hours 15
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.5179739387214416
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.8779631559750016
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.2897228383213174
-"cameras/drone/drone0" SET Transform localPosition (0.9113778868019609 0.1268305210964667 2.3)
-"cameras/drone/drone1" SET Transform localPosition (-0.7518846035474444 1.298299678022551 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (-7 -18 6)
-"cameras/drone/drone0" SET Transform localScale (1.2284763060902733 1.2284763060902733 1.2284763060902733)
-"cameras/drone/drone1" SET Transform localEulerAngles (10 7 16)
-"cameras/drone/drone1" SET Transform localScale (1.382301590039288 1.382301590039288 1.382301590039288)
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
-NOOP
-"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
-"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
-"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
-"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 4.050287992729434 0)
-"cameras" SET Transform eulerAngles (7.754521006919731 0 0)
-"EnviroSky" SET EnviroSky GameTime.Hours 9
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.5360514319777043
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.5104300395930768
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.18120916868255177
-"cameras/drone/drone0" SET Transform localPosition (0.4214987874509799 0.5122563668964009 2.3)
-"cameras/drone/drone1" SET Transform localPosition (-0.7932893843231088 1.1056642064562492 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (17 6 18)
-"cameras/drone/drone0" SET Transform localScale (1.271884207198489 1.271884207198489 1.271884207198489)
-"cameras/drone/drone1" SET Transform localEulerAngles (-9 3 19)
-"cameras/drone/drone1" SET Transform localScale (0.9992484981331566 0.9992484981331566 0.9992484981331566)
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
-NOOP
-"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
-"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
-"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
-"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 3.250322918945479 0)
-"cameras" SET Transform eulerAngles (-2.439514146082441 0 0)
-"EnviroSky" SET EnviroSky GameTime.Hours 11
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.8876833523619143
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.6449640335216071
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.14269057488564238
-"cameras/drone/drone0" SET Transform localPosition (-0.9777995782815672 0.42962506163051345 2.3)
-"cameras/drone/drone1" SET Transform localPosition (-1.0515547282880868 1.2505960704998014 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (5 -1 10)
-"cameras/drone/drone0" SET Transform localScale (1.243271807535511 1.243271807535511 1.243271807535511)
-"cameras/drone/drone1" SET Transform localEulerAngles (18 2 -4)
-"cameras/drone/drone1" SET Transform localScale (0.6231264596481549 0.6231264596481549 0.6231264596481549)
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
-NOOP
-"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
-"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
-"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
-"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 3.950919548671852 0)
-"cameras" SET Transform eulerAngles (5.894158685492712 0 0)
-"EnviroSky" SET EnviroSky GameTime.Hours 13
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.8307767580390645
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.1676814346833422
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.21569233309661595
-"cameras/drone/drone0" SET Transform localPosition (0.4411718991454425 0.4819200198333327 2.3)
-"cameras/drone/drone1" SET Transform localPosition (-0.3440069373952246 0.8607734236283711 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (8 14 -12)
-"cameras/drone/drone0" SET Transform localScale (0.7995488835418866 0.7995488835418866 0.7995488835418866)
-"cameras/drone/drone1" SET Transform localEulerAngles (-1 17 -3)
-"cameras/drone/drone1" SET Transform localScale (0.8850905419279693 0.8850905419279693 0.8850905419279693)
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
-NOOP
-"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
-"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
-"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
-"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 4.412285845441453 0)
-"cameras" SET Transform eulerAngles (-3.7328099022689223 0 0)
-"EnviroSky" SET EnviroSky GameTime.Hours 10
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.42630384631501334
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.2712281665790657
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.20740468441752224
-"cameras/drone/drone0" SET Transform localPosition (0.03523451628168228 0.27945250486838197 2.3)
-"cameras/drone/drone1" SET Transform localPosition (-0.17329236965346073 1.04905943407328 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (-20 -14 -2)
-"cameras/drone/drone0" SET Transform localScale (1.0294098216346663 1.0294098216346663 1.0294098216346663)
-"cameras/drone/drone1" SET Transform localEulerAngles (-14 -19 -20)
-"cameras/drone/drone1" SET Transform localScale (0.9875778546901681 0.9875778546901681 0.9875778546901681)
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
-NOOP
-"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
-"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
-"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
-"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 4.642442350191231 0)
-"cameras" SET Transform eulerAngles (-13.133832225096445 0 0)
-"EnviroSky" SET EnviroSky GameTime.Hours 12
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.43384788375714034
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.8326170226289709
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.0372921476225855
-"cameras/drone/drone0" SET Transform localPosition (-0.022095065185365748 0.5848035083149115 2.3)
-"cameras/drone/drone1" SET Transform localPosition (0.18450631272812945 1.277944542915459 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (-19 -7 -14)
-"cameras/drone/drone0" SET Transform localScale (1.0531448278792217 1.0531448278792217 1.0531448278792217)
-"cameras/drone/drone1" SET Transform localEulerAngles (7 3 0)
-"cameras/drone/drone1" SET Transform localScale (0.6548842464739603 0.6548842464739603 0.6548842464739603)
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
-NOOP
-"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
-"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
-"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
-"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 3.3840267832968225 0)
-"cameras" SET Transform eulerAngles (-3.2113983994050557 0 0)
-"EnviroSky" SET EnviroSky GameTime.Hours 18
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.5740910161581358
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.062864761497573
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.14452614658910212
-"cameras/drone/drone0" SET Transform localPosition (0.5328482759800346 0.2839502763878236 2.3)
-"cameras/drone/drone1" SET Transform localPosition (-0.9575742271184292 1.0845469916267763 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (2 -1 -4)
-"cameras/drone/drone0" SET Transform localScale (0.932193858807993 0.932193858807993 0.932193858807993)
-"cameras/drone/drone1" SET Transform localEulerAngles (6 -10 7)
-"cameras/drone/drone1" SET Transform localScale (1.16222232419804 1.16222232419804 1.16222232419804)
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
-NOOP
-"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
-"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
-"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
-"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 3.463645382906978 0)
-"cameras" SET Transform eulerAngles (-16.450828469600836 0 0)
-"EnviroSky" SET EnviroSky GameTime.Hours 12
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.9941369930099908
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.1746352765612749
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.36861407749005715
-"cameras/drone/drone0" SET Transform localPosition (-1.1015491873532872 0.5560723689659568 2.3)
-"cameras/drone/drone1" SET Transform localPosition (-0.7855321796605774 0.8822453773405267 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (18 17 -2)
-"cameras/drone/drone0" SET Transform localScale (0.9274359318208227 0.9274359318208227 0.9274359318208227)
-"cameras/drone/drone1" SET Transform localEulerAngles (-15 -5 16)
-"cameras/drone/drone1" SET Transform localScale (1.3980770326248853 1.3980770326248853 1.3980770326248853)
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
-NOOP
-"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
-"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
-"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
-"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 3.268824094375936 0)
-"cameras" SET Transform eulerAngles (-1.1135427342714586 0 0)
-"EnviroSky" SET EnviroSky GameTime.Hours 18
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.9480790640240079
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.5475049601267425
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.1176910526200321
-"cameras/drone/drone0" SET Transform localPosition (1.1439492721073596 0.2034499175963697 2.3)
-"cameras/drone/drone1" SET Transform localPosition (0.022053399175587796 0.8020010011824503 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (-9 1 11)
-"cameras/drone/drone0" SET Transform localScale (1.113574554942532 1.113574554942532 1.113574554942532)
-"cameras/drone/drone1" SET Transform localEulerAngles (6 15 7)
-"cameras/drone/drone1" SET Transform localScale (0.9537304275148126 0.9537304275148126 0.9537304275148126)
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
-NOOP
-"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
-"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
-"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
-"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 4.267346329066436 0)
-"cameras" SET Transform eulerAngles (8.666381648720488 0 0)
-"EnviroSky" SET EnviroSky GameTime.Hours 12
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.2668357875210785
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.5419318989219637
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.2717858259168115
-"cameras/drone/drone0" SET Transform localPosition (1.0963400610998904 0.027301591451729335 2.3)
-"cameras/drone/drone1" SET Transform localPosition (1.088523708454147 1.1749572673692232 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (15 17 -4)
-"cameras/drone/drone0" SET Transform localScale (1.4793657792267 1.4793657792267 1.4793657792267)
-"cameras/drone/drone1" SET Transform localEulerAngles (12 10 -18)
-"cameras/drone/drone1" SET Transform localScale (0.8761533687911871 0.8761533687911871 0.8761533687911871)
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
-NOOP
-"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
-"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
-"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
-"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 3.634721267686257 0)
-"cameras" SET Transform eulerAngles (-8.508331407340064 0 0)
-"EnviroSky" SET EnviroSky GameTime.Hours 13
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.5876731892505316
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.909029473894785
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.014005933670325944
-"cameras/drone/drone0" SET Transform localPosition (-0.02149588310322148 0.5914657199183941 2.3)
-"cameras/drone/drone1" SET Transform localPosition (0.373032530096864 1.168352044875262 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (-4 11 -19)
-"cameras/drone/drone0" SET Transform localScale (0.6604689504969397 0.6604689504969397 0.6604689504969397)
-"cameras/drone/drone1" SET Transform localEulerAngles (-8 -5 13)
-"cameras/drone/drone1" SET Transform localScale (0.7956945344106106 0.7956945344106106 0.7956945344106106)
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
-NOOP
-"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
-"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
-"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
-"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 3.5262600417326695 0)
-"cameras" SET Transform eulerAngles (16.823671103203566 0 0)
-"EnviroSky" SET EnviroSky GameTime.Hours 16
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.2992846564864449
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.2570636455494393
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.16825916166226837
-"cameras/drone/drone0" SET Transform localPosition (1.0534278579452796 0.09921252904927585 2.3)
-"cameras/drone/drone1" SET Transform localPosition (0.6649635781245935 1.2127792914233095 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (6 10 9)
-"cameras/drone/drone0" SET Transform localScale (0.9301711235098236 0.9301711235098236 0.9301711235098236)
-"cameras/drone/drone1" SET Transform localEulerAngles (-18 -10 2)
-"cameras/drone/drone1" SET Transform localScale (0.8564357247429768 0.8564357247429768 0.8564357247429768)
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
-NOOP
-"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
-"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
-"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
-"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 4.615049871981611 0)
-"cameras" SET Transform eulerAngles (11.0184087148251 0 0)
-"EnviroSky" SET EnviroSky GameTime.Hours 9
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.5529563082854002
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.8750678382345578
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.1603650031629328
-"cameras/drone/drone0" SET Transform localPosition (-0.20131420309223091 -0.05432268336624818 2.3)
-"cameras/drone/drone1" SET Transform localPosition (0.7117639576547445 0.9121932438141719 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (-4 11 11)
-"cameras/drone/drone0" SET Transform localScale (1.0288981175764391 1.0288981175764391 1.0288981175764391)
-"cameras/drone/drone1" SET Transform localEulerAngles (-10 6 -2)
-"cameras/drone/drone1" SET Transform localScale (0.997894933144451 0.997894933144451 0.997894933144451)
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
-NOOP
-"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
-"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
-"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
-"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 4.828900970123393 0)
-"cameras" SET Transform eulerAngles (-3.766791207595567 0 0)
-"EnviroSky" SET EnviroSky GameTime.Hours 9
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.8692283727821162
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.673350708087599
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.3402067237645454
-"cameras/drone/drone0" SET Transform localPosition (-0.5310805843779656 0.6230734745265181 2.3)
-"cameras/drone/drone1" SET Transform localPosition (0.9217630201119651 0.853727223085954 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (1 -10 -2)
-"cameras/drone/drone0" SET Transform localScale (0.9473358430573652 0.9473358430573652 0.9473358430573652)
-"cameras/drone/drone1" SET Transform localEulerAngles (5 12 12)
-"cameras/drone/drone1" SET Transform localScale (1.2576907831084245 1.2576907831084245 1.2576907831084245)
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
-NOOP
-"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
-"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
-"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
-"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 3.397744157777714 0)
-"cameras" SET Transform eulerAngles (5.000187501797377 0 0)
-"EnviroSky" SET EnviroSky GameTime.Hours 15
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.4354549501786585
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.3023861627362185
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.16273142800262352
-"cameras/drone/drone0" SET Transform localPosition (-0.22730665391117577 0.38914947515965564 2.3)
-"cameras/drone/drone1" SET Transform localPosition (0.6776305264326683 0.9759213134471859 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (14 5 -13)
-"cameras/drone/drone0" SET Transform localScale (1.1790695716676722 1.1790695716676722 1.1790695716676722)
-"cameras/drone/drone1" SET Transform localEulerAngles (5 20 -4)
-"cameras/drone/drone1" SET Transform localScale (0.6198893810624869 0.6198893810624869 0.6198893810624869)
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
-NOOP
-"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
-"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
-"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
-"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 4.47231771909849 0)
-"cameras" SET Transform eulerAngles (-0.7505936253184728 0 0)
-"EnviroSky" SET EnviroSky GameTime.Hours 14
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.9227807607206276
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.7684441243683162
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.07422043565876067
-"cameras/drone/drone0" SET Transform localPosition (-1.0218777505657397 -0.2762535478752722 2.3)
-"cameras/drone/drone1" SET Transform localPosition (0.3521411141828428 1.0356120177069266 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (18 6 -18)
-"cameras/drone/drone0" SET Transform localScale (1.2540766959295717 1.2540766959295717 1.2540766959295717)
-"cameras/drone/drone1" SET Transform localEulerAngles (18 -12 -16)
-"cameras/drone/drone1" SET Transform localScale (1.1216108699054197 1.1216108699054197 1.1216108699054197)
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
-NOOP
-"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
-"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
-"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
-"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 3.2591604031022348 0)
-"cameras" SET Transform eulerAngles (-19.08811201262572 0 0)
-"EnviroSky" SET EnviroSky GameTime.Hours 16
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.6475244529827305
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.30643312420955
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.1291109410574199
-"cameras/drone/drone0" SET Transform localPosition (-0.6399254783965294 -0.04802311857388658 2.3)
-"cameras/drone/drone1" SET Transform localPosition (-0.23890710563570328 0.9688749189104209 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (2 -1 19)
-"cameras/drone/drone0" SET Transform localScale (1.0777350929785654 1.0777350929785654 1.0777350929785654)
-"cameras/drone/drone1" SET Transform localEulerAngles (0 1 3)
-"cameras/drone/drone1" SET Transform localScale (0.9878558001717159 0.9878558001717159 0.9878558001717159)
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
-NOOP
-"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
-"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
-"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
-"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 3.8573575081138314 0)
-"cameras" SET Transform eulerAngles (-4.631210202860583 0 0)
-"EnviroSky" SET EnviroSky GameTime.Hours 14
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.0412498211571437
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 0.9633376643540166
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.28931528911179427
-"cameras/drone/drone0" SET Transform localPosition (0.35252302623496634 0.1380952373762439 2.3)
-"cameras/drone/drone1" SET Transform localPosition (-0.14699118575304881 0.8293411797515698 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (-18 20 8)
-"cameras/drone/drone0" SET Transform localScale (0.7918709826399506 0.7918709826399506 0.7918709826399506)
-"cameras/drone/drone1" SET Transform localEulerAngles (18 -3 -14)
-"cameras/drone/drone1" SET Transform localScale (0.7055569901618233 0.7055569901618233 0.7055569901618233)
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
-NOOP
-"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
-"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
-"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
-"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 4.05871941835614 0)
-"cameras" SET Transform eulerAngles (15.842406745043057 0 0)
-"EnviroSky" SET EnviroSky GameTime.Hours 13
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.550170778046025
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.0405298922494708
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.2902252689343539
-"cameras/drone/drone0" SET Transform localPosition (1.1951919075921376 0.6070077003498844 2.3)
-"cameras/drone/drone1" SET Transform localPosition (0.9791607136131095 0.9775522463192574 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (14 19 14)
-"cameras/drone/drone0" SET Transform localScale (1.0989019770667392 1.0989019770667392 1.0989019770667392)
-"cameras/drone/drone1" SET Transform localEulerAngles (-18 6 0)
-"cameras/drone/drone1" SET Transform localScale (1.1387240507798286 1.1387240507798286 1.1387240507798286)
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
-NOOP
-"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
-"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
-"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
-"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 3.5688073362324895 0)
-"cameras" SET Transform eulerAngles (5.2444384229791865 0 0)
+"cameras" SET Transform position (0 3.1881752368488248 0)
+"cameras" SET Transform eulerAngles (14.83510230376855 0 0)
 "EnviroSky" SET EnviroSky GameTime.Hours 17
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.9961724281486617
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 0.977342296881581
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.0911476854247288
-"cameras/drone/drone0" SET Transform localPosition (0.8549928238680173 0.3208308884546183 2.3)
-"cameras/drone/drone1" SET Transform localPosition (-0.8351626452081107 0.9001239141778706 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (-5 -20 -15)
-"cameras/drone/drone0" SET Transform localScale (0.67366025657811 0.67366025657811 0.67366025657811)
-"cameras/drone/drone1" SET Transform localEulerAngles (-4 13 -17)
-"cameras/drone/drone1" SET Transform localScale (0.8124960779835203 0.8124960779835203 0.8124960779835203)
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.4265444147227201
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.0619282226647588
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.10119858003183474
+"cameras/drone/drone0" SET Transform localPosition (1.1928704298035002 0.5267252528200976 2.3)
+"cameras/drone/drone1" SET Transform localPosition (0.7828746132815512 1.2863915065806382 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (-19 -19 -14)
+"cameras/drone/drone0" SET Transform localScale (1.3750646917261304 1.3750646917261304 1.3750646917261304)
+"cameras/drone/drone1" SET Transform localEulerAngles (14 6 -16)
+"cameras/drone/drone1" SET Transform localScale (1.1393689074388456 1.1393689074388456 1.1393689074388456)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
@@ -1715,18 +959,39 @@ NOOP
 "spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
 "spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
 "spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 4.766258715939546 0)
-"cameras" SET Transform eulerAngles (18.05463828802629 0 0)
+"cameras" SET Transform position (0 3.043688376199265 0)
+"cameras" SET Transform eulerAngles (1.6860801596485508 0 0)
+"EnviroSky" SET EnviroSky GameTime.Hours 14
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.6799492077547485
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 0.916573209669048
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.04795763012098693
+"cameras/drone/drone0" SET Transform localPosition (-0.517786315423848 0.5822415754530232 2.3)
+"cameras/drone/drone1" SET Transform localPosition (0.6353238119669409 1.233246781277336 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (-2 17 8)
+"cameras/drone/drone0" SET Transform localScale (1.293771107285563 1.293771107285563 1.293771107285563)
+"cameras/drone/drone1" SET Transform localEulerAngles (2 12 -1)
+"cameras/drone/drone1" SET Transform localScale (0.7405127886476359 0.7405127886476359 0.7405127886476359)
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
+NOOP
+"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
+"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
+"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
+"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
+"cameras" SET Transform position (0 3.9337456485603304 0)
+"cameras" SET Transform eulerAngles (19.718914416791613 0 0)
 "EnviroSky" SET EnviroSky GameTime.Hours 17
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.6704484831833214
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.2262471907167787
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.21752122792226053
-"cameras/drone/drone0" SET Transform localPosition (-1.146264094809559 0.5119686078950658 2.3)
-"cameras/drone/drone1" SET Transform localPosition (-0.028552826648269525 0.9217438704589335 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (7 -4 9)
-"cameras/drone/drone0" SET Transform localScale (1.1796867973940395 1.1796867973940395 1.1796867973940395)
-"cameras/drone/drone1" SET Transform localEulerAngles (7 -1 -5)
-"cameras/drone/drone1" SET Transform localScale (1.22896418126023 1.22896418126023 1.22896418126023)
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.3234434782805016
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.81700201012602
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.25227169096023305
+"cameras/drone/drone0" SET Transform localPosition (-0.0976514425596251 -0.0576364190044138 2.3)
+"cameras/drone/drone1" SET Transform localPosition (0.5054901381654191 1.0484015636586872 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (10 18 5)
+"cameras/drone/drone0" SET Transform localScale (1.139409650826917 1.139409650826917 1.139409650826917)
+"cameras/drone/drone1" SET Transform localEulerAngles (14 17 14)
+"cameras/drone/drone1" SET Transform localScale (0.9497544443378709 0.9497544443378709 0.9497544443378709)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
@@ -1736,396 +1001,18 @@ NOOP
 "spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
 "spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
 "spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 3.5540284033714933 0)
-"cameras" SET Transform eulerAngles (7.992281850708345 0 0)
-"EnviroSky" SET EnviroSky GameTime.Hours 18
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.2314633724806914
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.7861320567671535
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.29236433173717685
-"cameras/drone/drone0" SET Transform localPosition (0.04345181492078609 0.0017686741324664523 2.3)
-"cameras/drone/drone1" SET Transform localPosition (0.03153586308321876 1.2852656571565015 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (8 9 -14)
-"cameras/drone/drone0" SET Transform localScale (1.1357077604986667 1.1357077604986667 1.1357077604986667)
-"cameras/drone/drone1" SET Transform localEulerAngles (2 -7 18)
-"cameras/drone/drone1" SET Transform localScale (0.8053603756970251 0.8053603756970251 0.8053603756970251)
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
-NOOP
-"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
-"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
-"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
-"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 3.9448918764772243 0)
-"cameras" SET Transform eulerAngles (-2.989013630520553 0 0)
-"EnviroSky" SET EnviroSky GameTime.Hours 9
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.6080590539316693
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.0824322630183212
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.16144390301199404
-"cameras/drone/drone0" SET Transform localPosition (-0.2522588454802016 -0.011730604332985839 2.3)
-"cameras/drone/drone1" SET Transform localPosition (0.4447033868046968 1.110313023859241 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (-11 -9 19)
-"cameras/drone/drone0" SET Transform localScale (1.1229769008775847 1.1229769008775847 1.1229769008775847)
-"cameras/drone/drone1" SET Transform localEulerAngles (1 -4 -6)
-"cameras/drone/drone1" SET Transform localScale (1.4867486237257026 1.4867486237257026 1.4867486237257026)
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
-NOOP
-"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
-"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
-"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
-"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 3.8773544987701567 0)
-"cameras" SET Transform eulerAngles (13.997867141967049 0 0)
-"EnviroSky" SET EnviroSky GameTime.Hours 10
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.6449779078758048
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.9646108026418583
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.23218035865004807
-"cameras/drone/drone0" SET Transform localPosition (0.03702579627382918 0.04085856249934622 2.3)
-"cameras/drone/drone1" SET Transform localPosition (-0.7618508537592747 0.8650404555389785 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (17 3 3)
-"cameras/drone/drone0" SET Transform localScale (0.7605720712568684 0.7605720712568684 0.7605720712568684)
-"cameras/drone/drone1" SET Transform localEulerAngles (-1 20 -4)
-"cameras/drone/drone1" SET Transform localScale (0.6052335032419395 0.6052335032419395 0.6052335032419395)
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
-NOOP
-"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
-"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
-"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
-"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 3.744638871083695 0)
-"cameras" SET Transform eulerAngles (14.17750752748237 0 0)
-"EnviroSky" SET EnviroSky GameTime.Hours 9
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.5573728895066696
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.72781805895582
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.1884746210386708
-"cameras/drone/drone0" SET Transform localPosition (-0.42497488057749566 0.3050429735879164 2.3)
-"cameras/drone/drone1" SET Transform localPosition (-1.1345460127000566 0.9503084470210736 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (13 0 14)
-"cameras/drone/drone0" SET Transform localScale (1.2239986406730474 1.2239986406730474 1.2239986406730474)
-"cameras/drone/drone1" SET Transform localEulerAngles (10 -2 -15)
-"cameras/drone/drone1" SET Transform localScale (1.145053461426089 1.145053461426089 1.145053461426089)
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
-NOOP
-"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
-"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
-"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
-"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 4.894712736456329 0)
-"cameras" SET Transform eulerAngles (-6.729595127215253 0 0)
-"EnviroSky" SET EnviroSky GameTime.Hours 14
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.52162617169515
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.5880441199557525
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.35878612081951916
-"cameras/drone/drone0" SET Transform localPosition (-0.9952495796574152 0.2838504054186208 2.3)
-"cameras/drone/drone1" SET Transform localPosition (0.21461992616490533 0.9473711890073772 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (11 14 -13)
-"cameras/drone/drone0" SET Transform localScale (0.9400908067970681 0.9400908067970681 0.9400908067970681)
-"cameras/drone/drone1" SET Transform localEulerAngles (-13 0 7)
-"cameras/drone/drone1" SET Transform localScale (0.8079997876034468 0.8079997876034468 0.8079997876034468)
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
-NOOP
-"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
-"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
-"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
-"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 3.224047338535226 0)
-"cameras" SET Transform eulerAngles (11.204470453998976 0 0)
-"EnviroSky" SET EnviroSky GameTime.Hours 18
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.8613876058894364
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.7596607515503584
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.13053041809527302
-"cameras/drone/drone0" SET Transform localPosition (0.8557104274117389 0.5532208367629075 2.3)
-"cameras/drone/drone1" SET Transform localPosition (1.151188550376412 0.9002471190874916 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (-18 20 20)
-"cameras/drone/drone0" SET Transform localScale (0.8030058696953424 0.8030058696953424 0.8030058696953424)
-"cameras/drone/drone1" SET Transform localEulerAngles (-12 -20 -3)
-"cameras/drone/drone1" SET Transform localScale (0.9717309161632601 0.9717309161632601 0.9717309161632601)
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
-NOOP
-"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
-"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
-"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
-"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 4.653494586701694 0)
-"cameras" SET Transform eulerAngles (-2.5259700047269327 0 0)
-"EnviroSky" SET EnviroSky GameTime.Hours 11
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.4570721831989766
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.3562840971971
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.36185794028321133
-"cameras/drone/drone0" SET Transform localPosition (0.19041253897638266 -0.0658622316980147 2.3)
-"cameras/drone/drone1" SET Transform localPosition (0.10799339194721225 0.8078782396132436 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (12 -2 -5)
-"cameras/drone/drone0" SET Transform localScale (1.4302363573403127 1.4302363573403127 1.4302363573403127)
-"cameras/drone/drone1" SET Transform localEulerAngles (-15 2 8)
-"cameras/drone/drone1" SET Transform localScale (1.2383239304692486 1.2383239304692486 1.2383239304692486)
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
-NOOP
-"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
-"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
-"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
-"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 4.727846103234508 0)
-"cameras" SET Transform eulerAngles (1.3313784388835899 0 0)
-"EnviroSky" SET EnviroSky GameTime.Hours 18
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.8990221321927278
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.7798758558528194
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.37095424531219223
-"cameras/drone/drone0" SET Transform localPosition (0.01511802771490367 -0.29343236226349606 2.3)
-"cameras/drone/drone1" SET Transform localPosition (-0.671051899101039 1.2384336890347327 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (7 -8 -7)
-"cameras/drone/drone0" SET Transform localScale (0.6610688050550999 0.6610688050550999 0.6610688050550999)
-"cameras/drone/drone1" SET Transform localEulerAngles (-2 2 -17)
-"cameras/drone/drone1" SET Transform localScale (1.3118197832399607 1.3118197832399607 1.3118197832399607)
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
-NOOP
-"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
-"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
-"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
-"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 3.756473181250338 0)
-"cameras" SET Transform eulerAngles (-1.7137611160223827 0 0)
-"EnviroSky" SET EnviroSky GameTime.Hours 9
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.212985418486353
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 0.9965710301952514
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.35113370608226296
-"cameras/drone/drone0" SET Transform localPosition (-0.6598689765434951 0.2507611889193548 2.3)
-"cameras/drone/drone1" SET Transform localPosition (-0.9241812680965492 0.8058430257543212 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (7 3 -1)
-"cameras/drone/drone0" SET Transform localScale (1.04547954696811 1.04547954696811 1.04547954696811)
-"cameras/drone/drone1" SET Transform localEulerAngles (-16 -7 11)
-"cameras/drone/drone1" SET Transform localScale (1.3639514240853532 1.3639514240853532 1.3639514240853532)
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
-NOOP
-"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
-"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
-"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
-"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 3.8924011599767563 0)
-"cameras" SET Transform eulerAngles (-19.231444462158066 0 0)
-"EnviroSky" SET EnviroSky GameTime.Hours 18
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.8003712696089973
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.2010616471746425
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.298467987593152
-"cameras/drone/drone0" SET Transform localPosition (-0.6994236772245785 0.533221573697874 2.3)
-"cameras/drone/drone1" SET Transform localPosition (-0.35994235686039555 0.8778298757425036 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (-2 -17 -15)
-"cameras/drone/drone0" SET Transform localScale (0.6184714297774281 0.6184714297774281 0.6184714297774281)
-"cameras/drone/drone1" SET Transform localEulerAngles (-20 -6 -16)
-"cameras/drone/drone1" SET Transform localScale (1.2490653408338703 1.2490653408338703 1.2490653408338703)
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
-NOOP
-"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
-"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
-"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
-"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 3.1079238819004362 0)
-"cameras" SET Transform eulerAngles (-0.2091704039756621 0 0)
-"EnviroSky" SET EnviroSky GameTime.Hours 11
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.8937928191608145
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.5367548354147735
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.14810146185261527
-"cameras/drone/drone0" SET Transform localPosition (0.31516055052422964 0.34834996694685544 2.3)
-"cameras/drone/drone1" SET Transform localPosition (0.836639739008133 1.2861756179851835 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (2 -14 7)
-"cameras/drone/drone0" SET Transform localScale (1.3732710191892052 1.3732710191892052 1.3732710191892052)
-"cameras/drone/drone1" SET Transform localEulerAngles (-11 -16 6)
-"cameras/drone/drone1" SET Transform localScale (1.1467323418364876 1.1467323418364876 1.1467323418364876)
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
-NOOP
-"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
-"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
-"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
-"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 3.962190604795516 0)
-"cameras" SET Transform eulerAngles (-5.045882938577332 0 0)
-"EnviroSky" SET EnviroSky GameTime.Hours 14
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.1346152635147442
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.3462685954039035
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.09371267567496405
-"cameras/drone/drone0" SET Transform localPosition (-0.10159415087564438 0.37437075352437127 2.3)
-"cameras/drone/drone1" SET Transform localPosition (-0.8671954835684184 1.110490879067361 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (0 -19 -3)
-"cameras/drone/drone0" SET Transform localScale (0.768890512260261 0.768890512260261 0.768890512260261)
-"cameras/drone/drone1" SET Transform localEulerAngles (10 -20 -2)
-"cameras/drone/drone1" SET Transform localScale (1.118563418236933 1.118563418236933 1.118563418236933)
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
-NOOP
-"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
-"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
-"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
-"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 4.12276030282519 0)
-"cameras" SET Transform eulerAngles (-16.340904473379215 0 0)
-"EnviroSky" SET EnviroSky GameTime.Hours 10
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.7361871454786029
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.7523418530894386
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.2182730723679813
-"cameras/drone/drone0" SET Transform localPosition (-0.26352063840182127 0.2500587778072954 2.3)
-"cameras/drone/drone1" SET Transform localPosition (-0.892280752432378 1.1833231279772238 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (-5 -13 -10)
-"cameras/drone/drone0" SET Transform localScale (1.2959618948904819 1.2959618948904819 1.2959618948904819)
-"cameras/drone/drone1" SET Transform localEulerAngles (-5 9 -4)
-"cameras/drone/drone1" SET Transform localScale (0.6623586212187024 0.6623586212187024 0.6623586212187024)
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
-NOOP
-"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
-"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
-"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
-"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 3.1812579591848986 0)
-"cameras" SET Transform eulerAngles (-9.48134277034075 0 0)
-"EnviroSky" SET EnviroSky GameTime.Hours 15
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.6400787000771287
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 0.9219743552219052
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.04197397660313702
-"cameras/drone/drone0" SET Transform localPosition (-1.1076088528125276 -0.04510252774685647 2.3)
-"cameras/drone/drone1" SET Transform localPosition (-0.6081436437290663 0.9266814058093009 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (-7 -3 -17)
-"cameras/drone/drone0" SET Transform localScale (0.9820616374165578 0.9820616374165578 0.9820616374165578)
-"cameras/drone/drone1" SET Transform localEulerAngles (-6 -2 14)
-"cameras/drone/drone1" SET Transform localScale (1.3733267260551782 1.3733267260551782 1.3733267260551782)
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
-NOOP
-"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
-"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
-"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
-"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 4.264180264995443 0)
-"cameras" SET Transform eulerAngles (-18.510729222547432 0 0)
-"EnviroSky" SET EnviroSky GameTime.Hours 18
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.5805774207589425
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 0.9241781126980332
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.3496778007340596
-"cameras/drone/drone0" SET Transform localPosition (0.9278770453511644 0.43839360741026184 2.3)
-"cameras/drone/drone1" SET Transform localPosition (-0.5637092492404651 0.976726682075791 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (-12 3 -2)
-"cameras/drone/drone0" SET Transform localScale (1.2614009431987334 1.2614009431987334 1.2614009431987334)
-"cameras/drone/drone1" SET Transform localEulerAngles (-13 12 -20)
-"cameras/drone/drone1" SET Transform localScale (0.9388460474045619 0.9388460474045619 0.9388460474045619)
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
-NOOP
-"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
-"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
-"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
-"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 3.9049367747488892 0)
-"cameras" SET Transform eulerAngles (-1.0799252318573203 0 0)
-"EnviroSky" SET EnviroSky GameTime.Hours 16
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.1064904258299324
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.2086324130183415
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.10529556681091737
-"cameras/drone/drone0" SET Transform localPosition (-0.39296367417351064 -0.1554314604210007 2.3)
-"cameras/drone/drone1" SET Transform localPosition (-0.29636084604447677 1.1292446194799477 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (1 10 -3)
-"cameras/drone/drone0" SET Transform localScale (1.0770478380722333 1.0770478380722333 1.0770478380722333)
-"cameras/drone/drone1" SET Transform localEulerAngles (-20 15 -4)
-"cameras/drone/drone1" SET Transform localScale (0.8737081156311752 0.8737081156311752 0.8737081156311752)
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
-NOOP
-"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
-"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
-"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
-"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 3.032823367060785 0)
-"cameras" SET Transform eulerAngles (0.4759178726685107 0 0)
-"EnviroSky" SET EnviroSky GameTime.Hours 15
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.8162031374886266
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.7449296812973432
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.13823977498754406
-"cameras/drone/drone0" SET Transform localPosition (-0.2871807466552483 0.07583613308324894 2.3)
-"cameras/drone/drone1" SET Transform localPosition (-0.8307002613468527 1.1612037526884085 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (-2 -17 20)
-"cameras/drone/drone0" SET Transform localScale (1.2593703027245222 1.2593703027245222 1.2593703027245222)
-"cameras/drone/drone1" SET Transform localEulerAngles (16 -20 -12)
-"cameras/drone/drone1" SET Transform localScale (1.228766860782645 1.228766860782645 1.228766860782645)
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
-NOOP
-"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
-"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
-"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
-"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 4.614378725540194 0)
-"cameras" SET Transform eulerAngles (9.710140925770396 0 0)
-"EnviroSky" SET EnviroSky GameTime.Hours 14
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.0269519306770731
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.0615890198405915
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.2743693654581177
-"cameras/drone/drone0" SET Transform localPosition (0.5287836792200062 0.5260344551980547 2.3)
-"cameras/drone/drone1" SET Transform localPosition (-0.7208108156570503 1.1834962740495152 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (16 -9 -20)
-"cameras/drone/drone0" SET Transform localScale (1.024852889377452 1.024852889377452 1.024852889377452)
-"cameras/drone/drone1" SET Transform localEulerAngles (17 -4 19)
-"cameras/drone/drone1" SET Transform localScale (0.8449089784753412 0.8449089784753412 0.8449089784753412)
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
-NOOP
-"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
-"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
-"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
-"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 3.437122923556393 0)
-"cameras" SET Transform eulerAngles (-11.373345781180525 0 0)
+"cameras" SET Transform position (0 3.3827431569088313 0)
+"cameras" SET Transform eulerAngles (-5.332817243419793 0 0)
 "EnviroSky" SET EnviroSky GameTime.Hours 12
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.5329632631354506
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.4880697926968707
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.03152715607615462
-"cameras/drone/drone0" SET Transform localPosition (-1.098551925368931 0.15247851604290402 2.3)
-"cameras/drone/drone1" SET Transform localPosition (0.690741039879605 0.8135581288425616 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (1 -19 -8)
-"cameras/drone/drone0" SET Transform localScale (1.2640690553739322 1.2640690553739322 1.2640690553739322)
-"cameras/drone/drone1" SET Transform localEulerAngles (2 -6 14)
-"cameras/drone/drone1" SET Transform localScale (1.0340290472153693 1.0340290472153693 1.0340290472153693)
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.4959871403059468
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.8561181497909418
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.3288196744185467
+"cameras/drone/drone0" SET Transform localPosition (-0.08241676421091704 -0.2494687708382261 2.3)
+"cameras/drone/drone1" SET Transform localPosition (-0.96018291112865 1.0814689769858479 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (-19 -6 6)
+"cameras/drone/drone0" SET Transform localScale (1.1771363966586552 1.1771363966586552 1.1771363966586552)
+"cameras/drone/drone1" SET Transform localEulerAngles (6 4 -20)
+"cameras/drone/drone1" SET Transform localScale (0.6590837618350397 0.6590837618350397 0.6590837618350397)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
@@ -2135,18 +1022,18 @@ NOOP
 "spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
 "spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
 "spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 3.596709996683756 0)
-"cameras" SET Transform eulerAngles (6.6422136619744805 0 0)
-"EnviroSky" SET EnviroSky GameTime.Hours 14
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.4686798358985852
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 0.9418602039840681
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.20447528486400937
-"cameras/drone/drone0" SET Transform localPosition (1.012932111358775 0.20997938001720268 2.3)
-"cameras/drone/drone1" SET Transform localPosition (-0.10530978225459964 1.0182019325538905 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (13 -18 -19)
-"cameras/drone/drone0" SET Transform localScale (1.260306434857212 1.260306434857212 1.260306434857212)
-"cameras/drone/drone1" SET Transform localEulerAngles (-9 3 14)
-"cameras/drone/drone1" SET Transform localScale (1.0539456616693634 1.0539456616693634 1.0539456616693634)
+"cameras" SET Transform position (0 4.710219412634158 0)
+"cameras" SET Transform eulerAngles (11.447334191208807 0 0)
+"EnviroSky" SET EnviroSky GameTime.Hours 16
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.1540244348225355
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.816276289207169
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.09619145472953905
+"cameras/drone/drone0" SET Transform localPosition (0.5063489045453733 0.4234256662239994 2.3)
+"cameras/drone/drone1" SET Transform localPosition (0.5692956022733253 1.1587197841105503 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (-11 -6 -9)
+"cameras/drone/drone0" SET Transform localScale (1.4229519640220847 1.4229519640220847 1.4229519640220847)
+"cameras/drone/drone1" SET Transform localEulerAngles (10 10 -20)
+"cameras/drone/drone1" SET Transform localScale (0.6965477920073948 0.6965477920073948 0.6965477920073948)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
@@ -2156,18 +1043,18 @@ NOOP
 "spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
 "spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
 "spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 4.818437294608566 0)
-"cameras" SET Transform eulerAngles (-6.25066453743937 0 0)
-"EnviroSky" SET EnviroSky GameTime.Hours 14
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.8768238027479299
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.0657791328215873
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.3997793271466638
-"cameras/drone/drone0" SET Transform localPosition (0.811154790122824 0.05609679764104708 2.3)
-"cameras/drone/drone1" SET Transform localPosition (-0.8457511689127188 0.8854739225545458 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (-5 -18 -11)
-"cameras/drone/drone0" SET Transform localScale (1.0034717869496248 1.0034717869496248 1.0034717869496248)
-"cameras/drone/drone1" SET Transform localEulerAngles (-1 -2 16)
-"cameras/drone/drone1" SET Transform localScale (1.0946359811824784 1.0946359811824784 1.0946359811824784)
+"cameras" SET Transform position (0 4.958857300015422 0)
+"cameras" SET Transform eulerAngles (0.6980232415786567 0 0)
+"EnviroSky" SET EnviroSky GameTime.Hours 10
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.725311398839773
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.258495486196494
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.14874405436357163
+"cameras/drone/drone0" SET Transform localPosition (0.8986905007360606 0.031841904027389234 2.3)
+"cameras/drone/drone1" SET Transform localPosition (0.8565231318494295 1.1099586318571648 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (-14 2 -3)
+"cameras/drone/drone0" SET Transform localScale (1.2875087016552111 1.2875087016552111 1.2875087016552111)
+"cameras/drone/drone1" SET Transform localEulerAngles (11 18 -7)
+"cameras/drone/drone1" SET Transform localScale (1.4878344090979292 1.4878344090979292 1.4878344090979292)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
@@ -2177,18 +1064,18 @@ NOOP
 "spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
 "spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
 "spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 4.311188641343129 0)
-"cameras" SET Transform eulerAngles (-0.4489981464477637 0 0)
+"cameras" SET Transform position (0 3.538742679770875 0)
+"cameras" SET Transform eulerAngles (4.964555059936025 0 0)
 "EnviroSky" SET EnviroSky GameTime.Hours 18
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.525650832744141
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.8265461412556263
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.34691962717523617
-"cameras/drone/drone0" SET Transform localPosition (-0.8957015218736368 0.4323227069064434 2.3)
-"cameras/drone/drone1" SET Transform localPosition (0.7412780577078724 1.198160449267975 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (5 11 7)
-"cameras/drone/drone0" SET Transform localScale (0.9571386546134847 0.9571386546134847 0.9571386546134847)
-"cameras/drone/drone1" SET Transform localEulerAngles (-14 -13 6)
-"cameras/drone/drone1" SET Transform localScale (0.9146922135582 0.9146922135582 0.9146922135582)
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.5322201144402503
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.791733703192124
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.009267671850085969
+"cameras/drone/drone0" SET Transform localPosition (0.013453698646685996 0.4187530096527105 2.3)
+"cameras/drone/drone1" SET Transform localPosition (0.36360915264781246 1.1855646706376588 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (1 -1 -9)
+"cameras/drone/drone0" SET Transform localScale (1.4243540598614635 1.4243540598614635 1.4243540598614635)
+"cameras/drone/drone1" SET Transform localEulerAngles (-20 8 -19)
+"cameras/drone/drone1" SET Transform localScale (1.0758625924334804 1.0758625924334804 1.0758625924334804)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
@@ -2198,81 +1085,1194 @@ NOOP
 "spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
 "spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
 "spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 3.355346471737189 0)
-"cameras" SET Transform eulerAngles (13.38389304844653 0 0)
-"EnviroSky" SET EnviroSky GameTime.Hours 15
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.2046932274040858
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.9575239375597597
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.0876618337177388
-"cameras/drone/drone0" SET Transform localPosition (0.31550360494922214 0.34182171942156553 2.3)
-"cameras/drone/drone1" SET Transform localPosition (-0.5728530271765871 0.9803013287941351 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (20 3 -8)
-"cameras/drone/drone0" SET Transform localScale (0.612633348226807 0.612633348226807 0.612633348226807)
-"cameras/drone/drone1" SET Transform localEulerAngles (8 17 -9)
-"cameras/drone/drone1" SET Transform localScale (1.1667995798337945 1.1667995798337945 1.1667995798337945)
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
-NOOP
-"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
-"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
-"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
-"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 3.186218759304044 0)
-"cameras" SET Transform eulerAngles (-1.22357830673036 0 0)
-"EnviroSky" SET EnviroSky GameTime.Hours 11
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.586296818455522
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.642546086554157
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.30231487952904706
-"cameras/drone/drone0" SET Transform localPosition (1.1095083623286228 0.19666336971583037 2.3)
-"cameras/drone/drone1" SET Transform localPosition (-0.9903271117428806 0.9351090006779258 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (-5 -19 9)
-"cameras/drone/drone0" SET Transform localScale (0.7519917362576575 0.7519917362576575 0.7519917362576575)
-"cameras/drone/drone1" SET Transform localEulerAngles (17 -5 -13)
-"cameras/drone/drone1" SET Transform localScale (0.9630274408081736 0.9630274408081736 0.9630274408081736)
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
-NOOP
-"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
-"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
-"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
-"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 4.7361040281341715 0)
-"cameras" SET Transform eulerAngles (-9.816265680735142 0 0)
-"EnviroSky" SET EnviroSky GameTime.Hours 14
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.556242355734049
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.0912111023096556
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.2281142017788901
-"cameras/drone/drone0" SET Transform localPosition (-0.20823006483451423 0.08234916230076522 2.3)
-"cameras/drone/drone1" SET Transform localPosition (1.1562069565064002 1.2942749514947165 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (-11 -16 2)
-"cameras/drone/drone0" SET Transform localScale (0.7446480766139367 0.7446480766139367 0.7446480766139367)
-"cameras/drone/drone1" SET Transform localEulerAngles (0 3 0)
-"cameras/drone/drone1" SET Transform localScale (0.7952466546779959 0.7952466546779959 0.7952466546779959)
-"disk1" EXECUTE Sensors.Disk Snapshot
-"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
-NOOP
-"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
-"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
-"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
-"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
-"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
-"cameras" SET Transform position (0 3.282202123148573 0)
-"cameras" SET Transform eulerAngles (2.1748164427051755 0 0)
+"cameras" SET Transform position (0 3.1937040566044717 0)
+"cameras" SET Transform eulerAngles (16.772341411799594 0 0)
 "EnviroSky" SET EnviroSky GameTime.Hours 13
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.8774709907657026
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.4330664058097529
-"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.17122845417154117
-"cameras/drone/drone0" SET Transform localPosition (-1.0140474567472535 0.5443076582606134 2.3)
-"cameras/drone/drone1" SET Transform localPosition (0.8196908316924854 0.8758827450141435 2.3)
-"cameras/drone/drone0" SET Transform localEulerAngles (-9 6 17)
-"cameras/drone/drone0" SET Transform localScale (1.0206460843429286 1.0206460843429286 1.0206460843429286)
-"cameras/drone/drone1" SET Transform localEulerAngles (-2 -8 -14)
-"cameras/drone/drone1" SET Transform localScale (1.057417350982022 1.057417350982022 1.057417350982022)
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.464259654989597
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.9808505031223298
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.15307403215120072
+"cameras/drone/drone0" SET Transform localPosition (0.7394244026969898 0.26193358801310734 2.3)
+"cameras/drone/drone1" SET Transform localPosition (-0.7725341025152404 1.265836751078814 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (-1 -14 -16)
+"cameras/drone/drone0" SET Transform localScale (0.9204698320021554 0.9204698320021554 0.9204698320021554)
+"cameras/drone/drone1" SET Transform localEulerAngles (-7 -3 -1)
+"cameras/drone/drone1" SET Transform localScale (1.1354141058213965 1.1354141058213965 1.1354141058213965)
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
+NOOP
+"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
+"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
+"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
+"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
+"cameras" SET Transform position (0 3.185532390778425 0)
+"cameras" SET Transform eulerAngles (-15.975587950483856 0 0)
+"EnviroSky" SET EnviroSky GameTime.Hours 15
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.1816817273183595
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.7031963862673063
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.09330095883149259
+"cameras/drone/drone0" SET Transform localPosition (1.0798948173503804 0.3392869618613748 2.3)
+"cameras/drone/drone1" SET Transform localPosition (0.28423829443443616 1.1440975842373406 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (-2 -19 -7)
+"cameras/drone/drone0" SET Transform localScale (1.2421725593952764 1.2421725593952764 1.2421725593952764)
+"cameras/drone/drone1" SET Transform localEulerAngles (-5 18 -1)
+"cameras/drone/drone1" SET Transform localScale (1.4961792888773986 1.4961792888773986 1.4961792888773986)
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
+NOOP
+"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
+"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
+"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
+"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
+"cameras" SET Transform position (0 3.844084714811162 0)
+"cameras" SET Transform eulerAngles (14.337436215588475 0 0)
+"EnviroSky" SET EnviroSky GameTime.Hours 10
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.1446191555290244
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.3063710887325108
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.3132520000884482
+"cameras/drone/drone0" SET Transform localPosition (-0.9879750172223055 -0.13515590760279367 2.3)
+"cameras/drone/drone1" SET Transform localPosition (-0.9775485636943796 1.237734538054463 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (13 4 -18)
+"cameras/drone/drone0" SET Transform localScale (1.0083010640533003 1.0083010640533003 1.0083010640533003)
+"cameras/drone/drone1" SET Transform localEulerAngles (-20 6 -18)
+"cameras/drone/drone1" SET Transform localScale (1.098819435072827 1.098819435072827 1.098819435072827)
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
+NOOP
+"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
+"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
+"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
+"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
+"cameras" SET Transform position (0 3.372319693191468 0)
+"cameras" SET Transform eulerAngles (-0.4621540304377767 0 0)
+"EnviroSky" SET EnviroSky GameTime.Hours 18
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.5677223978555451
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.24715038991592
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.35485865866605204
+"cameras/drone/drone0" SET Transform localPosition (0.0007272925198142932 0.29401225107736134 2.3)
+"cameras/drone/drone1" SET Transform localPosition (-0.8463109064559338 1.2919655146595281 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (11 13 -2)
+"cameras/drone/drone0" SET Transform localScale (0.9695021364984436 0.9695021364984436 0.9695021364984436)
+"cameras/drone/drone1" SET Transform localEulerAngles (6 6 8)
+"cameras/drone/drone1" SET Transform localScale (1.158982381019864 1.158982381019864 1.158982381019864)
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
+NOOP
+"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
+"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
+"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
+"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
+"cameras" SET Transform position (0 3.198042323425774 0)
+"cameras" SET Transform eulerAngles (3.6228569620250823 0 0)
+"EnviroSky" SET EnviroSky GameTime.Hours 16
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.0449597904260282
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.583077817673842
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.10605553027682896
+"cameras/drone/drone0" SET Transform localPosition (0.9459001831574934 0.46316942443542614 2.3)
+"cameras/drone/drone1" SET Transform localPosition (0.15387764925843772 1.0843833753508294 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (4 9 14)
+"cameras/drone/drone0" SET Transform localScale (1.4110679964565773 1.4110679964565773 1.4110679964565773)
+"cameras/drone/drone1" SET Transform localEulerAngles (-1 4 -18)
+"cameras/drone/drone1" SET Transform localScale (0.9593230128185357 0.9593230128185357 0.9593230128185357)
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
+NOOP
+"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
+"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
+"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
+"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
+"cameras" SET Transform position (0 4.109446850976815 0)
+"cameras" SET Transform eulerAngles (-10.577331116016824 0 0)
+"EnviroSky" SET EnviroSky GameTime.Hours 12
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.5459539258460198
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.1500770455424485
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.34690585123959944
+"cameras/drone/drone0" SET Transform localPosition (-0.8176364469344568 0.26679898433091515 2.3)
+"cameras/drone/drone1" SET Transform localPosition (0.05311326471695432 1.062204261166895 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (5 -12 -4)
+"cameras/drone/drone0" SET Transform localScale (0.7820461211598159 0.7820461211598159 0.7820461211598159)
+"cameras/drone/drone1" SET Transform localEulerAngles (-2 3 -14)
+"cameras/drone/drone1" SET Transform localScale (1.3159288582902067 1.3159288582902067 1.3159288582902067)
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
+NOOP
+"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
+"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
+"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
+"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
+"cameras" SET Transform position (0 3.529893549244072 0)
+"cameras" SET Transform eulerAngles (0.9791420085493385 0 0)
+"EnviroSky" SET EnviroSky GameTime.Hours 15
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.5610746668551168
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.7035693330511552
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.3120954667284295
+"cameras/drone/drone0" SET Transform localPosition (0.342978792529514 0.5612492720598392 2.3)
+"cameras/drone/drone1" SET Transform localPosition (-0.5025314223360967 1.198079672315463 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (-19 -9 13)
+"cameras/drone/drone0" SET Transform localScale (0.6565018517016199 0.6565018517016199 0.6565018517016199)
+"cameras/drone/drone1" SET Transform localEulerAngles (-11 0 9)
+"cameras/drone/drone1" SET Transform localScale (1.2876614658091512 1.2876614658091512 1.2876614658091512)
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
+NOOP
+"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
+"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
+"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
+"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
+"cameras" SET Transform position (0 4.498295000022148 0)
+"cameras" SET Transform eulerAngles (2.0565148251872643 0 0)
+"EnviroSky" SET EnviroSky GameTime.Hours 9
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.8799999112408546
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.4249890631208364
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.07435659254785253
+"cameras/drone/drone0" SET Transform localPosition (-0.9065582137186676 0.5043124984814047 2.3)
+"cameras/drone/drone1" SET Transform localPosition (0.07236227498060077 1.0726141479650275 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (-4 -15 17)
+"cameras/drone/drone0" SET Transform localScale (1.1800586876284425 1.1800586876284425 1.1800586876284425)
+"cameras/drone/drone1" SET Transform localEulerAngles (17 -12 13)
+"cameras/drone/drone1" SET Transform localScale (1.1522106745116742 1.1522106745116742 1.1522106745116742)
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
+NOOP
+"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
+"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
+"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
+"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
+"cameras" SET Transform position (0 4.550311692648744 0)
+"cameras" SET Transform eulerAngles (-11.658115306625238 0 0)
+"EnviroSky" SET EnviroSky GameTime.Hours 11
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.7603558524878256
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.491102583271194
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.012514201384780411
+"cameras/drone/drone0" SET Transform localPosition (0.5535973015064954 0.6931512978805594 2.3)
+"cameras/drone/drone1" SET Transform localPosition (-0.010201578850268955 1.0031052660377884 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (-18 -16 3)
+"cameras/drone/drone0" SET Transform localScale (1.041980917287866 1.041980917287866 1.041980917287866)
+"cameras/drone/drone1" SET Transform localEulerAngles (-17 -5 15)
+"cameras/drone/drone1" SET Transform localScale (1.2761953703257496 1.2761953703257496 1.2761953703257496)
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
+NOOP
+"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
+"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
+"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
+"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
+"cameras" SET Transform position (0 4.5451228290516195 0)
+"cameras" SET Transform eulerAngles (-7.641049993372594 0 0)
+"EnviroSky" SET EnviroSky GameTime.Hours 10
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.6368974162391741
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.9887622049869504
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.024171759452249964
+"cameras/drone/drone0" SET Transform localPosition (-0.7199870417651064 0.3039862447713862 2.3)
+"cameras/drone/drone1" SET Transform localPosition (-0.26221706334660755 0.9207810925452129 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (-7 -5 15)
+"cameras/drone/drone0" SET Transform localScale (0.8995841385924273 0.8995841385924273 0.8995841385924273)
+"cameras/drone/drone1" SET Transform localEulerAngles (-13 -2 13)
+"cameras/drone/drone1" SET Transform localScale (1.3513443400701375 1.3513443400701375 1.3513443400701375)
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
+NOOP
+"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
+"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
+"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
+"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
+"cameras" SET Transform position (0 4.40149091381582 0)
+"cameras" SET Transform eulerAngles (-16.007307405891268 0 0)
+"EnviroSky" SET EnviroSky GameTime.Hours 18
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.294219911370666
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.1393064900692327
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.35745780504255026
+"cameras/drone/drone0" SET Transform localPosition (0.8864166799228543 0.4278459378361648 2.3)
+"cameras/drone/drone1" SET Transform localPosition (0.8360557408830858 1.1897346285533135 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (9 6 3)
+"cameras/drone/drone0" SET Transform localScale (1.4355877050847232 1.4355877050847232 1.4355877050847232)
+"cameras/drone/drone1" SET Transform localEulerAngles (-1 -6 -18)
+"cameras/drone/drone1" SET Transform localScale (0.9570995520305597 0.9570995520305597 0.9570995520305597)
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
+NOOP
+"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
+"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
+"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
+"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
+"cameras" SET Transform position (0 4.653316697428789 0)
+"cameras" SET Transform eulerAngles (11.255211775127322 0 0)
+"EnviroSky" SET EnviroSky GameTime.Hours 17
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.4576425473447006
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.8058768602137718
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.04978312971098489
+"cameras/drone/drone0" SET Transform localPosition (-0.3368797850053853 0.10310909177683508 2.3)
+"cameras/drone/drone1" SET Transform localPosition (-0.6198000876802454 1.2895430828480823 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (-9 20 0)
+"cameras/drone/drone0" SET Transform localScale (0.6281433387570612 0.6281433387570612 0.6281433387570612)
+"cameras/drone/drone1" SET Transform localEulerAngles (16 10 -12)
+"cameras/drone/drone1" SET Transform localScale (0.8262859768046198 0.8262859768046198 0.8262859768046198)
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
+NOOP
+"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
+"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
+"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
+"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
+"cameras" SET Transform position (0 4.305070045657889 0)
+"cameras" SET Transform eulerAngles (-16.492308659991647 0 0)
+"EnviroSky" SET EnviroSky GameTime.Hours 12
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.5885722682206757
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.1285940936605745
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.2529626680476756
+"cameras/drone/drone0" SET Transform localPosition (1.0768960288420792 0.1942801425955561 2.3)
+"cameras/drone/drone1" SET Transform localPosition (0.8937014545970057 0.8771325945029613 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (12 10 4)
+"cameras/drone/drone0" SET Transform localScale (1.2469546776659366 1.2469546776659366 1.2469546776659366)
+"cameras/drone/drone1" SET Transform localEulerAngles (20 -4 -5)
+"cameras/drone/drone1" SET Transform localScale (0.6404949004810766 0.6404949004810766 0.6404949004810766)
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
+NOOP
+"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
+"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
+"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
+"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
+"cameras" SET Transform position (0 4.395398522066099 0)
+"cameras" SET Transform eulerAngles (-9.72544058754405 0 0)
+"EnviroSky" SET EnviroSky GameTime.Hours 16
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.7896788202169369
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.2884522223962982
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.29908616056692167
+"cameras/drone/drone0" SET Transform localPosition (-0.9449275159485586 0.1774993591013853 2.3)
+"cameras/drone/drone1" SET Transform localPosition (-0.6796390625812648 0.943875947983463 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (18 8 -10)
+"cameras/drone/drone0" SET Transform localScale (1.00360605160057 1.00360605160057 1.00360605160057)
+"cameras/drone/drone1" SET Transform localEulerAngles (-20 -3 -5)
+"cameras/drone/drone1" SET Transform localScale (1.4346352102456237 1.4346352102456237 1.4346352102456237)
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
+NOOP
+"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
+"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
+"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
+"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
+"cameras" SET Transform position (0 4.0741608137146805 0)
+"cameras" SET Transform eulerAngles (6.840858848068898 0 0)
+"EnviroSky" SET EnviroSky GameTime.Hours 11
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.1700469443665313
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.6456368510386987
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.19344948047926952
+"cameras/drone/drone0" SET Transform localPosition (-0.005643255524289348 0.49746131426776513 2.3)
+"cameras/drone/drone1" SET Transform localPosition (0.11615908958314902 0.8737127824765418 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (-4 12 4)
+"cameras/drone/drone0" SET Transform localScale (1.2907497098309342 1.2907497098309342 1.2907497098309342)
+"cameras/drone/drone1" SET Transform localEulerAngles (-8 10 16)
+"cameras/drone/drone1" SET Transform localScale (0.86009699060155 0.86009699060155 0.86009699060155)
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
+NOOP
+"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
+"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
+"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
+"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
+"cameras" SET Transform position (0 4.876043358198778 0)
+"cameras" SET Transform eulerAngles (7.998966191680417 0 0)
+"EnviroSky" SET EnviroSky GameTime.Hours 17
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.5610880429447302
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.8078830287376806
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.1330022810509607
+"cameras/drone/drone0" SET Transform localPosition (-0.7611130993489688 0.14113300059123252 2.3)
+"cameras/drone/drone1" SET Transform localPosition (0.4626721016910076 0.8190256093405732 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (2 5 -14)
+"cameras/drone/drone0" SET Transform localScale (1.107464192250346 1.107464192250346 1.107464192250346)
+"cameras/drone/drone1" SET Transform localEulerAngles (-19 -12 -20)
+"cameras/drone/drone1" SET Transform localScale (1.2372043935584465 1.2372043935584465 1.2372043935584465)
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
+NOOP
+"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
+"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
+"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
+"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
+"cameras" SET Transform position (0 3.238333078035538 0)
+"cameras" SET Transform eulerAngles (-16.666464312871415 0 0)
+"EnviroSky" SET EnviroSky GameTime.Hours 12
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.2850031286753707
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.6720882370293864
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.36161322570751636
+"cameras/drone/drone0" SET Transform localPosition (1.0430459209713436 0.3506926861111043 2.3)
+"cameras/drone/drone1" SET Transform localPosition (0.7146045397795708 1.2111959423393428 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (13 14 -16)
+"cameras/drone/drone0" SET Transform localScale (1.4887197212546788 1.4887197212546788 1.4887197212546788)
+"cameras/drone/drone1" SET Transform localEulerAngles (7 5 -5)
+"cameras/drone/drone1" SET Transform localScale (1.0541778861657352 1.0541778861657352 1.0541778861657352)
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
+NOOP
+"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
+"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
+"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
+"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
+"cameras" SET Transform position (0 4.0301691539122135 0)
+"cameras" SET Transform eulerAngles (-7.967869522807934 0 0)
+"EnviroSky" SET EnviroSky GameTime.Hours 18
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.9303124024342535
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.59836563331811
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.16093969684115092
+"cameras/drone/drone0" SET Transform localPosition (-0.6201415595369202 -0.07676696214993367 2.3)
+"cameras/drone/drone1" SET Transform localPosition (0.2555076884517269 0.9735466928393123 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (-8 -18 2)
+"cameras/drone/drone0" SET Transform localScale (0.7020314568316893 0.7020314568316893 0.7020314568316893)
+"cameras/drone/drone1" SET Transform localEulerAngles (-9 -7 6)
+"cameras/drone/drone1" SET Transform localScale (1.05689930960032 1.05689930960032 1.05689930960032)
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
+NOOP
+"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
+"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
+"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
+"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
+"cameras" SET Transform position (0 4.683385315835666 0)
+"cameras" SET Transform eulerAngles (-10.335914815424413 0 0)
+"EnviroSky" SET EnviroSky GameTime.Hours 9
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.0546405305801194
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.6955576974321995
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.34722787341375816
+"cameras/drone/drone0" SET Transform localPosition (-0.26563594328523377 0.45512838543423 2.3)
+"cameras/drone/drone1" SET Transform localPosition (0.8689196305933684 0.983478124895512 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (-18 1 -2)
+"cameras/drone/drone0" SET Transform localScale (0.9507761398259267 0.9507761398259267 0.9507761398259267)
+"cameras/drone/drone1" SET Transform localEulerAngles (-14 -2 0)
+"cameras/drone/drone1" SET Transform localScale (0.6057809987383328 0.6057809987383328 0.6057809987383328)
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
+NOOP
+"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
+"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
+"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
+"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
+"cameras" SET Transform position (0 4.905913961873371 0)
+"cameras" SET Transform eulerAngles (-12.848235042748307 0 0)
+"EnviroSky" SET EnviroSky GameTime.Hours 13
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.607449695790062
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 0.9127291489828225
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.33849887869947265
+"cameras/drone/drone0" SET Transform localPosition (0.908385089446895 0.5708005185435383 2.3)
+"cameras/drone/drone1" SET Transform localPosition (-1.1348468506906657 1.1417001815154852 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (16 -10 -2)
+"cameras/drone/drone0" SET Transform localScale (1.2337736467007838 1.2337736467007838 1.2337736467007838)
+"cameras/drone/drone1" SET Transform localEulerAngles (-4 -3 6)
+"cameras/drone/drone1" SET Transform localScale (0.7655772547926666 0.7655772547926666 0.7655772547926666)
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
+NOOP
+"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
+"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
+"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
+"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
+"cameras" SET Transform position (0 3.409047175699729 0)
+"cameras" SET Transform eulerAngles (-17.259940192127186 0 0)
+"EnviroSky" SET EnviroSky GameTime.Hours 9
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.09255419227439
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.0338887359094757
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.0205180022806156
+"cameras/drone/drone0" SET Transform localPosition (0.621631934478555 -0.027669292893778452 2.3)
+"cameras/drone/drone1" SET Transform localPosition (0.47585003966529493 1.286114059015978 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (-9 3 12)
+"cameras/drone/drone0" SET Transform localScale (1.4414608393944697 1.4414608393944697 1.4414608393944697)
+"cameras/drone/drone1" SET Transform localEulerAngles (-19 19 -1)
+"cameras/drone/drone1" SET Transform localScale (0.7771663965191422 0.7771663965191422 0.7771663965191422)
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
+NOOP
+"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
+"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
+"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
+"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
+"cameras" SET Transform position (0 3.492732632800383 0)
+"cameras" SET Transform eulerAngles (-18.569475896499227 0 0)
+"EnviroSky" SET EnviroSky GameTime.Hours 13
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.0122989445115682
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.4257827622543227
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.11676108526214089
+"cameras/drone/drone0" SET Transform localPosition (-0.3101954364499242 0.24185972153861074 2.3)
+"cameras/drone/drone1" SET Transform localPosition (-1.0858545164218836 1.2276317684964584 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (14 0 14)
+"cameras/drone/drone0" SET Transform localScale (0.6435686875376089 0.6435686875376089 0.6435686875376089)
+"cameras/drone/drone1" SET Transform localEulerAngles (13 18 12)
+"cameras/drone/drone1" SET Transform localScale (1.0864332698219004 1.0864332698219004 1.0864332698219004)
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
+NOOP
+"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
+"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
+"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
+"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
+"cameras" SET Transform position (0 3.880070517801321 0)
+"cameras" SET Transform eulerAngles (18.577060544660945 0 0)
+"EnviroSky" SET EnviroSky GameTime.Hours 16
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.8687520053995174
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.7038535953357825
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.11392902992420809
+"cameras/drone/drone0" SET Transform localPosition (0.5776967579465182 0.41580398319775486 2.3)
+"cameras/drone/drone1" SET Transform localPosition (-0.44480264888684273 0.8655307483809227 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (3 4 -6)
+"cameras/drone/drone0" SET Transform localScale (0.9167889269527258 0.9167889269527258 0.9167889269527258)
+"cameras/drone/drone1" SET Transform localEulerAngles (-18 3 19)
+"cameras/drone/drone1" SET Transform localScale (1.1399867174311407 1.1399867174311407 1.1399867174311407)
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
+NOOP
+"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
+"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
+"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
+"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
+"cameras" SET Transform position (0 4.4822974943406955 0)
+"cameras" SET Transform eulerAngles (7.105723193125009 0 0)
+"EnviroSky" SET EnviroSky GameTime.Hours 15
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.9227541961572452
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.0287571045187285
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.3540840874367674
+"cameras/drone/drone0" SET Transform localPosition (-0.9357435705178403 0.4521041916792578 2.3)
+"cameras/drone/drone1" SET Transform localPosition (-0.9559454757165834 1.0884076748261993 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (-14 -18 -13)
+"cameras/drone/drone0" SET Transform localScale (0.8554143508871248 0.8554143508871248 0.8554143508871248)
+"cameras/drone/drone1" SET Transform localEulerAngles (5 1 2)
+"cameras/drone/drone1" SET Transform localScale (0.6077184042243495 0.6077184042243495 0.6077184042243495)
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
+NOOP
+"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
+"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
+"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
+"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
+"cameras" SET Transform position (0 4.928683244748935 0)
+"cameras" SET Transform eulerAngles (15.255721688412997 0 0)
+"EnviroSky" SET EnviroSky GameTime.Hours 14
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.2684287650324841
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.7055922910569108
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.05597105396446063
+"cameras/drone/drone0" SET Transform localPosition (0.27875524086086445 0.15870197512440437 2.3)
+"cameras/drone/drone1" SET Transform localPosition (-0.4390721297213207 0.9138665347885813 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (-15 -16 -2)
+"cameras/drone/drone0" SET Transform localScale (0.6774921215230427 0.6774921215230427 0.6774921215230427)
+"cameras/drone/drone1" SET Transform localEulerAngles (-5 8 -11)
+"cameras/drone/drone1" SET Transform localScale (0.854048868149371 0.854048868149371 0.854048868149371)
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
+NOOP
+"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
+"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
+"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
+"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
+"cameras" SET Transform position (0 3.8859635373058667 0)
+"cameras" SET Transform eulerAngles (-16.177544942294908 0 0)
+"EnviroSky" SET EnviroSky GameTime.Hours 10
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.4530494952501694
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.5922183081394854
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.007457849900891489
+"cameras/drone/drone0" SET Transform localPosition (-1.006643923504323 0.06578296393342037 2.3)
+"cameras/drone/drone1" SET Transform localPosition (0.13028689060815069 0.9057133443722614 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (9 2 6)
+"cameras/drone/drone0" SET Transform localScale (0.9201681858719148 0.9201681858719148 0.9201681858719148)
+"cameras/drone/drone1" SET Transform localEulerAngles (6 -4 -11)
+"cameras/drone/drone1" SET Transform localScale (0.8990619940787512 0.8990619940787512 0.8990619940787512)
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
+NOOP
+"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
+"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
+"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
+"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
+"cameras" SET Transform position (0 4.106564525441392 0)
+"cameras" SET Transform eulerAngles (-4.957265992561526 0 0)
+"EnviroSky" SET EnviroSky GameTime.Hours 14
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.5628464313490742
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.38855204407596
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.04652911058465042
+"cameras/drone/drone0" SET Transform localPosition (1.0249065987651098 -0.018495727508276716 2.3)
+"cameras/drone/drone1" SET Transform localPosition (0.5005237954385229 1.1765843815027326 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (8 -4 17)
+"cameras/drone/drone0" SET Transform localScale (1.053137666665559 1.053137666665559 1.053137666665559)
+"cameras/drone/drone1" SET Transform localEulerAngles (-5 -18 10)
+"cameras/drone/drone1" SET Transform localScale (0.8879861150686376 0.8879861150686376 0.8879861150686376)
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
+NOOP
+"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
+"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
+"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
+"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
+"cameras" SET Transform position (0 3.6130072092748335 0)
+"cameras" SET Transform eulerAngles (-3.800893948438304 0 0)
+"EnviroSky" SET EnviroSky GameTime.Hours 9
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.4410026838495654
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.6609505877520259
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.31711055587728426
+"cameras/drone/drone0" SET Transform localPosition (-0.7969779817444371 0.6246518143236204 2.3)
+"cameras/drone/drone1" SET Transform localPosition (-0.5791332615931456 1.1396456114949538 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (-18 -6 -16)
+"cameras/drone/drone0" SET Transform localScale (0.7642421839544943 0.7642421839544943 0.7642421839544943)
+"cameras/drone/drone1" SET Transform localEulerAngles (20 1 -13)
+"cameras/drone/drone1" SET Transform localScale (1.1658715536132593 1.1658715536132593 1.1658715536132593)
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
+NOOP
+"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
+"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
+"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
+"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
+"cameras" SET Transform position (0 3.2553962569458355 0)
+"cameras" SET Transform eulerAngles (-5.94619207471986 0 0)
+"EnviroSky" SET EnviroSky GameTime.Hours 15
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.5436988989887328
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.6017194344083132
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.20084248447250858
+"cameras/drone/drone0" SET Transform localPosition (0.9611739318080554 0.09735634830474799 2.3)
+"cameras/drone/drone1" SET Transform localPosition (-0.5533468358225455 0.840162476184372 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (9 -5 -13)
+"cameras/drone/drone0" SET Transform localScale (1.189980154240671 1.189980154240671 1.189980154240671)
+"cameras/drone/drone1" SET Transform localEulerAngles (19 -10 -3)
+"cameras/drone/drone1" SET Transform localScale (1.3174775233442735 1.3174775233442735 1.3174775233442735)
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
+NOOP
+"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
+"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
+"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
+"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
+"cameras" SET Transform position (0 4.123119010377394 0)
+"cameras" SET Transform eulerAngles (-5.568917947358312 0 0)
+"EnviroSky" SET EnviroSky GameTime.Hours 12
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.5507001791055273
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.2178344870391706
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.05932758497706336
+"cameras/drone/drone0" SET Transform localPosition (-0.7804125602862155 -0.17786917950522513 2.3)
+"cameras/drone/drone1" SET Transform localPosition (0.34794651023502343 1.0012715625213913 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (0 -16 4)
+"cameras/drone/drone0" SET Transform localScale (1.47777833345821 1.47777833345821 1.47777833345821)
+"cameras/drone/drone1" SET Transform localEulerAngles (-13 19 -10)
+"cameras/drone/drone1" SET Transform localScale (0.6494714606783576 0.6494714606783576 0.6494714606783576)
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
+NOOP
+"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
+"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
+"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
+"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
+"cameras" SET Transform position (0 3.008747453728984 0)
+"cameras" SET Transform eulerAngles (9.864709346486205 0 0)
+"EnviroSky" SET EnviroSky GameTime.Hours 9
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.4101467340264066
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.2783085086956725
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.17809797724631715
+"cameras/drone/drone0" SET Transform localPosition (1.1174306836122663 0.5662620692303693 2.3)
+"cameras/drone/drone1" SET Transform localPosition (0.5333279864425875 0.8845565701619008 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (12 18 -13)
+"cameras/drone/drone0" SET Transform localScale (0.6411974109949073 0.6411974109949073 0.6411974109949073)
+"cameras/drone/drone1" SET Transform localEulerAngles (-8 -6 0)
+"cameras/drone/drone1" SET Transform localScale (1.2911848703365298 1.2911848703365298 1.2911848703365298)
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
+NOOP
+"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
+"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
+"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
+"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
+"cameras" SET Transform position (0 3.35577511653751 0)
+"cameras" SET Transform eulerAngles (-1.9473591643594546 0 0)
+"EnviroSky" SET EnviroSky GameTime.Hours 13
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.460841882665581
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.0575724476897257
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.3521014415663677
+"cameras/drone/drone0" SET Transform localPosition (-0.7248363733962385 0.16941870021346844 2.3)
+"cameras/drone/drone1" SET Transform localPosition (-0.25271451966582326 1.0234888720537958 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (19 -20 -1)
+"cameras/drone/drone0" SET Transform localScale (0.7378833840494168 0.7378833840494168 0.7378833840494168)
+"cameras/drone/drone1" SET Transform localEulerAngles (-1 -16 9)
+"cameras/drone/drone1" SET Transform localScale (1.4020430103655797 1.4020430103655797 1.4020430103655797)
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
+NOOP
+"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
+"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
+"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
+"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
+"cameras" SET Transform position (0 4.28036471562859 0)
+"cameras" SET Transform eulerAngles (4.170315189423654 0 0)
+"EnviroSky" SET EnviroSky GameTime.Hours 18
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.1711214339953282
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.0769077000506653
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.05536714010497606
+"cameras/drone/drone0" SET Transform localPosition (-0.33709346509930105 0.686723862103136 2.3)
+"cameras/drone/drone1" SET Transform localPosition (-0.28067728781041157 1.048011797468692 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (-4 -16 -7)
+"cameras/drone/drone0" SET Transform localScale (1.0450078439330512 1.0450078439330512 1.0450078439330512)
+"cameras/drone/drone1" SET Transform localEulerAngles (18 18 12)
+"cameras/drone/drone1" SET Transform localScale (1.3247577554901082 1.3247577554901082 1.3247577554901082)
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
+NOOP
+"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
+"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
+"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
+"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
+"cameras" SET Transform position (0 3.523494150346857 0)
+"cameras" SET Transform eulerAngles (-18.591019605005737 0 0)
+"EnviroSky" SET EnviroSky GameTime.Hours 15
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.9383084578996913
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.4771466132524291
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.3028104448611306
+"cameras/drone/drone0" SET Transform localPosition (0.031554037266422696 0.4658534182507417 2.3)
+"cameras/drone/drone1" SET Transform localPosition (-0.9887597276012381 0.8562348203833965 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (20 15 10)
+"cameras/drone/drone0" SET Transform localScale (1.1659868547395433 1.1659868547395433 1.1659868547395433)
+"cameras/drone/drone1" SET Transform localEulerAngles (-7 -20 -12)
+"cameras/drone/drone1" SET Transform localScale (0.7141471132798438 0.7141471132798438 0.7141471132798438)
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
+NOOP
+"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
+"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
+"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
+"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
+"cameras" SET Transform position (0 4.143487618332265 0)
+"cameras" SET Transform eulerAngles (19.176978090023354 0 0)
+"EnviroSky" SET EnviroSky GameTime.Hours 18
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.5850088163254519
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.620307232848058
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.2533799008140991
+"cameras/drone/drone0" SET Transform localPosition (-0.8377176409314602 -0.26764706874791305 2.3)
+"cameras/drone/drone1" SET Transform localPosition (-0.6010990527342374 1.215747472549487 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (0 -3 -19)
+"cameras/drone/drone0" SET Transform localScale (1.1476963600029528 1.1476963600029528 1.1476963600029528)
+"cameras/drone/drone1" SET Transform localEulerAngles (-20 -13 10)
+"cameras/drone/drone1" SET Transform localScale (0.6049861177891451 0.6049861177891451 0.6049861177891451)
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
+NOOP
+"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
+"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
+"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
+"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
+"cameras" SET Transform position (0 3.217653395130898 0)
+"cameras" SET Transform eulerAngles (-9.199451300400575 0 0)
+"EnviroSky" SET EnviroSky GameTime.Hours 15
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.47452596962934257
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.9379208597720043
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.2344843996211902
+"cameras/drone/drone0" SET Transform localPosition (-0.9400620175272492 0.0075175895647141 2.3)
+"cameras/drone/drone1" SET Transform localPosition (0.2634024252148057 0.960931702188518 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (-12 -18 14)
+"cameras/drone/drone0" SET Transform localScale (0.8277480195764052 0.8277480195764052 0.8277480195764052)
+"cameras/drone/drone1" SET Transform localEulerAngles (20 -5 -12)
+"cameras/drone/drone1" SET Transform localScale (0.7466719244807031 0.7466719244807031 0.7466719244807031)
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
+NOOP
+"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
+"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
+"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
+"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
+"cameras" SET Transform position (0 4.279253182513488 0)
+"cameras" SET Transform eulerAngles (-15.795002426586002 0 0)
+"EnviroSky" SET EnviroSky GameTime.Hours 16
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.46425570448235204
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.078492540769668
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.1509717246639226
+"cameras/drone/drone0" SET Transform localPosition (-0.9399434898683305 -0.24247211302345445 2.3)
+"cameras/drone/drone1" SET Transform localPosition (-0.7712311439158734 0.909909738646657 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (19 -4 -18)
+"cameras/drone/drone0" SET Transform localScale (1.1178568841339687 1.1178568841339687 1.1178568841339687)
+"cameras/drone/drone1" SET Transform localEulerAngles (4 -15 -17)
+"cameras/drone/drone1" SET Transform localScale (1.4962836418495291 1.4962836418495291 1.4962836418495291)
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
+NOOP
+"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
+"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
+"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
+"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
+"cameras" SET Transform position (0 4.0060943328196394 0)
+"cameras" SET Transform eulerAngles (16.83877093904983 0 0)
+"EnviroSky" SET EnviroSky GameTime.Hours 9
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.3580916806026502
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.7167649282001436
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.2809941363776977
+"cameras/drone/drone0" SET Transform localPosition (0.7408526133984028 0.03344190590630186 2.3)
+"cameras/drone/drone1" SET Transform localPosition (-0.12494426806303038 1.01431474821505 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (18 -3 -9)
+"cameras/drone/drone0" SET Transform localScale (1.3450235962463881 1.3450235962463881 1.3450235962463881)
+"cameras/drone/drone1" SET Transform localEulerAngles (9 -15 5)
+"cameras/drone/drone1" SET Transform localScale (1.4152341082964521 1.4152341082964521 1.4152341082964521)
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
+NOOP
+"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
+"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
+"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
+"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
+"cameras" SET Transform position (0 3.6928365431078647 0)
+"cameras" SET Transform eulerAngles (17.292494716065022 0 0)
+"EnviroSky" SET EnviroSky GameTime.Hours 11
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.9319582083414826
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.300776163870469
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.2020892257878412
+"cameras/drone/drone0" SET Transform localPosition (0.252309595363285 -0.030696533936761694 2.3)
+"cameras/drone/drone1" SET Transform localPosition (0.18562721522741543 0.9591230111240998 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (-16 -11 -7)
+"cameras/drone/drone0" SET Transform localScale (0.774744239670049 0.774744239670049 0.774744239670049)
+"cameras/drone/drone1" SET Transform localEulerAngles (12 2 13)
+"cameras/drone/drone1" SET Transform localScale (0.6934457706133655 0.6934457706133655 0.6934457706133655)
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
+NOOP
+"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
+"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
+"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
+"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
+"cameras" SET Transform position (0 4.405720687302102 0)
+"cameras" SET Transform eulerAngles (-17.105091924719297 0 0)
+"EnviroSky" SET EnviroSky GameTime.Hours 11
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.5550656386300746
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.1111713538523302
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.09620333218756275
+"cameras/drone/drone0" SET Transform localPosition (-0.7088154407120564 0.4491619665564968 2.3)
+"cameras/drone/drone1" SET Transform localPosition (1.0202567807840361 0.8020980858842987 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (5 13 13)
+"cameras/drone/drone0" SET Transform localScale (0.8517129545046646 0.8517129545046646 0.8517129545046646)
+"cameras/drone/drone1" SET Transform localEulerAngles (-3 -4 -14)
+"cameras/drone/drone1" SET Transform localScale (1.3476986897629468 1.3476986897629468 1.3476986897629468)
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
+NOOP
+"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
+"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
+"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
+"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
+"cameras" SET Transform position (0 3.575840455254613 0)
+"cameras" SET Transform eulerAngles (-15.188013272982683 0 0)
+"EnviroSky" SET EnviroSky GameTime.Hours 13
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.9436639452815326
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.3192684150354606
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.10443750912502776
+"cameras/drone/drone0" SET Transform localPosition (-0.9237352881770502 0.6487430738801023 2.3)
+"cameras/drone/drone1" SET Transform localPosition (-0.11725817133628014 1.1182468620187267 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (15 -10 -19)
+"cameras/drone/drone0" SET Transform localScale (1.2625381731738488 1.2625381731738488 1.2625381731738488)
+"cameras/drone/drone1" SET Transform localEulerAngles (11 -10 3)
+"cameras/drone/drone1" SET Transform localScale (1.4933071245148186 1.4933071245148186 1.4933071245148186)
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
+NOOP
+"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
+"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
+"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
+"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
+"cameras" SET Transform position (0 3.762269366599372 0)
+"cameras" SET Transform eulerAngles (-1.2454429961146332 0 0)
+"EnviroSky" SET EnviroSky GameTime.Hours 16
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.5660905765915705
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.307907287394218
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.22650919378851958
+"cameras/drone/drone0" SET Transform localPosition (0.6548130945936832 -0.010372681285630014 2.3)
+"cameras/drone/drone1" SET Transform localPosition (-1.0474502304672038 0.8675715155547821 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (2 0 10)
+"cameras/drone/drone0" SET Transform localScale (0.8310461008077304 0.8310461008077304 0.8310461008077304)
+"cameras/drone/drone1" SET Transform localEulerAngles (19 0 -15)
+"cameras/drone/drone1" SET Transform localScale (0.7962808937438571 0.7962808937438571 0.7962808937438571)
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
+NOOP
+"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
+"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
+"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
+"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
+"cameras" SET Transform position (0 4.737716749145893 0)
+"cameras" SET Transform eulerAngles (16.696359282377912 0 0)
+"EnviroSky" SET EnviroSky GameTime.Hours 15
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.9602862821526358
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.775475936194609
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.13170973933542066
+"cameras/drone/drone0" SET Transform localPosition (-0.933747870420991 0.48875829206936666 2.3)
+"cameras/drone/drone1" SET Transform localPosition (0.331273479133706 1.1640792025789661 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (-6 -20 6)
+"cameras/drone/drone0" SET Transform localScale (1.0651471638939487 1.0651471638939487 1.0651471638939487)
+"cameras/drone/drone1" SET Transform localEulerAngles (-15 14 -6)
+"cameras/drone/drone1" SET Transform localScale (0.7198191727341382 0.7198191727341382 0.7198191727341382)
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
+NOOP
+"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
+"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
+"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
+"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
+"cameras" SET Transform position (0 3.2296195256614553 0)
+"cameras" SET Transform eulerAngles (15.75401623302676 0 0)
+"EnviroSky" SET EnviroSky GameTime.Hours 14
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.5909802629608905
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.7030625786465343
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.3749504799600408
+"cameras/drone/drone0" SET Transform localPosition (0.5971309354693652 0.09543077806897088 2.3)
+"cameras/drone/drone1" SET Transform localPosition (0.46957068940921354 0.899772250231641 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (9 14 1)
+"cameras/drone/drone0" SET Transform localScale (1.2719063639802957 1.2719063639802957 1.2719063639802957)
+"cameras/drone/drone1" SET Transform localEulerAngles (11 -5 9)
+"cameras/drone/drone1" SET Transform localScale (0.8768939309163807 0.8768939309163807 0.8768939309163807)
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
+NOOP
+"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
+"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
+"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
+"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
+"cameras" SET Transform position (0 4.781829301963255 0)
+"cameras" SET Transform eulerAngles (-1.9542816650041814 0 0)
+"EnviroSky" SET EnviroSky GameTime.Hours 18
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.6157389279566456
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 0.9112403984025184
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.006404160441604701
+"cameras/drone/drone0" SET Transform localPosition (0.006139387866465951 0.442083445044484 2.3)
+"cameras/drone/drone1" SET Transform localPosition (-0.35654255563162207 1.2403559293833526 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (-2 -13 11)
+"cameras/drone/drone0" SET Transform localScale (1.1506145206375433 1.1506145206375433 1.1506145206375433)
+"cameras/drone/drone1" SET Transform localEulerAngles (2 18 12)
+"cameras/drone/drone1" SET Transform localScale (1.0790774286558897 1.0790774286558897 1.0790774286558897)
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
+NOOP
+"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
+"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
+"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
+"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
+"cameras" SET Transform position (0 3.5470114626274487 0)
+"cameras" SET Transform eulerAngles (7.1239321198149455 0 0)
+"EnviroSky" SET EnviroSky GameTime.Hours 12
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.6353176883051487
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.3746644484921615
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.3642818142466788
+"cameras/drone/drone0" SET Transform localPosition (0.3500118546182034 0.48903449870810806 2.3)
+"cameras/drone/drone1" SET Transform localPosition (-1.0691129623792996 1.0202682861561168 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (15 2 -14)
+"cameras/drone/drone0" SET Transform localScale (0.8717760361342806 0.8717760361342806 0.8717760361342806)
+"cameras/drone/drone1" SET Transform localEulerAngles (6 5 -16)
+"cameras/drone/drone1" SET Transform localScale (1.2168734405551431 1.2168734405551431 1.2168734405551431)
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
+NOOP
+"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
+"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
+"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
+"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
+"cameras" SET Transform position (0 4.591799398328712 0)
+"cameras" SET Transform eulerAngles (4.586043634118319 0 0)
+"EnviroSky" SET EnviroSky GameTime.Hours 11
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.9450406785539429
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.0496191740479506
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.1332069367824802
+"cameras/drone/drone0" SET Transform localPosition (0.09358792870656085 0.3004831646032698 2.3)
+"cameras/drone/drone1" SET Transform localPosition (-0.9261408335632394 1.2805273046872512 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (-19 -19 -2)
+"cameras/drone/drone0" SET Transform localScale (1.2949343590930598 1.2949343590930598 1.2949343590930598)
+"cameras/drone/drone1" SET Transform localEulerAngles (-12 9 11)
+"cameras/drone/drone1" SET Transform localScale (0.6780010102703719 0.6780010102703719 0.6780010102703719)
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
+NOOP
+"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
+"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
+"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
+"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
+"cameras" SET Transform position (0 4.716929607688659 0)
+"cameras" SET Transform eulerAngles (-3.6039770460625 0 0)
+"EnviroSky" SET EnviroSky GameTime.Hours 16
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.1574672009747888
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.820853206059511
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.17033648026778409
+"cameras/drone/drone0" SET Transform localPosition (-0.1590499733004611 0.2611559714927148 2.3)
+"cameras/drone/drone1" SET Transform localPosition (-0.9499761523069579 0.8052702979120638 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (-7 19 13)
+"cameras/drone/drone0" SET Transform localScale (1.4369479770287263 1.4369479770287263 1.4369479770287263)
+"cameras/drone/drone1" SET Transform localEulerAngles (20 14 3)
+"cameras/drone/drone1" SET Transform localScale (1.2402435148807305 1.2402435148807305 1.2402435148807305)
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
+NOOP
+"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
+"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
+"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
+"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
+"cameras" SET Transform position (0 4.581258048121937 0)
+"cameras" SET Transform eulerAngles (9.453909054204953 0 0)
+"EnviroSky" SET EnviroSky GameTime.Hours 9
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.41935145282069
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.4832215780872018
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.3115786586077084
+"cameras/drone/drone0" SET Transform localPosition (-0.6561001191925071 0.1378873487647701 2.3)
+"cameras/drone/drone1" SET Transform localPosition (-0.530335213963153 0.855104893664324 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (-1 -14 -13)
+"cameras/drone/drone0" SET Transform localScale (0.8554235526371374 0.8554235526371374 0.8554235526371374)
+"cameras/drone/drone1" SET Transform localEulerAngles (-16 -5 -15)
+"cameras/drone/drone1" SET Transform localScale (0.6998966209422748 0.6998966209422748 0.6998966209422748)
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
+NOOP
+"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
+"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
+"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
+"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
+"cameras" SET Transform position (0 4.964434830118335 0)
+"cameras" SET Transform eulerAngles (13.741393391355878 0 0)
+"EnviroSky" SET EnviroSky GameTime.Hours 13
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.0968581407759368
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.631547920055104
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.37773153784653174
+"cameras/drone/drone0" SET Transform localPosition (-0.42598846930239465 0.00703294020828199 2.3)
+"cameras/drone/drone1" SET Transform localPosition (0.6825210906227046 1.2824930482011283 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (19 4 -7)
+"cameras/drone/drone0" SET Transform localScale (0.9962879754923987 0.9962879754923987 0.9962879754923987)
+"cameras/drone/drone1" SET Transform localEulerAngles (-10 14 -10)
+"cameras/drone/drone1" SET Transform localScale (0.9274531500621475 0.9274531500621475 0.9274531500621475)
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
+NOOP
+"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
+"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
+"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
+"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
+"cameras" SET Transform position (0 3.7300500534490624 0)
+"cameras" SET Transform eulerAngles (-14.652163204638345 0 0)
+"EnviroSky" SET EnviroSky GameTime.Hours 14
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.388680641846903
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.7662285042437715
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.07937938312141997
+"cameras/drone/drone0" SET Transform localPosition (0.14317043511938055 -0.22576489569169106 2.3)
+"cameras/drone/drone1" SET Transform localPosition (-0.43710589270637557 0.8787514742973974 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (-1 8 3)
+"cameras/drone/drone0" SET Transform localScale (1.1122735945783933 1.1122735945783933 1.1122735945783933)
+"cameras/drone/drone1" SET Transform localEulerAngles (-5 -10 1)
+"cameras/drone/drone1" SET Transform localScale (1.431031471849916 1.431031471849916 1.431031471849916)
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
+NOOP
+"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
+"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
+"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
+"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
+"cameras" SET Transform position (0 4.8364021019440475 0)
+"cameras" SET Transform eulerAngles (-3.5929607865269517 0 0)
+"EnviroSky" SET EnviroSky GameTime.Hours 10
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.7413158912037392
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.9295890802028532
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.3979451137116633
+"cameras/drone/drone0" SET Transform localPosition (1.0032614315384085 -0.14654781435901792 2.3)
+"cameras/drone/drone1" SET Transform localPosition (-0.50130757004892 1.0318681081032994 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (7 16 14)
+"cameras/drone/drone0" SET Transform localScale (1.4543401889954932 1.4543401889954932 1.4543401889954932)
+"cameras/drone/drone1" SET Transform localEulerAngles (-4 2 11)
+"cameras/drone/drone1" SET Transform localScale (1.0585412188995849 1.0585412188995849 1.0585412188995849)
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
+NOOP
+"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
+"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
+"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
+"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
+"cameras" SET Transform position (0 4.276466990777615 0)
+"cameras" SET Transform eulerAngles (-3.639168926573774 0 0)
+"EnviroSky" SET EnviroSky GameTime.Hours 17
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.6087211574639072
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.6820501633903422
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.10164038804698149
+"cameras/drone/drone0" SET Transform localPosition (-0.8885705385009428 0.48982544160210023 2.3)
+"cameras/drone/drone1" SET Transform localPosition (0.8554191741386179 1.253041907639366 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (19 18 18)
+"cameras/drone/drone0" SET Transform localScale (0.8162591184945431 0.8162591184945431 0.8162591184945431)
+"cameras/drone/drone1" SET Transform localEulerAngles (-8 -2 -3)
+"cameras/drone/drone1" SET Transform localScale (0.6151903277899916 0.6151903277899916 0.6151903277899916)
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
+NOOP
+"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
+"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
+"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
+"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
+"cameras" SET Transform position (0 3.1927640380198934 0)
+"cameras" SET Transform eulerAngles (17.77493221260673 0 0)
+"EnviroSky" SET EnviroSky GameTime.Hours 13
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.4793324159902204
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 0.9149499304081167
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.2879837131793767
+"cameras/drone/drone0" SET Transform localPosition (-0.4649350057649514 0.6750248043156708 2.3)
+"cameras/drone/drone1" SET Transform localPosition (0.4847146172845249 0.9202161147499774 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (3 -6 -2)
+"cameras/drone/drone0" SET Transform localScale (1.1498362835485567 1.1498362835485567 1.1498362835485567)
+"cameras/drone/drone1" SET Transform localEulerAngles (-2 2 2)
+"cameras/drone/drone1" SET Transform localScale (1.3422866481839777 1.3422866481839777 1.3422866481839777)
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
+NOOP
+"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
+"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
+"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
+"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
+"cameras" SET Transform position (0 4.504680846223416 0)
+"cameras" SET Transform eulerAngles (0.27827175216452105 0 0)
+"EnviroSky" SET EnviroSky GameTime.Hours 18
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 0.7602070158598053
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.1167671322293782
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.11481581097659843
+"cameras/drone/drone0" SET Transform localPosition (-0.5422611954215909 -0.22635867766283851 2.3)
+"cameras/drone/drone1" SET Transform localPosition (0.5812066993476424 1.0866034583862054 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (8 -9 -14)
+"cameras/drone/drone0" SET Transform localScale (1.0371738622465698 1.0371738622465698 1.0371738622465698)
+"cameras/drone/drone1" SET Transform localEulerAngles (-15 -5 -15)
+"cameras/drone/drone1" SET Transform localScale (0.8726516694651246 0.8726516694651246 0.8726516694651246)
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
+NOOP
+"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
+"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
+"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
+"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
+"cameras" SET Transform position (0 4.999239712164734 0)
+"cameras" SET Transform eulerAngles (13.00674801258571 0 0)
+"EnviroSky" SET EnviroSky GameTime.Hours 15
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.53865875182548
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.99396200309122
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.15824712878879954
+"cameras/drone/drone0" SET Transform localPosition (0.33511454490385706 -0.24767739075175949 2.3)
+"cameras/drone/drone1" SET Transform localPosition (-0.9342035118634582 0.886293715822517 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (7 -14 -1)
+"cameras/drone/drone0" SET Transform localScale (1.0839281695209761 1.0839281695209761 1.0839281695209761)
+"cameras/drone/drone1" SET Transform localEulerAngles (-11 15 10)
+"cameras/drone/drone1" SET Transform localScale (1.3680893174504307 1.3680893174504307 1.3680893174504307)
+"disk1" EXECUTE Sensors.Disk Snapshot
+"cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
+NOOP
+"spawner/city/ground" EXECUTE RandomProps.PropArea Shuffle
+"spawner/cars" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/nature/trees" EXECUTE RandomProps.PropArea Shuffle
+"spawner/city/buildings" EXECUTE RandomProps.PropArea Shuffle
+"spawner/roadsigns" EXECUTE RandomProps.PropArea Shuffle
+"spawner/humans_0" EXECUTE RandomProps.PropArea Shuffle
+"cameras" SET Transform position (0 3.4754717163071867 0)
+"cameras" SET Transform eulerAngles (-16.180664175210072 0 0)
+"EnviroSky" SET EnviroSky GameTime.Hours 18
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.saturation 1.057973892143735
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast 1.1091174925295344
+"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity 0.21535153787770717
+"cameras/drone/drone0" SET Transform localPosition (0.7008390884105438 0.49745731924445574 2.3)
+"cameras/drone/drone1" SET Transform localPosition (0.20189684256510265 1.127803361202693 2.3)
+"cameras/drone/drone0" SET Transform localEulerAngles (15 -2 12)
+"cameras/drone/drone0" SET Transform localScale (0.8388416525505293 0.8388416525505293 0.8388416525505293)
+"cameras/drone/drone1" SET Transform localEulerAngles (-18 -10 14)
+"cameras/drone/drone1" SET Transform localScale (0.641018175907278 0.641018175907278 0.641018175907278)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
