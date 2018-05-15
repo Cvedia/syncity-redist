@@ -9,8 +9,8 @@ CREATE "EnviroSky" AS "EnviroSky"
 "EnviroSky" SET EnviroSky Player "cameras" PlayerCamera "cameras/cameraRGB" GameTime.ProgressTime "None" weatherSettings.cloudTransitionSpeed 100 weatherSettings.effectTransitionSpeed 100 weatherSettings.fogTransitionSpeed 100 
 "EnviroSky" EXECUTE EnviroSky AssignAndStart "cameras/cameraRGB" "cameras/cameraRGB"
 "EnviroSky" SET active true
-"cameras/cameraRGB" SET active true
 [UI.Window] ShowFromCamera "cameras/cameraRGB" AS "cameraRGB" WITH 1024 768 24 "ARGB32" "Default"
+"cameras/cameraRGB" SET active true
 "cameras" SET active true
 "cameras/cameraRGB" ADD UnityEngine.PostProcessing.PostProcessingBehaviour
 "cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile "EnviroFX"
@@ -24,8 +24,8 @@ CREATE "cameras/segmentation"
 "cameras/segmentation" SET Segmentation.Output.BoundingBoxes minimumObjectVisibility 0 extensionAmount 0 minimumPixelsCount 1 
 "cameras/segmentation" ADD Segmentation.Output.FilteredBoundingBoxes
 "cameras/segmentation" EXECUTE Segmentation.Output.FilteredBoundingBoxes EnableClasses "Car"
-"cameras/segmentation" SET active true
 [UI.Window] ShowFromCamera "cameras/segmentation" AS "segmentation" WITH 1024 768 24 "ARGB32" "Default"
+"cameras/segmentation" SET active true
 CREATE "light"
 "light" ADD Light
 "light" SET Light type "Directional" intensity 1.7 shadows "Soft" 
