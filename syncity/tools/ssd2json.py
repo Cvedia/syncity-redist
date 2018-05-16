@@ -54,7 +54,7 @@ def run():
 				int(l[1]),
 				l[3], l[4], # bbox min, x1, y1
 				l[5], l[6],
-				l[2], math.abs(l[4]-l[3]) * math.abs(l[6]-l[5])
+				l[2], (float(l[4])-float(l[3])) * (float(l[6])-float(l[5]))
 			))
 		except:
 			common.output('Error converting image: {}'.format(l[0]), 'WARNING')
