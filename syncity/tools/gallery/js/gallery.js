@@ -151,17 +151,32 @@ function ImagesGallery() {
 			if (typeof arr[i].boxMax == 'string')
 				arr[i].boxMax = arr[i].boxMax.split(',');
 			
-			l = arr[i].boxMin[0]*100;
-			t = arr[i].boxMin[1]*100;
-			r = arr[i].boxMax[0]*100;
-			b = arr[i].boxMax[1]*100;
+			unit = '%';
+			if (
+				arr[i].boxMin[0] <= 1 &&
+				arr[i].boxMin[1] <= 1 &&
+				arr[i].boxMax[0] <= 1 &&
+				arr[i].boxMax[1] <= 1
+			) {
+				l = arr[i].boxMin[0]*100;
+				t = arr[i].boxMin[1]*100;
+				r = arr[i].boxMax[0]*100;
+				b = arr[i].boxMax[1]*100;
+			} else {
+				unit = 'px';
+				l = arr[i].boxMin[0];
+				t = arr[i].boxMin[1];
+				r = arr[i].boxMax[0];
+				b = arr[i].boxMax[1];
+			}
+			
 			c = classColors[arr[i].classId];
 			
 			boxes.append(
 				'<div class="bbox tooltip" data-tooltip="id: '+arr[i].id+', classId: '+
-				arr[i].classId+', numPoints: '+arr[i].numPoints+
-				'" style="bottom: '+t+'%; left: '+l+'%; width: '+(r-l)+
-				'%; height: '+(b-t)+'%; border-color: '+c+';"></div>'
+				arr[i].classId+(typeof arr[i].numPoints != 'undefined' ? ', numPoints: '+arr[i].numPoints : '')+(typeof arr[i].confidence != 'undefined' ? ', confidence: ' + arr[i].confidence : '' )+
+				'" style="' + (invert_bboxx ? 'bottom' : 'top') + ': '+t+unit+'; left: '+l+unit+'; width: '+(r-l)+
+				unit+'; height: '+(b-t)+unit+'; border-color: '+c+';"></div>'
 			);
 		}
 	}

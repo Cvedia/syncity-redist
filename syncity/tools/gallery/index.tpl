@@ -11,6 +11,7 @@
 {{ js_static }}
 		
 		var images = {{ fc }},
+			invert_bboxx = {{ invert_bboxx }},
 			total_images = {{ total_images }},
 			meta = {{ fm }},
 			meta_fn = {{ fmfn }},

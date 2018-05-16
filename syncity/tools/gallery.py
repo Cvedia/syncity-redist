@@ -27,6 +27,20 @@ static_assets = {
 	"js": [ "jquery-3.1.1.min.js", "gallery.js" ]
 }
 
+def args(parser):
+	try:
+		parser.add_argument('--flat_gallery', action='store_true', default=False, help='Skips prefix guessing treating all images as an output from a single output.')
+	except:
+		pass
+	try:
+		parser.add_argument('--linear_order', action='store_true', default=False, help='Skips prefix guessing treating all images as an output from a single output.')
+	except:
+		pass
+	try:
+		parser.add_argument('--no_invert_bboxx', action='store_true', default=False, help='Skips prefix guessing treating all images as an output from a single output.')
+	except:
+		pass
+
 def help():
 	return '''\
 	Creates a HTML gallery of the exported data
@@ -54,25 +68,33 @@ def run():
 	common.output('Processing {} files...'.format(fi))
 	
 	os.stat_float_times(True)
+	
 	for fn in fns:
 		lnm = os.path.basename(fn).lower()
 		fty = None
-		fts = os.path.getmtime(fn)
+		
+		if not settings.linear_order:
+			fts = os.path.getmtime(fn)
+		else:
+			fts = '.'.join(os.path.basename(fn).split('.')[:-1])
 		
 		if settings.log:
 			common.output('Processing: {}'.format(lnm))
 		
-		if "camerargb" in lnm:
+		if settings.flat_gallery == True:
+			fty = 'default'
+		if fty == None and "camerargb" in lnm:
 			fty = "rgb"
-		elif "segmentation" in lnm:
+		elif fty == None and "segmentation" in lnm:
 			fty = "seg"
-		elif "depth" in lnm:
+		elif fty == None and "depth" in lnm:
 			fty = "depth"
-		elif "thermal" in lnm:
+		elif fty == None and "thermal" in lnm:
 			fty = "thermal"
 		elif lnm.endswith(".json"):
-			while has_attribute(fm, fts):
-				fts += .000001
+			if not settings.linear_order:
+				while has_attribute(fm, fts):
+					fts += .000001
 			try:
 				fm[fts] = json.loads(common.readAll(fn))
 				fmfn[fts] = fn
@@ -93,10 +115,13 @@ def run():
 		if not has_attribute(fc, fty):
 			fc[fty] = {}
 		
-		while has_attribute(fc[fty], fts):
-			fts += .000001
-		
-		fc[fty][os.path.getmtime(fn)] = os.path.basename(fn)
+		if settings.linear_order:
+			fc[fty][fts] = os.path.basename(fn)
+		else:
+			while has_attribute(fc[fty], fts):
+				fts += .000001
+			
+			fc[fty][os.path.getmtime(fn)] = os.path.basename(fn)
 	
 	if len(fm) > 0:
 		features.append('bbox')
@@ -126,7 +151,8 @@ def run():
 			fc=json.dumps(fc, sort_keys=True),
 			fm=json.dumps(fm, sort_keys=True),
 			fmfn=json.dumps(fmfn, sort_keys=True),
-			total_images=total_images
+			total_images=total_images,
+			invert_bboxx='false' if settings.no_invert_bboxx == True else 'true'
 		).encode('utf-8') + b""
 	)
 	fh.close()
