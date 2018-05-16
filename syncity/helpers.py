@@ -1360,7 +1360,7 @@ def takeSnapshot(lst, autoSegment=False, label='disk1', forceNoop=False, forceRe
 		idx = [i for i, s in enumerate(lst) if 'segment' in s.lower()]
 		
 		if len(idx) == 0:
-			common.output('No camera with segmentation name found, skipping autoSegment', 'WARNING')
+			common.output('No camera with segmentation name found, skipping autoSegment', 'WARN')
 		else:
 			if forceRender:
 				doRender(lst)
@@ -1481,9 +1481,10 @@ def seqSave(pref, rawData, label='disk1'):
 						f[1] = False
 		
 		if len(data) == 0:
-			common.output('Unable to fetch bounding box #{}, retrying...'.format(settings._seqSave[label]), 'WARN')
-			time.sleep(.5)
-			rawData = common.sendData('NOOP', read=True)
+			common.output('Unable to fetch bounding box #{}, retrying...'.format(settings._seqSave[label]), 'ERROR')
+			sys.exit(1)
+			# time.sleep(.5)
+			# rawData = common.sendData('NOOP', read=True)
 		else:
 			# make sure object is valid, otherwise we might need to send another noop to complete it
 			try:
