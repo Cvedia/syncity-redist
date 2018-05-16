@@ -91,10 +91,23 @@ function ImagesGallery() {
 	
 	function updateImage() {
 		var url = images[curType][images2idx[curType][curImage-1]],
-				murl = meta_fn[meta2idx[curImage-1]];
+				murl = meta_fn[meta2idx[curImage-1]],
+				fancy_url, fancy_murl;
 		
-		name.html('<a href="'+url+'" target="_blank">'+url+'</a>');
-		meta_name.html('<a href="'+murl+'" target="_blank">'+murl+'</a>');
+		try {
+			fancy_url = url.split('/').slice(-1)[0];
+		} catch (z) {
+			fancy_url = url;
+		}
+		
+		try {
+			fancy_murl = murl.split('/').slice(-1)[0];
+		} catch (z) {
+			fancy_murl = murl;
+		}
+		
+		name.html('<a href="'+url+'" target="_blank">'+fancy_url+'</a>');
+		meta_name.html('<a href="'+murl+'" target="_blank">'+fancy_murl+'</a>');
 		image.attr('src', url);
 		drawBoxes();
 	}
