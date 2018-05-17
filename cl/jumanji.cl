@@ -20,7 +20,7 @@ CREATE "Camera/Segmentation"
 "Camera/Segmentation" SET Segmentation.Output.ClassColors lookUpTable "lookUpTable"
 "Camera/Segmentation" EXECUTE Segmentation.Output.FilteredBoundingBoxes EnableClasses "Person" "Bicycle" "Car"
 "Camera/Segmentation" SET Segmentation.Output.BoundingBoxesOnTexture boxesColor "Yellow"
-"Camera/Segmentation" SET Segmentation.Output.BoundingBoxes minimumObjectVisibility 0.25 extensionAmount 0 minimumPixelsCount 30 
+"Camera/Segmentation" SET Segmentation.Output.BoundingBoxes minimumObjectVisibility 0.1 extensionAmount 0 minimumPixelsCount 1 
 
 CREATE RenderTexture 1472 1472 24 "RGFloat" "Linear" AS "Segmentation Texture"
 "Camera/Segmentation" SET Camera targetTexture "Segmentation Texture" 
@@ -39,126 +39,53 @@ CREATE "EnviroSky" AS "EnviroSky"
 
 CREATE "Grounds"
 "Grounds" SET Transform localPosition (0 0.01 0)
-"Grounds" ADD RandomProps.Rectangle
-"Grounds" SET RandomProps.Rectangle size (50 100)
+"Grounds" ADD RandomProps.Frustum
+"Grounds" SET RandomProps.Frustum cam "Camera/Thermal"
+"Grounds" SET RandomProps.Frustum minDistance 30
+"Grounds" SET RandomProps.Frustum maxDistance 150
 "Grounds" ADD RandomProps.PropArea
 "Grounds" SET RandomProps.PropArea tags "ground"
 "Grounds" SET RandomProps.PropArea collisionCheck False
 "Grounds" SET RandomProps.PropArea stickToGround False
 "Grounds" SET RandomProps.PropArea findTerrains False
-"Grounds" SET RandomProps.PropArea numberOfProps 100
+"Grounds" SET RandomProps.PropArea numberOfProps 5
+"Grounds" SET RandomProps.PropArea rotationStep 180
 "Grounds" ADD Segmentation.Class Segmentation.Spawners.Entity
 "Grounds" SET Segmentation.Class className "Void"
 "Grounds" ADD Thermal.ThermalObjectBehaviour
 "Grounds" SET Thermal.ThermalObjectBehaviour profile "ThermalBehaviour/Ground"
 "Grounds" SET active true
 
-CREATE "Buildings E"
-"Buildings E" SET Transform localPosition (20 0 0)
-"Buildings E" ADD RandomProps.FillGrid
-"Buildings E" SET RandomProps.FillGrid tags "building"
-"Buildings E" SET RandomProps.FillGrid size (10 100)
-"Buildings E" SET RandomProps.FillGrid cellSize (10 10)
-"Buildings E" ADD Segmentation.Class Segmentation.Spawners.Entity
-"Buildings E" SET Segmentation.Class className "Void"
-"Buildings E" ADD Thermal.ThermalObjectBehaviour
-"Buildings E" SET Thermal.ThermalObjectBehaviour profile "ThermalBehaviour/Buildings"
-"Buildings E" SET active true
+CREATE "Buildings"
+"Buildings" SET Transform localPosition (20 0 0)
+"Buildings" ADD RandomProps.Frustum
+"Buildings" SET RandomProps.Frustum cam "Camera/Thermal"
+"Buildings" SET RandomProps.Frustum minDistance 80
+"Buildings" SET RandomProps.Frustum maxDistance 120
+"Buildings" ADD RandomProps.PropArea
+"Buildings" SET RandomProps.PropArea tags "building"
+"Buildings" SET RandomProps.PropArea findTerrains False
+"Buildings" PUSH RandomProps.PropArea groundObjects "Grounds"
+"Buildings" SET RandomProps.PropArea numberOfProps 40
+"Buildings" SET RandomProps.PropArea rotationStep 180
+"Buildings" ADD Segmentation.Class Segmentation.Spawners.Entity
+"Buildings" SET Segmentation.Class className "Void"
+"Buildings" ADD Thermal.ThermalObjectBehaviour
+"Buildings" SET Thermal.ThermalObjectBehaviour profile "ThermalBehaviour/Buildings"
+"Buildings" SET active true
 
-CREATE "Buildings W"
-"Buildings W" SET Transform localPosition (-20 0 0)
-"Buildings W" ADD RandomProps.FillGrid
-"Buildings W" SET RandomProps.FillGrid tags "building"
-"Buildings W" SET RandomProps.FillGrid size (10 100)
-"Buildings W" SET RandomProps.FillGrid cellSize (10 10)
-"Buildings W" ADD Segmentation.Class Segmentation.Spawners.Entity
-"Buildings W" SET Segmentation.Class className "Void"
-"Buildings W" ADD Thermal.ThermalObjectBehaviour
-"Buildings W" SET Thermal.ThermalObjectBehaviour profile "ThermalBehaviour/Buildings"
-"Buildings W" SET active true
-
-CREATE "Buildings N"
-"Buildings N" SET Transform localPosition (0 0 55)
-"Buildings N" ADD RandomProps.FillGrid
-"Buildings N" SET RandomProps.FillGrid tags "building"
-"Buildings N" SET RandomProps.FillGrid size (40 10)
-"Buildings N" SET RandomProps.FillGrid cellSize (10 10)
-"Buildings N" ADD Segmentation.Class Segmentation.Spawners.Entity
-"Buildings N" SET Segmentation.Class className "Void"
-"Buildings N" ADD Thermal.ThermalObjectBehaviour
-"Buildings N" SET Thermal.ThermalObjectBehaviour profile "ThermalBehaviour/Buildings"
-"Buildings N" SET active true
-
-CREATE "Parked Cars W"
-"Parked Cars W" ADD Segmentation.Class Segmentation.Spawners.Entity
-"Parked Cars W" SET Segmentation.Class className "Void"
-"Parked Cars W" SET Transform localPosition (-6 0 0)
-"Parked Cars W" ADD RandomProps.Rectangle
-"Parked Cars W" SET RandomProps.Rectangle size (3 50)
-"Parked Cars W" ADD RandomProps.PropArea
-"Parked Cars W" SET RandomProps.PropArea tags "+car,+thermal"
-"Parked Cars W" SET RandomProps.PropArea findTerrains False
-"Parked Cars W" PUSH RandomProps.PropArea groundObjects "Grounds"
-"Parked Cars W" SET RandomProps.PropArea numberOfProps 10
-"Parked Cars W" SET RandomProps.PropArea rotationStep 180
-"Parked Cars W" ADD Thermal.Spawners.ReplaceThermalProfiles
-"Parked Cars W" SET Thermal.Spawners.ReplaceThermalProfiles profile "ThermalBehaviour/Cars"
-"Parked Cars W" SET active true
-CREATE "Parked Cars E"
-"Parked Cars E" ADD Segmentation.Class Segmentation.Spawners.Entity
-"Parked Cars E" SET Segmentation.Class className "Void"
-"Parked Cars E" SET Transform localPosition (6 0 0)
-"Parked Cars E" ADD RandomProps.Rectangle
-"Parked Cars E" SET RandomProps.Rectangle size (3 50)
-"Parked Cars E" ADD RandomProps.PropArea
-"Parked Cars E" SET RandomProps.PropArea tags "+car,+thermal"
-"Parked Cars E" SET RandomProps.PropArea findTerrains False
-"Parked Cars E" PUSH RandomProps.PropArea groundObjects "Grounds"
-"Parked Cars E" SET RandomProps.PropArea numberOfProps 10
-"Parked Cars E" SET RandomProps.PropArea rotationStep 180
-"Parked Cars E" ADD Thermal.Spawners.ReplaceThermalProfiles
-"Parked Cars E" SET Thermal.Spawners.ReplaceThermalProfiles profile "ThermalBehaviour/Cars"
-"Parked Cars E" SET active true
-CREATE "Trees W"
-"Trees W" SET Transform localPosition (-12.5 0 0)
-"Trees W" ADD RandomProps.Rectangle
-"Trees W" SET RandomProps.Rectangle size (5 100)
-"Trees W" ADD RandomProps.PropArea
-"Trees W" SET RandomProps.PropArea tags "tree"
-"Trees W" SET RandomProps.PropArea findTerrains False
-"Trees W" PUSH RandomProps.PropArea groundObjects "Grounds"
-"Trees W" SET RandomProps.PropArea numberOfProps 0
-"Trees W" SET RandomProps.PropArea rotationStep 180
-"Trees W" ADD Segmentation.Class Segmentation.Spawners.Entity
-"Trees W" SET Segmentation.Class className "Void"
-"Trees W" ADD Thermal.ThermalObjectBehaviour
-"Trees W" SET Thermal.ThermalObjectBehaviour profile "ThermalBehaviour/Trees"
-"Trees W" SET active false
-CREATE "Trees E"
-"Trees E" SET Transform localPosition (12.5 0 0)
-"Trees E" ADD RandomProps.Rectangle
-"Trees E" SET RandomProps.Rectangle size (5 100)
-"Trees E" ADD RandomProps.PropArea
-"Trees E" SET RandomProps.PropArea tags "tree"
-"Trees E" SET RandomProps.PropArea findTerrains False
-"Trees E" PUSH RandomProps.PropArea groundObjects "Grounds"
-"Trees E" SET RandomProps.PropArea numberOfProps 0
-"Trees E" SET RandomProps.PropArea rotationStep 180
-"Trees E" ADD Segmentation.Class Segmentation.Spawners.Entity
-"Trees E" SET Segmentation.Class className "Void"
-"Trees E" ADD Thermal.ThermalObjectBehaviour
-"Trees E" SET Thermal.ThermalObjectBehaviour profile "ThermalBehaviour/Trees"
-"Trees E" SET active false
 
 CREATE "Trees"
 "Trees" SET Transform localPosition (0 0 30)
-"Trees" ADD RandomProps.Rectangle
-"Trees" SET RandomProps.Rectangle size (15 50)
+"Trees" ADD RandomProps.Frustum
+"Trees" SET RandomProps.Frustum cam "Camera/Thermal"
+"Trees" SET RandomProps.Frustum minDistance 12
+"Trees" SET RandomProps.Frustum maxDistance 30
 "Trees" ADD RandomProps.PropArea
 "Trees" SET RandomProps.PropArea tags "tree"
 "Trees" SET RandomProps.PropArea findTerrains False
 "Trees" PUSH RandomProps.PropArea groundObjects "Grounds"
-"Trees" SET RandomProps.PropArea numberOfProps 40
+"Trees" SET RandomProps.PropArea numberOfProps 10
 "Trees" SET RandomProps.PropArea rotationStep 180
 "Trees" ADD Segmentation.Class Segmentation.Spawners.Entity
 "Trees" SET Segmentation.Class className "Void"
@@ -170,13 +97,15 @@ CREATE "Cars"
 "Cars" SET Transform localPosition (0 0 20)
 "Cars" ADD Segmentation.Class Segmentation.Spawners.Entity
 "Cars" SET Segmentation.Class className "Void"
-"Cars" ADD RandomProps.Rectangle
-"Cars" SET RandomProps.Rectangle size (15 50)
+"Cars" ADD RandomProps.Frustum
+"Cars" SET RandomProps.Frustum cam "Camera/Thermal"
+"Cars" SET RandomProps.Frustum minDistance 12
+"Cars" SET RandomProps.Frustum maxDistance 30
 "Cars" ADD RandomProps.PropArea
 "Cars" SET RandomProps.PropArea tags "+car,+thermal" collisionCheck True stickToGround False findTerrains False
 "Cars" SET RandomProps.PropArea findTerrains False
 "Cars" PUSH RandomProps.PropArea groundObjects "Grounds"
-"Cars" SET RandomProps.PropArea numberOfProps 2
+"Cars" SET RandomProps.PropArea numberOfProps 12
 "Cars" ADD Thermal.Spawners.ReplaceThermalProfiles
 "Cars" SET Thermal.Spawners.ReplaceThermalProfiles profile "ThermalBehaviour/Cars"
 "Cars" SET active true
@@ -195,13 +124,16 @@ CREATE "Bird"
 
 CREATE "Signs"
 "Signs" SET Transform localPosition (0 0 20)
-"Signs" ADD RandomProps.Rectangle
-"Signs" SET RandomProps.Rectangle size (15 50)
+"Signs" ADD RandomProps.Frustum
+"Signs" SET RandomProps.Frustum cam "Camera/Thermal"
+"Signs" SET RandomProps.Frustum minDistance 12
+"Signs" SET RandomProps.Frustum maxDistance 15
 "Signs" ADD RandomProps.PropArea
 "Signs" SET RandomProps.PropArea tags "sign"
 "Signs" SET RandomProps.PropArea findTerrains False
 "Signs" PUSH RandomProps.PropArea groundObjects "Grounds"
 "Signs" SET RandomProps.PropArea numberOfProps 20
+"Signs" SET RandomProps.PropArea rotationStep 180
 "Signs" ADD Segmentation.Class Segmentation.Spawners.Entity
 "Signs" SET Segmentation.Class className "Void"
 "Signs" ADD Thermal.ThermalObjectBehaviour
@@ -209,8 +141,11 @@ CREATE "Signs"
 "Signs" SET active true
 
 CREATE "Trafficlights"
-"Trafficlights" ADD RandomProps.Rectangle
-"Trafficlights" SET RandomProps.Rectangle size (15 100)
+"Trafficlights" ADD RandomProps.Frustum
+"Trafficlights" SET RandomProps.Frustum cam "Camera/Thermal"
+"Trafficlights" SET RandomProps.Frustum minDistance 12
+"Trafficlights" SET RandomProps.Frustum maxDistance 15
+"Trafficlights" SET RandomProps.Frustum fixedYAxis 0"
 "Trafficlights" ADD RandomProps.PropArea
 "Trafficlights" SET RandomProps.PropArea tags "trafficlight"
 "Trafficlights" SET RandomProps.PropArea findTerrains False
@@ -234,15 +169,18 @@ CREATE "Misc"
 "Misc" SET active true
 
 CREATE "Humans"
-"Humans" SET Transform localPosition (0 0 -10)
+"Humans" SET Transform localPosition (10 0 -10)
 "Humans" ADD Segmentation.Class Segmentation.Spawners.Entity Humans.Spawners.RandomPose
-"Humans" PUSH Humans.Spawners.RandomPose clips ASSET "Humans/animations/LookingAroundNervously" FROM "humans" ASSET "Humans/animations/LeanAgainstWall3" FROM "humans" ASSET "Humans/animations/StandingAngry" FROM "humans" ASSET "Humans/animations/LookingAround" FROM "humans" ASSET "Humans/animations/LeanAgainstWall2" FROM "humans" ASSET "Humans/animations/Sitting4" FROM "humans" ASSET "Humans/animations/Waving" FROM "humans" ASSET "Humans/animations/Sitting3" FROM "humans" ASSET "Humans/animations/PushButton" FROM "humans" ASSET "Humans/animations/Sitting1" FROM "humans" ASSET "Humans/animations/ShakingHands" FROM "humans" ASSET "Humans/animations/LeanAgainstWall" FROM "humans" ASSET "Humans/animations/ArmsCrossed" FROM "humans" ASSET "Humans/animations/Sitting2" FROM "humans" ASSET "Humans/animations/LookBehind" FROM "humans" ASSET "Humans/animations/Looking" FROM "humans"
+"Humans" PUSH Humans.Spawners.RandomPose clips ASSET "Humans/animations/Walk" FROM "humans" ASSET "Humans/animations/Run" FROM "humans" ASSET "Humans/animations/LookingAroundNervously" FROM "humans" ASSET "Humans/animations/LeanAgainstWall3" FROM "humans" ASSET "Humans/animations/StandingAngry" FROM "humans" ASSET "Humans/animations/LookingAround" FROM "humans" ASSET "Humans/animations/LeanAgainstWall2" FROM "humans" ASSET "Humans/animations/Sitting4" FROM "humans" ASSET "Humans/animations/Waving" FROM "humans" ASSET "Humans/animations/Sitting3" FROM "humans" ASSET "Humans/animations/PushButton" FROM "humans" ASSET "Humans/animations/Sitting1" FROM "humans" ASSET "Humans/animations/ShakingHands" FROM "humans" ASSET "Humans/animations/LeanAgainstWall" FROM "humans" ASSET "Humans/animations/ArmsCrossed" FROM "humans" ASSET "Humans/animations/Sitting2" FROM "humans" ASSET "Humans/animations/LookBehind" FROM "humans" ASSET "Humans/animations/Looking" FROM "humans"
 "Humans" SET Segmentation.Class className "Person"
-"Humans" ADD RandomProps.Rectangle
-"Humans" SET RandomProps.Rectangle size (4 10)
+"Humans" ADD RandomProps.Frustum
+"Humans" SET RandomProps.Frustum cam "Camera/Thermal"
+"Humans" SET RandomProps.Frustum minDistance 6
+"Humans" SET RandomProps.Frustum maxDistance 12
+"Humans" SET RandomProps.Frustum fixedYAxis 0
 "Humans" ADD RandomProps.PropArea
 "Humans" SET RandomProps.PropArea tags "human" collisionCheck True stickToGround False findTerrains False
-"Humans" SET RandomProps.PropArea numberOfProps 1
+"Humans" SET RandomProps.PropArea numberOfProps 4
 "Humans" ADD Thermal.Spawners.ReplaceThermalProfiles
 "Humans" SET Thermal.Spawners.ReplaceThermalProfiles profile "ThermalBehaviour/Humans"
 "Humans" SET active true
@@ -254,12 +192,14 @@ CREATE "BicycleHumans"
 "BicycleHumans" SET Thermal.Spawners.ReplaceThermalProfiles profile "ThermalBehaviour/Humans"
 
 CREATE "Bicycles"
-"Bicycles" SET Transform localPosition (4 0 -10)
+"Bicycles" SET Transform localPosition (10 0 -10)
 "Bicycles" ADD Segmentation.Class Segmentation.Spawners.Entity Humans.Spawners.RandomHumansVehiclePoser
 "Bicycles" SET Humans.Spawners.RandomHumansVehiclePoser container "BicycleHumans"
 "Bicycles" SET Segmentation.Class className "Bicycle"
-"Bicycles" ADD RandomProps.Rectangle
-"Bicycles" SET RandomProps.Rectangle size (4 10)
+"Bicycles" ADD RandomProps.Frustum
+"Bicycles" SET RandomProps.Frustum cam "Camera/Thermal"
+"Bicycles" SET RandomProps.Frustum minDistance 6
+"Bicycles" SET RandomProps.Frustum maxDistance 12
 "Bicycles" ADD RandomProps.PropArea
 "Bicycles" SET RandomProps.PropArea tags "bicycle" collisionCheck True stickToGround False findTerrains False
 "Bicycles" SET RandomProps.PropArea numberOfProps 1
@@ -271,31 +211,31 @@ CREATE "Bicycles"
 "Camera" ADD Sensors.RenderCamera
 "Camera" SET Sensors.RenderCamera resolution (1472 1472)
 
-"Grounds" SET Thermal.ThermalObjectBehaviour enabled false
-"Grounds" SET Thermal.ThermalObjectBehaviour enabled true
-"Signs" SET Thermal.ThermalObjectBehaviour enabled false
-"Signs" SET Thermal.ThermalObjectBehaviour enabled true
-"Trafficlights" SET Thermal.ThermalObjectBehaviour enabled false
-"Trafficlights" SET Thermal.ThermalObjectBehaviour enabled true
-"Misc" SET Thermal.ThermalObjectBehaviour enabled false
-"Misc" SET Thermal.ThermalObjectBehaviour enabled true
-"Trees" SET Thermal.ThermalObjectBehaviour enabled false
-"Trees" SET Thermal.ThermalObjectBehaviour enabled true
-"Cars" SET Thermal.Spawners.ReplaceThermalProfiles enabled false
-"Cars" SET Thermal.Spawners.ReplaceThermalProfiles enabled true
-"Humans" SET Thermal.Spawners.ReplaceThermalProfiles enabled false
-"Humans" SET Thermal.Spawners.ReplaceThermalProfiles enabled true
-"Bicycles" SET Thermal.Spawners.ReplaceThermalProfiles enabled false
-"Bicycles" SET Thermal.Spawners.ReplaceThermalProfiles enabled true
+"Grounds" SET Thermal.ThermalObjectBehaviour enabled false"
+"Grounds" SET Thermal.ThermalObjectBehaviour enabled true"
+"Signs" SET Thermal.ThermalObjectBehaviour enabled false"
+"Signs" SET Thermal.ThermalObjectBehaviour enabled true"
+"Trafficlights" SET Thermal.ThermalObjectBehaviour enabled false"
+"Trafficlights" SET Thermal.ThermalObjectBehaviour enabled true"
+"Misc" SET Thermal.ThermalObjectBehaviour enabled false"
+"Misc" SET Thermal.ThermalObjectBehaviour enabled true"
+"Trees" SET Thermal.ThermalObjectBehaviour enabled false"
+"Trees" SET Thermal.ThermalObjectBehaviour enabled true"
+"Buildings" SET Thermal.ThermalObjectBehaviour enabled false"
+"Buildings" SET Thermal.ThermalObjectBehaviour enabled true"
+"Cars" SET Thermal.Spawners.ReplaceThermalProfiles enabled false"
+"Cars" SET Thermal.Spawners.ReplaceThermalProfiles enabled true"
+"Humans" SET Thermal.Spawners.ReplaceThermalProfiles enabled false"
+"Humans" SET Thermal.Spawners.ReplaceThermalProfiles enabled true"
+"Bicycles" SET Thermal.Spawners.ReplaceThermalProfiles enabled false"
+"Bicycles" SET Thermal.Spawners.ReplaceThermalProfiles enabled true"
 
 CREATE "disk1"
 "disk1" ADD Sensors.Disk
-"disk1" SET Sensors.Disk path "V:\adas_test1\"
+"disk1" SET Sensors.Disk path "C:\tmp\"
 CREATE "disk1/Cameras/thermal"
 "disk1/Cameras/thermal" ADD Sensors.RenderTextureLink
 "disk1/Cameras/thermal" SET Sensors.RenderTextureLink target "Thermal Texture"
 "disk1/Cameras/thermal" SET Sensors.RenderTextureLink outputType "Thermal"
 "disk1/Cameras/thermal" SET active true
 "disk1" SET active true
-
-"Camera/Thermal" SET CameraFilterPack_Blur_Movie Radius 5

@@ -80,7 +80,7 @@ def initTelnet(ip, port, retries=-1, wait=.5, timeout=30, ka_interval=3, ka_fail
 				TCP_KEEPALIVE = 0x10
 				sock.setsockopt(socket.SOL_SOCKET, socket.SO_KEEPALIVE, 1)
 				sock.setsockopt(socket.IPPROTO_TCP, TCP_KEEPALIVE, ka_interval)
-			else:
+			else: # linux
 				sock.setsockopt(socket.SOL_SOCKET, socket.SO_KEEPALIVE, 1)
 				sock.setsockopt(socket.IPPROTO_TCP, socket.TCP_KEEPIDLE, ka_idle)
 				sock.setsockopt(socket.IPPROTO_TCP, socket.TCP_KEEPINTVL, ka_interval)
@@ -335,9 +335,9 @@ def sendData(v, read=None, flush=None, timeout=3):
 	
 	string: Reply from server or raw data
 	"""
-	if settings.force_sync:
+	if settings.force_sync == True:
 		read = True
-	else:
+	else: # not recommended
 		if read == None:
 			if settings.async == True:
 				read = False
@@ -352,16 +352,22 @@ def sendData(v, read=None, flush=None, timeout=3):
 		output('[{}] Telnet sendData v: {} read: {} flush: {}'.format(settings._counters['send'], v, 'True' if read == True else 'False', 'True' if flush != None else 'False'))
 	r = []
 	abort = False
+	tBytes = 0
 	
 	for s in v:
 		s = re.sub(r'\s{2,}', ' ', s.strip('\n\r').replace('\t', ' '))
 		
+		# skip empty lines
 		if len(s) == 0 or len(s.strip(' ')) == 0:
 			continue
+		
+		# comment skip
 		if s[0:2] == '//' or s[0:2] == '--':
 			if settings.quiet == False:
 				output('>> {}'.format(s), 'DEBUG')
 			continue
+		
+		# mute
 		if settings.quiet == False:
 			output('>> {}'.format(s))
 		
@@ -384,14 +390,20 @@ def sendData(v, read=None, flush=None, timeout=3):
 			pass
 		
 		abort = False
+		rBytes = 0
 		
-		if read:
+		if read == True:
 			if settings.debug:
 				settings._counters['recv'] += 1
 				output('[{}] Telnet Reading...'.format(settings._counters['recv']), 'DEBUG')
 			
-			l = settings._tn.read_until(b"\r\n", timeout)
-			l = shapeData(l)
+			rData = settings._tn.read_until(b"\r\n", timeout)
+			
+			if settings.debug:
+				output('[{}] Raw data: {}'.format(settings._counters['recv'], rData), 'DEBUG')
+			
+			rBytes += len(rData)
+			l = shapeData(rData)
 			
 			if settings.abort_on_error == True and abort == False and 'ERROR' in l:
 				abort = True
@@ -401,20 +413,52 @@ def sendData(v, read=None, flush=None, timeout=3):
 			else:
 				r.append(l)
 			
-			# multi return hack, ideally first response would have a line count attached to it
+			aBytes = 0
+			eolFlag = True if rBytes > 0 and str(rData.decode('utf-8'))[-2:] == '\r\n' else False
+			
+			if settings.debug:
+				output('[{}] rBytes: {} eolFlag: {} rData: {}'.format(settings._counters['recv'], rBytes, '1' if eolFlag == True else '0', rData), 'DEBUG')
+			
+			rData = []
+			
 			while True:
 				if settings.debug:
-					output('Telnet Read Loop... buffer: {}'.format(r), 'DEBUG')
+					output('[{}:{}] Telnet Read Loop... buffer: {}'.format(rBytes, '1' if eolFlag == True else '0', r), 'DEBUG')
 				
 				try:
-					l = shapeData(settings._tn.read_eager())
+					eData = settings._tn.read_eager()
+					l = ''
+					s = len(eData)
+					
+					if settings.debug:
+						output('eData[{}]: {}'.format(s, eData), 'DEBUG')
+					
+					if s > 0:
+						rData.append(eData.decode('utf-8'))
+						rBytes += s
+						aBytes += s
+						merged = str(''.join(rData))
+						
+						if len(merged) >= 2 and merged[-2:] == '\r\n':
+							if settings.debug:
+								output('Line break found', 'DEBUG')
+							l = shapeData(merged)
+							rData = []
+							eolFlag = True
 				except EOFError:
 					output('Error reading data from socket, reconnecting...', 'ERROR')
 					initTelnet(settings.ip, settings.port)
 					break
 				
+				if len(l) > 0:
+					if settings.debug:
+						output('rData[{}:{}]: {}'.format(aBytes, '1' if eolFlag == True else '0', rData), 'DEBUG')
+				
 				if l is '' or not l:
-					break
+					if (rBytes > 0 and aBytes == 0) or (aBytes > 0 and eolFlag == True): # read enough?
+						break
+					else: # nothing read, keep looping until we read something
+						continue
 				
 				if isinstance(l, list):
 					r.extend(l)
@@ -430,9 +474,10 @@ def sendData(v, read=None, flush=None, timeout=3):
 				if l != '':
 					sendData('NOOP', read=True, flush=True)
 			"""
+			tBytes += rBytes
 	
 	if settings.debug:
-		output('Telnet Read Completed: {}'.format(r), 'DEBUG')
+		output('Telnet Read {} bytes: {}'.format(tBytes, r), 'DEBUG')
 	if abort == True:
 		output('Error received via telnet, aborting', 'ERROR')
 	
@@ -476,7 +521,7 @@ def shapeData(l):
 	
 	# Attributes
 	
-	l (string|buffer): Raw data
+	l (str|bytes): Raw data
 	
 	# Raises
 	
@@ -487,7 +532,7 @@ def shapeData(l):
 	string: UTF-8 Data
 	"""
 	try:
-		l = str(l.decode('utf-8')).rstrip()
+		l = str(l.decode('utf-8')).rstrip() if not isinstance(l, str) else l.rstrip()
 	except TypeError as e:
 		output('Error {} decoding: {}'.format(e, l), 'ERROR')
 	
@@ -501,8 +546,7 @@ def shapeData(l):
 			pass
 		
 		output('<< {}'.format(f), 'WARN' if 'ERROR:' in l else 'INFO')
-	
-	if "\r\n" in l:
+		
 		try:
 			x = l.split("\r\n")
 			l = x
@@ -590,7 +634,7 @@ def flushBuffer():
 	"""
 	Forces a telnet command read by sending NOOP
 	"""
-	if settings.dry_run:
+	if settings.dry_run or settings.force_sync == True:
 		return
 	if settings.debug:
 		settings._counters['flush'] += 1

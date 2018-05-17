@@ -1482,9 +1482,8 @@ def seqSave(pref, rawData, label='disk1'):
 		
 		if len(data) == 0:
 			common.output('Unable to fetch bounding box #{}, retrying...'.format(settings._seqSave[label]), 'ERROR')
-			sys.exit(1)
-			# time.sleep(.5)
-			# rawData = common.sendData('NOOP', read=True)
+			time.sleep(.5)
+			rawData = common.sendData('NOOP', read=True)
 		else:
 			# make sure object is valid, otherwise we might need to send another noop to complete it
 			try:
