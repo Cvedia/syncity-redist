@@ -344,7 +344,7 @@ def sendData(v, read=None, flush=None, timeout=3):
 			else:
 				read = True
 	
-	if type(v) != list:
+	if not isinstance(v, list):
 		v = [ v ]
 	
 	if settings.debug:
@@ -848,7 +848,7 @@ def getAllFiles(base, ignore_path=['.git', '__pycache__'], ignore_ext=['.md', 'p
 	list: All files found filtered by specified criteria
 	
 	"""
-	if type(base) != list:
+	if not isinstance(base, list):
 		base = [ base ]
 	fns = []
 	

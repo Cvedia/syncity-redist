@@ -99,8 +99,8 @@ CREATE "spawner/drone/container"
 "spawner/drone/container" ADD RandomProps.PropArea
 "spawner/drone/container" SET RandomProps.PropArea tags "drone"
 "spawner/drone/container" SET RandomProps.PropArea async false numberOfProps 25 collisionCheck true stickToGround false 
-"spawner/drone/container" SET RandomProps.Torus innerRadius 0
 "spawner/drone/container" SET RandomProps.Torus radius 15
+"spawner/drone/container" SET RandomProps.Torus innerRadius 0
 "spawner/drone/container" SET Transform position (-6 0 -9) eulerAngles (0 0 0) localScale (1 1 1)
 "spawner/drone/container" ADD Segmentation.Class
 "spawner/drone/container" SET Segmentation.Class className "Drone"

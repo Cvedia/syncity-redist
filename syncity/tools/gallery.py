@@ -96,7 +96,6 @@ def run():
 			except IndexError:
 				common.output('Unable to find number on {}, skipping'.format(fn), 'WARNING')
 				continue
-				pass
 		
 		if settings.log:
 			common.output('Processing: {}'.format(lnm))

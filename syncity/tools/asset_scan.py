@@ -29,10 +29,10 @@ def flatten_json(y, delim='.'):
 	out = {}
 	
 	def flatten(x, name='', delim='.'):
-		if type(x) is dict:
+		if isinstance(x, dict):
 			for a in x:
 				flatten(x[a], name + a + delim)
-		elif type(x) is list:
+		elif isinstance(x, list):
 			i = 0
 			for a in x:
 				flatten(a, name + str(i) + delim)

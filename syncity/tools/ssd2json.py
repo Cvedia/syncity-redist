@@ -58,7 +58,6 @@ def run():
 			))
 		except:
 			common.output('Error converting image: {}'.format(l[0]), 'WARNING')
-			pass
 		
 		i += 1
 	

@@ -1408,7 +1408,6 @@ def seqSaveSync(label='disk1', force=False):
 		except:
 			settings._seqSave[label] = 1
 			force = True
-			pass
 	
 	if force == True:
 		common.flushBuffer()
@@ -1582,7 +1581,7 @@ def addRandomColor(objs, colors=16, colorsWeights=14, spawner=False, method='Fro
 	else:
 		component = 'RandomProps.RandomColor'
 	
-	if type(objs) != list:
+	if not isinstance(objs, list):
 		objs = [ objs ]
 	
 	buf = []
@@ -2172,7 +2171,7 @@ def setThermalProps(
 	
 	common.flushBuffer()
 
-def humanSpawner(
+def humanWalkerSpawner(
 		label='human_walker',
 		goals=None,
 		spawners=None,
@@ -2188,9 +2187,12 @@ def humanSpawner(
 		playRandomAnimations=None
 	):
 	"""
-	Creates a human walker spawner.
+	Creates a human walker spawner
+	
 	This requires a scene with a NavMesh, otherwise humans will be stuck on their spawning points.
 	All human bodies and props are automatically randomized.
+	
+	The spawner will create humans on a number of defined spawning points, humans will navigate the NavMesh to the defined goal points. The random distribution conforms with the random seed in all random aspects of this component allowing for replayability.
 	
 	# Arguments
 	
@@ -2210,10 +2212,10 @@ def humanSpawner(
 	```json
 	{
 		"animations": [
-										'ASSET "Humans/content/common/animations/Waving" FROM "humans"',
-										'ASSET "Humans/content/common/animations/Walking" FROM "humans"',
-										'ASSET "Humans/content/common/animations/Running" FROM "humans"'
-									],
+			'ASSET "Humans/content/common/animations/Waving" FROM "humans"',
+			'ASSET "Humans/content/common/animations/Walking" FROM "humans"',
+			'ASSET "Humans/content/common/animations/Running" FROM "humans"'
+		],
 		"minAnimationDuration": 1,
 		"maxAnimationDuration": 5,
 		"minDelayBetweenAnimations": 1,
@@ -2284,7 +2286,8 @@ def humanSpawner(
 		buf.extend([
 			'CREATE "{}points/spawners/s_{}"'.format(prefix, i),
 			'"{}points/spawners/s_{}" SET Transform position ({} {} {})'.format(prefix, i, s[0], s[1], s[2]),
-			'"{}points/spawners/s_{}" ADD Humans.HumanSpawnPoint'.format(prefix, i),
+			# DEPRECATED ?
+			# '"{}points/spawners/s_{}" ADD Humans.HumanSpawnPoint'.format(prefix, i),
 			'"{}points/spawners/s_{}" SET active true'.format(prefix, i),
 			'"{}humanSpawner" PUSH Humans.Locomotion.WalkerSpawner spawnPoints "{}points/spawners/s_{}"'.format(prefix, prefix, i)
 		])
@@ -2296,16 +2299,19 @@ def humanSpawner(
 		
 		for k in playRandomAnimations:
 			if k == 'animations':
-				a.push(playRandomAnimations[k])
+				if isinstance(playRandomAnimations[k], list):
+					a.extend(playRandomAnimations[k])
+				else:
+					a.append(playRandomAnimations[k])
 			else:
-				s.push('{} {}'.format(k, playRandomAnimations[k]))
+				s.append('{} {}'.format(k, playRandomAnimations[k]))
 		
 		buf.append('"{}humanSpawner" ADD Humans.Animation.PlayRandomAnimations'.format(prefix))
 		
 		if len(s) > 1:
 			buf.append(' '.join(s))
 		if len(a) > 0:
-			buf.append('"{}humanSpawner" PUSH Humans.Animation.PlayRandomAnimations {}'.format(prefix, ' '.join(a)))
+			buf.append('"{}humanSpawner" PUSH Humans.Animation.PlayRandomAnimations animations {}'.format(prefix, ' '.join(a)))
 	
 	buf.extend([
 		'"{}humanSpawner" SET active true'.format(prefix),

@@ -109,7 +109,32 @@ def run():
 			goals=[[1696.21069, 215.3, 7000]],
 			spawners=[[1723.81311, 213.312, 6838.701], [1655.723, 211.563, 6797.911], [1528.34314, 219.4655, 7124.911]],
 			delay=[.01, .3], speed=[.5, 5], limit=50,
-			requireThermalClothing=True
+			requireThermalClothing=True,
+			playRandomAnimations={
+				"animations": [
+					'ASSET "Humans/animations/LookingAroundNervously" FROM "humans"',
+					'ASSET "Humans/animations/LeanAgainstWall3" FROM "humans"',
+					'ASSET "Humans/animations/StandingAngry" FROM "humans"',
+					'ASSET "Humans/animations/LookingAround" FROM "humans"',
+					'ASSET "Humans/animations/LeanAgainstWall2" FROM "humans"',
+					'ASSET "Humans/animations/Sitting4" FROM "humans"',
+					'ASSET "Humans/animations/Waving" FROM "humans"',
+					'ASSET "Humans/animations/Sitting3" FROM "humans"',
+					'ASSET "Humans/animations/PushButton" FROM "humans"',
+					'ASSET "Humans/animations/Sitting1" FROM "humans"',
+					'ASSET "Humans/animations/ShakingHands" FROM "humans"',
+					'ASSET "Humans/animations/LeanAgainstWall" FROM "humans"',
+					'ASSET "Humans/animations/ArmsCrossed" FROM "humans"',
+					'ASSET "Humans/animations/Sitting2" FROM "humans"',
+					'ASSET "Humans/animations/LookBehind" FROM "humans"',
+					'ASSET "Humans/animations/Looking" FROM "humans"',
+				],
+				"minAnimationDuration": 1,
+				"maxAnimationDuration": 5,
+				"minDelayBetweenAnimations": 1,
+				"maxDelayBetweenAnimations": 5,
+				"animationFadeDuration": 0.4
+			}
 		)
 		
 		helpers.addThermalProfileOverride(

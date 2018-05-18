@@ -54,7 +54,7 @@ for f in $(git diff-index --cached --name-only f2ed90f8932e9525f41006420f55943f1
 	cfn="$cfn $ofn"
 done
 
-if [ -n "$cfn" ]; then
+if [ -z "$cfn" ]; then
 	git commit $cfn -m "auto head"
 fi
 

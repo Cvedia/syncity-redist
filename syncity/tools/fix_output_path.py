@@ -1,3 +1,6 @@
+"""
+Sets `settings.output_path` to object `disk1` path
+"""
 from .. import common, helpers, settings_manager
 
 settings = settings_manager.Singleton()

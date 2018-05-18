@@ -1,5 +1,7 @@
 """
-We developed a special tool to generate meaningfull reports by collecting all existing logs, initialization files, hashes, etc. If you happen to have a issue with the simulator running the report tool will probably generate all information required for us to debug the problem.
+We developed a automated tool to generate meaningfull reports by collecting existing logs, initialization files, hashes, etc. If you happen to have a issue with the simulator running the report tool will probably generate all information required for us to debug the problem.
+
+Note that this will not include any sensitive information nor automatically transmit the report.
 
 ## Running report tool
 
