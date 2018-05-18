@@ -58,6 +58,7 @@ if [ -n "$DEBUG" ]; then
 	if [ -n "$BASE_PATH" ]; then
 		echo "Using base path: '$BASE_PATH'"
 	fi
+	
 	echo "Current version: '$CURRENT_VERSION'"
 	echo "New version: '$NEW_VERSION'"
 	
