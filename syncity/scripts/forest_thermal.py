@@ -105,7 +105,7 @@ def run():
 		)
 		
 		# create thermal humans
-		helpers.humanSpawner(
+		helpers.humanWalkerSpawner(
 			goals=[[1696.21069, 215.3, 7000]],
 			spawners=[[1723.81311, 213.312, 6838.701], [1655.723, 211.563, 6797.911], [1528.34314, 219.4655, 7124.911]],
 			delay=[.01, .3], speed=[.5, 5], limit=50,
