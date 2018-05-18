@@ -95,13 +95,13 @@ function ImagesGallery() {
 				fancy_url, fancy_murl;
 		
 		try {
-			fancy_url = url.split('/').slice(-1)[0];
+			fancy_url = url.split(url.indexOf('/') == -1 ? '\\' : '/').slice(-1)[0];
 		} catch (z) {
 			fancy_url = url;
 		}
 		
 		try {
-			fancy_murl = murl.split('/').slice(-1)[0];
+			fancy_murl = murl.split(murl.indexOf('/') == -1 ? '\\' : '/').slice(-1)[0];
 		} catch (z) {
 			fancy_murl = murl;
 		}

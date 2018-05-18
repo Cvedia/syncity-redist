@@ -5,19 +5,32 @@ This script generates a static gallery in html, that work locally straight from 
 
 `python syncity.py -t gallery -l E:\syncity\exported_images`
 
+## Options
+
+- `--flat_gallery`: Creates a gallery ignoring filename prefixes, this disables the funcionality that aggregates several cameras from the same POV into a single bounding box output.
+- `--no_invert_bboxx`: Exports from the simulator have the X axis inverted, this forces bounding box alignment to `top` instead of `bottom`.
+- `--align`: Controls how the gallery aligns the images with bounding boxes in the file level, the possible options are:
+	- `time`: Based on the timestamp of the image gallery will try to find the nearest timestamp match json file
+	- `linear`: Assumes a simple relationship between the images and boundingbox json files: `image_abc.jpg` expects a `image_abc.json` with bounding box information.
+	- `sequential`: Assumes that the boundingbox filename counter will always match the image or images, this works with the aggregation system. For example: `123_rgb_camera.jpg`, `123_thermal_camera.jpg`, `123_segmentation_camera.png`, `123_depth_camera.tif` will all be aggregate to a `bbox_123.json` , since they match the same number, `123`.
+
 ## Notes:
 
-The `local_path` (`-l`) is where all your images and `.json` objects are, this script will combine both to generate a `.html` gallery that you can open in any browser.
+- The `local_path` (`-l`) is where all your images and `.json` objects are, this script will combine both to generate a `.html` gallery that you can open in any browser.
+- If the bounding box object dimensions contains  numbers greater than 1, the rendering layer will assume it's absolute and not relative position.
+- Gallery will generate a standalone .html file that will includes the json objects embedded into the html, meaning that modifying or deleting the .json files will not affect the built gallery.
 
 """
 import json
 import sys
 import os
 import time
+import re
 
 from .. import common, helpers, settings_manager
 from datetime import datetime
 from jinja2 import Template
+from tqdm import tqdm
 
 settings = settings_manager.Singleton()
 
@@ -33,7 +46,7 @@ def args(parser):
 	except:
 		pass
 	try:
-		parser.add_argument('--linear_order', action='store_true', default=False, help='Skips prefix guessing treating all images as an output from a single output.')
+		parser.add_argument('--align', action='store', choices=['sequential', 'time', 'linear'], default='sequential', help='Defines alignment method, defaults to `sequential`.')
 	except:
 		pass
 	try:
@@ -69,14 +82,21 @@ def run():
 	
 	os.stat_float_times(True)
 	
-	for fn in fns:
+	for fn in tqdm(fns):
 		lnm = os.path.basename(fn).lower()
-		fty = None
+		fty = None # feature type, eg: thermal, rgb, depth, etc
 		
-		if not settings.linear_order:
+		if settings.align == 'time':
 			fts = os.path.getmtime(fn)
-		else:
+		elif settings.align == 'linear':
 			fts = '.'.join(os.path.basename(fn).split('.')[:-1])
+		elif settings.align == 'sequential':
+			try:
+				fts = re.findall(r'\d+', lnm)[0]
+			except IndexError:
+				common.output('Unable to find number on {}, skipping'.format(fn), 'WARNING')
+				continue
+				pass
 		
 		if settings.log:
 			common.output('Processing: {}'.format(lnm))
@@ -92,7 +112,7 @@ def run():
 		elif fty == None and "thermal" in lnm:
 			fty = "thermal"
 		elif lnm.endswith(".json"):
-			if not settings.linear_order:
+			if settings.align == 'time':
 				while has_attribute(fm, fts):
 					fts += .000001
 			try:
@@ -115,13 +135,14 @@ def run():
 		if not has_attribute(fc, fty):
 			fc[fty] = {}
 		
-		if settings.linear_order:
-			fc[fty][fts] = os.path.basename(fn)
-		else:
+		if settings.align == 'time':
 			while has_attribute(fc[fty], fts):
 				fts += .000001
 			
 			fc[fty][os.path.getmtime(fn)] = os.path.basename(fn)
+		# elif settings.align == 'linear':
+		else:
+			fc[fty][fts] = os.path.basename(fn)
 	
 	if len(fm) > 0:
 		features.append('bbox')
@@ -146,7 +167,7 @@ def run():
 	
 	fh.write(
 		html.render(
-			title='Gallery',
+			title='Gallery [{}]'.format(settings._start),
 			js_static=js_static, css_static=css_static, features=features,
 			fc=json.dumps(fc, sort_keys=True),
 			fm=json.dumps(fm, sort_keys=True),
