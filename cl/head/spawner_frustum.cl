@@ -65,9 +65,9 @@ CREATE "cameras/spawner/drones/container"
 "cameras/spawner/drones/container" SET RandomProps.Frustum minDistance 2
 "cameras/spawner/drones/container" SET RandomProps.Frustum maxDistance 5
 "cameras/spawner/drones/container" SET RandomProps.PropArea async false numberOfProps 10 collisionCheck true stickToGround false 
+"cameras/spawner/drones/container" SET RandomProps.Frustum cam "cameras/cameraRGB"
 "cameras/spawner/drones/container" SET RandomProps.Frustum allowEdge false
 "cameras/spawner/drones/container" SET RandomProps.Frustum scaleBack 0.25
-"cameras/spawner/drones/container" SET RandomProps.Frustum cam "cameras/cameraRGB"
 "cameras/spawner/drones/container" SET Transform eulerAngles (0 0 0) localScale (1 1 1)
 "cameras/spawner/drones/container" ADD Segmentation.Class
 "cameras/spawner/drones/container" SET Segmentation.Class className "Drone"

@@ -2267,7 +2267,7 @@ def humanWalkerSpawner(
 	
 	if container != None and segmentationClass != None:
 		buf.extend([
-			'"{}{}" ADD Segmentation.Class'.format(prefix, container),
+			'"{}{}" ADD Segmentation.Class Segmentation.Spawners.Entity'.format(prefix, container),
 			'"{}{}" SET Segmentation.Class className "{}"'.format(prefix, container, segmentationClass)
 		])
 	
@@ -2483,12 +2483,12 @@ def spawner(
 		if segmentationClass != None:
 			if isinstance(segmentationClass, list):
 				common.sendData([
-					'"{}" ADD Segmentation.Class'.format(obj),
+					'"{}" ADD Segmentation.Class Segmentation.Spawners.Entity'.format(obj),
 					'"{}" SET Segmentation.Class className "{}"'.format(obj, segmentationClass[i])
 				], read=False)
 			else:
 				common.sendData([
-					'"{}" ADD Segmentation.Class'.format(obj),
+					'"{}" ADD Segmentation.Class Segmentation.Spawners.Entity'.format(obj),
 					'"{}" SET Segmentation.Class className "{}"'.format(obj, segmentationClass)
 				], read=False)
 		
@@ -2697,7 +2697,7 @@ def spawnParkingLot(
 		
 		common.sendData([
 			'CREATE "Cars/{}" FROM "cars" AS "{}/car_{}"'.format(carID, prefix, k),
-			'"{}/car_{}" ADD Segmentation.Class'.format(prefix, k),
+			'"{}/car_{}" ADD Segmentation.Class Segmentation.Spawners.Entity'.format(prefix, k),
 			'"{}/car_{}" SET Segmentation.Class className "{}"'.format(prefix, k, segment),
 			'"{}/car_{}" SET Transform position ({} {} {})'.format(prefix, k, pX + settings.X_COMP, pY, pZ + settings.Z_COMP),
 			'"{}/car_{}" SET active true'.format(prefix, k)
@@ -2801,7 +2801,7 @@ def spawnDroneObjs(
 	
 	if groundSegment != None:
 		common.sendData([
-			'"{}" ADD Segmentation.Class'.format('city'),
+			'"{}" ADD Segmentation.Class Segmentation.Spawners.Entity'.format('city'),
 			'"{}" SET Segmentation.Class className "{}"'.format('city', groundSegment)
 		])
 	

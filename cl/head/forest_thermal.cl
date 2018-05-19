@@ -97,3 +97,54 @@ CREATE "spawner/animals/container"
 "spawner/animals/container" SET Segmentation.Class className "Animal"
 "spawner/animals/container" SET active true
 "spawner/animals" SET active true
+CREATE "spawner/human_walker"
+CREATE "spawner/human_walker/points"
+CREATE "spawner/human_walker/points/goals"
+CREATE "spawner/human_walker/points/spawners"
+CREATE "spawner/human_walker/humanSpawner"
+CREATE "spawner/human_walker/container"
+"spawner/human_walker/humanSpawner" SET active false
+"spawner/human_walker/humanSpawner" ADD Humans.Locomotion.WalkerSpawner
+"spawner/human_walker/humanSpawner" SET Humans.Locomotion.WalkerSpawner minimumDelayBetweenSpawns 0.01 maximumDelayBetweenSpawns 0.3 minimumSpeed 0.5 maximumSpeed 5 maximumHumans 50 arriveDistance 5 genderRestriction "None" requireThermalClothing true 
+"spawner/human_walker/humanSpawner" SET Humans.Locomotion.WalkerSpawner container "spawner/human_walker/container"
+"spawner/human_walker/container" ADD Segmentation.Class
+"spawner/human_walker/container" SET Segmentation.Class className "Human"
+CREATE "spawner/human_walker/points/goals/g_0"
+"spawner/human_walker/points/goals/g_0" SET Transform position (1696.21069 215.3 7000)
+"spawner/human_walker/points/goals/g_0" SET active true
+"spawner/human_walker/humanSpawner" PUSH Humans.Locomotion.WalkerSpawner goalPoints "spawner/human_walker/points/goals/g_0"
+CREATE "spawner/human_walker/points/spawners/s_0"
+"spawner/human_walker/points/spawners/s_0" SET Transform position (1723.81311 213.312 6838.701)
+"spawner/human_walker/points/spawners/s_0" SET active true
+"spawner/human_walker/humanSpawner" PUSH Humans.Locomotion.WalkerSpawner spawnPoints "spawner/human_walker/points/spawners/s_0"
+CREATE "spawner/human_walker/points/spawners/s_1"
+"spawner/human_walker/points/spawners/s_1" SET Transform position (1655.723 211.563 6797.911)
+"spawner/human_walker/points/spawners/s_1" SET active true
+"spawner/human_walker/humanSpawner" PUSH Humans.Locomotion.WalkerSpawner spawnPoints "spawner/human_walker/points/spawners/s_1"
+CREATE "spawner/human_walker/points/spawners/s_2"
+"spawner/human_walker/points/spawners/s_2" SET Transform position (1528.34314 219.4655 7124.911)
+"spawner/human_walker/points/spawners/s_2" SET active true
+"spawner/human_walker/humanSpawner" PUSH Humans.Locomotion.WalkerSpawner spawnPoints "spawner/human_walker/points/spawners/s_2"
+"spawner/human_walker/humanSpawner" ADD Humans.Animation.PlayRandomAnimations
+"spawner/human_walker/humanSpawner" SET Humans.Animation.PlayRandomAnimations animationFadeDuration 0.4 minAnimationDuration 1 maxDelayBetweenAnimations 5 minDelayBetweenAnimations 1 maxAnimationDuration 5
+"spawner/human_walker/humanSpawner" PUSH Humans.Animation.PlayRandomAnimations animations ASSET "Humans/animations/LookingAroundNervously" FROM "humans" ASSET "Humans/animations/LeanAgainstWall3" FROM "humans" ASSET "Humans/animations/StandingAngry" FROM "humans" ASSET "Humans/animations/LookingAround" FROM "humans" ASSET "Humans/animations/LeanAgainstWall2" FROM "humans" ASSET "Humans/animations/Sitting4" FROM "humans" ASSET "Humans/animations/Waving" FROM "humans" ASSET "Humans/animations/Sitting3" FROM "humans" ASSET "Humans/animations/PushButton" FROM "humans" ASSET "Humans/animations/Sitting1" FROM "humans" ASSET "Humans/animations/ShakingHands" FROM "humans" ASSET "Humans/animations/LeanAgainstWall" FROM "humans" ASSET "Humans/animations/ArmsCrossed" FROM "humans" ASSET "Humans/animations/Sitting2" FROM "humans" ASSET "Humans/animations/LookBehind" FROM "humans" ASSET "Humans/animations/Looking" FROM "humans"
+"spawner/human_walker/humanSpawner" SET active true
+"spawner/human_walker/points/goals" SET active true
+"spawner/human_walker/points/spawners" SET active true
+"spawner/human_walker/container" SET active true
+"spawner/human_walker/points" SET active true
+"spawner/human_walker" SET active true
+"spawner/human_walker/container" ADD Thermal.ThermalProfileOverride
+"spawner/human_walker/container" SET Thermal.ThermalProfileOverride temperatureMode "Disabled" temperature 0 temperatureMedianMode "Disabled" temperatureMedian 0.5 temperatureBandwidthMode "Disabled" temperatureBandwidth 0 heatinessMode "Absolute" heatiness 60 varianceMode "Disabled" variance 0 reflectivityMode "Disabled" reflectivity 0 ambientOffsetMode "Disabled" ambientOffset 0 
+"spawner/human_walker/container" ADD Thermal.ThermalProfileOverride
+"spawner/human_walker/container" SET Thermal.ThermalProfileOverride temperatureMode "Disabled" temperature 0 temperatureMedianMode "Disabled" temperatureMedian 0.5 temperatureBandwidthMode "Disabled" temperatureBandwidth 0 heatinessMode "Absolute" heatiness 60 varianceMode "Disabled" variance 0 reflectivityMode "Disabled" reflectivity 0 ambientOffsetMode "Disabled" ambientOffset 0 
+"cameras/cameraRGB" EXECUTE Sensors.RenderCamera RenderFrame
+"cameras/thermal" EXECUTE Sensors.RenderCamera RenderFrame
+"cameras/segmentation" EXECUTE Sensors.RenderCamera RenderFrame
+"cameras/depth" EXECUTE Sensors.RenderCamera RenderFrame
+"cameras/cameraRGB" SET Camera enabled true
+"cameras/thermal" SET Camera enabled true
+"cameras/segmentation" SET Camera enabled true
+"cameras/depth" SET Camera enabled true
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-3~5 30~35)
+"cameras" SET Transform position (1600 246 6829) eulerAngles (31.971 60.161 0)
