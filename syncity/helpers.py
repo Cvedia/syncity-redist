@@ -320,7 +320,7 @@ def addCameraSeg(
 	clippingFar=1000,
 	boundingBoxesExtensionAmount=0,
 	renderingPath=4,
-	textureFormat=4,
+	textureFormat=55,
 	minimumVisibility=0,
 	renderCamera=False,
 	registerCamera=True,
@@ -1548,7 +1548,7 @@ def addDiskOutput(lst, label='disk1', component='RenderTextureLink'):
 		if "depth" in l.lower():
 			common.sendData('"{}/{}" SET Sensors.{} outputType "DEPTH"'.format(label, l.capitalize(), component), read=False)
 		elif "segmentation" in l.lower():
-			common.sendData('"{}/{}" SET Sensors.{} outputType "LOSSLESS"'.format(label, l.capitalize(), component), read=False)
+			common.sendData('"{}/{}" SET Sensors.{} outputType "CUSTOM" outputChannels 3 outputPixelSize 4 outputExtension "png"'.format(label, l.capitalize(), component), read=False)
 		
 		common.sendData('"{}/{}" SET active true'.format(label, l.capitalize()), read=False)
 	common.sendData('"{}" SET active true'.format(label))

@@ -65,7 +65,7 @@ CREATE "spawner/drone/container"
 "spawner/drone/container" SET RandomProps.PropArea async false numberOfProps 3 collisionCheck false stickToGround false 
 "spawner/drone/container" SET RandomProps.Rectangle size (10 10)
 "spawner/drone/container" SET Transform position (0 0 0) eulerAngles (0 0 0) localScale (1 1 1)
-"spawner/drone/container" ADD Segmentation.Class
+"spawner/drone/container" ADD Segmentation.Class Segmentation.Spawners.Entity
 "spawner/drone/container" SET Segmentation.Class className "Drone"
 "spawner/drone/container" SET active true
 "spawner/drone" SET active true

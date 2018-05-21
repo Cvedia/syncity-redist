@@ -90,10 +90,10 @@ CREATE "spawner/animals/container"
 "spawner/animals/container" ADD RandomProps.PropArea
 "spawner/animals/container" SET RandomProps.PropArea tags "+animal, +thermal"
 "spawner/animals/container" SET RandomProps.PropArea async false numberOfProps 100 collisionCheck true stickToGround true 
-"spawner/animals/container" SET RandomProps.Torus radius 100
 "spawner/animals/container" SET RandomProps.Torus innerRadius 0
+"spawner/animals/container" SET RandomProps.Torus radius 100
 "spawner/animals/container" SET Transform position (1696.21069 250 7000) eulerAngles (0 0 0) localScale (1 1 1)
-"spawner/animals/container" ADD Segmentation.Class
+"spawner/animals/container" ADD Segmentation.Class Segmentation.Spawners.Entity
 "spawner/animals/container" SET Segmentation.Class className "Animal"
 "spawner/animals/container" SET active true
 "spawner/animals" SET active true
@@ -107,7 +107,7 @@ CREATE "spawner/human_walker/container"
 "spawner/human_walker/humanSpawner" ADD Humans.Locomotion.WalkerSpawner
 "spawner/human_walker/humanSpawner" SET Humans.Locomotion.WalkerSpawner minimumDelayBetweenSpawns 0.01 maximumDelayBetweenSpawns 0.3 minimumSpeed 0.5 maximumSpeed 5 maximumHumans 50 arriveDistance 5 genderRestriction "None" requireThermalClothing true 
 "spawner/human_walker/humanSpawner" SET Humans.Locomotion.WalkerSpawner container "spawner/human_walker/container"
-"spawner/human_walker/container" ADD Segmentation.Class
+"spawner/human_walker/container" ADD Segmentation.Class Segmentation.Spawners.Entity
 "spawner/human_walker/container" SET Segmentation.Class className "Human"
 CREATE "spawner/human_walker/points/goals/g_0"
 "spawner/human_walker/points/goals/g_0" SET Transform position (1696.21069 215.3 7000)
@@ -126,7 +126,7 @@ CREATE "spawner/human_walker/points/spawners/s_2"
 "spawner/human_walker/points/spawners/s_2" SET active true
 "spawner/human_walker/humanSpawner" PUSH Humans.Locomotion.WalkerSpawner spawnPoints "spawner/human_walker/points/spawners/s_2"
 "spawner/human_walker/humanSpawner" ADD Humans.Animation.PlayRandomAnimations
-"spawner/human_walker/humanSpawner" SET Humans.Animation.PlayRandomAnimations animationFadeDuration 0.4 minAnimationDuration 1 maxDelayBetweenAnimations 5 minDelayBetweenAnimations 1 maxAnimationDuration 5
+"spawner/human_walker/humanSpawner" SET Humans.Animation.PlayRandomAnimations minAnimationDuration 1 maxDelayBetweenAnimations 5 maxAnimationDuration 5 minDelayBetweenAnimations 1 animationFadeDuration 0.4
 "spawner/human_walker/humanSpawner" PUSH Humans.Animation.PlayRandomAnimations animations ASSET "Humans/animations/LookingAroundNervously" FROM "humans" ASSET "Humans/animations/LeanAgainstWall3" FROM "humans" ASSET "Humans/animations/StandingAngry" FROM "humans" ASSET "Humans/animations/LookingAround" FROM "humans" ASSET "Humans/animations/LeanAgainstWall2" FROM "humans" ASSET "Humans/animations/Sitting4" FROM "humans" ASSET "Humans/animations/Waving" FROM "humans" ASSET "Humans/animations/Sitting3" FROM "humans" ASSET "Humans/animations/PushButton" FROM "humans" ASSET "Humans/animations/Sitting1" FROM "humans" ASSET "Humans/animations/ShakingHands" FROM "humans" ASSET "Humans/animations/LeanAgainstWall" FROM "humans" ASSET "Humans/animations/ArmsCrossed" FROM "humans" ASSET "Humans/animations/Sitting2" FROM "humans" ASSET "Humans/animations/LookBehind" FROM "humans" ASSET "Humans/animations/Looking" FROM "humans"
 "spawner/human_walker/humanSpawner" SET active true
 "spawner/human_walker/points/goals" SET active true

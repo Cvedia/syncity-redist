@@ -68,7 +68,8 @@ textureFormat = [
 	'ETC_RGB4_3DS',			# 51 ETC 4 bits/pixel compressed RGB texture format.
 	'ETC_RGBA8_3DS',		# 52 ETC 4 bits/pixel RGB + 4 bits/pixel Alpha compressed texture format.
 	'RG16',							# 53 Two color (RG) texture format, 8-bits per channel.
-	'R8'								# 54 Scalar (R) render texture format, 8 bit fixed point.
+	'R8',								# 54 Scalar (R) render texture format, 8 bit fixed point.
+	'ARGBFloat'					# 55
 ]
 
 # TODO: Add textureFormatDepth

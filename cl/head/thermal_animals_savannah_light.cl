@@ -92,7 +92,7 @@ CREATE "spawner/animals0/container"
 "spawner/animals0/container" SET RandomProps.PropArea async false numberOfProps 50 collisionCheck true stickToGround true 
 "spawner/animals0/container" SET RandomProps.Rectangle size (1000 1000)
 "spawner/animals0/container" SET Transform position (1685 591 7894) eulerAngles (0 0 0) localScale (1 1 1)
-"spawner/animals0/container" ADD Segmentation.Class
+"spawner/animals0/container" ADD Segmentation.Class Segmentation.Spawners.Entity
 "spawner/animals0/container" SET Segmentation.Class className "Animal"
 "spawner/animals0/container" SET active true
 "spawner/animals0" SET active true
@@ -104,7 +104,7 @@ CREATE "spawner/cars0/container"
 "spawner/cars0/container" SET RandomProps.PropArea async false numberOfProps 50 collisionCheck true stickToGround true 
 "spawner/cars0/container" SET RandomProps.Rectangle size (1000 1000)
 "spawner/cars0/container" SET Transform position (1685 591 7894) eulerAngles (0 0 0) localScale (1 1 1)
-"spawner/cars0/container" ADD Segmentation.Class
+"spawner/cars0/container" ADD Segmentation.Class Segmentation.Spawners.Entity
 "spawner/cars0/container" SET Segmentation.Class className "Car"
 "spawner/cars0/container" SET active true
 "spawner/cars0" SET active true
@@ -116,7 +116,7 @@ CREATE "spawner/humans0/container"
 "spawner/humans0/container" SET RandomProps.PropArea async false numberOfProps 50 collisionCheck true stickToGround true 
 "spawner/humans0/container" SET RandomProps.Rectangle size (1000 1000)
 "spawner/humans0/container" SET Transform position (1685 591 7894) eulerAngles (0 0 0) localScale (1 1 1)
-"spawner/humans0/container" ADD Segmentation.Class
+"spawner/humans0/container" ADD Segmentation.Class Segmentation.Spawners.Entity
 "spawner/humans0/container" SET Segmentation.Class className "Human"
 "spawner/humans0/container" SET active true
 "spawner/humans0" SET active true

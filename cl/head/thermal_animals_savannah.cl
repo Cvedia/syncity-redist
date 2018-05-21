@@ -85,7 +85,7 @@ CREATE "spawner/cars0/container"
 "spawner/cars0/container" SET RandomProps.PropArea async false numberOfProps 50 collisionCheck true stickToGround true 
 "spawner/cars0/container" SET RandomProps.Rectangle size (5000 625)
 "spawner/cars0/container" SET Transform position (2519 591 9630) eulerAngles (0 0 0) localScale (1 1 1)
-"spawner/cars0/container" ADD Segmentation.Class
+"spawner/cars0/container" ADD Segmentation.Class Segmentation.Spawners.Entity
 "spawner/cars0/container" SET Segmentation.Class className "Car"
 "spawner/cars0/container" SET active true
 "spawner/cars0" SET active true
@@ -97,7 +97,7 @@ CREATE "spawner/animals0/container"
 "spawner/animals0/container" SET RandomProps.PropArea async false numberOfProps 50 collisionCheck true stickToGround true 
 "spawner/animals0/container" SET RandomProps.Rectangle size (5000 625)
 "spawner/animals0/container" SET Transform position (2519 591 9630) eulerAngles (0 0 0) localScale (1 1 1)
-"spawner/animals0/container" ADD Segmentation.Class
+"spawner/animals0/container" ADD Segmentation.Class Segmentation.Spawners.Entity
 "spawner/animals0/container" SET Segmentation.Class className "Animal"
 "spawner/animals0/container" SET active true
 "spawner/animals0" SET active true
@@ -109,7 +109,7 @@ CREATE "spawner/animals1/container"
 "spawner/animals1/container" SET RandomProps.PropArea async false numberOfProps 50 collisionCheck true stickToGround true 
 "spawner/animals1/container" SET RandomProps.Rectangle size (5000 625)
 "spawner/animals1/container" SET Transform position (2519 591 9630) eulerAngles (0 0 0) localScale (1 1 1)
-"spawner/animals1/container" ADD Segmentation.Class
+"spawner/animals1/container" ADD Segmentation.Class Segmentation.Spawners.Entity
 "spawner/animals1/container" SET Segmentation.Class className "Animal"
 "spawner/animals1/container" SET active true
 "spawner/animals1" SET active true
@@ -121,7 +121,7 @@ CREATE "spawner/animals2/container"
 "spawner/animals2/container" SET RandomProps.PropArea async false numberOfProps 50 collisionCheck true stickToGround true 
 "spawner/animals2/container" SET RandomProps.Rectangle size (5000 625)
 "spawner/animals2/container" SET Transform position (2519 591 9630) eulerAngles (0 0 0) localScale (1 1 1)
-"spawner/animals2/container" ADD Segmentation.Class
+"spawner/animals2/container" ADD Segmentation.Class Segmentation.Spawners.Entity
 "spawner/animals2/container" SET Segmentation.Class className "Animal"
 "spawner/animals2/container" SET active true
 "spawner/animals2" SET active true
@@ -133,7 +133,7 @@ CREATE "spawner/animals3/container"
 "spawner/animals3/container" SET RandomProps.PropArea async false numberOfProps 50 collisionCheck true stickToGround true 
 "spawner/animals3/container" SET RandomProps.Rectangle size (5000 625)
 "spawner/animals3/container" SET Transform position (2519 591 9630) eulerAngles (0 0 0) localScale (1 1 1)
-"spawner/animals3/container" ADD Segmentation.Class
+"spawner/animals3/container" ADD Segmentation.Class Segmentation.Spawners.Entity
 "spawner/animals3/container" SET Segmentation.Class className "Animal"
 "spawner/animals3/container" SET active true
 "spawner/animals3" SET active true
@@ -145,7 +145,7 @@ CREATE "spawner/animalsF/container"
 "spawner/animalsF/container" SET RandomProps.PropArea async false numberOfProps 50 collisionCheck true stickToGround true 
 "spawner/animalsF/container" SET RandomProps.Rectangle size (100 100)
 "spawner/animalsF/container" SET Transform position (1685 591 9856) eulerAngles (0 0 0) localScale (1 1 1)
-"spawner/animalsF/container" ADD Segmentation.Class
+"spawner/animalsF/container" ADD Segmentation.Class Segmentation.Spawners.Entity
 "spawner/animalsF/container" SET Segmentation.Class className "Animal"
 "spawner/animalsF/container" SET active true
 "spawner/animalsF" SET active true
@@ -178,595 +178,595 @@ CREATE "spawner/animalsF/container"
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-8 32)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (0 35)
 "cameras" SET Orbit distance 260~320 elevation 71.75 azimuth 0.5 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-4 27)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-3 34)
 "cameras" SET Orbit distance 260~320 elevation 71.5 azimuth 1.0 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-3 25)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-9 27)
 "cameras" SET Orbit distance 260~320 elevation 71.25 azimuth 1.5 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-2 31)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-8 29)
 "cameras" SET Orbit distance 260~320 elevation 71.0 azimuth 2.0 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-2 26)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-7 34)
 "cameras" SET Orbit distance 260~320 elevation 70.75 azimuth 2.5 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (1 26)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-8 33)
 "cameras" SET Orbit distance 260~320 elevation 70.5 azimuth 3.0 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-4 25)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-5 30)
 "cameras" SET Orbit distance 260~320 elevation 70.25 azimuth 3.5 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-8 34)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-5 29)
 "cameras" SET Orbit distance 260~320 elevation 70.0 azimuth 4.0 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (0 30)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (0 28)
 "cameras" SET Orbit distance 260~320 elevation 69.75 azimuth 4.5 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-7 27)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-6 35)
 "cameras" SET Orbit distance 260~320 elevation 69.5 azimuth 5.0 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-5 30)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-3 28)
 "cameras" SET Orbit distance 260~320 elevation 69.25 azimuth 5.5 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-1 32)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-2 32)
 "cameras" SET Orbit distance 260~320 elevation 69.0 azimuth 6.0 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-4 31)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-2 33)
 "cameras" SET Orbit distance 260~320 elevation 68.75 azimuth 6.5 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-1 26)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (1 31)
 "cameras" SET Orbit distance 260~320 elevation 68.5 azimuth 7.0 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (2 25)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-5 33)
 "cameras" SET Orbit distance 260~320 elevation 68.25 azimuth 7.5 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-9 31)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-9 27)
 "cameras" SET Orbit distance 260~320 elevation 68.0 azimuth 8.0 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-8 27)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (1 35)
 "cameras" SET Orbit distance 260~320 elevation 67.75 azimuth 8.5 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-2 29)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-7 33)
 "cameras" SET Orbit distance 260~320 elevation 67.5 azimuth 9.0 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-5 28)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (1 29)
 "cameras" SET Orbit distance 260~320 elevation 67.25 azimuth 9.5 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (2 34)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (1 33)
 "cameras" SET Orbit distance 260~320 elevation 67.0 azimuth 10.0 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-8 30)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-1 26)
 "cameras" SET Orbit distance 260~320 elevation 66.75 azimuth 10.5 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-4 32)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (1 30)
 "cameras" SET Orbit distance 260~320 elevation 66.5 azimuth 11.0 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-7 32)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (1 26)
 "cameras" SET Orbit distance 260~320 elevation 66.25 azimuth 11.5 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-2 26)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-4 35)
 "cameras" SET Orbit distance 260~320 elevation 66.0 azimuth 12.0 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-9 30)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (1 25)
 "cameras" SET Orbit distance 260~320 elevation 65.75 azimuth 12.5 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (2 31)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-4 33)
 "cameras" SET Orbit distance 260~320 elevation 65.5 azimuth 13.0 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (1 28)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-4 31)
 "cameras" SET Orbit distance 260~320 elevation 65.25 azimuth 13.5 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-9 28)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (2 26)
 "cameras" SET Orbit distance 260~320 elevation 65.0 azimuth 14.0 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-9 29)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-3 26)
 "cameras" SET Orbit distance 260~320 elevation 64.75 azimuth 14.5 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-4 26)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (2 32)
 "cameras" SET Orbit distance 260~320 elevation 64.5 azimuth 15.0 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-3 34)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-6 27)
 "cameras" SET Orbit distance 260~320 elevation 64.25 azimuth 15.5 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (0 25)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-1 26)
 "cameras" SET Orbit distance 260~320 elevation 64.0 azimuth 16.0 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-8 35)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-7 35)
 "cameras" SET Orbit distance 260~320 elevation 63.75 azimuth 16.5 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (0 35)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-2 28)
 "cameras" SET Orbit distance 260~320 elevation 63.5 azimuth 17.0 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (2 27)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-4 33)
 "cameras" SET Orbit distance 260~320 elevation 63.25 azimuth 17.5 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-9 25)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-2 26)
 "cameras" SET Orbit distance 260~320 elevation 63.0 azimuth 18.0 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-6 30)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-7 27)
 "cameras" SET Orbit distance 260~320 elevation 62.75 azimuth 18.5 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-7 35)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (2 30)
 "cameras" SET Orbit distance 260~320 elevation 62.5 azimuth 19.0 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (0 25)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-1 27)
 "cameras" SET Orbit distance 260~320 elevation 62.25 azimuth 19.5 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-3 33)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-7 28)
 "cameras" SET Orbit distance 260~320 elevation 62.0 azimuth 20.0 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (1 34)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-9 32)
 "cameras" SET Orbit distance 260~320 elevation 61.75 azimuth 20.5 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-2 25)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (0 35)
 "cameras" SET Orbit distance 260~320 elevation 61.5 azimuth 21.0 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-6 27)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (0 32)
 "cameras" SET Orbit distance 260~320 elevation 61.25 azimuth 21.5 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-6 25)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-8 33)
 "cameras" SET Orbit distance 260~320 elevation 61.0 azimuth 22.0 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-4 30)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-6 29)
 "cameras" SET Orbit distance 260~320 elevation 60.75 azimuth 22.5 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (2 30)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (0 33)
 "cameras" SET Orbit distance 260~320 elevation 60.5 azimuth 23.0 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-6 29)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-8 29)
 "cameras" SET Orbit distance 260~320 elevation 60.25 azimuth 23.5 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-7 25)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-1 31)
 "cameras" SET Orbit distance 260~320 elevation 60.0 azimuth 24.0 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-5 27)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-6 30)
 "cameras" SET Orbit distance 260~320 elevation 59.75 azimuth 24.5 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-1 25)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-8 31)
 "cameras" SET Orbit distance 260~320 elevation 59.5 azimuth 25.0 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-8 31)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-2 28)
 "cameras" SET Orbit distance 260~320 elevation 59.25 azimuth 25.5 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-9 28)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (1 25)
 "cameras" SET Orbit distance 260~320 elevation 59.0 azimuth 26.0 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-5 32)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (0 35)
 "cameras" SET Orbit distance 260~320 elevation 58.75 azimuth 26.5 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (1 28)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-9 26)
 "cameras" SET Orbit distance 260~320 elevation 58.5 azimuth 27.0 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-5 32)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-2 25)
 "cameras" SET Orbit distance 260~320 elevation 58.25 azimuth 27.5 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (0 33)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-5 28)
 "cameras" SET Orbit distance 260~320 elevation 58.0 azimuth 28.0 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-2 28)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-2 35)
 "cameras" SET Orbit distance 260~320 elevation 57.75 azimuth 28.5 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-2 27)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-3 30)
 "cameras" SET Orbit distance 260~320 elevation 57.5 azimuth 29.0 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (1 26)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-7 28)
 "cameras" SET Orbit distance 260~320 elevation 57.25 azimuth 29.5 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (0 27)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-4 29)
 "cameras" SET Orbit distance 260~320 elevation 57.0 azimuth 30.0 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (1 29)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-8 29)
 "cameras" SET Orbit distance 260~320 elevation 56.75 azimuth 30.5 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-7 32)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-3 30)
 "cameras" SET Orbit distance 260~320 elevation 56.5 azimuth 31.0 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-7 25)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-8 32)
 "cameras" SET Orbit distance 260~320 elevation 56.25 azimuth 31.5 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-3 34)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-5 29)
 "cameras" SET Orbit distance 260~320 elevation 56.0 azimuth 32.0 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-2 33)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-2 35)
 "cameras" SET Orbit distance 260~320 elevation 55.75 azimuth 32.5 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (2 28)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-2 35)
 "cameras" SET Orbit distance 260~320 elevation 55.5 azimuth 33.0 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-4 35)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (0 30)
 "cameras" SET Orbit distance 260~320 elevation 55.25 azimuth 33.5 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (1 35)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-1 35)
 "cameras" SET Orbit distance 260~320 elevation 55.0 azimuth 34.0 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-5 33)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (0 25)
 "cameras" SET Orbit distance 260~320 elevation 54.75 azimuth 34.5 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-7 33)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (1 32)
 "cameras" SET Orbit distance 260~320 elevation 54.5 azimuth 35.0 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-6 31)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-8 28)
 "cameras" SET Orbit distance 260~320 elevation 54.25 azimuth 35.5 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (0 32)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-9 25)
 "cameras" SET Orbit distance 260~320 elevation 54.0 azimuth 36.0 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (0 29)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-6 25)
 "cameras" SET Orbit distance 260~320 elevation 53.75 azimuth 36.5 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-9 32)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-1 31)
 "cameras" SET Orbit distance 260~320 elevation 53.5 azimuth 37.0 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-9 26)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-2 31)
 "cameras" SET Orbit distance 260~320 elevation 53.25 azimuth 37.5 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-5 26)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-4 35)
 "cameras" SET Orbit distance 260~320 elevation 53.0 azimuth 38.0 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (0 31)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-8 30)
 "cameras" SET Orbit distance 260~320 elevation 52.75 azimuth 38.5 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-4 31)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-4 32)
 "cameras" SET Orbit distance 260~320 elevation 52.5 azimuth 39.0 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (0 28)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-4 31)
 "cameras" SET Orbit distance 260~320 elevation 52.25 azimuth 39.5 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-1 33)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (0 28)
 "cameras" SET Orbit distance 260~320 elevation 52.0 azimuth 40.0 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-2 34)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (2 29)
 "cameras" SET Orbit distance 260~320 elevation 51.75 azimuth 40.5 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-8 28)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-5 28)
 "cameras" SET Orbit distance 260~320 elevation 51.5 azimuth 41.0 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-7 30)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (0 26)
 "cameras" SET Orbit distance 260~320 elevation 51.25 azimuth 41.5 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-8 29)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (0 27)
 "cameras" SET Orbit distance 260~320 elevation 51.0 azimuth 42.0 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-8 25)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-6 26)
 "cameras" SET Orbit distance 260~320 elevation 50.75 azimuth 42.5 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-4 30)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-2 32)
 "cameras" SET Orbit distance 260~320 elevation 50.5 azimuth 43.0 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (0 29)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (2 31)
 "cameras" SET Orbit distance 260~320 elevation 50.25 azimuth 43.5 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (0 31)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-6 33)
 "cameras" SET Orbit distance 260~320 elevation 50.0 azimuth 44.0 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (1 25)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (2 32)
 "cameras" SET Orbit distance 260~320 elevation 49.75 azimuth 44.5 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-9 33)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-3 31)
 "cameras" SET Orbit distance 260~320 elevation 49.5 azimuth 45.0 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-6 35)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-3 29)
 "cameras" SET Orbit distance 260~320 elevation 49.25 azimuth 45.5 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (2 34)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-6 34)
 "cameras" SET Orbit distance 260~320 elevation 49.0 azimuth 46.0 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-2 28)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-2 29)
 "cameras" SET Orbit distance 260~320 elevation 48.75 azimuth 46.5 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-8 27)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-9 34)
 "cameras" SET Orbit distance 260~320 elevation 48.5 azimuth 47.0 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-1 29)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-4 28)
 "cameras" SET Orbit distance 260~320 elevation 48.25 azimuth 47.5 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-1 32)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-6 33)
 "cameras" SET Orbit distance 260~320 elevation 48.0 azimuth 48.0 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (0 26)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-7 26)
 "cameras" SET Orbit distance 260~320 elevation 47.75 azimuth 48.5 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-3 31)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-2 26)
 "cameras" SET Orbit distance 260~320 elevation 47.5 azimuth 49.0 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
 NOOP
 "cameras" SET Transform position.z 8900~2000
-"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (-7 32)
+"cameras/thermal" SET Thermal.ThermalCamera temperatureRange (1 32)
 "cameras" SET Orbit distance 260~320 elevation 47.25 azimuth 49.5 snapOffset (0 55~65 0)
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes

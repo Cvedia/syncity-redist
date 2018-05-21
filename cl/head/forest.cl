@@ -84,7 +84,7 @@ CREATE "spawner/cars/container"
 "spawner/cars/container" SET RandomProps.Torus innerRadius 0
 "spawner/cars/container" SET RandomProps.Torus radius 50
 "spawner/cars/container" SET Transform position (0 10 0) eulerAngles (0 0 0) localScale (1 1 1)
-"spawner/cars/container" ADD Segmentation.Class
+"spawner/cars/container" ADD Segmentation.Class Segmentation.Spawners.Entity
 "spawner/cars/container" SET Segmentation.Class className "Car"
 "cameras" SET Orbit target "spawner/cars/container"
 "spawner/cars/container" SET active true
