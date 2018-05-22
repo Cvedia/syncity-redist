@@ -801,6 +801,8 @@ def waitQueue(threshold=0, wait=3):
 	
 	flushBuffer()
 	
+	output('Waiting queue...', 'DEBUG')
+	
 	b = False
 	wTrigger = False
 	
@@ -812,11 +814,15 @@ def waitQueue(threshold=0, wait=3):
 			if s == 'ok' or 'error' in s:
 				continue
 			
-			q = int(s)
-			
-			if q <= threshold:
-				b = True
-				break
+			try:
+				s = re.findall(r'\d+', s)[0]
+				q = int(s)
+				
+				if q <= threshold:
+					b = True
+					break
+			except:
+				pass
 			
 			output('Waiting for queue to flush, {} pending...'.format(q))
 			wTrigger = True
