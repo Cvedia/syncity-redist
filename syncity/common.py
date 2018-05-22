@@ -322,18 +322,26 @@ def output(s, level='INFO', permissive=False):
 		output('Aborting on error!')
 		sys.exit(1)
 	
-def sendData(v, read=None, flush=None, timeout=3):
+def sendData(v, read=None, flush=None, timeout=3, readWait=.5):
 	"""
 	Sends data via telnet to the server
 	
 	# Arguments
 	
 	v (list|string): Command or multiple commands to be sent to the server
-	read (bool): Waits for a confirmation from server for each command been executed/queued (this greatly slows down execution)
+	read (bool): Waits for a confirmation from server for each command been executed/queued (this greatly slows down execution), defaults to `None`
+	flush (bool): Flush after reading, defaults to `None`
+	timeout (float): Time in seconds to wait for a immediate reply, defaults to `3`
+	readWait (float): If it happens we didn't received a reply on the immediate read, we will keep pooling for a reply every readWait seconds cycle, ideally this is just to avoid a fast as possible loop on a already loaded API. Defaults to `.5`
+	
+	# Notes
+	
+	- When `settings.async` is disabled (default behaviour) read flag is redundant, as system will always force a read, the same applies for flush, since there won't be any buffer to be read, trying to flush will have no effect.
 	
 	# Returns
 	
 	string: Reply from server or raw data
+	
 	"""
 	if settings.force_sync == True:
 		read = True
@@ -458,6 +466,8 @@ def sendData(v, read=None, flush=None, timeout=3):
 					if (rBytes > 0 and aBytes == 0) or (aBytes > 0 and eolFlag == True): # read enough?
 						break
 					else: # nothing read, keep looping until we read something
+						if readWait > 0:
+							time.sleep(readWait)
 						continue
 				
 				if isinstance(l, list):
@@ -821,11 +831,11 @@ def waitQueue(threshold=0, wait=3):
 				if q <= threshold:
 					b = True
 					break
+				
+				output('Waiting for queue to flush, {} pending...'.format(q))
+				wTrigger = True
 			except:
 				pass
-			
-			output('Waiting for queue to flush, {} pending...'.format(q))
-			wTrigger = True
 		
 		if b == False:
 			time.sleep(wait)

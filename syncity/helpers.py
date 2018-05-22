@@ -1332,7 +1332,7 @@ def doRender(lst):
 	for l in lst:
 		common.sendData('"{}" EXECUTE Sensors.RenderCamera RenderFrame'.format(l))
 
-def takeSnapshot(lst, autoSegment=False, label='disk1', forceNoop=False, forceRender=False):
+def takeSnapshot(lst, autoSegment=False, label='disk1', prefix='bbox', basePath=None, forceNoop=False, forceRender=False, waitQueue=True):
 	"""
 	Creates a image snapshot from a set of cameras using a disk component
 	
@@ -1341,8 +1341,12 @@ def takeSnapshot(lst, autoSegment=False, label='disk1', forceNoop=False, forceRe
 	lst (string|list): List of cameras
 	autoSegment (bool): Automatic guess which cameras are segmentation and export json objects among with the pixel dense image, defaults to `None`
 	label (string): Game object name, defaults to `disk1`
+	prefix (string): Bounding box filename prefix, defaults to `bbox`
+	basePath (string): Bounding box output path, defaults to `None`, when set to `None` falls back to default, `settings.local_path`
 	forceNoop (bool): Force a buffer flush before snapshot happens, this ensures that any queued commands are executed before doing the render. Defaults to `False`
 	forceRender (bool): Forces rendering frame before taking the snapshot, defaults to `False`
+	waitQueue (bool): Forces system to wait for simulator processing queue to be empty before taking a snapshot, this is crucial to ensure scene is completly built, defaults to `True`
+	
 	"""
 	if not isinstance(lst, list):
 		lst = [ lst ]
@@ -1354,6 +1358,8 @@ def takeSnapshot(lst, autoSegment=False, label='disk1', forceNoop=False, forceRe
 			doRender(lst)
 		return
 	
+	if waitQueue == True:
+		common.waitQueue()
 	seqSaveSync(label=label)
 	
 	if autoSegment:
@@ -1372,7 +1378,7 @@ def takeSnapshot(lst, autoSegment=False, label='disk1', forceNoop=False, forceRe
 				'"{}" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes'.format(lst[idx[0]]),
 				'NOOP'
 			], read=True)
-			seqSave('bbox', r, label=label)
+			seqSave(prefix, r, label=label, basePath=basePath)
 	else:
 		if forceNoop:
 			common.sendData('NOOP', read=True);
@@ -1382,13 +1388,16 @@ def takeSnapshot(lst, autoSegment=False, label='disk1', forceNoop=False, forceRe
 	if settings.cooldown > 0:
 		common.sendData('SLEEP {}'.format(settings.cooldown), read=True);
 
-def takeSegSnapshot(lst, label='disk1'):
+def takeSegSnapshot(lst, prefix='bbox', label='disk1', basePath=None):
 	"""
 	Creates a segmentation snapshot with json output from a list of cameras
 	
-	# Attributes
+	# Arguments
 	
 	lst (string|list): List of cameras with segmentation component
+	prefix (string): Bounding box filename prefix, defaults to `bbox`
+	label (string): Defines disk source, defaults to `disk1`
+	basePath (string): Bounding box output path, defaults to `None`, when set to `None` falls back to default, `settings.local_path`
 	
 	"""
 	if not isinstance(lst, list):
@@ -1399,7 +1408,34 @@ def takeSegSnapshot(lst, label='disk1'):
 	for l in lst:
 		r = common.sendData(['"{}" GET Segmentation.Output.BoundingBoxes boundingBoxes'.format(l), 'NOOP'], read=True)
 		# "cam" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
-		seqSave('bbox', r, label=label)
+		seqSave(prefix, r, label=label, basePath=basePath)
+
+def getSaveCounter(label='disk1'):
+	"""
+	Gets current save counter
+	This align the boundingbox filenames to the output files
+	
+	# Arguments
+	
+	label (string): Defines disk source, defaults to `disk1`
+	
+	# Output
+	
+	Returns a int
+	
+	"""
+	common.flushBuffer()
+	res = common.sendData('"{}" GET Sensors.Disk counter'.format(label), read=True)
+	counter = 1
+	
+	for r in res:
+		s = str(r).lower()
+		
+		if s == 'ok' or 'error' in s:
+			continue
+		
+		counter = int(s)
+	return counter
 
 def seqSaveSync(label='disk1', force=False):
 	if force == False:
@@ -1410,33 +1446,25 @@ def seqSaveSync(label='disk1', force=False):
 			force = True
 	
 	if force == True:
-		common.flushBuffer()
-		res = common.sendData('"{}" GET Sensors.Disk counter'.format(label), read=True)
-		counter = 1
-		
-		for r in res:
-			s = str(r).lower()
-			
-			if s == 'ok' or 'error' in s:
-				continue
-			
-			counter = int(s)
-		
-		settings._seqSave[label] = counter
+		settings._seqSave[label] = getSaveCounter(label=label)
 
-def seqSave(pref, rawData, label='disk1'):
+def seqSave(prefix, rawData, label='disk1', basePath=None):
 	"""
 	Helper function to mutate raw telnet outputs into json objects
 	
 	Note: This function is temporary, the simulator daemon itself will save json
 	files the same way it exports images in the future.
 	
-	# Attributes
+	# Arguments
 	
-	pref (string): Output file prefix
+	prefix (string): Output file prefix
 	rawData (list): Data to write
+	label (string): Defines disk source, defaults to `disk1`
+	basePath (string): Bounding box output path, defaults to `None`, when set to `None` falls back to default, `settings.local_path`
 	
 	"""
+	if basePath == None:
+		basePath = settings.local_path
 	if settings.dry_run:
 		return
 	
@@ -1503,10 +1531,10 @@ def seqSave(pref, rawData, label='disk1'):
 	data = ''.join(data)
 	
 	# TODO: Filename should take the `label` in consideration
-	fn = '{}{}_{}.json'.format(settings.local_path, pref, settings._seqSave[label])
+	fn = '{}{}_{}.json'.format(basePath, prefix, settings._seqSave[label])
 	
 	if settings.debug:
-		common.output('SEQ Save path: {} prefix: {} data: {}'.format(fn, pref, data), 'DEBUG')
+		common.output('SEQ Save path: {} prefix: {} data: {}'.format(fn, prefix, data), 'DEBUG')
 		d = open(fn + '.debug', 'w')
 		d.write('\r\n'.join(rawData))
 		d.close()
@@ -1521,7 +1549,7 @@ def addDiskOutput(lst, label='disk1', component='RenderTextureLink'):
 	"""
 	Creates a image output from a existing disk component
 	
-	# Attributes
+	# Arguments
 	
 	lst (list): List of cameras
 	label (string): Existing disk component game object name
@@ -2717,7 +2745,7 @@ def spawnMiscObjs(destroy=False, prefix='spawner', container='container', seed=N
 	"""
 	Spawns city / animals / cars objects
 	
-	# Attributes
+	# Arguments
 	
 	destroy (bool): Destroy objects before creating them, defaults to `False`
 	prefix (string): Spawner root object where spawned objects will be nested within, defaults to `spawner`
@@ -2759,7 +2787,7 @@ def spawnDroneObjs(
 	"""
 	Spawns trees / buildings / birds / donres and cars objects
 	
-	# Attributes
+	# Arguments
 	
 	destroy (bool): Destroy objects before creating them, defaults to `False`
 	prefix (string): Spawner root object where spawned objects will be nested within, defaults to `spawner`
@@ -2949,7 +2977,7 @@ def spawnAnimalsObjs(destroy=False, prefix='spawner', container='container', see
 	"""
 	Spawns trees and animals
 	
-	# Attributes
+	# Arguments
 	
 	destroy (bool): Destroy objects before creating them, defaults to `False`
 	prefix (string): Spawner root object where spawned objects will be nested within, defaults to `spawner`
