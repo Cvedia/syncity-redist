@@ -15,7 +15,7 @@ import random
 
 from syncity import common, settings_manager
 
-SYNCITY_VERSION = '18.05.22.1646'
+SYNCITY_VERSION = '18.06.06.2328'
 SIMULATOR_MIN_VERSION = '18.04.23.0000'
 
 print ('SynCity toolbox - v{}\nCopyright (c) 2016-{} CVEDIA PVE Ltd\n'.format(SYNCITY_VERSION, datetime.date.today().year))
@@ -75,6 +75,7 @@ parser.add_argument('--async', action='store_true', default=False, help='Send so
 parser.add_argument('--skip_init', action='store_true', default=False, help='Disables telnet init sequence')
 parser.add_argument('--skip_disk', action='store_true', default=False, help='Disables disk export completly')
 parser.add_argument('--skip_setup', action='store_true', default=False, help='Skip script setup and go straight to data extraction')
+parser.add_argument('--skip_queue', action='store_true', default=False, help='Skips all queue waits, this might cause asyncronous states for exports -- NOT RECOMMENDED')
 
 parser.add_argument('-c', '--config', default='syncity.conf', help='Defines a path/filename for syncity.conf')
 parser.add_argument('--skip_config', action='store_true', default=False, help='Skips SDK default config file')
@@ -92,6 +93,8 @@ parser.add_argument('--disable_envirosky', action='store_true', default=False, h
 parser.add_argument('--use_old_depth_buffer', action='store_true', default=False, help='Uses old depth buffer component')
 parser.add_argument('--flycam', action='store_true', default=False, help='Spawns fly cam, controllable via simulator')
 parser.add_argument('--nohead', action='store_true', default=False, help='Disables header outputs on log / record')
+
+parser.add_argument('-T', '--queue_threshold', type=int, default=0, help='Defines a threshold to wait for simulator queue, if queue is higher, SDK will wait until it\'s lower than the threshold.')
 
 parser.add_argument('--carsLimit', type=int, default=50, help='Spawn cars into scene, defaults to 100')
 parser.add_argument('--propsLimit', type=int, default=250, help='Spawn props into scene, defaults to 250')

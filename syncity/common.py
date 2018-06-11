@@ -95,6 +95,7 @@ def initTelnet(ip, port, retries=-1, wait=.5, timeout=30, ka_interval=3, ka_fail
 			output('Simulator Version: {}'.format(settings._simulator_version))
 			
 			if settings.test == False:
+				os.environ['SYNCITY_VERSION'] = settings._simulator_version
 				if settings.version == True:
 					output('SDK Version: {}'.format(settings._version))
 					sys.exit(0)
@@ -207,8 +208,14 @@ def init2():
 	else:
 		head = '// SDK v{}'.format(settings._version).encode('ascii') + b"\r\n"
 		head += '// ARGV {}'.format(' '.join(sys.argv)).encode('ascii') + b"\r\n"
-		# print(settings.getData())
 		head += '// SETTINGS {}'.format(json.dumps(settings.getData())).encode('ascii') + b"\r\n"
+		
+		# This may contain sensitive information, we only collect it on test mode
+		try:
+			if settings.test == True:
+				head += '// ENV {}'.format(json.dumps(os.environ.__dict__)).encode('ascii') + b"\r\n"
+		except:
+			pass
 	
 	init_logging(head)
 	
@@ -413,7 +420,7 @@ def sendData(v, read=None, flush=None, timeout=3, readWait=.5):
 			rBytes += len(rData)
 			l = shapeData(rData)
 			
-			if settings.abort_on_error == True and abort == False and 'ERROR' in l:
+			if settings.abort_on_error == True and abort == False and 'error' in str(l).lower():
 				abort = True
 			
 			if isinstance(l, list):
@@ -491,6 +498,12 @@ def sendData(v, read=None, flush=None, timeout=3, readWait=.5):
 	if abort == True:
 		output('Error received via telnet, aborting', 'ERROR')
 	
+	if settings.test:
+		for l in r:
+			if 'error' in str(l).lower():
+				output('Error on response: {}'.format(l), 'WARN')
+				# assert False
+	
 	return r
 
 def md5(fname):
@@ -544,7 +557,10 @@ def shapeData(l):
 	try:
 		l = str(l.decode('utf-8')).rstrip() if not isinstance(l, str) else l.rstrip()
 	except TypeError as e:
-		output('Error {} decoding: {}'.format(e, l), 'ERROR')
+		output('Error decoding: {}'.format(l), 'ERROR')
+	except:
+		output('Unknown error while decoding output from telnet', 'ERROR')
+		return ''
 	
 	if settings.quiet == False and l != '':
 		f = l
@@ -795,33 +811,36 @@ def mkdirP(path):
 		else:
 			raise
 
-def waitQueue(threshold=0, wait=3):
+def waitQueue(threshold=None, wait=.5):
+	# return
+	
 	"""
 	Blocks new CL commands until queue is above a threshold.
 	
 	# Arguments
 	
-	threshold (int): Maximum items on queue, defaults to `0`
+	threshold (int): Maximum items on queue, defaults to `None` that fallsback to `settings.queue_threshold`
 	wait (int): Time in seconds to wait until asking again, defaults to `3`
 	
 	"""
 	
-	if settings._tn == None:
+	if settings._tn == None or settings.skip_queue:
 		return
+	if threshold == None:
+		threshold = settings.queue_threshold
 	
 	flushBuffer()
 	
-	output('Waiting queue...', 'DEBUG')
+	output('Checking for queue...', 'DEBUG')
 	
 	b = False
-	wTrigger = False
 	
 	while b == False:
 		res = sendData('"API" GET API.Manager queueCount', read=True)
 		for r in res:
 			s = str(r).lower()
 			
-			if s == 'ok' or 'error' in s:
+			if s == '' or s == 'ok' or 'error' in s:
 				continue
 			
 			try:
@@ -833,20 +852,13 @@ def waitQueue(threshold=0, wait=3):
 					break
 				
 				output('Waiting for queue to flush, {} pending...'.format(q))
-				wTrigger = True
 			except:
 				pass
 		
 		if b == False:
 			time.sleep(wait)
 	
-	# NOTE: When a wait has been triggered, we will assure that there's nothing
-	# else pending, so we run the wait again until there's no more fluctuations
-	# on the queue. This is a issue that will only be resolved when the API 
-	# async problem is solved.
-	if wTrigger == True:
-		waitQueue(threshold=threshold, wait=wait)
-
+	output('Queue is below threshold', 'DEBUG')
 
 def getAllFiles(base, ignore_path=['.git', '__pycache__'], ignore_ext=['.md', 'pyc'], recursive=True):
 	"""

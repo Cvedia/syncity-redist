@@ -4,7 +4,7 @@ CREATE "cameras"
 CREATE "cameras/cameraRGB"
 "cameras/cameraRGB" SET active false
 "cameras/cameraRGB" ADD Camera AudioListener
-"cameras/cameraRGB" SET Camera near 0.3 far 1000 fieldOfView 60 renderingPath "UsePlayerSettings"
+"cameras/cameraRGB" SET Camera near 0.3 far 1000 fieldOfView 60 renderingPath "UsePlayerSettings" allowHDR true 
 CREATE "EnviroSky" AS "EnviroSky"
 "EnviroSky" SET EnviroSky Player "cameras" PlayerCamera "cameras/cameraRGB" GameTime.ProgressTime "None" weatherSettings.cloudTransitionSpeed 100 weatherSettings.effectTransitionSpeed 100 weatherSettings.fogTransitionSpeed 100 
 "EnviroSky" EXECUTE EnviroSky AssignAndStart "cameras/cameraRGB" "cameras/cameraRGB"
@@ -25,7 +25,7 @@ CREATE "cameras/segmentation"
 "cameras/segmentation" EXECUTE Segmentation.Output.ClassColors lookUpTable.SetClassColor "Void->black" "Car->red"
 "cameras/segmentation" ADD Segmentation.Output.FilteredBoundingBoxes
 "cameras/segmentation" EXECUTE Segmentation.Output.FilteredBoundingBoxes EnableClasses "Car"
-[UI.Window] ShowFromCamera "cameras/segmentation" AS "segmentation" WITH 1024 768 24 "ARGB32" "Default"
+[UI.Window] ShowFromCamera "cameras/segmentation" AS "segmentation" WITH 1024 768 24 "ARGBFloat" "Default"
 "cameras/segmentation" SET active true
 CREATE "disk1"
 "disk1" SET active false
@@ -40,7 +40,7 @@ CREATE "disk1/Cameras/camerargb"
 CREATE "disk1/Cameras/segmentation"
 "disk1/Cameras/segmentation" ADD Sensors.RenderTextureLink
 "disk1/Cameras/segmentation" SET Sensors.RenderTextureLink target "segmentation"
-"disk1/Cameras/segmentation" SET Sensors.RenderTextureLink outputType "LOSSLESS"
+"disk1/Cameras/segmentation" SET Sensors.RenderTextureLink outputType "CUSTOM" outputChannels 3 outputPixelSize 4 outputExtension "png"
 "disk1/Cameras/segmentation" SET active true
 "disk1" SET active true
 CREATE "obj/subject" Cars/VW_Golf_V/VW_Golf_V

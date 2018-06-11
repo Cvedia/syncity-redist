@@ -211,6 +211,8 @@ def addCameraRGB(
 	
 	enviroskyCloudTransitionSpeed=100, enviroskyEffectTransitionSpeed=100,
 	enviroskyFogTransitionSpeed=100, enviroskyProgressTime='None',
+	
+	allowHDR=True,
 	renderCamera=False, registerCamera=True
 ):
 	"""
@@ -235,6 +237,7 @@ def addCameraRGB(
 	enviroskyEffectTransitionSpeed (int): Defines weather transition speed, defaults to `100` which is instant
 	enviroskyFogTransitionSpeed (int): Defines fog deposition speed, defaults to `100` which is instant
 	enviroskyProgressTime (string): Defines time progression, defaults to `None` avoiding time to change
+	allowHDR (bool): Enables / disables HDR, defaults to `True`
 	renderCamera (bool): Binds a renderCamera component, defaults to `False`
 	registerCamera (bool): Register camera on the UI making it visible
 	
@@ -294,7 +297,16 @@ def addCameraRGB(
 			'CREATE "{}"'.format(l),
 			'"{}" SET active false'.format(l),
 			'"{}" ADD {}'.format(l, ' '.join(addStack)),
-			'"{}" SET Camera near {} far {} fieldOfView {} renderingPath "{}"'.format(l, clippingNear, clippingFar, fov, unity_vars.renderingPath[renderingPath])
+			'''"{}" SET Camera
+				near {}
+				far {}
+				fieldOfView {}
+				renderingPath "{}"
+				allowHDR {}
+			'''.format(
+				l, clippingNear, clippingFar, fov,
+				unity_vars.renderingPath[renderingPath], 'true' if allowHDR == True else 'false'
+			)
 		])
 		buf.extend(b)
 		if registerCamera == True:
@@ -1358,6 +1370,16 @@ def takeSnapshot(lst, autoSegment=False, label='disk1', prefix='bbox', basePath=
 			doRender(lst)
 		return
 	
+	# hack for thermal + rgb reflection probe issue
+	try:
+		if any(s.lower().endswith('rgb') for s in lst) and any(s.lower().endswith('thermal') for s in lst):
+			cams = [ s for s in lst if 'rgb' in s.lower() ]
+			for c in cams:
+				common.output('Disabling HDR for camera {}'.format(c), 'DEBUG')
+				common.sendData('"{}" SET Camera allowHDR false'.format(c))
+	except:
+		pass
+	
 	if waitQueue == True:
 		common.waitQueue()
 	seqSaveSync(label=label)
@@ -1424,17 +1446,21 @@ def getSaveCounter(label='disk1'):
 	Returns a int
 	
 	"""
-	common.flushBuffer()
+	common.waitQueue()
 	res = common.sendData('"{}" GET Sensors.Disk counter'.format(label), read=True)
 	counter = 1
 	
 	for r in res:
 		s = str(r).lower()
 		
-		if s == 'ok' or 'error' in s:
+		if s == '' or s == 'ok' or 'error' in s:
 			continue
-		
-		counter = int(s)
+		try:
+			s = re.findall(r'\d+', s)[0]
+			counter = int(s)
+		except:
+			pass
+	
 	return counter
 
 def seqSaveSync(label='disk1', force=False):
@@ -2773,8 +2799,8 @@ def spawnDroneObjs(
 	destroy=False, ground_position=[84,0,0], groundLimit=0,
 	distH=25, distV=25, distLimit=150, pX=-150, pZ=-350, pY=0,
 	birdsRadius=120, birdsInnerRadius=0, carsRadius=50, carsInnerRadius=5,
-	treesLimit=[150,200], buildingsRadius=120, buildingsInnerRadius=60, treesRadius=80, treesInnerRadius=10, animalsRadius=50, animalsInnerRadius=5,
-	buildingsLimit=[150,150], birdsLimit=[25,100], carsLimit=[75,75], dronesLimit=[80,200], animalsLimit=[10,50],
+	treesLimit=[20,50], buildingsRadius=120, buildingsInnerRadius=60, treesRadius=80, treesInnerRadius=10, animalsRadius=50, animalsInnerRadius=5,
+	buildingsLimit=[10,50], birdsLimit=[25,100], carsLimit=[5,15], dronesLimit=[20,50], animalsLimit=[10,50],
 	prefix='spawner', container='container',
 	animalsTags=['animal'], treesTags=['tree'], buildingsTags=['building'], birdsTags=['bird'], carsTags=['car'], dronesTags=['drones'],
 	animals_colors=None, trees_colors=None, buildings_colors=None, birds_colors=None, cars_colors=None, dronesColors=None,

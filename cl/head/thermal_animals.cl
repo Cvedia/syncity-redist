@@ -4,7 +4,7 @@ CREATE "cameras"
 CREATE "cameras/cameraRGB"
 "cameras/cameraRGB" SET active false
 "cameras/cameraRGB" ADD Camera AudioListener
-"cameras/cameraRGB" SET Camera near 0.3 far 1000 fieldOfView 60 renderingPath "UsePlayerSettings"
+"cameras/cameraRGB" SET Camera near 0.3 far 1000 fieldOfView 60 renderingPath "UsePlayerSettings" allowHDR true 
 CREATE "EnviroSky" AS "EnviroSky"
 "EnviroSky" SET EnviroSky Player "cameras" PlayerCamera "cameras/cameraRGB" GameTime.ProgressTime "None" weatherSettings.cloudTransitionSpeed 100 weatherSettings.effectTransitionSpeed 100 weatherSettings.fogTransitionSpeed 100 
 "EnviroSky" EXECUTE EnviroSky AssignAndStart "cameras/cameraRGB" "cameras/cameraRGB"
@@ -50,8 +50,8 @@ CREATE "spawner/animal___thermal/container"
 "spawner/animal___thermal/container" ADD RandomProps.PropArea
 "spawner/animal___thermal/container" SET RandomProps.PropArea tags "animal, +thermal"
 "spawner/animal___thermal/container" SET RandomProps.PropArea async false numberOfProps 10 collisionCheck true stickToGround false 
-"spawner/animal___thermal/container" SET RandomProps.Torus radius 50
 "spawner/animal___thermal/container" SET RandomProps.Torus innerRadius 0
+"spawner/animal___thermal/container" SET RandomProps.Torus radius 50
 "spawner/animal___thermal/container" SET Transform position (0 0 0) eulerAngles (0 0 0) localScale (1 1 1)
 "spawner/animal___thermal/container" SET active true
 "spawner/animal___thermal" SET active true
@@ -65,6 +65,7 @@ CREATE "spawner/animal___thermal/container"
 "cameras" SET Orbit azimuth 0
 "cameras/cameraRGB" EXECUTE Sensors.RenderCamera RenderFrame
 "cameras/thermal" EXECUTE Sensors.RenderCamera RenderFrame
+"cameras/cameraRGB" SET Camera allowHDR false
 "disk1" GET Sensors.Disk counter
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/thermal" SET Thermal.ThermalCamera ambientTemperature 11
@@ -73,6 +74,7 @@ CREATE "spawner/animal___thermal/container"
 "cameras" SET Orbit azimuth 10
 "cameras/cameraRGB" EXECUTE Sensors.RenderCamera RenderFrame
 "cameras/thermal" EXECUTE Sensors.RenderCamera RenderFrame
+"cameras/cameraRGB" SET Camera allowHDR false
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/thermal" SET Thermal.ThermalCamera ambientTemperature 12
 "cameras" SET Orbit distance 55
@@ -80,6 +82,7 @@ CREATE "spawner/animal___thermal/container"
 "cameras" SET Orbit azimuth 20
 "cameras/cameraRGB" EXECUTE Sensors.RenderCamera RenderFrame
 "cameras/thermal" EXECUTE Sensors.RenderCamera RenderFrame
+"cameras/cameraRGB" SET Camera allowHDR false
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/thermal" SET Thermal.ThermalCamera ambientTemperature 13
 "cameras" SET Orbit distance 55
@@ -87,6 +90,7 @@ CREATE "spawner/animal___thermal/container"
 "cameras" SET Orbit azimuth 30
 "cameras/cameraRGB" EXECUTE Sensors.RenderCamera RenderFrame
 "cameras/thermal" EXECUTE Sensors.RenderCamera RenderFrame
+"cameras/cameraRGB" SET Camera allowHDR false
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/thermal" SET Thermal.ThermalCamera ambientTemperature 14
 "cameras" SET Orbit distance 55
@@ -94,6 +98,7 @@ CREATE "spawner/animal___thermal/container"
 "cameras" SET Orbit azimuth 40
 "cameras/cameraRGB" EXECUTE Sensors.RenderCamera RenderFrame
 "cameras/thermal" EXECUTE Sensors.RenderCamera RenderFrame
+"cameras/cameraRGB" SET Camera allowHDR false
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/thermal" SET Thermal.ThermalCamera ambientTemperature 15
 "cameras" SET Orbit distance 55
@@ -101,6 +106,7 @@ CREATE "spawner/animal___thermal/container"
 "cameras" SET Orbit azimuth 50
 "cameras/cameraRGB" EXECUTE Sensors.RenderCamera RenderFrame
 "cameras/thermal" EXECUTE Sensors.RenderCamera RenderFrame
+"cameras/cameraRGB" SET Camera allowHDR false
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/thermal" SET Thermal.ThermalCamera ambientTemperature 16
 "cameras" SET Orbit distance 55
@@ -108,6 +114,7 @@ CREATE "spawner/animal___thermal/container"
 "cameras" SET Orbit azimuth 60
 "cameras/cameraRGB" EXECUTE Sensors.RenderCamera RenderFrame
 "cameras/thermal" EXECUTE Sensors.RenderCamera RenderFrame
+"cameras/cameraRGB" SET Camera allowHDR false
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/thermal" SET Thermal.ThermalCamera ambientTemperature 17
 "cameras" SET Orbit distance 55
@@ -115,6 +122,7 @@ CREATE "spawner/animal___thermal/container"
 "cameras" SET Orbit azimuth 70
 "cameras/cameraRGB" EXECUTE Sensors.RenderCamera RenderFrame
 "cameras/thermal" EXECUTE Sensors.RenderCamera RenderFrame
+"cameras/cameraRGB" SET Camera allowHDR false
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/thermal" SET Thermal.ThermalCamera ambientTemperature 18
 "cameras" SET Orbit distance 55
@@ -122,6 +130,7 @@ CREATE "spawner/animal___thermal/container"
 "cameras" SET Orbit azimuth 80
 "cameras/cameraRGB" EXECUTE Sensors.RenderCamera RenderFrame
 "cameras/thermal" EXECUTE Sensors.RenderCamera RenderFrame
+"cameras/cameraRGB" SET Camera allowHDR false
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/thermal" SET Thermal.ThermalCamera ambientTemperature 19
 "cameras" SET Orbit distance 55
@@ -129,6 +138,7 @@ CREATE "spawner/animal___thermal/container"
 "cameras" SET Orbit azimuth 90
 "cameras/cameraRGB" EXECUTE Sensors.RenderCamera RenderFrame
 "cameras/thermal" EXECUTE Sensors.RenderCamera RenderFrame
+"cameras/cameraRGB" SET Camera allowHDR false
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/thermal" SET Thermal.ThermalCamera ambientTemperature 20
 "cameras" SET Orbit distance 55
@@ -136,6 +146,7 @@ CREATE "spawner/animal___thermal/container"
 "cameras" SET Orbit azimuth 100
 "cameras/cameraRGB" EXECUTE Sensors.RenderCamera RenderFrame
 "cameras/thermal" EXECUTE Sensors.RenderCamera RenderFrame
+"cameras/cameraRGB" SET Camera allowHDR false
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/thermal" SET Thermal.ThermalCamera ambientTemperature 21
 "cameras" SET Orbit distance 55
@@ -143,6 +154,7 @@ CREATE "spawner/animal___thermal/container"
 "cameras" SET Orbit azimuth 110
 "cameras/cameraRGB" EXECUTE Sensors.RenderCamera RenderFrame
 "cameras/thermal" EXECUTE Sensors.RenderCamera RenderFrame
+"cameras/cameraRGB" SET Camera allowHDR false
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/thermal" SET Thermal.ThermalCamera ambientTemperature 22
 "cameras" SET Orbit distance 55
@@ -150,6 +162,7 @@ CREATE "spawner/animal___thermal/container"
 "cameras" SET Orbit azimuth 120
 "cameras/cameraRGB" EXECUTE Sensors.RenderCamera RenderFrame
 "cameras/thermal" EXECUTE Sensors.RenderCamera RenderFrame
+"cameras/cameraRGB" SET Camera allowHDR false
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/thermal" SET Thermal.ThermalCamera ambientTemperature 23
 "cameras" SET Orbit distance 55
@@ -157,6 +170,7 @@ CREATE "spawner/animal___thermal/container"
 "cameras" SET Orbit azimuth 130
 "cameras/cameraRGB" EXECUTE Sensors.RenderCamera RenderFrame
 "cameras/thermal" EXECUTE Sensors.RenderCamera RenderFrame
+"cameras/cameraRGB" SET Camera allowHDR false
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/thermal" SET Thermal.ThermalCamera ambientTemperature 24
 "cameras" SET Orbit distance 55
@@ -164,6 +178,7 @@ CREATE "spawner/animal___thermal/container"
 "cameras" SET Orbit azimuth 140
 "cameras/cameraRGB" EXECUTE Sensors.RenderCamera RenderFrame
 "cameras/thermal" EXECUTE Sensors.RenderCamera RenderFrame
+"cameras/cameraRGB" SET Camera allowHDR false
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/thermal" SET Thermal.ThermalCamera ambientTemperature 25
 "cameras" SET Orbit distance 55
@@ -171,6 +186,7 @@ CREATE "spawner/animal___thermal/container"
 "cameras" SET Orbit azimuth 150
 "cameras/cameraRGB" EXECUTE Sensors.RenderCamera RenderFrame
 "cameras/thermal" EXECUTE Sensors.RenderCamera RenderFrame
+"cameras/cameraRGB" SET Camera allowHDR false
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/thermal" SET Thermal.ThermalCamera ambientTemperature 26
 "cameras" SET Orbit distance 55
@@ -178,6 +194,7 @@ CREATE "spawner/animal___thermal/container"
 "cameras" SET Orbit azimuth 160
 "cameras/cameraRGB" EXECUTE Sensors.RenderCamera RenderFrame
 "cameras/thermal" EXECUTE Sensors.RenderCamera RenderFrame
+"cameras/cameraRGB" SET Camera allowHDR false
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/thermal" SET Thermal.ThermalCamera ambientTemperature 27
 "cameras" SET Orbit distance 55
@@ -185,6 +202,7 @@ CREATE "spawner/animal___thermal/container"
 "cameras" SET Orbit azimuth 170
 "cameras/cameraRGB" EXECUTE Sensors.RenderCamera RenderFrame
 "cameras/thermal" EXECUTE Sensors.RenderCamera RenderFrame
+"cameras/cameraRGB" SET Camera allowHDR false
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/thermal" SET Thermal.ThermalCamera ambientTemperature 28
 "cameras" SET Orbit distance 55
@@ -192,6 +210,7 @@ CREATE "spawner/animal___thermal/container"
 "cameras" SET Orbit azimuth 180
 "cameras/cameraRGB" EXECUTE Sensors.RenderCamera RenderFrame
 "cameras/thermal" EXECUTE Sensors.RenderCamera RenderFrame
+"cameras/cameraRGB" SET Camera allowHDR false
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/thermal" SET Thermal.ThermalCamera ambientTemperature 29
 "cameras" SET Orbit distance 55
@@ -199,6 +218,7 @@ CREATE "spawner/animal___thermal/container"
 "cameras" SET Orbit azimuth 190
 "cameras/cameraRGB" EXECUTE Sensors.RenderCamera RenderFrame
 "cameras/thermal" EXECUTE Sensors.RenderCamera RenderFrame
+"cameras/cameraRGB" SET Camera allowHDR false
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/thermal" SET Thermal.ThermalCamera ambientTemperature 30
 "cameras" SET Orbit distance 55
@@ -206,6 +226,7 @@ CREATE "spawner/animal___thermal/container"
 "cameras" SET Orbit azimuth 200
 "cameras/cameraRGB" EXECUTE Sensors.RenderCamera RenderFrame
 "cameras/thermal" EXECUTE Sensors.RenderCamera RenderFrame
+"cameras/cameraRGB" SET Camera allowHDR false
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/thermal" SET Thermal.ThermalCamera ambientTemperature 10
 "cameras" SET Orbit distance 55
@@ -213,6 +234,7 @@ CREATE "spawner/animal___thermal/container"
 "cameras" SET Orbit azimuth 210
 "cameras/cameraRGB" EXECUTE Sensors.RenderCamera RenderFrame
 "cameras/thermal" EXECUTE Sensors.RenderCamera RenderFrame
+"cameras/cameraRGB" SET Camera allowHDR false
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/thermal" SET Thermal.ThermalCamera ambientTemperature 11
 "cameras" SET Orbit distance 55
@@ -220,6 +242,7 @@ CREATE "spawner/animal___thermal/container"
 "cameras" SET Orbit azimuth 220
 "cameras/cameraRGB" EXECUTE Sensors.RenderCamera RenderFrame
 "cameras/thermal" EXECUTE Sensors.RenderCamera RenderFrame
+"cameras/cameraRGB" SET Camera allowHDR false
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/thermal" SET Thermal.ThermalCamera ambientTemperature 12
 "cameras" SET Orbit distance 55
@@ -227,6 +250,7 @@ CREATE "spawner/animal___thermal/container"
 "cameras" SET Orbit azimuth 230
 "cameras/cameraRGB" EXECUTE Sensors.RenderCamera RenderFrame
 "cameras/thermal" EXECUTE Sensors.RenderCamera RenderFrame
+"cameras/cameraRGB" SET Camera allowHDR false
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/thermal" SET Thermal.ThermalCamera ambientTemperature 13
 "cameras" SET Orbit distance 55
@@ -234,6 +258,7 @@ CREATE "spawner/animal___thermal/container"
 "cameras" SET Orbit azimuth 240
 "cameras/cameraRGB" EXECUTE Sensors.RenderCamera RenderFrame
 "cameras/thermal" EXECUTE Sensors.RenderCamera RenderFrame
+"cameras/cameraRGB" SET Camera allowHDR false
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/thermal" SET Thermal.ThermalCamera ambientTemperature 14
 "cameras" SET Orbit distance 55
@@ -241,6 +266,7 @@ CREATE "spawner/animal___thermal/container"
 "cameras" SET Orbit azimuth 250
 "cameras/cameraRGB" EXECUTE Sensors.RenderCamera RenderFrame
 "cameras/thermal" EXECUTE Sensors.RenderCamera RenderFrame
+"cameras/cameraRGB" SET Camera allowHDR false
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/thermal" SET Thermal.ThermalCamera ambientTemperature 15
 "cameras" SET Orbit distance 55
@@ -248,6 +274,7 @@ CREATE "spawner/animal___thermal/container"
 "cameras" SET Orbit azimuth 260
 "cameras/cameraRGB" EXECUTE Sensors.RenderCamera RenderFrame
 "cameras/thermal" EXECUTE Sensors.RenderCamera RenderFrame
+"cameras/cameraRGB" SET Camera allowHDR false
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/thermal" SET Thermal.ThermalCamera ambientTemperature 16
 "cameras" SET Orbit distance 55
@@ -255,6 +282,7 @@ CREATE "spawner/animal___thermal/container"
 "cameras" SET Orbit azimuth 270
 "cameras/cameraRGB" EXECUTE Sensors.RenderCamera RenderFrame
 "cameras/thermal" EXECUTE Sensors.RenderCamera RenderFrame
+"cameras/cameraRGB" SET Camera allowHDR false
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/thermal" SET Thermal.ThermalCamera ambientTemperature 17
 "cameras" SET Orbit distance 55
@@ -262,6 +290,7 @@ CREATE "spawner/animal___thermal/container"
 "cameras" SET Orbit azimuth 280
 "cameras/cameraRGB" EXECUTE Sensors.RenderCamera RenderFrame
 "cameras/thermal" EXECUTE Sensors.RenderCamera RenderFrame
+"cameras/cameraRGB" SET Camera allowHDR false
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/thermal" SET Thermal.ThermalCamera ambientTemperature 18
 "cameras" SET Orbit distance 55
@@ -269,6 +298,7 @@ CREATE "spawner/animal___thermal/container"
 "cameras" SET Orbit azimuth 290
 "cameras/cameraRGB" EXECUTE Sensors.RenderCamera RenderFrame
 "cameras/thermal" EXECUTE Sensors.RenderCamera RenderFrame
+"cameras/cameraRGB" SET Camera allowHDR false
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/thermal" SET Thermal.ThermalCamera ambientTemperature 19
 "cameras" SET Orbit distance 55
@@ -276,6 +306,7 @@ CREATE "spawner/animal___thermal/container"
 "cameras" SET Orbit azimuth 300
 "cameras/cameraRGB" EXECUTE Sensors.RenderCamera RenderFrame
 "cameras/thermal" EXECUTE Sensors.RenderCamera RenderFrame
+"cameras/cameraRGB" SET Camera allowHDR false
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/thermal" SET Thermal.ThermalCamera ambientTemperature 20
 "cameras" SET Orbit distance 55
@@ -283,6 +314,7 @@ CREATE "spawner/animal___thermal/container"
 "cameras" SET Orbit azimuth 310
 "cameras/cameraRGB" EXECUTE Sensors.RenderCamera RenderFrame
 "cameras/thermal" EXECUTE Sensors.RenderCamera RenderFrame
+"cameras/cameraRGB" SET Camera allowHDR false
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/thermal" SET Thermal.ThermalCamera ambientTemperature 21
 "cameras" SET Orbit distance 55
@@ -290,6 +322,7 @@ CREATE "spawner/animal___thermal/container"
 "cameras" SET Orbit azimuth 320
 "cameras/cameraRGB" EXECUTE Sensors.RenderCamera RenderFrame
 "cameras/thermal" EXECUTE Sensors.RenderCamera RenderFrame
+"cameras/cameraRGB" SET Camera allowHDR false
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/thermal" SET Thermal.ThermalCamera ambientTemperature 22
 "cameras" SET Orbit distance 55
@@ -297,6 +330,7 @@ CREATE "spawner/animal___thermal/container"
 "cameras" SET Orbit azimuth 330
 "cameras/cameraRGB" EXECUTE Sensors.RenderCamera RenderFrame
 "cameras/thermal" EXECUTE Sensors.RenderCamera RenderFrame
+"cameras/cameraRGB" SET Camera allowHDR false
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/thermal" SET Thermal.ThermalCamera ambientTemperature 23
 "cameras" SET Orbit distance 55
@@ -304,6 +338,7 @@ CREATE "spawner/animal___thermal/container"
 "cameras" SET Orbit azimuth 340
 "cameras/cameraRGB" EXECUTE Sensors.RenderCamera RenderFrame
 "cameras/thermal" EXECUTE Sensors.RenderCamera RenderFrame
+"cameras/cameraRGB" SET Camera allowHDR false
 "disk1" EXECUTE Sensors.Disk Snapshot
 "cameras/thermal" SET Thermal.ThermalCamera ambientTemperature 24
 "cameras" SET Orbit distance 55
@@ -311,4 +346,5 @@ CREATE "spawner/animal___thermal/container"
 "cameras" SET Orbit azimuth 350
 "cameras/cameraRGB" EXECUTE Sensors.RenderCamera RenderFrame
 "cameras/thermal" EXECUTE Sensors.RenderCamera RenderFrame
+"cameras/cameraRGB" SET Camera allowHDR false
 "disk1" EXECUTE Sensors.Disk Snapshot

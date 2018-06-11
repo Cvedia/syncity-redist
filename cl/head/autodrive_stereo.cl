@@ -5,7 +5,7 @@ CREATE "autodrive/SyncityJPickup" FROM "autodrive" AS "SyncityJPickup"
 CREATE "SyncityJPickup/rgb1"
 "SyncityJPickup/rgb1" SET active false
 "SyncityJPickup/rgb1" ADD Camera
-"SyncityJPickup/rgb1" SET Camera near 0.3 far 1000 fieldOfView 60 renderingPath "UsePlayerSettings"
+"SyncityJPickup/rgb1" SET Camera near 0.3 far 1000 fieldOfView 60 renderingPath "UsePlayerSettings" allowHDR true 
 CREATE "EnviroSky" AS "EnviroSky"
 "EnviroSky" SET EnviroSky Player "SyncityJPickup" PlayerCamera "SyncityJPickup/rgb1" GameTime.ProgressTime "None" weatherSettings.cloudTransitionSpeed 100 weatherSettings.effectTransitionSpeed 100 weatherSettings.fogTransitionSpeed 100 
 "EnviroSky" EXECUTE EnviroSky AssignAndStart "SyncityJPickup/rgb1" "SyncityJPickup/rgb1"
@@ -19,7 +19,7 @@ CREATE "EnviroSky" AS "EnviroSky"
 CREATE "SyncityJPickup/rgb2"
 "SyncityJPickup/rgb2" SET active false
 "SyncityJPickup/rgb2" ADD Camera
-"SyncityJPickup/rgb2" SET Camera near 0.3 far 1000 fieldOfView 60 renderingPath "UsePlayerSettings"
+"SyncityJPickup/rgb2" SET Camera near 0.3 far 1000 fieldOfView 60 renderingPath "UsePlayerSettings" allowHDR true 
 CREATE "EnviroSky" AS "EnviroSky"
 "EnviroSky" SET EnviroSky Player "SyncityJPickup" PlayerCamera "SyncityJPickup/rgb2" GameTime.ProgressTime "None" weatherSettings.cloudTransitionSpeed 100 weatherSettings.effectTransitionSpeed 100 weatherSettings.fogTransitionSpeed 100 
 "EnviroSky" EXECUTE EnviroSky AssignAndStart "SyncityJPickup/rgb2" "SyncityJPickup/rgb2"
@@ -33,7 +33,7 @@ CREATE "EnviroSky" AS "EnviroSky"
 CREATE "SyncityJPickup/bumper"
 "SyncityJPickup/bumper" SET active false
 "SyncityJPickup/bumper" ADD Camera
-"SyncityJPickup/bumper" SET Camera near 0.3 far 1000 fieldOfView 60 renderingPath "UsePlayerSettings"
+"SyncityJPickup/bumper" SET Camera near 0.3 far 1000 fieldOfView 60 renderingPath "UsePlayerSettings" allowHDR true 
 CREATE "EnviroSky" AS "EnviroSky"
 "EnviroSky" SET EnviroSky Player "SyncityJPickup" PlayerCamera "SyncityJPickup/bumper" GameTime.ProgressTime "None" weatherSettings.cloudTransitionSpeed 100 weatherSettings.effectTransitionSpeed 100 weatherSettings.fogTransitionSpeed 100 
 "EnviroSky" EXECUTE EnviroSky AssignAndStart "SyncityJPickup/bumper" "SyncityJPickup/bumper"

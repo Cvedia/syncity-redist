@@ -238,4 +238,11 @@ CREATE "disk1/Cameras/thermal"
 "disk1/Cameras/thermal" SET Sensors.RenderTextureLink target "Thermal Texture"
 "disk1/Cameras/thermal" SET Sensors.RenderTextureLink outputType "Thermal"
 "disk1/Cameras/thermal" SET active true
+
+
+CREATE "disk1/Cameras/rgb"
+"disk1/Cameras/rgb" ADD Sensors.RenderCameraLink
+"disk1/Cameras/rgb" SET Sensors.RenderCameraLink target "Camera"
+"disk1/Cameras/rgb" SET active true
+
 "disk1" SET active true

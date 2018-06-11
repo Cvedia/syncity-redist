@@ -96,7 +96,7 @@ def run():
 			signsThermalObjectBehaviour=True,
 			cityThermalObjectBehaviour=True,
 			buildingsInnerRadius=80,
-			treesLimit=[150,200], treesInnerRadius=15, treesRadius=60, buildingsLimit=[100,100],
+			treesLimit=[20,50], treesInnerRadius=15, treesRadius=60, buildingsLimit=[20,50],
 			#
 			# NOTE:
 			#

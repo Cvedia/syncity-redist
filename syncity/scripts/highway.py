@@ -6,17 +6,8 @@ settings = settings_manager.Singleton()
 
 def help():
 	return '''\
-Autodrive
-	- Spawns autodrive track
-	- Setups envirosky postprocessing filters
-	- Creates a RGB camera on bumper
-	- Creates a Segmentation map camera following RGB output
-	- Creates a Depth map camera following RGB output
-	- Setup segmentation classes
-	- Setup lidar device
-	- Setup multiple ROS2 ios for driving car
-	- Setup ROS2 image output for each of the cameras
-	- Exits leaving all objects exposed
+Highway export
+	- Generate data from a already setup scene by exporting all cameras
 '''
 
 def args(parser):

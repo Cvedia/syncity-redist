@@ -9,7 +9,7 @@ CREATE "SyncityJPickup/cameras"
 CREATE "SyncityJPickup/cameras/Front"
 "SyncityJPickup/cameras/Front" SET active false
 "SyncityJPickup/cameras/Front" ADD Camera Sensors.RenderCamera
-"SyncityJPickup/cameras/Front" SET Camera near 0.3 far 1000 fieldOfView 60 renderingPath "UsePlayerSettings"
+"SyncityJPickup/cameras/Front" SET Camera near 0.3 far 1000 fieldOfView 60 renderingPath "UsePlayerSettings" allowHDR true 
 "SyncityJPickup/cameras/Front" SET Sensors.RenderCamera format "ARGB32" resolution (640 480)
 CREATE "EnviroSky" AS "EnviroSky"
 "EnviroSky" SET EnviroSky Player "SyncityJPickup/cameras" PlayerCamera "SyncityJPickup/cameras/Front" GameTime.ProgressTime "None" weatherSettings.cloudTransitionSpeed 100 weatherSettings.effectTransitionSpeed 100 weatherSettings.fogTransitionSpeed 100 
@@ -39,12 +39,12 @@ CREATE "SyncityJPickup/cameras/Segment"
 "SyncityJPickup/cameras/Segment" ADD Camera SegmentationCamera Segmentation.Output.BoundingBoxes Segmentation.Output.ClassColors Sensors.RenderCamera
 "SyncityJPickup/cameras/Segment" SET SegmentationCamera transparencyCutout 0
 "SyncityJPickup/cameras/Segment" SET Camera near 0.3 far 1000 fieldOfView 60 renderingPath "UsePlayerSettings" targetTexture.filterMode "Point" 
-"SyncityJPickup/cameras/Segment" SET Sensors.RenderCamera format "ARGB32" resolution (640 480)
+"SyncityJPickup/cameras/Segment" SET Sensors.RenderCamera format "ARGBFloat" resolution (640 480)
 "SyncityJPickup/cameras/Segment" SET Segmentation.Output.BoundingBoxes minimumObjectVisibility 0 extensionAmount 0 minimumPixelsCount 1 
 "SyncityJPickup/cameras/Segment" EXECUTE Segmentation.Output.ClassColors lookUpTable.SetClassColor "Void->black" "LINES->white" "DIRT->blue" "ROAD->#838383" "PROPS->#09FF00" "SIGNS->red"
 "SyncityJPickup/cameras/Segment" ADD Segmentation.Output.FilteredBoundingBoxes
 "SyncityJPickup/cameras/Segment" EXECUTE Segmentation.Output.FilteredBoundingBoxes EnableClasses "LINES" "DIRT" "ROAD" "PROPS" "SIGNS"
-[UI.Window] ShowFromCamera "SyncityJPickup/cameras/Segment" AS "Segment" WITH 640 480 24 "ARGB32" "Default"
+[UI.Window] ShowFromCamera "SyncityJPickup/cameras/Segment" AS "Segment" WITH 640 480 24 "ARGBFloat" "Default"
 "SyncityJPickup/cameras/Segment" SET active true
 CREATE "disk1"
 "disk1" SET active false
@@ -65,6 +65,10 @@ CREATE "disk1/Syncityjpickup/cameras/segment"
 "disk1/Syncityjpickup/cameras/segment" ADD Sensors.RenderTextureLink
 "disk1/Syncityjpickup/cameras/segment" SET Sensors.RenderTextureLink target "Segment"
 "disk1/Syncityjpickup/cameras/segment" SET active true
+CREATE "disk1/Syncityjpickup/cameras/back"
+"disk1/Syncityjpickup/cameras/back" ADD Sensors.RenderTextureLink
+"disk1/Syncityjpickup/cameras/back" SET Sensors.RenderTextureLink target "Back"
+"disk1/Syncityjpickup/cameras/back" SET active true
 "disk1" SET active true
 "autodrive/Road/Lines" ADD Segmentation.Entity Segmentation.Class
 "autodrive/Road/Lines" SET Segmentation.Class className "LINES"

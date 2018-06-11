@@ -43,7 +43,8 @@ def run():
 	mycams = [
 		'{}/Front'.format(camera_mount),
 		'{}/Depth'.format(camera_mount),
-		'{}/Segment'.format(camera_mount)
+		'{}/Segment'.format(camera_mount),
+		'{}/Back'.format(camera_mount),
 	]
 	
 	if settings.skip_setup == False:
@@ -54,7 +55,16 @@ def run():
 		])
 		
 		helpers.addWindzone(target='autodrive')
+		"""
+		helpers.addCameraRGB(width=640, height=480, pp='EnviroFX', label=mycams[3], labelRoot=camera_mount, audio=False, renderCamera=True)
 		
+		helpers.LCP(
+			camera=mycams[3],
+			radialParam1=5,
+			radialParam2=5,
+			isFisheyeDistortion=True
+		)
+		"""
 		helpers.globalCameraSetup(labelRoot=camera_mount)
 		helpers.addCameraRGB(width=640, height=480, pp='EnviroFX', label=mycams[0], labelRoot=camera_mount, audio=False, renderCamera=True)
 		helpers.addCameraDepth(width=640, height=480, label=mycams[1], renderCamera=True)

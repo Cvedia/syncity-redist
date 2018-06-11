@@ -102,7 +102,7 @@ def run():
 		
 		if settings.flat_gallery == True:
 			fty = 'default'
-		if fty == None and "camerargb" in lnm:
+		if fty == None and "rgb" in lnm:
 			fty = "rgb"
 		elif fty == None and "segmentation" in lnm:
 			fty = "seg"

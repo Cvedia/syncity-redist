@@ -4,7 +4,7 @@ CREATE "cameras"
 CREATE "cameras/cameraRGB"
 "cameras/cameraRGB" SET active false
 "cameras/cameraRGB" ADD Camera AudioListener
-"cameras/cameraRGB" SET Camera near 0.3 far 1000 fieldOfView 60 renderingPath "UsePlayerSettings"
+"cameras/cameraRGB" SET Camera near 0.3 far 1000 fieldOfView 60 renderingPath "UsePlayerSettings" allowHDR true 
 CREATE "EnviroSky" AS "EnviroSky"
 "EnviroSky" SET EnviroSky Player "cameras" PlayerCamera "cameras/cameraRGB" GameTime.ProgressTime "None" weatherSettings.cloudTransitionSpeed 100 weatherSettings.effectTransitionSpeed 100 weatherSettings.fogTransitionSpeed 100 
 "EnviroSky" EXECUTE EnviroSky AssignAndStart "cameras/cameraRGB" "cameras/cameraRGB"
@@ -39,8 +39,8 @@ CREATE "spawner/city/nature/trees/container"
 "spawner/city/nature/trees/container" ADD RandomProps.PropArea
 "spawner/city/nature/trees/container" SET RandomProps.PropArea tags "tree"
 "spawner/city/nature/trees/container" SET RandomProps.PropArea async false numberOfProps 150~400 collisionCheck true stickToGround true 
-"spawner/city/nature/trees/container" SET RandomProps.Torus innerRadius 30~50
 "spawner/city/nature/trees/container" SET RandomProps.Torus radius 80
+"spawner/city/nature/trees/container" SET RandomProps.Torus innerRadius 30~50
 "spawner/city/nature/trees/container" SET Transform position (0 5 0) eulerAngles (0 0 0) localScale (1 1 1)
 "spawner/city/nature/trees/container" SET active true
 "spawner/city/nature/trees" SET active true
@@ -50,8 +50,8 @@ CREATE "spawner/animals/container"
 "spawner/animals/container" ADD RandomProps.PropArea
 "spawner/animals/container" SET RandomProps.PropArea tags "animal"
 "spawner/animals/container" SET RandomProps.PropArea async false numberOfProps 200~350 collisionCheck true stickToGround true 
-"spawner/animals/container" SET RandomProps.Torus innerRadius 0
 "spawner/animals/container" SET RandomProps.Torus radius 40~80
+"spawner/animals/container" SET RandomProps.Torus innerRadius 0
 "spawner/animals/container" SET Transform position (0 5 0) eulerAngles (0 0 0) localScale (1 1 1)
 "cameras" SET Orbit target "spawner/animals/container"
 "spawner/animals/container" SET active true
