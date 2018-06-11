@@ -1,7 +1,3 @@
-"Config.instance" SET assetBundlesCache "X:\z3n\__syncity__\__assetbundles__\__builds__\180515\"
-"Config.instance" SET databaseFolderPath "X:\z3n\__syncity__\__assetbundles__\__builds__\180515\"
-
-
 CREATE "Ground"
 "Ground" SET Transform localPosition (0 0 0)
 "Ground" ADD RandomProps.FillGrid
