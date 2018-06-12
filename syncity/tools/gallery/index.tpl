@@ -27,10 +27,11 @@
 		<div class="galWrapper">
 			<div class="galTop">
 				<div class="galTopLeft">
-					{% if "rgb" in features %}<button class="btn" data-type="rgb">RGB</button>{% endif %}
-					{% if "seg" in features %}<button class="btn" data-type="seg">Segmentation</button>{% endif %}
-					{% if "depth" in features %}<button class="btn" data-type="depth">Depth</button>{% endif %}
-					{% if "thermal" in features %}<button class="btn" data-type="thermal">Thermal</button>{% endif %}
+					{% for f in features %}
+						{% if f != "bbox" %}
+							<button class="btn" data-type="{{ f }}">{{ f }}</button>
+						{% endif %}
+					{% endfor %}
 				</div>
 				<div class="galTopMid">
 					Image <input type="text" value="1" /> / {{ total_images }}

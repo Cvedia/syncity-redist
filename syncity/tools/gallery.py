@@ -110,6 +110,8 @@ def run():
 			fty = "depth"
 		elif fty == None and "thermal" in lnm:
 			fty = "thermal"
+		elif fty == None and "mono" in lnm:
+			fty = "mono"
 		elif lnm.endswith(".json"):
 			if settings.align == 'time':
 				while has_attribute(fm, fts):

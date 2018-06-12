@@ -51,17 +51,20 @@ def run():
 			_start = time.time()
 		
 		helpers.takeSnapshot(mycams, autoSegment=autoSegment)
-		
 		_sleep = 0
 		
-		if settings.loop_frequency > 0:
-			_sleep = time.time() - _start
-			
-			# check if it took longer than the expected wait time
-			if _sleep < settings.loop_frequency:
-				_sleep = settings.loop_frequency - _sleep
-			else:
-				_sleep = 0
+		if settings.dry_run:
+			if settings.loop_frequency > 0:
+				common.sendData('SLEEP {}'.format(settings.loop_frequency))
+		else:
+			if settings.loop_frequency > 0:
+				_sleep = time.time() - _start
+				
+				# check if it took longer than the expected wait time
+				if _sleep < settings.loop_frequency:
+					_sleep = settings.loop_frequency - _sleep
+				else:
+					_sleep = 0
 		
 		loop += 1
 		common.output('Loop {} ({}%), wait: {}s'.format(loop, round(100 * (loop / settings.loop_limit),2), _sleep))
