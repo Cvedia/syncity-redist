@@ -14,7 +14,7 @@ CREATE "cameras/segmentation"
 "cameras/segmentation" SET active false
 "cameras/segmentation" ADD Camera SegmentationCamera Segmentation.Output.BoundingBoxes Segmentation.Output.ClassColors
 "cameras/segmentation" SET SegmentationCamera transparencyCutout 0
-"cameras/segmentation" SET Camera near 0.3 far 10000 fieldOfView 90 renderingPath "UsePlayerSettings" targetTexture.filterMode "Point" 
+"cameras/segmentation" SET Camera allowMSAA false allowHDR false near 0.3 far 10000 fieldOfView 90 renderingPath "UsePlayerSettings" targetTexture.filterMode "Point" 
 "cameras/segmentation" SET Segmentation.Output.BoundingBoxes minimumObjectVisibility 0 extensionAmount 0 minimumPixelsCount 1 
 "cameras/segmentation" EXECUTE Segmentation.Output.ClassColors lookUpTable.SetClassColor "Void->black" "Human->green" "ground->#520000FF" "Animal->red"
 "cameras/segmentation" ADD Segmentation.Output.FilteredBoundingBoxes
@@ -23,13 +23,18 @@ CREATE "cameras/segmentation"
 "cameras/segmentation" SET active true
 CREATE "cameras/cameraRGB"
 "cameras/cameraRGB" SET active false
-"cameras/cameraRGB" ADD Camera
-"cameras/cameraRGB" SET Camera near 0.3 far 10000 fieldOfView 90 renderingPath "UsePlayerSettings" allowHDR true 
+"cameras/cameraRGB" ADD Camera Sensors.RenderCamera
+"cameras/cameraRGB" SET Camera near 0.3 far 10000 fieldOfView 90 renderingPath "UsePlayerSettings" allowHDR true allowMSAA false 
+CREATE RenderTexture 1024 768 24 "ARGB32" "Default" AS "cameraRGB_RT"
+"cameraRGB_RT" SET name "cameras/cameraRGB"
+"cameraRGB_RT" EXECUTE @Create
+"cameras/cameraRGB" SET Camera targetTexture "cameraRGB_RT"
+"cameras/cameraRGB" SET Sensors.RenderCamera format "ARGB32" resolution (1024 768) alwaysOn false
 CREATE "EnviroSky" AS "EnviroSky"
 "EnviroSky" SET EnviroSky Player "cameras" PlayerCamera "cameras/cameraRGB" GameTime.ProgressTime "None" weatherSettings.cloudTransitionSpeed 100 weatherSettings.effectTransitionSpeed 100 weatherSettings.fogTransitionSpeed 100 
 "EnviroSky" EXECUTE EnviroSky AssignAndStart "cameras/cameraRGB" "cameras/cameraRGB"
 "EnviroSky" SET active true
-[UI.Window] ShowFromCamera "cameras/cameraRGB" AS "cameraRGB" WITH 1024 768 24 "ARGB32" "Default"
+[UI.Window] ShowFromRenderTexture "cameraRGB_RT" AS "cameraRGB"
 "cameras/cameraRGB" SET active true
 "cameras" SET active true
 "cameras/cameraRGB" ADD UnityEngine.PostProcessing.PostProcessingBehaviour
@@ -38,7 +43,7 @@ CREATE "EnviroSky" AS "EnviroSky"
 CREATE "cameras/depth"
 "cameras/depth" SET active false
 "cameras/depth" ADD Camera Cameras.RenderDepthBufferSimple
-"cameras/depth" SET Camera near 0.3 far 1000 fieldOfView 90 renderingPath "DeferredShading"
+"cameras/depth" SET Camera near 0.3 far 1000 fieldOfView 90 allowMSAA false renderingPath "DeferredShading"
 "cameras/depth" SET Cameras.RenderDepthBufferSimple outputMode "Linear01Depth" transparencyCutout 0
 [UI.Window] ShowFromCamera "cameras/depth" AS "depth" WITH 1024 768 32 "RFloat" "Default"
 "cameras/depth" SET active true
@@ -126,7 +131,7 @@ CREATE "spawner/human_walker/points/spawners/s_2"
 "spawner/human_walker/points/spawners/s_2" SET active true
 "spawner/human_walker/humanSpawner" PUSH Humans.Locomotion.WalkerSpawner spawnPoints "spawner/human_walker/points/spawners/s_2"
 "spawner/human_walker/humanSpawner" ADD Humans.Animation.PlayRandomAnimations
-"spawner/human_walker/humanSpawner" SET Humans.Animation.PlayRandomAnimations minAnimationDuration 1 maxDelayBetweenAnimations 5 minDelayBetweenAnimations 1 animationFadeDuration 0.4 maxAnimationDuration 5
+"spawner/human_walker/humanSpawner" SET Humans.Animation.PlayRandomAnimations maxDelayBetweenAnimations 5 animationFadeDuration 0.4 maxAnimationDuration 5 minDelayBetweenAnimations 1 minAnimationDuration 1
 "spawner/human_walker/humanSpawner" PUSH Humans.Animation.PlayRandomAnimations animations ASSET "Humans/animations/LookingAroundNervously" FROM "humans" ASSET "Humans/animations/LeanAgainstWall3" FROM "humans" ASSET "Humans/animations/StandingAngry" FROM "humans" ASSET "Humans/animations/LookingAround" FROM "humans" ASSET "Humans/animations/LeanAgainstWall2" FROM "humans" ASSET "Humans/animations/Sitting4" FROM "humans" ASSET "Humans/animations/Waving" FROM "humans" ASSET "Humans/animations/Sitting3" FROM "humans" ASSET "Humans/animations/PushButton" FROM "humans" ASSET "Humans/animations/Sitting1" FROM "humans" ASSET "Humans/animations/ShakingHands" FROM "humans" ASSET "Humans/animations/LeanAgainstWall" FROM "humans" ASSET "Humans/animations/ArmsCrossed" FROM "humans" ASSET "Humans/animations/Sitting2" FROM "humans" ASSET "Humans/animations/LookBehind" FROM "humans" ASSET "Humans/animations/Looking" FROM "humans"
 "spawner/human_walker/humanSpawner" SET active true
 "spawner/human_walker/points/goals" SET active true

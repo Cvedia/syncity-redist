@@ -8,6 +8,9 @@ def help():
 	return '''\
 Highway export
 	- Generate data from a already setup scene by exporting all cameras
+	
+	This script is just an export loop, the scene setup is made on the .cl scripts,
+	since the scene is static there's no need for logic in python.
 '''
 
 def args(parser):

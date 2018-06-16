@@ -15,7 +15,7 @@ import random
 
 from syncity import common, settings_manager
 
-SYNCITY_VERSION = '18.06.06.2328'
+SYNCITY_VERSION = '18.06.15.1842'
 SIMULATOR_MIN_VERSION = '18.04.23.0000'
 
 print ('SynCity toolbox - v{}\nCopyright (c) 2016-{} CVEDIA PVE Ltd\n'.format(SYNCITY_VERSION, datetime.date.today().year))
@@ -77,9 +77,10 @@ parser.add_argument('--skip_disk', action='store_true', default=False, help='Dis
 parser.add_argument('--skip_setup', action='store_true', default=False, help='Skip script setup and go straight to data extraction')
 parser.add_argument('--skip_queue', action='store_true', default=False, help='Skips all queue waits, this might cause asyncronous states for exports -- NOT RECOMMENDED')
 
-parser.add_argument('-c', '--config', default='syncity.conf', help='Defines a path/filename for syncity.conf')
-parser.add_argument('--skip_config', action='store_true', default=False, help='Skips SDK default config file')
-parser.add_argument('--save_config', action='store_true', default=False, help='Save sent parameters as SDK config file -- WARNING: This will not save the stack parameters (-r, -s and -t)')
+parser.add_argument('-c', '--config', default=None, help='Defines a config file to be loaded, overwriting / appending to arbitrary settings values')
+# parser.add_argument('--skip_config', action='store_true', default=False, help='Skips SDK default config file')
+# parser.add_argument('--save_config', action='store_true', default=False, help='Save sent parameters as SDK config file -- WARNING: This will not save the stack parameters (-r, -s and -t)')
+parser.add_argument('-O', '--options', default=None, help='Defines a path to a json file to overload / overwrite settings.options to be used as parameters on scripts globally.')
 
 parser.add_argument('--skip_shutdown', action='store_true', default=False, help='Skips shutdown sequence')
 parser.add_argument('--test', action='store_true', default=False, help='Enables test suite flag')
@@ -141,9 +142,12 @@ for k in args.__dict__:
 	# print('{}: {}'.format(k, args.__dict__[k]))
 	settings[k] = args.__dict__[k]
 
-if settings.skip_config == False:
-	common.loadConfig()
+settings._root = os.path.dirname(os.path.realpath(sys.argv[0]))
 
+if settings.config != None:
+	common.loadConfig()
+if settings.options != None:
+	common.loadOptions()
 if platform.system() == 'Windows':
 	if settings.local_path.find('/') != -1:
 		if settings.local_path[-1:] != '/':

@@ -606,8 +606,10 @@ def gracefullShutdown(a=None, b=None):
 	settings._shutdown = True
 	output('Shutdown sequence...', 'DEBUG')
 	
+	"""
 	if settings.save_config:
 		saveConfig()
+	"""
 	
 	if settings._telnet == True:
 		if settings.keep == False:
@@ -727,16 +729,39 @@ def loadConfig():
 	with open(settings.config, encoding='utf-8') as data:
 		cfg = json.loads(data.read())
 	
+	"""
 	for c in cfg:
 		if settings.isset(c) == False:
 			settings[c] = cfg[c]
+	"""
+	
+	# overwrite / add existing values
+	for c in cfg:
+		settings[c] = cfg[c]
 
+def loadOptions():
+	if not os.path.isfile(settings.options):
+		return
+	
+	output('Loading options from: `{}` ...'.format(settings.options))
+	
+	with open(settings.options, encoding='utf-8') as data:
+		cfg = json.loads(data.read())
+	
+	settings._options = str(settings.options)
+	settings.options = {}
+	
+	for c in cfg:
+		settings.options[c] = cfg[c]
+
+"""
 def saveConfig():
 	output('Saving config to: `{}` ...'.format(settings.config))
 	data = settings.getData()
 	
 	with open(settings.config, "w", encoding='utf-8') as fh:
 		fh.write(json.dumps(data, indent=4, sort_keys=True))
+"""
 
 def runCL(path):
 	"""

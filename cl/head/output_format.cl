@@ -3,13 +3,18 @@ CREATE "cameras"
 "cameras" SET Transform position (-6 1 -50) eulerAngles (0 0 0)
 CREATE "cameras/cameraRGB"
 "cameras/cameraRGB" SET active false
-"cameras/cameraRGB" ADD Camera AudioListener
-"cameras/cameraRGB" SET Camera near 0.3 far 1000 fieldOfView 60 renderingPath "UsePlayerSettings" allowHDR true 
+"cameras/cameraRGB" ADD Camera Sensors.RenderCamera AudioListener
+"cameras/cameraRGB" SET Camera near 0.3 far 1000 fieldOfView 60 renderingPath "UsePlayerSettings" allowHDR true allowMSAA false 
+CREATE RenderTexture 1024 768 24 "ARGB32" "Default" AS "cameraRGB_RT"
+"cameraRGB_RT" SET name "cameras/cameraRGB"
+"cameraRGB_RT" EXECUTE @Create
+"cameras/cameraRGB" SET Camera targetTexture "cameraRGB_RT"
+"cameras/cameraRGB" SET Sensors.RenderCamera format "ARGB32" resolution (1024 768) alwaysOn false
 CREATE "EnviroSky" AS "EnviroSky"
 "EnviroSky" SET EnviroSky Player "cameras" PlayerCamera "cameras/cameraRGB" GameTime.ProgressTime "None" weatherSettings.cloudTransitionSpeed 100 weatherSettings.effectTransitionSpeed 100 weatherSettings.fogTransitionSpeed 100 
 "EnviroSky" EXECUTE EnviroSky AssignAndStart "cameras/cameraRGB" "cameras/cameraRGB"
 "EnviroSky" SET active true
-[UI.Window] ShowFromCamera "cameras/cameraRGB" AS "cameraRGB" WITH 1024 768 24 "ARGB32" "Default"
+[UI.Window] ShowFromRenderTexture "cameraRGB_RT" AS "cameraRGB"
 "cameras/cameraRGB" SET active true
 "cameras" SET active true
 "cameras/cameraRGB" ADD UnityEngine.PostProcessing.PostProcessingBehaviour
@@ -20,7 +25,7 @@ CREATE "cameras/segmentation"
 "cameras/segmentation" SET active false
 "cameras/segmentation" ADD Camera SegmentationCamera Segmentation.Output.BoundingBoxes Segmentation.Output.ClassColors
 "cameras/segmentation" SET SegmentationCamera transparencyCutout 0
-"cameras/segmentation" SET Camera near 0.3 far 1000 fieldOfView 60 renderingPath "UsePlayerSettings" targetTexture.filterMode "Point" 
+"cameras/segmentation" SET Camera allowMSAA false allowHDR false near 0.3 far 1000 fieldOfView 60 renderingPath "UsePlayerSettings" targetTexture.filterMode "Point" 
 "cameras/segmentation" SET Segmentation.Output.BoundingBoxes minimumObjectVisibility 0 extensionAmount 0 minimumPixelsCount 1 
 "cameras/segmentation" EXECUTE Segmentation.Output.ClassColors lookUpTable.SetClassColor "Void->black" "Car->red"
 "cameras/segmentation" ADD Segmentation.Output.FilteredBoundingBoxes
@@ -30,35 +35,35 @@ CREATE "cameras/segmentation"
 CREATE "cameras/depth_blob"
 "cameras/depth_blob" SET active false
 "cameras/depth_blob" ADD Camera Cameras.RenderDepthBufferSimple
-"cameras/depth_blob" SET Camera near 0.3 far 1000 fieldOfView 60 renderingPath "DeferredShading"
+"cameras/depth_blob" SET Camera near 0.3 far 1000 fieldOfView 60 allowMSAA false renderingPath "DeferredShading"
 "cameras/depth_blob" SET Cameras.RenderDepthBufferSimple outputMode "Linear01Depth" transparencyCutout 0
 [UI.Window] ShowFromCamera "cameras/depth_blob" AS "depth_blob" WITH 1024 768 32 "RFloat" "Default"
 "cameras/depth_blob" SET active true
 CREATE "cameras/depth_depth"
 "cameras/depth_depth" SET active false
 "cameras/depth_depth" ADD Camera Cameras.RenderDepthBufferSimple
-"cameras/depth_depth" SET Camera near 0.3 far 1000 fieldOfView 60 renderingPath "DeferredShading"
+"cameras/depth_depth" SET Camera near 0.3 far 1000 fieldOfView 60 allowMSAA false renderingPath "DeferredShading"
 "cameras/depth_depth" SET Cameras.RenderDepthBufferSimple outputMode "Linear01Depth" transparencyCutout 0
 [UI.Window] ShowFromCamera "cameras/depth_depth" AS "depth_depth" WITH 1024 768 32 "RFloat" "Default"
 "cameras/depth_depth" SET active true
 CREATE "cameras/depth_rgb"
 "cameras/depth_rgb" SET active false
 "cameras/depth_rgb" ADD Camera Cameras.RenderDepthBufferSimple
-"cameras/depth_rgb" SET Camera near 0.3 far 1000 fieldOfView 60 renderingPath "DeferredShading"
+"cameras/depth_rgb" SET Camera near 0.3 far 1000 fieldOfView 60 allowMSAA false renderingPath "DeferredShading"
 "cameras/depth_rgb" SET Cameras.RenderDepthBufferSimple outputMode "Linear01Depth" transparencyCutout 0
 [UI.Window] ShowFromCamera "cameras/depth_rgb" AS "depth_rgb" WITH 1024 768 32 "RFloat" "Default"
 "cameras/depth_rgb" SET active true
 CREATE "cameras/depth_jpg"
 "cameras/depth_jpg" SET active false
 "cameras/depth_jpg" ADD Camera Cameras.RenderDepthBufferSimple
-"cameras/depth_jpg" SET Camera near 0.3 far 1000 fieldOfView 60 renderingPath "DeferredShading"
+"cameras/depth_jpg" SET Camera near 0.3 far 1000 fieldOfView 60 allowMSAA false renderingPath "DeferredShading"
 "cameras/depth_jpg" SET Cameras.RenderDepthBufferSimple outputMode "Linear01Depth" transparencyCutout 0
 [UI.Window] ShowFromCamera "cameras/depth_jpg" AS "depth_jpg" WITH 1024 768 32 "RFloat" "Default"
 "cameras/depth_jpg" SET active true
 CREATE "cameras/depth_tif"
 "cameras/depth_tif" SET active false
 "cameras/depth_tif" ADD Camera Cameras.RenderDepthBufferSimple
-"cameras/depth_tif" SET Camera near 0.3 far 1000 fieldOfView 60 renderingPath "DeferredShading"
+"cameras/depth_tif" SET Camera near 0.3 far 1000 fieldOfView 60 allowMSAA false renderingPath "DeferredShading"
 "cameras/depth_tif" SET Cameras.RenderDepthBufferSimple outputMode "Linear01Depth" transparencyCutout 0
 [UI.Window] ShowFromCamera "cameras/depth_tif" AS "depth_tif" WITH 1024 768 32 "RFloat" "Default"
 "cameras/depth_tif" SET active true

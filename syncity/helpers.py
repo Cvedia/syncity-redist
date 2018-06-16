@@ -7,6 +7,7 @@ import sys
 import time
 import random
 import json
+import os
 
 from . import common, settings_manager, unity_vars
 
@@ -14,7 +15,6 @@ settings = settings_manager.Singleton()
 
 ### HARCODED VALUES - This should be used only by the example scripts ##########
 
-# this should be used only for the examples
 ground_lst = [ 'Intersection', 'Grass', 'Asphalt', 'RoadSection2', 'DirtBrown', 'ForestFloor', 'Concrete', 'RoadSection3', 'RoadSection' ]
 cars_lst = [ 'auditts','audi_a2','audi_q7','audi_s3','bentley_arnage','bmw','bmw6_series_650i','bmw_760li','bmw_m3','bmw_m5','bmw_m_limousine','cadillac_escalade_ext','caterpillar_bulldozer_d9','chevrolet_cruze_2011','chevrolet_s10','chevrolet_tornado','fiat500_new','fiat_131','fiat_500','ford_crown_victoria_taxi','ford_fiesta','ford_fire_department','ford_focus','ford_mustang_gt_eleanor','ford_shelby_cobra','ford_transit_jumbo','freightliner_aerodyne','honda_civic_sedan','hummer_h2','international_ambulance_fdny','international_school_bus','kenworth_t600','lamborghini_gallardo','lancia_delta','mack_dumper','mercedes_class_g_500','mercedes_slk','mercedes_vario_brinks','mini_coopers','nissan_elgrand','nissan_murano','peugeot_406','rangerover','renault_420','renault_g210','renault_megane','renault_trm_2000','scania_400_concretemixer','scania_450_dumpster_hauler','truck_v010_008','volvo_th5','vw_caravelle','vw_golf_v','vw_touareg','vw_touran_2007','vw_transporter' ]
 weather_lst = [ 'Clear Sky', 'Cloudy 1', 'Cloudy 2', 'Cloudy 3', 'Foggy', 'Heavy Rain', 'Light Rain', 'Storm' ]
@@ -31,8 +31,6 @@ drones_lst = [
 	'Drones/DJI_Phantom_3_Pro/DJI_Phantom_3_Pro',
 	'Drones/DJI_Phantom_4_Pro_obsidian/DJI_Phantom_4_Pro_obsidian'
 ]
-
-# lite asset package
 drones_lite_lst = [ 'Drones/buzz/buzz', 'Drones/splinter/splinter', 'Drones/red/red', 'Drones/white/white' ]
 
 ################################################################################
@@ -40,7 +38,7 @@ drones_lite_lst = [ 'Drones/buzz/buzz', 'Drones/splinter/splinter', 'Drones/red/
 def globalCameraSetup(
 	labelRoot='cameras', canvasWidth=1024, canvasHeight=768, canvas=None,
 	orbit=False, orbitOffset=None, orbitGround=None, orbitSnap=None, position=None,
-	rotation=None, flycam=False
+	rotation=None, flycam=False, isLocal=False
 ):
 	"""
 	Sets up camera root object
@@ -58,6 +56,7 @@ def globalCameraSetup(
 	position (list): Defines a position, if not set defaults to X,Y,Z compensation values
 	rotation (list): Defines a rotation, defaults to `None`
 	flycam (bool): Adds a fly cam component that will move any nested cameras among with it
+	isLocal (bool): Set position / rotation values to local
 	"""
 	if canvas == None:
 		if settings.enable_canvas:
@@ -72,13 +71,13 @@ def globalCameraSetup(
 	
 	s = []
 	if position == None:
-		s.append('position ({} {} {})'.format(settings.X_COMP -6, settings.Y_COMP, settings.Z_COMP -50))
+		s.append('{} ({} {} {})'.format('localPosition' if isLocal == True else 'position', settings.X_COMP -6, settings.Y_COMP, settings.Z_COMP -50))
 	else:
-		s.append('position ({} {} {})'.format(position[0], position[1], position[2]))
+		s.append('{} ({} {} {})'.format('localPosition' if isLocal == True else 'position', position[0], position[1], position[2]))
 	if rotation == None:
-		s.append('eulerAngles ({} {} {})'.format(0, 0, 0))
+		s.append('{} ({} {} {})'.format('localEulerAngles' if isLocal == True else 'eulerAngles', 0, 0, 0))
 	else:
-		s.append('eulerAngles ({} {} {})'.format(rotation[0], rotation[1], rotation[2]))
+		s.append('{} ({} {} {})'.format('localEulerAngles' if isLocal == True else 'eulerAngles', rotation[0], rotation[1], rotation[2]))
 	
 	buf = [
 		'CREATE "{}"'.format(labelRoot),
@@ -126,7 +125,11 @@ def addCameraDepth(
 	depthBuffer='simple',
 	transparencyCutout=0,
 	textureFormat=14,
+	position=None,
+	rotation=None,
+	isLocal=False,
 	renderCamera=False,
+	renderCameraAlwaysOn=False,
 	registerCamera=True
 ):
 	"""
@@ -145,6 +148,13 @@ def addCameraDepth(
 	renderCamera (bool): Binds a renderCamera component, defaults to `True`
 	registerCamera (bool): Register camera on the UI making it visible
 	textureFormat (int): Defines texture format, defaults to `14` - This is defined on unity_vars lookup table
+	position (list): Defines a position for a camera or cameras
+	rotation (list): Defines rotation for a camera or cameras
+	isLocal (bool): Defines is position / rotation are local or global
+	renderCamera (bool): Binds a renderCamera component, defaults to `False`
+	renderCameraAlwaysOn (bool): Sets renderCamera to be always enabled, this will only be effective if `renderCamera` is `True`
+	registerCamera (bool): Register camera on the UI making it visible
+	
 	# Note
 	
 	Different from the other cameras, depth camera must have a renderCamera in order to work.
@@ -155,6 +165,7 @@ def addCameraDepth(
 		label = [ label ]
 	
 	buf = []
+	idx = 0
 	
 	for l in label:
 		addStack = [ 'Camera' ]
@@ -173,13 +184,19 @@ def addCameraDepth(
 		
 		if renderCamera == True:
 			addStack.append('Sensors.RenderCamera')
-			lrt = '{}_RT'.format(l.replace('/','_'))
+			lrt = '{}_RT'.format(l.split('/')[-1])
 			b.extend([
 				'CREATE RenderTexture {} {} {} "{}" "Default" AS "{}"'.format(width, height, 32, unity_vars.textureFormat[textureFormat], lrt),
 				'"{}" SET name "{}"'.format(lrt, l),
 				'"{}" EXECUTE @Create'.format(lrt),
 				'"{}" SET Camera targetTexture "{}"'.format(l, lrt),
-				'"{}" SET Sensors.RenderCamera format "{}" resolution ({} {})'.format(l, unity_vars.textureFormat[textureFormat], width, height)
+				'"{}" SET Sensors.RenderCamera format "{}" resolution ({} {}) alwaysOn {}'.format(
+					l,
+					unity_vars.textureFormat[textureFormat],
+					width,
+					height,
+					'true' if renderCameraAlwaysOn == True else 'false'
+				)
 			])
 		else:
 			lrt = None
@@ -188,13 +205,37 @@ def addCameraDepth(
 			'CREATE "{}"'.format(l),
 			'"{}" SET active false'.format(l),
 			'"{}" ADD {}'.format(l, ' '.join(addStack)),
-			'"{}" SET Camera near {} far {} fieldOfView {} renderingPath "DeferredShading"'.format(l, clippingNear, clippingFar, fov)
+			'"{}" SET Camera near {} far {} fieldOfView {} allowMSAA false renderingPath "DeferredShading"'.format(l, clippingNear, clippingFar, fov)
 		])
 		
+		if position != None or rotation != None:
+			x = []
+			if position != None:
+				if isinstance(position[0], list):
+					p = position[idx]
+				else:
+					p = position
+				
+				x.append('{} ({} {} {})'.format('localPosition' if isLocal == True else 'position', p[0], p[1], p[2]))
+			
+			if rotation != None:
+				if isinstance(rotation[0], list):
+					p = rotation[idx]
+				else:
+					p = rotation
+				
+				x.append('{} ({} {} {})'.format('localEulerAngles' if isLocal == True else 'eulerAngles', p[0], p[1], p[2]))
+			
+			buf.append('"{}" SET Transform {}'.format(l, ' '.join(x)))
+		
 		buf.extend(b)
+		
 		if registerCamera == True:
 			buf.extend(uiWindow(objs=l, width=width, height=height, depth=32, textureFormat=textureFormat, targetTexture=lrt, link='ShowFromCamera' if renderCamera == False else 'ShowFromRenderTexture', ret=True))
+		
 		buf.append('"{}" SET active true'.format(l))
+		
+		idx += 1
 	
 	common.sendData(buf, read=False)
 	common.flushBuffer()
@@ -202,7 +243,7 @@ def addCameraDepth(
 
 def addCameraRGB(
 	width=1024, height=768, audio=True, envirosky=None, flycam=False,
-	labelRoot='cameras', label='cameras/cameraRGB', pp=None,
+	labelRoot='cameras', label='cameras/cameraRGB', pp=None, pp2=None,
 	renderingPath=4, textureFormat=4,
 	
 	fov=60,
@@ -211,9 +252,13 @@ def addCameraRGB(
 	
 	enviroskyCloudTransitionSpeed=100, enviroskyEffectTransitionSpeed=100,
 	enviroskyFogTransitionSpeed=100, enviroskyProgressTime='None',
+	enviroskyWeatherProfile=None, enviroskyGameTime=None,
 	
-	allowHDR=True,
-	renderCamera=False, registerCamera=True
+	allowHDR=True, allowMSAA=False,
+	renderCamera=False, renderCameraAlwaysOn=False, registerCamera=True,
+	
+	position=None, rotation=None,
+	isLocal=False
 ):
 	"""
 	Creates a RGB camera with optional postprocessing options
@@ -237,9 +282,16 @@ def addCameraRGB(
 	enviroskyEffectTransitionSpeed (int): Defines weather transition speed, defaults to `100` which is instant
 	enviroskyFogTransitionSpeed (int): Defines fog deposition speed, defaults to `100` which is instant
 	enviroskyProgressTime (string): Defines time progression, defaults to `None` avoiding time to change
+	enviroskyWeatherProfile (string): Defines a weather profile to be loaded, defaults to `None`
+	enviroskyGameTime (string): Defines game time, this is in 24 hour format, you can define hour, minutes and seconds following this pattern HH:MM:SS where minutes and seconds are optional, defaults to `None`
 	allowHDR (bool): Enables / disables HDR, defaults to `True`
+	allowMSAA (bool): Enables / disables MSAA, defaults to `False`
 	renderCamera (bool): Binds a renderCamera component, defaults to `False`
+	renderCameraAlwaysOn (bool): Sets renderCamera to be always enabled, this will only be effective if `renderCamera` is `True`
 	registerCamera (bool): Register camera on the UI making it visible
+	position (list): Defines a position for a camera or cameras
+	rotation (list): Defines rotation for a camera or cameras
+	isLocal (bool): Defines is position / rotation are local or global
 	
 	"""
 	if envirosky == None:
@@ -254,13 +306,31 @@ def addCameraRGB(
 	buf = []
 	idx = 0
 	
+	if registerCamera == True and renderCamera == False:
+		renderCamera = True
+	
 	for l in label:
 		addStack = [ 'Camera' ]
 		b = []
 		
 		if renderCamera == True:
 			addStack.append('Sensors.RenderCamera')
-			b.append('"{}" SET Sensors.RenderCamera format "{}" resolution ({} {})'.format(l, unity_vars.textureFormat[textureFormat], width, height))
+			lrt = '{}_RT'.format(l.split('/')[-1])
+			
+			b.extend([
+				'CREATE RenderTexture {} {} {} "{}" "Default" AS "{}"'.format(width, height, 24, unity_vars.textureFormat[textureFormat], lrt),
+				'"{}" SET name "{}"'.format(lrt, l),
+				'"{}" EXECUTE @Create'.format(lrt),
+				'"{}" SET Camera targetTexture "{}"'.format(l, lrt),
+				'"{}" SET Sensors.RenderCamera format "{}" resolution ({} {}) alwaysOn {}'.format(
+					l,
+					unity_vars.textureFormat[textureFormat],
+					width,
+					height,
+					'true' if renderCameraAlwaysOn == True else 'false'
+			)])
+		else:
+			lrt = None
 		
 		if idx == 0:
 			if audio:
@@ -271,6 +341,14 @@ def addCameraRGB(
 				b.append('"{}" SET FlyCamera enabled true'.format(l))
 			
 			if envirosky:
+				gameTime = []
+				
+				if enviroskyGameTime != None:
+					bits = enviroskyGameTime.split(':')
+					mask = [ 'Hours', 'Minutes', 'Seconds' ]
+					for i, bit in enumerate(bits):
+						gameTime.append('GameTime.{} {}'.format(mask[i], bit))
+				
 				b.extend([
 					# NOTE: This is a prefab that already contains the EnviroSky default profile
 					# NOTE: You can only have one camera bound to envirosky, if you set multiple this script will bind to the first only
@@ -282,16 +360,22 @@ def addCameraRGB(
 						weatherSettings.cloudTransitionSpeed {}
 						weatherSettings.effectTransitionSpeed {}
 						weatherSettings.fogTransitionSpeed {}
+						{}
 					'''.format(
 						labelRoot, l, enviroskyProgressTime, enviroskyCloudTransitionSpeed,
-						enviroskyEffectTransitionSpeed, enviroskyFogTransitionSpeed
+						enviroskyEffectTransitionSpeed, enviroskyFogTransitionSpeed, ' '.join(gameTime)
 					),
 					'"EnviroSky" EXECUTE EnviroSky AssignAndStart "{}" "{}"'.format(l, l),
+					'"EnviroSky" EXECUTE EnviroSky ChangeWeather "{}"'.format(enviroskyWeatherProfile) if enviroskyWeatherProfile != None else '',
 					'"EnviroSky" SET active true'
 				])
-				envirosky = False
+		# cameras that are not direclty referenced by EnviroSky's PlayerCamera must
+		# have the rendering and lightshafts manually added to get postprocessing
+		elif envirosky == True:
+			addStack.append('EnviroSkyRendering EnviroLightShafts')
 		
-		idx += 1
+		if pp2 != None:
+			addStack.extend(['UnityEngine.Rendering.PostProcessing.PostProcessLayer', 'UnityEngine.Rendering.PostProcessing.PostProcessVolume'])
 		
 		buf.extend([
 			'CREATE "{}"'.format(l),
@@ -303,15 +387,50 @@ def addCameraRGB(
 				fieldOfView {}
 				renderingPath "{}"
 				allowHDR {}
+				allowMSAA {}
 			'''.format(
 				l, clippingNear, clippingFar, fov,
-				unity_vars.renderingPath[renderingPath], 'true' if allowHDR == True else 'false'
+				unity_vars.renderingPath[renderingPath],
+				'true' if allowHDR == True else 'false',
+				'true' if allowMSAA == True else 'false'
 			)
 		])
+		
 		buf.extend(b)
+		
+		if pp2 != None:
+			buf.extend([
+				'"{}" SET UnityEngine.Rendering.PostProcessing.PostProcessLayer volumeTrigger "{}" antialiasingMode "TemporalAntialiasing" volumeLayer 1'.format(l, l),
+				'"{}" EXECUTE UnityEngine.Rendering.PostProcessing.PostProcessLayer Init "PostProcessResources"'.format(l),
+				'"{}" SET UnityEngine.Rendering.PostProcessing.PostProcessVolume isGlobal true priority 100 sharedProfile "{}"'.format(l, pp2)
+			])
+		
 		if registerCamera == True:
-			buf.extend(uiWindow(objs=l, width=width, height=height, textureFormat=textureFormat, ret=True))
+			buf.extend(uiWindow(objs=l, width=width, height=height, targetTexture=lrt, textureFormat=textureFormat, link='ShowFromCamera' if renderCamera == False else 'ShowFromRenderTexture', ret=True))
+		
+		if position != None or rotation != None:
+			x = []
+			if position != None:
+				if isinstance(position[0], list):
+					p = position[idx]
+				else:
+					p = position
+				
+				x.append('{} ({} {} {})'.format('localPosition' if isLocal == True else 'position', p[0], p[1], p[2]))
+			
+			if rotation != None:
+				if isinstance(rotation[0], list):
+					p = rotation[idx]
+				else:
+					p = rotation
+				
+				x.append('{} ({} {} {})'.format('localEulerAngles' if isLocal == True else 'eulerAngles', p[0], p[1], p[2]))
+			
+			buf.append('"{}" SET Transform {}'.format(l, ' '.join(x)))
+		
 		buf.append('"{}" SET active true'.format(l))
+		
+		idx += 1
 	
 	buf.append('"{}" SET active true'.format(labelRoot))
 	
@@ -438,6 +557,7 @@ def addCameraSeg(
 			'"{}" ADD {}'.format(l, ' '.join(addStack)),
 			'"{}" SET SegmentationCamera transparencyCutout {}'.format(l, transparencyCutout),
 			'''"{}" SET Camera
+				allowMSAA false allowHDR false
 				near {} far {} fieldOfView {}
 				renderingPath "{}" targetTexture.filterMode "Point"
 			'''.format(l, clippingNear, clippingFar, fov, unity_vars.renderingPath[renderingPath])
@@ -2116,6 +2236,18 @@ def uiWindow(objs, width=1024, height=768, depth=24, textureFormat=4, link="Show
 	
 	common.sendData(cmd)
 
+def findLayout(hint):
+	try:
+		lfn = os.path.join(settings._root, 'layout', '{}.layout'.format(hint))
+		if os.path.isfile(lfn):
+			common.sendData([
+				'"UI.WindowController.instance" EXECUTE LoadLayout "{}"'.format(lfn)
+			])
+		else:
+			common.output('No layout match found, path: {}'.format(lfn), 'DEBUG')
+	except:
+		common.output('Failed to autoload layout', 'DEBUG')
+
 def enableAll(objs, component):
 	if not isinstance(objs, list):
 		objs = [ objs ]
@@ -2225,21 +2357,471 @@ def setThermalProps(
 	
 	common.flushBuffer()
 
+def setOSVehicle(
+	target='mainCar',
+	create=False,
+	
+	selfDriving=True,
+	externControl=False,
+	isBike=False,
+	bikeLeanMult=40,
+	
+	startSpeed=60,
+	maxSpeed=60,
+	maxForce=40,
+	
+	vehicleSize=None,
+	vehicleMass=None,
+	
+	spinWheels=True,
+	spinWheelDisableDistance=100,
+	
+	predictMult=.4,
+	
+	parked=False,
+	
+	setDriver=True,
+	createDriver=True,
+	
+	# parameters for setOSVehicleDriver
+	driverSpeed=80,
+	brakePower=10000,
+	steerFactor=10,
+	steerOvertake=2,
+	smoothAdjust=100,
+	laneWidth=.5,
+	network='OpenSteerNetwork'
+):
+	"""
+	Sets or adds a OSVehicle component.
+	This component is intended to drive or set properties for a controller component
+	to drive this vehicle. This also ties into the spline system allowing for
+	configuration of lane distance, speed and agressiveness.
+	
+	# Arguments
+	
+	target (string): Object name where the component exists or will be added to
+	create (bool): Defines is the component should be added or just configured
+	selfDriving (bool): Defines is the car should be automatically controlled (requires a spline network and a driver)
+	externControl (bool): Defines is external control is allowed
+	
+	isBike (bool): Defines if vehicle is a bike
+	bikeLeanMult (float): Defines maximum leaning angle for bikes
+	
+	startSpeed (float): Start speed for spawned object
+	maxSpeed (float): Maximum speed
+	maxForce (float): Maximum force when it comes to changing lanes
+	
+	vehicleSize (float): Coarse setting for vehicle radius
+	vehicleMass (float): Coarse setting for vehicle mass (kg)
+	
+	spinWheels (bool): Defines is wheels should be spinning
+	spinWheelDisableDistance (float): Defines distance to stop spinning wheels
+	
+	predictMult (float): Car agressiveness factor
+	
+	parked (bool): Defines if car is parked
+	
+	setDriver (bool): Defines if we should cascade parameters to OSVehicleDriver
+	createDriver (bool): Defines if a OSVehicleDriver should be created or just configured
+	
+	# Arguments passed to `setOSVehicleDriver`
+	
+	driverSpeed (float): Defines maximum speed driver should be going (kmh)
+	brakePower (float): Defines driver brake power
+	steerFactor (float): Defines steer factor
+	steerOvertake (float): How fast steer happens when overtaking
+	smoothAdjust (float): Defines how smooth steer adjusting is when following curves / changing lanes / etc
+	laneWidth (float): Defines lane width jitter based on spline center
+	network (string): Defines the `osNetwork` the driver should drive on
+	"""
+	
+	buf = []
+	p = []
+	
+	if create == True:
+		buf.append('"{}" ADD OSVehicle'.format(target))
+	
+	p.extend([
+		'selfDriving {}'.format('true' if selfDriving == True else 'false'),
+		'externControl {}'.format('true' if externControl == True else 'false'),
+		'isBike {}'.format('true' if isBike == True else 'false'),
+		'bikeLeanMult {}'.format(bikeLeanMult),
+		
+		'startSpeed {}'.format(startSpeed),
+		'maxSpeed {}'.format(maxSpeed),
+		'maxForce {}'.format(maxForce),
+		
+		'spinWheels {}'.format('true' if spinWheels == True else 'false'),
+		'spinWheelDisableDistance {}'.format(spinWheelDisableDistance),
+		
+		'predictMult {}'.format(predictMult),
+		'parked {}'.format('true' if parked == True else 'false')
+	])
+	
+	if vehicleSize != None:
+		p.append('vehicleSize {}'.format(vehicleSize))
+	if vehicleMass != None:
+		p.append('vehicleMass {}'.format(vehicleMass))
+	
+	buf.append('"{}" SET OSVehicle {}'.format(target, ' '.join(p)))
+	common.sendData(buf)
+	
+	if setDriver == True:
+		setOSVehicleDriver(
+			target=target,
+			create=createDriver,
+			
+			selfDriving=selfDriving,
+			driverSpeed=driverSpeed,
+			brakePower=brakePower,
+			steerFactor=steerFactor,
+			steerOvertake=steerOvertake,
+			smoothAdjust=smoothAdjust,
+			laneWidth=laneWidth,
+			network=network
+		)
+
+def setOSVehicleDriver(
+	target='mainCar',
+	create=False,
+	
+	selfDriving=True,
+	driverSpeed=80,
+	brakePower=10000,
+	steerFactor=10,
+	steerOvertake=2,
+	smoothAdjust=100,
+	laneWidth=.5,
+	network='OpenSteerNetwork'
+):
+	"""
+	Adds a driver to a OSVehicle compatible component
+	
+	# Arguments
+	
+	target (string): Object name where the component exists or will be added to
+	create (bool): Defines is the component should be added or just configured
+	
+	selfDriving (bool): Defines is the car should be automatically controlled (requires a spline network and a driver)
+	driverSpeed (float): Defines maximum speed driver should be going (kmh)
+	brakePower (float): Defines driver brake power
+	steerFactor (float): Defines steer factor
+	steerOvertake (float): How fast steer happens when overtaking
+	smoothAdjust (float): Defines how smooth steer adjusting is when following curves / changing lanes / etc
+	laneWidth (float): Defines lane width jitter based on spline center
+	network (string): Defines the `osNetwork` the driver should drive on
+	
+	"""
+	buf = []
+	if create == True:
+		buf.append('"{}" ADD OSBHVehicleDriver'.format(target))
+	
+	buf.append('"{}" SET OSBHVehicleDriver {}'.format(
+		target,
+		' '.join([
+			'selfDriving {}'.format('true' if selfDriving == True else 'false'),
+			'driverSpeed {}'.format(driverSpeed),
+			'brakePower {}'.format(brakePower),
+			'steerFactor {}'.format(steerFactor),
+			'steerOvertake {}'.format(steerOvertake),
+			'smoothAdjust {}'.format(smoothAdjust),
+			'laneWidth {}'.format(laneWidth),
+			'osNetwork "{}"'.format(network)
+	])))
+	
+	common.sendData(buf)
+
+def setOSNetwork(
+	target='OpenSteerNetwork',
+	create=False
+):
+	# WIP: More configurables to be added later
+	buf = []
+	buf.append('"{}" ADD OpenSteerNetwork'.format(target))
+	
+	if create == True:
+		buf.insert(0, 'CREATE "{}"'.format(target))
+		buf.append('"{}" SET active true'.format(target))
+	
+	common.sendData(buf)
+
+def createTrafficNetwork(drivers=None, label='OSN'):
+	"""
+	Creates a traffic network placeholder, this can later be linked to a `OSNetwork`
+	compatible component and become a spline container, allowing `drivers` to
+	transverse a shared network.
+	
+	# Arguments
+	
+	drivers (list|string|None): Defines one or more drivers to be bound to this network
+	label (string): Defines the name of the network
+	
+	"""
+	buf = [
+		'CREATE "{}"'.format(label),
+		'"{}" ADD OpenSteerNetwork'.format(label)
+	]
+	
+	if drivers != None:
+		if not isinstance(drivers, list):
+			drivers = [ drivers ]
+		for d in drivers:
+			buf.append('"{}" SET OSBHVehicleDriver osNetwork "{}"'.format(d, label))
+	
+	common.sendData(buf)
+
+def setVehicleSpawner(
+	target='VehicleSpawner',
+	create=False,
+	addTiler=True,
+	
+	position=None,
+	
+	maxObjects=20,
+	
+	spawnRadius=140,
+	spawnSize=20,
+	spawnClearance=8,
+	spawnFocus=None,
+	despawnRadius=150,
+	
+	speedVariance=6,
+	brakeLightPower=2,
+	
+	hidePosition=None,
+	
+	removeProbes=True,
+	removeBoxColliders=True,
+	removeRigidBodies=True,
+	network=None,
+	
+	databaseFilter=None,
+	assetBundle='lowpolycars',
+	
+	loadCarsAsynchronously=True,
+	segmentationClass=False
+):
+	buf = []
+	p = []
+	
+	if create == True:
+		buf.extend([
+			'CREATE "{}"'.format(target),
+			'"{}" ADD OSNetworkSpawner'.format(target)
+		])
+	if segmentationClass != False:
+		buf.extend([
+			'"{}" ADD Segmentation.Class'.format(target),
+			'"{}" SET Segmentation.Class className "{}"'.format(target, segmentationClass)
+		])
+	if addTiler == True:
+		buf.append('"{}" ADD Tiler.Helpers.LightProcessor'.format(target))
+	if isinstance(hidePosition, bool) and hidePosition == True:
+		hidePosition = target
+	if isinstance(network, bool) and network == True:
+		network = 'OpenSteerNetwork'
+	
+	p.extend([
+		'maxObjects {}'.format(maxObjects),
+		
+		'spawnRadius {}'.format(spawnRadius),
+		'spawnClearance {}'.format(spawnClearance),
+		'despawnRadius {}'.format(despawnRadius),
+		
+		'speedVariance {}'.format(speedVariance),
+		'brakeLightPower {}'.format(brakeLightPower),
+		
+		'removeProbes {}'.format('true' if removeProbes == True else 'false'),
+		'removeBoxColliders {}'.format('true' if removeBoxColliders == True else 'false'),
+		'removeRigidBodies {}'.format('true' if removeRigidBodies == True else 'false'),
+		
+		'loadCarsAsynchronously {}'.format('true' if loadCarsAsynchronously == True else 'false')
+	])
+	
+	if databaseFilter != None:
+		p.append('databaseFilter "{}"'.format(databaseFilter))
+	else:
+		p.append('assetBundle "{}"'.format(assetBundle))
+	
+	if hidePosition != None:
+		p.append('hidePosition "{}"'.format(hidePosition))
+	if network != None:
+		p.append('network "{}"'.format(network))
+	if spawnFocus != None:
+		p.append('spawnFocus "{}"'.format(spawnFocus))
+	if isinstance(position, list):
+		buf.append('"{}" SET Transform localPosition ({} {} {})'.format(target, position[0], position[1], position[2]))
+	
+	buf.append('"{}" SET OSNetworkSpawner {}'.format(target, ' '.join(p)))
+	common.sendData(buf)
+
+def setTilerPool(
+	pool,
+	
+	target="Tiler",
+	create=False,
+	
+	position=None,
+	addPool=True,
+	
+	# passthuru to setTiler
+	addTiler=True,
+	createTiler=False,
+	createContainer=False,
+	targetReference='mainCar',
+	targetReferenceTileDistance=500,
+	tileContainer="tileContainer",
+	loadOtherTilesSynchronously=False,
+	
+	# passthuru to setTileOSP
+	addTilerOSP=True,
+	createTilerOSP=False,
+	roadNetwork=None,
+	mainCar='mainCar',
+	networkSpawner='VehicleSpawner',
+):
+	buf = []
+	if not isinstance(pool, list):
+		pool = [ pool ]
+	
+	if create == True:
+		buf.append('CREATE "{}"'.format(target))
+	if isinstance(position, list):
+		buf.append('"{}" SET Transform localPosition ({} {} {})'.format(target, position[0], position[1], position[2]))
+	if addPool == True:
+		buf.append('"{}" ADD Tiler.PoolTileLoader'.format(target))
+	
+	buf.append('"{}" PUSH Tiler.PoolTileLoader pool {}'.format(target,' '.join('"{0}"'.format(p) for p in pool)))
+	
+	common.sendData(buf)
+	
+	if addTiler == True:
+		setTiler(
+			target=target,
+			create=createTiler,
+			createContainer=createContainer,
+			targetReference=targetReference,
+			targetReferenceTileDistance=targetReferenceTileDistance,
+			tileContainer=tileContainer,
+			loadOtherTilesSynchronously=loadOtherTilesSynchronously
+		)
+	
+	if addTilerOSP == True:
+		setTilerOSP(
+			create=createTilerOSP,
+			roadNetwork=roadNetwork,
+			mainCar=mainCar,
+			networkSpawner=networkSpawner
+		)
+	
+	if create == True:
+		common.sendData('"{}" SET active true'.format(target))
+
+def setTiler(
+	target="Tiler",
+	create=False,
+	createContainer=False,
+	targetReference='mainCar',
+	targetReferenceTileDistance=500,
+	tileContainer="tileContainer",
+	loadOtherTilesSynchronously=False
+):
+	buf = []
+	
+	if create == True:
+		buf.append('"{}" ADD Tiler.Tiler'.format(target))
+	
+	buf.append('"{}" SET Tiler.Tiler {}'.format(target, ' '.join([
+		'targetReference "{}"'.format(targetReference),
+		'targetReferenceTileDistance {}'.format(targetReferenceTileDistance),
+		'tileContainer "{}"'.format(tileContainer),
+		'loadOtherTilesSynchronously {}'.format('true' if loadOtherTilesSynchronously == True else 'false')
+	])))
+	
+	if createContainer == True:
+		buf.insert(0, 'CREATE "{}"'.format(tileContainer))
+		buf.append('"{}" SET active true'.format(tileContainer))
+	
+	common.sendData(buf)
+
+def setTilerOSP(
+	target="Tiler",
+	create=False,
+	
+	roadNetwork=None,
+	mainCar='mainCar',
+	networkSpawner='VehicleSpawner'
+):
+	buf = []
+	p = []
+	
+	if create == True:
+		buf.append('"{}" ADD Tiler.TileOpenSteerProcessor'.format(target))
+	p = [
+		'mainCar "{}"'.format(mainCar),
+		'networkSpawner "{}"'.format(networkSpawner)
+	]
+	
+	if roadNetwork != None:
+		p.append('roadNetwork "{}"'.format(roadNetwork))
+	
+	buf.append('"{}" SET Tiler.TileOpenSteerProcessor {}'.format(target, ' '.join(p)))
+	
+	common.sendData(buf)
+
+def setQualitySettings(params):
+	"""
+	Allows for dyanmic realtime arbitrary quality settings setup.
+	You can see a full list of available settings in:
+	
+	https://docs.unity3d.com/ScriptReference/QualitySettings.html
+	
+	# Arguments
+	
+	params (dict): A key value list of values to be changed, example:
+	
+	```json
+	{
+		"shadowDistance": 100,
+		"shadowCascades": 2,
+		"shadows": 2
+	}
+	```
+	
+	## Notes
+	
+	The default settings will depend on what quality settings you set
+	when first launching the simulator, we recomend you always set to the highest
+	tier to avoid discrepancies.
+	
+	Not all those parameters can be changed on fly, it's recommended you change
+	all quality settings before setting up cameras, although it's possible to do it
+	after depending on the parameter.
+	
+	"""
+	p = []
+	
+	for k, v in params.items():
+		p.append('{} {}'.format(k, v))
+	
+	common.sendData('"QualitySettings" SET {}'.format(' '.join(p)))
+
 def humanWalkerSpawner(
-		label='human_walker',
-		goals=None,
-		spawners=None,
-		delay=[0.3, 3],
-		speed=[0.5, 3],
-		limit=20,
-		goalThreshold=5,
-		genderRestriction='None',
-		container='container',
-		prefix='spawner',
-		segmentationClass='Human',
-		requireThermalClothing=False,
-		playRandomAnimations=None
-	):
+	label='human_walker',
+	goals=None,
+	spawners=None,
+	delay=[0.3, 3],
+	speed=[0.5, 3],
+	limit=20,
+	goalThreshold=5,
+	genderRestriction='None',
+	container='container',
+	prefix='spawner',
+	segmentationClass='Human',
+	requireThermalClothing=False,
+	playRandomAnimations=None
+):
 	"""
 	Creates a human walker spawner
 	
@@ -2276,7 +2858,6 @@ def humanWalkerSpawner(
 		"maxDelayBetweenAnimations": 5,
 		"animationFadeDuration": 0.4
 	}
-	
 	```
 	
 	"""

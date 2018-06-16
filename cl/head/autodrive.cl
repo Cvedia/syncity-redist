@@ -9,13 +9,17 @@ CREATE "SyncityJPickup/cameras"
 CREATE "SyncityJPickup/cameras/Front"
 "SyncityJPickup/cameras/Front" SET active false
 "SyncityJPickup/cameras/Front" ADD Camera Sensors.RenderCamera
-"SyncityJPickup/cameras/Front" SET Camera near 0.3 far 1000 fieldOfView 60 renderingPath "UsePlayerSettings" allowHDR true 
-"SyncityJPickup/cameras/Front" SET Sensors.RenderCamera format "ARGB32" resolution (640 480)
+"SyncityJPickup/cameras/Front" SET Camera near 0.3 far 1000 fieldOfView 60 renderingPath "UsePlayerSettings" allowHDR true allowMSAA false 
+CREATE RenderTexture 640 480 24 "ARGB32" "Default" AS "Front_RT"
+"Front_RT" SET name "SyncityJPickup/cameras/Front"
+"Front_RT" EXECUTE @Create
+"SyncityJPickup/cameras/Front" SET Camera targetTexture "Front_RT"
+"SyncityJPickup/cameras/Front" SET Sensors.RenderCamera format "ARGB32" resolution (640 480) alwaysOn false
 CREATE "EnviroSky" AS "EnviroSky"
 "EnviroSky" SET EnviroSky Player "SyncityJPickup/cameras" PlayerCamera "SyncityJPickup/cameras/Front" GameTime.ProgressTime "None" weatherSettings.cloudTransitionSpeed 100 weatherSettings.effectTransitionSpeed 100 weatherSettings.fogTransitionSpeed 100 
 "EnviroSky" EXECUTE EnviroSky AssignAndStart "SyncityJPickup/cameras/Front" "SyncityJPickup/cameras/Front"
 "EnviroSky" SET active true
-[UI.Window] ShowFromCamera "SyncityJPickup/cameras/Front" AS "Front" WITH 640 480 24 "ARGB32" "Default"
+[UI.Window] ShowFromRenderTexture "Front_RT" AS "Front"
 "SyncityJPickup/cameras/Front" SET active true
 "SyncityJPickup/cameras" SET active true
 "SyncityJPickup/cameras/Front" ADD UnityEngine.PostProcessing.PostProcessingBehaviour
@@ -24,21 +28,21 @@ CREATE "EnviroSky" AS "EnviroSky"
 CREATE "SyncityJPickup/cameras/Depth"
 "SyncityJPickup/cameras/Depth" SET active false
 "SyncityJPickup/cameras/Depth" ADD Camera Cameras.RenderDepthBufferSimple Sensors.RenderCamera
-"SyncityJPickup/cameras/Depth" SET Camera near 0.3 far 1000 fieldOfView 60 renderingPath "DeferredShading"
+"SyncityJPickup/cameras/Depth" SET Camera near 0.3 far 1000 fieldOfView 60 allowMSAA false renderingPath "DeferredShading"
 "SyncityJPickup/cameras/Depth" SET Cameras.RenderDepthBufferSimple outputMode "Linear01Depth" transparencyCutout 0
-CREATE RenderTexture 640 480 32 "RFloat" "Default" AS "SyncityJPickup_cameras_Depth_RT"
-"SyncityJPickup_cameras_Depth_RT" SET name "SyncityJPickup/cameras/Depth"
-"SyncityJPickup_cameras_Depth_RT" EXECUTE @Create
-"SyncityJPickup/cameras/Depth" SET Camera targetTexture "SyncityJPickup_cameras_Depth_RT"
-"SyncityJPickup/cameras/Depth" SET Sensors.RenderCamera format "RFloat" resolution (640 480)
-[UI.Window] ShowFromRenderTexture "SyncityJPickup_cameras_Depth_RT" AS "Depth"
+CREATE RenderTexture 640 480 32 "RFloat" "Default" AS "Depth_RT"
+"Depth_RT" SET name "SyncityJPickup/cameras/Depth"
+"Depth_RT" EXECUTE @Create
+"SyncityJPickup/cameras/Depth" SET Camera targetTexture "Depth_RT"
+"SyncityJPickup/cameras/Depth" SET Sensors.RenderCamera format "RFloat" resolution (640 480) alwaysOn false
+[UI.Window] ShowFromRenderTexture "Depth_RT" AS "Depth"
 "SyncityJPickup/cameras/Depth" SET active true
 "Segmentation.Profile.instance" PUSH classes "Void" "LINES" "DIRT" "ROAD" "PROPS" "SIGNS"
 CREATE "SyncityJPickup/cameras/Segment"
 "SyncityJPickup/cameras/Segment" SET active false
 "SyncityJPickup/cameras/Segment" ADD Camera SegmentationCamera Segmentation.Output.BoundingBoxes Segmentation.Output.ClassColors Sensors.RenderCamera
 "SyncityJPickup/cameras/Segment" SET SegmentationCamera transparencyCutout 0
-"SyncityJPickup/cameras/Segment" SET Camera near 0.3 far 1000 fieldOfView 60 renderingPath "UsePlayerSettings" targetTexture.filterMode "Point" 
+"SyncityJPickup/cameras/Segment" SET Camera allowMSAA false allowHDR false near 0.3 far 1000 fieldOfView 60 renderingPath "UsePlayerSettings" targetTexture.filterMode "Point" 
 "SyncityJPickup/cameras/Segment" SET Sensors.RenderCamera format "ARGBFloat" resolution (640 480)
 "SyncityJPickup/cameras/Segment" SET Segmentation.Output.BoundingBoxes minimumObjectVisibility 0 extensionAmount 0 minimumPixelsCount 1 
 "SyncityJPickup/cameras/Segment" EXECUTE Segmentation.Output.ClassColors lookUpTable.SetClassColor "Void->black" "LINES->white" "DIRT->blue" "ROAD->#838383" "PROPS->#09FF00" "SIGNS->red"

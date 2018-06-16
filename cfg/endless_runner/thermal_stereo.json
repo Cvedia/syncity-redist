@@ -1,0 +1,205 @@
+{
+	"loop": 0,
+	"mainCar": "mainCar",
+	"cams": {
+		"mainCar/cameras/cameraThermal1": {
+			"type": "THERMAL",
+			"cameraWidth": 320,
+			"cameraHeight": 320,
+			"fov": 60,
+			"clippingNear": 0.3,
+			"clippingFar": 400,
+			
+			"cameraPosition": [0.1, 0, 0],
+			"cameraRotation": [0, -3, 0],
+			
+			"thermal": {
+				"temperatureRange": [-10, 30],
+				"bloom": {
+					"threshold": 0,
+					"intensity": 0.3,
+					"blurSize": 1.47,
+					"blurIterations": 4
+				},
+				"noise": {
+					"spotsContrast": 0.8,
+					"linesMaskIntensity": 0.1,
+					"noiseIntensity": 6,
+					"noiseContrast": 0.9,
+					"noiseSize": 0.1,
+					"noiseBlur": 1,
+					"blendAmount": 0.1,
+					"filterMode": 2
+				}
+			}
+		},
+		"mainCar/cameras/cameraThermal2": {
+			"type": "THERMAL",
+			"cameraWidth": 320,
+			"cameraHeight": 320,
+			"fov": 60,
+			"clippingNear": 0.3,
+			"clippingFar": 400,
+			
+			"cameraPosition": [-0.1, 0, 0],
+			"cameraRotation": [0, 3, 0],
+			
+			"thermal": {
+				"temperatureRange": [-10, 30],
+				"bloom": {
+					"threshold": 0,
+					"intensity": 0.3,
+					"blurSize": 1.47,
+					"blurIterations": 4
+				},
+				"noise": {
+					"spotsContrast": 0.8,
+					"linesMaskIntensity": 0.1,
+					"noiseIntensity": 6,
+					"noiseContrast": 0.9,
+					"noiseSize": 0.1,
+					"noiseBlur": 1,
+					"blendAmount": 0.1,
+					"filterMode": 2
+				}
+			}
+		}
+	},
+	
+	"quality": {
+		"shadowDistance": 100,
+		"shadowCascades": 2,
+		"shadows": 2
+	},
+	
+	"envirosky": {
+		"weatherProfile": "Cloudy 2",
+		"cloudTransitionSpeed": 100,
+		"effectTransitionSpeed": 100,
+		"fogTransitionSpeed": 100,
+		"progressTime": "None",
+		"gameTime": "12:00:00"
+	},
+	
+	"labelRoot": "mainCar/cameras",
+	"vehicleSpawnerLabel": "VehicleSpawner",
+	"vehicleSpawnerClass": false,
+	"roadNetworkLabel": "OpenSteerNetwork",
+	
+	"carPosition": [8.8, 0, -352.5],
+	"selfDriving": true,
+	"maxSpeed": 20,
+	"startSpeed": 5,
+	"smoothAdjust": 100.0,
+	
+	"spawnerPosition": [0, 0, 0],
+	"maxObjects": 20,
+	"spawnRadius": 140,
+	"spawnSize": 20,
+	"spawnClearance": 8,
+	"spawnFocus": "mainCar",
+	"despawnRadius": 150,
+	"speedVariance": 6,
+	"brakeLightPower": 2,
+	"databaseFilter": "+car,+thermal",
+	
+	"tilerPosition": [251.59, 0.03, 249.715],
+	
+	"globalCameraPosition": [0, 1.78, 0.3],
+	"globalCameraRotation": [0, 0, 0],
+	
+	"ros": {
+		"writeLinks": [
+			{
+				"label": "throttle",
+				"topic": "syncity/throttle",
+				"target": "mainCar",
+				"component": "VPCustomInput",
+				"field": "externalThrottle",
+				"interval": 0.5
+			},
+			{
+				"label": "brake",
+				"topic": "syncity/brake",
+				"target": "mainCar",
+				"component": "VPCustomInput",
+				"field": "externalBrake",
+				"interval": 0.5
+			},
+			{
+				"label": "handbrake",
+				"topic": "syncity/handbrake",
+				"target": "mainCar",
+				"component": "VPCustomInput",
+				"field": "externalHandbrake",
+				"interval": 0.5
+			},
+			{
+				"label": "steer",
+				"topic": "syncity/steer",
+				"target": "mainCar",
+				"component": "VPCustomInput",
+				"field": "externalSteer",
+				"interval": 0.5
+			}
+		],
+		"readLinks": [
+			{
+				"label": "velocity",
+				"topic": "syncity/velocity",
+				"target": "mainCar",
+				"component": "Rigidbody",
+				"field": "velocity",
+				"interval": 0.5
+			},
+			{
+				"label": "angularVelocity",
+				"topic": "syncity/angularVelocity",
+				"target": "mainCar",
+				"component": "Rigidbody",
+				"field": "angularVelocity",
+				"interval": 0.5
+			},
+			{
+				"label": "angularDrag",
+				"topic": "syncity/angularDrag",
+				"target": "mainCar",
+				"component": "Rigidbody",
+				"field": "angularDrag",
+				"interval": 0.5
+			},
+			{
+				"label": "position",
+				"topic": "syncity/position",
+				"target": "mainCar",
+				"component": "Transform",
+				"field": "position",
+				"interval": 0.5
+			},
+			{
+				"label": "rotation",
+				"topic": "syncity/rotation",
+				"target": "mainCar",
+				"component": "Transform",
+				"field": "eulerAngles",
+				"interval": 0.5
+			},
+			{
+				"label": "thermal1",
+				"topic": "syncity/thermal1",
+				"target": "mainCar/cameras/cameraThermal1",
+				"component": "Camera",
+				"field": "targetTexture",
+				"interval": 0.5
+			},
+			{
+				"label": "thermal2",
+				"topic": "syncity/thermal2",
+				"target": "mainCar/cameras/cameraThermal2",
+				"component": "Camera",
+				"field": "targetTexture",
+				"interval": 0.5
+			}
+		]
+	}
+}
