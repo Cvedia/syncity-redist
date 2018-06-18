@@ -1,9 +1,6 @@
-import subprocess
 import os
-import pathlib
-import time
+
 from .. import common, helpers, settings_manager
-from random import randint
 
 settings = settings_manager.Singleton()
 
@@ -248,7 +245,7 @@ def run():
 					),
 					'"{}" ADD UnityStandardAssets.ImageEffects.BloomOptimized'.format(idx),
 					'"{}" SET Thermal.ThermalCamera temperatureRange ({} {})'.format(idx, cam['thermal']['temperatureRange'][0], cam['thermal']['temperatureRange'][1]),
-					'"{}" SET Camera far 400'.format(idx, cam['clippingFar']),
+					'"{}" SET Camera far {}'.format(idx, cam['clippingFar']),
 					
 					'''"{}" SET UnityStandardAssets.ImageEffects.BloomOptimized fastBloomShader "Hidden/FastBloom"
 						threshold {}
@@ -263,7 +260,7 @@ def run():
 						cam['thermal']['bloom']['blurIterations'],
 					),
 					
-					'CREATE RenderTexture 640 512 24 "ARGB32" "Default" AS "{}"'.format(cam_s),
+					'CREATE RenderTexture {} {} 24 "ARGB32" "Default" AS "{}"'.format(cam['cameraWidth'], cam['cameraHeight'], cam_s),
 					'"{}" SET Camera targetTexture "{}"'.format(idx, cam_s),
 					'"{}" SET active true'.format(idx),
 					

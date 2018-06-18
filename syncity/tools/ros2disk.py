@@ -7,7 +7,6 @@ except:
 	missing_modules = True
 
 import os
-import time
 import sys
 
 from .. import common, helpers, settings_manager
