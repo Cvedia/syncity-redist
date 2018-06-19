@@ -121,7 +121,7 @@
 				"noise": {
 					"spotsContrast": 0.8,
 					"linesMaskIntensity": 0.1,
-					"noiseIntensity": 6,
+					"noiseIntensitly": 6,
 					"noiseContrast": 0.9,
 					"noiseSize": 0.1,
 					"noiseBlur": 1,
@@ -148,8 +148,14 @@
 	},
 	
 	"labelRoot": "mainCar/cameras",
-	"vehicleSpawnerLabel": "VehicleSpawner",
-	"vehicleSpawnerClass": "Cars",
+	"vehicleSpawner": {
+		"label": "VehicleSpawner",
+		"class": "Cars",
+		"rigidBodies": false,
+		"boxColliders": false,
+		"reflectionProbes": false
+	},
+	
 	"roadNetworkLabel": "OpenSteerNetwork",
 	
 	"carPosition": [8.8, 0, -352.5],

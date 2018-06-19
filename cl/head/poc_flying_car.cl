@@ -37,8 +37,8 @@ CREATE "spawner/Buildings_001//container"
 "spawner/Buildings_001//container" ADD RandomProps.PropArea
 "spawner/Buildings_001//container" SET RandomProps.PropArea tags ""
 "spawner/Buildings_001//container" SET RandomProps.PropArea async false numberOfProps 350 collisionCheck true stickToGround false 
-"spawner/Buildings_001//container" SET RandomProps.Torus innerRadius 0
 "spawner/Buildings_001//container" SET RandomProps.Torus radius 350
+"spawner/Buildings_001//container" SET RandomProps.Torus innerRadius 0
 "spawner/Buildings_001//container" SET Transform position (0 0 0) eulerAngles (0 0 0) localScale (1 1 1)
 "spawner/Buildings_001//container" SET active true
 "spawner/Buildings_001/" SET active true
@@ -48,8 +48,8 @@ CREATE "spawner/Buildings_002//container"
 "spawner/Buildings_002//container" ADD RandomProps.PropArea
 "spawner/Buildings_002//container" SET RandomProps.PropArea tags ""
 "spawner/Buildings_002//container" SET RandomProps.PropArea async false numberOfProps 350 collisionCheck true stickToGround false 
-"spawner/Buildings_002//container" SET RandomProps.Torus innerRadius 0
 "spawner/Buildings_002//container" SET RandomProps.Torus radius 350
+"spawner/Buildings_002//container" SET RandomProps.Torus innerRadius 0
 "spawner/Buildings_002//container" SET Transform position (0 0 0) eulerAngles (0 0 0) localScale (1 1 1)
 "spawner/Buildings_002//container" SET active true
 "spawner/Buildings_002/" SET active true
@@ -59,8 +59,8 @@ CREATE "spawner/Buildings_003//container"
 "spawner/Buildings_003//container" ADD RandomProps.PropArea
 "spawner/Buildings_003//container" SET RandomProps.PropArea tags ""
 "spawner/Buildings_003//container" SET RandomProps.PropArea async false numberOfProps 350 collisionCheck true stickToGround false 
-"spawner/Buildings_003//container" SET RandomProps.Torus innerRadius 0
 "spawner/Buildings_003//container" SET RandomProps.Torus radius 350
+"spawner/Buildings_003//container" SET RandomProps.Torus innerRadius 0
 "spawner/Buildings_003//container" SET Transform position (0 0 0) eulerAngles (0 0 0) localScale (1 1 1)
 "spawner/Buildings_003//container" SET active true
 "spawner/Buildings_003/" SET active true

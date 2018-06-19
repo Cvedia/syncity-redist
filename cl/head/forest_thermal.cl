@@ -131,7 +131,7 @@ CREATE "spawner/human_walker/points/spawners/s_2"
 "spawner/human_walker/points/spawners/s_2" SET active true
 "spawner/human_walker/humanSpawner" PUSH Humans.Locomotion.WalkerSpawner spawnPoints "spawner/human_walker/points/spawners/s_2"
 "spawner/human_walker/humanSpawner" ADD Humans.Animation.PlayRandomAnimations
-"spawner/human_walker/humanSpawner" SET Humans.Animation.PlayRandomAnimations maxDelayBetweenAnimations 5 animationFadeDuration 0.4 maxAnimationDuration 5 minDelayBetweenAnimations 1 minAnimationDuration 1
+"spawner/human_walker/humanSpawner" SET Humans.Animation.PlayRandomAnimations minAnimationDuration 1 minDelayBetweenAnimations 1 maxAnimationDuration 5 maxDelayBetweenAnimations 5 animationFadeDuration 0.4
 "spawner/human_walker/humanSpawner" PUSH Humans.Animation.PlayRandomAnimations animations ASSET "Humans/animations/LookingAroundNervously" FROM "humans" ASSET "Humans/animations/LeanAgainstWall3" FROM "humans" ASSET "Humans/animations/StandingAngry" FROM "humans" ASSET "Humans/animations/LookingAround" FROM "humans" ASSET "Humans/animations/LeanAgainstWall2" FROM "humans" ASSET "Humans/animations/Sitting4" FROM "humans" ASSET "Humans/animations/Waving" FROM "humans" ASSET "Humans/animations/Sitting3" FROM "humans" ASSET "Humans/animations/PushButton" FROM "humans" ASSET "Humans/animations/Sitting1" FROM "humans" ASSET "Humans/animations/ShakingHands" FROM "humans" ASSET "Humans/animations/LeanAgainstWall" FROM "humans" ASSET "Humans/animations/ArmsCrossed" FROM "humans" ASSET "Humans/animations/Sitting2" FROM "humans" ASSET "Humans/animations/LookBehind" FROM "humans" ASSET "Humans/animations/Looking" FROM "humans"
 "spawner/human_walker/humanSpawner" SET active true
 "spawner/human_walker/points/goals" SET active true

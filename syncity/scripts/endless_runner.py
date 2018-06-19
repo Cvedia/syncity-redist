@@ -96,7 +96,7 @@ def run():
 		helpers.setVehicleSpawner(
 			create=True,
 			addTiler=True,
-			target=options['vehicleSpawnerLabel'],
+			target=options['vehicleSpawner']['label'],
 			
 			position=options['spawnerPosition'],
 			maxObjects=options['maxObjects'],
@@ -112,15 +112,15 @@ def run():
 			
 			hidePosition=True,
 			
-			removeProbes=True,
-			removeBoxColliders=True,
-			removeRigidBodies=True,
+			removeProbes=not options['vehicleSpawner']['reflectionProbes'],
+			removeBoxColliders=not options['vehicleSpawner']['boxColliders'],
+			removeRigidBodies=not options['vehicleSpawner']['rigidBodies'],
 			network=True,
 			
 			databaseFilter=options['databaseFilter'],
 			loadCarsAsynchronously=True,
 			
-			segmentationClass=options['vehicleSpawnerClass']
+			segmentationClass=options['vehicleSpawner']['class']
 		)
 		
 		# create tiler
@@ -228,7 +228,7 @@ def run():
 		if 'THERMAL' in options['flags']:
 			common.sendData([
 				'"Thermal.ProbeUpdateScheduler.instance" SET Thermal.ProbeUpdateScheduler disableProbesRendering true',
-				'"{}" SET OSNetworkSpawner removeProbes false'.format(options['vehicleSpawnerLabel'])
+				'"{}" SET OSNetworkSpawner removeProbes {}'.format(options['vehicleSpawner']['label'], 'false' if options['vehicleSpawner']['reflectionProbes'] == True else 'true')
 			])
 			
 			for idx in options['cam_mask']['THERMAL']:
@@ -301,7 +301,7 @@ def run():
 		
 		# enable components
 		common.sendData([
-			'"{}" SET active true'.format(options['vehicleSpawnerLabel']),
+			'"{}" SET active true'.format(options['vehicleSpawner']['label']),
 			'"{}" SET active true'.format(options['labelRoot']),
 			'"{}" SET active true'.format(options['mainCar']),
 		])

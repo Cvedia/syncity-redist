@@ -64,8 +64,14 @@
 	},
 	
 	"labelRoot": "mainCar/cameras",
-	"vehicleSpawnerLabel": "VehicleSpawner",
-	"vehicleSpawnerClass": "Cars",
+	"vehicleSpawner": {
+		"label": "VehicleSpawner",
+		"class": "Cars",
+		"rigidBodies": false,
+		"boxColliders": false,
+		"reflectionProbes": false
+	},
+	
 	"roadNetworkLabel": "OpenSteerNetwork",
 	
 	"carPosition": [8.8, 0, -352.5],

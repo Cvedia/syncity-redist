@@ -119,7 +119,7 @@ CREATE "spawner/city/nature/trees/container"
 "spawner/city/nature/trees/container" ADD Thermal.ThermalObjectOverride
 "RandomProps.Random.instance" SET seed 666
 "spawner/city/nature/trees/container" SET RandomProps.PropArea tags "tree"
-"spawner/city/nature/trees/container" SET RandomProps.PropArea async false numberOfProps 361 collisionCheck false stickToGround false 
+"spawner/city/nature/trees/container" SET RandomProps.PropArea async false numberOfProps 389 collisionCheck false stickToGround false 
 "spawner/city/nature/trees/container" SET RandomProps.Torus radius 50
 "spawner/city/nature/trees/container" SET RandomProps.Torus innerRadius 30
 "spawner/city/nature/trees/container" SET Transform position (0 0 0) eulerAngles (0 0 0) localScale (1 1 1)
@@ -134,7 +134,7 @@ CREATE "spawner/city/buildings/container"
 "spawner/city/buildings/container" ADD Thermal.ThermalObjectOverride
 "RandomProps.Random.instance" SET seed 666
 "spawner/city/buildings/container" SET RandomProps.PropArea tags "building"
-"spawner/city/buildings/container" SET RandomProps.PropArea async false numberOfProps 59 collisionCheck false stickToGround false 
+"spawner/city/buildings/container" SET RandomProps.PropArea async false numberOfProps 74 collisionCheck false stickToGround false 
 "spawner/city/buildings/container" SET RandomProps.Torus radius 400
 "spawner/city/buildings/container" SET RandomProps.Torus innerRadius 300
 "spawner/city/buildings/container" SET Transform position (0 0 0) eulerAngles (0 0 0) localScale (1 1 1)
@@ -146,7 +146,7 @@ CREATE "spawner/animals/generic/container"
 "spawner/animals/generic/container" ADD RandomProps.PropArea
 "RandomProps.Random.instance" SET seed 666
 "spawner/animals/generic/container" SET RandomProps.PropArea tags "animal"
-"spawner/animals/generic/container" SET RandomProps.PropArea async false numberOfProps 16 collisionCheck false stickToGround false 
+"spawner/animals/generic/container" SET RandomProps.PropArea async false numberOfProps 20 collisionCheck false stickToGround false 
 "spawner/animals/generic/container" SET RandomProps.Torus radius 50
 "spawner/animals/generic/container" SET RandomProps.Torus innerRadius 5
 "spawner/animals/generic/container" SET Transform position (0 0 0) eulerAngles (0 0 0) localScale (1 1 1)
@@ -161,10 +161,10 @@ CREATE "spawner/animals/birds/container"
 "spawner/animals/birds/container" ADD Thermal.ThermalObjectOverride
 "RandomProps.Random.instance" SET seed 666
 "spawner/animals/birds/container" SET RandomProps.PropArea tags "bird"
-"spawner/animals/birds/container" SET RandomProps.PropArea async false numberOfProps 67 collisionCheck true stickToGround false 
+"spawner/animals/birds/container" SET RandomProps.PropArea async false numberOfProps 97 collisionCheck true stickToGround false 
 "spawner/animals/birds/container" SET RandomProps.Torus radius 120
 "spawner/animals/birds/container" SET RandomProps.Torus innerRadius 0
-"spawner/animals/birds/container" SET Transform position (0 19 0) eulerAngles (0 0 0) localScale (1 1 1)
+"spawner/animals/birds/container" SET Transform position (0 16 0) eulerAngles (0 0 0) localScale (1 1 1)
 "spawner/animals/birds/container" SET active true
 "spawner/animals/birds" SET active true
 CREATE "spawner/cars/container"
@@ -175,13 +175,13 @@ CREATE "spawner/cars/container"
 "spawner/cars" SET Thermal.ThermalObjectBehaviour profile "DefaultThermalProfile"
 "RandomProps.Random.instance" SET seed 666
 "spawner/cars/container" SET RandomProps.PropArea tags "car, +thermal"
-"spawner/cars/container" SET RandomProps.PropArea async false numberOfProps 5 collisionCheck false stickToGround false 
+"spawner/cars/container" SET RandomProps.PropArea async false numberOfProps 14 collisionCheck false stickToGround false 
 "spawner/cars/container" SET RandomProps.Torus radius 50
 "spawner/cars/container" SET RandomProps.Torus innerRadius 5
 "spawner/cars/container" SET Transform position (0 0 0) eulerAngles (0 0 0) localScale (1 1 1)
 "spawner/cars/container" ADD RandomProps.SpawnerRandomizers.RandomColor
 "spawner/cars/container" SET RandomProps.SpawnerRandomizers.RandomColor randomMethod "FromList"
-"spawner/cars/container" PUSH RandomProps.SpawnerRandomizers.RandomColor availableColors "#3985B9FF" "#E5C67FFF" "#340084FF" "#02C1F6FF" "#060356FF" "#E5051DFF" "#95F2B4FF" "#AC8505FF" "#9C129BFF" "#BC4DEAFF" "#E110D2FF" "#2D5A1EFF" "#8DD574FF" "#B18DFDFF" "#3D8D51FF" "#85A668FF"
+"spawner/cars/container" PUSH RandomProps.SpawnerRandomizers.RandomColor availableColors "#A717DFFF" "#D001E5FF" "#FD61B0FF" "#31FBDFFF" "#145601FF" "#B16AECFF" "#56D07AFF" "#99316DFF" "#759245FF" "#15E3CBFF" "#98227FFF" "#22EAC3FF" "#1E1A9AFF" "#800EA4FF" "#83C2D1FF" "#42A19BFF"
 "spawner/cars/container" PUSH RandomProps.SpawnerRandomizers.RandomColor colorsWeights 14
 "spawner/cars/container" SET active true
 "spawner/cars" SET active true
@@ -238,15 +238,15 @@ CREATE "Drones/Parrot Disco Drone/Parrot_Disco" FROM "drones" AS "drone/drone2/d
 "drone/drone2/drone2" SET Transform position (0 3 0)
 "drone/drone0/drone0" ADD RandomProps.RandomColor
 "drone/drone0/drone0" SET RandomProps.RandomColor randomMethod "FromList"
-"drone/drone0/drone0" PUSH RandomProps.RandomColor availableColors "#3152C1FF" "#372E33FF" "#427066FF" "#680E9CFF" "#A25996FF" "#110945FF" "#FB55E9FF" "#203500FF" "#341A06FF" "#EDB561FF" "#321AFBFF" "#B79A90FF" "#4F3A15FF" "#B7BF7AFF" "#370E8BFF" "#F93F09FF"
+"drone/drone0/drone0" PUSH RandomProps.RandomColor availableColors "#46AE9DFF" "#57531DFF" "#BF7ADEFF" "#7ABD71FF" "#BC982DFF" "#B008DEFF" "#54ED6EFF" "#E03102FF" "#42405DFF" "#AA25BEFF" "#910998FF" "#AD4046FF" "#A4B1CEFF" "#D77B73FF" "#D02542FF" "#175918FF"
 "drone/drone0/drone0" PUSH RandomProps.RandomColor colorsWeights 14
 "drone/drone1/drone1" ADD RandomProps.RandomColor
 "drone/drone1/drone1" SET RandomProps.RandomColor randomMethod "FromList"
-"drone/drone1/drone1" PUSH RandomProps.RandomColor availableColors "#6CFDCEFF" "#5340F8FF" "#5ACF24FF" "#49A15FFF" "#44B425FF" "#D4B46AFF" "#01F912FF" "#6569A1FF" "#7A0A08FF" "#5F1253FF" "#8CB883FF" "#FDDEF2FF" "#8B62F0FF" "#50B29DFF" "#0E6340FF" "#62ED95FF"
+"drone/drone1/drone1" PUSH RandomProps.RandomColor availableColors "#573CD6FF" "#9663ABFF" "#F94701FF" "#6786A2FF" "#7FD847FF" "#6D22E0FF" "#EE9DB7FF" "#3B19CFFF" "#36EC73FF" "#EC278AFF" "#8C5ABBFF" "#AFC04CFF" "#B58636FF" "#6F9A9AFF" "#BC312EFF" "#6D7E48FF"
 "drone/drone1/drone1" PUSH RandomProps.RandomColor colorsWeights 14
 "drone/drone2/drone2" ADD RandomProps.RandomColor
 "drone/drone2/drone2" SET RandomProps.RandomColor randomMethod "FromList"
-"drone/drone2/drone2" PUSH RandomProps.RandomColor availableColors "#0F2931FF" "#11D049FF" "#0DB815FF" "#EC5164FF" "#458453FF" "#1EAE2CFF" "#01FF43FF" "#3166F0FF" "#F2C533FF" "#D4A224FF" "#1E0DE3FF" "#A9E956FF" "#700FAEFF" "#1EA5BAFF" "#C241C6FF" "#0C2B6DFF"
+"drone/drone2/drone2" PUSH RandomProps.RandomColor availableColors "#944FFCFF" "#844B2CFF" "#2B1D54FF" "#D3FF84FF" "#969A05FF" "#8CAE4BFF" "#E784D0FF" "#9C1995FF" "#95A1EDFF" "#FB202CFF" "#0B4E11FF" "#5EF0B6FF" "#1048CCFF" "#B412E3FF" "#F3ECFEFF" "#B59D57FF"
 "drone/drone2/drone2" PUSH RandomProps.RandomColor colorsWeights 14
 "drone/drone0" SET active true
 "drone/drone0/drone0" SET active true
