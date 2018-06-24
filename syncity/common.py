@@ -131,6 +131,8 @@ def initTelnet(ip, port, retries=-1, wait=.5, timeout=30, ka_interval=3, ka_fail
 				
 				if settings.seed_api:
 					setAPISeed(settings.seed_api)
+				if settings.layout != None:
+					loadLayout(settings.layout)
 			break
 		except Exception as e:
 			output('Error connecting: {}'.format(e), 'ERROR', permissive=True)
@@ -739,20 +741,101 @@ def loadConfig():
 	for c in cfg:
 		settings[c] = cfg[c]
 
+def deep_merge_lists(original, incoming, extendKeys=[]):
+	common_length = min(len(original), len(incoming))
+	
+	for idx in range(common_length):
+		if isinstance(original[idx], dict) and isinstance(incoming[idx], dict):
+			deep_merge_dicts(original[idx], incoming[idx], extendKeys)
+		elif isinstance(original[idx], list) and isinstance(incoming[idx], list):
+			deep_merge_lists(original[idx], incoming[idx], extendKeys)
+		else:
+			original[idx] = incoming[idx]
+	
+	for idx in range(common_length, len(incoming)):
+		original.append(incoming[idx])
+
+def deep_merge_dicts(original, incoming, extendKeys=[]):
+	for key in incoming:
+		if key in original:
+			if isinstance(original[key], dict) and isinstance(incoming[key], dict):
+				deep_merge_dicts(original[key], incoming[key], extendKeys)
+			elif isinstance(original[key], list) and isinstance(incoming[key], list):
+				if key in extendKeys:
+					original[key].extend(incoming[key])
+				else:
+					deep_merge_lists(original[key], incoming[key], extendKeys)
+			else:
+				original[key] = incoming[key]
+		else:
+			original[key] = incoming[key]
+
+def flatList(l):
+	r = []
+	for sublist in l:
+		for item in sublist:
+			r.append(item)
+	return r
+
+def findLayoutFromOptions(hint, suffix=None):
+	layouts = getAllFiles(os.path.join(settings._root, 'layout', hint), recursive=False)
+	sets = []
+	
+	for x in settings._options:
+		sets.append(x.split('\\')[-1].split('/')[-1].split('.')[0])
+	
+	layout = None
+	
+	for x in sets:
+		if any(x in s for s in layouts):
+			if layout != None:
+				layout = 'combined'
+				break
+			else:
+				layout = x
+	
+	if layout != None:
+		loadLayout('endless_runner/{}{}.layout'.format(layout, suffix if suffix != None else ''))
+
+def findLayout(hint):
+	try:
+		lfn = os.path.join(settings._root, 'layout', '{}.layout'.format(hint))
+		if os.path.isfile(lfn):
+			loadLayout(lfn)
+		else:
+			output('No layout match found, path: {}'.format(lfn), 'DEBUG')
+	except:
+		output('Failed to autoload layout', 'DEBUG')
+
+def loadLayout(fn):
+	sendData('"UI.WindowController.instance" EXECUTE LoadLayout "{}"'.format(fn))
+	output('Loaded layout: {}'.format(fn), 'DEBUG')
+
 def loadOptions():
-	if not os.path.isfile(settings.options):
+	if settings.options == None:
 		return
 	
-	output('Loading options from: `{}` ...'.format(settings.options))
+	fns = flatList(settings.options)
+	cfg = None
 	
-	with open(settings.options, encoding='utf-8') as data:
-		cfg = json.loads(data.read())
+	for fn in fns:
+		if not os.path.isfile(fn):
+			output('File: {} not accessible'.format(fn), 'ERROR')
+			sys.exit(1)
+			return
+		
+		output('Loading options from: `{}` ...'.format(fn))
+		
+		with open(fn, encoding='utf-8') as data:
+			_cfg = json.loads(data.read())
+		
+		if cfg == None:
+			cfg = _cfg.copy()
+		else:
+			deep_merge_dicts(cfg, _cfg, extendKeys=['writeLinks', 'readLinks'])
 	
-	settings._options = str(settings.options)
-	settings.options = {}
-	
-	for c in cfg:
-		settings.options[c] = cfg[c]
+	settings._options = fns.copy()
+	settings.options = cfg.copy()
 
 """
 def saveConfig():

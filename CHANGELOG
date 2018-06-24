@@ -3,7 +3,24 @@ This change log follows YYMMDD timestamps which are also the version number for
 both the SDK and the simulator.
 --------------------------------------------------------------------------------
 
-180504:
+# 180624:
+
+- Added several functions for controlling traffic spawners and traffic management in general
+- Added first json fully configurable scene (`endless_runner`) abstracts logic from user-end
+- Added options to configure, aggregate and merge several `--options` files
+- Added support for layout loading with helper functions to "guess" layouts
+- New tool to bridge ros2 outputs to disk (requires ros2 rclpy)
+- Cleanup on public version of the SDK (no more tests in public)
+- Telnet protocol edge cases hardening
+- Deprecated `--skip_config` , `--save_config`
+- Added pydocs for misc functions
+- Several additions to camera helpers
+- Added `layout` folder holding layouts for scripts
+- Added `cfg` folder for holding .json configurables for scripts
+- New tool, `dbclean`, for database cleanup based on asset collection
+- New options for `gallery` tool to align images in different fashions
+
+# 180504:
 
 - Lexicon changes
 - Added several tests for pytest
@@ -12,7 +29,7 @@ both the SDK and the simulator.
 - Refactoring
 - Misc fixes
 
-180425:
+# 180425:
 
 - New segmentation api implementation and profiles
 - New UI implementation (enabled by default)
@@ -31,7 +48,7 @@ both the SDK and the simulator.
 - Segmentation refactoring
 - Segmentation pixel filtering
 
-180412:
+# 180412:
 
 - Fixed issue with spawners TypeErrors
 - runCL standarization
@@ -48,7 +65,7 @@ both the SDK and the simulator.
 - Added CL head examples
 - Added automated CL head builder / scripts self-testing git hook
 
-180405:
+# 180405:
 
 - Video compression artifacts support
 - Chromatic aberration and SDK helper added

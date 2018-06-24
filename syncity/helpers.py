@@ -258,7 +258,10 @@ def addCameraRGB(
 	renderCamera=False, renderCameraAlwaysOn=False, registerCamera=True,
 	
 	position=None, rotation=None,
-	isLocal=False
+	isLocal=False,
+	
+	antialiasingMode="TemporalAntialiasing",
+	antialiasingOptions=None
 ):
 	"""
 	Creates a RGB camera with optional postprocessing options
@@ -292,6 +295,8 @@ def addCameraRGB(
 	position (list): Defines a position for a camera or cameras
 	rotation (list): Defines rotation for a camera or cameras
 	isLocal (bool): Defines is position / rotation are local or global
+	antialiasingMode (string): Antialiasing mode (only works when using a `pp2` profile), defaults to `TemporalAntialiasing`, possible options are: `None`, `FastApproximateAntialiasing`, `SubpixelMorphologicalAntialiasing`, `TemporalAntialiasing`
+	antialiasingOptions (none|dict): Specific options to `antialiasingMode`, this depends on the mode, if set to `None`  no options will be sent, falling into mode defaults. defaults to `None`
 	
 	"""
 	if envirosky == None:
@@ -304,6 +309,8 @@ def addCameraRGB(
 		label = [ label ]
 	
 	buf = []
+	buf_s = []
+	
 	idx = 0
 	
 	if registerCamera == True and renderCamera == False:
@@ -399,8 +406,19 @@ def addCameraRGB(
 		buf.extend(b)
 		
 		if pp2 != None:
-			buf.extend([
-				'"{}" SET UnityEngine.Rendering.PostProcessing.PostProcessLayer volumeTrigger "{}" antialiasingMode "TemporalAntialiasing" volumeLayer 1'.format(l, l),
+			aao = ''
+			
+			if isinstance(antialiasingOptions, dict):
+				aao = []
+				lcFirst = lambda s: s[:1].lower() + s[1:] if s else ''
+				
+				for k, v in antialiasingOptions.items():
+					aao.append('{}.{} {}'.format(lcFirst(antialiasingMode), k, v))
+				
+				aao = ' '.join(aao)
+			
+			buf_s.extend([
+				'"{}" SET UnityEngine.Rendering.PostProcessing.PostProcessLayer volumeTrigger "{}" antialiasingMode "{}" {} volumeLayer 1'.format(l, l, antialiasingMode, aao),
 				'"{}" EXECUTE UnityEngine.Rendering.PostProcessing.PostProcessLayer Init "PostProcessResources"'.format(l),
 				'"{}" SET UnityEngine.Rendering.PostProcessing.PostProcessVolume isGlobal true priority 100 sharedProfile "{}"'.format(l, pp2)
 			])
@@ -433,7 +451,7 @@ def addCameraRGB(
 		idx += 1
 	
 	buf.append('"{}" SET active true'.format(labelRoot))
-	
+	buf.extend(buf_s)
 	common.sendData(buf, read=False)
 	common.flushBuffer()
 	
@@ -2236,18 +2254,6 @@ def uiWindow(objs, width=1024, height=768, depth=24, textureFormat=4, link="Show
 	
 	common.sendData(cmd)
 
-def findLayout(hint):
-	try:
-		lfn = os.path.join(settings._root, 'layout', '{}.layout'.format(hint))
-		if os.path.isfile(lfn):
-			common.sendData([
-				'"UI.WindowController.instance" EXECUTE LoadLayout "{}"'.format(lfn)
-			])
-		else:
-			common.output('No layout match found, path: {}'.format(lfn), 'DEBUG')
-	except:
-		common.output('Failed to autoload layout', 'DEBUG')
-
 def enableAll(objs, component):
 	if not isinstance(objs, list):
 		objs = [ objs ]
@@ -2543,6 +2549,21 @@ def setOSNetwork(
 	if create == True:
 		buf.insert(0, 'CREATE "{}"'.format(target))
 		buf.append('"{}" SET active true'.format(target))
+	
+	common.sendData(buf)
+
+def setTrafficEvents(label, create=True, network='OpenSteerNetwork'):
+	buf = []
+	if create == True:
+		buf.extend([
+			'CREATE "{}"'.format(label),
+			'"{}" ADD TrafficEvents'.format(label)
+		])
+	
+	buf.extend([
+		'"{}" SET TrafficEvents network "{}"'.format(label, network),
+		'"{}" SET active true'.format(label)
+	])
 	
 	common.sendData(buf)
 

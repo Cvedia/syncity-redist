@@ -15,7 +15,7 @@ import random
 
 from syncity import common, settings_manager
 
-SYNCITY_VERSION = '18.06.15.1842'
+SYNCITY_VERSION = '18.06.21.1922'
 SIMULATOR_MIN_VERSION = '18.04.23.0000'
 
 print ('SynCity toolbox - v{}\nCopyright (c) 2016-{} CVEDIA PVE Ltd\n'.format(SYNCITY_VERSION, datetime.date.today().year))
@@ -80,7 +80,8 @@ parser.add_argument('--skip_queue', action='store_true', default=False, help='Sk
 parser.add_argument('-c', '--config', default=None, help='Defines a config file to be loaded, overwriting / appending to arbitrary settings values')
 # parser.add_argument('--skip_config', action='store_true', default=False, help='Skips SDK default config file')
 # parser.add_argument('--save_config', action='store_true', default=False, help='Save sent parameters as SDK config file -- WARNING: This will not save the stack parameters (-r, -s and -t)')
-parser.add_argument('-O', '--options', default=None, help='Defines a path to a json file to overload / overwrite settings.options to be used as parameters on scripts globally.')
+parser.add_argument('-O', '--options', default=None, action='append', nargs='+', help='Defines a path to a json file to overload / overwrite settings.options to be used as parameters on scripts globally. You can concatenate files, they will be merged into a single option stack. Note that the order you define the parameters of this function will affect how they are merged.')
+parser.add_argument('--layout', default=None, help='Path to layout file, this file must be accessible to the simulator')
 
 parser.add_argument('--skip_shutdown', action='store_true', default=False, help='Skips shutdown sequence')
 parser.add_argument('--test', action='store_true', default=False, help='Enables test suite flag')

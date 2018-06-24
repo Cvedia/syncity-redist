@@ -10,9 +10,14 @@
 			
 			"cameraPosition": [0.1, 0, 0],
 			"cameraRotation": [0, -3, 0],
-			"profile": "ColdACESNoBlur",
-			"antialiasingMode": "None",
-			"antialiasingOptions": false
+			"profile": "ColdACES",
+			"antialiasingMode": "TemporalAntialiasing",
+			"antialiasingOptions": {
+				"jitterSpread": 0.85,
+				"stationaryBlending": 0.95,
+				"motionBlending": 0.85,
+				"sharpness": 0.25
+			}
 		},
 		"mainCar/cameras/cameraRGB2": {
 			"type": "RGB",
@@ -24,9 +29,14 @@
 			
 			"cameraPosition": [-0.1, 0, 0],
 			"cameraRotation": [0, 3, 0],
-			"profile": "ColdACESNoBlur",
-			"antialiasingMode": "None",
-			"antialiasingOptions": false
+			"profile": "ColdACES",
+			"antialiasingMode": "TemporalAntialiasing",
+			"antialiasingOptions": {
+				"jitterSpread": 0.85,
+				"stationaryBlending": 0.95,
+				"motionBlending": 0.85,
+				"sharpness": 0.25
+			}
 		}
 	},
 	"ros": {

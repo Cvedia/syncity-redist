@@ -25,11 +25,8 @@ def run():
 		common.output('No --options sent!', 'ERROR')
 		return
 	
-	try:
-		helpers.findLayout('endless_runner/{}'.format(os.path.basename(settings._options).split('.')[0]))
-	except:
-		common.output('No options set, aborting!', 'ERROR')
-		return
+	if settings.layout == None:
+		common.findLayoutFromOptions(os.path.basename(__file__).split('.')[0], suffix='_stereo')
 	
 	options = settings.options
 	helpers.setQualitySettings(options['quality'])
@@ -44,12 +41,25 @@ def run():
 			if v['type'] not in options['flags']:
 				options['flags'].append(v['type'])
 				options['cam_mask'][v['type']] = []
+			
 			options['cam_mask'][v['type']].append(k)
 		
-		common.sendData([
-			# preload tiles
-			'CREATE "Tiles/Tile 1 Random" FROM "tiles" as "tile1"',
+		# find, preload and initalize tiles
+		tiles = []
+		i = 0
+		
+		for k, v in options['tiles'].items():
+			tile = 'tile{}'.format(i)
+			common.sendData('CREATE "{}" FROM "{}" as "{}"'.format(k, v['bundle'], tile))
 			
+			if 'init' in v:
+				for c in v['init']:
+					common.sendData(c.replace('{}', tile))
+			
+			tiles.append(tile)
+			i += 1
+		
+		common.sendData([
 			# create mainCar
 			'CREATE "Pickup" FROM "highway" AS "{}"'.format(options['mainCar']),
 			'"{}" SET Rigidbody isKinematic true'.format(options['mainCar']),
@@ -59,18 +69,16 @@ def run():
 			'"{}" SET VPCustomInput enabled false'.format(options['mainCar']),
 			
 			# disable headlights
-			'"{}/Lights" SET active false'.format(options['mainCar']),
-			
-			# set terrain temperature
-			'"tile1/Terrain" SET Thermal.ThermalTerrain ambientOffset -18'
+			'"{}/Lights" SET active false'.format(options['mainCar'])
 		])
 		
 		if 'SEGMENTATION' in options['flags']:
-			common.sendData([
-				'[Segmentation.Camera] UseProfile ASSET "Resources/Segmentation.Profile" FROM "tiles"',
-				'"tile1/Road system" ADD Segmentation.Class',
-				'"tile1/Road system" SET Segmentation.Class className "Road"'
-			])
+			common.sendData('[Segmentation.Camera] UseProfile ASSET "Resources/Segmentation.Profile" FROM "tiles"')
+			for tile in tiles:
+				common.sendData([
+					'"{}/Road system" ADD Segmentation.Class'.format(tile),
+					'"{}/Road system" SET Segmentation.Class className "Road"'.format(tile)
+				])
 		
 		helpers.setOSNetwork(
 			target=options['roadNetworkLabel'],
@@ -117,7 +125,9 @@ def run():
 			removeRigidBodies=not options['vehicleSpawner']['rigidBodies'],
 			network=True,
 			
-			databaseFilter=options['databaseFilter'],
+			assetBundle=options['vehicleSpawner']['assetBundle'],
+			
+			databaseFilter=options['vehicleSpawner']['databaseFilter'],
 			loadCarsAsynchronously=True,
 			
 			segmentationClass=options['vehicleSpawner']['class']
@@ -132,7 +142,7 @@ def run():
 			createTilerOSP=True,
 			
 			position=options['tilerPosition'],
-			pool=['tile1'],
+			pool=tiles,
 			roadNetwork=options['roadNetworkLabel'],
 			targetReference=options['mainCar']
 		)
@@ -161,7 +171,7 @@ def run():
 					clippingNear=cam['clippingNear'],
 					clippingFar=cam['clippingFar'],
 					pp='EnviroFX',
-					pp2='ColdACES',
+					pp2=cam['profile'] if 'profile' in cam else 'ColdAces',
 					position=cam['cameraPosition'],
 					rotation=cam['cameraRotation'],
 					audio=i == 0,
@@ -175,7 +185,10 @@ def run():
 					isLocal=True,
 					renderCamera=True,
 					renderCameraAlwaysOn=True,
-					registerCamera=True
+					registerCamera=True,
+					
+					antialiasingMode=cam['antialiasingMode'] if 'antialiasingMode' in cam else 'None',
+					antialiasingOptions=cam['antialiasingOptions'] if 'antialiasingOptions' in cam else None
 				)
 				
 				i += 1
@@ -298,9 +311,10 @@ def run():
 		
 		helpers.globalDiskSetup()
 		helpers.addDiskOutput(mycams)
+		helpers.setTrafficEvents(label=options['trafficEventsLabel'], network=options['roadNetworkLabel'], create=True)
 		
-		# enable components
 		common.sendData([
+			# enable components
 			'"{}" SET active true'.format(options['vehicleSpawner']['label']),
 			'"{}" SET active true'.format(options['labelRoot']),
 			'"{}" SET active true'.format(options['mainCar']),
