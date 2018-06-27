@@ -137,13 +137,8 @@ CREATE "cameras/segmentation"
 // finalize setup and enable
 
 // segment human as a whole
-"humans/container" ADD Humans.Segmentation.HumanClassGroup Segmentation.Spawners.Entity
-"humans/container" SET Humans.Segmentation.HumanClassGroup humanClassName "Human"
-
-// segment individual acessories
-// "humans/container" ADD Segmentation.Class
-// "humans/container" SET Segmentation.Class className "Human"
-// "humans/container" SET Humans.Segmentation.HumanClassGroup humanClassName "Human" shirtClassName "Shirt" pantsClassName "Pants" shoesClassName "Shoes" hairClassName "Hair" hatClassName "Hat" accessoriesClassName "Accessories"
+"humans/container" ADD Segmentation.Class
+"humans/container" SET Segmentation.Class className "Human"
 
 "humans/container" SET active true
 
