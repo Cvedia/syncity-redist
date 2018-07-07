@@ -21,7 +21,7 @@
 	"vehicleSpawner": {
 		"label": "VehicleSpawner",
 		"class": false,
-		"rigidBodies": true,
+		"rigidBodies": false,
 		"boxColliders": true,
 		"reflectionProbes": false,
 		"assetBundle": false,
@@ -39,11 +39,11 @@
 	
 	"spawnerPosition": [0, 0, 0],
 	"maxObjects": 20,
-	"spawnRadius": 140,
+	"spawnRadius": 200,
 	"spawnSize": 20,
 	"spawnClearance": 8,
 	"spawnFocus": "mainCar",
-	"despawnRadius": 150,
+	"despawnRadius": 250,
 	"speedVariance": 6,
 	"brakeLightPower": 2,
 	
@@ -51,6 +51,11 @@
 	
 	"globalCameraPosition": [0, 1.78, 0.3],
 	"globalCameraRotation": [0, 0, 0],
+	
+	"videoExport": {
+		"streamLength": 300,
+		"streamProfile": "high"
+	},
 	
 	"ros": {
 		"writeLinks": [

@@ -100,7 +100,7 @@ def initTelnet(ip, port, retries=-1, wait=.5, timeout=30, ka_interval=3, ka_fail
 					output('SDK Version: {}'.format(settings._version))
 					sys.exit(0)
 				
-				if int(settings._simulator_version.replace('.', '')[0:10]) < int(settings._simulator_min_version.replace('.', '')[0:10]):
+				if versionCompare(settings._simulator_version, settings._simulator_min_version, '<'):
 					output('The version of the simulator you\'re connecting with is deprecated and most likely not compatible with the version of this SDK.', 'ERROR', permissive=True)
 					output('You should use a old branch of the SDK or update the simulator.', 'ERROR', permissive=True)
 					output('SDK minimum supported simulator version: {}'.format(settings._simulator_min_version), 'ERROR', permissive=True)
@@ -918,6 +918,20 @@ def mkdirP(path):
 			pass
 		else:
 			raise
+
+def versionCompare(a, b, condition):
+	if condition == '<' and int(str(a).replace('.', '')[0:10]) < int(str(b).replace('.', '')[0:10]):
+		return True
+	elif condition == '<=' and int(str(a).replace('.', '')[0:10]) <= int(str(b).replace('.', '')[0:10]):
+		return True
+	elif condition == '>=' and int(str(a).replace('.', '')[0:10]) >= int(str(b).replace('.', '')[0:10]):
+		return True
+	elif condition == '>' and int(str(a).replace('.', '')[0:10]) > int(str(b).replace('.', '')[0:10]):
+		return True
+	elif condition == '==' and int(str(a).replace('.', '')[0:10]) == int(str(b).replace('.', '')[0:10]):
+		return True
+	
+	return False
 
 def waitQueue(threshold=None, wait=.5):
 	# return

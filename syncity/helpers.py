@@ -313,7 +313,7 @@ def addCameraRGB(
 	
 	idx = 0
 	
-	if registerCamera == True and renderCamera == False:
+	if common.versionCompare(settings._simulator_version, '18.07.05.0000', '<') and registerCamera == True and renderCamera == False:
 		renderCamera = True
 	
 	for l in label:
@@ -335,7 +335,8 @@ def addCameraRGB(
 					width,
 					height,
 					'true' if renderCameraAlwaysOn == True else 'false'
-			)])
+				)
+			])
 		else:
 			lrt = None
 		
@@ -1709,6 +1710,42 @@ def seqSave(prefix, rawData, label='disk1', basePath=None):
 	common.output('Wrote: {}'.format(fn))
 	settings._seqSave[label] = settings._seqSave[label] + 1
 
+def addVideoExport(lst, label='videoExport1', params=None):
+	if common.versionCompare(settings._simulator_version, '18.07.05.0000', '<'):
+		common.output('Your simulator version is not compatible with `videoExports`', 'ERROR')
+		return;
+	
+	p = []
+	
+	if params != None:
+		if isinstance(params, dict):
+			for k, v in params.items():
+				if isinstance(v, bool):
+					v = 'true' if v == True else 'false'
+				else:
+					v = '"{}"'.format(v)
+				
+				p.append('{} {}'.format(k, v))
+		else:
+			common.output('Invalid params type sent', 'ERROR')
+			return
+	
+	common.sendData([
+		'CREATE "{}"'.format(label),
+		'"{}" ADD Sensors.VideoExport'.format(label),
+		'"{}" PUSH Sensors.VideoExport cameras {}'.format(label, ' '.join('"{0}"'.format(s) for s in lst)),
+		'"{}" SET Sensors.VideoExport streamOutput "{}"'.format(label, settings.output_path)
+	])
+	
+	if len(p) > 0:
+		for v in p:
+			common.sendData('"{}" SET Sensors.VideoExport {}'.format(label, v))
+	
+	common.sendData([
+		'"{}" SET active true'.format(label),
+		'"{}" SET Sensors.VideoExport enabled true'.format(label)
+	])
+
 def addDiskOutput(lst, label='disk1', component='RenderTextureLink'):
 	"""
 	Creates a image output from a existing disk component
@@ -2271,7 +2308,7 @@ def setThermalProps(
 	reflectivityMode=None, varianceMode=None,
 	
 	heatiness=None, temperatureValue=None, temperatureBandwidth=None, temperatureMedian=None,
-	ambientOffset=None, reflectivity=None, variance=None
+	ambientOffset=None, reflectivity=None, variance=None, toggleEnabled=True
 ):
 	"""
 	
@@ -2357,7 +2394,7 @@ def setThermalProps(
 				'"{}" SET active false'.format(obj),
 				' '.join(s),
 				'"{}" SET active true'.format(obj)
-			], read=False)
+			] if toggleEnabled == True else ' '.join(s), read=False)
 		else:
 			raise 'No parameters changed'
 	
@@ -2595,7 +2632,7 @@ def createTrafficNetwork(drivers=None, label='OSN'):
 def setVehicleSpawner(
 	target='VehicleSpawner',
 	create=False,
-	addTiler=True,
+	addAutomaticLights=False,
 	
 	position=None,
 	
@@ -2636,7 +2673,7 @@ def setVehicleSpawner(
 			'"{}" ADD Segmentation.Class'.format(target),
 			'"{}" SET Segmentation.Class className "{}"'.format(target, segmentationClass)
 		])
-	if addTiler == True:
+	if addAutomaticLights == True:
 		buf.append('"{}" ADD Tiler.Helpers.LightProcessor'.format(target))
 	if isinstance(hidePosition, bool) and hidePosition == True:
 		hidePosition = target
@@ -2694,6 +2731,7 @@ def setTilerPool(
 	targetReferenceTileDistance=500,
 	tileContainer="tileContainer",
 	loadOtherTilesSynchronously=False,
+	addAutomaticLights=True,
 	
 	# passthuru to setTileOSP
 	addTilerOSP=True,
@@ -2725,7 +2763,8 @@ def setTilerPool(
 			targetReference=targetReference,
 			targetReferenceTileDistance=targetReferenceTileDistance,
 			tileContainer=tileContainer,
-			loadOtherTilesSynchronously=loadOtherTilesSynchronously
+			loadOtherTilesSynchronously=loadOtherTilesSynchronously,
+			addAutomaticLights=addAutomaticLights
 		)
 	
 	if addTilerOSP == True:
@@ -2746,7 +2785,8 @@ def setTiler(
 	targetReference='mainCar',
 	targetReferenceTileDistance=500,
 	tileContainer="tileContainer",
-	loadOtherTilesSynchronously=False
+	loadOtherTilesSynchronously=False,
+	addAutomaticLights=True
 ):
 	buf = []
 	
@@ -2763,6 +2803,8 @@ def setTiler(
 	if createContainer == True:
 		buf.insert(0, 'CREATE "{}"'.format(tileContainer))
 		buf.append('"{}" SET active true'.format(tileContainer))
+		if addAutomaticLights == True:
+			buf.append('"{}" ADD Tiler.Helpers.LightProcessor'.format(tileContainer))
 	
 	common.sendData(buf)
 

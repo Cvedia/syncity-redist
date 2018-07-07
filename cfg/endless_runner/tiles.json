@@ -3,19 +3,21 @@
 		"Tiles/Tile 1 Random": {
 			"bundle": "tiles",
 			"init": [
-				"\"{}/Terrain\" SET Thermal.ThermalTerrain ambientOffset -18"
 			]
 		},
 		"Tiles/Tile 2 Random": {
 			"bundle": "tiles",
 			"init": [
-				"\"{}/Terrain\" SET Thermal.ThermalTerrain ambientOffset -18"
 			]
 		},
 		"Tiles/Tile 3 Random": {
 			"bundle": "tiles",
 			"init": [
-				"\"{}/Terrain\" SET Thermal.ThermalTerrain ambientOffset -18"
+			]
+		},
+		"Tiles/Tile 4 Random": {
+			"bundle": "tiles",
+			"init": [
 			]
 		}
 	}

@@ -172,33 +172,3 @@ CREATE "humans/spawner"
 "humans" SET active true
 "cameras" SET FlyCamera enabled true
 "cameras" SET active true
-
-// setup disk
-
-CREATE "disk1"
-"disk1" SET active false
-"disk1" ADD Sensors.Disk
-"disk1" SET Sensors.Disk path "E:\tmp\" counter 1
-"disk1" SET active true
-"disk1" SET active false
-CREATE "disk1/Cameras/camerargb"
-"disk1/Cameras/camerargb" ADD Sensors.RenderTextureLink
-"disk1/Cameras/camerargb" SET Sensors.RenderTextureLink target "cameraRGB"
-"disk1/Cameras/camerargb" SET active true
-CREATE "disk1/Cameras/segmentation"
-"disk1/Cameras/segmentation" ADD Sensors.RenderTextureLink
-"disk1/Cameras/segmentation" SET Sensors.RenderTextureLink target "segmentation"
-"disk1/Cameras/segmentation" SET Sensors.RenderTextureLink outputType "CUSTOM" outputChannels 3 outputPixelSize 4 outputExtension "png"
-"disk1/Cameras/segmentation" SET active true
-CREATE "disk1/Cameras/mono"
-"disk1/Cameras/mono" ADD Sensors.RenderTextureLink
-"disk1/Cameras/mono" SET Sensors.RenderTextureLink target "cameraMono"
-"disk1/Cameras/mono" SET Sensors.RenderTextureLink outputType "LOSSLESS"
-"disk1/Cameras/mono" SET active true
-CREATE "disk1/Cameras/thermal"
-"disk1/Cameras/thermal" ADD Sensors.RenderTextureLink
-"disk1/Cameras/thermal" SET Sensors.RenderTextureLink target "cameraThermal"
-"disk1/Cameras/thermal" SET active true
-"disk1" SET active true
-
-// "disk1" EXECUTE Sensors.Disk Snapshot

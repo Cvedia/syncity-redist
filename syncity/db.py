@@ -19,6 +19,10 @@ from . import common, settings_manager
 settings = settings_manager.Singleton()
 settings._conn = None
 
+settings._sFields = [ 'guid', 'parentGUID', 'timestamp', 'assetbundle', 'prefabPath', 'sizeX', 'sizeY', 'colliderSizeX', 'colliderSizeY' ]
+settings._rFields = [ 'guid', 'rootID', 'parentID', 'timestamp' ]
+settings._pFields = [ 'guid', 'propertyID', 'value' ]
+
 """
 Initializes a database connections
 
@@ -75,11 +79,13 @@ def bundleObjects(bundle, selection="*", fields=[0]):
 	r = []
 	
 	for row in cur.execute('SELECT {} FROM objects WHERE assetBundle="{}"'.format(selection, bundle)):
-		f = []
-		for i in fields:
-			f.append(row[i])
-		
-		r.append(f[0] if len(f) == 1 else f)
+		if fields == True:
+			r.append(list(row))
+		else:
+			f = []
+			for i in fields:
+				f.append(row[i])
+			r.append(f[0] if len(f) == 1 else f)
 	
 	cur.close()
 	return r
@@ -105,3 +111,59 @@ def remove(guids):
 	
 	cur.close()
 	settings._conn.commit()
+
+def fixStrings(vals):
+	r = []
+	for val in vals:
+		try:
+			x = int(val)
+			r.append(str(val))
+		except:
+			common.output('Except: {}'.format(val))
+			r.append(str('"{}"'.format(val.replace('"', '""'))))
+	return r
+
+def add(props, table='objects'):
+	cur = settings._conn.cursor()
+	vals = fixStrings(list(props.values()))
+	
+	sql = 'INSERT INTO {} ({}) VALUES ({})'.format(table, ', '.join(list(props.keys())), ', '.join(vals))
+	
+	common.output('add: {}'.format(sql), 'DEBUG')
+	cur.execute(sql)
+	cur.close()
+	settings._conn.commit()
+
+def getRelations(guid):
+	cur = settings._conn.cursor()
+	
+	r = []
+	
+	for row in cur.execute('SELECT {} FROM rel_objects WHERE guid="{}"'.format(', '.join(settings._rFields), guid)):
+		r.append(list(row))
+	
+	cur.close()
+	return r
+
+def getProperties(guid, type="numeric"):
+	cur = settings._conn.cursor()
+	
+	r = []
+	
+	for row in cur.execute('SELECT {} FROM object_properties_{} WHERE guid="{}"'.format(', '.join(settings._pFields), type, guid)):
+		r.append(list(row))
+	
+	cur.close()
+	return r
+
+def guidExist(guid):
+	cur = settings._conn.cursor()
+	exist = False
+	
+	for row in cur.execute('SELECT guid FROM objects where guid="{}"'.format(guid)):
+		exist = True
+		break
+	
+	cur.close()
+	
+	return exist
