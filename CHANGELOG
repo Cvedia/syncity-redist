@@ -6,6 +6,7 @@ both the SDK and the simulator.
 # 180718:
 
 - Nanosecond precision data export synchronization
+- Asset browser first release
 - VideoExporter helpers, example scripts and more
 - Video FPS control
 - Shopping mall fixes
@@ -13,9 +14,10 @@ both the SDK and the simulator.
 - New JSON exporter functionalities, including data streaming from video
 - New Thermal profiles
 - New Tiler system spawners / fixes
+- Greatly improved thermal noise profile on endless runner
 - Fixes for the new postprocessing layer, allowing for full configurability per camera
 - Human spawn points deprecated
-- Cars now stops at obstacles
+- Several fixes related to car driving / handling
 - Improved car colliders
 - Main car manual drive properly works now
 - Several thermal shader fixes
