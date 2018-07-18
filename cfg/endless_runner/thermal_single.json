@@ -1,0 +1,40 @@
+{
+	"cams": {
+		"mainCar/cameras/cameraThermal1": {
+			"type": "THERMAL",
+			"cameraWidth": 1920,
+			"cameraHeight": 1080,
+			"fov": 60,
+			"clippingNear": 0.3,
+			"clippingFar": 400,
+			
+			"cameraPosition": [0.1, 0, 0],
+			"cameraRotation": [0, -3, 0],
+			
+			"thermal": {
+				"temperatureRange": [-4, 50],
+				"ambientTemperature": -1.5,
+				"bloom": {
+					"threshold": 0,
+					"intensity": 0.15,
+					"blurSize": 3.5,
+					"blurIterations": 4
+				},
+				"noise": {
+					"spotsContrast": 0.8,
+					"linesMaskIntensity": 0.15,
+					"noiseIntensity": 6,
+					"noiseContrast": 0.4,
+					"noiseSize": 0.1,
+					"noiseBlur": 2,
+					"blendAmount": 0.05,
+					"filterMode": 2
+				},
+				"blur": {
+					"level": 5,
+					"distance": [4,0]
+				}
+			}
+		}
+	}
+}

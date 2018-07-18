@@ -52,7 +52,11 @@ def run():
 
 		for k, v in options['tiles'].items():
 			tile = 'tile{}'.format(i)
-			common.sendData('CREATE "{}" FROM "{}" as "{}"'.format(k, v['bundle'], tile))
+			common.sendData([
+				'CREATE "{}" FROM "{}" as "{}"'.format(k, v['bundle'], tile),
+				'"{}/Terrain" SET active false'.format(tile),
+				'"{}/Terrain_Mesh" SET active true'.format(tile),
+			])
 			
 			if 'init' in v:
 				for c in v['init']:
@@ -82,65 +86,71 @@ def run():
 				'"lookUpTable" EXECUTE Segmentation.LookUpTable SetClassColor "Pedestrian->Yellow" "Building->Green" "Car->Red"  "Road->Blue" "Tree->Grey" "Prop->Cyan" "Sign->White"',
 			])
 			
-			for tile in tiles:
-				common.sendData([
-					'"{}/Humans" ADD Segmentation.Class'.format(tile),
-					'"{}/Humans" SET Segmentation.Class className "Pedestrian"'.format(tile),
-					'"{}/Buildings" ADD Segmentation.Class'.format(tile),
-					'"{}/Buildings" SET Segmentation.Class className "Building"'.format(tile),
-					'"{}/Cars" ADD Segmentation.Class'.format(tile),
-					'"{}/Cars" SET Segmentation.Class className "Car"'.format(tile),
-					'"{}/Road system/Road0/MainMeshes" ADD Segmentation.Class'.format(tile),
-					'"{}/Road system/Road0/MainMeshes" SET Segmentation.Class className "Road"'.format(tile),
-					'"{}/Props" ADD Segmentation.Class'.format(tile),
-					'"{}/Props" SET Segmentation.Class className "Prop"'.format(tile),
-					'"{}/Powerlines" ADD Segmentation.Class'.format(tile),
-					'"{}/Powerlines" SET Segmentation.Class className "Prop"'.format(tile),
-					'"{}/Trees" ADD Segmentation.Class'.format(tile),
-					'"{}/Trees" SET Segmentation.Class className "Tree"'.format(tile),
-					'"{}/Signs" ADD Segmentation.Class'.format(tile),
-					'"{}/Signs" SET Segmentation.Class className "Sign"'.format(tile),
-				])
+			common.sendData([
+				'REGEX "tile*/Humans" ADD Segmentation.Class',
+				'REGEX "tile*/Humans" SET Segmentation.Class className "Pedestrian"',
+				'REGEX "tile*/Buildings" ADD Segmentation.Class',
+				'REGEX "tile*/Buildings" SET Segmentation.Class className "Building"',
+				'REGEX "tile*/Cars" ADD Segmentation.Class',
+				'REGEX "tile*/Cars" SET Segmentation.Class className "Car"',
+				'REGEX "tile*/Road system/Road0/MainMeshes" ADD Segmentation.Class',
+				'REGEX "tile*/Road system/Road0/MainMeshes" SET Segmentation.Class className "Road"',
+				'REGEX "tile*/Road system/Intersections" ADD Segmentation.Class',
+				'REGEX "tile*/Road system/Intersections" SET Segmentation.Class className "Road"',
+				'REGEX "tile*/Props" ADD Segmentation.Class',
+				'REGEX "tile*/Props" SET Segmentation.Class className "Prop"',
+				'REGEX "tile*/Powerlines" ADD Segmentation.Class',
+				'REGEX "tile*/Powerlines" SET Segmentation.Class className "Prop"',
+				'REGEX "tile*/Trees" ADD Segmentation.Class',
+				'REGEX "tile*/Trees" SET Segmentation.Class className "Tree"',
+				'REGEX "tile*/Signs" ADD Segmentation.Class',
+				'REGEX "tile*/Signs" SET Segmentation.Class className "Sign"',
+			])
 		
 		if 'THERMAL' in options['flags']:
 			common.sendData([
 				'CREATE Thermal.ThermalObjectProfile AS "ThermalBehaviour/Trees"',
-				'"ThermalBehaviour/Trees" SET temperature.value -9 temperature.bandwidth 3.67 temperature.median 0 ambientOffset.value -25 heatiness.value 0 reflectivity.value 0.5 variance.value 0',
+				'"ThermalBehaviour/Trees" SET temperature.value 3 temperature.bandwidth 3 temperature.median 0.95 ambientOffset.value -25 heatiness.value 0 reflectivity.value 0 variance.value 2.4',
 				'CREATE Thermal.ThermalObjectProfile AS "ThermalBehaviour/Buildings"',
-				'"ThermalBehaviour/Buildings" SET temperature.value 14 temperature.bandwidth 20 temperature.median 0 ambientOffset.value -15.7 heatiness.value 0 reflectivity.value 0.5 variance.value 0',
+				'"ThermalBehaviour/Buildings" SET temperature.value 14 temperature.bandwidth 7 temperature.median 0.3 ambientOffset.value 4 heatiness.value 0 reflectivity.value 0 variance.value 1.5',
 				'CREATE Thermal.ThermalObjectProfile AS "ThermalBehaviour/Humans"',
-				'"ThermalBehaviour/Humans" SET temperature.value 10 temperature.bandwidth 1 temperature.median 0.5 ambientOffset.value 0 heatiness.value 50 reflectivity.value 0.5 variance.value 0',
+				'"ThermalBehaviour/Humans" SET temperature.value 10 temperature.bandwidth 1 temperature.median 0.5 ambientOffset.value 0 heatiness.value 50 reflectivity.value 0 variance.value 0',
 				'CREATE Thermal.ThermalObjectProfile AS "ThermalBehaviour/Props"',
-				'"ThermalBehaviour/Props" SET temperature.value -20 temperature.bandwidth 2.27 temperature.median 0.214 ambientOffset.value -17.8 heatiness.value 0 reflectivity.value 0.5 variance.value 0',
+				'"ThermalBehaviour/Props" SET temperature.value -20 temperature.bandwidth 7 temperature.median 0.23 ambientOffset.value 4.8 heatiness.value 0 reflectivity.value 0 variance.value 0',
 				'CREATE Thermal.ThermalObjectProfile AS "ThermalBehaviour/Roads"',
-				'"ThermalBehaviour/Roads" SET temperature.value -20 temperature.bandwidth 7.07 temperature.median 0 ambientOffset.value -16.4 heatiness.value 0 reflectivity.value 0 variance.value 0',
+				'"ThermalBehaviour/Roads" SET temperature.value -20 temperature.bandwidth 14 temperature.median 0 ambientOffset.value 6.7 heatiness.value 0 reflectivity.value 0 variance.value 0',
+				'CREATE Thermal.ThermalObjectProfile AS "ThermalBehaviour/RoadsProps"',
+				'"ThermalBehaviour/RoadsProps" SET temperature.value -20 temperature.bandwidth 5 temperature.median 0.25 ambientOffset.value 4.4 heatiness.value 0 reflectivity.value 0.0 variance.value 0',
 				'CREATE Thermal.ThermalObjectProfile AS "ThermalBehaviour/Others"',
 				'"ThermalBehaviour/Others" SET temperature.value -20 temperature.bandwidth 0 temperature.median 0 ambientOffset.value -25 heatiness.value 0 reflectivity.value 0 variance.value 0',
-				'CREATE Thermal.ThermalObjectProfile AS "ThermalBehaviour/Cars"',
-				'"ThermalBehaviour/Cars" SET temperature.value -20 temperature.bandwidth 8.09 temperature.median 0.5 ambientOffset.value 11 heatiness.value 69 reflectivity.value 0.111 variance.value 16.6'
+				'CREATE Thermal.ThermalObjectProfile AS "ThermalBehaviour/Terrain"',
+				'"ThermalBehaviour/Terrain" SET temperature.value 10 temperature.bandwidth 1 temperature.median 0.574 ambientOffset.value 3.6 heatiness.value 0 reflectivity.value 0 variance.value 0'
 			])
 
-			for tile in tiles:
-				common.sendData([
-					'"{}/Terrain" ADD Thermal.ThermalTerrain'.format(tile),
-					'"{}/Terrain" SET Thermal.ThermalTerrain ambientOffset -18'.format(tile),
-					'"{}/Humans" ADD Thermal.ThermalObjectBehaviour'.format(tile),
-					'"{}/Humans" SET Thermal.ThermalObjectBehaviour profile "ThermalBehaviour/Humans"'.format(tile),
-					'"{}/Buildings" ADD Thermal.ThermalObjectBehaviour'.format(tile),
-					'"{}/Buildings" SET Thermal.ThermalObjectBehaviour profile "ThermalBehaviour/Buildings"'.format(tile),
-					'"{}/Props" ADD Thermal.ThermalObjectBehaviour'.format(tile),
-					'"{}/Props" SET Thermal.ThermalObjectBehaviour profile "ThermalBehaviour/Props"'.format(tile),
-					'"{}/Trees" ADD Thermal.ThermalObjectBehaviour'.format(tile),
-					'"{}/Trees" SET Thermal.ThermalObjectBehaviour profile "ThermalBehaviour/Trees"'.format(tile),
-					'"{}/Powerlines" ADD Thermal.ThermalObjectBehaviour'.format(tile),
-					'"{}/Powerlines" SET Thermal.ThermalObjectBehaviour profile "ThermalBehaviour/Props"'.format(tile),
-					'"{}/Signs" ADD Thermal.ThermalObjectBehaviour'.format(tile),
-					'"{}/Signs" SET Thermal.ThermalObjectBehaviour profile "ThermalBehaviour/Props"'.format(tile),
-					'"{}/Road system/Road0/MainMeshes" ADD Thermal.ThermalObjectBehaviour'.format(tile),
-					'"{}/Road system/Road0/MainMeshes" SET Thermal.ThermalObjectBehaviour profile "ThermalBehaviour/Roads"'.format(tile),
-					'"{}/Road system/Road0" ADD Thermal.ThermalObjectBehaviour'.format(tile),
-					'"{}/Road system/Road0" SET Thermal.ThermalObjectBehaviour profile "ThermalBehaviour/Props"'.format(tile),
-				])
+			common.sendData([
+				'REGEX "tile*" ADD Thermal.ThermalProfileOverride',
+				'REGEX "tile*" SET Thermal.ThermalProfileOverride ambientOffsetMode "Relative" ambientOffset -5 temperatureMode "Relative" temperature -4',
+				'REGEX "tile*/Terrain_Mesh" ADD Thermal.ThermalObjectBehaviour',
+				'REGEX "tile*/Terrain_Mesh" SET Thermal.ThermalObjectBehaviour profile "ThermalBehaviour/Terrain"',
+				'REGEX "tile*/Humans" ADD Thermal.ThermalObjectBehaviour',
+				'REGEX "tile*/Humans" SET Thermal.ThermalObjectBehaviour profile "ThermalBehaviour/Humans"',
+				'REGEX "tile*/Buildings" ADD Thermal.ThermalObjectBehaviour',
+				'REGEX "tile*/Buildings" SET Thermal.ThermalObjectBehaviour profile "ThermalBehaviour/Buildings"',
+				'REGEX "tile*/Props" ADD Thermal.ThermalObjectBehaviour',
+				'REGEX "tile*/Props" SET Thermal.ThermalObjectBehaviour profile "ThermalBehaviour/Props"',
+				'REGEX "tile*/Trees" ADD Thermal.ThermalObjectBehaviour',
+				'REGEX "tile*/Trees" SET Thermal.ThermalObjectBehaviour profile "ThermalBehaviour/Trees"',
+				'REGEX "tile*/Powerlines" ADD Thermal.ThermalObjectBehaviour',
+				'REGEX "tile*/Powerlines" SET Thermal.ThermalObjectBehaviour profile "ThermalBehaviour/Props"',
+				'REGEX "tile*/Signs" ADD Thermal.ThermalObjectBehaviour',
+				'REGEX "tile*/Signs" SET Thermal.ThermalObjectBehaviour profile "ThermalBehaviour/Props"',
+				'REGEX "tile*/Road system/Road*/MainMeshes" ADD Thermal.ThermalObjectBehaviour',
+				'REGEX "tile*/Road system/Road*/MainMeshes" SET Thermal.ThermalObjectBehaviour profile "ThermalBehaviour/Roads"',
+				'REGEX "tile*/Road system/Intersections" ADD Thermal.ThermalObjectBehaviour',
+				'REGEX "tile*/Road system/Intersections" SET Thermal.ThermalObjectBehaviour profile "ThermalBehaviour/RoadsProps"',
+				'REGEX "tile*/Road system/Road*" ADD Thermal.ThermalObjectBehaviour',
+				'REGEX "tile*/Road system/Road*" SET Thermal.ThermalObjectBehaviour profile "ThermalBehaviour/RoadsProps"',
+			])
 
 		helpers.setOSNetwork(
 			target=options['roadNetworkLabel'],
@@ -164,9 +174,19 @@ def run():
 
 	#car manual driving toggle
 		common.sendData([
-			'"{}" ADD ToggleBetweenAutoDriveAndUserControl VPCustomInput'.format(options['mainCar']),
-			'"{}" SET VPCustomInput enabled false'.format(options['mainCar']),
+			'"{}" ADD ToggleBetweenAutoDriveAndUserControl'.format(options['mainCar']),
 		])
+
+		if options['carInput']:
+			if options['carInput']['mode'] == "steeringWheel":
+				common.sendData([
+
+					'"{}" SET OSVehicle externControl TRUE'.format(options['mainCar']),
+					'"{}" SET VPVehicleController enabled true'.format(options['mainCar']),
+					'"{}" SET Rigidbody isKinematic false'.format(options['mainCar']),
+					'"{}" ADD VPDeviceInput'.format(options['mainCar']),
+					'"{}"SET VPDeviceInput deviceModel "{}" ignitionKeyPosition "Drive"'.format(options['mainCar'],options['carInput']['steeringWheelModel']),
+				])
 		
 		# set spawners
 		helpers.setVehicleSpawner(
@@ -196,15 +216,15 @@ def run():
 			assetBundle=options['vehicleSpawner']['assetBundle'],
 			
 			databaseFilter=options['vehicleSpawner']['databaseFilter'],
-			loadCarsAsynchronously=True,
+			loadCarsAsynchronously=False,
 			
 			segmentationClass=options['vehicleSpawner']['class']
 		)
 
 		if 'THERMAL' in options['flags']:
 			common.sendData([
-				'"{}" ADD Thermal.ThermalObjectBehaviour'.format(options['vehicleSpawner']['label']),
-				'"{}" SET Thermal.ThermalObjectBehaviour profile "ThermalBehaviour/Cars"'.format(options['vehicleSpawner']['label']),
+				'"{}" ADD Thermal.ThermalProfileOverride'.format(options['vehicleSpawner']['label']),
+				'"{}" SET Thermal.ThermalProfileOverride heatinessMode "Relative" heatiness -24'.format(options['vehicleSpawner']['label']),
 			])
 		
 		# create tiler
@@ -296,7 +316,7 @@ def run():
 				mycams.append(idx)
 				
 				common.sendData([
-					'[Segmentation.Camera] CreateWithClassColors "{}" WITH lookUpTable ASSET "Tiles/Segmentation/Segmentation.LookUpTable" FROM "tiles"'.format(idx),
+					'[Segmentation.Camera] CreateWithClassColors "{}" WITH lookUpTable "lookUpTable"'.format(idx),
 					'[Cameras.RenderTexture] CreateNew "{}" {} {}'.format(cam_s, cam['cameraWidth'], cam['cameraHeight']),
 					'"{}" SET Transform localPosition ({} {} {}) localEulerAngles ({} {} {})'.format(
 						idx,
@@ -317,9 +337,8 @@ def run():
 
 			common.sendData([
 				'"Thermal.ProbeUpdateScheduler.instance" SET Thermal.ProbeUpdateScheduler disableProbesRendering true',
-				'"{}" SET OSNetworkSpawner removeProbes {}'.format(options['vehicleSpawner']['label'], 'false' if options['vehicleSpawner']['reflectionProbes'] == True else 'true')
 			])
-			
+
 			for idx in options['cam_mask']['THERMAL']:
 				cam = options['cams'][idx]
 				cam_s = idx.split('/')[-1]
@@ -332,8 +351,30 @@ def run():
 						cam['cameraPosition'][0], cam['cameraPosition'][1], cam['cameraPosition'][2],
 						cam['cameraRotation'][0], cam['cameraRotation'][1], cam['cameraRotation'][2]
 					),
+					'"{}" ADD Thermal.ThermalNoise'.format(idx),
+					'''"{}" SET Thermal.ThermalNoise
+								spotsContrast {}
+								linesMaskIntensity {}
+								noiseIntensity {}
+								noiseContrast {}
+								noiseSize {}
+								noiseBlur {}
+								blendAmount {}
+								filterMode {}
+						'''.format(
+						idx,
+						cam['thermal']['noise']['spotsContrast'],
+						cam['thermal']['noise']['linesMaskIntensity'],
+						cam['thermal']['noise']['noiseIntensity'],
+						cam['thermal']['noise']['noiseContrast'],
+						cam['thermal']['noise']['noiseSize'],
+						cam['thermal']['noise']['noiseBlur'],
+						cam['thermal']['noise']['blendAmount'],
+						cam['thermal']['noise']['filterMode']
+					),
 					'"{}" ADD UnityStandardAssets.ImageEffects.BloomOptimized'.format(idx),
 					'"{}" SET Thermal.ThermalCamera temperatureRange ({} {})'.format(idx, cam['thermal']['temperatureRange'][0], cam['thermal']['temperatureRange'][1]),
+					'"{}" SET Thermal.ThermalCamera ambientTemperature {}'.format(idx, cam['thermal']['ambientTemperature']),
 					'"{}" SET Camera far {}'.format(idx, cam['clippingFar']),
 					
 					'''"{}" SET UnityStandardAssets.ImageEffects.BloomOptimized fastBloomShader "Hidden/FastBloom"
@@ -359,30 +400,39 @@ def run():
 					
 					'[UI.Window] ShowFromRenderTexture "{}" AS "{}"'.format(cam_s, cam_s),
 					
-					# '"EnviroSky" EXECUTE EnviroSky AssignAndStart "{}" "{}"'.format(cam, cam),
-					
-					'"{}" ADD Thermal.ThermalNoise'.format(idx),
-					
-					'''"{}" SET Thermal.ThermalNoise
-						spotsContrast {}
-						linesMaskIntensity {}
-						noiseIntensity {}
-						noiseContrast {}
-						noiseSize {}
-						noiseBlur {}
-						blendAmount {}
-						filterMode {}
+					#'"EnviroSky" EXECUTE EnviroSky AssignAndStart "{}" "{}"'.format(cam, cam),
+
+				])
+
+				if "blur" in cam['thermal']:
+					common.sendData([
+						'"{}" ADD CameraFilterPack_Blur_Noise'.format(idx),
+						'''"{}" SET CameraFilterPack_Blur_Noise
+						Level {}
+						Distance ({} {})
 					'''.format(
 						idx,
-						cam['thermal']['noise']['spotsContrast'],
-						cam['thermal']['noise']['linesMaskIntensity'],
-						cam['thermal']['noise']['noiseIntensity'],
-						cam['thermal']['noise']['noiseContrast'],
-						cam['thermal']['noise']['noiseSize'],
-						cam['thermal']['noise']['noiseBlur'],
-						cam['thermal']['noise']['blendAmount'],
-						cam['thermal']['noise']['filterMode']
-					)
+						cam['thermal']['blur']['level'],
+						cam['thermal']['blur']['distance'][0],
+						cam['thermal']['blur']['distance'][1]
+					),
+						])
+
+				if "oilPaint" in cam['thermal']:
+					common.sendData([
+						'"{}" ADD CameraFilterPack_Pixelisation_DeepOilPaintHQ'.format(idx),
+						'''"{}" SET CameraFilterPack_Pixelisation_DeepOilPaintHQ
+						_FixDistance {}
+						_Distance {}
+						_Size {}
+						Intensity {}
+					'''.format(
+						idx,
+						cam['thermal']['oilPaint']['fixDistance'],
+						cam['thermal']['oilPaint']['distance'],
+						cam['thermal']['oilPaint']['size'],
+						cam['thermal']['oilPaint']['intensity'],
+					),
 				])
 		
 		if not options['videoExport']:
@@ -421,13 +471,15 @@ def run():
 			
 			common.waitQueue()
 			
+			_params = {
+				"exportBBoxes": False # autoSegment
+			}
+			
+			common.deep_merge_dicts(_params, options['videoExport'])
+			
 			helpers.addVideoExport(
 				mycams,
-				params={
-					"streamLength": options['videoExport']['streamLength'],
-					"streamProfile": options['videoExport']['streamProfile'],
-					"exportBBoxes": False # autoSegment
-				}
+				params=_params
 			)
 	
 	# misc
@@ -437,6 +489,8 @@ def run():
 			'"disk1" SET active true',
 			# '"disk1" SET Sensors.Disk counter 1',
 		])
+	
+	common.sendData('"UI.WindowController.instance" EXECUTE UpdateHierarchy')
 	
 	if settings.setup_only == True:
 		return

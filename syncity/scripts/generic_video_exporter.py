@@ -20,6 +20,9 @@ def args(parser):
 		parser.add_argument('--stream_length', type=int, default=300, help='Defines the size of each video in seconds')
 	except: pass
 	try:
+		parser.add_argument('--stream_fps', type=int, default=30, help='Defines the FPS of the exported video')
+	except: pass
+	try:
 		parser.add_argument('--camera', action='append', nargs='+', default=None, help='Defines a list of one of more cameras to be exported, those will be syncronized by default, bounding box support is automatic')
 	except: pass
 	try:
@@ -45,5 +48,12 @@ def run():
 		time.sleep(settings.wait)
 	
 	common.waitQueue()
-	helpers.addVideoExport(mycams, params={"streamLength": settings.stream_length, "streamProfile": settings.stream_profile, "exportBBoxes": autoSegment})
+	
+	helpers.addVideoExport(mycams, params={
+		"streamLength": settings.stream_length,
+		"streamProfile": settings.stream_profile,
+		"streamFPS": settings.stream_fps,
+		"exportBBoxes": autoSegment
+	})
+	
 	common.output('Done')

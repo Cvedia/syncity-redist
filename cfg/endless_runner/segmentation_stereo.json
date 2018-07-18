@@ -26,7 +26,7 @@
 	
 	"vehicleSpawner": {
 		"label": "VehicleSpawner",
-		"class": "Cars",
+		"class": "Car",
 		"rigidBodies": false,
 		"boxColliders": false,
 		"reflectionProbes": false,

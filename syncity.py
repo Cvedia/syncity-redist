@@ -15,7 +15,7 @@ import random
 
 from syncity import common, settings_manager
 
-SYNCITY_VERSION = '18.06.21.1922'
+SYNCITY_VERSION = '18.07.18.1130'
 SIMULATOR_MIN_VERSION = '18.04.23.0000'
 
 print ('SynCity toolbox - v{}\nCopyright (c) 2016-{} CVEDIA PVE Ltd\n'.format(SYNCITY_VERSION, datetime.date.today().year))
@@ -176,7 +176,7 @@ if settings.seed_py != None:
 
 # setup telnet connection
 if settings.run != None or settings.script != None:
-	if settings.async == True:
+	if getattr(settings, "async"):
 		common.output('Telnet mode set to ASYNCRONOUS')
 		settings.force_sync = False
 	else:

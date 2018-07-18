@@ -356,7 +356,7 @@ def sendData(v, read=None, flush=None, timeout=3, readWait=.5):
 		read = True
 	else: # not recommended
 		if read == None:
-			if settings.async == True:
+			if getattr(settings, "async") == True:
 				read = False
 			else:
 				read = True

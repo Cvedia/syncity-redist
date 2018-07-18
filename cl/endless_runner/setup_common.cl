@@ -135,7 +135,6 @@ CREATE "Tiler"
 "Tiler" ADD Tiler.PoolTileLoader
 "Tiler" PUSH Tiler.PoolTileLoader pool "tile1"
 "Tiler" ADD Tiler.Tiler
-"Tiler" SET Tiler.Tiler targetReferenceTileDistance 800
 "Tiler" SET Tiler.Tiler targetReference "mainCar"
 "Tiler" SET Tiler.Tiler tileContainer "tileContainer"
 "Tiler" SET Tiler.Tiler loadOtherTilesSynchronously false

@@ -3,6 +3,29 @@ This change log follows YYMMDD timestamps which are also the version number for
 both the SDK and the simulator.
 --------------------------------------------------------------------------------
 
+# 180718:
+
+- Nanosecond precision data export synchronization
+- VideoExporter helpers, example scripts and more
+- Video FPS control
+- Shopping mall fixes
+- Endless runner configurables
+- New JSON exporter functionalities, including data streaming from video
+- New Thermal profiles
+- New Tiler system spawners / fixes
+- Fixes for the new postprocessing layer, allowing for full configurability per camera
+- Human spawn points deprecated
+- Cars now stops at obstacles
+- Improved car colliders
+- Main car manual drive properly works now
+- Several thermal shader fixes
+- Faster than realtime prototype
+- New Unity 2018.2.0f2 engine, now no longer beta
+
+Note: Currently exporting via Disk module is not recommended, this module will
+be deprecated in favor to `ImageExport`. This is a breaking change starting from
+18.07 and on. Older versions will still work with the SDK.
+
 # 180624:
 
 - Added several functions for controlling traffic spawners and traffic management in general

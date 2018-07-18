@@ -2421,8 +2421,6 @@ def setOSVehicle(
 	
 	predictMult=.4,
 	
-	parked=False,
-	
 	setDriver=True,
 	createDriver=True,
 	
@@ -2463,8 +2461,6 @@ def setOSVehicle(
 	
 	predictMult (float): Car agressiveness factor
 	
-	parked (bool): Defines if car is parked
-	
 	setDriver (bool): Defines if we should cascade parameters to OSVehicleDriver
 	createDriver (bool): Defines if a OSVehicleDriver should be created or just configured
 	
@@ -2498,8 +2494,7 @@ def setOSVehicle(
 		'spinWheels {}'.format('true' if spinWheels == True else 'false'),
 		'spinWheelDisableDistance {}'.format(spinWheelDisableDistance),
 		
-		'predictMult {}'.format(predictMult),
-		'parked {}'.format('true' if parked == True else 'false')
+		'predictMult {}'.format(predictMult)
 	])
 	
 	if vehicleSize != None:
@@ -2661,12 +2656,16 @@ def setVehicleSpawner(
 	segmentationClass=False
 ):
 	buf = []
-	p = []
+	spawnerProperties = []
+	vehiclePoolProperties = []
+	roadsProperties = []
 	
 	if create == True:
 		buf.extend([
 			'CREATE "{}"'.format(target),
-			'"{}" ADD OSNetworkSpawner'.format(target)
+			'"{}" ADD OSNetworkSpawner'.format(target),
+			'"{}" ADD OSNetworkRoads'.format(target),
+			'"{}" ADD OSNetworkVehiclePool'.format(target)
 		])
 	if segmentationClass != False:
 		buf.extend([
@@ -2680,8 +2679,7 @@ def setVehicleSpawner(
 	if isinstance(network, bool) and network == True:
 		network = 'OpenSteerNetwork'
 	
-	p.extend([
-		'maxObjects {}'.format(maxObjects),
+	spawnerProperties.extend([
 		
 		'spawnRadius {}'.format(spawnRadius),
 		'spawnClearance {}'.format(spawnClearance),
@@ -2693,25 +2691,32 @@ def setVehicleSpawner(
 		'removeProbes {}'.format('true' if removeProbes == True else 'false'),
 		'removeBoxColliders {}'.format('true' if removeBoxColliders == True else 'false'),
 		'removeRigidBodies {}'.format('true' if removeRigidBodies == True else 'false'),
-		
+	])
+
+	vehiclePoolProperties.extend([
+		'maxObjects {}'.format(maxObjects),
+
 		'loadCarsAsynchronously {}'.format('true' if loadCarsAsynchronously == True else 'false')
 	])
 	
 	if databaseFilter != None:
-		p.append('databaseFilter "{}"'.format(databaseFilter))
+		vehiclePoolProperties.append('databaseFilter "{}"'.format(databaseFilter))
 	else:
-		p.append('assetBundle "{}"'.format(assetBundle))
+		vehiclePoolProperties.append('assetBundle "{}"'.format(assetBundle))
 	
 	if hidePosition != None:
-		p.append('hidePosition "{}"'.format(hidePosition))
+		vehiclePoolProperties.append('hidePosition "{}"'.format(hidePosition))
 	if network != None:
-		p.append('network "{}"'.format(network))
+		roadsProperties.append('network "{}"'.format(network))
 	if spawnFocus != None:
-		p.append('spawnFocus "{}"'.format(spawnFocus))
+		spawnerProperties.append('spawnFocus "{}"'.format(spawnFocus))
 	if isinstance(position, list):
 		buf.append('"{}" SET Transform localPosition ({} {} {})'.format(target, position[0], position[1], position[2]))
 	
-	buf.append('"{}" SET OSNetworkSpawner {}'.format(target, ' '.join(p)))
+	buf.append('"{}" SET OSNetworkSpawner {}'.format(target, ' '.join(spawnerProperties)))
+	buf.append('"{}" SET OSNetworkRoads {}'.format(target, ' '.join(roadsProperties)))
+	buf.append('"{}" SET OSNetworkVehiclePool {}'.format(target, ' '.join(vehiclePoolProperties)))
+
 	common.sendData(buf)
 
 def setTilerPool(
@@ -2728,7 +2733,6 @@ def setTilerPool(
 	createTiler=False,
 	createContainer=False,
 	targetReference='mainCar',
-	targetReferenceTileDistance=500,
 	tileContainer="tileContainer",
 	loadOtherTilesSynchronously=False,
 	addAutomaticLights=True,
@@ -2761,7 +2765,6 @@ def setTilerPool(
 			create=createTiler,
 			createContainer=createContainer,
 			targetReference=targetReference,
-			targetReferenceTileDistance=targetReferenceTileDistance,
 			tileContainer=tileContainer,
 			loadOtherTilesSynchronously=loadOtherTilesSynchronously,
 			addAutomaticLights=addAutomaticLights
@@ -2783,7 +2786,6 @@ def setTiler(
 	create=False,
 	createContainer=False,
 	targetReference='mainCar',
-	targetReferenceTileDistance=500,
 	tileContainer="tileContainer",
 	loadOtherTilesSynchronously=False,
 	addAutomaticLights=True
@@ -2795,7 +2797,6 @@ def setTiler(
 	
 	buf.append('"{}" SET Tiler.Tiler {}'.format(target, ' '.join([
 		'targetReference "{}"'.format(targetReference),
-		'targetReferenceTileDistance {}'.format(targetReferenceTileDistance),
 		'tileContainer "{}"'.format(tileContainer),
 		'loadOtherTilesSynchronously {}'.format('true' if loadOtherTilesSynchronously == True else 'false')
 	])))
@@ -2984,8 +2985,6 @@ def humanWalkerSpawner(
 		buf.extend([
 			'CREATE "{}points/spawners/s_{}"'.format(prefix, i),
 			'"{}points/spawners/s_{}" SET Transform position ({} {} {})'.format(prefix, i, s[0], s[1], s[2]),
-			# DEPRECATED ?
-			# '"{}points/spawners/s_{}" ADD Humans.HumanSpawnPoint'.format(prefix, i),
 			'"{}points/spawners/s_{}" SET active true'.format(prefix, i),
 			'"{}humanSpawner" PUSH Humans.Locomotion.WalkerSpawner spawnPoints "{}points/spawners/s_{}"'.format(prefix, prefix, i)
 		])

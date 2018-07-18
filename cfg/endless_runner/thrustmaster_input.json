@@ -1,0 +1,7 @@
+{
+	"carInput": {
+		"mode": "steeringWheel",
+		"steeringWheelModel": "TrustmasterT500RS"
+	},
+	"selfDriving": false
+}

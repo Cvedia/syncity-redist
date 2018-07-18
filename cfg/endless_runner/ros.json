@@ -1,0 +1,80 @@
+{
+	"ros": {
+		"writeLinks": [
+			{
+				"label": "throttle",
+				"topic": "syncity/throttle",
+				"target": "mainCar",
+				"component": "VPCustomInput",
+				"field": "externalThrottle",
+				"interval": 0.5
+			},
+			{
+				"label": "brake",
+				"topic": "syncity/brake",
+				"target": "mainCar",
+				"component": "VPCustomInput",
+				"field": "externalBrake",
+				"interval": 0.5
+			},
+			{
+				"label": "handbrake",
+				"topic": "syncity/handbrake",
+				"target": "mainCar",
+				"component": "VPCustomInput",
+				"field": "externalHandbrake",
+				"interval": 0.5
+			},
+			{
+				"label": "steer",
+				"topic": "syncity/steer",
+				"target": "mainCar",
+				"component": "VPCustomInput",
+				"field": "externalSteer",
+				"interval": 0.5
+			}
+		],
+		"readLinks": [
+			{
+				"label": "velocity",
+				"topic": "syncity/velocity",
+				"target": "mainCar",
+				"component": "Rigidbody",
+				"field": "velocity",
+				"interval": 0.5
+			},
+			{
+				"label": "angularVelocity",
+				"topic": "syncity/angularVelocity",
+				"target": "mainCar",
+				"component": "Rigidbody",
+				"field": "angularVelocity",
+				"interval": 0.5
+			},
+			{
+				"label": "angularDrag",
+				"topic": "syncity/angularDrag",
+				"target": "mainCar",
+				"component": "Rigidbody",
+				"field": "angularDrag",
+				"interval": 0.5
+			},
+			{
+				"label": "position",
+				"topic": "syncity/position",
+				"target": "mainCar",
+				"component": "Transform",
+				"field": "position",
+				"interval": 0.5
+			},
+			{
+				"label": "rotation",
+				"topic": "syncity/rotation",
+				"target": "mainCar",
+				"component": "Transform",
+				"field": "eulerAngles",
+				"interval": 0.5
+			}
+		]
+	}
+}

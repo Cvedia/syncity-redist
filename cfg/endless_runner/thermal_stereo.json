@@ -12,21 +12,22 @@
 			"cameraRotation": [0, -3, 0],
 			
 			"thermal": {
-				"temperatureRange": [-10, 30],
+				"temperatureRange": [-4, 50],
+				"ambientTemperature": -1.5,
 				"bloom": {
 					"threshold": 0,
-					"intensity": 0.3,
-					"blurSize": 1.47,
+					"intensity": 0.15,
+					"blurSize": 3.5,
 					"blurIterations": 4
 				},
 				"noise": {
 					"spotsContrast": 0.8,
-					"linesMaskIntensity": 0.1,
+					"linesMaskIntensity": 0.15,
 					"noiseIntensity": 6,
-					"noiseContrast": 0.9,
+					"noiseContrast": 0.4,
 					"noiseSize": 0.1,
-					"noiseBlur": 1,
-					"blendAmount": 0.1,
+					"noiseBlur": 2,
+					"blendAmount": 0.05,
 					"filterMode": 2
 				}
 			}
@@ -43,21 +44,22 @@
 			"cameraRotation": [0, 3, 0],
 			
 			"thermal": {
-				"temperatureRange": [-10, 30],
+				"temperatureRange": [-4, 50],
+				"ambientTemperature": -1.5,
 				"bloom": {
 					"threshold": 0,
-					"intensity": 0.3,
-					"blurSize": 1.47,
+					"intensity": 0.15,
+					"blurSize": 3.5,
 					"blurIterations": 4
 				},
 				"noise": {
 					"spotsContrast": 0.8,
-					"linesMaskIntensity": 0.1,
+					"linesMaskIntensity": 0.15,
 					"noiseIntensity": 6,
-					"noiseContrast": 0.9,
+					"noiseContrast": 0.4,
 					"noiseSize": 0.1,
-					"noiseBlur": 1,
-					"blendAmount": 0.1,
+					"noiseBlur": 2,
+					"blendAmount": 0.05,
 					"filterMode": 2
 				}
 			}
