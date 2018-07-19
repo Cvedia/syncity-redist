@@ -459,11 +459,14 @@ def run():
 			])
 		
 		# ros - must run after cameras are rendering
-		if settings.disable_ros == False and options['ros']:
-			helpers.setupROSTopics(
-				writeLinks=options['ros']['writeLinks'],
-				readLinks=options['ros']['readLinks']
-			)
+		try:
+			if settings.disable_ros == False and options['ros']:
+				helpers.setupROSTopics(
+					writeLinks=options['ros']['writeLinks'],
+					readLinks=options['ros']['readLinks']
+				)
+		except:
+			pass
 		
 		if options['videoExport']:
 			idx = [i for i, s in enumerate(mycams) if 'segment' in s.lower()]
