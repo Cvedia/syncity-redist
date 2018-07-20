@@ -46,6 +46,7 @@ def initTelnet(ip, port, retries=-1, wait=.5, timeout=30, ka_interval=3, ka_fail
 	
 	"""
 	if settings.dry_run:
+		os.environ['SYNCITY_VERSION'] = settings._simulator_version = "99.00.00.0000"
 		return False
 	
 	if settings._telnet == True:
@@ -934,7 +935,8 @@ def versionCompare(a, b, condition):
 	return False
 
 def waitQueue(threshold=None, wait=.5):
-	# return
+	if versionCompare(settings._simulator_version, '18.07.05.0000', '>='):
+		return
 	
 	"""
 	Blocks new CL commands until queue is above a threshold.

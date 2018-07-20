@@ -63,7 +63,7 @@ def run():
 		
 		helpers.addCameraSeg(
 			width=1024, height=768, fov=90, clippingFar=10000,
-			segments=['Human'],
+			segments=['Human', 'Ground', 'Animal'],
 			lookupTable=[['Human', 'green'], ['ground', '#520000FF'], ['Animal', 'red']]
 		)
 		
@@ -88,8 +88,8 @@ def run():
 			treesBase=6.41, treesBandwidth=50, treesMedian=.18, treesLeafsVariance=10
 		)
 		
-		helpers.globalDiskSetup()
-		helpers.addDiskOutput(mycams)
+		# helpers.globalDiskSetup()
+		# helpers.addDiskOutput(mycams)
 		
 		# create thermal animals around humans goal area
 		helpers.spawnRadiusGeneric(
@@ -142,9 +142,15 @@ def run():
 			heatinessMode='Absolute',
 			heatinessValue=60
 		)
+		
+		helpers.addImageExport(mycams, params={
+			"streamFormat": ["jpg", "jpg", "png", "tif" ],
+			"exportBBoxes": True
+		})
 	
 	# warm up
-	helpers.doRender(mycams)
+	# helpers.doRender(mycams)
+	
 	helpers.enableAll(mycams, 'Camera')
 	
 	if settings.setup_only == True:
@@ -170,7 +176,7 @@ def run():
 			)
 		])
 		
-		helpers.takeSnapshot(mycams, autoSegment=True, forceNoop=True)
+		# helpers.takeSnapshot(mycams, autoSegment=True, forceNoop=True)
 		
 		# increments
 		for k, v in enumerate(position_incr):

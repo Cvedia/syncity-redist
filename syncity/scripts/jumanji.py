@@ -9,7 +9,10 @@ settings = settings_manager.Singleton()
 
 def help():
 	return '''\
-Jumanji
+Jumanji exporter
+
+You should run this script after the scene built by cl/jumanji.cl is ready. This
+will setup the image exporter and start producing data.
 '''
 
 def args(parser):
@@ -19,21 +22,16 @@ def args(parser):
 
 def run():
 	loop = 0
-	mycams = ['Camera/rgb', 'Camera/Thermal', 'Camera/Segmentation']
+	mycams = ['Camera/Thermal', 'Camera/Segmentation']
 	
-	common.sendData([
-		'"disk1" SET Sensors.Disk path "{}"'.format(settings.output_path),
-		'"disk1" SET active true',
-		'"disk1" SET Sensors.Disk counter 1'
-	])
-
+	if settings.skip_setup == False:
+		helpers.addImageExport(mycams, params={
+			"streamFormat": ["jpg", "png"],
+			"exportBBoxes": True
+		})
+	
 	# loop changing camera positions with random agc bounduaries
 	while loop < settings.loop_limit:
-		# "disk1" EXECUTE Sensors.Disk Snapshot
-		# "Camera/Segmentation" GET Segmentation.Output.FilteredBoundingBoxes filteredBoundingBoxes
-		
-		helpers.takeSnapshot(mycams, autoSegment=True)
-		
 		common.sendData([
 			'"Camera" SET Transform localPosition (-3~3 0.5~2 -30~-15)',
 			'"Camera" SET Transform localEulerAngles (-2~0 -20~20 -3~3)',

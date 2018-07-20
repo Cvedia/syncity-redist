@@ -5,9 +5,10 @@ CREATE "Camera"
 "Camera" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile "EnviroFX" profile.motionBlur.enabled false
 "Camera" SET active true
 
-CREATE "ThermalCameraPrefab" AS "Camera/Thermal" 
-CREATE RenderTexture 1472 1472 24 "ARGB32" "Default" AS "Thermal Texture"
-"Camera/Thermal" SET Camera targetTexture "Thermal Texture" 
+[Thermal.Camera] CreateCamera "Camera/Thermal"
+
+//CREATE RenderTexture 1472 1472 24 "ARGB32" "Default" AS "Thermal Texture"
+//"Camera/Thermal" SET Camera targetTexture "Thermal Texture" 
 "Camera/Thermal" SET Thermal.ThermalCamera temperatureRange (-10 30)
 "Camera/Thermal" SET active true
 
@@ -16,19 +17,25 @@ CREATE Segmentation.LookUpTable AS "lookUpTable"
 "lookUpTable" EXECUTE Segmentation.LookUpTable SetClassColor "Person->Yellow" "Bicycle->#00FF00FF" "Car->#FF0000FF" 
 
 CREATE "Camera/Segmentation"
-"Camera/Segmentation" ADD Camera Segmentation.Output.ClassColors Segmentation.Output.BoundingBoxes Segmentation.Output.FilteredBoundingBoxes Segmentation.Output.BoundingBoxesOnTexture
+
+//"Camera/Segmentation" ADD Camera Segmentation.Output.ClassColors Segmentation.Output.BoundingBoxes Segmentation.Output.FilteredBoundingBoxes Segmentation.Output.BoundingBoxesOnTexture
+"Camera/Segmentation" ADD Camera SegmentationCamera Segmentation.Output.BoundingBoxes Segmentation.Output.FilteredBoundingBoxes Segmentation.Output.ClassColors
 "Camera/Segmentation" SET Segmentation.Output.ClassColors lookUpTable "lookUpTable"
 "Camera/Segmentation" EXECUTE Segmentation.Output.FilteredBoundingBoxes EnableClasses "Person" "Bicycle" "Car"
-"Camera/Segmentation" SET Segmentation.Output.BoundingBoxesOnTexture boxesColor "Yellow"
-"Camera/Segmentation" SET Segmentation.Output.BoundingBoxes minimumObjectVisibility 0.1 extensionAmount 0 minimumPixelsCount 1 
 
-CREATE RenderTexture 1472 1472 24 "RGFloat" "Linear" AS "Segmentation Texture"
-"Camera/Segmentation" SET Camera targetTexture "Segmentation Texture" 
+//"Camera/Segmentation" SET Segmentation.Output.BoundingBoxesOnTexture boxesColor "Yellow"
+//"Camera/Segmentation" SET Segmentation.Output.BoundingBoxes minimumObjectVisibility 0.1 extensionAmount 0 minimumPixelsCount 1 
+
+//CREATE RenderTexture 1472 1472 24 "RGFloat" "Linear" AS "Segmentation Texture"
+//"Camera/Segmentation" SET Camera targetTexture "Segmentation Texture" 
 "Camera/Segmentation" SET active true
 
-[UI.Window] ShowFromRenderTexture "Thermal Texture" AS "Thermal Texture"
-[UI.Window] ShowFromCamera "Camera" AS "RGB" WITH 1024 768 24 "ARGB32" "Default"
-[UI.Window] ShowFromRenderTexture "Segmentation Texture" AS "Segmentation Texture"
+[UI.Window] ShowFromCamera "Camera/Segmentation" AS "segmentation" WITH 1472 1472 24 "ARGBFloat" "Default"
+[UI.Window] ShowFromCamera "Camera/Thermal" AS "thermal" WITH 1472 1472 24 "ARGB32" "Default"
+
+//[UI.Window] ShowFromRenderTexture "Thermal Texture" AS "Thermal Texture"
+//[UI.Window] ShowFromCamera "Camera" AS "RGB" WITH 1024 768 24 "ARGB32" "Default"
+//[UI.Window] ShowFromRenderTexture "Segmentation Texture" AS "Segmentation Texture"
 
 CREATE "EnviroSky" AS "EnviroSky"
 "EnviroSky" SET EnviroSky Player "Camera" PlayerCamera "Camera" GameTime.ProgressTime "None" weatherSettings.cloudTransitionSpeed 100 weatherSettings.effectTransitionSpeed 100 weatherSettings.fogTransitionSpeed 100 
@@ -211,38 +218,21 @@ CREATE "Bicycles"
 "Camera" ADD Sensors.RenderCamera
 "Camera" SET Sensors.RenderCamera resolution (1472 1472)
 
-"Grounds" SET Thermal.ThermalObjectBehaviour enabled false"
-"Grounds" SET Thermal.ThermalObjectBehaviour enabled true"
-"Signs" SET Thermal.ThermalObjectBehaviour enabled false"
-"Signs" SET Thermal.ThermalObjectBehaviour enabled true"
-"Trafficlights" SET Thermal.ThermalObjectBehaviour enabled false"
-"Trafficlights" SET Thermal.ThermalObjectBehaviour enabled true"
-"Misc" SET Thermal.ThermalObjectBehaviour enabled false"
-"Misc" SET Thermal.ThermalObjectBehaviour enabled true"
-"Trees" SET Thermal.ThermalObjectBehaviour enabled false"
-"Trees" SET Thermal.ThermalObjectBehaviour enabled true"
-"Buildings" SET Thermal.ThermalObjectBehaviour enabled false"
-"Buildings" SET Thermal.ThermalObjectBehaviour enabled true"
-"Cars" SET Thermal.Spawners.ReplaceThermalProfiles enabled false"
-"Cars" SET Thermal.Spawners.ReplaceThermalProfiles enabled true"
-"Humans" SET Thermal.Spawners.ReplaceThermalProfiles enabled false"
-"Humans" SET Thermal.Spawners.ReplaceThermalProfiles enabled true"
-"Bicycles" SET Thermal.Spawners.ReplaceThermalProfiles enabled false"
-"Bicycles" SET Thermal.Spawners.ReplaceThermalProfiles enabled true"
-
-CREATE "disk1"
-"disk1" ADD Sensors.Disk
-"disk1" SET Sensors.Disk path "C:\tmp\"
-CREATE "disk1/Cameras/thermal"
-"disk1/Cameras/thermal" ADD Sensors.RenderTextureLink
-"disk1/Cameras/thermal" SET Sensors.RenderTextureLink target "Thermal Texture"
-"disk1/Cameras/thermal" SET Sensors.RenderTextureLink outputType "Thermal"
-"disk1/Cameras/thermal" SET active true
-
-
-CREATE "disk1/Cameras/rgb"
-"disk1/Cameras/rgb" ADD Sensors.RenderCameraLink
-"disk1/Cameras/rgb" SET Sensors.RenderCameraLink target "Camera"
-"disk1/Cameras/rgb" SET active true
-
-"disk1" SET active true
+"Grounds" SET Thermal.ThermalObjectBehaviour enabled false
+"Grounds" SET Thermal.ThermalObjectBehaviour enabled true
+"Signs" SET Thermal.ThermalObjectBehaviour enabled false
+"Signs" SET Thermal.ThermalObjectBehaviour enabled true
+"Trafficlights" SET Thermal.ThermalObjectBehaviour enabled false
+"Trafficlights" SET Thermal.ThermalObjectBehaviour enabled true
+"Misc" SET Thermal.ThermalObjectBehaviour enabled false
+"Misc" SET Thermal.ThermalObjectBehaviour enabled true
+"Trees" SET Thermal.ThermalObjectBehaviour enabled false
+"Trees" SET Thermal.ThermalObjectBehaviour enabled true
+"Buildings" SET Thermal.ThermalObjectBehaviour enabled false
+"Buildings" SET Thermal.ThermalObjectBehaviour enabled true
+"Cars" SET Thermal.Spawners.ReplaceThermalProfiles enabled false
+"Cars" SET Thermal.Spawners.ReplaceThermalProfiles enabled true
+"Humans" SET Thermal.Spawners.ReplaceThermalProfiles enabled false
+"Humans" SET Thermal.Spawners.ReplaceThermalProfiles enabled true
+"Bicycles" SET Thermal.Spawners.ReplaceThermalProfiles enabled false
+"Bicycles" SET Thermal.Spawners.ReplaceThermalProfiles enabled true

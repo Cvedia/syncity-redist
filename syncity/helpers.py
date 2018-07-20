@@ -558,11 +558,18 @@ def addCameraSeg(
 		elif isinstance(lookupTable, list):
 			# c = []
 			c = ['"{}->{}"'.format('Void', 'black')]
-			
+			n = ['"Void"']
 			for i in lookupTable:
 				c.append('"{}->{}"'.format(i[0], i[1]))
+				n.append('"{}"'.format(i[0]))
 			
-			b.append('"{}" EXECUTE Segmentation.Output.{} lookUpTable.SetClassColor {}'.format(l, outputType, ' '.join(c)))
+			b.append('"Segmentation.Profile.instance" PUSH classes {}'.format(' '.join(n)))
+			
+			b.append('CREATE Segmentation.LookUpTable AS "lookUpTable"')
+			b.append('"lookUpTable" EXECUTE Segmentation.LookUpTable SetClassColor {}'.format(' '.join(c)))
+			b.append('"{}" SET Segmentation.Output.{} lookUpTable "lookUpTable"'.format(l, outputType))
+			
+			# b.append('"{}" EXECUTE Segmentation.Output.{} lookUpTable.SetClassColor {}'.format(l, outputType, ' '.join(c)))
 		# assumes it's a profile name
 		elif isinstance(lookupTable, str):
 			b.append('"{}" SET Segmentation.Output.{} lookUpTable "{}"'.format(l, outputType, lookupTable))
@@ -1710,6 +1717,47 @@ def seqSave(prefix, rawData, label='disk1', basePath=None):
 	common.output('Wrote: {}'.format(fn))
 	settings._seqSave[label] = settings._seqSave[label] + 1
 
+def addImageExport(lst, label='imageExport1', params=None):
+	if common.versionCompare(settings._simulator_version, '18.07.19.0000', '<'):
+		common.output('Your simulator version is not compatible with `imageExports`', 'ERROR')
+		return;
+	
+	p = []
+	
+	if params != None:
+		if isinstance(params, dict):
+			for k, v in params.items():
+				mode = 'SET'
+				
+				if isinstance(v, bool):
+					v = 'true' if v == True else 'false'
+				elif isinstance(v, list):
+					v = ' '.join('"{0}"'.format(s) for s in v)
+					mode = 'PUSH'
+				else:
+					v = '"{}"'.format(v)
+				
+				p.append('{} Sensors.ImageExport {} {}'.format(mode, k, v))
+		else:
+			common.output('Invalid params type sent', 'ERROR')
+			return
+	
+	common.sendData([
+		'CREATE "{}"'.format(label),
+		'"{}" ADD Sensors.ImageExport'.format(label),
+		'"{}" PUSH Sensors.ImageExport cameras {}'.format(label, ' '.join('"{0}"'.format(s) for s in lst)),
+		'"{}" SET Sensors.ImageExport streamOutput "{}"'.format(label, settings.output_path)
+	])
+	
+	if len(p) > 0:
+		for v in p:
+			common.sendData('"{}" {}'.format(label, v))
+	
+	common.sendData([
+		'"{}" SET active true'.format(label),
+		'"{}" SET Sensors.ImageExport enabled true'.format(label)
+	])
+
 def addVideoExport(lst, label='videoExport1', params=None):
 	if common.versionCompare(settings._simulator_version, '18.07.05.0000', '<'):
 		common.output('Your simulator version is not compatible with `videoExports`', 'ERROR')
@@ -1806,7 +1854,7 @@ def addRandomColor(objs, colors=16, colorsWeights=14, spawner=False, method='Fro
 	"""
 	
 	if spawner:
-		component = 'RandomProps.SpawnerRandomizers.RandomColor'
+		component = 'RandomProps.Spawners.SpawnerRandomizers.RandomColor'
 	else:
 		component = 'RandomProps.RandomColor'
 	

@@ -19,10 +19,7 @@ def help():
 
 def args(parser):
 	try:
-		parser.add_argument('--stream_profile', default="high", help='Defines encoding profile')
-	except: pass
-	try:
-		parser.add_argument('--stream_length', type=int, default=300, help='Defines the size of each video in seconds')
+		parser.add_argument('--stream_format', action='append', nargs='+', default=None, help='Image output format (OCV2 compatible), you should specify one per camera, for example --stream_format jpg tif png; If you don\'t send any it will default to jpg')
 	except: pass
 
 def run():
@@ -67,7 +64,14 @@ def run():
 	], read=False)
 	
 	if settings.skip_setup == False:
-		helpers.addVideoExport(mycams, params={"streamLength": settings.stream_length, "streamProfile": settings.stream_profile, "exportBBoxes": True})
+		params={
+			"exportBBoxes": True
+		}
+		
+		if settings.stream_format != None:
+			params["streamFormat"] = settings.stream_format
+		
+		helpers.addImageExport(mycams, params=params)
 	
 	if settings.setup_only == True:
 		return

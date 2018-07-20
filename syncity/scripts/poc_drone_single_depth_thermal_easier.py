@@ -55,12 +55,14 @@ def run():
 			treesBase=8, treesBandwidth=50, treesMedian=0, treesLeafsVariance=10
 		)
 		
+		"""
 		helpers.globalDiskSetup()
 		helpers.addDiskOutput(mycams)
 		
 		# if you want to return BLOBs instead of DEPTH maps use this:
 		# common.sendData([ '"disk1/Cameras/depth" SET Sensors.RenderCameraLink outputType "BLOB"' ])
 		common.sendData([ '"disk1/Cameras/depth" SET Sensors.RenderCameraLink outputType "DEPTH"' ])
+		"""
 		
 		# chromatic aberration on red channel
 		helpers.LCP(
@@ -69,6 +71,7 @@ def run():
 			redParam2=0.05
 		)
 		
+		"""
 		# video compression artifacts
 		common.sendData([
 			# Add video compression artifacts to rgb output
@@ -78,6 +81,7 @@ def run():
 			'"disk1/Cameras/camerargb" ADD Sensors.Augmentations',
 			'"disk1/Cameras/camerargb" SET active true'
 		], read=False)
+		"""
 		
 		helpers.spawnDroneObjs(
 			dronesLimit=[2,2],
@@ -139,11 +143,16 @@ def run():
 #				'"cameras/drone/drone{}/drone{} PUSH RandomProps.RandomColor availableColors "#101010"'.format(x,x),
 			], read=False)
 		"""
-		common.sendData('"cameras/spawner/drones" SET active false')
+		# common.sendData('"cameras/spawner/drones" SET active false')
 		# helpers.addThermalProfileOverride(target='cameras/spawner/drones/container', heatinessMode='Absolute', heatinessValue=250, temperatureMode='Absolute', temperatureValue=300)
 		helpers.setThermalProps(objs='cameras/spawner/drones/container', heatiness=250, temperatureValue=300)
-		common.sendData('"cameras/spawner/drones" SET active true')
+		# common.sendData('"cameras/spawner/drones" SET active true')
 		
+		helpers.addImageExport(mycams, params={
+			"streamFormat": ["jpg", "png", "tif", "jpg"],
+			"exportBBoxes": True
+		})
+	
 	pX_r = [-5, 5]
 	pY_r = [1.5, 8]
 	pZ_r = [3, 9]
@@ -172,7 +181,7 @@ def run():
 				profile.motionBlur.settings.sampleCount {}
 				profile.motionBlur.settings.frameBlending {}
 		'''.format(mycams[0], 360, 4, .064) if blurring_method != 'embedded' else '"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.motionBlur.enabled false'.format(mycams[0]),
-		'"disk1" SET Sensors.Disk counter {}'.format(loop+1),
+		# '"disk1" SET Sensors.Disk counter {}'.format(loop+1),
 		
 		# if not using cars, +thermal
 		#'"spawner/cars" ADD Thermal.ThermalObjectOverride',
@@ -292,7 +301,7 @@ def run():
 			helpers.kickSeg(mycams[1])
 			kick = False
 		
-		helpers.takeSnapshot(mycams, autoSegment=True)
+		# helpers.takeSnapshot(mycams, autoSegment=True)
 		
 		loop = loop + 1
 		common.output('Loop {} ({}%)'.format(loop, round(100 * (loop / settings.loop_limit),2)))

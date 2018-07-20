@@ -7,34 +7,20 @@ settings = settings_manager.Singleton()
 def help():
 	return '''\
 Generic image exporter
-	Creates a video exporter object bound to one or more cameras.
+	Creates a image exporter object bound to one or more cameras.
 	If you specify a segmentation camera that produces bounding boxes, the system
 	will automatically export them as .json files.
 	
-	This exporter works in batches, the --stream_length parameter defines how many
-	images to collect before closing a batch, while the --stream_fps enforces a
-	stable playback frame rate. You can calculate the length of a video in seconds
-	by stream_length / stream_fps. It's recommended to keep videos short to avoid
-	long enconding times in the background, although there's no real limit on how
-	long a video could be. Keep in mind that a video will only be playable once
-	it's closed.
+	You can also specify a --stream_format to define the output image encoding,
+	for example, if you want lossless images, use --stream_format png
 	
 	The exporter will export data as fast as the simulator produces it, a synchronizer
 	in the middle takes are of aligning the data so you have neat timestamped outputs.
-	
-	Note: While the exporter is collecting buffered data you might see zero byte
-	files on your export path,
 '''
 
 def args(parser):
 	try:
-		parser.add_argument('--stream_profile', default="high", help='Defines encoding profile')
-	except: pass
-	try:
-		parser.add_argument('--stream_length', type=int, default=300, help='Defines the size of each video in seconds')
-	except: pass
-	try:
-		parser.add_argument('--stream_fps', type=int, default=30, help='Defines the FPS of the exported video')
+		parser.add_argument('--stream_format', action='append', nargs='+', default=None, help='Image output format (OCV2 compatible), you should specify one per camera, for example --stream_format jpg tif png; If you don\'t send any it will default to jpg')
 	except: pass
 	try:
 		parser.add_argument('--camera', action='append', nargs='+', default=None, help='Defines a list of one of more cameras to be exported, those will be syncronized by default, bounding box support is automatic')
@@ -63,11 +49,12 @@ def run():
 	
 	common.waitQueue()
 	
-	helpers.addVideoExport(mycams, params={
-		"streamLength": settings.stream_length,
-		"streamProfile": settings.stream_profile,
-		"streamFPS": settings.stream_fps,
+	params={
 		"exportBBoxes": autoSegment
-	})
+	}
 	
+	if settings.stream_format != None:
+		params["streamFormat"] = settings.stream_format
+	
+	helpers.addImageExport(mycams, params=params)
 	common.output('Done')
