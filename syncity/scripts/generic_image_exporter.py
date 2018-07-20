@@ -32,6 +32,7 @@ def args(parser):
 def run():
 	loop = 0
 	mycams = []
+	stream_format = []
 	
 	if settings.camera != None:
 		for c in settings.camera:
@@ -39,7 +40,13 @@ def run():
 				mycams.extend(c)
 			else:
 				mycams.append(c)
-	
+	if settings.stream_format != None:
+		for c in settings.stream_format:
+			if isinstance(c, list):
+				stream_format.extend(c)
+			else:
+				stream_format.append(c)
+		
 	idx = [i for i, s in enumerate(mycams) if 'segment' in s.lower()]
 	autoSegment = False if len(idx) == 0 else True
 	
@@ -54,7 +61,7 @@ def run():
 	}
 	
 	if settings.stream_format != None:
-		params["streamFormat"] = settings.stream_format
+		params["streamFormat"] = stream_format
 	
 	helpers.addImageExport(mycams, params=params)
 	common.output('Done')

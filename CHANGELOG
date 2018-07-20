@@ -3,6 +3,16 @@ This change log follows YYMMDD timestamps which are also the version number for
 both the SDK and the simulator.
 --------------------------------------------------------------------------------
 
+# 180720:
+
+- New image export rollout among with json exporter per-frame compatibility
+- Segmentation exports now perform 10x faster and can work in asynchronous mode
+- Several thermal profiles added
+- Added scripts to export images using the new modules
+- Partially updated existing scripts and cls to work with the new exporter
+- Additional fixes for thermal flickering
+- New scripts for faster than realtime data generation
+
 # 180718:
 
 - Nanosecond precision data export synchronization
