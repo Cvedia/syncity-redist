@@ -16,6 +16,9 @@ def help():
 	- Exits leaving all objects exposed
 '''
 
+def minVersion():
+	return '18.07.26.0000'
+
 def run():
 	settings.keep = True
 	mycams = [
@@ -37,13 +40,7 @@ def run():
 		
 		helpers.addCameraDepth(label=mycams[2])
 		
-		helpers.globalDiskSetup()
-		helpers.addDiskOutput(mycams)
-		
 		common.sendData([
-			# DEPTH shortcut to 1 channel 16bit png
-			'"disk1/Cameras/depth" SET Sensors.RenderCameraLink outputType "DEPTH"',
-			
 			# 'CREATE "{}" FROM "drones" AS "obj/subject"'.format(obj),
 			'CREATE "{}" FROM "cars" AS "obj/subject"'.format(obj),
 			'"obj" SET active false',
@@ -71,6 +68,36 @@ def run():
 		'"EnviroSky" EXECUTE EnviroSky ChangeWeather "{}"'.format(helpers.weather_lst[1])
 	], read=False)
 	
+	if settings.skip_setup == False:
+		"""
+		helpers.addDataExport(
+			videoLinks=helpers.cameraExportParametrize(mycams, "video"),
+			fieldLinks=[
+				{
+					"target": "obj",
+					"label": "subject",
+					"componentName": "Transform",
+					"fieldName": "eulerAngles",
+					"onChange": True
+				}
+			]
+		)
+		
+		"""
+		helpers.addDataExport(
+			imageLinks=helpers.cameraExportParametrize(mycams, "image"),
+			fieldLinks=[
+				{
+					"target": "obj",
+					"label": "subject",
+					"componentName": "Transform",
+					"fieldName": "eulerAngles",
+					"onChange": True
+				}
+			]
+		)
+		
+	
 	if settings.setup_only == True:
 		return
 	
@@ -83,13 +110,13 @@ def run():
 	
 	while a_x < 360:
 		a_y = 0
+		
 		# do a 360 around object
 		while a_y < 360:
 			common.sendData([
 				'"obj" SET Transform eulerAngles ({} {} {})'.format(a_x, a_y, 0)
 			])
 			a_y = a_y + displ_y
-			helpers.takeSnapshot(mycams, True)
 		
 		# next
 		a_x = a_x + displ_x

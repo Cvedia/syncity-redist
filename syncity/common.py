@@ -22,12 +22,19 @@ import telnetlib
 import socket
 import colorama
 import code
+import uuid
 
 from . import settings_manager
 from datetime import datetime
 from subprocess import PIPE, Popen, STDOUT
 
 settings = False
+
+export2list = {
+	"ReadFieldLink": "fieldLinks",
+	"ImageExportLink": "imageLinks",
+	"VideoExportLink": "videoLinks"
+}
 
 def initTelnet(ip, port, retries=-1, wait=.5, timeout=30, ka_interval=3, ka_fail=10, ka_idle=1, return_fail=False):
 	"""
@@ -47,6 +54,7 @@ def initTelnet(ip, port, retries=-1, wait=.5, timeout=30, ka_interval=3, ka_fail
 	"""
 	if settings.dry_run:
 		os.environ['SYNCITY_VERSION'] = settings._simulator_version = "99.00.00.0000"
+		initSequence()
 		return False
 	
 	if settings._telnet == True:
@@ -110,30 +118,7 @@ def initTelnet(ip, port, retries=-1, wait=.5, timeout=30, ka_interval=3, ka_fail
 			if settings.skip_init == True:
 				ouptut('Skipping init sequence')
 			else:
-				output('Init sequence...')
-				
-				if settings.assets:
-					sendData('"Config.instance" SET assetBundlesCache "{}"'.format(settings.assets))
-				
-				if settings.db:
-					sendData('"Config.instance" SET databaseFolderPath "{}"'.format(settings.db))
-				elif settings.assets:
-					sendData('"Config.instance" SET databaseFolderPath "{}"'.format(settings.assets))
-				
-				"""
-				sendData([
-					'"Config.instance" SET physicsEnabled {}'.format('false' if settings.enable_physics == False else 'true'),
-					'"Canvas/ConsolePanel" SET active {}'.format('false' if settings.enable_console_log == False else 'true'),
-					'{}'.format('DELETE "Canvas"' if settings.enable_canvas == False else '')
-				])
-				"""
-				
-				sendData('"Config.instance" SET physicsEnabled {}'.format('false' if settings.enable_physics == False else 'true'))
-				
-				if settings.seed_api:
-					setAPISeed(settings.seed_api)
-				if settings.layout != None:
-					loadLayout(settings.layout)
+				initSequence()
 			break
 		except Exception as e:
 			output('Error connecting: {}'.format(e), 'ERROR', permissive=True)
@@ -152,6 +137,33 @@ def initTelnet(ip, port, retries=-1, wait=.5, timeout=30, ka_interval=3, ka_fail
 	
 	flushBuffer()
 	return True
+
+def initSequence():
+	output('Init sequence...')
+	if settings.assets:
+		sendData('"Config.instance" SET assetBundlesCache "{}"'.format(settings.assets))
+	if settings.db:
+		sendData('"Config.instance" SET databaseFolderPath "{}"'.format(settings.db))
+	elif settings.assets:
+		sendData('"Config.instance" SET databaseFolderPath "{}"'.format(settings.assets))
+	
+	"""
+	sendData([
+		'"Config.instance" SET physicsEnabled {}'.format('false' if settings.enable_physics == False else 'true'),
+		'"Canvas/ConsolePanel" SET active {}'.format('false' if settings.enable_console_log == False else 'true'),
+		'{}'.format('DELETE "Canvas"' if settings.enable_canvas == False else '')
+	])
+	"""
+	
+	# temporary workaround : disable thermal reflection probes
+	sendData('"Thermal.ProbeUpdateScheduler.instance" SET Thermal.ProbeUpdateScheduler disableProbesRendering true')
+	
+	sendData('"Config.instance" SET physicsEnabled {}'.format('false' if settings.enable_physics == False else 'true'))
+	
+	if settings.seed_api:
+		setAPISeed(settings.seed_api)
+	if settings.layout != None:
+		loadLayout(settings.layout)
 
 def setAPISeed(seed):
 	sendData('"RandomProps.Random.instance" SET seed {}'.format(seed))
@@ -268,6 +280,8 @@ def close_recording():
 def shouldLog(level):
 	l = {
 		'NONE': 0,
+		'OBSOLETE': 1,
+		'DEPRECATED': 1,
 		'ERROR': 1,
 		'ERR': 1,
 		'WARNING': 2,
@@ -306,7 +320,9 @@ def output(s, level='INFO', permissive=False):
 	else:
 		if level == 'INFO':
 			level_color = colorama.Fore.GREEN
-		elif level == 'ERROR':
+		elif level == 'OBSOLETE':
+			level_color = colorama.Fore.BLUE
+		elif level == 'ERROR' or level == 'DEPRECATED':
 			level_color = colorama.Fore.RED
 		elif level == 'DEBUG':
 			level_color = colorama.Fore.CYAN
@@ -399,13 +415,14 @@ def sendData(v, read=None, flush=None, timeout=3, readWait=.5):
 		
 		if settings.benchmark:
 			settings._benchts = time.time()
-		if settings.dry_run:
-			continue
 		
 		try:
 			settings._tn.write(s)
 		except:
 			pass
+		
+		if settings.dry_run:
+			continue
 		
 		abort = False
 		rBytes = 0
@@ -696,8 +713,10 @@ def modulesHelp(module):
 				hl = import_script.help()
 				hl = re.sub(r'^', '\t\t', hl).replace('\n', '\n\t')
 				output.append(hl)
-			except:
+			except AttributeError:
 				output.append('\tNo description')
+			except:
+				pass
 	
 	return '\n'.join(output)
 
@@ -920,17 +939,25 @@ def mkdirP(path):
 		else:
 			raise
 
-def versionCompare(a, b, condition):
+def genID():
+	return str(uuid.uuid4())
+
+def versionCompare(a, b, condition, failWarning=None):
 	if condition == '<' and int(str(a).replace('.', '')[0:10]) < int(str(b).replace('.', '')[0:10]):
-		return True
-	elif condition == '<=' and int(str(a).replace('.', '')[0:10]) <= int(str(b).replace('.', '')[0:10]):
-		return True
-	elif condition == '>=' and int(str(a).replace('.', '')[0:10]) >= int(str(b).replace('.', '')[0:10]):
 		return True
 	elif condition == '>' and int(str(a).replace('.', '')[0:10]) > int(str(b).replace('.', '')[0:10]):
 		return True
-	elif condition == '==' and int(str(a).replace('.', '')[0:10]) == int(str(b).replace('.', '')[0:10]):
+	elif (condition == '<=' or condition == '=>') and int(str(a).replace('.', '')[0:10]) <= int(str(b).replace('.', '')[0:10]):
 		return True
+	elif (condition == '>=' or condition == '=<') and int(str(a).replace('.', '')[0:10]) >= int(str(b).replace('.', '')[0:10]):
+		return True
+	elif (condition == '==' or condition == '=') and int(str(a).replace('.', '')[0:10]) == int(str(b).replace('.', '')[0:10]):
+		return True
+	elif (condition == '!=' or condition == '<>') and int(str(a).replace('.', '')[0:10]) != int(str(b).replace('.', '')[0:10]):
+		return True
+	
+	if failWarning != None:
+		output(failWarning, 'WARN')
 	
 	return False
 

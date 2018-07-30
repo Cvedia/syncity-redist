@@ -1443,7 +1443,9 @@ def globalDiskSetup(label='disk1', outputPath=None):
 	"""
 	if settings.skip_disk:
 		return
-	
+	if common.versionCompare(settings._simulator_version, '18.07.05.0000', '>'):
+		common.output('Disk module exports are deprecated on your version of the simulator. Please migrate to `DataExport`.', 'DEPRECATED')
+		return
 	if outputPath == None:
 		outputPath = settings.output_path
 	
@@ -1506,6 +1508,9 @@ def takeSnapshot(lst, autoSegment=False, label='disk1', prefix='bbox', basePath=
 	waitQueue (bool): Forces system to wait for simulator processing queue to be empty before taking a snapshot, this is crucial to ensure scene is completly built, defaults to `True`
 	
 	"""
+	if common.versionCompare(settings._simulator_version, '18.07.05.0000', '>'):
+		common.output('Disk module exports are deprecated on your version of the simulator. Please migrate to `DataExport`.', 'DEPRECATED')
+		return
 	if not isinstance(lst, list):
 		lst = [ lst ]
 	if settings.skip_disk and autoSegment == False:
@@ -1568,6 +1573,9 @@ def takeSegSnapshot(lst, prefix='bbox', label='disk1', basePath=None):
 	basePath (string): Bounding box output path, defaults to `None`, when set to `None` falls back to default, `settings.local_path`
 	
 	"""
+	if common.versionCompare(settings._simulator_version, '18.07.05.0000', '>'):
+		common.output('Disk module exports are deprecated on your version of the simulator. Please migrate to `DataExport`.', 'DEPRECATED')
+		return
 	if not isinstance(lst, list):
 		lst = [ lst ]
 	
@@ -1592,6 +1600,9 @@ def getSaveCounter(label='disk1'):
 	Returns a int
 	
 	"""
+	if common.versionCompare(settings._simulator_version, '18.07.05.0000', '>'):
+		common.output('Disk module exports are deprecated on your version of the simulator. Please migrate to `DataExport`.', 'DEPRECATED')
+		return
 	common.waitQueue()
 	res = common.sendData('"{}" GET Sensors.Disk counter'.format(label), read=True)
 	counter = 1
@@ -1610,6 +1621,9 @@ def getSaveCounter(label='disk1'):
 	return counter
 
 def seqSaveSync(label='disk1', force=False):
+	if common.versionCompare(settings._simulator_version, '18.07.05.0000', '>'):
+		common.output('Disk module exports are deprecated on your version of the simulator. Please migrate to `DataExport`.', 'DEPRECATED')
+		return
 	if force == False:
 		try:
 			meh = settings._seqSave[label]
@@ -1635,6 +1649,9 @@ def seqSave(prefix, rawData, label='disk1', basePath=None):
 	basePath (string): Bounding box output path, defaults to `None`, when set to `None` falls back to default, `settings.local_path`
 	
 	"""
+	if common.versionCompare(settings._simulator_version, '18.07.05.0000', '>'):
+		common.output('Disk module exports are deprecated on your version of the simulator. Please migrate to `DataExport`.', 'DEPRECATED')
+		return
 	if basePath == None:
 		basePath = settings.local_path
 	if settings.dry_run:
@@ -1717,10 +1734,236 @@ def seqSave(prefix, rawData, label='disk1', basePath=None):
 	common.output('Wrote: {}'.format(fn))
 	settings._seqSave[label] = settings._seqSave[label] + 1
 
+def cameraExportParametrize(cams, mode="image", options=None):
+	"""
+	This method is a static helper for parametrizing a list of cameras into a
+	pre-defined parameter list for DataExport component. It will assign default
+	parameters based on the camera name.
+	
+	Note: This might throw random errors from the API, but it will work anyway
+	
+	# Arguments
+	
+	cams (list): list of cameras to parametrize
+	mode (enum): defines if it's a image or video based export
+	options (dict): option overlap
+	
+	return dictionary
+	"""
+	if not isinstance(cams, list):
+		cams = [ cams ]
+	
+	obj = []
+	
+	for c in cams:
+		if mode == "image":
+			streamFormat = "jpg"
+			if "segment" in c.lower():
+				streamFormat = "png"
+			elif "depth" in c.lower():
+				streamFormat = "tif"
+		elif mode == "video":
+			streamFormat = "mp4"
+		else:
+			common.output("Unknown parametrization mode: {}".format(mode), 'ERROR')
+			return
+		
+		_options = { "format": streamFormat }
+		
+		if options != None:
+			try:
+				if options['format']:
+					_options = options
+			except:
+				_options = options.copy()
+				_options['format'] = streamFormat
+		
+		obj.append({
+			"target": c,
+			"label": c.split("/")[-1:][0],
+			
+			"exportBBoxes": "true" if 'segment' in c.lower() else "false",
+			"options": _options
+		})
+	
+	return obj
+
+def addDataExport(label='dataExport1', fieldLinks=None, videoLinks=None, imageLinks=None, outputPath=None, enable=True):
+	"""
+	Creates a data export component with optional links to data source points
+	
+	All links are exported in a synchronized fashion, exports will only happen
+	when data from ALL data sources been collected, so the number of exports you
+	can generate depends on the lowest frequency of the defined links.
+	
+	# Arguments
+	
+	label (string): defines the name of the game object container to be creates, defaults to `dataExport1`
+	fieldLinks (list of dict): defines one or more field based exports. defaults to `None`
+	
+	Definition mock:
+	
+	```json
+	[
+		{
+			"target": <game object path where data is available>,
+			"label": <prefix for export filename and/or bus topic>,
+			"componentName": <component where data is available within target>,
+			"fieldName": <field to export>,
+			"options": {
+				<key>: <value>,
+				...
+			}
+		},
+		...
+	]
+	```
+	
+	Example object:
+	
+	```json
+	[
+		{
+			"target": "path/to/object",
+			"label": "object",
+			"componentName": "Transform",
+			"fieldName": "eulerAngles",
+			"options": {
+				"stream_max": "1"
+			}
+		},
+		...
+	]
+	```
+	
+	videoLinks (list of dict): defines one of more cameras to export as video. defaults to `None`
+	imageLinks (list of dict): defines one of more cameras to export as image. defaults to `None`
+	
+	Both `videoLinks` and `imageLinks` share the same definition, the only
+	difference is the parameters they accept, this is defined on the documentation
+	for `DataExport`.
+	
+	Definition mock:
+	
+	```json
+	[
+		{
+			"target": <game object path to camera>,
+			"label": <prefix for export filename and/or bus topic>,
+			"exportBBoxes": <bool that enables bounding box exports>,
+			"options": {
+				<key>: <value>,
+				...
+			}
+			...
+		},
+		...
+	]
+	```
+	
+	outputPath (string): Path to write files, if not defined defaults to `settings.output_path`
+	enable (bool): Automatically enable exporter once everything is setup, defaults to `True`
+	
+	# Note
+	
+	For `videoLinks`, `imageLinks` and `fieldLinks` the dictionary option `options` can contain
+	an abitrary set of parameters compatible with the external module / device / exporter, those
+	could be used on both the component layer and / or exported to the actual external device,
+	commanding the exports.
+	
+	"""
+	if settings.skip_export == True:
+		common.output('Data export is disabled by command line, skipping!', 'WARN')
+		return
+	if outputPath == None:
+		outputPath = settings.output_path
+	
+	common.sendData([
+		'CREATE "{}"'.format(label),
+		'CREATE "{}/exporter"'.format(label),
+		'CREATE "{}/links"'.format(label),
+		'"{}/exporter" ADD Sensors.DataExport'.format(label),
+		
+		'"{}/exporter" SET active true'.format(label),
+		'"{}/links" SET active true'.format(label)
+	], read=True)
+	
+	if fieldLinks != None:
+		for params in fieldLinks:
+			addExportLink(params, 'ReadFieldLink', label)
+	
+	if videoLinks != None:
+		for params in videoLinks:
+			addExportLink(params, 'VideoExportLink', label)
+	
+	if imageLinks != None:
+		for params in imageLinks:
+			addExportLink(params, 'ImageExportLink', label)
+	
+	if enable == True:
+		common.sendData('"{}" SET active true'.format(label))
+
+def pauseDataExport(label='dataExport1'):
+	common.sendData('"{}" SET active false'.format(label))
+def startDataExport(label='dataExport1'):
+	common.sendData('"{}" SET active true'.format(label))
+
+def addExportLink(params, linkType, exportLinks):
+	"""
+	Adds a single export link to an object and back to it's DataExporter.
+	
+	This is a helper method for `addDataExport`
+	
+	# Arguments
+	
+	params (dict): Arbitrary parameter dictionary compatible with the `linkType`
+	linkType (string): Type of link compatible with `DataExport` capabilities
+	exportLinks (list): List of `DataExport` components to link this export against
+	
+	"""
+	if not isinstance(exportLinks, list):
+		exportLinks = [ exportLinks ]
+	
+	buf = []
+	options = None
+	
+	for k, v in params.items():
+		if k == 'options':
+			options = v
+			continue
+		
+		if isinstance(v, bool):
+			v = "true" if v == True else "false"
+		
+		buf.append('{} "{}"'.format(k, v))
+	
+	if options != None:
+		_options = []
+		
+		for k, v in options.items():
+			_options.append('"{}->{}"'.format(k, v))
+		
+		options = ' '.join(_options)
+	
+	for l in exportLinks:
+		obj = '{}/links/{}'.format(l, common.genID())
+		
+		common.sendData([
+			'CREATE "{}"'.format(obj),
+			'"{}" ADD Sensors.{}'.format(obj, linkType),
+			'"{}" SET Sensors.{} {} enabled true'.format(obj, linkType, ' '.join(buf)),
+			'"{}/exporter" PUSH Sensors.DataExport {} "{}"'.format(l, common.export2list[linkType], obj),
+			'"{}" EXECUTE Sensors.{} SetOptions {}'.format(obj, linkType, options) if options != None else '',
+			'"{}" SET active true'.format(obj)
+		])
+
 def addImageExport(lst, label='imageExport1', params=None):
 	if common.versionCompare(settings._simulator_version, '18.07.19.0000', '<'):
 		common.output('Your simulator version is not compatible with `imageExports`', 'ERROR')
 		return;
+	if common.versionCompare(settings._simulator_version, '18.07.26.0000', '>'):
+		common.output('Your simulator version is not compatible with `imageExports`, use `addDataExport` instead', 'DEPRECATED')
+		return
 	
 	p = []
 	
@@ -1762,6 +2005,9 @@ def addVideoExport(lst, label='videoExport1', params=None):
 	if common.versionCompare(settings._simulator_version, '18.07.05.0000', '<'):
 		common.output('Your simulator version is not compatible with `videoExports`', 'ERROR')
 		return;
+	if common.versionCompare(settings._simulator_version, '18.07.26.0000', '>'):
+		common.output('Your simulator version is not compatible with `videoExports`, use `addDataExport` instead', 'DEPRECATED')
+		return
 	
 	p = []
 	
@@ -1810,6 +2056,9 @@ def addDiskOutput(lst, label='disk1', component='RenderTextureLink'):
 	creates a link between the texture this camera is rendering and a disk output.
 	
 	"""
+	if common.versionCompare(settings._simulator_version, '18.07.05.0000', '>'):
+		common.output('Disk module exports are deprecated on your version of the simulator. Please migrate to `DataExport`.', 'DEPRECATED')
+		return
 	if settings.skip_disk:
 		return
 	common.sendData('"{}" SET active false'.format(label))
@@ -2226,6 +2475,10 @@ def addLidar(
 	])
 
 def setupROSTopics(labelRoot='ROS2', writeLinks=None, readLinks=None):
+	if common.versionCompare(settings._simulator_version, '18.07.05.0000', '>'):
+		common.output('`ROS` topics been deprecated in favor to `addDataExport`', 'DEPRECATED')
+		return
+	
 	buf = [
 		'CREATE "{}"'.format(labelRoot),
 		'"{}" SET active false'.format(labelRoot),
@@ -3144,6 +3397,7 @@ def spawner(
 			'"{}" ADD RandomProps.PropArea'.format(obj)
 		], read=False)
 		
+		
 		# NOTE: This is added to the parent object, not container
 		if thermalObjectBehaviour != None:
 			common.sendData([
@@ -3493,7 +3747,7 @@ def spawnDroneObjs(
 	treesLimit=[20,50], buildingsRadius=120, buildingsInnerRadius=60, treesRadius=80, treesInnerRadius=10, animalsRadius=50, animalsInnerRadius=5,
 	buildingsLimit=[10,50], birdsLimit=[25,100], carsLimit=[5,15], dronesLimit=[20,50], animalsLimit=[10,50],
 	prefix='spawner', container='container',
-	animalsTags=['animal'], treesTags=['tree'], buildingsTags=['building'], birdsTags=['bird'], carsTags=['car'], dronesTags=['drones'],
+	animalsTags=['animal'], treesTags=['tree'], buildingsTags=['building'], birdsTags=['bird'], carsTags=['car'], dronesTags=['drone'],
 	animals_colors=None, trees_colors=None, buildings_colors=None, birds_colors=None, cars_colors=None, dronesColors=None,
 	animalsPartsNames=None, treesPartsNames=None, buildingsPartsNames=None, birdsPartsNames=None, carsPartsNames=None, dronesPartsNames=None,
 	groundSegment=None, treesSegment=None, buildingsSegment=None, birdsSegment=None, carsSegment=None, dronesSegment='DRONE', animalsSegment=None,
@@ -3551,7 +3805,8 @@ def spawnDroneObjs(
 		])
 	
 	spawnRadiusGeneric(['city/ground'], tags=['ground'], limit=300, radius=150, innerradius=0, scale=[3,3,3], position=[0,0,0], collisionCheck=False, prefix=prefix, seed=seed, thermalObjectBehaviour=groundThermalObjectBehaviour, thermalObjectOverride=True if groundThermalObjectBehaviour != None else False)
-	spawnRadiusGeneric(['humans'], tags=['human, +random'], suffix='_0', limit=40, radius=30, innerradius=2, position=[0,0,0], collisionCheck=False, prefix=prefix, seed=seed, thermalObjectBehaviour=humansThermalObjectBehaviour, thermalObjectOverride=True if humansThermalObjectBehaviour != None else False)
+	# spawnRadiusGeneric(['humans'], tags=['human, +random'], suffix='_0', limit=40, radius=30, innerradius=2, position=[0,0,0], collisionCheck=False, prefix=prefix, seed=seed, thermalObjectBehaviour=humansThermalObjectBehaviour, thermalObjectOverride=True if humansThermalObjectBehaviour != None else False)
+	spawnRadiusGeneric(['humans'], tags=['human'], suffix='_0', limit=40, radius=30, innerradius=2, position=[0,0,0], collisionCheck=False, prefix=prefix, seed=seed, thermalObjectBehaviour=humansThermalObjectBehaviour, thermalObjectOverride=True if humansThermalObjectBehaviour != None else False)
 	spawnRadiusGeneric(['city/nature/trees'], partsNames=treesPartsNames, segmentationClass=treesSegment, randomColors=trees_colors, tags=treesTags, collisionCheck=False, limit=random.randint(treesLimit[0], treesLimit[1]), radius=treesRadius, innerradius=treesInnerRadius, position=[0,0,0], prefix=prefix, seed=seed, thermalObjectBehaviour=treesThermalObjectBehaviour, thermalObjectOverride=True if treesThermalObjectBehaviour != None else False)
 	spawnRadiusGeneric(['city/buildings'], partsNames=buildingsPartsNames, segmentationClass=buildingsSegment, randomColors=buildings_colors, tags=buildingsTags, stickToGround=False, collisionCheck=False, limit=random.randint(buildingsLimit[0], buildingsLimit[1]), radius=buildingsRadius, innerradius=buildingsInnerRadius, position=[0,0,0], prefix=prefix, seed=seed, thermalObjectBehaviour=buildingsThermalObjectBehaviour, thermalObjectOverride=True if buildingsThermalObjectBehaviour != None else False)
 	spawnRadiusGeneric(['animals/generic'], partsNames=animalsPartsNames, segmentationClass=animalsSegment, randomColors=animals_colors, tags=animalsTags, stickToGround=False, collisionCheck=False, limit=random.randint(animalsLimit[0], animalsLimit[1]), radius=animalsRadius, innerradius=animalsInnerRadius, position=[0,0,0], prefix=prefix, seed=seed, thermalObjectBehaviour=animalsThermalObjectBehaviour, thermalObjectOverride=True if animalsThermalObjectBehaviour != None else False)
@@ -3562,7 +3817,7 @@ def spawnDroneObjs(
 
 	spawnRadiusGeneric(['animals/birds'], partsNames=birdsPartsNames, container=container, segmentationClass=birdsSegment, randomColors=birds_colors, tags=birdsTags, limit=random.randint(birdsLimit[0], birdsLimit[1]), radius=birdsRadius, innerradius=birdsInnerRadius, position=[0,random.randint(15,95),0], prefix=prefix, seed=seed, thermalObjectBehaviour=birdsThermalObjectBehaviour, thermalObjectOverride=True if birdsThermalObjectBehaviour != None and not any('thermal' in s for s in birdsTags) and birdsLimit[1] > 0else False)
 	spawnRadiusGeneric(['cars'], partsNames=carsPartsNames, container=container, segmentationClass=carsSegment, randomColors=cars_colors, tags=carsTags, collisionCheck=False, limit=random.randint(carsLimit[0], carsLimit[1]), radius=carsRadius, innerradius=carsInnerRadius, position=[0,0,0], prefix=prefix, seed=seed, thermalObjectBehaviour=carsThermalObjectBehaviour, thermalObjectOverride=True if carsThermalObjectBehaviour != None and not any('thermal' in s for s in carsTags) and carsLimit[1] > 0 else False)
-	spawnRadiusGeneric(['roadsigns'], tags=['roadsign'], container=container, limit=250, radius=80, collisionCheck=False, innerradius=15, position=[0,0,0], prefix=prefix, seed=seed, thermalObjectBehaviour=signsThermalObjectBehaviour, thermalObjectOverride=True if signsThermalObjectBehaviour != None else False)
+	spawnRadiusGeneric(['roadsigns'], tags=['sign'], container=container, limit=250, radius=80, collisionCheck=False, innerradius=15, position=[0,0,0], prefix=prefix, seed=seed, thermalObjectBehaviour=signsThermalObjectBehaviour, thermalObjectOverride=True if signsThermalObjectBehaviour != None else False)
 	
 	if dronesLimit[1] > 0:
 		# spawnRadiusGeneric(['drones'], segmentationClass=dronesSegment, randomColors=dronesColors, tags=dronesTags, uglyFix=False, limit=random.randint(dronesLimit[0], dronesLimit[1]), radius=random.randint(30,50), innerradius=0, position=[0,0,0], prefix=prefix, seed=seed)

@@ -88,8 +88,10 @@ def run():
 			treesBase=6.41, treesBandwidth=50, treesMedian=.18, treesLeafsVariance=10
 		)
 		
-		# helpers.globalDiskSetup()
-		# helpers.addDiskOutput(mycams)
+		# WARNING: Deprecated in favor to data export module
+		if common.versionCompare(settings._simulator_version, '18.07.26.0000', '<'):
+			helpers.globalDiskSetup()
+			helpers.addDiskOutput(mycams)
 		
 		# create thermal animals around humans goal area
 		helpers.spawnRadiusGeneric(
@@ -143,10 +145,19 @@ def run():
 			heatinessValue=60
 		)
 		
-		helpers.addImageExport(mycams, params={
-			"streamFormat": ["jpg", "jpg", "png", "tif" ],
-			"exportBBoxes": True
-		})
+		if common.versionCompare(settings._simulator_version, '18.07.26.0000', '>='):
+			helpers.addDataExport(
+				imageLinks=helpers.cameraExportParametrize(mycams, "image"),
+				fieldLinks=[
+					{
+						"target": "cameras",
+						"label": "cameraPosition",
+						"componentName": "Transform",
+						"fieldName": "position",
+						"onChange": True
+					}
+				]
+			)
 	
 	# warm up
 	# helpers.doRender(mycams)
@@ -176,7 +187,9 @@ def run():
 			)
 		])
 		
-		# helpers.takeSnapshot(mycams, autoSegment=True, forceNoop=True)
+		# WARNING: Deprecated in favor to data export module
+		if common.versionCompare(settings._simulator_version, '18.07.26.0000', '<'):
+			helpers.takeSnapshot(mycams, autoSegment=True)
 		
 		# increments
 		for k, v in enumerate(position_incr):

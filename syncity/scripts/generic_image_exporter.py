@@ -18,6 +18,11 @@ Generic image exporter
 	in the middle takes are of aligning the data so you have neat timestamped outputs.
 '''
 
+def minVersion():
+	return '18.07.10.0000'
+def maxVersion():
+	return '18.07.25.0000'
+
 def args(parser):
 	try:
 		parser.add_argument('--stream_format', action='append', nargs='+', default=None, help='Image output format (OCV2 compatible), you should specify one per camera, for example --stream_format jpg tif png; If you don\'t send any it will default to jpg')

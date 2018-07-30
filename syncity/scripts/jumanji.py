@@ -20,20 +20,30 @@ def args(parser):
 		parser.add_argument('--loop_limit', type=int, default=500, help='Defines a limit of iterations for exporting')
 	except: pass
 
+def minVersion():
+	return '18.07.26.0000'
+
 def run():
 	loop = 0
 	mycams = ['Camera/Thermal', 'Camera/Segmentation']
 	
 	if settings.skip_setup == False:
-		helpers.addImageExport(mycams, params={
-			"streamFormat": ["jpg", "png"],
-			"exportBBoxes": True
-		})
+		helpers.addDataExport(
+			imageLinks=helpers.cameraExportParametrize(mycams, "image"),
+			fieldLinks=[
+				{
+					"target": "Camera",
+					"label": "cameraPosition",
+					"componentName": "Transform",
+					"fieldName": "localPosition",
+					"onChange": True
+				}
+			]
+		)
 	
 	# loop changing camera positions with random agc bounduaries
 	while loop < settings.loop_limit:
 		common.sendData([
-			'"Camera" SET Transform localPosition (-3~3 0.5~2 -30~-15)',
 			'"Camera" SET Transform localEulerAngles (-2~0 -20~20 -3~3)',
 			'"Humans" SET RandomProps.Frustum minDistance 5~7',
 			'"Humans" SET Thermal.Spawners.ReplaceThermalProfiles profile.heatiness.value 17~40',
@@ -72,4 +82,6 @@ def run():
 #				'"Bicycles" SET active true',
 			])
 		
+		# intentionally last as this will trigger data export
+		common.sendData('"Camera" SET Transform localPosition (-3~3 0.5~2 -30~-15)')
 		common.output('Loop {} ({}%)'.format(loop, round(100 * (loop / settings.loop_limit),2)))

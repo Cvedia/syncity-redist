@@ -55,9 +55,62 @@
 	"globalCameraPosition": [0, 1.78, 0.3],
 	"globalCameraRotation": [0, 0, 0],
 	
-	"videoExport": {
-		"streamLength": 300,
-		"streamProfile": "high",
-		"streamFPS": 30
+	"dataExport": {
+		"mode": "video",
+		
+		"video": {
+			"stream_max": 300,
+			"profile": "high",
+			"fps": 30
+		},
+		
+		"image": {
+			"stream_max": 1
+		},
+		
+		"fields": [
+			{
+				"label": "distanceTravelled",
+				"target": "mainCar",
+				"componentName": "OSVehicle",
+				"fieldName": "distanceTravelled"
+			},
+			{
+				"label": "speed",
+				"target": "mainCar",
+				"componentName": "OSVehicle",
+				"fieldName": "currentSpeed"
+			},
+			{
+				"label": "velocityVector",
+				"target": "mainCar",
+				"componentName": "Rigidbody",
+				"fieldName": "velocity"
+			},
+			{
+				"label": "angularVelocity",
+				"target": "mainCar",
+				"componentName": "Rigidbody",
+				"fieldName": "angularVelocity"
+			},
+			{
+				"label": "angularDrag",
+				"target": "mainCar",
+				"componentName": "Rigidbody",
+				"fieldName": "angularDrag"
+			},
+			{
+				"label": "position",
+				"target": "mainCar",
+				"componentName": "Transform",
+				"fieldName": "position"
+			},
+			{
+				"label": "rotation",
+				"target": "mainCar",
+				"componentName": "Transform",
+				"fieldName": "eulerAngles"
+			}
+		]
 	}
 }

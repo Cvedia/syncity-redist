@@ -15,13 +15,13 @@ import random
 
 from syncity import common, settings_manager
 
-SYNCITY_VERSION = '18.07.18.1130'
+SYNCITY_VERSION = '18.07.30.1820'
 SIMULATOR_MIN_VERSION = '18.04.23.0000'
 
 print ('SynCity toolbox - v{}\nCopyright (c) 2016-{} CVEDIA PVE Ltd\n'.format(SYNCITY_VERSION, datetime.date.today().year))
 
 if sys.version_info[0] < 3:
-	print ('*** WARNING: You\'re using a old version of python that is not maintained by this SDK, some functions might fail. Run at your own risk! Please use python 3+\n\n')
+	print ('*** WARNING: You\'re using a old version of python that is not maintained by this SDK, some functions might fail. Run at your own risk! Please use python 3.6+\n\n')
 
 parser = argparse.ArgumentParser(
 	formatter_class=argparse.RawDescriptionHelpFormatter,
@@ -74,6 +74,7 @@ parser.add_argument('--async', action='store_true', default=False, help='Send so
 
 parser.add_argument('--skip_init', action='store_true', default=False, help='Disables telnet init sequence')
 parser.add_argument('--skip_disk', action='store_true', default=False, help='Disables disk export completly')
+parser.add_argument('--skip_export', action='store_true', default=False, help='Disables data exports completly')
 parser.add_argument('--skip_setup', action='store_true', default=False, help='Skip script setup and go straight to data extraction')
 parser.add_argument('--skip_queue', action='store_true', default=False, help='Skips all queue waits, this might cause asyncronous states for exports -- NOT RECOMMENDED')
 
@@ -215,6 +216,24 @@ for s in stack:
 			
 			# this should work with both python 2.7 and 3+
 			import_script = __import__('syncity.scripts.{}'.format(subject), fromlist=['syncity.scripts'])
+			
+			if not settings.dry_run:
+				try:
+					mv = import_script.minVersion()
+					if common.versionCompare(settings._simulator_version, mv, '<'):
+						syncity.common.output('This script requires simulator newer than {}, you\'re running {}. Aborting!'.format(mv, settings._simulator_version), 'OBSOLETE')
+						sys.exit(1)
+				except:
+					pass
+				
+				try:
+					mv = import_script.maxVersion()
+					if common.versionCompare(settings._simulator_version, mv, '>'):
+						syncity.common.output('This script requires simulator older than {}, you\'re running {}. Aborting!'.format(mv, settings._simulator_version), 'OBSOLETE')
+						sys.exit(1)
+				except:
+					pass
+			
 			import_script.run()
 			common.flushBuffer()
 		

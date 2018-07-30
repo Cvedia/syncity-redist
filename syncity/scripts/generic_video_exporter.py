@@ -26,6 +26,11 @@ Generic image exporter
 	files on your export path,
 '''
 
+def minVersion():
+	return '18.07.10.0000'
+def maxVersion():
+	return '18.07.25.0000'
+
 def args(parser):
 	try:
 		parser.add_argument('--stream_profile', default="high", help='Defines encoding profile')

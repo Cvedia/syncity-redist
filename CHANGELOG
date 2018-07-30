@@ -3,6 +3,35 @@ This change log follows YYMMDD timestamps which are also the version number for
 both the SDK and the simulator.
 --------------------------------------------------------------------------------
 
+# 180730
+
+- New DataExport module, standarizing all types of data exports into a single component
+- Arbitrary data types (float, int, vector3, etc) exports to json support
+- Data exports are now timestamped individually, allowing for very precise data synchronization
+- Mixed data exports (video, image, data) in the same synchronizer package are now supported
+- SDK DataExport function support and deprecation of old methods
+- SDK graceful deprecation of VideoExport and ImageExport methods
+- SDK misc refactoring
+- DataExports can now be paused and resumed at any point
+- Forest thermal script changes; Added new data export module support
+- Endless runner script changes; Added new data export module support; Added support to export IMU and other vector data;
+- Camping script changes
+- Fixed Jumanji Scene and added new data export module support
+- Fixed issue causing all RandomArea spawners from going into a endless loop when toggling enabled / disabled
+- Fixed issues with aerial_cars_depth_thermal_easier and added new data export module support
+- Added generic exporters for video and image
+- Shopping mall scene reviews
+
+* Disk module has been deprecated in favor to DataExport
+* Segmentation snapshot telnet based json helper methods been deprecated in favor to DataExport, although this still available via telnet
+* ROS exports been temporarly disabled in this release as it's being refactored to the ICE bus
+
+# 180723:
+
+- Documentation updated
+- Fixed critical issues with endless runner scene
+- Fixed critical issues with obsolete components not being properly redirected
+
 # 180720:
 
 - New image export rollout among with json exporter per-frame compatibility

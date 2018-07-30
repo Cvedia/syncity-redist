@@ -6,28 +6,33 @@ settings = settings_manager.Singleton()
 
 def help():
 	return '''\
-Generic exporter
-	Loops in a configurable frequency a export loop containing configurable cameras.
-	This script will precisely keep the frequency set, taking in consideration the
-	time for replies from the simulator.
+Generic image exporter
+	Creates a image exporter object bound to one or more cameras.
+	If you specify a segmentation camera that produces bounding boxes, the system
+	will automatically export them as .json files.
+	
+	You can also specify a --stream_format to define the output image encoding,
+	for example, if you want lossless images, use --stream_format png
+	
+	The exporter will export data as fast as the simulator produces it, a synchronizer
+	in the middle takes are of aligning the data so you have neat timestamped outputs.
 '''
 
 def args(parser):
 	try:
-		parser.add_argument('--loop_limit', type=int, default=500, help='Defines a limit of iterations for exporting')
+		parser.add_argument('--mode', choices=["image", "video"], default="image", help='Defines export mode')
 	except: pass
 	try:
-		parser.add_argument('--loop_frequency', type=float, default=1.0, help='Defines a export frequency, in seconds, when set to zero will export as fast as possible.')
-	except: pass
-	try:
-		parser.add_argument('--camera', action='append', nargs='+', default=None, help='Defines a list of one of more cameras relevant to the scene')
+		parser.add_argument('--camera', action='append', nargs='+', default=None, help='Defines a list of one of more cameras to be exported, those will be syncronized by default, bounding box support is automatic')
 	except: pass
 	try:
 		parser.add_argument('--wait', type=float, default=0, help='Wait, in seconds, before starting the loop')
 	except: pass
 
+def minVersion():
+	return '18.07.26.0000'
+
 def run():
-	loop = 0
 	mycams = []
 	
 	if settings.camera != None:
@@ -36,38 +41,20 @@ def run():
 				mycams.extend(c)
 			else:
 				mycams.append(c)
-	
-	idx = [i for i, s in enumerate(mycams) if 'segment' in s.lower()]
-	autoSegment = False if len(idx) == 0 else True
-	
+		
 	if settings.wait > 0:
 		common.output('Waiting {}s to start'.format(settings.wait))
 		time.sleep(settings.wait)
 	
 	common.waitQueue()
 	
-	while loop < settings.loop_limit:
-		if settings.loop_frequency > 0:
-			_start = time.time()
-		
-		helpers.takeSnapshot(mycams, autoSegment=autoSegment)
-		_sleep = 0
-		
-		if settings.dry_run:
-			if settings.loop_frequency > 0:
-				common.sendData('SLEEP {}'.format(settings.loop_frequency))
-		else:
-			if settings.loop_frequency > 0:
-				_sleep = time.time() - _start
-				
-				# check if it took longer than the expected wait time
-				if _sleep < settings.loop_frequency:
-					_sleep = settings.loop_frequency - _sleep
-				else:
-					_sleep = 0
-		
-		loop += 1
-		common.output('Loop {} ({}%), wait: {}s'.format(loop, round(100 * (loop / settings.loop_limit),2), _sleep))
-		
-		if _sleep > 0:
-			time.sleep(_sleep)
+	if settings.mode == "image":
+		helpers.addDataExport(
+			imageLinks=helpers.cameraExportParametrize(mycams, "image")
+		)
+	elif settings.mode == "video":
+		helpers.addDataExport(
+			videoLinks=helpers.cameraExportParametrize(mycams, "video")
+		)
+	
+	common.output('Done')

@@ -25,8 +25,10 @@ def run():
 		helpers.addCameraRGB(width=1024, height=768, pp='EnviroFX')
 		helpers.addCameraSeg(segments=['Drone'], lookupTable=[['Drone', 'red']])
 		helpers.addCameraDepth(width=1024, height=768, depthBuffer='simple')
-		helpers.globalDiskSetup()
-		helpers.addDiskOutput(mycams)
+		
+		if common.versionCompare(settings._simulator_version, '18.07.26.0000', '<'):
+			helpers.globalDiskSetup()
+			helpers.addDiskOutput(mycams)
 		
 		"""
 		helpers.spawnRadiusGeneric(
@@ -53,6 +55,7 @@ def run():
 			collisionCheck=False
 		)
 		
+		"""
 		common.sendData([
 			'"{}" SET Sensors.RenderCamera alwaysOn true'.format(mycams[0]),
 			'''"{}" SET PostProcessing.PostProcessingBehaviour
@@ -62,6 +65,20 @@ def run():
 				profile.motionBlur.settings.frameBlending {}
 			'''.format(mycams[0], 360, 4, .064)
 		])
+		"""
+		if common.versionCompare(settings._simulator_version, '18.07.26.0000', '>'):
+			helpers.addDataExport(
+				imageLinks=helpers.cameraExportParametrize(mycams, "image"),
+				fieldLinks=[
+					{
+						"target": obj,
+						"label": "subject",
+						"componentName": "Transform",
+						"fieldName": "eulerAngles",
+						"onChange": True
+					}
+				]
+			)
 		
 		"""
 			'"cameras/cameraRGB" ADD UnityStandardAssets.ImageEffects.motionBlur',
@@ -99,4 +116,6 @@ def run():
 		])
 		
 		a_y = a_y + displ_y
-		helpers.takeSnapshot(mycams, True)
+		
+		if common.versionCompare(settings._simulator_version, '18.07.26.0000', '<'):
+			helpers.takeSnapshot(mycams, True)

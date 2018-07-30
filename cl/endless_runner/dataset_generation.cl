@@ -2,7 +2,7 @@
 // in order to export data you must use it with a VideoExport or ImageExport
 // module after the scene is setup, for example:
 //
-// python syncity.py -r cl/endless_runner/dataset_generation.cl -s generic_image_exporter --camera mainCar/cameras/cameraThermal1 mainCar/cameras/cameraSegmentation1
+// python syncity.py -r cl/endless_runner/dataset_generation.cl -s generic_exporter --camera mainCar/cameras/cameraThermal1 mainCar/cameras/cameraSegmentation1 --mode image
 
 "QualitySettings" SET shadowDistance 100 shadowCascades 2 shadows 2
 "Config.instance" SET physicsEnabled true

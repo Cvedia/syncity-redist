@@ -17,10 +17,10 @@ def args(parser):
 		parser.add_argument('--loop_limit', type=int, default=500, help='Defines a limit of iterations for exporting')
 	except: pass
 
+def minVersion():
+	return '18.07.00.0000'
+
 def run():
-	if settings.dry_run:
-		return
-	
 	if settings.isset('options') == None:
 		common.output('No --options sent!', 'ERROR')
 		return
@@ -47,9 +47,9 @@ def run():
 		# find, preload and initalize tiles
 		tiles = []
 		i = 0
-
+		
 		common.sendData('"Config.instance" SET physicsEnabled true')
-
+		
 		for k, v in options['tiles'].items():
 			tile = 'tile{}'.format(i)
 			common.sendData([
@@ -334,11 +334,6 @@ def run():
 				])
 		
 		if 'THERMAL' in options['flags']:
-
-			common.sendData([
-				'"Thermal.ProbeUpdateScheduler.instance" SET Thermal.ProbeUpdateScheduler disableProbesRendering true',
-			])
-
 			for idx in options['cam_mask']['THERMAL']:
 				cam = options['cams'][idx]
 				cam_s = idx.split('/')[-1]
@@ -435,9 +430,12 @@ def run():
 					),
 				])
 		
-		if not options['videoExport']:
-			helpers.globalDiskSetup()
-			helpers.addDiskOutput(mycams)
+		try:
+			if common.versionCompare(settings._simulator_version, '18.07.26.0000', '<') and not options['videoExport']:
+				helpers.globalDiskSetup()
+				helpers.addDiskOutput(mycams)
+		except KeyError:
+			pass
 		
 		helpers.setTrafficEvents(label=options['trafficEventsLabel'], network=options['roadNetworkLabel'], create=True)
 		
@@ -458,42 +456,78 @@ def run():
 				# '"EnviroSky" EXECUTE EnviroSky ChangeWeather "{}"'.format(options['weatherProfile'])
 			])
 		
-		# ros - must run after cameras are rendering
 		try:
+			# ros - must run after cameras are rendering
 			if settings.disable_ros == False and options['ros']:
 				helpers.setupROSTopics(
 					writeLinks=options['ros']['writeLinks'],
 					readLinks=options['ros']['readLinks']
 				)
-		except:
+		except KeyError:
+			common.output('No ROS configuration found', 'DEBUG')
+		
+		try:
+			# deprecated as of 18.07.26
+			if options['videoExport']:
+				idx = [i for i, s in enumerate(mycams) if 'segment' in s.lower()]
+				autoSegment = False if len(idx) == 0 else True
+				
+				common.waitQueue()
+				
+				_params = {
+					"exportBBoxes": False # autoSegment
+				}
+				
+				common.deep_merge_dicts(_params, options['videoExport'])
+				
+				helpers.addVideoExport(
+					mycams,
+					params=_params
+				)
+		except KeyError:
 			pass
 		
-		if options['videoExport']:
-			idx = [i for i, s in enumerate(mycams) if 'segment' in s.lower()]
-			autoSegment = False if len(idx) == 0 else True
-			
-			common.waitQueue()
-			
-			_params = {
-				"exportBBoxes": False # autoSegment
-			}
-			
-			common.deep_merge_dicts(_params, options['videoExport'])
-			
-			helpers.addVideoExport(
-				mycams,
-				params=_params
-			)
+		try:
+			# replacement for disk and videoExport
+			if common.versionCompare(settings._simulator_version, '18.07.26.0000', '>') and options['dataExport']:
+				_fields = options['dataExport']['fields'].copy()
+				
+				# copy `options['dataExport'][mode]` options to `options['dataExport']['fields'][]['options']`
+				try:
+					for p in _fields:
+						try:
+							if p['options']:
+								continue
+						except KeyError:
+							p['options'] = options['dataExport'][options['dataExport']['mode']].copy()
+				except KeyError:
+					pass
+				
+				if options['dataExport']['mode'] == "image":
+					helpers.addDataExport(
+						imageLinks=helpers.cameraExportParametrize(mycams, "image", options['dataExport'][options['dataExport']['mode']]),
+						fieldLinks=_fields
+					)
+				else:
+					helpers.addDataExport(
+						videoLinks=helpers.cameraExportParametrize(mycams, "video", options['dataExport'][options['dataExport']['mode']]),
+						fieldLinks=_fields
+					)
+		except KeyError:
+			common.output('No dataExport configuration found', 'DEBUG')
 	
 	# misc
-	if not options['videoExport']:
-		common.sendData([
-			'"disk1" SET Sensors.Disk path "{}"'.format(settings.output_path),
-			'"disk1" SET active true',
-			# '"disk1" SET Sensors.Disk counter 1',
-		])
+	try:
+		if common.versionCompare(settings._simulator_version, '18.07.26.0000', '<') and not options['videoExport']:
+			common.sendData([
+				'"disk1" SET Sensors.Disk path "{}"'.format(settings.output_path),
+				'"disk1" SET active true',
+				# '"disk1" SET Sensors.Disk counter 1',
+			])
+	except KeyError:
+		pass
 	
-	common.sendData('"UI.WindowController.instance" EXECUTE UpdateHierarchy')
+	# common.sendData('"UI.WindowController.instance" EXECUTE UpdateHierarchy')
 	
 	if settings.setup_only == True:
 		return

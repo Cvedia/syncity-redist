@@ -22,23 +22,41 @@ My script description
 	- blah
 '''
 
+def minVersion():
+	"""
+	(optional) defines a minimum supported version of the simulator.
+	"""
+	return '00.00.00.0000'
+
+def maxVersion():
+	"""
+	(optional) defines a maximum supported version of the simulator.
+	"""
+	return '99.99.99.2359'
+
 def args(parser):
 	"""
-	If required, you can define specific command line configurables
+	(optional) If required, you can define specific command line configurables
 	
 	Those parameters will become available for `run()` as `settings.<name>`. Additionally
 	all options set will also appear on --help / -h
+	
+	Usually it's a good idea to wrap it around try / except to avoid exceptions with
+	existing parameters
 	
 	# Parameters
 	
 	parser (argparse)
 	
 	"""
-	parser.add_argument('--hallo', help='Defines an arbitrary global parameter')
+	try:
+		parser.add_argument('--hallo', help='Defines an arbitrary global parameter')
+	except:
+		pass
 
 def run():
 	"""
-	Entry point function, aka `main`
+	(required) Entry point function, aka `main`
 	"""
 	
 	# keeps created objects on scene after exit
