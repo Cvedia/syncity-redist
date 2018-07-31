@@ -1883,6 +1883,7 @@ def addDataExport(label='dataExport1', fieldLinks=None, videoLinks=None, imageLi
 		'CREATE "{}/exporter"'.format(label),
 		'CREATE "{}/links"'.format(label),
 		'"{}/exporter" ADD Sensors.DataExport'.format(label),
+		'"{}/exporter" SET Sensors.DataExport streamOutput "{}"'.format(label, outputPath),
 		
 		'"{}/exporter" SET active true'.format(label),
 		'"{}/links" SET active true'.format(label)
