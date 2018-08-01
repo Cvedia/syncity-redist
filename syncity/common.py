@@ -939,6 +939,27 @@ def mkdirP(path):
 		else:
 			raise
 
+def addStack(target, sType):
+	"""
+	Adds an arbitrary target to main execution stack.
+	This allows for dynamic stack shaping from within the execution loop.
+	
+	# Arguments
+	
+	target (string): Defines target, a script, cl, path, or whatever main engine is capable of running
+	sType (string): Type of target, supported types are defined under syncity.py main loop.
+	
+	# Example
+	
+	`common.addStack("generic_exporter", "script")`
+	
+	Adds the `generic_exporter` script to current stack as the immediate next in execution order
+	
+	"""
+	if not sType in settings._stack:
+		settings._stack.append(sType)
+	settings[sType][settings._idx[sType]].append(target)
+
 def genID():
 	return str(uuid.uuid4())
 

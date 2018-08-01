@@ -15,7 +15,7 @@ import random
 
 from syncity import common, settings_manager
 
-SYNCITY_VERSION = '18.07.30.1820'
+SYNCITY_VERSION = '18.08.01.1909'
 SIMULATOR_MIN_VERSION = '18.04.23.0000'
 
 print ('SynCity toolbox - v{}\nCopyright (c) 2016-{} CVEDIA PVE Ltd\n'.format(SYNCITY_VERSION, datetime.date.today().year))
@@ -132,13 +132,13 @@ settings._interactive = False
 
 syncity.common.init()
 
-stack = common.findArgOrder([
+settings._stack = common.findArgOrder([
 	{'id': 'run', 'args': ['-r', '--run']},
 	{'id': 'script', 'args': ['-s', '--script']},
 	{'id': 'tool', 'args': ['-t', '--tool']}
 ])
 
-stack_size = len(stack)
+settings._stack_size = len(settings._stack)
 
 for k in args.__dict__:
 	# print('{}: {}'.format(k, args.__dict__[k]))
@@ -160,7 +160,7 @@ else:
 	if settings.local_path[-1:] != '/':
 		settings.local_path = settings.local_path + '/'
 
-if stack_size == 0 and settings.version == False:
+if settings._stack_size == 0 and settings.version == False:
 	common.output('Nothing to run, aborting!', 'ERROR')
 	sys.exit(0)
 elif settings.version == True:
@@ -191,20 +191,20 @@ if settings.run != None or settings.script != None:
 	
 	syncity.common.flushBuffer()
 
-idx = { 'run': 0, 'script': 0, 'tool': 0 }
+settings._idx = { 'run': 0, 'script': 0, 'tool': 0 }
 ran = 1
 
-for s in stack:
-	common.output('[{}% {}/{}] Running stack: {}'.format(round(100 * (ran / stack_size), 2), ran, stack_size, s))
+for s in settings._stack:
+	common.output('[{}% {}/{}] Running stack: {}'.format(round(100 * (ran / settings._stack_size), 2), ran, settings._stack_size, s))
 	
 	if s == 'run':
-		for subject in settings.run[idx['run']]:
+		for subject in settings.run[settings._idx['run']]:
 			syncity.common.output('Running command line script {} {}...'.format(subject.name, syncity.common.md5(subject.name)))
 			syncity.common.runCL(subject.name)
 		
-		idx['run'] += 1
+		settings._idx['run'] += 1
 	elif s == 'script':
-		for subject in settings.script[idx['script']]:
+		for subject in settings.script[settings._idx['script']]:
 			if subject[-3:] == '.py':
 				subject = subject[:-3]
 			
@@ -237,9 +237,9 @@ for s in stack:
 			import_script.run()
 			common.flushBuffer()
 		
-		idx['script'] += 1
+		settings._idx['script'] += 1
 	elif s == 'tool':
-		for subject in settings.tool[idx['tool']]:
+		for subject in settings.tool[settings._idx['tool']]:
 			if subject[-3:] == '.py':
 				subject = subject[:-3]
 			
@@ -248,7 +248,7 @@ for s in stack:
 			import_tool = __import__('syncity.tools.{}'.format(subject), fromlist=['syncity.tools'])
 			import_tool.run()
 		
-		idx['tool'] += 1
+		settings._idx['tool'] += 1
 	else:
 		raise 'Trying to run unknown stack type: {}'.format(s)
 	

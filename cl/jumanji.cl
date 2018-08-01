@@ -177,7 +177,7 @@ CREATE "Misc"
 
 CREATE "Humans"
 "Humans" SET Transform localPosition (10 0 -10)
-"Humans" ADD Segmentation.Class Segmentation.Spawners.Entity Humans.Spawners.RandomPose
+"Humans" ADD Segmentation.Class Segmentation.Spawners.Entity Humans.Spawners.RandomHumans Humans.Spawners.RandomPose
 "Humans" PUSH Humans.Spawners.RandomPose clips ASSET "Humans/animations/Walk" FROM "humans" ASSET "Humans/animations/Run" FROM "humans" ASSET "Humans/animations/LookingAroundNervously" FROM "humans" ASSET "Humans/animations/LeanAgainstWall3" FROM "humans" ASSET "Humans/animations/StandingAngry" FROM "humans" ASSET "Humans/animations/LookingAround" FROM "humans" ASSET "Humans/animations/LeanAgainstWall2" FROM "humans" ASSET "Humans/animations/Sitting4" FROM "humans" ASSET "Humans/animations/Waving" FROM "humans" ASSET "Humans/animations/Sitting3" FROM "humans" ASSET "Humans/animations/PushButton" FROM "humans" ASSET "Humans/animations/Sitting1" FROM "humans" ASSET "Humans/animations/ShakingHands" FROM "humans" ASSET "Humans/animations/LeanAgainstWall" FROM "humans" ASSET "Humans/animations/ArmsCrossed" FROM "humans" ASSET "Humans/animations/Sitting2" FROM "humans" ASSET "Humans/animations/LookBehind" FROM "humans" ASSET "Humans/animations/Looking" FROM "humans"
 "Humans" SET Segmentation.Class className "Person"
 "Humans" ADD RandomProps.Frustum
@@ -201,7 +201,7 @@ CREATE "BicycleHumans"
 CREATE "Bicycles"
 "Bicycles" SET Transform localPosition (10 0 -10)
 "Bicycles" ADD Segmentation.Class Segmentation.Spawners.Entity Humans.Spawners.RandomHumansVehiclePoser
-"Bicycles" SET Humans.Spawners.RandomHumansVehiclePoser container "BicycleHumans"
+"Bicycles" SET Humans.Spawners.RandomHumansVehiclePoser humansContainer "BicycleHumans"
 "Bicycles" SET Segmentation.Class className "Bicycle"
 "Bicycles" ADD RandomProps.Frustum
 "Bicycles" SET RandomProps.Frustum cam "Camera/Thermal"

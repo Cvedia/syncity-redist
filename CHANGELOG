@@ -21,6 +21,7 @@ both the SDK and the simulator.
 - Fixed issues with aerial_cars_depth_thermal_easier and added new data export module support
 - Added generic exporters for video and image
 - Shopping mall scene reviews
+- Fixed issue with missing configurable for streamOutput on DataExport
 
 * Disk module has been deprecated in favor to DataExport
 * Segmentation snapshot telnet based json helper methods been deprecated in favor to DataExport, although this still available via telnet
