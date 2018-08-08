@@ -19,6 +19,9 @@ def args(parser):
 	try:
 		parser.add_argument('--loop_limit', type=int, default=500, help='Defines a limit of iterations for exporting')
 	except: pass
+	try:
+		parser.add_argument('--random_texture_source', default=None, help='Defines a random texture source, if not set will not randomize textures')
+	except: pass
 
 def minVersion():
 	return '18.07.26.0000'
@@ -26,6 +29,16 @@ def minVersion():
 def run():
 	loop = 0
 	mycams = ['Camera/Thermal', 'Camera/Segmentation']
+	randomTextures = [ "Trees", "Cars", "Buildings", "Grounds" ]
+	
+	# add compnents for randomization and execute the first texture random roll
+	if settings.random_texture_source != None:
+		for r in randomTextures:
+			common.sendData([
+				'"{}" ADD ObjectTagging.Spawners.RandomizeMainTexture Thermal.Spawners.RandomizeThermalTexture'.format(r),
+				'"{}" EXECUTE ObjectTagging.Spawners.RandomizeMainTexture GetImagesFromDisk "{}"'.format(r, settings.random_texture_source),
+				'"{}" EXECUTE Thermal.Spawners.RandomizeThermalTexture GetImagesFromDisk "{}"'.format(r, settings.random_texture_source)
+			])
 	
 	if settings.skip_setup == False:
 		helpers.addDataExport(
@@ -53,35 +66,42 @@ def run():
 			'"Trafficlights" SET Thermal.ThermalObjectBehaviour profile.variance.value 0~50',
 			'"Cars" SET Thermal.Spawners.ReplaceThermalProfiles profile.reflectivity.value 0~0.8',
 			'"Camera/Thermal" SET Thermal.ThermalCamera temperatureRange (-30~0 8~30)',
-			'[RandomProps.Spawner] ShuffleAll "Parked Cars W" "Parked Cars E" "Trees W" "Trees E" "Cars" "Trees" "Signs" "Grounds" "Trafficlights" "Misc" "Humans" "Bicycles"'
+			'[RandomProps.Spawner] ShuffleAll "Cars" "Trees" "Signs" "Grounds" "Trafficlights" "Misc" "Humans" "Bicycles"'
 		])
-		loop += 1
-
-#			'[RandomProps.Spawner] ShuffleAll "Parked Cars W" "Parked Cars E" "Trees W" "Trees E" "Cars" "Trees" "Signs" "Grounds" "Trafficlights" "Misc" "Humans" "Bicycles"'
+		
 		if loop % 25 == 0:
 			common.sendData([
-#				'"Parked Cars W" SET active false',
-#				'"Parked Cars E" SET active false',
-				'"Buildings W" SET active false',
-				'"Buildings E" SET active false',
-				'"Buildings N" SET active false',
-				'"Trees W" SET active false',
-				'"Trees E" SET active false',
-#				'"Cars" SET active false',
+				'"Trees" SET active false',
+				'"Cars" SET active false',
 				'"Humans" SET active false',
-#				'"Bicycles" SET active false',
-#				'"Parked Cars W" SET active true',
-#				'"Parked Cars E" SET active true',
-				'"Buildings W" SET active true',
-				'"Buildings E" SET active true',
-				'"Buildings N" SET active true',
-				'"Trees W" SET active true',
-				'"Trees E" SET active true',
-#				'"Cars" SET active true',
+				'"Bicycles" SET active false',
+				
+				'"Trees" SET active true',
+				'"Cars" SET active true',
 				'"Humans" SET active true',
-#				'"Bicycles" SET active true',
+				'"Bicycles" SET active true'
 			])
+		
+		# reroll random textures every 100 loops
+		if loop > 0 and loop % 100 == 0 and settings.random_texture_source != None:
+			for r in randomTextures:
+				common.sendData([
+					'"{}" EXECUTE ObjectTagging.Spawners.RandomizeMainTexture GetImagesFromDisk "{}"'.format(r, settings.random_texture_source),
+					'"{}" EXECUTE Thermal.Spawners.RandomizeThermalTexture GetImagesFromDisk "{}"'.format(r, settings.random_texture_source)
+				])
+		
+		"""
+		# workaround until #260941684 is solved
+		common.sendData([
+			'"{}" SET active false'.format(mycams[1]),
+			'"{}" SET active true'.format(mycams[1])
+		])
+		"""
+		
+		# common.sendData("SLEEP 1")
 		
 		# intentionally last as this will trigger data export
 		common.sendData('"Camera" SET Transform localPosition (-3~3 0.5~2 -30~-15)')
 		common.output('Loop {} ({}%)'.format(loop, round(100 * (loop / settings.loop_limit),2)))
+		
+		loop += 1

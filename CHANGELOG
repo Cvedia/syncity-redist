@@ -3,6 +3,23 @@ This change log follows YYMMDD timestamps which are also the version number for
 both the SDK and the simulator.
 --------------------------------------------------------------------------------
 
+# 180808
+
+- Fixed critical issue with bounding boxes not being aligned
+- Jumanji T-Pose fixes
+- DBUpdate tool added
+- Fixed issue related to not all parameters are passed thuru the backend
+- Added texture randomization example for jumanji
+- #259132755 Fixed issue with humans when using the generic spawner
+- #259735641 Allow output filename customization
+- #260373068 Proper acceleration vectors
+- #260125142 Gallery tool now works with new boundingbox types
+- #259628624 Clustering of humans / cyclists, etc (endless_runner)
+- #260471509 Jumanji cleanup
+- #260941684 Fixed missing bounding boxes at random
+- #260440779 Fixed issue with alongated bounding boxes in endless runner scene
+- Added visibility to bounding box export message
+
 # 180730
 
 - New DataExport module, standarizing all types of data exports into a single component

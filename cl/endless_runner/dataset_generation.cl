@@ -22,17 +22,28 @@ CREATE "Pickup" FROM "highway" AS "mainCar"
 
 //--- TILES
 CREATE "Tiles/Tile 1 Random" FROM "tiles" as "tile0"
-"tile0/Terrain" SET active false
-"tile0/Terrain_Mesh" SET active true
 CREATE "Tiles/Tile 2 Random" FROM "tiles" as "tile1"
-"tile1/Terrain" SET active false
-"tile1/Terrain_Mesh" SET active true
 CREATE "Tiles/Tile 3 Random" FROM "tiles" as "tile2"
-"tile2/Terrain" SET active false
-"tile2/Terrain_Mesh" SET active true
 CREATE "Tiles/Tile 4 Random" FROM "tiles" as "tile3"
-"tile3/Terrain" SET active false
-"tile3/Terrain_Mesh" SET active true
+
+REGEX "tile*/Terrain" SET active false
+REGEX "tile*/Terrain_Mesh" SET active true
+
+// --- TILE PEDESTRIAN SETUP BEGIN ---
+
+REGEX "tile*/Humans/NavMesh" ADD RandomProps.Spawners.Area.Navigation RandomProps.Spawners.PropArea Humans.Spawners.RandomHumans Humans.Spawners.HumanWanderers
+REGEX "tile*/Humans/NavMesh" SET Humans.Spawners.RandomHumans settings.context "Casual"
+
+"tile0/Humans/NavMesh" PUSH Humans.Spawners.HumanWanderers pointsOfInterest REGEX "tile0/Humans/Walking points/.*"
+"tile1/Humans/NavMesh" PUSH Humans.Spawners.HumanWanderers pointsOfInterest REGEX "tile1/Humans/Walking points/.*"
+"tile2/Humans/NavMesh" PUSH Humans.Spawners.HumanWanderers pointsOfInterest REGEX "tile2/Humans/Walking points/.*"
+"tile3/Humans/NavMesh" PUSH Humans.Spawners.HumanWanderers pointsOfInterest REGEX "tile3/Humans/Walking points/.*"
+
+REGEX "tile*/Humans/NavMesh" SET Humans.Spawners.HumanWanderers minSpeed 1 maxSpeed 1.5 stoppingDistance 2
+REGEX "tile*/Humans/NavMesh" SET RandomProps.Spawners.Area.Navigation size (500 750) areaMask -1
+REGEX "tile*/Humans/NavMesh" SET RandomProps.Spawners.PropArea tags "human" numberOfProps 20 collisionCheck false
+
+// --- TILE PEDESTRIAN SETUP END ---
 
 // --- THERMAL SETUP BEGIN ---
 
@@ -86,8 +97,8 @@ CREATE Segmentation.LookUpTable AS "lookUpTable"
 "lookUpTable" EXECUTE Segmentation.LookUpTable SetClassColor "Person->Yellow" "Car->Red" "Bicycle->White"
 
 
-REGEX "tile*/Humans" ADD Segmentation.Class Segmentation.Spawners.Entity
-REGEX "tile*/Humans" SET Segmentation.Class className "Person"
+REGEX "tile*/Humans/Humans" ADD Segmentation.Class Segmentation.Spawners.Entity
+REGEX "tile*/Humans/Humans" SET Segmentation.Class className "Person"
 REGEX "tile*/Cars" ADD Segmentation.Class Segmentation.Spawners.Entity
 REGEX "tile*/Cars" SET Segmentation.Class className "Car"
 
@@ -101,7 +112,6 @@ CREATE "OpenSteerNetwork"
 "mainCar" SET OSVehicle selfDriving true externControl false isBike false bikeLeanMult 40 startSpeed 20 maxSpeed 20 maxForce 40 spinWheels true spinWheelDisableDistance 100 predictMult 0.4
 "mainCar" ADD OSBHVehicleDriver
 "mainCar" SET OSBHVehicleDriver selfDriving true driverSpeed 80 brakePower 10000 steerFactor 10 steerOvertake 2 smoothAdjust 100.0 laneWidth 0.5 osNetwork "OpenSteerNetwork"
-"mainCar" ADD ToggleBetweenAutoDriveAndUserControl
 
 CREATE "cyclists"
 "cyclists" SET active true
@@ -177,7 +187,8 @@ CREATE RenderTexture 1920 1080 24 "ARGB32" "Default" AS "cameraThermal1"
 // --- SEGMENTATION CAMERAS
 
 [Segmentation.Camera] CreateWithClassColors "mainCar/cameras/cameraSegmentation1" WITH lookUpTable "lookUpTable"
-[Cameras.RenderTexture] CreateNew "cameraSegmentation1" 480 270
+//[Cameras.RenderTexture] CreateNew "cameraSegmentation1" 480 270
+[Cameras.RenderTexture] CreateNew "cameraSegmentation1" 1920 1080
 "mainCar/cameras/cameraSegmentation1" SET Transform localPosition (0.1 0 0) localEulerAngles (0 -3 0)
 "mainCar/cameras/cameraSegmentation1" ADD Segmentation.Output.BoundingBoxes Segmentation.Output.FilteredBoundingBoxes
 "mainCar/cameras/cameraSegmentation1" EXECUTE Segmentation.Output.FilteredBoundingBoxes EnableClasses "Person" "Car" "Bicycle"

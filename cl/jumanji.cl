@@ -224,8 +224,8 @@ CREATE "Bicycles"
 "Signs" SET Thermal.ThermalObjectBehaviour enabled true
 "Trafficlights" SET Thermal.ThermalObjectBehaviour enabled false
 "Trafficlights" SET Thermal.ThermalObjectBehaviour enabled true
-"Misc" SET Thermal.ThermalObjectBehaviour enabled false
-"Misc" SET Thermal.ThermalObjectBehaviour enabled true
+//"Misc" SET Thermal.ThermalObjectBehaviour enabled false
+//"Misc" SET Thermal.ThermalObjectBehaviour enabled true
 "Trees" SET Thermal.ThermalObjectBehaviour enabled false
 "Trees" SET Thermal.ThermalObjectBehaviour enabled true
 "Buildings" SET Thermal.ThermalObjectBehaviour enabled false

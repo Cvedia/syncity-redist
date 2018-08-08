@@ -26,7 +26,7 @@ def run():
 		return
 	
 	if settings.layout == None:
-		common.findLayoutFromOptions(os.path.basename(__file__).split('.')[0], suffix='_stereo')
+		common.findLayoutFromOptions(os.path.basename(__file__).split('.')[0], suffix='_stereo', prefix="endless_runner/")
 	
 	options = settings.options
 	helpers.setQualitySettings(options['quality'])
@@ -49,13 +49,20 @@ def run():
 		i = 0
 		
 		common.sendData('"Config.instance" SET physicsEnabled true')
-		
+
+
 		for k, v in options['tiles'].items():
 			tile = 'tile{}'.format(i)
 			common.sendData([
 				'CREATE "{}" FROM "{}" as "{}"'.format(k, v['bundle'], tile),
 				'"{}/Terrain" SET active false'.format(tile),
 				'"{}/Terrain_Mesh" SET active true'.format(tile),
+				'"{}/Humans/NavMesh" ADD RandomProps.Spawners.Area.Navigation RandomProps.Spawners.PropArea Humans.Spawners.RandomHumans Humans.Spawners.HumanWanderers"'.format(tile),
+				'"{}/Humans/NavMesh" SET Humans.Spawners.RandomHumans settings.context "{}"'.format(tile,options["pedestrians"]["context"]),
+				'"{}/Humans/NavMesh" PUSH Humans.Spawners.HumanWanderers pointsOfInterest REGEX "{}/Humans/Walking points/.*"'.format(tile,tile),
+				'"{}/Humans/NavMesh" SET Humans.Spawners.HumanWanderers minSpeed {} maxSpeed {} stoppingDistance 2'.format(tile,options["pedestrians"]["minSpeed"],options["pedestrians"]["maxSpeed"]),
+				'"{}/Humans/NavMesh" SET RandomProps.Spawners.Area.Navigation size (500 750) areaMask -1'.format(tile),
+				'"{}/Humans/NavMesh" SET RandomProps.Spawners.PropArea tags "human" numberOfProps {} collisionCheck false'.format(tile,options["pedestrians"]["amountPerTile"]),
 			])
 			
 			if 'init' in v:

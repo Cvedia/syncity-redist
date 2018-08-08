@@ -10,7 +10,7 @@ settings = settings_manager.Singleton()
 
 def help():
 	return '''\
-POC Drone
+POC Drone single scene
 	- Creates a RGB camera with video compression artifacts
 	- Creates a Segmentation camera
 	- Creates a Depth camera
@@ -31,7 +31,7 @@ POC Drone
 
 def args(parser):
 	try:
-		parser.add_argument('--loop_limit', type=int, default=500, help='Defines a limit of iterations for exporting')
+		parser.add_argument('--loop_limit', type=int, default=100, help='Defines a limit of iterations for exporting')
 	except:
 		pass
 
@@ -43,12 +43,12 @@ def run():
 	blurring_method = 'embedded'
 	
 	if settings.skip_setup == False:
-		camera_size = [ 1024, 1024 ]
+		camera_size = [ 1024, 768 ]
 		
 		helpers.globalCameraSetup(orbit=False)
-		helpers.addCameraSeg(width=camera_size[0], height=camera_size[1], segments=['DRONE'], lookupTable=[['DRONE', 'red']])
-		helpers.addCameraDepth(width=camera_size[0], height=camera_size[1])
 		helpers.addCameraRGB(width=camera_size[0], height=camera_size[1], pp='EnviroFX')
+		helpers.addCameraSeg(width=camera_size[0], height=camera_size[1], segments=['CAR'], lookupTable=[['CAR', 'blue']])
+		helpers.addCameraDepth(width=camera_size[0], height=camera_size[1])
 		helpers.addCameraThermal(
 			trees=True,
 			ambientTemperature=15, minimumTemperature=9, maximumTemperature=35,
@@ -59,23 +59,10 @@ def run():
 		if common.versionCompare(settings._simulator_version, '18.07.26.0000', '<'):
 			helpers.globalDiskSetup()
 			helpers.addDiskOutput(mycams)
-			
-			# if you want to return BLOBs instead of DEPTH maps use this:
-			# common.sendData([ '"disk1/Cameras/depth" SET Sensors.RenderCameraLink outputType "BLOB"' ])
-			common.sendData([ '"disk1/Cameras/depth" SET Sensors.RenderCameraLink outputType "DEPTH"' ])
-			
-			"""
-			# video compression artifacts
-			common.sendData([
-				# Add video compression artifacts to rgb output
-				# WARNING: This is a hack, might be deprecated on the next versions of the simulator
-				'"disk1/Cameras/camerargb" SET active false',
-				'"disk1/Cameras/camerargb" SET Sensors.RenderCameraLink videoFilter true',
-				'"disk1/Cameras/camerargb" ADD Sensors.Augmentations',
-				'"disk1/Cameras/camerargb" SET active true'
-			], read=False)
-			
-			"""
+		
+		# if you want to return BLOBs instead of DEPTH maps use this:
+		# common.sendData([ '"disk1/Cameras/depth" SET Sensors.RenderCameraLink outputType "BLOB"' ])
+		# common.sendData([ '"disk1/Cameras/depth" SET Sensors.RenderCameraLink outputType "DEPTH"' ])
 		
 		# chromatic aberration on red channel
 		helpers.LCP(
@@ -84,12 +71,40 @@ def run():
 			redParam2=0.05
 		)
 		
+		"""
+		# video compression artifacts
+		common.sendData([
+			# Add video compression artifacts to rgb output
+			# WARNING: This is a hack, might be deprecated on the next versions of the simulator
+			'"disk1/Cameras/camerargb" SET active false',
+			'"disk1/Cameras/camerargb" SET Sensors.RenderCameraLink videoFilter true',
+			'"disk1/Cameras/camerargb" ADD Sensors.Augmentations',
+			'"disk1/Cameras/camerargb" SET active true'
+		], read=False)
+		"""
+		
+		common.sendData([
+			'CREATE "Ground"',
+			'"Ground" SET Transform localPosition (0 0 0)',
+			'"Ground" ADD RandomProps.FillGrid',
+			'"Ground" SET RandomProps.FillGrid tags "ground"',
+			'"Ground" SET RandomProps.FillGrid size (160 160)',
+			'"Ground" SET RandomProps.FillGrid cellSize (20 20)',
+			'"Ground" SET active true',
+		], read=False)
+
 		helpers.spawnDroneObjs(
-			dronesLimit=[2,2],
+			dronesLimit=[0,0], # occasionally spawn drones
 			dronesColors=True,
 			dronesTags=['blurred' if blurring_method == 'embedded' else 'phantom'],
 			dronesPartsNames='chassis,legs,motors,battery,bolts,sensors_caps,sensors,camera,blades',
 			
+			cars_colors=True,
+			carsSegment='CAR',
+			dronesSegment=None,
+			animalsLimit=[5,15],
+			birdsLimit=[3,7],
+
 			animalsThermalObjectBehaviour=True,
 			birdsThermalObjectBehaviour=True,
 			treesThermalObjectBehaviour=True,
@@ -100,8 +115,9 @@ def run():
 			humansThermalObjectBehaviour=True,
 			signsThermalObjectBehaviour=True,
 			cityThermalObjectBehaviour=True,
-			buildingsInnerRadius=80,
-			treesLimit=[20,50], treesInnerRadius=15, treesRadius=60, buildingsLimit=[20,50],
+			buildingsInnerRadius=70,
+			treesLimit=[5,10], treesInnerRadius=40, treesRadius=100, buildingsLimit=[10,10],
+			carsLimit=[5,15], carsInnerRadius=10, carsRadius=60,
 			#
 			# NOTE:
 			#
@@ -111,6 +127,7 @@ def run():
 			#
 			# use 'car, +thermal' to spawn only cars with thermal profiles
 			#
+			#carsTags=['+car, +thermal'],
 			carsTags=['+car, +thermal'],
 			animalsTags=['+animal, +thermal']
 		)
@@ -119,10 +136,10 @@ def run():
 		for x in range(0,2):
 			common.sendData([
 				'CREATE "cameras/drone/drone{}/drone{}" "{}"'.format(x,x,helpers.drones_lst[6]), # Drones/DJI Phantom 4 Pro/DJI_Phantom_4_Pro
-				'"cameras/drone/drone{}" ADD Segmentation.Entity Segmentation.Class'.format(x),
+				'"cameras/drone/drone{}" ADD Segmentation.ClassGroup'.format(x),
 				'"cameras/drone/drone{}" SET active false'.format(x),
 				
-				'"cameras/drone/drone{}" SET Segmentation.Class className "drone0"'.format(x),
+				'"cameras/drone/drone{}" SET Segmentation.ClassGroup itemsClassName "drone0"'.format(x),
 				'"cameras/drone/drone{}/drone{}" SET Transform position ({} {} {})'.format(x, x, 0, 1, 0),
 			], read=False)
 			
@@ -144,22 +161,23 @@ def run():
 #				'"cameras/drone/drone{}/drone{} PUSH RandomProps.RandomColor availableColors "#101010"'.format(x,x),
 			], read=False)
 		"""
+		common.sendData('"cameras/spawner/drones" SET active false')
 		# helpers.addThermalProfileOverride(target='cameras/spawner/drones/container', heatinessMode='Absolute', heatinessValue=250, temperatureMode='Absolute', temperatureValue=300)
 		helpers.setThermalProps(objs='cameras/spawner/drones/container', heatiness=250, temperatureValue=300)
+		common.sendData('"cameras/spawner/drones" SET active true')
 		
-		if common.versionCompare(settings._simulator_version, '18.07.26.0000', '>='):
-			helpers.addDataExport(
-				imageLinks=helpers.cameraExportParametrize(mycams, "image"),
-				fieldLinks=[
-					{
-						"target": "cameras",
-						"label": "cameraPosition",
-						"componentName": "Transform",
-						"fieldName": "position",
-						"onChange": True
-					}
-				]
-			)
+		helpers.addDataExport(
+			imageLinks=helpers.cameraExportParametrize(mycams, "image"),
+			fieldLinks=[
+				{
+					"target": "cameras",
+					"label": "cameraPosition",
+					"componentName": "Transform",
+					"fieldName": "position",
+					"onChange": True
+				}
+			]
+		)
 	
 	pX_r = [-5, 5]
 	pY_r = [1.5, 8]
@@ -174,13 +192,13 @@ def run():
 	pZ_d = 1
 	
 	loop = 0
+	settings.seqSave_i = loop;
 	
 	# reset camera
 	common.sendData([
 		'"cameras/cameraRGB" SET Camera enabled true',
 		'"cameras/thermal" SET Camera enabled true',
-		
-		'"cameras" SET Transform position ({} {} {}) eulerAngles ({}~{} {} {})'.format(0, 5, 0, -20, 0, 0, 0),
+		'"cameras" SET Transform position ({} {} {}) eulerAngles ({}~{} {} {})'.format(0, 30, 0, 45, 90, 0, 0),
 		'"EnviroSky" EXECUTE EnviroSky ChangeWeather "{}"'.format(helpers.weather_lst[2]),
 		'"EnviroSky" SET EnviroSky cloudsMode "{}" fogSettings.heightFog false fogSettings.distanceFog false cloudsSettings.globalCloudCoverage {}'.format(helpers.clouds_lst[2], -0.04),
 		'"{}" SET Sensors.RenderCamera alwaysOn false'.format(mycams[0]),
@@ -226,13 +244,14 @@ def run():
 		
 		if loop > 0:
 			if loop % 100 == 0:
+			# if loop == 0:
 				common.sendData([
 					'"spawner/city/ground/container" SET active false',
-					'"spawner/city/ground/container" SET RandomProps.PropArea numberOfProps {}~{}'.format(500, 1000),
+					'"spawner/city/ground/container" SET RandomProps.PropArea numberOfProps {}~{}'.format(50, 100),
 					'"spawner/city/ground/container" SET active true',
 					
 					'"spawner/cars/container" SET active false',
-					'"spawner/cars/container" SET RandomProps.PropArea numberOfProps {}~{}'.format(35, 75),
+					'"spawner/cars/container" SET RandomProps.PropArea numberOfProps {}~{}'.format(20, 50),
 					'"spawner/cars/container" SET active true',
 
 					'"spawner/city/nature/trees/container" SET active false',
@@ -252,10 +271,9 @@ def run():
 					'"spawner/humans_0/container" SET RandomProps.PropArea numberOfProps {}~{}'.format(50, 70),
 					'"spawner/humans_0/container" SET active true',
 				], read=False)
-			
-			elif loop % 10 == 0:
+			elif loop % 1 == 0:
 				common.sendData([
-					'"spawner/city/ground/container" EXECUTE RandomProps.PropArea Shuffle',
+					#'"spawner/city/ground/container" EXECUTE RandomProps.PropArea Shuffle',
 					'"spawner/cars/container" EXECUTE RandomProps.PropArea Shuffle',
 					'"spawner/city/nature/trees/container" EXECUTE RandomProps.PropArea Shuffle',
 					'"spawner/animals/birds/container" EXECUTE RandomProps.PropArea Shuffle',
@@ -272,32 +290,23 @@ def run():
 					'"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.colorGrading.settings.basic.contrast {}~{}'.format(0.9, 1.3),
 					'"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity {}~{}'.format(0.0, 0.3)
 				], read=False)
-			
-			if loop % 10 == 0:
-				common.sendData([
-					'"cameras/spawner/drones/container" SET active false',
-					'"cameras/spawner/drones/container" SET RandomProps.PropArea rotationStep {}~{}'.format(0, 180),
-					# '"cameras/spawner/drones/container" SET RandomProps.PropArea propScale ({}~{} {}~{} {}~{})'.format(0.6, 1.5, 0.6, 1.5, 0.6, 1.5),
-					'"cameras/spawner/drones/container" SET active true'
-				], read=False)
 		
 		common.sendData([
-			# randomize drone positions
-			'"cameras/spawner/drones/container" EXECUTE RandomProps.PropArea Shuffle',
-			# move drone container a bit further away
-			'"cameras/spawner" SET Transform localPosition (0 0 {}~{})'.format(.5, 1.5),
-			# randomize prop rotations on all axis
-			'"cameras/spawner/drones/container" EXECUTE RandomProps.PropArea RandomizeRotations (0 360) (0 360) (0 360)',
-			# enable rendering for motion blur
-			# '"{}" SET Camera enabled true'.format(mycams[0]) if blurring_method != 'embedded' else ''
-		])
+			'"EnviroSky" EXECUTE EnviroSky ChangeWeather "{}"'.format(helpers.weather_lst[random.randint(0, 7)]),
+			'"cameras" SET Transform position ({} {}~{} {}) eulerAngles ({}~{} {} {})'.format(0, 15, 45, 0, 45, 90, 0, 0)
+		], read=False)
 		
+		"""
+		if loop % 1 == 0:
+			common.sendData([
+				'"cameras/spawner/drones/container" SET active false',
+				'"cameras/spawner/drones/container" SET RandomProps.PropArea rotationStep {}~{}'.format(0, 180),
+				# '"cameras/spawner/drones/container" SET RandomProps.PropArea propScale ({}~{} {}~{} {}~{})'.format(0.6, 1.5, 0.6, 1.5, 0.6, 1.5),
+				'"cameras/spawner/drones/container" SET active true'
+			], read=False)
+		"""
 		if blurring_method != 'embedded':
 			common.sendData('SLEEP 1', read=True)
-		
-		common.sendData([
-			'"cameras" SET Transform position ({} {}~{} {}) eulerAngles ({}~{} {} {})'.format(0, 5, 20, 0, -20, 70, 0, 0)
-		], read=False)
 		
 		# WARNING: Deprecated in favor to data export module
 		if common.versionCompare(settings._simulator_version, '18.07.26.0000', '<'):

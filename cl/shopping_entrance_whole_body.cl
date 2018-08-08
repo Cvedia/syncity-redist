@@ -122,22 +122,20 @@ CREATE "cameras/cameraThermal"
 CREATE "cameras/segmentation"
 "cameras/segmentation" SET active false
 "cameras/segmentation" SET Transform localPosition (7.149458 6.276992 11.56043) localEulerAngles (80.25 4.046 0)
-"cameras/segmentation" ADD Camera SegmentationCamera Segmentation.Output.BoundingBoxes Segmentation.Output.ClassColors
+"cameras/segmentation" ADD Camera SegmentationCamera Segmentation.Output.FilteredBoundingBoxes Segmentation.Output.ClassColors
 // set drawTransparentObjects to see thuru glass
 "cameras/segmentation" SET SegmentationCamera transparencyCutout 0.5 drawTransparentObjects true
 "cameras/segmentation" SET Camera near 0.3 far 100 fieldOfView 60 renderingPath "UsePlayerSettings" targetTexture.filterMode "Point" 
-"cameras/segmentation" SET Segmentation.Output.BoundingBoxes minimumObjectVisibility 0 extensionAmount 0 minimumPixelsCount 1 
+"cameras/segmentation" SET Segmentation.Output.BoundingBoxes minimumObjectVisibility 0 extensionAmount 0 minimumPixelsCount 1
 
 "Segmentation.Profile.instance" PUSH classes "Void" "Human" "Hair" "Hat" "Shirt" "Shoes" "Pants" "Accessories" "Floor" "Wall" "Decoration"
 CREATE Segmentation.LookUpTable AS "lookUpTable"
 "lookUpTable" EXECUTE Segmentation.LookUpTable SetClassColor "Void->black" "Human->#FF00D8FF" "Hair->#E6FF00FF" "Hat->#590072FF" "Shirt->#269CFFFF" "Shoes->#FF0000FF" "Pants->#1EFF00FF" "Accessories->#FFC300FF" "Floor->#858585FF" "Wall->#444444FF" "Decoration->#5C4B2DFF"
 "cameras/segmentation" SET Segmentation.Output.ClassColors lookUpTable "lookUpTable"
 
-"cameras/segmentation" ADD Segmentation.Output.FilteredBoundingBoxes
 "cameras/segmentation" EXECUTE Segmentation.Output.FilteredBoundingBoxes EnableClasses "Human"
 
 [UI.Window] ShowFromCamera "cameras/segmentation" AS "segmentation" WITH 1024 768 24 "ARGBFloat" "Default"
-"cameras/segmentation" SET active true
 
 // finalize setup and enable
 
@@ -172,6 +170,7 @@ CREATE "humans/spawner"
 "humans/spawner" PUSH Humans.Locomotion.WalkerSpawner goalPoints "humans/goal_point_1" "humans/goal_point_2" "humans/goal_point_3" "humans/goal_point_4" "humans/goal_point_5" "nav/POI" "nav/POI (1)" "nav/POI (2)" "nav/POI (3)" "nav/POI (4)" "nav/POI (5)" "nav/POI (6)" "nav/POI (7)" "nav/POI (8)" "nav/POI (9)" "nav/POI (10)" "nav/POI (11)" "nav/POI (12)" "nav/POI (13)" "nav/POI (14)" "nav/POI (15)" "nav/POI (16)" "nav/POI (17)" "nav/POI (18)" "nav/POI (19)" "nav/POI (20)" "nav/POI (21)" "nav/POI (22)" "nav/POI (23)" "nav/POI (24)" "nav/POI (25)" "nav/POI (26)" "nav/POI (27)" "nav/POI (28)" "nav/POI (29)" "nav/POI (30)" "nav/POI (31)" "nav/POI (32)" "nav/POI (33)" "nav/POI (34)" "nav/POI (35)" "nav/POI (36)" "nav/POI (37)" "nav/POI (38)" "nav/POI (39)" "nav/POI (40)" "nav/POI (41)" "nav/POI (42)" "nav/POI (43)" "nav/POI (44)" "nav/POI (45)" "nav/POI (46)" "nav/POI (47)" "nav/POI (48)" "nav/POI (49)" "nav/POI (50)" "nav/POI (51)" "nav/POI (52)" "nav/POI (53)" "nav/POI (54)" "nav/POI (55)" "nav/POI (56)" "nav/POI (57)"
 "humans/spawner" SET active true
 
+"cameras/segmentation" SET active true
 "humans" SET active true
 "cameras" SET FlyCamera enabled true
 "cameras" SET active true

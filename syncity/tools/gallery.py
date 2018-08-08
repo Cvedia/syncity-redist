@@ -19,6 +19,11 @@ This script generates a static gallery in html, that work locally straight from 
 - The `local_path` (`-l`) is where all your images and `.json` objects are, this script will combine both to generate a `.html` gallery that you can open in any browser.
 - If the bounding box object dimensions contains  numbers greater than 1, the rendering layer will assume it's absolute and not relative position.
 - Gallery will generate a standalone .html file that will includes the json objects embedded into the html, meaning that modifying or deleting the .json files will not affect the built gallery.
+- This gallery works with both old and new ice based exports
+
+## Notes in the new format:
+
+This script expects filenames to follow `<object name><divider><timestamp>.<ext>` where divider can be null or a non a-Z0-9 string.
 
 """
 import json
@@ -92,7 +97,7 @@ def run():
 			fts = '.'.join(os.path.basename(fn).split('.')[:-1])
 		elif settings.align == 'sequential':
 			try:
-				fts = re.findall(r'\d+', lnm)[0]
+				fts = re.findall(r'\d+', lnm[::-1])[0][::-1]
 			except IndexError:
 				common.output('Unable to find number on {}, skipping'.format(fn), 'WARNING')
 				continue
@@ -101,10 +106,10 @@ def run():
 			common.output('Processing: {}'.format(lnm))
 		
 		if settings.flat_gallery == True:
-			fty = 'default'
+			fty = "default"
 		if fty == None and "rgb" in lnm:
 			fty = "rgb"
-		elif fty == None and "segmentation" in lnm:
+		elif fty == None and "segmentation" in lnm and not lnm.endswith(".json"):
 			fty = "seg"
 		elif fty == None and "depth" in lnm:
 			fty = "depth"
@@ -113,16 +118,26 @@ def run():
 		elif fty == None and "mono" in lnm:
 			fty = "mono"
 		elif lnm.endswith(".json"):
-			if settings.align == 'time':
-				while has_attribute(fm, fts):
-					fts += .000001
-			try:
-				fm[fts] = json.loads(common.readAll(fn))
-				fmfn[fts] = fn
-			except:
-				common.output('Invalid JSON data in {}'.format(fn), 'ERROR')
-				pass
+			if "segmentation" in lnm or "bbox" in lnm:
+				if settings.align == 'time':
+					while has_attribute(fm, fts):
+						fts += .000001
+				
+				try:
+					fm[fts] = json.loads(common.readAll(fn))
+					fmfn[fts] = fn
+				except:
+					common.output('Invalid JSON data in {}'.format(fn), 'ERROR')
+			else:
+				common.output('Found JSON object in {} that\'s not linked to cameras, skipping'.format(fn), 'WARN')
+			
 			continue
+		elif lnm.startswith('camera'):
+			try:
+				fty = re.findall(r'camera[a-zA-Z0-9]+', lnm)[0].replace('camera', '')
+			except:
+				common.output('Unable to identify camera on string {}'.format(lnm), 'WARN')
+				fty = None
 		elif lnm.endswith(".debug") or lnm.endswith(".html") or lnm.endswith(".txt"):
 			continue
 		

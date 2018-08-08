@@ -3329,7 +3329,8 @@ def spawner(
 	stickToGround=False, collisionCheck=True, suffix="", flush=False, prefix='spawner', container='container',
 	names=None, uglyFix=True, seed=None, randomColors=None, randomColorsWeights=14,
 	method=None, methodParameters=None, minDistance=None, maxDistance=None,
-	partsNames=None, autoSegment=False, thermalObjectBehaviour=None, thermalObjectOverride=False
+	partsNames=None, autoSegment=False, thermalObjectBehaviour=None, thermalObjectOverride=False,
+	extraComponents=None
 ):
 	"""
 	Creates a object spawner
@@ -3363,7 +3364,7 @@ def spawner(
 	autoSegment (bool): Automatically segment objects based on types or tags given, defaults to `False`
 	thermalObjectBehaviour (string|bool): Defines a thermal profile; Note that this will be added to the second level component allowing for a `thermalObjectOverride` to be placed at the `container`; defaults to `None`, when set to `True` will use `DefaultThermalProfile`
 	thermalObjectOverride (bool): Adds a thermalObjectOverride component to the `container`. You must have `thermalObjectBehaviour` on the parent object in order for this work; Defaults to `False`
-	
+	extraComponents (list): Defines a list of arbitrary additional components to be added to the spawner, those will be added the last to the container. Defaults to `None`
 	"""
 	
 	# convert bool to strings
@@ -3507,6 +3508,10 @@ def spawner(
 					spawner=True, partsNames=partsNames
 				)
 		
+		if extraComponents != None:
+			for c in extraComponents:
+				common.sendData('"{}" ADD {}'.format(obj, c))
+		
 		common.sendData('"{}" SET active true'.format(obj))
 		common.sendData('"{}/{}" SET active true'.format(prefix, n))
 		
@@ -3521,7 +3526,8 @@ def spawnRadiusGeneric(
 	rotation=[0,0,0], limit=50, segmentationClass=None, orbit=False,
 	stickToGround=False, collisionCheck=True, suffix="", flush=False, prefix='spawner', container='container',
 	names=None, uglyFix=True, seed=None, randomColors=None, randomColorsWeights=14,
-	partsNames=None, autoSegment=False, thermalObjectBehaviour=None, thermalObjectOverride=False
+	partsNames=None, autoSegment=False, thermalObjectBehaviour=None, thermalObjectOverride=False,
+	extraComponents=None
 ):
 	"""
 	Creates a torus shaped object spawner
@@ -3553,7 +3559,7 @@ def spawnRadiusGeneric(
 	autoSegment (bool): Automatically segment objects based on types or tags given, defaults to `False`
 	thermalObjectBehaviour (string|bool): Defines a thermal profile; Note that this will be added to the second level component allowing for a `thermalObjectOverride` to be placed at the `container`; defaults to `None`, when set to `True` will use `DefaultThermalProfile`
 	thermalObjectOverride (bool): Adds a thermalObjectOverride component to the `container`. You must have `thermalObjectBehaviour` on the parent object in order for this work; Defaults to `False`
-	
+	extraComponents (list): Defines a list of arbitrary additional components to be added to the spawner, those will be added the last to the container. Defaults to `None`
 	"""
 	return spawner(
 		types=types, tags=tags, scale=scale, position=position,
@@ -3561,7 +3567,8 @@ def spawnRadiusGeneric(
 		stickToGround=stickToGround, collisionCheck=collisionCheck, suffix=suffix, flush=flush, prefix=prefix, container=container,
 		names=names, uglyFix=uglyFix, seed=seed, randomColors=randomColors, randomColorsWeights=randomColorsWeights,
 		method='Torus', methodParameters={'innerRadius': innerradius, 'radius': radius},
-		partsNames=partsNames, thermalObjectBehaviour=thermalObjectBehaviour, thermalObjectOverride=thermalObjectOverride
+		partsNames=partsNames, thermalObjectBehaviour=thermalObjectBehaviour, thermalObjectOverride=thermalObjectOverride,
+		extraComponents=extraComponents
 	)
 
 def spawnRectangleGeneric(
@@ -3569,7 +3576,8 @@ def spawnRectangleGeneric(
 	rotation=[0,0,0], limit=50, segmentationClass=None, orbit=False,
 	stickToGround=False, collisionCheck=True, suffix="", flush=False, prefix='spawner', container='container',
 	names=None, uglyFix=True, seed=None, randomColors=None, randomColorsWeights=14,
-	partsNames=None, autoSegment=False, thermalObjectBehaviour=None, thermalObjectOverride=False
+	partsNames=None, autoSegment=False, thermalObjectBehaviour=None, thermalObjectOverride=False,
+	extraComponents=None
 ):
 	"""
 	Creates a rectangle shaped object spawner
@@ -3600,7 +3608,7 @@ def spawnRectangleGeneric(
 	autoSegment (bool): Automatically segment objects based on types or tags given, defaults to `False`
 	thermalObjectBehaviour (string|bool): Defines a thermal profile; Note that this will be added to the second level component allowing for a `thermalObjectOverride` to be placed at the `container`; defaults to `None`, when set to `True` will use `DefaultThermalProfile`
 	thermalObjectOverride (bool): Adds a thermalObjectOverride component to the `container`. You must have `thermalObjectBehaviour` on the parent object in order for this work; Defaults to `False`
-	
+	extraComponents (list): Defines a list of arbitrary additional components to be added to the spawner, those will be added the last to the container. Defaults to `None`
 	"""
 	
 	if a <= 0 or b <= 0:
@@ -3612,7 +3620,8 @@ def spawnRectangleGeneric(
 		stickToGround=stickToGround, collisionCheck=collisionCheck, suffix=suffix, flush=flush, prefix=prefix, container=container,
 		names=names, uglyFix=uglyFix, seed=seed, randomColors=randomColors, randomColorsWeights=randomColorsWeights,
 		method='Rectangle', methodParameters={'size': '({} {})'.format(a,b)}, partsNames=partsNames,
-		thermalObjectBehaviour=thermalObjectBehaviour, thermalObjectOverride=thermalObjectOverride
+		thermalObjectBehaviour=thermalObjectBehaviour, thermalObjectOverride=thermalObjectOverride,
+		extraComponents=extraComponents
 	)
 
 def spawnFlatGrid(types=[], size=[1000,1000], position=[0,0,0], scale=[1,1,1], prefix='spawner'):
@@ -3807,7 +3816,7 @@ def spawnDroneObjs(
 	
 	spawnRadiusGeneric(['city/ground'], tags=['ground'], limit=300, radius=150, innerradius=0, scale=[3,3,3], position=[0,0,0], collisionCheck=False, prefix=prefix, seed=seed, thermalObjectBehaviour=groundThermalObjectBehaviour, thermalObjectOverride=True if groundThermalObjectBehaviour != None else False)
 	# spawnRadiusGeneric(['humans'], tags=['human, +random'], suffix='_0', limit=40, radius=30, innerradius=2, position=[0,0,0], collisionCheck=False, prefix=prefix, seed=seed, thermalObjectBehaviour=humansThermalObjectBehaviour, thermalObjectOverride=True if humansThermalObjectBehaviour != None else False)
-	spawnRadiusGeneric(['humans'], tags=['human'], suffix='_0', limit=40, radius=30, innerradius=2, position=[0,0,0], collisionCheck=False, prefix=prefix, seed=seed, thermalObjectBehaviour=humansThermalObjectBehaviour, thermalObjectOverride=True if humansThermalObjectBehaviour != None else False)
+	spawnRadiusGeneric(['humans'], tags=['human'], suffix='_0', limit=40, radius=30, innerradius=2, position=[0,0,0], collisionCheck=False, prefix=prefix, seed=seed, thermalObjectBehaviour=humansThermalObjectBehaviour, thermalObjectOverride=True if humansThermalObjectBehaviour != None else False, extraComponents=["Humans.Spawners.RandomHumans"])
 	spawnRadiusGeneric(['city/nature/trees'], partsNames=treesPartsNames, segmentationClass=treesSegment, randomColors=trees_colors, tags=treesTags, collisionCheck=False, limit=random.randint(treesLimit[0], treesLimit[1]), radius=treesRadius, innerradius=treesInnerRadius, position=[0,0,0], prefix=prefix, seed=seed, thermalObjectBehaviour=treesThermalObjectBehaviour, thermalObjectOverride=True if treesThermalObjectBehaviour != None else False)
 	spawnRadiusGeneric(['city/buildings'], partsNames=buildingsPartsNames, segmentationClass=buildingsSegment, randomColors=buildings_colors, tags=buildingsTags, stickToGround=False, collisionCheck=False, limit=random.randint(buildingsLimit[0], buildingsLimit[1]), radius=buildingsRadius, innerradius=buildingsInnerRadius, position=[0,0,0], prefix=prefix, seed=seed, thermalObjectBehaviour=buildingsThermalObjectBehaviour, thermalObjectOverride=True if buildingsThermalObjectBehaviour != None else False)
 	spawnRadiusGeneric(['animals/generic'], partsNames=animalsPartsNames, segmentationClass=animalsSegment, randomColors=animals_colors, tags=animalsTags, stickToGround=False, collisionCheck=False, limit=random.randint(animalsLimit[0], animalsLimit[1]), radius=animalsRadius, innerradius=animalsInnerRadius, position=[0,0,0], prefix=prefix, seed=seed, thermalObjectBehaviour=animalsThermalObjectBehaviour, thermalObjectOverride=True if animalsThermalObjectBehaviour != None else False)

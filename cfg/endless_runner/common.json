@@ -54,7 +54,12 @@
 	
 	"globalCameraPosition": [0, 1.78, 0.3],
 	"globalCameraRotation": [0, 0, 0],
-	
+	"pedestrians" : {
+		"amountPerTile": 8,
+		"minSpeed" : 1,
+		"maxSpeed" : 1.5,
+		"context" : "Casual"
+	},
 	"dataExport": {
 		"mode": "video",
 		
@@ -90,8 +95,8 @@
 			{
 				"label": "angularVelocity",
 				"target": "mainCar",
-				"componentName": "Rigidbody",
-				"fieldName": "angularVelocity"
+				"componentName": "OSVehicle",
+				"fieldName": "velocity"
 			},
 			{
 				"label": "angularDrag",

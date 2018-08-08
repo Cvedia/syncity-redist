@@ -1,5 +1,5 @@
 /*===============================
-* Images Gallery v 1.0.3
+* Images Gallery v 1.1.0
 * Copyright: Cvedia (C) 2018
 *================================*/
 
@@ -155,45 +155,78 @@ function ImagesGallery() {
 	
 	function drawBoxes() {
 		var arr = meta[meta2idx[curImage-1]],
-			t, l, b, r, c;
+			t, l, b, r, c, field;
 		
 		boxes.find('.bbox').remove();
+		
 		for (var i = 0; i < arr.length; i++) {
-			if (typeof arr[i].boxMin == 'string')
-				arr[i].boxMin = arr[i].boxMin.split(',');
-			if (typeof arr[i].boxMax == 'string')
-				arr[i].boxMax = arr[i].boxMax.split(',');
-			
-			unit = '%';
-			if (
-				arr[i].boxMin[0] <= 1 &&
-				arr[i].boxMin[1] <= 1 &&
-				arr[i].boxMax[0] <= 1 &&
-				arr[i].boxMax[1] <= 1
-			) {
-				l = arr[i].boxMin[0]*100;
-				t = arr[i].boxMin[1]*100;
-				r = arr[i].boxMax[0]*100;
-				b = arr[i].boxMax[1]*100;
+			if (typeof arr[i]['boxMin'] != 'undefined') { // old school bbox_* types
+				if (typeof arr[i].boxMin == 'string')
+					arr[i].boxMin = arr[i].boxMin.split(',');
+				if (typeof arr[i].boxMax == 'string')
+					arr[i].boxMax = arr[i].boxMax.split(',');
+				
+				unit = '%';
+				if (
+					arr[i].boxMin[0] <= 1 &&
+					arr[i].boxMin[1] <= 1 &&
+					arr[i].boxMax[0] <= 1 &&
+					arr[i].boxMax[1] <= 1
+				) {
+					l = arr[i].boxMin[0]*100;
+					t = arr[i].boxMin[1]*100;
+					r = arr[i].boxMax[0]*100;
+					b = arr[i].boxMax[1]*100;
+				} else {
+					unit = 'px';
+					l = arr[i].boxMin[0];
+					t = arr[i].boxMin[1];
+					r = arr[i].boxMax[0];
+					b = arr[i].boxMax[1];
+				}
+				
+				c = classColors[arr[i].classId];
+				
+				boxes.append(
+					'<div class="bbox tooltip" data-tooltip="x: ' + l + ',' + r + ' y: ' + t + ',' + b + ' w: ' + Math.abs(r-l) + ' h: ' + Math.abs(b-t) + ' id: '+arr[i].id+', classId: '+
+					arr[i].classId + (typeof arr[i].visibility != 'undefined' ? ', visibility: ' + arr[i].visibility : '') + (typeof arr[i].numPoints != 'undefined' ? ', numPoints: '+arr[i].numPoints : '') + (typeof arr[i].confidence != 'undefined' ? ', confidence: ' + arr[i].confidence : '' )+
+					'" style="' + (invert_bboxx ? 'bottom' : 'top') + ': '+t+unit+'; left: '+l+unit+'; width: '+(r-l)+
+					unit+'; height: '+(b-t)+unit+'; border-color: '+c+';"></div>'
+				);
+			} else if (typeof arr[i]['xmin'] != 'undefined') { // SCBoundingBox structure
+				unit = '%';
+				if (
+					arr[i].xmax <= 1 &&
+					arr[i].xmin <= 1 &&
+					arr[i].ymax <= 1 &&
+					arr[i].ymin <= 1
+				) {
+					l = arr[i].xmin*100;
+					t = arr[i].ymin*100;
+					r = arr[i].xmax*100;
+					b = arr[i].ymax*100;
+				} else {
+					unit = 'px';
+					l = arr[i].xmin;
+					t = arr[i].ymin;
+					r = arr[i].xmax;
+					b = arr[i].ymax;
+				}
+				
+				c = classColors[arr[i].label];
+				
+				boxes.append(
+					'<div class="bbox tooltip" data-tooltip="x: ' + l + ',' + r + ' y: ' + t + ',' + b + ' w: ' + Math.abs(r-l) + ' h: ' + Math.abs(b-t) + ' id: '+arr[i].timestamp+', classId: '+
+					arr[i].label + (typeof arr[i].visibility != 'undefined' ? ', visibility: ' + arr[i].visibility : '') + (typeof arr[i].numPoints != 'undefined' ? ', numPoints: '+arr[i].numPoints : '') + (typeof arr[i].confidence != 'undefined' ? ', confidence: ' + arr[i].confidence : '' )+
+					'" style="' + (invert_bboxx ? 'bottom' : 'top') + ': '+t+unit+'; left: '+l+unit+'; width: '+(r-l)+
+					unit+'; height: '+(b-t)+unit+'; border-color: '+c+';"></div>'
+				);
 			} else {
-				unit = 'px';
-				l = arr[i].boxMin[0];
-				t = arr[i].boxMin[1];
-				r = arr[i].boxMax[0];
-				b = arr[i].boxMax[1];
+				console.log('WARNING: Unknown bounding box structure:', arr[i]);
 			}
-			
-			c = classColors[arr[i].classId];
-			
-			boxes.append(
-				'<div class="bbox tooltip" data-tooltip="id: '+arr[i].id+', classId: '+
-				arr[i].classId+(typeof arr[i].numPoints != 'undefined' ? ', numPoints: '+arr[i].numPoints : '')+(typeof arr[i].confidence != 'undefined' ? ', confidence: ' + arr[i].confidence : '' )+
-				'" style="' + (invert_bboxx ? 'bottom' : 'top') + ': '+t+unit+'; left: '+l+unit+'; width: '+(r-l)+
-				unit+'; height: '+(b-t)+unit+'; border-color: '+c+';"></div>'
-			);
 		}
 	}
-
+	
 	function onKeyDown(e) {
 		switch (e.which) {
 			case 32:

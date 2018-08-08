@@ -797,12 +797,15 @@ def flatList(l):
 			r.append(item)
 	return r
 
-def findLayoutFromOptions(hint, suffix=None):
+def findLayoutFromOptions(hint, suffix=None, prefix=None):
 	layouts = getAllFiles(os.path.join(settings._root, 'layout', hint), recursive=False)
 	sets = []
 	
-	for x in settings._options:
-		sets.append(x.split('\\')[-1].split('/')[-1].split('.')[0])
+	try:
+		for x in settings._options:
+			sets.append(x.split('\\')[-1].split('/')[-1].split('.')[0])
+	except:
+		pass
 	
 	layout = None
 	
@@ -815,7 +818,7 @@ def findLayoutFromOptions(hint, suffix=None):
 				layout = x
 	
 	if layout != None:
-		loadLayout('endless_runner/{}{}.layout'.format(layout, suffix if suffix != None else ''))
+		loadLayout('{}{}{}.layout'.format(prefix if prefix != None else '', layout, suffix if suffix != None else ''))
 
 def findLayout(hint):
 	try:
