@@ -1788,7 +1788,7 @@ def cameraExportParametrize(cams, mode="image", options=None):
 	
 	return obj
 
-def addDataExport(label='dataExport1', fieldLinks=None, videoLinks=None, imageLinks=None, outputPath=None, enable=True):
+def addDataExport(label='dataExport1', fieldLinks=None, videoLinks=None, imageLinks=None, outputPath=None, enable=True, filenameMask=None):
 	"""
 	Creates a data export component with optional links to data source points
 	
@@ -1863,6 +1863,12 @@ def addDataExport(label='dataExport1', fieldLinks=None, videoLinks=None, imageLi
 	
 	outputPath (string): Path to write files, if not defined defaults to `settings.output_path`
 	enable (bool): Automatically enable exporter once everything is setup, defaults to `True`
+	filenameMask (string): Defines a filename mask using placeholders, example: `!label!_!barrier!.!extension!`
+	currently supported placeholders:
+	
+	`!label!`: Object name
+	`!barrier!`: Unix timestamp
+	`!extension!`: File extension
 	
 	# Note
 	
@@ -1884,7 +1890,7 @@ def addDataExport(label='dataExport1', fieldLinks=None, videoLinks=None, imageLi
 		'CREATE "{}/links"'.format(label),
 		'"{}/exporter" ADD Sensors.DataExport'.format(label),
 		'"{}/exporter" SET Sensors.DataExport streamOutput "{}"'.format(label, outputPath),
-		
+		'"{}/exporter" SET Sensors.DataExport filenameMask "{}"'.format(label, filenameMask) if filenameMask != None else '',
 		'"{}/exporter" SET active true'.format(label),
 		'"{}/links" SET active true'.format(label)
 	], read=True)
