@@ -3,6 +3,12 @@ This change log follows YYMMDD timestamps which are also the version number for
 both the SDK and the simulator.
 --------------------------------------------------------------------------------
 
+# PRE-RELEASE
+
+- #259735641 File mask support added in the SDK
+- Fixed issue with bicycles in jumanji scene
+- Added endless runner entropic scene
+
 # 180808
 
 - Fixed critical issue with bounding boxes not being aligned

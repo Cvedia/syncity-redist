@@ -26,6 +26,20 @@ def args(parser):
 def minVersion():
 	return '18.07.26.0000'
 
+def cycleBicycles():
+	common.sendData([
+		'"Bicyclists" SET active false',
+		'DELETE "Bicyclists/Humans"',
+		'CREATE "Bicyclists/Humans"',
+		'"Bicyclists/Humans" ADD Segmentation.Class Segmentation.Spawners.Entity',
+		'"Bicyclists/Humans" SET Segmentation.Class className "Person"',
+		'"Bicyclists/Humans" ADD Thermal.Spawners.ReplaceThermalProfiles',
+		'"Bicyclists/Humans" SET Thermal.Spawners.ReplaceThermalProfiles profile "ThermalBehaviour/Humans"',
+		'"Bicyclists/Bicycles" SET Humans.Spawners.RandomHumansVehiclePoser humansContainer "Bicyclists/Humans"',
+		'"Bicyclists/Humans" SET active true',
+		'"Bicyclists" SET active true'
+		])
+
 def run():
 	loop = 0
 	mycams = ['Camera/Thermal', 'Camera/Segmentation']
@@ -60,27 +74,27 @@ def run():
 			'"Camera" SET Transform localEulerAngles (-2~0 -20~20 -3~3)',
 			'"Humans" SET RandomProps.Frustum minDistance 5~7',
 			'"Humans" SET Thermal.Spawners.ReplaceThermalProfiles profile.heatiness.value 17~40',
-			'"BicycleHumans" SET Thermal.Spawners.ReplaceThermalProfiles profile.heatiness.value 17~40',
+			'"Bicyclists/Humans" SET Thermal.Spawners.ReplaceThermalProfiles profile.heatiness.value 17~40',
 			'"Trees" SET Thermal.ThermalObjectBehaviour profile.temperature.value -10~20',
 			'"Cars" SET Thermal.Spawners.ReplaceThermalProfiles profile.heatiness.value 0~100',
 			'"Trafficlights" SET Thermal.ThermalObjectBehaviour profile.variance.value 0~50',
 			'"Cars" SET Thermal.Spawners.ReplaceThermalProfiles profile.reflectivity.value 0~0.8',
 			'"Camera/Thermal" SET Thermal.ThermalCamera temperatureRange (-30~0 8~30)',
 			'[RandomProps.Spawner] ShuffleAll "Cars" "Trees" "Signs" "Grounds" "Trafficlights" "Misc" "Humans" "Bicycles"'
-		])
+			])
 		
-		if loop % 25 == 0:
+		if loop > 0 and loop % 25 == 0:
 			common.sendData([
 				'"Trees" SET active false',
 				'"Cars" SET active false',
 				'"Humans" SET active false',
-				'"Bicycles" SET active false',
 				
 				'"Trees" SET active true',
 				'"Cars" SET active true',
-				'"Humans" SET active true',
-				'"Bicycles" SET active true'
+				'"Humans" SET active true'
 			])
+			
+			cycleBicycles()
 		
 		# reroll random textures every 100 loops
 		if loop > 0 and loop % 100 == 0 and settings.random_texture_source != None:
