@@ -97,8 +97,8 @@ CREATE Segmentation.LookUpTable AS "lookUpTable"
 "lookUpTable" EXECUTE Segmentation.LookUpTable SetClassColor "Person->Yellow" "Car->Red" "Bicycle->White"
 
 
-REGEX "tile*/Humans/Humans" ADD Segmentation.Class Segmentation.Spawners.Entity
-REGEX "tile*/Humans/Humans" SET Segmentation.Class className "Person"
+REGEX "tile*/Humans" ADD Segmentation.Class Segmentation.Spawners.Entity
+REGEX "tile*/Humans" SET Segmentation.Class className "Person"
 REGEX "tile*/Cars" ADD Segmentation.Class Segmentation.Spawners.Entity
 REGEX "tile*/Cars" SET Segmentation.Class className "Car"
 
@@ -181,14 +181,16 @@ CREATE RenderTexture 1920 1080 24 "ARGB32" "Default" AS "cameraThermal1"
 "mainCar/cameras/cameraThermal1" SET active true
 [UI.Window] ShowFromRenderTexture "cameraThermal1" AS "cameraThermal1"
 "mainCar/cameras/cameraThermal1" ADD CameraFilterPack_Blur_Noise
-"mainCar/cameras/cameraThermal1" SET CameraFilterPack_Blur_Noise Level 5 Distance (4 0)
+"mainCar/cameras/cameraThermal1" SET CameraFilterPack_Blur_Noise Level 5 Distance (4 0) 
+
 
 // --- SEGMENTATION CAMERAS
 
 [Segmentation.Camera] CreateWithClassColors "mainCar/cameras/cameraSegmentation1" WITH lookUpTable "lookUpTable"
+//[Cameras.RenderTexture] CreateNew "cameraSegmentation1" 480 270
 [Cameras.RenderTexture] CreateNew "cameraSegmentation1" 1920 1080
 "mainCar/cameras/cameraSegmentation1" SET Transform localPosition (0.1 0 0) localEulerAngles (0 -3 0)
-"mainCar/cameras/cameraSegmentation1" ADD Segmentation.Output.BoundingBoxes Segmentation.Output.FilteredBoundingBoxes
+"mainCar/cameras/cameraSegmentation1" ADD Segmentation.Output.BoundingBoxes Segmentation.Output.FilteredBoundingBoxes Segmentation.Output.BoundingBoxesOnTexture
 "mainCar/cameras/cameraSegmentation1" EXECUTE Segmentation.Output.FilteredBoundingBoxes EnableClasses "Person" "Car" "Bicycle"
 "mainCar/cameras/cameraSegmentation1" SET Segmentation.Output.BoundingBoxes minimumObjectVisibility 0 extensionAmount 0 minimumPixelsCount 1
 "mainCar/cameras/cameraSegmentation1" SET Camera targetTexture "cameraSegmentation1" far 400

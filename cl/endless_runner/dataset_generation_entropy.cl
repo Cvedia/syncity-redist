@@ -1,13 +1,10 @@
-// This CL runs setups a faster than realtime scenario for dataset generation
-// in order to export data you must use it with a VideoExport or ImageExport
-// module after the scene is setup, for example:
-//
-// python syncity.py -r cl/endless_runner/dataset_generation.cl -s generic_exporter --camera mainCar/cameras/cameraThermal1 mainCar/cameras/cameraSegmentation1 --mode image
+// python syncity.py -r cl/endless_runner/dataset_generation_entropy.cl -s dataset_generation_entropy
 
+"Time" SET captureFramerate 30
 "QualitySettings" SET shadowDistance 100 shadowCascades 2 shadows 2
 "Config.instance" SET physicsEnabled true
 
-"Time" SET timeScale 3.0
+//"Time" SET timeScale 3.0
 
 CREATE "EnviroSky" AS "EnviroSky"
 "EnviroSky" SET EnviroSky GameTime.ProgressTime "None" weatherSettings.cloudTransitionSpeed 100 weatherSettings.effectTransitionSpeed 100 weatherSettings.fogTransitionSpeed 100 
@@ -104,17 +101,16 @@ REGEX "tile*/Cars" SET Segmentation.Class className "Car"
 
 // --- SEGMENTATION SETUP END ---
 
-
 CREATE "OpenSteerNetwork"
 "OpenSteerNetwork" ADD OpenSteerNetwork
 
 "mainCar" ADD OSVehicle
-"mainCar" SET OSVehicle selfDriving true externControl false isBike false bikeLeanMult 40 startSpeed 20 maxSpeed 20 maxForce 40 spinWheels true spinWheelDisableDistance 100 predictMult 0.4
+"mainCar" SET OSVehicle selfDriving true externControl false isBike false bikeLeanMult 40 startSpeed 35 maxSpeed 60 maxForce 40 spinWheels true spinWheelDisableDistance 100 predictMult 0.4
 "mainCar" ADD OSBHVehicleDriver
-"mainCar" SET OSBHVehicleDriver selfDriving true driverSpeed 80 brakePower 10000 steerFactor 10 steerOvertake 2 smoothAdjust 100.0 laneWidth 0.5 osNetwork "OpenSteerNetwork"
+"mainCar" SET OSBHVehicleDriver selfDriving true driverSpeed 20 brakePower 10000 steerFactor 10 steerOvertake 2 smoothAdjust 100.0 laneWidth 0.5 osNetwork "OpenSteerNetwork"
 
 CREATE "cyclists"
-"cyclists" SET active true
+// "cyclists" SET active true
 
 CREATE "cyclist1"
 CREATE "cyclist1/human"
@@ -146,9 +142,10 @@ CREATE "VehicleSpawner"
 "VehicleSpawner" ADD OSNetworkRoads
 "VehicleSpawner" SET OSNetworkRoads network "OpenSteerNetwork"
 "VehicleSpawner" ADD OSNetworkSpawner
-"VehicleSpawner" SET OSNetworkSpawner spawnDelay 1.0 spawnRadius 500 spawnClearance 8 despawnRadius 550 speedVariance 20 brakeLightPower 2 spawnFocus "mainCar" removeProbes false removeBoxColliders false removeRigidBodies true
+"VehicleSpawner" SET OSNetworkSpawner spawnDelay 0 spawnRadius 50 speedVariance 20 spawnClearance 2 despawnRadius 275 speedVariance 5 brakeLightPower 2 spawnFocus "mainCar" removeProbes false removeBoxColliders false removeRigidBodies true
 "VehicleSpawner" ADD OSNetworkVehiclePool
-"VehicleSpawner" SET OSNetworkVehiclePool loadCarsAsynchronously false databaseFilter "+car.classification!=\"Special Purpose Vehicle\",+car.classification!=\"Truck\",+thermal" hidePosition "VehicleSpawner" maxObjects 80
+// change maxObjects to control how many cars are active
+"VehicleSpawner" SET OSNetworkVehiclePool loadCarsAsynchronously false databaseFilter "+car.classification!=\"Special Purpose Vehicle\",+car.classification!=\"Truck\",+thermal" hidePosition "VehicleSpawner" maxObjects 100
 
 "VehicleSpawner" ADD Thermal.ThermalProfileOverride
 "VehicleSpawner" SET Thermal.ThermalProfileOverride heatinessMode "Relative" heatiness -24
