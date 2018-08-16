@@ -66,6 +66,8 @@ def run():
 	while loop < settings.loop_limit:
 		# randomize thermal properties
 		common.sendData([
+			# random angles and position for camera container
+			'"mainCar/cameras" SET Transform localEulerAngles (-20~20 -25~25 -20~20) localPosition (-1.15~1.15 1.2~3.5 2.54)',
 			'"VehicleSpawner" SET Thermal.ThermalProfileOverride temperatureMode "Absolute" temperature -20~50 temperatureMedianMode "Absolute" temperatureMedian -0.25~1 temperatureBandwidthMode "Absolute" temperatureBandwidth -2.5~15 heatinessMode "Absolute" heatiness 0~100 varianceMode "Absolute" variance 0~50 reflectivityMode "Absolute" reflectivity 0~0.8',
 		])
 		
@@ -85,10 +87,12 @@ def run():
 					'REGEX "{}" EXECUTE Thermal.Spawners.RandomizeThermalTexture GetImagesFromDisk "{}"'.format(r, settings.random_texture_source)
 				])
 		
+		# make sure new spawned cars have proper reflection probes
+		if loop > 0 and loop % 100 == 0:
+			common.sendData('REGEX "^VehicleSpawner$/.*/Reflection Probe" SET ReflectionProbe boxProjection false farClipPlane 70 size (100 100 100) resolution 128')
+		
 		common.sendData([
-			# random angles and position for camera container
-			'"mainCar/cameras" SET Transform localEulerAngles (-20~20 -25~25 -20~20) localPosition (-6.16~2.37 1.2~3.5 0.3)',
-			'SLEEP 0.5',
+			# 'SLEEP 0.5',
 			# intentionally last as this will trigger data export
 			'"dummy" SET Transform localPosition (0~10 0~10 0~10)'
 		])

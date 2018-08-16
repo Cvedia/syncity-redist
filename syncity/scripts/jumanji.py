@@ -80,7 +80,7 @@ def run():
 			'"Trafficlights" SET Thermal.ThermalObjectBehaviour profile.variance.value 0~50',
 			'"Cars" SET Thermal.Spawners.ReplaceThermalProfiles profile.reflectivity.value 0~0.8',
 			'"Camera/Thermal" SET Thermal.ThermalCamera temperatureRange (-30~0 8~30)',
-			'[RandomProps.Spawner] ShuffleAll "Cars" "Trees" "Signs" "Grounds" "Trafficlights" "Misc" "Humans" "Bicycles"'
+			'[RandomProps.Spawner] ShuffleAll "Cars" "Trees" "Signs" "Grounds" "Trafficlights" "Misc" "Humans"'
 			])
 		
 		if loop > 0 and loop % 25 == 0:

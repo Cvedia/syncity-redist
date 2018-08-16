@@ -1,10 +1,10 @@
 // python syncity.py -r cl/endless_runner/dataset_generation_entropy.cl -s dataset_generation_entropy
 
-"Time" SET captureFramerate 30
-"QualitySettings" SET shadowDistance 100 shadowCascades 2 shadows 2
+"Time" SET captureFramerate 15
+"QualitySettings" SET shadowDistance 100 shadowCascades 2 shadows 0 realtimeReflectionProbes true
 "Config.instance" SET physicsEnabled true
 
-//"Time" SET timeScale 3.0
+//"Time" SET timeScale 6.0
 
 CREATE "EnviroSky" AS "EnviroSky"
 "EnviroSky" SET EnviroSky GameTime.ProgressTime "None" weatherSettings.cloudTransitionSpeed 100 weatherSettings.effectTransitionSpeed 100 weatherSettings.fogTransitionSpeed 100 
@@ -145,7 +145,7 @@ CREATE "VehicleSpawner"
 "VehicleSpawner" SET OSNetworkSpawner spawnDelay 0 spawnRadius 50 speedVariance 20 spawnClearance 2 despawnRadius 275 speedVariance 5 brakeLightPower 2 spawnFocus "mainCar" removeProbes false removeBoxColliders false removeRigidBodies true
 "VehicleSpawner" ADD OSNetworkVehiclePool
 // change maxObjects to control how many cars are active
-"VehicleSpawner" SET OSNetworkVehiclePool loadCarsAsynchronously false databaseFilter "+car.classification!=\"Special Purpose Vehicle\",+car.classification!=\"Truck\",+thermal" hidePosition "VehicleSpawner" maxObjects 100
+"VehicleSpawner" SET OSNetworkVehiclePool loadCarsAsynchronously false databaseFilter "+car.classification!=\"Special Purpose Vehicle\",+car.classification!=\"Truck\",+thermal" hidePosition "VehicleSpawner" maxObjects 25
 
 "VehicleSpawner" ADD Thermal.ThermalProfileOverride
 "VehicleSpawner" SET Thermal.ThermalProfileOverride heatinessMode "Relative" heatiness -24
@@ -172,7 +172,10 @@ CREATE "mainCar/cameras"
 "mainCar/cameras/cameraThermal1" SET Thermal.ThermalCamera temperatureRange (-4 50)
 "mainCar/cameras/cameraThermal1" SET Thermal.ThermalCamera ambientTemperature -1.5
 "mainCar/cameras/cameraThermal1" SET Camera far 400
-"mainCar/cameras/cameraThermal1" SET UnityStandardAssets.ImageEffects.BloomOptimized fastBloomShader "Hidden/FastBloom" threshold 0 intensity 0.15 blurSize 3.5 blurIterations 4 
+"mainCar/cameras/cameraThermal1" SET UnityStandardAssets.ImageEffects.BloomOptimized fastBloomShader "Hidden/FastBloom" threshold 0 intensity 0.15 blurSize 3.5 blurIterations 4
+"mainCar/cameras/cameraThermal1" ADD UnityStandardAssets.CinematicEffects.TonemappingColorGrading
+"mainCar/cameras/cameraThermal1" SET UnityStandardAssets.CinematicEffects.TonemappingColorGrading tonemapping.enabled true
+"mainCar/cameras/cameraThermal1" SET UnityStandardAssets.CinematicEffects.TonemappingColorGrading tonemapping.neutralWhiteLevel 13
 CREATE RenderTexture 1920 1080 24 "ARGB32" "Default" AS "cameraThermal1"
 "mainCar/cameras/cameraThermal1" SET Camera targetTexture "cameraThermal1"
 "mainCar/cameras/cameraThermal1" SET active true
@@ -214,4 +217,10 @@ CREATE "tileContainer"
 "mainCar/cameras" SET active true
 "mainCar" SET active true
 
-REGEX "^VehicleSpawner$/.*/Reflection Probe" SET ReflectionProbe boxProjection false farClipPlane 70 size (100 100 100)
+REGEX "^VehicleSpawner$/.*/Reflection Probe" SET ReflectionProbe boxProjection false farClipPlane 70 size (50 50 50) resolution 128 hdr false
+
+// enables reflection probes
+"Thermal.ProbeUpdateScheduler.instance" SET Thermal.ProbeUpdateScheduler drawThermalOnly true disableProbesRendering false
+
+// disables reflection probes
+// "Thermal.ProbeUpdateScheduler.instance" SET Thermal.ProbeUpdateScheduler disableProbesRendering true

@@ -110,6 +110,11 @@ CREATE "cameras/cameraThermal"
 "cameras/cameraThermal" SET CameraFilterPack_Pixelisation_DeepOilPaintHQ _FixDistance 47 _Distance 0.085 _Size 0.5 Intensity 2.17 enabled true
 "cameras/cameraThermal" SET CameraFilterPack_Blur_Noise Level 4 Distance (5 0) enabled true
 "cameras/cameraThermal" SET Thermal.ThermalCamera ambientTemperature 10 temperatureRange (1.93 30.23) maxDistanceForProbeUpdate 100 useAGC true enabled true 
+
+"cameras/cameraThermal" ADD UnityStandardAssets.CinematicEffects.TonemappingColorGrading
+"cameras/cameraThermal" SET UnityStandardAssets.CinematicEffects.TonemappingColorGrading tonemapping.enabled true
+"cameras/cameraThermal" SET UnityStandardAssets.CinematicEffects.TonemappingColorGrading tonemapping.neutralWhiteLevel 13
+
 [UI.Window] ShowFromCamera "cameras/cameraThermal" AS "cameraThermal" WITH 1024 768 24 "ARGB32" "Default"
 "cameras/cameraThermal" SET active true
 

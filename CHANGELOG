@@ -3,11 +3,17 @@ This change log follows YYMMDD timestamps which are also the version number for
 both the SDK and the simulator.
 --------------------------------------------------------------------------------
 
-# PRE-RELEASE
+# 180816
 
 - #259735641 File mask support added in the SDK
 - Fixed issue with bicycles in jumanji scene
 - Added endless runner entropic scene
+- Fixed VehicleSpawner naming in endless runner
+- Enabled / optimized reflection probes in endless runner and other thermal scenes
+- Fix in endless_runner entropy script that would cause bounding boxes to not show in some cases
+- New thermal reflection probe shader (fixes problems with thermal cameras + rgb + reflection probes in the same scene)
+- New thermal cars, humans and clothing asset bundle packages
+- Better thermal camera settings
 
 # 180808
 

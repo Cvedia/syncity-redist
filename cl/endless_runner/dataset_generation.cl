@@ -4,7 +4,8 @@
 //
 // python syncity.py -r cl/endless_runner/dataset_generation.cl -s generic_exporter --camera mainCar/cameras/cameraThermal1 mainCar/cameras/cameraSegmentation1 --mode image
 
-"QualitySettings" SET shadowDistance 100 shadowCascades 2 shadows 2
+"Time" SET captureFramerate 15
+"QualitySettings" SET shadowDistance 100 shadowCascades 2 shadows 0 realtimeReflectionProbes true
 "Config.instance" SET physicsEnabled true
 
 "Time" SET timeScale 3.0
@@ -148,7 +149,7 @@ CREATE "VehicleSpawner"
 "VehicleSpawner" ADD OSNetworkSpawner
 "VehicleSpawner" SET OSNetworkSpawner spawnDelay 1.0 spawnRadius 500 spawnClearance 8 despawnRadius 550 speedVariance 20 brakeLightPower 2 spawnFocus "mainCar" removeProbes false removeBoxColliders false removeRigidBodies true
 "VehicleSpawner" ADD OSNetworkVehiclePool
-"VehicleSpawner" SET OSNetworkVehiclePool loadCarsAsynchronously false databaseFilter "+car.classification!=\"Special Purpose Vehicle\",+car.classification!=\"Truck\",+thermal" hidePosition "VehicleSpawner" maxObjects 80
+"VehicleSpawner" SET OSNetworkVehiclePool loadCarsAsynchronously false databaseFilter "+car.classification!=\"Special Purpose Vehicle\",+car.classification!=\"Truck\",+thermal" hidePosition "VehicleSpawner" maxObjects 25
 
 "VehicleSpawner" ADD Thermal.ThermalProfileOverride
 "VehicleSpawner" SET Thermal.ThermalProfileOverride heatinessMode "Relative" heatiness -24
@@ -181,11 +182,13 @@ CREATE RenderTexture 1920 1080 24 "ARGB32" "Default" AS "cameraThermal1"
 "mainCar/cameras/cameraThermal1" SET active true
 [UI.Window] ShowFromRenderTexture "cameraThermal1" AS "cameraThermal1"
 "mainCar/cameras/cameraThermal1" ADD CameraFilterPack_Blur_Noise
-"mainCar/cameras/cameraThermal1" SET CameraFilterPack_Blur_Noise Level 5 Distance (4 0)
+"mainCar/cameras/cameraThermal1" SET CameraFilterPack_Blur_Noise Level 5 Distance (4 0) 
+
 
 // --- SEGMENTATION CAMERAS
 
 [Segmentation.Camera] CreateWithClassColors "mainCar/cameras/cameraSegmentation1" WITH lookUpTable "lookUpTable"
+//[Cameras.RenderTexture] CreateNew "cameraSegmentation1" 480 270
 [Cameras.RenderTexture] CreateNew "cameraSegmentation1" 1920 1080
 "mainCar/cameras/cameraSegmentation1" SET Transform localPosition (0.1 0 0) localEulerAngles (0 -3 0)
 "mainCar/cameras/cameraSegmentation1" ADD Segmentation.Output.BoundingBoxes Segmentation.Output.FilteredBoundingBoxes

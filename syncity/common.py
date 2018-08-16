@@ -155,8 +155,10 @@ def initSequence():
 	])
 	"""
 	
-	# temporary workaround : disable thermal reflection probes
-	sendData('"Thermal.ProbeUpdateScheduler.instance" SET Thermal.ProbeUpdateScheduler disableProbesRendering true')
+	if settings.disable_reflections or versionCompare(settings._simulator_version, '18.08.10.0000', '<'):
+		sendData('"Thermal.ProbeUpdateScheduler.instance" SET Thermal.ProbeUpdateScheduler disableProbesRendering true')
+	else:
+		sendData('"Thermal.ProbeUpdateScheduler.instance" SET Thermal.ProbeUpdateScheduler drawThermalOnly false disableProbesRendering false')
 	
 	sendData('"Config.instance" SET physicsEnabled {}'.format('false' if settings.enable_physics == False else 'true'))
 	

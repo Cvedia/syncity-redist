@@ -15,7 +15,7 @@ import random
 
 from syncity import common, settings_manager
 
-SYNCITY_VERSION = '18.08.01.1909'
+SYNCITY_VERSION = '18.08.16.1542'
 SIMULATOR_MIN_VERSION = '18.04.23.0000'
 
 print ('SynCity toolbox - v{}\nCopyright (c) 2016-{} CVEDIA PVE Ltd\n'.format(SYNCITY_VERSION, datetime.date.today().year))
@@ -92,6 +92,7 @@ parser.add_argument('--enable_physics', action='store_true', default=False, help
 # parser.add_argument('--enable_console_log', action='store_true', default=False, help='Enable UI console log')
 parser.add_argument('--enable_canvas', action='store_true', default=False, help='Enable client rendering visualization, this is the legacy interface')
 parser.add_argument('--disable_envirosky', action='store_true', default=False, help='Disables Envirosky -- NOT RECOMMENDED')
+parser.add_argument('--disable_reflections', action='store_true', default=False, help='Disables Reflection probes')
 
 parser.add_argument('--use_old_depth_buffer', action='store_true', default=False, help='Uses old depth buffer component')
 parser.add_argument('--flycam', action='store_true', default=False, help='Spawns fly cam, controllable via simulator')
