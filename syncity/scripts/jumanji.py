@@ -26,20 +26,6 @@ def args(parser):
 def minVersion():
 	return '18.07.26.0000'
 
-def cycleBicycles():
-	common.sendData([
-		'"Bicyclists" SET active false',
-		'DELETE "Bicyclists/Humans"',
-		'CREATE "Bicyclists/Humans"',
-		'"Bicyclists/Humans" ADD Segmentation.Class Segmentation.Spawners.Entity',
-		'"Bicyclists/Humans" SET Segmentation.Class className "Person"',
-		'"Bicyclists/Humans" ADD Thermal.Spawners.ReplaceThermalProfiles',
-		'"Bicyclists/Humans" SET Thermal.Spawners.ReplaceThermalProfiles profile "ThermalBehaviour/Humans"',
-		'"Bicyclists/Bicycles" SET Humans.Spawners.RandomHumansVehiclePoser humansContainer "Bicyclists/Humans"',
-		'"Bicyclists/Humans" SET active true',
-		'"Bicyclists" SET active true'
-		])
-
 def run():
 	loop = 0
 	mycams = ['Camera/Thermal', 'Camera/Segmentation']
@@ -91,10 +77,11 @@ def run():
 				
 				'"Trees" SET active true',
 				'"Cars" SET active true',
-				'"Humans" SET active true'
+				'"Humans" SET active true',
+				
+				'"Bicyclists" SET active false',
+				'"Bicyclists" SET active true'
 			])
-			
-			cycleBicycles()
 		
 		# reroll random textures every 100 loops
 		if loop > 0 and loop % 100 == 0 and settings.random_texture_source != None:
