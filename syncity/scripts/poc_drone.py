@@ -45,6 +45,42 @@ def run():
 	if settings.skip_setup == False:
 		camera_size = [ 1024, 1024 ]
 		
+		helpers.spawnDroneObjs(
+			dronesLimit=[2,2],
+			dronesColors=True,
+			dronesTags=['blurred' if blurring_method == 'embedded' else 'phantom'],
+			dronesPartsNames='chassis,legs,motors,battery,bolts,sensors_caps,sensors,camera,blades',
+			
+			animalsThermalObjectBehaviour=True,
+			birdsThermalObjectBehaviour=True,
+			treesThermalObjectBehaviour=True,
+			buildingsThermalObjectBehaviour=True,
+			carsThermalObjectBehaviour=True,
+			groundThermalObjectBehaviour=True,
+			dronesThermalObjectBehaviour=True,
+			humansThermalObjectBehaviour=True,
+			signsThermalObjectBehaviour=True,
+			cityThermalObjectBehaviour=True,
+			buildingsInnerRadius=80,
+			treesLimit=[20,50], treesInnerRadius=15, treesRadius=60, buildingsLimit=[20,50],
+			#
+			# NOTE:
+			#
+			# use only 'car' to spawn cars without thermal signature, that will be then
+			# linked to a default profile, note that this will not show full detail, but
+			# it's pretty much the same from a distance.
+			#
+			# use 'car, +thermal' to spawn only cars with thermal profiles
+			#
+			carsTags=['+car, +thermal'],
+			animalsTags=['+animal, +thermal']
+		)
+		
+		common.sendData([
+			# disable car reflection probes
+			'REGEX "^spawner/cars/container$/.*/Reflection Probe" SET ReflectionProbe enabled false'
+		])
+		
 		helpers.globalCameraSetup(orbit=False)
 		helpers.addCameraSeg(width=camera_size[0], height=camera_size[1], segments=['DRONE'], lookupTable=[['DRONE', 'red']])
 		helpers.addCameraDepth(width=camera_size[0], height=camera_size[1])
@@ -82,37 +118,6 @@ def run():
 			camera=mycams[0],
 			redParam1=0.05,
 			redParam2=0.05
-		)
-		
-		helpers.spawnDroneObjs(
-			dronesLimit=[2,2],
-			dronesColors=True,
-			dronesTags=['blurred' if blurring_method == 'embedded' else 'phantom'],
-			dronesPartsNames='chassis,legs,motors,battery,bolts,sensors_caps,sensors,camera,blades',
-			
-			animalsThermalObjectBehaviour=True,
-			birdsThermalObjectBehaviour=True,
-			treesThermalObjectBehaviour=True,
-			buildingsThermalObjectBehaviour=True,
-			carsThermalObjectBehaviour=True,
-			groundThermalObjectBehaviour=True,
-			dronesThermalObjectBehaviour=True,
-			humansThermalObjectBehaviour=True,
-			signsThermalObjectBehaviour=True,
-			cityThermalObjectBehaviour=True,
-			buildingsInnerRadius=80,
-			treesLimit=[20,50], treesInnerRadius=15, treesRadius=60, buildingsLimit=[20,50],
-			#
-			# NOTE:
-			#
-			# use only 'car' to spawn cars without thermal signature, that will be then
-			# linked to a default profile, note that this will not show full detail, but
-			# it's pretty much the same from a distance.
-			#
-			# use 'car, +thermal' to spawn only cars with thermal profiles
-			#
-			carsTags=['+car, +thermal'],
-			animalsTags=['+animal, +thermal']
 		)
 		
 		"""
@@ -175,15 +180,18 @@ def run():
 	
 	loop = 0
 	
-	# reset camera
 	common.sendData([
+		# global reflection probe
+		'"cameras/thermal" ADD ReflectionProbe',
+		'"cameras/thermal" SET ReflectionProbe type 2 mode 1 refreshMode 1 shadowDistance 0 boxProjection true farClipPlane 350 size (250 250 250) resolution 1024 hdr true enabled true',
+		
 		'"cameras/cameraRGB" SET Camera enabled true',
 		'"cameras/thermal" SET Camera enabled true',
 		
 		'"cameras" SET Transform position ({} {} {}) eulerAngles ({}~{} {} {})'.format(0, 5, 0, -20, 0, 0, 0),
 		'"EnviroSky" EXECUTE EnviroSky ChangeWeather "{}"'.format(helpers.weather_lst[2]),
 		'"EnviroSky" SET EnviroSky cloudsMode "{}" fogSettings.heightFog false fogSettings.distanceFog false cloudsSettings.globalCloudCoverage {}'.format(helpers.clouds_lst[2], -0.04),
-		'"{}" SET Sensors.RenderCamera alwaysOn false'.format(mycams[0]),
+		'"{}" SET Sensors.RenderCamera alwaysOn false'.format(mycams[0]) if common.versionCompare(settings._simulator_version, '18.07.26.0000', '<') else '',
 		'''"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour
 				profile.motionBlur.enabled true
 				profile.motionBlur.settings.shutterAngle {}
@@ -234,7 +242,10 @@ def run():
 					'"spawner/cars/container" SET active false',
 					'"spawner/cars/container" SET RandomProps.PropArea numberOfProps {}~{}'.format(35, 75),
 					'"spawner/cars/container" SET active true',
-
+					
+					# disable car reflection probes
+					'REGEX "^spawner/cars/container$/.*/Reflection Probe" SET ReflectionProbe enabled false',
+					
 					'"spawner/city/nature/trees/container" SET active false',
 					'"spawner/city/nature/trees/container" SET RandomProps.PropArea numberOfProps {}~{}'.format(70, 200),
 					'"spawner/city/nature/trees/container" SET active true',
@@ -295,6 +306,7 @@ def run():
 		if blurring_method != 'embedded':
 			common.sendData('SLEEP 1', read=True)
 		
+		# intentionally last as this will trigger data export
 		common.sendData([
 			'"cameras" SET Transform position ({} {}~{} {}) eulerAngles ({}~{} {} {})'.format(0, 5, 20, 0, -20, 70, 0, 0)
 		], read=False)

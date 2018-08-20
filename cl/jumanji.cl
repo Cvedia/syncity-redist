@@ -10,6 +10,11 @@ CREATE "Camera"
 //CREATE RenderTexture 1472 1472 24 "ARGB32" "Default" AS "Thermal Texture"
 //"Camera/Thermal" SET Camera targetTexture "Thermal Texture" 
 "Camera/Thermal" SET Thermal.ThermalCamera temperatureRange (-10 30)
+
+// global reflection probe
+"Camera/Thermal" ADD ReflectionProbe
+"Camera/Thermal" SET ReflectionProbe type 2 mode 1 refreshMode 1 shadowDistance 0 boxProjection true farClipPlane 350 size (250 250 250) resolution 1024 hdr true enabled true
+
 "Camera/Thermal" SET active true
 
 "Segmentation.Profile.instance" PUSH classes "Void" "Person" "Bicycle" "Car"
@@ -116,6 +121,12 @@ CREATE "Cars"
 "Cars" ADD Thermal.Spawners.ReplaceThermalProfiles
 "Cars" SET Thermal.Spawners.ReplaceThermalProfiles profile "ThermalBehaviour/Cars"
 "Cars" SET active true
+
+// disable reflection probes in cars, we will relay in the global one instead
+REGEX "^Cars$/.*/Reflection Probe" SET ReflectionProbe enabled false
+
+// .. or update them to be less heavy
+// REGEX "^Cars$/.*/Reflection Probe" SET ReflectionProbe boxProjection false farClipPlane 70 size (50 50 50) resolution 128 hdr false enabled true
 
 CREATE "Bird"
 "Bird" SET Transform localPosition (0 2 0)

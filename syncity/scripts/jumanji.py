@@ -80,7 +80,13 @@ def run():
 				'"Humans" SET active true',
 				
 				'"Bicyclists" SET active false',
-				'"Bicyclists" SET active true'
+				'"Bicyclists" SET active true',
+				
+				# disable reflection probes in new spawned cars
+				'REGEX "^Cars$/.*/Reflection Probe" SET ReflectionProbe enabled false'
+				
+				# ...or update them to be less heavy
+				# 'REGEX "^Cars$/.*/Reflection Probe" SET ReflectionProbe boxProjection false farClipPlane 70 size (50 50 50) resolution 128 hdr false enabled true',
 			])
 		
 		# reroll random textures every 100 loops
