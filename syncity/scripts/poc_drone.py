@@ -45,42 +45,6 @@ def run():
 	if settings.skip_setup == False:
 		camera_size = [ 1024, 1024 ]
 		
-		helpers.spawnDroneObjs(
-			dronesLimit=[2,2],
-			dronesColors=True,
-			dronesTags=['blurred' if blurring_method == 'embedded' else 'phantom'],
-			dronesPartsNames='chassis,legs,motors,battery,bolts,sensors_caps,sensors,camera,blades',
-			
-			animalsThermalObjectBehaviour=True,
-			birdsThermalObjectBehaviour=True,
-			treesThermalObjectBehaviour=True,
-			buildingsThermalObjectBehaviour=True,
-			carsThermalObjectBehaviour=True,
-			groundThermalObjectBehaviour=True,
-			dronesThermalObjectBehaviour=True,
-			humansThermalObjectBehaviour=True,
-			signsThermalObjectBehaviour=True,
-			cityThermalObjectBehaviour=True,
-			buildingsInnerRadius=80,
-			treesLimit=[20,50], treesInnerRadius=15, treesRadius=60, buildingsLimit=[20,50],
-			#
-			# NOTE:
-			#
-			# use only 'car' to spawn cars without thermal signature, that will be then
-			# linked to a default profile, note that this will not show full detail, but
-			# it's pretty much the same from a distance.
-			#
-			# use 'car, +thermal' to spawn only cars with thermal profiles
-			#
-			carsTags=['+car, +thermal'],
-			animalsTags=['+animal, +thermal']
-		)
-		
-		common.sendData([
-			# disable car reflection probes
-			'REGEX "^spawner/cars/container$/.*/Reflection Probe" SET ReflectionProbe enabled false'
-		])
-		
 		helpers.globalCameraSetup(orbit=False)
 		helpers.addCameraSeg(width=camera_size[0], height=camera_size[1], segments=['DRONE'], lookupTable=[['DRONE', 'red']])
 		helpers.addCameraDepth(width=camera_size[0], height=camera_size[1])
@@ -119,6 +83,42 @@ def run():
 			redParam1=0.05,
 			redParam2=0.05
 		)
+		
+		helpers.spawnDroneObjs(
+			dronesLimit=[2,2],
+			dronesColors=True,
+			dronesTags=['blurred' if blurring_method == 'embedded' else 'phantom'],
+			dronesPartsNames='chassis,legs,motors,battery,bolts,sensors_caps,sensors,camera,blades',
+			
+			animalsThermalObjectBehaviour=True,
+			birdsThermalObjectBehaviour=True,
+			treesThermalObjectBehaviour=True,
+			buildingsThermalObjectBehaviour=True,
+			carsThermalObjectBehaviour=True,
+			groundThermalObjectBehaviour=True,
+			dronesThermalObjectBehaviour=True,
+			humansThermalObjectBehaviour=True,
+			signsThermalObjectBehaviour=True,
+			cityThermalObjectBehaviour=True,
+			buildingsInnerRadius=80,
+			treesLimit=[20,50], treesInnerRadius=15, treesRadius=60, buildingsLimit=[20,50],
+			#
+			# NOTE:
+			#
+			# use only 'car' to spawn cars without thermal signature, that will be then
+			# linked to a default profile, note that this will not show full detail, but
+			# it's pretty much the same from a distance.
+			#
+			# use 'car, +thermal' to spawn only cars with thermal profiles
+			#
+			carsTags=['+car, +thermal'],
+			animalsTags=['+animal, +thermal']
+		)
+		
+		common.sendData([
+			# disable car reflection probes
+			'REGEX "^spawner/cars/container$/.*/Reflection Probe" SET ReflectionProbe enabled false'
+		])
 		
 		"""
 		for x in range(0,2):
