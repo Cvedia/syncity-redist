@@ -181,9 +181,10 @@ def run():
 	loop = 0
 	
 	common.sendData([
+		'"AssetBundles.GameobjectCache" SET AssetBundles.GameobjectCache cachedObjectsLimit {}'.format(settings.cache_limit),
 		# global reflection probe
 		'"cameras/thermal" ADD ReflectionProbe',
-		'"cameras/thermal" SET ReflectionProbe type 2 mode 1 refreshMode 1 shadowDistance 0 boxProjection true farClipPlane 350 size (250 250 250) resolution 1024 hdr true enabled true',
+		'"cameras/thermal" SET ReflectionProbe mode 1 refreshMode 1 shadowDistance 0 boxProjection true farClipPlane 350 size (250 250 250) resolution 1024 hdr true enabled true',
 		
 		'"cameras/cameraRGB" SET Camera enabled true',
 		'"cameras/thermal" SET Camera enabled true',
@@ -236,31 +237,31 @@ def run():
 			if loop % 100 == 0:
 				common.sendData([
 					'"spawner/city/ground/container" SET active false',
-					'"spawner/city/ground/container" SET RandomProps.PropArea numberOfProps {}~{}'.format(500, 1000),
+					'"spawner/city/ground/container" SET RandomProps.PropArea numberOfProps {}~{}'.format(75, 250),
 					'"spawner/city/ground/container" SET active true',
 					
 					'"spawner/cars/container" SET active false',
-					'"spawner/cars/container" SET RandomProps.PropArea numberOfProps {}~{}'.format(35, 75),
+					'"spawner/cars/container" SET RandomProps.PropArea numberOfProps {}~{}'.format(5, 15),
 					'"spawner/cars/container" SET active true',
 					
 					# disable car reflection probes
 					'REGEX "^spawner/cars/container$/.*/Reflection Probe" SET ReflectionProbe enabled false',
 					
 					'"spawner/city/nature/trees/container" SET active false',
-					'"spawner/city/nature/trees/container" SET RandomProps.PropArea numberOfProps {}~{}'.format(70, 200),
+					'"spawner/city/nature/trees/container" SET RandomProps.PropArea numberOfProps {}~{}'.format(20, 50),
 					'"spawner/city/nature/trees/container" SET active true',
 
 					'"spawner/city/buildings/container" SET active false',
-					'"spawner/city/buildings/container" SET RandomProps.PropArea numberOfProps {}~{}'.format(100, 150),
+					'"spawner/city/buildings/container" SET RandomProps.PropArea numberOfProps {}~{}'.format(10, 50),
 					'"spawner/city/buildings/container" SET RandomProps.Torus innerRadius {}~{}'.format(30, 100),
 					'"spawner/city/buildings/container" SET active true',
 
 					'"spawner/roadsigns/container" SET active false',
-					'"spawner/roadsigns/container" SET RandomProps.PropArea numberOfProps {}~{}'.format(160, 250),
+					'"spawner/roadsigns/container" SET RandomProps.PropArea numberOfProps {}~{}'.format(20, 100),
 					'"spawner/roadsigns/container" SET active true',
 
 					'"spawner/humans_0/container" SET active false',
-					'"spawner/humans_0/container" SET RandomProps.PropArea numberOfProps {}~{}'.format(50, 70),
+					'"spawner/humans_0/container" SET RandomProps.PropArea numberOfProps {}~{}'.format(10, 50),
 					'"spawner/humans_0/container" SET active true',
 				], read=False)
 			

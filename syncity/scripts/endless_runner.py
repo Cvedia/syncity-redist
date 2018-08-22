@@ -48,22 +48,21 @@ def run():
 		tiles = []
 		i = 0
 		
-		common.sendData('"Config.instance" SET physicsEnabled true')
-
-
+		common.sendData([
+			'"Config.instance" SET physicsEnabled true',
+			'"Time" SET captureFramerate {}'.format(options['fps']))
+		])
+		
+		# time stepping for synchronization regardless of FPS
+		try:
+			if options['dataExport']['mode'] == 'video':
+				options['dataExport']['video']['fps'] = options['fps']
+		except:
+			pass
+		
 		for k, v in options['tiles'].items():
 			tile = 'tile{}'.format(i)
-			common.sendData([
-				'CREATE "{}" FROM "{}" as "{}"'.format(k, v['bundle'], tile),
-				'"{}/Terrain" SET active false'.format(tile),
-				'"{}/Terrain_Mesh" SET active true'.format(tile),
-				'"{}/Humans/NavMesh" ADD RandomProps.Spawners.Area.Navigation RandomProps.Spawners.PropArea Humans.Spawners.RandomHumans Humans.Spawners.HumanWanderers"'.format(tile),
-				'"{}/Humans/NavMesh" SET Humans.Spawners.RandomHumans settings.context "{}"'.format(tile,options["pedestrians"]["context"]),
-				'"{}/Humans/NavMesh" PUSH Humans.Spawners.HumanWanderers pointsOfInterest REGEX "{}/Humans/Walking points/.*"'.format(tile,tile),
-				'"{}/Humans/NavMesh" SET Humans.Spawners.HumanWanderers minSpeed {} maxSpeed {} stoppingDistance 2'.format(tile,options["pedestrians"]["minSpeed"],options["pedestrians"]["maxSpeed"]),
-				'"{}/Humans/NavMesh" SET RandomProps.Spawners.Area.Navigation size (500 750) areaMask -1'.format(tile),
-				'"{}/Humans/NavMesh" SET RandomProps.Spawners.PropArea tags "human" numberOfProps {} collisionCheck false'.format(tile,options["pedestrians"]["amountPerTile"]),
-			])
+			common.sendData('CREATE "{}" FROM "{}" as "{}"'.format(k, v['bundle'], tile))
 			
 			if 'init' in v:
 				for c in v['init']:
@@ -73,6 +72,25 @@ def run():
 			i += 1
 		
 		common.sendData([
+			# tile regex setup
+			'REGEX "tile*/Terrain" SET active false',
+			'REGEX "tile*/Terrain_Mesh" SET active true',
+			
+			# --- TILE PEDESTRIAN SETUP BEGIN ---
+			
+			'REGEX "tile*/Humans/NavMesh" ADD RandomProps.Spawners.Area.Navigation RandomProps.Spawners.PropArea Humans.Spawners.RandomHumans Humans.Spawners.HumanWanderers',
+			'REGEX "tile*/Humans/NavMesh" SET Humans.Spawners.RandomHumans settings.context "{}"'.format(options["pedestrians"]["context"]),
+			
+			# deprecated
+			# '"tile0/Humans/NavMesh" PUSH Humans.Spawners.HumanWanderers pointsOfInterest REGEX "tile0/Humans/Walking points/.*"',
+			# '"tile1/Humans/NavMesh" PUSH Humans.Spawners.HumanWanderers pointsOfInterest REGEX "tile1/Humans/Walking points/.*"',
+			# '"tile2/Humans/NavMesh" PUSH Humans.Spawners.HumanWanderers pointsOfInterest REGEX "tile2/Humans/Walking points/.*"',
+			# '"tile3/Humans/NavMesh" PUSH Humans.Spawners.HumanWanderers pointsOfInterest REGEX "tile3/Humans/Walking points/.*"',
+			
+			'REGEX "tile*/Humans/NavMesh" SET Humans.Spawners.HumanWanderers minSpeed {} maxSpeed {} stoppingDistance 2'.format(options["pedestrians"]["minSpeed"],options["pedestrians"]["maxSpeed"]),
+			'REGEX "tile*/Humans/NavMesh" SET RandomProps.Spawners.Area.Navigation size (500 750) areaMask -1',
+			'REGEX "tile*/Humans/NavMesh" SET RandomProps.Spawners.PropArea tags "human" numberOfProps {} collisionCheck false'.format(options["pedestrians"]["amountPerTile"]),
+			
 			# create mainCar
 			'CREATE "Pickup" FROM "highway" AS "{}"'.format(options['mainCar']),
 			'"{}" SET Rigidbody isKinematic true'.format(options['mainCar']),
@@ -82,7 +100,7 @@ def run():
 			# disable headlights
 			'"{}/Lights" SET active false'.format(options['mainCar'])
 		])
-
+		
 		# automaticLights require EnviroSky
 		addAutomaticLights = 'RGB' in options['flags']
 		
@@ -91,9 +109,7 @@ def run():
 				'"Segmentation.Profile.instance" PUSH classes "Void" "Pedestrian" "Building" "Car" "Road" "Tree" "Prop" "Sign"',
 				'CREATE Segmentation.LookUpTable AS "lookUpTable"',
 				'"lookUpTable" EXECUTE Segmentation.LookUpTable SetClassColor "Pedestrian->Yellow" "Building->Green" "Car->Red"  "Road->Blue" "Tree->Grey" "Prop->Cyan" "Sign->White"',
-			])
-			
-			common.sendData([
+				
 				'REGEX "tile*/Humans" ADD Segmentation.Class',
 				'REGEX "tile*/Humans" SET Segmentation.Class className "Pedestrian"',
 				'REGEX "tile*/Buildings" ADD Segmentation.Class',
@@ -178,8 +194,8 @@ def run():
 			
 			smoothAdjust=options['smoothAdjust']
 		)
-
-	#car manual driving toggle
+		
+		#car manual driving toggle
 		common.sendData([
 			'"{}" ADD ToggleBetweenAutoDriveAndUserControl'.format(options['mainCar']),
 		])
@@ -419,7 +435,7 @@ def run():
 						cam['thermal']['blur']['distance'][1]
 					),
 						])
-
+				
 				if "oilPaint" in cam['thermal']:
 					common.sendData([
 						'"{}" ADD CameraFilterPack_Pixelisation_DeepOilPaintHQ'.format(idx),
@@ -451,6 +467,10 @@ def run():
 			'"{}" SET active true'.format(options['vehicleSpawner']['label']),
 			'"{}" SET active true'.format(options['labelRoot']),
 			'"{}" SET active true'.format(options['mainCar']),
+			
+			# setup global reflection probes, if enabled
+			'"{}/Reflection Probe" SET active true'.format(options['mainCar']) if options['globalReflectionProbe']['enabled'] == True else '',
+			'"{}/Reflection Probe" SET ReflectionProbe boxProjection true farClipPlane {} size ({} {} {}) center ({} {} {}) resolution {} hdr true enabled true'.format(options['mainCar'], options['globalReflectionProbe']['farClipPlane'], options['globalReflectionProbe']['size'][0], options['globalReflectionProbe']['size'][1], options['globalReflectionProbe']['size'][2], options['globalReflectionProbe']['offset'][0], options['globalReflectionProbe']['offset'][1], options['globalReflectionProbe']['offset'][2], options['globalReflectionProbe']['resolution']) if options['globalReflectionProbe']['enabled'] == True else ''
 		])
 
 		# update hierarchy window
@@ -496,7 +516,7 @@ def run():
 		
 		try:
 			# replacement for disk and videoExport
-			if common.versionCompare(settings._simulator_version, '18.07.26.0000', '>') and options['dataExport']:
+			if common.versionCompare(settings._simulator_version, '18.07.26.0000', '>') and options['dataExport']['enabled'] == True:
 				_fields = options['dataExport']['fields'].copy()
 				
 				# copy `options['dataExport'][mode]` options to `options['dataExport']['fields'][]['options']`

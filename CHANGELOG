@@ -3,6 +3,15 @@ This change log follows YYMMDD timestamps which are also the version number for
 both the SDK and the simulator.
 --------------------------------------------------------------------------------
 
+# 180822
+
+- #265386365: Fixed memory overflow in poc_drone
+- #259415293: Fixed FPS in video exports
+- Fixed issue with syncity crashing out of memory due excess of cached entities
+- Fixed argument passing issue with DataExporter in SDK
+- Optimizations and better camera settings for endless_runner scene
+- Several minor fixes in SDK scripts
+
 # 180816
 
 - #259735641 File mask support added in the SDK

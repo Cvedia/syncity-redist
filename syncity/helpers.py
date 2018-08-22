@@ -1932,6 +1932,7 @@ def addExportLink(params, linkType, exportLinks):
 		exportLinks = [ exportLinks ]
 	
 	buf = []
+	sts = []
 	options = None
 	
 	for k, v in params.items():
@@ -1942,7 +1943,7 @@ def addExportLink(params, linkType, exportLinks):
 		if isinstance(v, bool):
 			v = "true" if v == True else "false"
 		
-		buf.append('{} "{}"'.format(k, v))
+		sts.append('{} "{}"'.format(k, v))
 	
 	if options != None:
 		_options = []
@@ -1950,19 +1951,27 @@ def addExportLink(params, linkType, exportLinks):
 		for k, v in options.items():
 			_options.append('"{}->{}"'.format(k, v))
 		
-		options = ' '.join(_options)
+		# options = ' '.join(_options)
+		options = _options
 	
 	for l in exportLinks:
 		obj = '{}/links/{}'.format(l, common.genID())
-		
-		common.sendData([
+		buf.extend([
 			'CREATE "{}"'.format(obj),
 			'"{}" ADD Sensors.{}'.format(obj, linkType),
-			'"{}" SET Sensors.{} {} enabled true'.format(obj, linkType, ' '.join(buf)),
-			'"{}/exporter" PUSH Sensors.DataExport {} "{}"'.format(l, common.export2list[linkType], obj),
-			'"{}" EXECUTE Sensors.{} SetOptions {}'.format(obj, linkType, options) if options != None else '',
-			'"{}" SET active true'.format(obj)
+			'"{}" SET Sensors.{} {} enabled true'.format(obj, linkType, ' '.join(sts)),
+			'"{}/exporter" PUSH Sensors.DataExport {} "{}"'.format(l, common.export2list[linkType], obj)
 		])
+		
+		# TODO Note: SetOptions defType in c# layer is not yet compatible with aggregation
+		# so we're splitting this in different statements.
+		if options != None:
+			for o in options:
+				buf.append('"{}" EXECUTE Sensors.{} SetOptions {}'.format(obj, linkType, o))
+		
+		buf.append('"{}" SET active true'.format(obj))
+	
+	common.sendData(buf)
 
 def addImageExport(lst, label='imageExport1', params=None):
 	if common.versionCompare(settings._simulator_version, '18.07.19.0000', '<'):

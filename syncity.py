@@ -15,7 +15,7 @@ import random
 
 from syncity import common, settings_manager
 
-SYNCITY_VERSION = '18.08.16.1542'
+SYNCITY_VERSION = '18.08.22.2045'
 SIMULATOR_MIN_VERSION = '18.04.23.0000'
 
 print ('SynCity toolbox - v{}\nCopyright (c) 2016-{} CVEDIA PVE Ltd\n'.format(SYNCITY_VERSION, datetime.date.today().year))
@@ -73,7 +73,7 @@ parser.add_argument('--log', default=False, nargs='?', help='Log all IOs, if a p
 parser.add_argument('--async', action='store_true', default=False, help='Send some telnet commands asyncronously -- EXPERIMENTAL')
 
 parser.add_argument('--skip_init', action='store_true', default=False, help='Disables telnet init sequence')
-parser.add_argument('--skip_disk', action='store_true', default=False, help='Disables disk export completly')
+parser.add_argument('--skip_disk', action='store_true', default=False, help='Disables disk export completly (deprecated)')
 parser.add_argument('--skip_export', action='store_true', default=False, help='Disables data exports completly')
 parser.add_argument('--skip_setup', action='store_true', default=False, help='Skip script setup and go straight to data extraction')
 parser.add_argument('--skip_queue', action='store_true', default=False, help='Skips all queue waits, this might cause asyncronous states for exports -- NOT RECOMMENDED')
@@ -93,6 +93,8 @@ parser.add_argument('--enable_physics', action='store_true', default=False, help
 parser.add_argument('--enable_canvas', action='store_true', default=False, help='Enable client rendering visualization, this is the legacy interface')
 parser.add_argument('--disable_envirosky', action='store_true', default=False, help='Disables Envirosky -- NOT RECOMMENDED')
 parser.add_argument('--disable_reflections', action='store_true', default=False, help='Disables Reflection probes')
+
+parser.add_argument('--cache_limit', type=int, default=0, help='Defines how large the asset cache pool should be. The higher you set this more GPU memory will be used.')
 
 parser.add_argument('--use_old_depth_buffer', action='store_true', default=False, help='Uses old depth buffer component')
 parser.add_argument('--flycam', action='store_true', default=False, help='Spawns fly cam, controllable via simulator')

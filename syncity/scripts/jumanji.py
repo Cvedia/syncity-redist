@@ -41,6 +41,8 @@ def run():
 			])
 	
 	if settings.skip_setup == False:
+		common.sendData('"AssetBundles.GameobjectCache" SET AssetBundles.GameobjectCache cachedObjectsLimit {}'.format(settings.cache_limit))
+		
 		helpers.addDataExport(
 			imageLinks=helpers.cameraExportParametrize(mycams, "image"),
 			fieldLinks=[

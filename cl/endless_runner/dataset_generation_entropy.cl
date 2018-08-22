@@ -31,13 +31,15 @@ REGEX "tile*/Terrain_Mesh" SET active true
 REGEX "tile*/Humans/NavMesh" ADD RandomProps.Spawners.Area.Navigation RandomProps.Spawners.PropArea Humans.Spawners.RandomHumans Humans.Spawners.HumanWanderers
 REGEX "tile*/Humans/NavMesh" SET Humans.Spawners.RandomHumans settings.context "Casual"
 
-"tile0/Humans/NavMesh" PUSH Humans.Spawners.HumanWanderers pointsOfInterest REGEX "tile0/Humans/Walking points/.*"
-"tile1/Humans/NavMesh" PUSH Humans.Spawners.HumanWanderers pointsOfInterest REGEX "tile1/Humans/Walking points/.*"
-"tile2/Humans/NavMesh" PUSH Humans.Spawners.HumanWanderers pointsOfInterest REGEX "tile2/Humans/Walking points/.*"
-"tile3/Humans/NavMesh" PUSH Humans.Spawners.HumanWanderers pointsOfInterest REGEX "tile3/Humans/Walking points/.*"
+// deprecated
+// "tile0/Humans/NavMesh" PUSH Humans.Spawners.HumanWanderers pointsOfInterest REGEX "tile0/Humans/Walking points/.*"
+// "tile1/Humans/NavMesh" PUSH Humans.Spawners.HumanWanderers pointsOfInterest REGEX "tile1/Humans/Walking points/.*"
+// "tile2/Humans/NavMesh" PUSH Humans.Spawners.HumanWanderers pointsOfInterest REGEX "tile2/Humans/Walking points/.*"
+// "tile3/Humans/NavMesh" PUSH Humans.Spawners.HumanWanderers pointsOfInterest REGEX "tile3/Humans/Walking points/.*"
 
 REGEX "tile*/Humans/NavMesh" SET Humans.Spawners.HumanWanderers minSpeed 1 maxSpeed 1.5 stoppingDistance 2
 REGEX "tile*/Humans/NavMesh" SET RandomProps.Spawners.Area.Navigation size (500 750) areaMask -1
+// change numberOfProps to spawn more humans per tile
 REGEX "tile*/Humans/NavMesh" SET RandomProps.Spawners.PropArea tags "human" numberOfProps 20 collisionCheck false
 
 // --- TILE PEDESTRIAN SETUP END ---

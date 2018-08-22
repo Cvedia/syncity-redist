@@ -1,11 +1,13 @@
 {
 	"loop": 0,
 	"mainCar": "mainCar",
+	"fps": 30,
 	
 	"quality": {
-		"shadowDistance": 100,
-		"shadowCascades": 2,
-		"shadows": 2
+		"shadowDistance": 350,
+		"shadowCascades": 4,
+		"shadows": 1,
+		"antiAliasing": 8
 	},
 	
 	"envirosky": {
@@ -28,6 +30,14 @@
 		"databaseFilter": "+car.classification!=\\\"Special Purpose Vehicle\\\",+car.classification!=\\\"Truck\\\",+thermal"
 	},
 	
+	"globalReflectionProbe": {
+		"enabled": true,
+		"farClipPlane": 350,
+		"size": [300, 50, 300],
+		"offset": [0, 20, 100],
+		"resolution": 1024
+	},
+	
 	"roadNetworkLabel": "OpenSteerNetwork",
 	"trafficEventsLabel": "TrafficEvents",
 	
@@ -35,8 +45,9 @@
 	"carInput": {
 		"mode": "auto"
 	},
+	
 	"selfDriving": true,
-	"maxSpeed": 20,
+	"maxSpeed": 60,
 	"startSpeed": 5,
 	"smoothAdjust": 100.0,
 	
@@ -61,16 +72,20 @@
 		"context" : "Casual"
 	},
 	"dataExport": {
+		"enabled": true,
 		"mode": "video",
 		
 		"video": {
 			"stream_max": 300,
 			"profile": "high",
-			"fps": 30
+			"height": 1024,
+			"width": 1024
 		},
 		
 		"image": {
-			"stream_max": 1
+			"stream_max": 1,
+			"height": 1024,
+			"width": 1024
 		},
 		
 		"fields": [
