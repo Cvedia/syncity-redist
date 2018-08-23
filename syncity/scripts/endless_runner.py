@@ -50,7 +50,7 @@ def run():
 		
 		common.sendData([
 			'"Config.instance" SET physicsEnabled true',
-			'"Time" SET captureFramerate {}'.format(options['fps']))
+			'"Time" SET captureFramerate {}'.format(options['fps'])
 		])
 		
 		# time stepping for synchronization regardless of FPS
