@@ -41,6 +41,17 @@ def run():
 	# set to `embedded` for rotors that are blurred textures
 	# set to `motion` for rotors that will be blurred by render camera's motion blur
 	blurring_method = 'embedded'
+	limits = {
+		'trees': [20,50],
+		'buildings': [20,50],
+		'birds': [25,100],
+		'cars': [5,15],
+		'drones': [2,2],
+		'animals': [10,50],
+		'ground': [200,300],
+		'humans': [20,50],
+		'signs': [50,250]
+	}
 	
 	if settings.skip_setup == False:
 		camera_size = [ 1024, 1024 ]
@@ -85,10 +96,19 @@ def run():
 		)
 		
 		helpers.spawnDroneObjs(
-			dronesLimit=[2,2],
 			dronesColors=True,
 			dronesTags=['blurred' if blurring_method == 'embedded' else 'phantom'],
 			dronesPartsNames='chassis,legs,motors,battery,bolts,sensors_caps,sensors,camera,blades',
+			
+			groundLimit=limits['ground'],
+			humansLimit=limits['humans'],
+			signsLimit=limits['signs'],
+			treesLimit=limits['trees'],
+			buildingsLimit=limits['buildings'],
+			birdsLimit=limits['birds'],
+			carsLimit=limits['cars'],
+			dronesLimit=limits['drones'],
+			animalsLimit=limits['animals'],
 			
 			animalsThermalObjectBehaviour=True,
 			birdsThermalObjectBehaviour=True,
@@ -101,7 +121,8 @@ def run():
 			signsThermalObjectBehaviour=True,
 			cityThermalObjectBehaviour=True,
 			buildingsInnerRadius=80,
-			treesLimit=[20,50], treesInnerRadius=15, treesRadius=60, buildingsLimit=[20,50],
+			treesInnerRadius=15, treesRadius=60,
+			
 			#
 			# NOTE:
 			#
@@ -111,6 +132,7 @@ def run():
 			#
 			# use 'car, +thermal' to spawn only cars with thermal profiles
 			#
+			
 			carsTags=['+car, +thermal'],
 			animalsTags=['+animal, +thermal']
 		)
@@ -236,35 +258,17 @@ def run():
 		if loop > 0:
 			if loop % 100 == 0:
 				common.sendData([
-					'"spawner/city/ground/container" SET active false',
-					'"spawner/city/ground/container" SET RandomProps.PropArea numberOfProps {}~{}'.format(75, 250),
-					'"spawner/city/ground/container" SET active true',
-					
-					'"spawner/cars/container" SET active false',
-					'"spawner/cars/container" SET RandomProps.PropArea numberOfProps {}~{}'.format(5, 15),
-					'"spawner/cars/container" SET active true',
-					
-					# disable car reflection probes
-					'REGEX "^spawner/cars/container$/.*/Reflection Probe" SET ReflectionProbe enabled false',
-					
-					'"spawner/city/nature/trees/container" SET active false',
-					'"spawner/city/nature/trees/container" SET RandomProps.PropArea numberOfProps {}~{}'.format(20, 50),
-					'"spawner/city/nature/trees/container" SET active true',
-
-					'"spawner/city/buildings/container" SET active false',
-					'"spawner/city/buildings/container" SET RandomProps.PropArea numberOfProps {}~{}'.format(10, 50),
+					'"spawner" SET active false',
+					'"spawner/city/ground/container" SET RandomProps.PropArea numberOfProps {}~{}'.format(limits['ground'][0], limits['ground'][1]),
+					'"spawner/cars/container" SET RandomProps.PropArea numberOfProps {}~{}'.format(limits['cars'][0], limits['cars'][1]),
+					'"spawner/city/nature/trees/container" SET RandomProps.PropArea numberOfProps {}~{}'.format(limits['trees'][0], limits['trees'][1]),
+					'"spawner/city/buildings/container" SET RandomProps.PropArea numberOfProps {}~{}'.format(limits['buildings'][0], limits['buildings'][1]),
 					'"spawner/city/buildings/container" SET RandomProps.Torus innerRadius {}~{}'.format(30, 100),
-					'"spawner/city/buildings/container" SET active true',
-
-					'"spawner/roadsigns/container" SET active false',
-					'"spawner/roadsigns/container" SET RandomProps.PropArea numberOfProps {}~{}'.format(20, 100),
-					'"spawner/roadsigns/container" SET active true',
-
-					'"spawner/humans_0/container" SET active false',
-					'"spawner/humans_0/container" SET RandomProps.PropArea numberOfProps {}~{}'.format(10, 50),
-					'"spawner/humans_0/container" SET active true',
-				], read=False)
-			
+					'"spawner/roadsigns/container" SET RandomProps.PropArea numberOfProps {}~{}'.format(limits['signs'][0], limits['signs'][1]),
+					'"spawner/humans_0/container" SET RandomProps.PropArea numberOfProps {}~{}'.format(limits['humans'][0], limits['humans'][1]),
+					'"spawner" SET active true',
+					'REGEX "^spawner/cars/container$/.*/Reflection Probe" SET ReflectionProbe enabled false'
+				])
 			elif loop % 10 == 0:
 				common.sendData([
 					'"spawner/city/ground/container" EXECUTE RandomProps.PropArea Shuffle',
@@ -285,13 +289,6 @@ def run():
 					'"cameras/cameraRGB" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.chromaticAberration.settings.intensity {}~{}'.format(0.0, 0.3)
 				], read=False)
 			
-			if loop % 10 == 0:
-				common.sendData([
-					'"cameras/spawner/drones/container" SET active false',
-					'"cameras/spawner/drones/container" SET RandomProps.PropArea rotationStep {}~{}'.format(0, 180),
-					# '"cameras/spawner/drones/container" SET RandomProps.PropArea propScale ({}~{} {}~{} {}~{})'.format(0.6, 1.5, 0.6, 1.5, 0.6, 1.5),
-					'"cameras/spawner/drones/container" SET active true'
-				], read=False)
 		
 		common.sendData([
 			# randomize drone positions

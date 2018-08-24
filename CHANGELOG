@@ -3,6 +3,13 @@ This change log follows YYMMDD timestamps which are also the version number for
 both the SDK and the simulator.
 --------------------------------------------------------------------------------
 
+# 180824
+
+- GPU memory leak issues fixed
+- Support to unload assetbundles via API
+- Refactoring of poc_drone spawn limits
+- Misc changes / fixes in helpers
+
 # 180822
 
 - #265386365: Fixed memory overflow in poc_drone

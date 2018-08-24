@@ -71,7 +71,7 @@ def run():
 			'[RandomProps.Spawner] ShuffleAll "Cars" "Trees" "Signs" "Grounds" "Trafficlights" "Misc" "Humans"'
 			])
 		
-		if loop > 0 and loop % 25 == 0:
+		if loop > 0 and loop % 50 == 0:
 			common.sendData([
 				'"Trees" SET active false',
 				'"Cars" SET active false',
@@ -98,16 +98,6 @@ def run():
 					'"{}" EXECUTE ObjectTagging.Spawners.RandomizeMainTexture GetImagesFromDisk "{}"'.format(r, settings.random_texture_source),
 					'"{}" EXECUTE Thermal.Spawners.RandomizeThermalTexture GetImagesFromDisk "{}"'.format(r, settings.random_texture_source)
 				])
-		
-		"""
-		# workaround until #260941684 is solved
-		common.sendData([
-			'"{}" SET active false'.format(mycams[1]),
-			'"{}" SET active true'.format(mycams[1])
-		])
-		"""
-		
-		# common.sendData("SLEEP 1")
 		
 		# intentionally last as this will trigger data export
 		common.sendData('"Camera" SET Transform localPosition (-3~3 0.5~2 -30~-15)')

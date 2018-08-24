@@ -241,6 +241,18 @@ def addCameraDepth(
 	common.flushBuffer()
 	settings._obj.extend(label)
 
+def unloadBundle(bundles, clearCache=True):
+	if not isinstance(bundles, list):
+		bundles = [ bundles ]
+	
+	buf = []
+	for b in bundles:
+		buf.append('"AssetBundles.GameobjectCache" EXECUTE AssetBundles.GameobjectCache UnloadBundle "{}"'.format(b))
+	
+	if clearCache == True:
+		buf.append('"AssetBundles.GameobjectCache" EXECUTE AssetBundles.GameobjectCache ClearCache')
+	common.sendData(buf)
+
 def addCameraRGB(
 	width=1024, height=768, audio=True, envirosky=None, flycam=False,
 	labelRoot='cameras', label='cameras/cameraRGB', pp=None, pp2=None,
@@ -3766,11 +3778,11 @@ def spawnMiscObjs(destroy=False, prefix='spawner', container='container', seed=N
 	spawnRadiusGeneric(['city/ground'], tags=['ground'], container=container, suffix='_0', limit=3, radius=75, innerradius=0, scale=[1,1,1], position=[0,0,0], collisionCheck=False, prefix=prefix, seed=seed)
 
 def spawnDroneObjs(
-	destroy=False, ground_position=[84,0,0], groundLimit=0,
+	destroy=False, ground_position=[84,0,0],
 	distH=25, distV=25, distLimit=150, pX=-150, pZ=-350, pY=0,
 	birdsRadius=120, birdsInnerRadius=0, carsRadius=50, carsInnerRadius=5,
 	treesLimit=[20,50], buildingsRadius=120, buildingsInnerRadius=60, treesRadius=80, treesInnerRadius=10, animalsRadius=50, animalsInnerRadius=5,
-	buildingsLimit=[10,50], birdsLimit=[25,100], carsLimit=[5,15], dronesLimit=[20,50], animalsLimit=[10,50],
+	buildingsLimit=[10,50], birdsLimit=[25,100], carsLimit=[5,15], dronesLimit=[20,50], animalsLimit=[10,50], groundLimit=[150, 300], humansLimit=[20,40], signsLimit=[250, 350],
 	prefix='spawner', container='container',
 	animalsTags=['animal'], treesTags=['tree'], buildingsTags=['building'], birdsTags=['bird'], carsTags=['car'], dronesTags=['drone'],
 	animals_colors=None, trees_colors=None, buildings_colors=None, birds_colors=None, cars_colors=None, dronesColors=None,
@@ -3798,30 +3810,6 @@ def spawnDroneObjs(
 			'DELETE "{}/drones"'.format(prefix),
 			'DELETE "{}/cars"'.format(prefix)
 		], read=False)
-	elif groundLimit > 0:
-		k = 0
-		idx = 0
-		
-		common.sendData([
-			'CREATE "city"',
-			'"city" SET Transform position ({} {} {})'.format(ground_position[0], ground_position[1], ground_position[2]),
-			'"city" SET active false'
-		], read=False)
-		
-		while k < groundLimit:
-			common.sendData([
-				'CREATE city/ground_{}" city/ground/{}'.format(k, random.choice(ground_lst)),
-				'"city/ground_{}" SET Transform position ({} {} {})'.format(k, pX + settings.X_COMP, pY, pZ + settings.Z_COMP),
-				'"city/ground_{}" SET Transform localScale ({} {} {})'.format(k, 3, 3, 3),
-				'"city/ground_{}" SET active true'.format(k)
-			], read=False)
-			settings._obj.append('city/ground_{}'.format(k))
-			k += 1
-			pZ += distH
-			
-			if pZ > distLimit:
-				pZ = -distLimit
-				pX += distV
 	
 	if groundSegment != None:
 		common.sendData([
@@ -3829,9 +3817,9 @@ def spawnDroneObjs(
 			'"{}" SET Segmentation.Class className "{}"'.format('city', groundSegment)
 		])
 	
-	spawnRadiusGeneric(['city/ground'], tags=['ground'], limit=300, radius=150, innerradius=0, scale=[3,3,3], position=[0,0,0], collisionCheck=False, prefix=prefix, seed=seed, thermalObjectBehaviour=groundThermalObjectBehaviour, thermalObjectOverride=True if groundThermalObjectBehaviour != None else False)
+	spawnRadiusGeneric(['city/ground'], tags=['ground'], limit=random.randint(groundLimit[0], groundLimit[1]), radius=150, innerradius=0, scale=[3,3,3], position=[0,0,0], collisionCheck=False, prefix=prefix, seed=seed, thermalObjectBehaviour=groundThermalObjectBehaviour, thermalObjectOverride=True if groundThermalObjectBehaviour != None else False)
 	# spawnRadiusGeneric(['humans'], tags=['human, +random'], suffix='_0', limit=40, radius=30, innerradius=2, position=[0,0,0], collisionCheck=False, prefix=prefix, seed=seed, thermalObjectBehaviour=humansThermalObjectBehaviour, thermalObjectOverride=True if humansThermalObjectBehaviour != None else False)
-	spawnRadiusGeneric(['humans'], tags=['human'], suffix='_0', limit=40, radius=30, innerradius=2, position=[0,0,0], collisionCheck=False, prefix=prefix, seed=seed, thermalObjectBehaviour=humansThermalObjectBehaviour, thermalObjectOverride=True if humansThermalObjectBehaviour != None else False, extraComponents=["Humans.Spawners.RandomHumans"])
+	spawnRadiusGeneric(['humans'], tags=['human'], suffix='_0', limit=random.randint(humansLimit[0], humansLimit[1]), radius=30, innerradius=2, position=[0,0,0], collisionCheck=False, prefix=prefix, seed=seed, thermalObjectBehaviour=humansThermalObjectBehaviour, thermalObjectOverride=True if humansThermalObjectBehaviour != None else False, extraComponents=["Humans.Spawners.RandomHumans"])
 	spawnRadiusGeneric(['city/nature/trees'], partsNames=treesPartsNames, segmentationClass=treesSegment, randomColors=trees_colors, tags=treesTags, collisionCheck=False, limit=random.randint(treesLimit[0], treesLimit[1]), radius=treesRadius, innerradius=treesInnerRadius, position=[0,0,0], prefix=prefix, seed=seed, thermalObjectBehaviour=treesThermalObjectBehaviour, thermalObjectOverride=True if treesThermalObjectBehaviour != None else False)
 	spawnRadiusGeneric(['city/buildings'], partsNames=buildingsPartsNames, segmentationClass=buildingsSegment, randomColors=buildings_colors, tags=buildingsTags, stickToGround=False, collisionCheck=False, limit=random.randint(buildingsLimit[0], buildingsLimit[1]), radius=buildingsRadius, innerradius=buildingsInnerRadius, position=[0,0,0], prefix=prefix, seed=seed, thermalObjectBehaviour=buildingsThermalObjectBehaviour, thermalObjectOverride=True if buildingsThermalObjectBehaviour != None else False)
 	spawnRadiusGeneric(['animals/generic'], partsNames=animalsPartsNames, segmentationClass=animalsSegment, randomColors=animals_colors, tags=animalsTags, stickToGround=False, collisionCheck=False, limit=random.randint(animalsLimit[0], animalsLimit[1]), radius=animalsRadius, innerradius=animalsInnerRadius, position=[0,0,0], prefix=prefix, seed=seed, thermalObjectBehaviour=animalsThermalObjectBehaviour, thermalObjectOverride=True if animalsThermalObjectBehaviour != None else False)
@@ -3842,7 +3830,7 @@ def spawnDroneObjs(
 
 	spawnRadiusGeneric(['animals/birds'], partsNames=birdsPartsNames, container=container, segmentationClass=birdsSegment, randomColors=birds_colors, tags=birdsTags, limit=random.randint(birdsLimit[0], birdsLimit[1]), radius=birdsRadius, innerradius=birdsInnerRadius, position=[0,random.randint(15,95),0], prefix=prefix, seed=seed, thermalObjectBehaviour=birdsThermalObjectBehaviour, thermalObjectOverride=True if birdsThermalObjectBehaviour != None and not any('thermal' in s for s in birdsTags) and birdsLimit[1] > 0else False)
 	spawnRadiusGeneric(['cars'], partsNames=carsPartsNames, container=container, segmentationClass=carsSegment, randomColors=cars_colors, tags=carsTags, collisionCheck=False, limit=random.randint(carsLimit[0], carsLimit[1]), radius=carsRadius, innerradius=carsInnerRadius, position=[0,0,0], prefix=prefix, seed=seed, thermalObjectBehaviour=carsThermalObjectBehaviour, thermalObjectOverride=True if carsThermalObjectBehaviour != None and not any('thermal' in s for s in carsTags) and carsLimit[1] > 0 else False)
-	spawnRadiusGeneric(['roadsigns'], tags=['sign'], container=container, limit=250, radius=80, collisionCheck=False, innerradius=15, position=[0,0,0], prefix=prefix, seed=seed, thermalObjectBehaviour=signsThermalObjectBehaviour, thermalObjectOverride=True if signsThermalObjectBehaviour != None else False)
+	spawnRadiusGeneric(['roadsigns'], tags=['sign'], container=container, limit=random.randint(signsLimit[0], signsLimit[1]), radius=80, collisionCheck=False, innerradius=15, position=[0,0,0], prefix=prefix, seed=seed, thermalObjectBehaviour=signsThermalObjectBehaviour, thermalObjectOverride=True if signsThermalObjectBehaviour != None else False)
 	
 	if dronesLimit[1] > 0:
 		# spawnRadiusGeneric(['drones'], segmentationClass=dronesSegment, randomColors=dronesColors, tags=dronesTags, uglyFix=False, limit=random.randint(dronesLimit[0], dronesLimit[1]), radius=random.randint(30,50), innerradius=0, position=[0,0,0], prefix=prefix, seed=seed)
@@ -3861,17 +3849,6 @@ def spawnDroneObjs(
 			thermalObjectBehaviour=dronesThermalObjectBehaviour,
 			thermalObjectOverride=True if groundThermalObjectBehaviour != None and not any('thermal' in s for s in dronesTags) and dronesLimit[1] > 0 else False
 		)
-	
-	if groundLimit > 0:
-		if cityThermalObjectBehaviour != None:
-			common.sendData([
-				'"city" ADD Thermal.ThermalObjectBehaviour',
-				'"city" SET Thermal.ThermalObjectBehaviour profile "{}"'.format(cityThermalObjectBehaviour)
-			], read=False)
-		
-		common.sendData([
-			'"city" SET active true'
-		], read=True)
 
 def spawnDroneObjs_alt(
 	destroy=False, groundLimit=204,
