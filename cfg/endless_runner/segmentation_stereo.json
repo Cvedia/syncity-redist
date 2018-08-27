@@ -2,8 +2,8 @@
 	"cams": {
 		"mainCar/cameras/cameraSegmentation1": {
 			"type": "SEGMENTATION",
-			"cameraWidth": 320,
-			"cameraHeight": 320,
+			"cameraWidth": 768,
+			"cameraHeight": 512,
 			"fov": 60,
 			"clippingNear": 0.3,
 			"clippingFar": 400,
@@ -13,8 +13,8 @@
 		},
 		"mainCar/cameras/cameraSegmentation2": {
 			"type": "SEGMENTATION",
-			"cameraWidth": 320,
-			"cameraHeight": 320,
+			"cameraWidth": 768,
+			"cameraHeight": 512,
 			"fov": 60,
 			"clippingNear": 0.3,
 			"clippingFar": 400,

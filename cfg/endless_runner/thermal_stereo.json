@@ -2,13 +2,13 @@
 	"cams": {
 		"mainCar/cameras/cameraThermal1": {
 			"type": "THERMAL",
-			"cameraWidth": 320,
-			"cameraHeight": 320,
-			"fov": 60,
+			"cameraWidth": 1536,
+			"cameraHeight": 1024,
+			"fov": 50,
 			"clippingNear": 0.3,
 			"clippingFar": 400,
 			
-			"cameraPosition": [0.1, 0, 0],
+			"cameraPosition": [0.2, 0, 0],
 			"cameraRotation": [0, -3, 0],
 			
 			"thermal": {
@@ -34,13 +34,13 @@
 		},
 		"mainCar/cameras/cameraThermal2": {
 			"type": "THERMAL",
-			"cameraWidth": 320,
-			"cameraHeight": 320,
-			"fov": 60,
+			"cameraWidth": 1536,
+			"cameraHeight": 1024,
+			"fov": 50,
 			"clippingNear": 0.3,
 			"clippingFar": 400,
 			
-			"cameraPosition": [-0.1, 0, 0],
+			"cameraPosition": [-0.2, 0, 0],
 			"cameraRotation": [0, 3, 0],
 			
 			"thermal": {

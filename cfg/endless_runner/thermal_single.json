@@ -2,8 +2,8 @@
 	"cams": {
 		"mainCar/cameras/cameraThermal1": {
 			"type": "THERMAL",
-			"cameraWidth": 1920,
-			"cameraHeight": 1080,
+			"cameraWidth": 1536,
+			"cameraHeight": 1024,
 			"fov": 60,
 			"clippingNear": 0.3,
 			"clippingFar": 400,

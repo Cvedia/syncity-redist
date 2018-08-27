@@ -26,12 +26,12 @@ def run():
 		helpers.globalCameraSetup()
 		helpers.addCameraRGB(flycam=settings.flycam, pp='Savannah')
 		# addLight(position=[-684.8,532.5,262.466])
-		helpers.globalDiskSetup()
+		# helpers.globalDiskSetup()
 		
 		helpers.addDiskOutput(mycams)
 		common.sendData([
 			'"cameras/cameraRGB" SET Transform position ({} {} {})'.format(0, -10, 0),
-			'CREATE "Savannah" FROM "savannah" AS "test"',
+			'CREATE "Savannah" FROM "tiles" AS "test"',
 			'"cameras/cameraRGB" ADD EnviroCamera',
 			'"test" SET Transform position ({} {} {})'.format(-5000,-180,-5000),
 			'"test" SET Terrain basemapDistance 2000',
@@ -70,7 +70,7 @@ def run():
 				'"EnviroSky" SET EnviroSky GameTime.Hours {}'.format(random.randint(6, 18))
 			])
 			
-			helpers.takeSnapshot(mycams)
+			# helpers.takeSnapshot(mycams)
 			loops += 1
 			
 			if loops == reroll:

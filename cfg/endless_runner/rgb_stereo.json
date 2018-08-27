@@ -2,13 +2,13 @@
 	"cams": {
 		"mainCar/cameras/cameraRGB1": {
 			"type": "RGB",
-			"cameraWidth": 3072,
-			"cameraHeight": 3072,
-			"fov": 60,
+			"cameraWidth": 1536,
+			"cameraHeight": 1024,
+			"fov": 37,
 			"clippingNear": 0.3,
 			"clippingFar": 1000,
 			
-			"cameraPosition": [0.1, 0, 0],
+			"cameraPosition": [0.15, 0, 0],
 			"cameraRotation": [0, -3, 0],
 			"profile": "ColdACESNoBlur",
 			"antialiasingMode": "TemporalAntialiasing",
@@ -16,13 +16,13 @@
 		},
 		"mainCar/cameras/cameraRGB2": {
 			"type": "RGB",
-			"cameraWidth": 3072,
-			"cameraHeight": 3072,
-			"fov": 60,
+			"cameraWidth": 1536,
+			"cameraHeight": 1024,
+			"fov": 37,
 			"clippingNear": 0.3,
 			"clippingFar": 1000,
 			
-			"cameraPosition": [-0.1, 0, 0],
+			"cameraPosition": [-0.15, 0, 0],
 			"cameraRotation": [0, 3, 0],
 			"profile": "ColdACESNoBlur",
 			"antialiasingMode": "TemporalAntialiasing",

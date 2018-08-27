@@ -174,7 +174,7 @@ def run():
 				'REGEX "tile*/Road system/Road*" ADD Thermal.ThermalObjectBehaviour',
 				'REGEX "tile*/Road system/Road*" SET Thermal.ThermalObjectBehaviour profile "ThermalBehaviour/RoadsProps"',
 			])
-
+		
 		helpers.setOSNetwork(
 			target=options['roadNetworkLabel'],
 			create=True
@@ -199,11 +199,10 @@ def run():
 		common.sendData([
 			'"{}" ADD ToggleBetweenAutoDriveAndUserControl'.format(options['mainCar']),
 		])
-
+		
 		if options['carInput']:
 			if options['carInput']['mode'] == "steeringWheel":
 				common.sendData([
-
 					'"{}" SET OSVehicle externControl TRUE'.format(options['mainCar']),
 					'"{}" SET VPVehicleController enabled true'.format(options['mainCar']),
 					'"{}" SET Rigidbody isKinematic false'.format(options['mainCar']),
@@ -243,7 +242,7 @@ def run():
 			
 			segmentationClass=options['vehicleSpawner']['class']
 		)
-
+		
 		if 'THERMAL' in options['flags']:
 			common.sendData([
 				'"{}" ADD Thermal.ThermalProfileOverride'.format(options['vehicleSpawner']['label']),
@@ -338,6 +337,8 @@ def run():
 				cam_s = idx.split('/')[-1]
 				mycams.append(idx)
 				
+				helpers.validateResolution(cam['cameraPosition'][0], cam['cameraPosition'][1])
+				
 				common.sendData([
 					'[Segmentation.Camera] CreateWithClassColors "{}" WITH lookUpTable "lookUpTable"'.format(idx),
 					'[Cameras.RenderTexture] CreateNew "{}" {} {}'.format(cam_s, cam['cameraWidth'], cam['cameraHeight']),
@@ -362,13 +363,30 @@ def run():
 				cam_s = idx.split('/')[-1]
 				mycams.append(idx)
 				
+				helpers.addCameraThermal(
+					label=idx,
+					width=cam['cameraWidth'],
+					height=cam['cameraHeight'],
+					fov=cam['fov'],
+					clippingNear=cam['clippingNear'],
+					clippingFar=cam['clippingFar'],
+					position=cam['cameraPosition'],
+					rotation=cam['cameraRotation'],
+					
+					patchyness=False,
+					isLocal=True,
+					renderCamera=True,
+					registerCamera=True
+				)
+				
 				common.sendData([
-					'[Thermal.Camera] CreateCamera "{}"'.format(idx),
-					'"{}" SET Transform localPosition ({} {} {}) localEulerAngles ({} {} {})'.format(
-						idx,
-						cam['cameraPosition'][0], cam['cameraPosition'][1], cam['cameraPosition'][2],
-						cam['cameraRotation'][0], cam['cameraRotation'][1], cam['cameraRotation'][2]
-					),
+					# '[Thermal.Camera] CreateCamera "{}"'.format(idx),
+					# '"{}" SET Transform localPosition ({} {} {}) localEulerAngles ({} {} {})'.format(
+					#	idx,
+					#	cam['cameraPosition'][0], cam['cameraPosition'][1], cam['cameraPosition'][2],
+					#	cam['cameraRotation'][0], cam['cameraRotation'][1], cam['cameraRotation'][2]
+					# ),
+					
 					'"{}" ADD Thermal.ThermalNoise'.format(idx),
 					'''"{}" SET Thermal.ThermalNoise
 								spotsContrast {}
@@ -408,20 +426,19 @@ def run():
 						cam['thermal']['bloom']['blurIterations'],
 					),
 					
-					'CREATE RenderTexture {} {} 24 "ARGB32" "Default" AS "{}"'.format(cam['cameraWidth'], cam['cameraHeight'], cam_s),
-					'"{}" SET Camera targetTexture "{}"'.format(idx, cam_s),
+					# 'CREATE RenderTexture {} {} 24 "ARGB32" "Default" AS "{}"'.format(cam['cameraWidth'], cam['cameraHeight'], cam_s),
+					# '"{}" SET Camera targetTexture "{}"'.format(idx, cam_s),
 					'"{}" SET active true'.format(idx),
 					
 					# Temporary HACK
 					# '"{}" ADD Sensors.RenderCamera'.format(idx),
 					# '"{}" SET Sensors.RenderCamera alwaysOn true'.format(idx),
 					
-					'[UI.Window] ShowFromRenderTexture "{}" AS "{}"'.format(cam_s, cam_s),
+					# '[UI.Window] ShowFromRenderTexture "{}" AS "{}"'.format(cam_s, cam_s),
 					
 					#'"EnviroSky" EXECUTE EnviroSky AssignAndStart "{}" "{}"'.format(cam, cam),
-
 				])
-
+				
 				if "blur" in cam['thermal']:
 					common.sendData([
 						'"{}" ADD CameraFilterPack_Blur_Noise'.format(idx),
@@ -433,8 +450,8 @@ def run():
 						cam['thermal']['blur']['level'],
 						cam['thermal']['blur']['distance'][0],
 						cam['thermal']['blur']['distance'][1]
-					),
-						])
+						),
+					])
 				
 				if "oilPaint" in cam['thermal']:
 					common.sendData([
@@ -450,9 +467,8 @@ def run():
 						cam['thermal']['oilPaint']['distance'],
 						cam['thermal']['oilPaint']['size'],
 						cam['thermal']['oilPaint']['intensity'],
-					),
-				])
-		
+						)
+					])
 		try:
 			if common.versionCompare(settings._simulator_version, '18.07.26.0000', '<') and not options['videoExport']:
 				helpers.globalDiskSetup()
@@ -482,6 +498,11 @@ def run():
 				'"EnviroSky" SET EnviroSky fogSettings.distanceFog 0 fogSettings.heightFog 0',
 				# '"EnviroSky" EXECUTE EnviroSky ChangeWeather "{}"'.format(options['weatherProfile'])
 			])
+		
+		# enable thermal cameras after everything is setup
+		if 'THERMAL' in options['flags']:
+			for idx in options['cam_mask']['THERMAL']:
+				common.sendData('"{}" SET Camera enabled true'.format(idx))
 		
 		try:
 			# ros - must run after cameras are rendering

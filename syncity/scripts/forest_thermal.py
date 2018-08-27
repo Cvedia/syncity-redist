@@ -80,7 +80,8 @@ def run():
 		common.sendData('"Forest" SET active true')
 		
 		helpers.addCameraThermal(
-			width=1024, height=768, fov=90,
+			# width=1024, height=768, fov=90,
+			width=3072, height=2304, fov=90,
 			clippingFar=10000,
 			
 			trees=True,

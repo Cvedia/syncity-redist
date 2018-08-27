@@ -164,6 +164,8 @@ def addCameraDepth(
 	if not isinstance(label, list):
 		label = [ label ]
 	
+	validateResolution(width, height)
+	
 	buf = []
 	idx = 0
 	
@@ -319,6 +321,8 @@ def addCameraRGB(
 	
 	if not isinstance(label, list):
 		label = [ label ]
+	
+	validateResolution(width, height)
 	
 	buf = []
 	buf_s = []
@@ -521,6 +525,8 @@ def addCameraSeg(
 	if not isinstance(label, list):
 		label = [ label ]
 	
+	validateResolution(width, height)
+	
 	buf = []
 	
 	if autoLookupTable == True:
@@ -634,6 +640,9 @@ def addCameraThermal(
 	blur=True,
 	blurNoise=[2, 1],
 	
+	position=None, rotation=None,
+	isLocal=False,
+	
 	renderCamera=False,
 	registerCamera=True
 ):
@@ -683,6 +692,8 @@ def addCameraThermal(
 	"""
 	if not isinstance(label, list):
 		label = [ label ]
+	
+	validateResolution(width, height)
 	
 	buf = []
 	
@@ -746,6 +757,26 @@ def addCameraThermal(
 		
 		if registerCamera == True:
 			buf.extend(uiWindow(objs=l, width=width, height=height, textureFormat=textureFormat, ret=True))
+		
+		if position != None or rotation != None:
+			x = []
+			if position != None:
+				if isinstance(position[0], list):
+					p = position[idx]
+				else:
+					p = position
+				
+				x.append('{} ({} {} {})'.format('localPosition' if isLocal == True else 'position', p[0], p[1], p[2]))
+			
+			if rotation != None:
+				if isinstance(rotation[0], list):
+					p = rotation[idx]
+				else:
+					p = rotation
+				
+				x.append('{} ({} {} {})'.format('localEulerAngles' if isLocal == True else 'eulerAngles', p[0], p[1], p[2]))
+			
+			buf.append('"{}" SET Transform {}'.format(l, ' '.join(x)))
 		
 		buf.append('"{}" SET active true'.format(l))
 	
@@ -3993,3 +4024,20 @@ def spawnAnimalsObjs(destroy=False, prefix='spawner', container='container', see
 	)
 	
 	common.flushBuffer()
+
+def validateResolution(width, height):
+	if width < 64 or height < 64 or (not isPowerOf(2, height) and not isPowerOf(2, width)):
+		common.output('At least one of the given camera resolution dimensions: {}x{} must be a power of 2 and greater than 64.'.format(width, height), 'FATAL')
+
+def isPowerOf(x, n):
+	if n == 0:
+		return False
+	elif x == 1:
+		return True
+	
+	while n != 1:
+		if n % x != 0:
+			return False
+		n = n // x
+	
+	return True

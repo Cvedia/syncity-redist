@@ -100,7 +100,14 @@ def initTelnet(ip, port, retries=-1, wait=.5, timeout=30, ka_interval=3, ka_fail
 			
 			settings._telnet = True
 			output('Connected')
-			settings._simulator_version = sendData(['VERSION', 'NOOP'], read=True)[0].replace('"', '')
+			
+			# find version
+			try:
+				settings._simulator_version = re.findall(r'\d{2}.\d{2}.\d{2}.\d{4}', sendData(['VERSION', 'NOOP'], read=True)[0])[0]
+			except IndexError:
+				output('Your simulator is deprecated / version unknown', 'WARNING')
+				settings._simulator_version = '18.01.01.0000'
+			
 			output('Simulator Version: {}'.format(settings._simulator_version))
 			
 			if settings.test == False:
@@ -281,6 +288,7 @@ def close_recording():
 
 def shouldLog(level):
 	l = {
+		'FATAL': -1,
 		'NONE': 0,
 		'OBSOLETE': 1,
 		'DEPRECATED': 1,
@@ -294,7 +302,7 @@ def shouldLog(level):
 	}
 	
 	try:
-		if l[settings.loglevel] >= l[level]:
+		if l[level] < 0 or l[settings.loglevel] >= l[level]:
 			return True
 	except:
 		pass
@@ -317,14 +325,14 @@ def output(s, level='INFO', permissive=False):
 	"""
 	if shouldLog(level) == False:
 		return
-	if settings.no_color == True:
+	if settings.no_color and settings.no_color == True:
 		x = '[{}] {}{}'.format(datetime.now().strftime("%H:%M:%S.%f"), '[{}] '.format(level), s)
 	else:
 		if level == 'INFO':
 			level_color = colorama.Fore.GREEN
 		elif level == 'OBSOLETE':
 			level_color = colorama.Fore.BLUE
-		elif level == 'ERROR' or level == 'DEPRECATED':
+		elif level == 'ERROR' or level == 'DEPRECATED' or level == 'FATAL':
 			level_color = colorama.Fore.RED
 		elif level == 'DEBUG':
 			level_color = colorama.Fore.CYAN
@@ -346,7 +354,7 @@ def output(s, level='INFO', permissive=False):
 		except:
 			pass
 	
-	if permissive == False and settings.abort_on_error == True and (level == 'ERROR' or level == 'WARN' or level == 'WARNING'):
+	if level == 'FATAL' or (permissive == False and settings.abort_on_error == True and (level == 'ERROR' or level == 'WARN' or level == 'WARNING')):
 		output('Aborting on error!')
 		sys.exit(1)
 	
@@ -528,7 +536,7 @@ def sendData(v, read=None, flush=None, timeout=3, readWait=.5):
 	
 	return r
 
-def md5(fname):
+def md5_file(fname):
 	"""
 	Creates a md5 hash from a file name
 	
@@ -545,6 +553,23 @@ def md5(fname):
 	with open(fname, "rb") as f:
 		for chunk in iter(lambda: f.read(4096), b""):
 			hash_md5.update(chunk)
+	return hash_md5.hexdigest()
+
+def md5(s):
+	"""
+	Creates a md5 hash from a string
+	
+	# Attributes
+	
+	s (string): String
+	
+	# Returns
+	
+	string: md5 hash
+	"""
+	
+	hash_md5 = hashlib.md5()
+	hash_md5.update(s.encode('utf-8'))
 	
 	return hash_md5.hexdigest()
 
@@ -744,14 +769,19 @@ def modulesArgs(module, parser):
 			except:
 				pass
 
+def loadJSON(path):
+	output('Loading JSON object from: `{}` ...'.format(path))
+	
+	with open(path, encoding='utf-8') as data:
+		r = json.loads(data.read())
+	
+	return r
+
 def loadConfig():
 	if not os.path.isfile(settings.config):
 		return
 	
-	output('Loading config from: `{}` ...'.format(settings.config))
-	
-	with open(settings.config, encoding='utf-8') as data:
-		cfg = json.loads(data.read())
+	cfg = loadJSON(settings.config)
 	
 	"""
 	for c in cfg:

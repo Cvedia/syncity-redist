@@ -47,7 +47,7 @@
 	},
 	
 	"selfDriving": true,
-	"maxSpeed": 60,
+	"maxSpeed": 70,
 	"startSpeed": 5,
 	"smoothAdjust": 100.0,
 	
@@ -78,8 +78,8 @@
 		"video": {
 			"stream_max": 300,
 			"profile": "high",
-			"height": 1024,
-			"width": 1024
+			"width": 720,
+			"height": 480
 		},
 		
 		"image": {
