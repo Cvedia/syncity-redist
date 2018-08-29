@@ -1,0 +1,11 @@
+{
+	"obstacles": [
+		{
+			"assetPath": "cars/suv_42/suv_42",
+			"assetBundle": "thermal-cars",
+			"delay": 5,
+			"distance": 50,
+			"angle": 45
+		}
+	]
+}

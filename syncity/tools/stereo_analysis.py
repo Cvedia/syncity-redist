@@ -2,6 +2,7 @@
 This script builds a list of stereo images based in inputs and passes them 
 thuru a panorama merger and disparity comparison
 
+Based in the original from https://github.com/kushalvyas/Python-Multiple-Image-Stitching/
 """
 
 import json
@@ -27,7 +28,6 @@ def chunkSplit(l, n):
 		o.append(l[i:i+n])
 	return o
 
-# original source: https://github.com/kushalvyas/Python-Multiple-Image-Stitching/
 class Matchers:
 	def __init__(self):
 		self.surf = cv2.xfeatures2d.SURF_create()
@@ -84,35 +84,47 @@ class Stitch:
 	def prepare_lists(self):
 		common.output("Number of images : {}".format(self.count), 'DEBUG')
 		self.centerIdx = self.count/2 
+		
 		common.output("Center index image : {}".format(self.centerIdx), 'DEBUG')
 		self.center_im = self.images[int(self.centerIdx)]
+		
 		for i in range(self.count):
-			if(i<=self.centerIdx):
+			if i <= self.centerIdx:
 				self.left_list.append(self.images[i])
 			else:
 				self.right_list.append(self.images[i])
+		
 		common.output("Image lists prepared", 'DEBUG')
 
 	def leftshift(self):
 		# self.left_list = reversed(self.left_list)
 		a = self.left_list[0]
+		
 		for b in self.left_list[1:]:
 			H = self.matcher_obj.match(a, b, 'left')
 			common.output("Homography is : {}".format(H), 'DEBUG')
+			
 			xh = np.linalg.inv(H)
 			common.output("Inverse Homography : {}".format(xh), 'DEBUG')
+			
 			ds = np.dot(xh, np.array([a.shape[1], a.shape[0], 1]));
 			ds = ds/ds[-1]
 			common.output("final ds=>{}".format(ds), 'DEBUG')
+			
 			f1 = np.dot(xh, np.array([0,0,1]))
 			f1 = f1/f1[-1]
+			
 			xh[0][-1] += abs(f1[0])
 			xh[1][-1] += abs(f1[1])
+			
 			ds = np.dot(xh, np.array([a.shape[1], a.shape[0], 1]))
+			
 			offsety = abs(int(f1[1]))
 			offsetx = abs(int(f1[0]))
+			
 			dsize = (int(ds[0])+offsetx, int(ds[1]) + offsety)
 			common.output("image dsize =>{}".format(dsize), 'DEBUG')
+			
 			try:
 				tmp = cv2.warpPerspective(a, xh, dsize)
 				# cv2.imshow("warped", tmp)
@@ -129,16 +141,22 @@ class Stitch:
 		for each in self.right_list:
 			H = self.matcher_obj.match(self.leftImage, each, 'right')
 			common.output("Homography : {}".format(H), 'DEBUG')
+			
 			txyz = np.dot(H, np.array([each.shape[1], each.shape[0], 1]))
 			txyz = txyz/txyz[-1]
+			
 			dsize = (int(txyz[0])+self.leftImage.shape[1], int(txyz[1])+self.leftImage.shape[0])
 			tmp = cv2.warpPerspective(each, H, dsize)
+			
 			cv2.imshow("tp", tmp)
 			cv2.waitKey()
+			
 			# tmp[:self.leftImage.shape[0], :self.leftImage.shape[1]]=self.leftImage
 			tmp = self.mix_and_match(self.leftImage, tmp)
+			
 			common.output("tmp shape {}".format(tmp.shape), 'DEBUG')
 			common.output("self.leftimage shape={}".format(self.leftImage.shape), 'DEBUG')
+			
 			self.leftImage = tmp
 		# self.showImage('left')
 	
@@ -150,19 +168,20 @@ class Stitch:
 		t = time.time()
 		black_l = np.where(leftImage == np.array([0,0,0]))
 		black_wi = np.where(warpedImage == np.array([0,0,0]))
+		
 		common.output(time.time() - t, 'DEBUG')
 		common.output(black_l[-1], 'DEBUG')
 		
 		for i in range(0, i1x):
 			for j in range(0, i1y):
 				try:
-					if(np.array_equal(leftImage[j,i],np.array([0,0,0])) and  np.array_equal(warpedImage[j,i],np.array([0,0,0]))):
+					if (np.array_equal(leftImage[j,i],np.array([0,0,0])) and  np.array_equal(warpedImage[j,i],np.array([0,0,0]))):
 						# print "BLACK"
 						# instead of just putting it with black, 
 						# take average of all nearby values and avg it.
 						warpedImage[j,i] = [0, 0, 0]
 					else:
-						if(np.array_equal(warpedImage[j,i],[0,0,0])):
+						if (np.array_equal(warpedImage[j,i],[0,0,0])):
 							# print "PIXEL"
 							warpedImage[j,i] = leftImage[j,i]
 						else:
@@ -175,6 +194,7 @@ class Stitch:
 								warpedImage[j, i] = [bl,gl,rl]
 				except:
 					pass
+		
 		# cv2.imshow("waRPED mix", warpedImage)
 		# cv2.waitKey()
 		return warpedImage
@@ -198,6 +218,8 @@ def args(parser):
 def help():
 	return '''\
 	This script builds a list of stereo images based in inputs and passes them thuru a panorama merger and disparity comparison.
+	
+	Based in the original from https://github.com/kushalvyas/Python-Multiple-Image-Stitching/
 	
 	Usage:
 		-l base/path/to/images
@@ -278,3 +300,5 @@ def run():
 				cv2.imwrite(ofn, disparity)
 				common.output('Writing: {}...'.format(ofn))
 				idx += 1
+	
+	common.output('Completed')
