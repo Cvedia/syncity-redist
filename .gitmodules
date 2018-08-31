@@ -1,0 +1,6 @@
+[submodule "tests"]
+	path = tests
+	url = git@gitlab.cvedia.com:syncity/qa_stack.git
+[submodule "devtools"]
+	path = devtools
+	url = git@gitlab.cvedia.com:syncity/devtools.git

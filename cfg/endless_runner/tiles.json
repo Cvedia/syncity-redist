@@ -1,0 +1,44 @@
+{
+	// defines what tiles are active in the scene; each of this tiles will be shuffled
+	// as the car moves by, including the tile order and tile content ruled by
+	// existing random spawners.
+	// 
+	// definition:
+	// 
+	// {
+	//	// tile name within asset bundle
+	// 	"Tiles/Tile 1 Random": {
+	// 		// asset bundle where tile exists
+	// 		"bundle": "tiles",
+	// 		// arbitrary command line init commands to be executed after tile is loaded
+	// 		"init": [
+	// 		]
+	// 	},
+	// 
+	// 	...
+	// 
+	// }
+	
+	"tiles": {
+		"Tiles/Tile 1 Random": {
+			"bundle": "tiles",
+			"init": [
+			]
+		},
+		"Tiles/Tile 2 Random": {
+			"bundle": "tiles",
+			"init": [
+			]
+		},
+		"Tiles/Tile 3 Random": {
+			"bundle": "tiles",
+			"init": [
+			]
+		},
+		"Tiles/Tile 4 Random": {
+			"bundle": "tiles",
+			"init": [
+			]
+		}
+	}
+}

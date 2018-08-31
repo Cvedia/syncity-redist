@@ -1,0 +1,15 @@
+_debug/*
+*.pyc
+__pycache__
+.pytest*
+assets-*
+_*.sh
+.vs/*
+syncity.conf
+syncity/scripts/*_test*
+tests/logs/*
+tests/config.json
+.idea/
+logs/*
+records/*
+cl/head/*

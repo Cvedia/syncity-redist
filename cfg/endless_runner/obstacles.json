@@ -1,0 +1,39 @@
+{
+	// creates a obstacle in the front of mainCar
+	"obstacle": {
+		// defines a specific object to spawned, when this is set to false
+		// the SDK will find a suitable random prefab from the database.
+		//
+		// Note: When spawning a random prefab the --assets must be available
+		// in the same machine the SDK is running.
+		// 
+		// example for fixed car:
+		// "assetPath": "cars/suv_42/suv_42",
+		//
+		// example for random cars (requires local database access):
+		// "assetPath": false,
+		"assetPath": false,
+		// assetbundle where the obstacle should come from
+		"assetBundle": "thermal-cars",
+		// how much delay in seconds the SDK will wait before triggering the obstacle creation
+		"delay": 5,
+		// distance in meters within the mainCar where obstacle should be placed
+		"distance": 75,
+		// angle in degrees that the obstacle should be placed (this allows for randomization via ~)
+		"angle": "0~360",
+		// maximum time to live of obstacle in seconds; once the obstacle is placed
+		// this will trigger a timeout that will remove the obstacle from the scene.
+		// this avoids the mainCar and other traffic to be struck, as depending on
+		// the position the obstacle is spawned and it's size it might block the
+		// whole road, creating a impossible situation for the traffic system
+		"timeToLive": 7,
+		// when greater than zero this will loop the obstacle creation, creating more
+		// objects as the car moves thuru the tiles
+		"loopTimeout": 25,
+		// defines a limit of loopTimeout loops, when set to -1 loops forever
+		"loopLimit": -1,
+		// resets car selfDriving switch forcing car to readjust every N loop iterations
+		// set to zero to disable this funcionality
+		"selfDrivingReset": 100
+	}
+}

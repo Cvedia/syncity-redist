@@ -1,0 +1,8 @@
+// enables thrustmaster gaming controller inputs when selfDriving is disabled
+{
+	"carInput": {
+		"mode": "steeringWheel",
+		"steeringWheelModel": "TrustmasterT500RS"
+	},
+	"selfDriving": false
+}

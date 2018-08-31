@@ -1,0 +1,85 @@
+{
+	// camera container
+	// 
+	// defines one or more cameras with a specific type / configuration.
+	// 
+	// object definition:
+	// 
+	// {
+	// 	// the KEY of this JSON object defines where the camera should be placed
+	// 	// this is propousely defined as a KEY for this object to avoid duplication.
+	// 	// ideally you'd place the camera within the mainCar/cameras mount, so it follows
+	// 	// the diving car
+	// 	"mainCar/cameras/myCamera": {
+	// 		// camera type, possible options RGB, SEGMENTATION, DEPTH and THERMAL
+	// 		"type": "DEPTH",
+	// 		
+	// 		// camera rendering size; usually this is greater than the export size, so
+	// 		// we can produce smoother edges; Note that this is NOT the export size,
+	// 		// this is defined in common.json.
+	// 		
+	// 		// IMPORTANT: at least one of the dimensions must be a power of 2
+	// 		// NOTE: You might want to keep this dimensions aspect ratio the same
+	// 		// of the export size, so there's no distortions in the exported image data
+	// 		"cameraWidth": 768,
+	// 		"cameraHeight": 512,
+	// 		
+	// 		// field of view
+	// 		"fov": 60,
+	// 		
+	// 		// minimum viewing distance
+	// 		"clippingNear": 0.3,
+	// 		// maximum viewing distance
+	// 		"clippingFar": 400,
+	// 		
+	// 		// camera position within mount defined in meters
+	// 		"cameraPosition": [0.1, 0, 0],
+	// 		// camera rotation within mount, defined in degrees
+	// 		"cameraRotation": [0, -3, 0]
+	// 	},
+	// 	
+	// 	...
+	// }
+	//
+	
+	"cams": {
+		"mainCar/cameras/cameraRGB1": {
+			"type": "RGB",
+			"cameraWidth": 1024,
+			"cameraHeight": 1024,
+			"fov": 60,
+			"clippingNear": 0.3,
+			"clippingFar": 400,
+			
+			"cameraPosition": [0.1, 0, 0],
+			"cameraRotation": [0, -3, 0],
+			"profile": "ColdACES",
+			"antialiasingMode": "TemporalAntialiasing",
+			"antialiasingOptions": {
+				"jitterSpread": 0.85,
+				"stationaryBlending": 0.95,
+				"motionBlending": 0.85,
+				"sharpness": 0.25
+			}
+		},
+		"mainCar/cameras/cameraRGB2": {
+			"type": "RGB",
+			"cameraWidth": 1024,
+			"cameraHeight": 1024,
+			"fov": 60,
+			"clippingNear": 0.3,
+			"clippingFar": 400,
+			
+			"cameraPosition": [-0.1, 0, 0],
+			"cameraRotation": [0, 3, 0],
+			"profile": "ColdACES",
+			"antialiasingMode": "TemporalAntialiasing",
+			"antialiasingOptions": {
+				"jitterSpread": 0.85,
+				"stationaryBlending": 0.95,
+				"motionBlending": 0.85,
+				"sharpness": 0.25
+			}
+		}
+	}
+}

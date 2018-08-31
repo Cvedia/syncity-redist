@@ -1,0 +1,239 @@
+{
+	// placeholder for loop
+	"loop": 0,
+	// defines mainCar object name
+	"mainCar": "mainCar",
+	
+	// FPS for producing videos and time stepping; If the graphics card cannot
+	// produce frames fast enough the simulation will seem slower, this will
+	// not affect the timestepping of sensors and meta data in general
+	"fps": 30,
+	
+	// defines general rendering quality
+	"quality": {
+		"shadowDistance": 350,
+		"shadowCascades": 4,
+		
+		// 1: disable shadows (fastest)
+		// 2: hard shadows only
+		// 3: hard and soft shadows (slowest)
+		"shadows": 1,
+		
+		// 0: disabled (fastest)
+		// 2: 2x antialiasing multi sampling
+		// 4: 4x antialiasing multi sampling
+		// 8: 8x antialiasing multi sampling (slowest)
+		"antiAliasing": 8
+	},
+	
+	// defines envirosky options, this will only affect RGB cameras
+	"envirosky": {
+		// defines how the sky looks like
+		// available profiles:
+		// Clear
+		// Cloudy 1
+		// Cloudy 2
+		// Cloudy 3
+		"weatherProfile": "Cloudy 2",
+		
+		// defines transition speed from one weather profile to another
+		"cloudTransitionSpeed": 100,
+		"effectTransitionSpeed": 100,
+		"fogTransitionSpeed": 100,
+		
+		// defines if time should progress or should stay still
+		"progressTime": "None",
+		// default starting time, if time progress is set to None this will stay still
+		"gameTime": "12:00:00"
+	},
+	
+	// defines where camera container should be placed, if placed within a moving object it will follow
+	"labelRoot": "mainCar/cameras",
+	
+	// controls cars spawned in the scene aka traffic
+	"vehicleSpawner": {
+		"label": "VehicleSpawner",
+		// defines maximum speed of spawned cars
+		"maxSpeed": 50,
+		// defines a common segmentation class for every vehicle spawned
+		"class": false,
+		// defines if vehicles should have a rigidbody (not recommended yet)
+		"rigidBodies": false,
+		// defines if vehicles should be collidable
+		"boxColliders": true,
+		// defines if vehicles should have individual reflection probes (not recommended)
+		"reflectionProbes": false,
+		// defines a specific assetbundle cars should be spawned from; Thermal cars must come from thermal-cars only
+		"assetBundle": false,
+		// defines a arbitrary filter in the top of the assetbundle
+		"databaseFilter": "+car.classification!=\\\"Special Purpose Vehicle\\\",+car.classification!=\\\"Truck\\\",+thermal"
+	},
+	
+	// creates a single global reflection probe, way more performant than many individual probes in each of the cars
+	"globalReflectionProbe": {
+		// when false, disable all reflections in the scene
+		"enabled": true,
+		// defines maximum visible distance
+		"farClipPlane": 350,
+		// reflection probe box size
+		"size": [300, 50, 300],
+		// reflection probe offset in relation to mainCar center
+		"offset": [0, 20, 100],
+		// reflection resolution, defined in powers of 2
+		"resolution": 512
+	},
+	
+	// roadNetwork container label
+	"roadNetworkLabel": "OpenSteerNetwork",
+	// trafficEvents container label
+	"trafficEventsLabel": "TrafficEvents",
+	
+	// initial car position
+	"carPosition": [8.8, 0, -352.5],
+	"carInput": {
+		"mode": "auto"
+	},
+	
+	// initial mainCar selfDriving behaviour
+	"selfDriving": true,
+	// mainCar maxSpeed
+	"maxSpeed": 70,
+	// mainCar startSpeed
+	"startSpeed": 5,
+	// mainCar speed and steering smooth adjust factor
+	"smoothAdjust": 100.0,
+	
+	"spawnerPosition": [0, 0, 0],
+	// max number of active traffic cars
+	"maxObjects": 20,
+	// maximum radius from mainCar traffic cars should be spawned
+	"spawnRadius": 250,
+	
+	"spawnSize": 20,
+	// minimum distance between spawned cars, the smaller more dense traffic will seem from the start
+	"spawnClearance": 8,
+	// defines the gameObject that is the center of radius spawner
+	"spawnFocus": "mainCar",
+	// defines how far traffic cars should be to be destroyed. Defining a very small value will cause cars from pop in existence, defining a very large value will cause cars to stay for longer in the scene, causing traffic to be more sparse
+	"despawnRadius": 270,
+	// defines a speed randomization factor within spawned cars maximum speed
+	"speedVariance": 6,
+	// defines brakeLight brightness (not implemented yet)
+	"brakeLightPower": 2,
+	
+	// defines initial position of the tiler system
+	"tilerPosition": [251.59, 0.03, 249.715],
+	
+	// defines camera container (labelRoot) initial position
+	"globalCameraPosition": [0, 1.78, 0.3],
+	// defines camera container (labelRoot) initial rotation
+	"globalCameraRotation": [0, 0, 0],
+	
+	"pedestrians" : {
+		// number of pedestrians per tile segment
+		"amountPerTile": 8,
+		// minimum / maximum walking speed
+		"minSpeed" : 1,
+		"maxSpeed" : 1.5,
+		// clothing types
+		"context" : "Casual"
+	},
+	
+	// data exporter options
+	"dataExport": {
+		// when false disables all exports
+		"enabled": true,
+		// defines the format data should be exported, either video or image
+		"mode": "video",
+		
+		// video data export configuration parameters
+		"video": {
+			// maximum number of frames that should be collected before encoding a video
+			// you can set this to -1 (experimental) to produce a stream with no limit,
+			// video will be exported only when the simulator is closed.
+			"stream_max": 3000,
+			// vp9 mp4 encoding profile
+			"profile": "high",
+			// video export dimensions (if different from camera, video will be resized)
+			"width": 720,
+			"height": 480
+		},
+		
+		// image data export configuration parameters
+		"image": {
+			// how many images to collect before exporting; This MUST be 1, other settings are not yet supported
+			"stream_max": 1,
+			// image export dimensions (if different from camera, image will be resized)
+			"width": 720,
+			"height": 480
+		},
+		
+		// arbitrary field exports
+		//
+		// all fields defined here will be exported as a individual json file, if
+		// you export a video, the vectors from those fields will be concatenated
+		// into a single json file with a specific timestamp, matching the frames
+		// within the video
+		// 
+		// definition:
+		// 
+		// [
+		//	{
+		// 		// label of export in disk
+		// 		"label": "distanceTravelled",
+		// 		// gameObject where component to be exported exists
+		// 		"target": "mainCar",
+		// 		// component within gameObject
+		// 		"componentName": "OSVehicle",
+		// 		// name of the field within component to be exported
+		// 		"fieldName": "distanceTravelled"
+		// 	},
+		// 	
+		// 	...
+		// ]
+		"fields": [
+			{
+				"label": "distanceTravelled",
+				"target": "mainCar",
+				"componentName": "OSVehicle",
+				"fieldName": "distanceTravelled"
+			},
+			{
+				"label": "speed",
+				"target": "mainCar",
+				"componentName": "OSVehicle",
+				"fieldName": "currentSpeed"
+			},
+			{
+				"label": "velocityVector",
+				"target": "mainCar",
+				"componentName": "Rigidbody",
+				"fieldName": "velocity"
+			},
+			{
+				"label": "angularVelocity",
+				"target": "mainCar",
+				"componentName": "OSVehicle",
+				"fieldName": "velocity"
+			},
+			{
+				"label": "angularDrag",
+				"target": "mainCar",
+				"componentName": "Rigidbody",
+				"fieldName": "angularDrag"
+			},
+			{
+				"label": "position",
+				"target": "mainCar",
+				"componentName": "Transform",
+				"fieldName": "position"
+			},
+			{
+				"label": "rotation",
+				"target": "mainCar",
+				"componentName": "Transform",
+				"fieldName": "eulerAngles"
+			}
+		]
+	}
+}
