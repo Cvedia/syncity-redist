@@ -151,7 +151,7 @@
 			// maximum number of frames that should be collected before encoding a video
 			// you can set this to -1 (experimental) to produce a stream with no limit,
 			// video will be exported only when the simulator is closed.
-			"stream_max": 3000,
+			"stream_max": 300,
 			// vp9 mp4 encoding profile
 			"profile": "high",
 			// video export dimensions (if different from camera, video will be resized)
@@ -214,7 +214,7 @@
 				"label": "angularVelocity",
 				"target": "mainCar",
 				"componentName": "OSVehicle",
-				"fieldName": "velocity"
+				"fieldName": "angularVelocity"
 			},
 			{
 				"label": "angularDrag",
