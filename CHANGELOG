@@ -3,6 +3,10 @@ This change log follows YYMMDD timestamps which are also the version number for
 both the SDK and the simulator.
 --------------------------------------------------------------------------------
 
+# 180901
+
+- endless_runner: angularVelocity configuration fixed
+
 # 180831
 
 - *IMPORTANT*: SDK now requires commentjson module, you can install it by running `python3 -m pip install commentjson`
