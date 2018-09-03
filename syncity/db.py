@@ -128,7 +128,7 @@ This function works in a deterministic fashion when `pyseed` flag is set.
 
 """
 def getRandomBundlePrefab(bundle, size=1):
-	return random.choices(bundleObjects(bundle, selection='prefabPath'), k=size)
+	return random.sample(bundleObjects(bundle, selection='prefabPath'), size)
 
 """
 Removes objects from the database by GUID

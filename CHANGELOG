@@ -3,6 +3,14 @@ This change log follows YYMMDD timestamps which are also the version number for
 both the SDK and the simulator.
 --------------------------------------------------------------------------------
 
+# 180903
+
+- Removed random.choices dependency in favor to random.sample
+
+# 180902
+
+- endless_runner: angularVelocity calculations fixed
+
 # 180901
 
 - endless_runner: angularVelocity configuration fixed
