@@ -43,8 +43,21 @@ def run():
 	if settings.skip_setup == False:
 		common.sendData('"AssetBundles.GameobjectCache" SET AssetBundles.GameobjectCache cachedObjectsLimit {}'.format(settings.cache_limit))
 		
+		# setup segmentation instance id exporter
+		common.sendData([
+			'CREATE "Camera/SegmentationIIDs"',
+			'"Camera/SegmentationIIDs" ADD Camera SegmentationCamera Segmentation.Output.BoundingBoxes Segmentation.Output.InstanceIds',
+			'"Camera/SegmentationIIDs" SET active true',
+			'[UI.Window] ShowFromCamera "Camera/SegmentationIIDs" AS "segmentationIIDs" WITH 1472 1472 24 "ARGBFloat" "Default"'
+		])
+		
+		# add instance id to stack and set it's export format to raw
+		mycams.append('Camera/SegmentationIIDs')
+		_params = helpers.cameraExportParametrize(mycams, "image")
+		_params[2]['options']['format'] = 'raw'
+		
 		helpers.addDataExport(
-			imageLinks=helpers.cameraExportParametrize(mycams, "image"),
+			imageLinks=_params,
 			fieldLinks=[
 				{
 					"target": "Camera",
