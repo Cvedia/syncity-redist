@@ -1,5 +1,5 @@
 """
-Converts 32-bit raw export images to 8-bit, this will loose information, but 
+Converts 32-bit color depth raw export images to 8-bit, this will loose information, but 
 will make raw images human friendly.
 
 ## Usage
@@ -36,7 +36,7 @@ def args(parser):
 
 def help():
 	return '''\
-	Converts 32-bit depth raw export images to 8-bit, this will loose information, but will make raw images human friendly.
+	Converts 32-bit color depth raw export images to 8-bit, this will loose information, but will make raw images human friendly.
 '''
 
 def run():

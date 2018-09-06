@@ -17,9 +17,9 @@ CREATE "Camera"
 
 "Camera/Thermal" SET active true
 
-"Segmentation.Profile.instance" PUSH classes "Void" "Person" "Bicycle" "Car"
+"Segmentation.Profile.instance" PUSH classes "Void" "Sky" "Person" "Bicycle" "Car"
 CREATE Segmentation.LookUpTable AS "lookUpTable"
-"lookUpTable" EXECUTE Segmentation.LookUpTable SetClassColor "Person->Yellow" "Bicycle->#00FF00FF" "Car->#FF0000FF" 
+"lookUpTable" EXECUTE Segmentation.LookUpTable SetClassColor "Void->black" "Sky->#FF7B00FF" "Person->Yellow" "Bicycle->#00FF00FF" "Car->#FF0000FF" 
 
 CREATE "Camera/Segmentation"
 

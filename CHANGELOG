@@ -3,6 +3,12 @@ This change log follows YYMMDD timestamps which are also the version number for
 both the SDK and the simulator.
 --------------------------------------------------------------------------------
 
+# 180906
+
+- SKY segmentation support
+- Jumanji: Changes to support sky segmentation
+- SDK: Segmentation cameras will now automatically add SKY among with VOID into the lookup table by default. To avoid conflicting with existing colors, SKY is segmented as a orangish color (#FF7B00)
+
 # 180903
 
 - Removed random.choices dependency in favor to random.sample

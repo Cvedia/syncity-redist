@@ -574,8 +574,8 @@ def addCameraSeg(
 		# assumes it's a [ <class>, <color> ]
 		elif isinstance(lookupTable, list):
 			# c = []
-			c = ['"{}->{}"'.format('Void', 'black')]
-			n = ['"Void"']
+			c = ['"{}->{}"'.format('Void', 'black'), '"{}->{}"'.format('Sky', '#FF7B00FF')]
+			n = ['"Void"', '"Sky"']
 			for i in lookupTable:
 				c.append('"{}->{}"'.format(i[0], i[1]))
 				n.append('"{}"'.format(i[0]))

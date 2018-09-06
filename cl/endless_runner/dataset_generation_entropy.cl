@@ -93,7 +93,7 @@ REGEX "tile*/Road system/Road*" SET Thermal.ThermalObjectBehaviour profile "Ther
 
 "Segmentation.Profile.instance" PUSH classes "Void" "Person" "Car" "Bicycle"
 CREATE Segmentation.LookUpTable AS "lookUpTable"
-"lookUpTable" EXECUTE Segmentation.LookUpTable SetClassColor "Person->Yellow" "Car->Red" "Bicycle->White"
+"lookUpTable" EXECUTE Segmentation.LookUpTable SetClassColor "Void->black" "Person->Yellow" "Car->Red" "Bicycle->White"
 
 
 REGEX "tile*/Humans/Humans" ADD Segmentation.Class Segmentation.Spawners.Entity
