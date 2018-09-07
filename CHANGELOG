@@ -5,6 +5,7 @@ both the SDK and the simulator.
 
 # 180907
 
+- #269804617 RandomProps.Spawners.PropArea now supports a list of assets to be spawned
 - #255897254 Custom log path support
 - Added endless runner instance id support with configurables
 - Misc helper functions changes
