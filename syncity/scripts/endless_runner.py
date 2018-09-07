@@ -303,9 +303,10 @@ def run():
 		)
 		
 		if 'RGB' in options['flags']:
+			common.output('Setting up RGB Cameras...', 'DEBUG')
 			i = 0
 			for idx in options['cam_mask']['RGB']:
-				cam = options['cams'][idx]
+				cam = copy.deepcopy(options['cams'][idx])
 				cam_s = idx.split('/')[-1]
 				mycams.append(idx)
 				
@@ -341,8 +342,10 @@ def run():
 				i += 1
 		
 		if 'DEPTH' in options['flags']:
+			common.output('Setting up DEPTH Cameras...', 'DEBUG')
+			
 			for idx in options['cam_mask']['DEPTH']:
-				cam = options['cams'][idx]
+				cam = copy.deepcopy(options['cams'][idx])
 				cam_s = idx.split('/')[-1]
 				mycams.append(idx)
 				
@@ -362,12 +365,14 @@ def run():
 				)
 		
 		if 'SEGMENTATION' in options['flags']:
+			common.output('Setting up SEGMENTATION Cameras...', 'DEBUG')
+			
 			for idx in options['cam_mask']['SEGMENTATION']:
-				cam = options['cams'][idx]
+				cam = copy.deepcopy(options['cams'][idx])
 				cam_s = idx.split('/')[-1]
 				mycams.append(idx)
 				
-				helpers.validateResolution(cam['cameraPosition'][0], cam['cameraPosition'][1])
+				helpers.validateResolution(cam['cameraWidth'], cam['cameraHeight'])
 				
 				common.sendData([
 					'[Segmentation.Camera] CreateWithClassColors "{}" WITH lookUpTable "lookUpTable"'.format(idx),
@@ -388,8 +393,10 @@ def run():
 				])
 		
 		if 'THERMAL' in options['flags']:
+			common.output('Setting up THERMAL Cameras...', 'DEBUG')
+			
 			for idx in options['cam_mask']['THERMAL']:
-				cam = options['cams'][idx]
+				cam = copy.deepcopy(options['cams'][idx])
 				cam_s = idx.split('/')[-1]
 				mycams.append(idx)
 				
