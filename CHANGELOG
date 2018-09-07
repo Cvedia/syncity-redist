@@ -3,6 +3,10 @@ This change log follows YYMMDD timestamps which are also the version number for
 both the SDK and the simulator.
 --------------------------------------------------------------------------------
 
+# 180907
+
+- #255897254 Custom log path support
+
 # 180906
 
 - SKY segmentation support

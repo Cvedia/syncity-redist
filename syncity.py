@@ -15,7 +15,7 @@ import random
 
 from syncity import common, settings_manager
 
-SYNCITY_VERSION = '18.08.31.2019'
+SYNCITY_VERSION = '18.09.07.0331'
 SIMULATOR_MIN_VERSION = '18.04.23.0000'
 
 print ('SynCity toolbox - v{}\nCopyright (c) 2016-{} CVEDIA PVE Ltd\n'.format(SYNCITY_VERSION, datetime.date.today().year))
@@ -52,6 +52,8 @@ if platform.system() == 'Windows':
 else:
 	parser.add_argument('-o', '--output', default='/tmp/', help='Defines output path for snapshots, note that this path is relative to the machine running the simulator, defaults to /tmp/', dest='output_path')
 	parser.add_argument('-l', '--local_output', default='/tmp/', action=common.readableDir, help='Defines local output path for recordings, json exports, etc; This path is relative to the machine running this script, defaults to /tmp/', dest='local_path')
+
+parser.add_argument('--log_output', default=None, action=common.readableDir, help='Defines a path to write recordings and log files. This overrides the defaults logs/ and records/', dest='log_path')
 
 # misc
 parser.add_argument('-q', '--quiet', action='store_true', default=False, help='Quiet mode')

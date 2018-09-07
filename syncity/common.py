@@ -248,7 +248,7 @@ def init2():
 
 def init_logging(head=None):
 	if settings.log == None:
-		base = os.path.join(settings._root, 'logs')
+		base = os.path.join(settings._root, 'logs') if settings.log_path == None else settings.log_path
 		output('Logging to: {}'.format(base), 'DEBUG')
 		mkdirP(base)
 		settings.log = os.path.join(base, 'log_{}.txt'.format(settings._start))
@@ -260,7 +260,7 @@ def init_logging(head=None):
 
 def init_recording(head=None):
 	if settings.record == None:
-		base = os.path.join(settings._root, 'records')
+		base = os.path.join(settings._root, 'records') if settings.log_path == None else settings.log_path
 		output('Recording to: {}'.format(base), 'DEBUG')
 		mkdirP(base)
 		settings.record = os.path.join(base, 'record_{}.cl'.format(settings._start))
