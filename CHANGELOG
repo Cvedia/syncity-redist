@@ -6,6 +6,8 @@ both the SDK and the simulator.
 # 180907
 
 - #255897254 Custom log path support
+- Added endless runner instance id support with configurables
+- Misc helper functions changes
 
 # 180906
 
