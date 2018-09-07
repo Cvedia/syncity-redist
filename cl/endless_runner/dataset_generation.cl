@@ -197,6 +197,11 @@ CREATE RenderTexture 1920 1080 24 "ARGB32" "Default" AS "cameraThermal1"
 "mainCar/cameras/cameraSegmentation1" SET active true
 [UI.Window] ShowFromRenderTexture "cameraSegmentation1" AS "cameraSegmentation1"
 
+CREATE "mainCar/cameras/cameraSegmentationIIDs"
+"mainCar/cameras/cameraSegmentationIIDs" ADD Camera SegmentationCamera Segmentation.Output.BoundingBoxes Segmentation.Output.InstanceIds
+"mainCar/cameras/cameraSegmentationIIDs" SET active true
+[UI.Window] ShowFromCamera "mainCar/cameras/cameraSegmentationIIDs" AS "segmentationIIDs" WITH 1920 1080 24 "ARGBFloat" "Default"
+
 "EnviroSky" EXECUTE EnviroSky AssignAndStart "mainCar" "mainCar/cameras/cameraThermal1"
 "EnviroSky" SET active true
 NOOP

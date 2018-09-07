@@ -1,5 +1,6 @@
 import os
 import copy
+import sys
 
 from .. import common, helpers, settings_manager, db
 
@@ -66,6 +67,13 @@ def run():
 				options['cam_mask'][v['type']] = []
 			
 			options['cam_mask'][v['type']].append(k)
+		
+		if not 'SEGMENTATION' in options['flags'] and 'SEGMENTATION_IID' in options['flags']:
+			common.output('You must have a segmentation camera in order to produce proper segmentation instance ids outputs', 'FATAL')
+			sys.exit(1)
+		if 'SEGMENTATION_IID' in options['flags'] and options['dataExport']['mode'] == 'video':
+			common.output('You cannot export segmentation instance ids as videos, please change dataExport.mode to image.', 'FATAL')
+			sys.exit(1)
 		
 		# find, preload and initalize tiles
 		tiles = []
@@ -383,13 +391,25 @@ def run():
 						cam['cameraRotation'][0], cam['cameraRotation'][1], cam['cameraRotation'][2]
 					),
 					
-					# Temporary HACK
-					# '"{}" ADD Sensors.RenderCamera'.format(idx),
-					# '"{}" SET Sensors.RenderCamera alwaysOn true'.format(idx),
-					
 					'"{}" SET Camera targetTexture "{}" far {}'.format(idx, cam_s, cam['clippingFar']),
 					'"{}" SET active true'.format(idx),
 					'[UI.Window] ShowFromRenderTexture "{}" AS "{}"'.format(cam_s, cam_s),
+				])
+		
+		if 'SEGMENTATION_IID' in options['flags']:
+			common.output('Setting up SEGMENTATION_IID Cameras...', 'DEBUG')
+			
+			for idx in options['cam_mask']['SEGMENTATION_IID']:
+				cam = copy.deepcopy(options['cams'][idx])
+				cam_s = idx.split('/')[-1]
+				mycams.append(idx)
+				
+				helpers.validateResolution(cam['cameraWidth'], cam['cameraHeight'])
+				common.sendData([
+					'CREATE "{}"'.format(idx),
+					'"{}" ADD Camera SegmentationCamera Segmentation.Output.BoundingBoxes Segmentation.Output.InstanceIds'.format(idx),
+					'"{}" SET active true'.format(idx),
+					'[UI.Window] ShowFromCamera "{}" AS "{}" WITH {} {} 24 "ARGBFloat" "Default"'.format(idx, cam_s , cam['cameraWidth'], cam['cameraHeight'])
 				])
 		
 		if 'THERMAL' in options['flags']:
@@ -589,8 +609,14 @@ def run():
 					pass
 				
 				if options['dataExport']['mode'] == "image":
+					_params = helpers.cameraExportParametrize(mycams, "image", options['dataExport'][options['dataExport']['mode']])
+					
+					if 'SEGMENTATION_IID' in options['flags']:
+						for idx in options['cam_mask']['SEGMENTATION_IID']:
+							_params[mycams.index(idx)]['options']['format'] = 'raw'
+					
 					helpers.addDataExport(
-						imageLinks=helpers.cameraExportParametrize(mycams, "image", options['dataExport'][options['dataExport']['mode']]),
+						imageLinks=_params,
 						fieldLinks=_fields
 					)
 				else:

@@ -225,3 +225,13 @@ def guidExist(guid):
 def logQuery(sql):
 	common.output('[{}] {}'.format(settings._qCount, sql), 'SQL')
 	settings._qCount += 1
+
+def executeSqlCommand(command):
+	cur = settings._conn.cursor()
+	r = []
+	
+	for row in cur.execute(command):
+		r.append(list(row))
+	
+	cur.close()
+	return r

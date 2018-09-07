@@ -30,7 +30,7 @@ def minVersion():
 
 def run():
 	loop = 0
-	mycams = ['mainCar/cameras/cameraThermal1', 'mainCar/cameras/cameraSegmentation1']
+	mycams = ['mainCar/cameras/cameraThermal1', 'mainCar/cameras/cameraSegmentation1', 'mainCar/cameras/cameraSegmentationIIDs']
 	randomTextures = [ "VechicleSpawner" ]
 	
 	# add compnents for randomization and execute the first texture random roll
@@ -49,8 +49,11 @@ def run():
 			'"dummy" SET active true'
 		])
 		
+		_params = helpers.cameraExportParametrize(mycams, "image")
+		_params[2]['options']['format'] = 'raw'
+		
 		helpers.addDataExport(
-			imageLinks=helpers.cameraExportParametrize(mycams, "image"),
+			imageLinks=_params,
 			fieldLinks=[
 				{
 					"target": "dummy",

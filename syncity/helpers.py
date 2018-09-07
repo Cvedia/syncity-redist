@@ -643,7 +643,9 @@ def addCameraThermal(
 	isLocal=False,
 	
 	renderCamera=False,
-	registerCamera=True
+	registerCamera=True,
+	
+	profile="Thermal"
 ):
 	"""
 	Creates a Thermal camera with special postprocessing features
@@ -683,6 +685,8 @@ def addCameraThermal(
 	
 	renderCamera (bool): Binds a renderCamera component allowing for disk exports, defaults to `True`
 	
+	profile (string): Adds a thermal profile to the camera, defaults to `Thermal`, When set to `False` will not add any profile.
+	
 	# Notes
 	
 	- patchyness effects mimic thermal cameras averaging feature from mid / long distance focal points
@@ -697,7 +701,11 @@ def addCameraThermal(
 	buf = []
 	
 	for l in label:
-		addStack = [ 'Camera', 'Thermal.ThermalCamera', 'UnityEngine.PostProcessing.PostProcessingBehaviour' ]
+		addStack = [ 'Camera', 'Thermal.ThermalCamera' ]
+		
+		if profile != False:
+			addStack.append('UnityEngine.PostProcessing.PostProcessingBehaviour')
+		
 		b = []
 		
 		if renderCamera == True:
@@ -743,7 +751,7 @@ def addCameraThermal(
 		buf.extend(b)
 		
 		buf.extend([
-			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile "Thermal"'.format(l),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile "{}"'.format(l, profile) if profile != False else '',
 			'''"{}" SET Thermal.ThermalCamera
 				ambientTemperature {}
 				temperatureRange ({} {})
@@ -751,7 +759,7 @@ def addCameraThermal(
 				useAGC {}
 				enabled true
 			'''.format(l, ambientTemperature, minimumTemperature, maximumTemperature, maxDistanceForProbeUpdate, useAGC),
-			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.grain.enabled false'.format(l),
+			'"{}" SET UnityEngine.PostProcessing.PostProcessingBehaviour profile.grain.enabled false'.format(l) if profile != False else '',
 		])
 		
 		if registerCamera == True:
@@ -1804,6 +1812,8 @@ def cameraExportParametrize(cams, mode="image", options=None):
 				streamFormat = "png"
 			elif "depth" in c.lower():
 				streamFormat = "tif"
+		elif mode == "png_image":
+			streamFormat = "png"
 		elif mode == "video":
 			streamFormat = "mp4"
 		else:
