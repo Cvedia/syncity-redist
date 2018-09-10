@@ -1,4 +1,4 @@
 Jinja2
 colorama
 tqdm
-commonjson
+commentjson
