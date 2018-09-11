@@ -384,6 +384,8 @@ def run():
 				
 				common.sendData([
 					'[Segmentation.Camera] CreateWithClassColors "{}" WITH lookUpTable "lookUpTable"'.format(idx),
+					'"{}" ADD Segmentation.Output.BoundingBoxes Segmentation.Output.FilteredBoundingBoxes'.format(idx),
+					'"{}" EXECUTE Segmentation.Output.FilteredBoundingBoxes EnableClasses "Person" "Car" "Bicycle"'.format(idx),
 					'[Cameras.RenderTexture] CreateNew "{}" {} {}'.format(cam_s, cam['cameraWidth'], cam['cameraHeight']),
 					'"{}" SET Transform localPosition ({} {} {}) localEulerAngles ({} {} {})'.format(
 						idx,
@@ -407,7 +409,7 @@ def run():
 				helpers.validateResolution(cam['cameraWidth'], cam['cameraHeight'])
 				common.sendData([
 					'CREATE "{}"'.format(idx),
-					'"{}" ADD Camera SegmentationCamera Segmentation.Output.BoundingBoxes Segmentation.Output.InstanceIds'.format(idx),
+					'"{}" ADD Camera SegmentationCamera Segmentation.Output.InstanceIds'.format(idx),
 					'"{}" SET active true'.format(idx),
 					'[UI.Window] ShowFromCamera "{}" AS "{}" WITH {} {} 24 "ARGBFloat" "Default"'.format(idx, cam_s , cam['cameraWidth'], cam['cameraHeight'])
 				])
@@ -614,6 +616,7 @@ def run():
 					if 'SEGMENTATION_IID' in options['flags']:
 						for idx in options['cam_mask']['SEGMENTATION_IID']:
 							_params[mycams.index(idx)]['options']['format'] = 'raw'
+							_params[mycams.index(idx)]['exportBBoxes'] = 'false'
 					
 					helpers.addDataExport(
 						imageLinks=_params,
