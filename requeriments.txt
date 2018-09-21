@@ -2,3 +2,4 @@ Jinja2
 colorama
 tqdm
 commentjson
+requests

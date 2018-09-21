@@ -43,8 +43,10 @@ def init(path, force=False):
 		settings._conn = None
 	
 	if not os.path.isfile(path):
-		common.output('Can\'t read: {}'.format(path), 'ERROR')
-		return false
+		common.output('[DB] Can\'t read: {}'.format(path), 'ERROR')
+		return False
+	
+	common.output('[DB] Initializing DB in: {}...'.format(path), 'DEBUG')
 	
 	settings._dbfile = path
 	settings._conn = sqlite3.connect(path)
@@ -59,7 +61,7 @@ def autoInit():
 		return
 	
 	fn = os.path.join(settings.assets, 'main.db')
-	common.output('Auto initializing db @ {}'.format(fn), 'DEBUG')
+	common.output('[DB] Auto initializing db @ {}'.format(fn), 'DEBUG')
 	
 	init(fn)
 
@@ -166,7 +168,7 @@ def fixStrings(vals):
 			x = int(val)
 			r.append(str(val))
 		except:
-			common.output('Except: {}'.format(val))
+			common.output('[DB] Except: {}'.format(val))
 			r.append(str('"{}"'.format(val.replace('"', '""'))))
 	return r
 
@@ -229,7 +231,7 @@ def logQuery(sql):
 def executeSqlCommand(command):
 	cur = settings._conn.cursor()
 	r = []
-	
+	logQuery(command)
 	for row in cur.execute(command):
 		r.append(list(row))
 	
