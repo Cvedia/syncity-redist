@@ -401,14 +401,17 @@ def sendData(v, read=None, flush=None, timeout=3, readWait=.5):
 	string: Reply from server or raw data
 	
 	"""
-	if settings.force_sync == True:
+	try:
+		if settings.force_sync == True:
+			read = True
+		else: # not recommended
+			if read == None:
+				if getattr(settings, "async") == True:
+					read = False
+				else:
+					read = True
+	except:
 		read = True
-	else: # not recommended
-		if read == None:
-			if getattr(settings, "async") == True:
-				read = False
-			else:
-				read = True
 	
 	if not isinstance(v, list):
 		v = [ v ]
@@ -731,8 +734,12 @@ def flushBuffer():
 	"""
 	Forces a telnet command read by sending NOOP
 	"""
-	if settings.dry_run or settings.force_sync == True:
-		return
+	try:
+		if settings.dry_run or settings.force_sync == True:
+			return
+	except:
+		pass
+	
 	if settings.debug:
 		settings._counters['flush'] += 1
 	
