@@ -102,18 +102,6 @@ REGEX "human_*" SET Humans.Locomotion.Character AnimatorForwardAmountMultiplier 
 //REGEX "human_*" ADD Humans.Animation.AnimationStepper
 
 
-// ---------- NETWORK GENERATION
-
-"World Root" ADD Traffic.Sumo.SumoTrafficConfigurator
-"World Root" EXECUTE Traffic.Sumo.SumoTrafficConfigurator CreateTraffic
-"World Root" EXECUTE Traffic.Sumo.SumoTrafficConfigurator AddRandomPedestrianTrips 10 0 1
-"World Root" EXECUTE Traffic.Sumo.SumoTrafficConfigurator AddRandomVehicleTrips 15
-"World Root" EXECUTE Traffic.Sumo.SumoTrafficConfigurator AddRandomVehicleTrips 10 "bike" 0 2
-"World Root" EXECUTE Traffic.Sumo.SumoTrafficConfigurator AddRandomVehicleTrips 15
-"World Root" EXECUTE Traffic.Sumo.SumoTrafficConfigurator AddRandomVehicleTrips 10 "bus" 0 2
-//"World Root" EXECUTE Traffic.Sumo.SumoTrafficConfigurator Build
-
-
 // ---------- SUMO TRAFFIC
 
 CREATE "Traffic"
