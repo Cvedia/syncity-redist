@@ -15,6 +15,11 @@ CREATE "Camera"
 "Camera/Thermal" ADD ReflectionProbe
 "Camera/Thermal" SET ReflectionProbe type 2 mode 1 refreshMode 1 shadowDistance 0 boxProjection true farClipPlane 350 size (250 250 250) resolution 1024 hdr true enabled true
 
+// Uncomment the following three lines to get random background images. They will replace the sky, so adjusting skyboxBackgroundTemperature is important
+//"Camera/Thermal" SET Thermal.ThermalCamera skyboxBackgroundTemperature 9
+//"Camera/Thermal" ADD Cameras.RandomBackground
+//"Camera/Thermal" EXECUTE Cameras.RandomBackground GetImagesFromDisk "D:\Projects\Syncity\random-images\*.jpg"
+
 "Camera/Thermal" SET active true
 
 "Segmentation.Profile.instance" PUSH classes "Void" "Sky" "Person" "Bicycle" "Car"

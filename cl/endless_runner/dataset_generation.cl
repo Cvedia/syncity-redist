@@ -123,7 +123,7 @@ CREATE "cyclist1/human"
 CREATE "bikes/bike_03" FROM "transportation" as "cyclist1/bike"
 "cyclist1/bike" SET active true
 "cyclist1/bike" ADD Humans.Posing.RandomHumanVehiclePoser
-"cyclist1/bike" SET Humans.Posing.RandomHumanVehiclePoser executeOnEnable true settings.context "Casual" createNewHumanOnEnable true humansContainer "cyclist1/human"
+"cyclist1/bike" SET Humans.Posing.RandomHumanVehiclePoser executeOnEnable true settings.context "Casual" destroyHumanOnDisable true humansContainer "cyclist1/human"
 "cyclist1/bike" ADD Segmentation.Class Segmentation.Entity
 "cyclist1/bike" SET Segmentation.Class className "Bicycle"
 "cyclist1/human" ADD Segmentation.Class Segmentation.Entity
@@ -135,7 +135,7 @@ CREATE "cyclist2/human"
 CREATE "bikes/bike_03" FROM "transportation" as "cyclist2/bike"
 "cyclist2/bike" SET active true
 "cyclist2/bike" ADD Humans.Posing.RandomHumanVehiclePoser
-"cyclist2/bike" SET Humans.Posing.RandomHumanVehiclePoser executeOnEnable true settings.context "Casual" createNewHumanOnEnable true humansContainer "cyclist2/human"
+"cyclist2/bike" SET Humans.Posing.RandomHumanVehiclePoser executeOnEnable true settings.context "Casual" destroyHumanOnDisable true humansContainer "cyclist2/human"
 "cyclist2/bike" ADD Segmentation.Class Segmentation.Entity
 "cyclist2/bike" SET Segmentation.Class className "Bicycle"
 "cyclist2/human" ADD Segmentation.Class Segmentation.Entity

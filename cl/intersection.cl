@@ -2,13 +2,15 @@
 
 // ---------- WORLD LOADING
 
-"Time.instance" SET captureFramerate 1
-LOAD "Worlds/Intersection Loop/Intersection Loop" FROM "worlds"
+LOAD "Worlds/Intersection Loop/New York" FROM "worlds"
+//LOAD "Worlds/Intersection Loop/Florida" FROM "worlds"
+
 REGEX "World Root/.*/Cars" SET active false
 
 CREATE "EnviroSky" AS "EnviroSky"
 "EnviroSky" SET EnviroSky GameTime.ProgressTime "None" weatherSettings.cloudTransitionSpeed 100 weatherSettings.effectTransitionSpeed 100 weatherSettings.fogTransitionSpeed 100
 "EnviroSky" SET EnviroSky GameTime.Hours 13
+
 
 // ---------- CAMERA SETUP
 
@@ -35,6 +37,7 @@ CREATE "Camera"
 [UI.Window] ShowFromCamera "Camera/Thermal" AS "Thermal" WITH 1920 1080 24 "ARGB32" "Default"
 "Camera/Thermal" EXECUTE SetActive true
 "Camera" EXECUTE SetActive true
+
 
 // ---------- THERMAL SETUP
 
@@ -87,6 +90,7 @@ CREATE Thermal.ThermalObjectProfile AS "ThermalBehaviour/Sidewalk"
 REGEX "World Root/.*/Others" ADD Thermal.ThermalObjectBehaviour
 REGEX "World Root/.*/Others" SET Thermal.ThermalObjectBehaviour profile "ThermalBehaviour/Sidewalk"
 
+
 // ---------- HUMANS INITIALIZATION
 
 CREATE "Humans/Male" FROM "humans" AS "human_male"
@@ -109,10 +113,15 @@ CREATE "Traffic"
 "Traffic" SET SUMOProcess sumoPath "sumo\"
 "Traffic" SET SUMOProcess sumoParams "-v --remote-port 4001 --start --step-length 0.016 --collision.check-junctions true --collision.mingap-factor 0 --collision.action warn"
 
+"Traffic" ADD FilteredAssetsPool
+"Traffic" SET FilteredAssetsPool usePlaceholders false
+"Traffic" PUSH FilteredAssetsPool humanReferences "human_male" "human_female"
 "Traffic" ADD CarsTick
 "Traffic" ADD PedestriansTick
 "Traffic" ADD TrafficLightsTick
 "Traffic" SET CarsTick entityCullingReference "Camera/Thermal"
+"Traffic" SET CarsTick entityCullingDistance 999999
+"Traffic" SET CarsTick bikeRiderSegmentationClassName "Person"
 "Traffic" ADD SUMOController RandomProps.Spawners.Spawner RandomProps.Spawners.Vehicles.RandomLicensePlate RandomProps.Spawners.RandomColor
 "Traffic" SET RandomProps.Spawners.RandomColor randomMethod "FromList"
 "Traffic" PUSH RandomProps.Spawners.RandomColor availableColors "#46AE9DFF" "#57531DFF" "#BF7ADEFF" "#7ABD71FF" "#BC982DFF" "#B008DEFF" "#54ED6EFF" "#E03102FF" "#42405DFF" "#AA25BEFF" "#910998FF" "#AD4046FF" "#A4B1CEFF" "#D77B73FF" "#D02542FF" "#175918FF"
@@ -120,15 +129,20 @@ CREATE "Traffic"
 
 CREATE "Bikes"
 "Bikes" SET active true
-"Traffic" SET CarsTick bicycleContainer "Bikes"
 
 CREATE "Pedestrians"
 "Pedestrians" SET active true
-"Traffic" SET SUMOController scale 1
 "Traffic" SET PedestriansTick pedestrianContainer "Pedestrians"
-"Traffic" PUSH SUMOController pedestrianPool "human_male" "human_female"
-"Traffic" SET active true
+"Traffic" SET SUMOController scale 1
+
 //"Traffic" SET CarsTick entityCullingReference "Main Camera"
+
+
+// ----------- FAST FORWARD FRAMES
+
+"Time.instance" SET captureFramerate 2
+"Traffic" SET SUMOController smoothing false
+
 
 // ---------- EXPORT SETUP
 
@@ -139,6 +153,7 @@ CREATE "dataExport1/links"
 "dataExport1/exporter" SET Sensors.DataExport streamOutput "E:\tmp\"
 "dataExport1/exporter" SET active true
 "dataExport1/links" SET active true
+
 
 // ----------- EXPORT THERMAL CAMERA
 
@@ -152,16 +167,20 @@ CREATE "dataExport1/links/770fa81b-e3f0-48a0-858a-5b5360db4e01"
 "dataExport1/links/770fa81b-e3f0-48a0-858a-5b5360db4e01" EXECUTE Sensors.ImageExportLink SetOptions "format->jpg"
 "dataExport1/links/770fa81b-e3f0-48a0-858a-5b5360db4e01" SET active true
 
+
 // ----------- SEGMENTATION CAMERA SETUP
 
 "Segmentation.Profile.instance" PUSH classes "Car" "Bicycle" "Person"
 CREATE Segmentation.LookUpTable AS "lookUpTable"
 "lookUpTable" EXECUTE Segmentation.LookUpTable SetClassColor "Person->Yellow" "Car->Red" "Bicycle->White"
 
+"Bikes" ADD RandomProps.Spawners.Spawner
 "Bikes" ADD Segmentation.Class Segmentation.Spawners.Entity
 "Bikes" SET Segmentation.Class className "Bicycle"
+"Traffic" ADD RandomProps.Spawners.Spawner
 "Traffic" ADD Segmentation.Class Segmentation.Spawners.Entity
 "Traffic" SET Segmentation.Class className "Car"
+"Pedestrians" ADD RandomProps.Spawners.Spawner
 "Pedestrians" ADD Segmentation.Class Segmentation.Spawners.Entity
 "Pedestrians" SET Segmentation.Class className "Person"
 
@@ -173,6 +192,7 @@ CREATE Segmentation.LookUpTable AS "lookUpTable"
 "Camera/Segmentation" SET Camera targetTexture "cameraSegmentation1" far 400
 "Camera/Segmentation" SET active true
 [UI.Window] ShowFromRenderTexture "cameraSegmentation1" AS "cameraSegmentation1"
+
 
 // ----------- EXPORT SEGMENTATION CAMERA
 
@@ -186,17 +206,27 @@ CREATE "dataExport1/links/022914b6-9cac-463c-940e-3712cf051084"
 "dataExport1/links/022914b6-9cac-463c-940e-3712cf051084" EXECUTE Sensors.ImageExportLink SetOptions "format->png"
 "dataExport1/links/022914b6-9cac-463c-940e-3712cf051084" SET active true
 
+
 // ----------- ENTROPY - Jump from one car to another at random
 
 "Camera" ADD JumpBetweenObjects
 "Camera" SET JumpBetweenObjects container "Traffic"
-"Camera" SET JumpBetweenObjects localPosition (0 2 2)
+"Camera" SET JumpBetweenObjects localPosition (0 3 2)
+
 
 // ----------- POST SETUP
 
 "EnviroSky" EXECUTE EnviroSky AssignAndStart "Camera" "Camera/Thermal"
 "EnviroSky" SET active true
 "World Root" SET active true
+
+"Traffic" SET active true
+"Traffic" EXECUTE FilteredAssetsPool SetContainerForType "Human" "Pedestrians"
+"Traffic" EXECUTE FilteredAssetsPool SetPoolSizeForType "Human" 60
+"Traffic" EXECUTE FilteredAssetsPool SetContainerForType "Bike" "Bikes"
+"Traffic" EXECUTE FilteredAssetsPool SetPoolSizeForType "Bike" 25
+"Traffic" EXECUTE FilteredAssetsPool SetPoolSizeForType "Car" 50
+
 "EnviroSky" EXECUTE EnviroSky SetWeatherOverwrite 3
 REGEX "World Root/.*/Road Network/Road Objects/.*/Decal_Asphalt_Crossroad_Mask_02_ERDecal_Start" SET Thermal.ThermalRenderer enabled false
 SLEEP 10

@@ -385,7 +385,8 @@ def run():
 				common.sendData([
 					'[Segmentation.Camera] CreateWithClassColors "{}" WITH lookUpTable "lookUpTable"'.format(idx),
 					'"{}" ADD Segmentation.Output.BoundingBoxes Segmentation.Output.FilteredBoundingBoxes'.format(idx),
-					'"{}" EXECUTE Segmentation.Output.FilteredBoundingBoxes EnableClasses "Person" "Car" "Bicycle"'.format(idx),
+					# '"{}" EXECUTE Segmentation.Output.FilteredBoundingBoxes EnableClasses "Person" "Car" "Bicycle"'.format(idx),
+					'"{}" EXECUTE Segmentation.Output.FilteredBoundingBoxes EnableClasses "Person" "Car"'.format(idx),
 					'[Cameras.RenderTexture] CreateNew "{}" {} {}'.format(cam_s, cam['cameraWidth'], cam['cameraHeight']),
 					'"{}" SET Transform localPosition ({} {} {}) localEulerAngles ({} {} {})'.format(
 						idx,

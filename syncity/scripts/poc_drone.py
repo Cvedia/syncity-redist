@@ -63,7 +63,8 @@ def run():
 		helpers.addCameraThermal(
 			trees=True,
 			ambientTemperature=15, minimumTemperature=9, maximumTemperature=35,
-			treesBase=8, treesBandwidth=50, treesMedian=0, treesLeafsVariance=10
+			treesBase=8, treesBandwidth=50, treesMedian=0, treesLeafsVariance=10,
+			width=camera_size[0], height=camera_size[1]
 		)
 		
 		# WARNING: Deprecated in favor to data export module
@@ -113,12 +114,12 @@ def run():
 			animalsThermalObjectBehaviour=True,
 			birdsThermalObjectBehaviour=True,
 			treesThermalObjectBehaviour=True,
-			buildingsThermalObjectBehaviour=True,
+			buildingsThermalObjectBehaviour="ThermalBehaviour/Buildings",
 			carsThermalObjectBehaviour=True,
-			groundThermalObjectBehaviour=True,
+			groundThermalObjectBehaviour="ThermalBehaviour/Ground",
 			dronesThermalObjectBehaviour=True,
 			humansThermalObjectBehaviour=True,
-			signsThermalObjectBehaviour=True,
+			signsThermalObjectBehaviour="ThermalBehaviour/Signs",
 			cityThermalObjectBehaviour=True,
 			buildingsInnerRadius=80,
 			treesInnerRadius=15, treesRadius=60,
@@ -173,7 +174,12 @@ def run():
 		"""
 		# helpers.addThermalProfileOverride(target='cameras/spawner/drones/container', heatinessMode='Absolute', heatinessValue=250, temperatureMode='Absolute', temperatureValue=300)
 		helpers.setThermalProps(objs='cameras/spawner/drones/container', heatiness=250, temperatureValue=300)
-		
+
+		common.sendData([
+			'"cameras/spawner/drones" SET Thermal.ThermalObjectBehaviour enabled false',
+			'"cameras/spawner/drones" SET Thermal.ThermalObjectBehaviour enabled true',
+		])
+
 		if common.versionCompare(settings._simulator_version, '18.07.26.0000', '>='):
 			helpers.addDataExport(
 				imageLinks=helpers.cameraExportParametrize(mycams, "image"),

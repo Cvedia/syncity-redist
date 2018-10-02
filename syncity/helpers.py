@@ -3462,9 +3462,10 @@ def spawner(
 			n = names[i]
 		
 		obj = '{}/{}/{}'.format(prefix, n, container)
-		
+
 		common.sendData([
 			'CREATE "{}"'.format(obj),
+			'"{}/{}" SET active false'.format(prefix, n),
 			'"{}" SET active false'.format(obj),
 			
 			'"{}" ADD RandomProps.{}'.format(obj, method) if method != None else '',

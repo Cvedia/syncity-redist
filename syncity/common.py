@@ -14,6 +14,7 @@ import random
 import signal
 import textwrap
 import commentjson as json
+import json as json_alt
 import types
 import re
 import hashlib
@@ -799,6 +800,17 @@ def modulesArgs(module, parser):
 				pass
 
 def loadJSONS(s):
+	if isinstance(s, bytes):
+		return json_alt.loads(s)
+		
+		"""
+		try:
+			s = s.decode('utf-8')
+		except:
+			output('Unable to decode bytes to string: {}'.format(s), 'ERROR')
+			return False
+		"""
+	
 	return json.loads(s)
 
 def loadJSON(path):
