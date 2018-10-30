@@ -22,6 +22,9 @@ def args(parser):
 	try:
 		parser.add_argument('--random_texture_source', default=None, help='Defines a random texture source, if not set will not randomize textures')
 	except: pass
+	try:
+		parser.add_argument('--use_segmentation_iid', default=False, help='If set to true, will export raw segmentation instance ids')
+	except: pass
 
 def minVersion():
 	return '18.07.26.0000'
@@ -52,9 +55,14 @@ def run():
 		])
 		
 		# add instance id to stack and set it's export format to raw
-		mycams.append('Camera/SegmentationIIDs')
+
+		if settings.use_segmentation_iid == True:
+			mycams.append('Camera/SegmentationIIDs')
+
 		_params = helpers.cameraExportParametrize(mycams, "image")
-		_params[2]['options']['format'] = 'raw'
+
+		if settings.use_segmentation_iid == True:
+			_params[2]['options']['format'] = 'raw'
 		
 		helpers.addDataExport(
 			imageLinks=_params,

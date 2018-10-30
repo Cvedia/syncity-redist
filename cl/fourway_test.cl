@@ -10,14 +10,18 @@ CREATE "Camera/RGB"
 "Camera/RGB" ADD Camera AudioListener
 "Camera/RGB" SET Camera fieldOfView 60 renderingPath "UsePlayerSettings" allowHDR true
 "Camera/RGB" ADD UnityEngine.Rendering.PostProcessing.PostProcessVolume UnityEngine.Rendering.PostProcessing.PostProcessLayer
-"Camera/RGB" SET UnityEngine.Rendering.PostProcessing.PostProcessLayer volumeTrigger "Camera/RGB" antialiasingMode "SubpixelMorphologicalAntialiasing"
+"Camera/RGB" SET UnityEngine.Rendering.PostProcessing.PostProcessLayer volumeTrigger "Camera/RGB" antialiasingMode "None"
 "Camera/RGB" SET UnityEngine.Rendering.PostProcessing.PostProcessVolume isGlobal true profile "Cold Profile"
 "Camera/RGB" EXECUTE UnityEngine.Rendering.PostProcessing.PostProcessLayer Init "PostProcessResources"
+//Add FXAA III
+"Camera/RGB" ADD Syncity.ImageEffects.Antialiasing
 "Camera/RGB" SET active true
 
 // Create Thermal Camera
 [Thermal.Camera] CreateCamera "Camera/Thermal"
 "Camera/Thermal" SET Thermal.ThermalCamera temperatureRange (-10 30)
+//Add FXAA III
+"Camera/Thermal" ADD Syncity.ImageEffects.Antialiasing
 "Camera/Thermal" SET active true
 
 // Create Segmentation Camera
@@ -43,7 +47,7 @@ CREATE "EnviroSky" AS "EnviroSky"
 "EnviroSky" SET EnviroSky Player "Camera" PlayerCamera "Camera" GameTime.ProgressTime "None" weatherSettings.cloudTransitionSpeed 100 weatherSettings.effectTransitionSpeed 100 weatherSettings.fogTransitionSpeed 100 
 "EnviroSky" SET EnviroSky GameTime.Hours 13
 "EnviroSky" EXECUTE EnviroSky ChangeWeather 1
-"EnviroSky" EXECUTE EnviroSky AssignAndStart "Camera" "Camera"
+"EnviroSky" EXECUTE EnviroSky AssignAndStart "Camera/RGB" "Camera/RGB"
 "EnviroSky" SET active true
 
 // UI setup 

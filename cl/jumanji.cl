@@ -210,10 +210,14 @@ CREATE "Humans"
 
 CREATE "Bicyclists"
 CREATE "Bicyclists/Humans"
-"Bicyclists/Humans" ADD Segmentation.Class Segmentation.Spawners.Entity
+"Bicyclists/Humans" ADD Segmentation.Class Segmentation.Spawners.Entity RandomProps.Spawners.Spawner
 "Bicyclists/Humans" SET Segmentation.Class className "Person"
 "Bicyclists/Humans" ADD Thermal.Spawners.ReplaceThermalProfiles
 "Bicyclists/Humans" SET Thermal.Spawners.ReplaceThermalProfiles profile "ThermalBehaviour/Humans"
+"Bicyclists/Humans" ADD Humans.Spawners.RandomPose
+"Bicyclists/Humans" ADD RandomProps.Spawners.Spawner
+"Bicyclists/Humans" EXECUTE Humans.Spawners.RandomPose addMaskedAnimationsFromPack ASSET "Humans/animations/MicroGestures" FROM "humans"
+
 
 CREATE "Bicyclists/Bicycles"
 "Bicyclists/Bicycles" SET Transform localPosition (10 0 -10)

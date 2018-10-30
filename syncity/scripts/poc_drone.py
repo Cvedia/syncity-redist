@@ -113,7 +113,7 @@ def run():
 			
 			animalsThermalObjectBehaviour=True,
 			birdsThermalObjectBehaviour=True,
-			treesThermalObjectBehaviour=True,
+			treesThermalObjectBehaviour="ThermalBehaviour/Trees_poc_drone",
 			buildingsThermalObjectBehaviour="ThermalBehaviour/Buildings",
 			carsThermalObjectBehaviour=True,
 			groundThermalObjectBehaviour="ThermalBehaviour/Ground",

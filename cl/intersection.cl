@@ -3,7 +3,10 @@
 // ---------- WORLD LOADING
 
 LOAD "Worlds/Intersection Loop/New York" FROM "worlds"
-//LOAD "Worlds/Intersection Loop/Florida" FROM "worlds"
+
+//Switch variants
+//REGEX "World Root/.*" EXECUTE Tiler.TileVariantSet SwitchVariant "Italian City"
+//REGEX "World Root/.*" EXECUTE Tiler.TileVariantSet SwitchVariant "Florida Neighborhood"
 
 REGEX "World Root/.*/Cars" SET active false
 
@@ -26,6 +29,7 @@ CREATE "Camera"
 // change skyboxBackgroundTemperature to control sky visibility
 "Camera/Thermal" SET Thermal.ThermalCamera temperatureRange (-4 75) ambientTemperature -1.5 skyboxBackgroundTemperature 0
 "Camera/Thermal" SET Camera far 400
+"Camera/Thermal" SET Camera nearClipPlane 1
 "Camera/Thermal" SET UnityStandardAssets.ImageEffects.BloomOptimized fastBloomShader "Hidden/FastBloom" threshold 0 intensity 0.15 blurSize 3.5 blurIterations 4
 
 "Camera/Thermal" ADD UnityStandardAssets.CinematicEffects.TonemappingColorGrading
@@ -110,8 +114,9 @@ REGEX "human_*" SET Humans.Locomotion.Character AnimatorForwardAmountMultiplier 
 
 CREATE "Traffic"
 "Traffic" ADD SUMOProcess
+"Traffic" SET SUMOProcess sumoConfigName "traffic.pedestrians.15.min.sumocfg"
 "Traffic" SET SUMOProcess sumoPath "sumo\"
-"Traffic" SET SUMOProcess sumoParams "-v --remote-port 4001 --start --step-length 0.016 --collision.check-junctions true --collision.mingap-factor 0 --collision.action warn"
+"Traffic" SET SUMOProcess sumoParams "-v --remote-port 4001 --start --step-length 0.016 --collision.check-junctions true --collision.mingap-factor 1 --collision.action teleport --lanechange.duration 2"
 
 "Traffic" ADD FilteredAssetsPool
 "Traffic" SET FilteredAssetsPool usePlaceholders false
@@ -123,6 +128,9 @@ CREATE "Traffic"
 "Traffic" SET CarsTick entityCullingDistance 999999
 "Traffic" SET CarsTick bikeRiderSegmentationClassName "Person"
 "Traffic" ADD SUMOController RandomProps.Spawners.Spawner RandomProps.Spawners.Vehicles.RandomLicensePlate RandomProps.Spawners.RandomColor
+"Traffic" SET SUMOController currentTime 150
+"Traffic" SET SUMOController restartTime 750
+"Traffic" SET SUMOController enabled false
 "Traffic" SET RandomProps.Spawners.RandomColor randomMethod "FromList"
 "Traffic" PUSH RandomProps.Spawners.RandomColor availableColors "#46AE9DFF" "#57531DFF" "#BF7ADEFF" "#7ABD71FF" "#BC982DFF" "#B008DEFF" "#54ED6EFF" "#E03102FF" "#42405DFF" "#AA25BEFF" "#910998FF" "#AD4046FF" "#A4B1CEFF" "#D77B73FF" "#D02542FF" "#175918FF"
 "Traffic" PUSH RandomProps.Spawners.RandomColor colorsWeights 14
@@ -189,7 +197,7 @@ CREATE Segmentation.LookUpTable AS "lookUpTable"
 "Camera/Segmentation" ADD Segmentation.Output.BoundingBoxes Segmentation.Output.FilteredBoundingBoxes
 "Camera/Segmentation" SET Segmentation.Output.BoundingBoxes minimumObjectVisibility 0 extensionAmount 0 minimumPixelsCount 1
 "Camera/Segmentation" EXECUTE Segmentation.Output.FilteredBoundingBoxes EnableClasses "Person" "Car" "Bicycle"
-"Camera/Segmentation" SET Camera targetTexture "cameraSegmentation1" far 400
+"Camera/Segmentation" SET Camera targetTexture "cameraSegmentation1" nearClipPlane 1 far 400
 "Camera/Segmentation" SET active true
 [UI.Window] ShowFromRenderTexture "cameraSegmentation1" AS "cameraSegmentation1"
 
@@ -211,7 +219,8 @@ CREATE "dataExport1/links/022914b6-9cac-463c-940e-3712cf051084"
 
 "Camera" ADD JumpBetweenObjects
 "Camera" SET JumpBetweenObjects container "Traffic"
-"Camera" SET JumpBetweenObjects localPosition (0 3 2)
+"Camera" SET JumpBetweenObjects localPosition (0 2 2.3)
+"Camera" SET JumpBetweenObjects rotationMinY 0 rotationMaxY 0 ignoreObjectsNamed "Vehicle Pointer"
 
 
 // ----------- POST SETUP
@@ -226,6 +235,8 @@ CREATE "dataExport1/links/022914b6-9cac-463c-940e-3712cf051084"
 "Traffic" EXECUTE FilteredAssetsPool SetContainerForType "Bike" "Bikes"
 "Traffic" EXECUTE FilteredAssetsPool SetPoolSizeForType "Bike" 25
 "Traffic" EXECUTE FilteredAssetsPool SetPoolSizeForType "Car" 50
+
+"Traffic" SET SUMOController enabled true
 
 "EnviroSky" EXECUTE EnviroSky SetWeatherOverwrite 3
 REGEX "World Root/.*/Road Network/Road Objects/.*/Decal_Asphalt_Crossroad_Mask_02_ERDecal_Start" SET Thermal.ThermalRenderer enabled false
