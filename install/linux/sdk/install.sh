@@ -16,7 +16,7 @@ if [ "$RT" -ne "0" ] ; then
 fi
 
 echo Installing required modules...
-python3 -m pip install -r requeriments.txt
+python3 -m pip install -r requirements.txt
 
 RT=$?
 if [ "$RT" -ne "0" ] ; then

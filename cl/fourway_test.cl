@@ -18,8 +18,9 @@ CREATE "Camera/RGB"
 "Camera/RGB" SET active true
 
 // Create Thermal Camera
-[Thermal.Camera] CreateCamera "Camera/Thermal"
-"Camera/Thermal" SET Thermal.ThermalCamera temperatureRange (-10 30)
+CREATE "Cameras/Thermal/ThermalCamera" FROM "sensors" AS "Camera/Thermal"
+"Camera/Thermal" SET Transform localPosition (0 0 0)
+"Camera/Thermal" SET Transform localEulerAngles (0 0 0)
 //Add FXAA III
 "Camera/Thermal" ADD Syncity.ImageEffects.Antialiasing
 "Camera/Thermal" SET active true
@@ -59,18 +60,17 @@ CREATE "EnviroSky" AS "EnviroSky"
 CREATE "Humans"
 "Humans" SET Transform localPosition (0 0 0)
 "Humans" ADD Segmentation.Class Segmentation.Spawners.Entity Humans.Spawners.RandomHumans Humans.Spawners.RandomPose
-"Humans" PUSH Humans.Spawners.RandomPose clips ASSET "Humans/animations/Walk" FROM "humans" ASSET "Humans/animations/Run" FROM "humans" ASSET "Humans/animations/LookingAroundNervously" FROM "humans" ASSET "Humans/animations/StandingAngry" FROM "humans" ASSET "Humans/animations/LookingAround" FROM "humans" ASSET "Humans/animations/Waving" FROM "humans" ASSET "Humans/animations/PushButton" FROM "humans" ASSET "Humans/animations/ShakingHands" FROM "humans" ASSET "Humans/animations/ArmsCrossed" FROM "humans" ASSET "Humans/animations/LookBehind" FROM "humans" ASSET "Humans/animations/Looking" FROM "humans"
+"Humans" SET Humans.Spawners.RandomHumans settings.additionalTags ",+fixed"
+//"Humans" PUSH Humans.Spawners.RandomPose clips ASSET "Humans/animations/Walk" FROM "humans" ASSET "Humans/animations/Run" FROM "humans" ASSET "Humans/animations/LookingAroundNervously" FROM "humans" ASSET "Humans/animations/StandingAngry" FROM "humans" ASSET "Humans/animations/LookingAround" FROM "humans" ASSET "Humans/animations/Waving" FROM "humans" ASSET "Humans/animations/PushButton" FROM "humans" ASSET "Humans/animations/ShakingHands" FROM "humans" ASSET "Humans/animations/ArmsCrossed" FROM "humans" ASSET "Humans/animations/LookBehind" FROM "humans" ASSET "Humans/animations/Looking" FROM "humans"
 "Humans" SET Segmentation.Class className "Person"
 "Humans" ADD RandomProps.Frustum
 "Humans" SET RandomProps.Frustum cam "Camera/Thermal"
 "Humans" SET RandomProps.Frustum fixedYAxis 0
-"Humans" SET RandomProps.Frustum fixedZAxis 10
+"Humans" SET RandomProps.Frustum fixedZAxis 5
 "Humans" SET RandomProps.Frustum fixedXAxis 0 
 "Humans" ADD RandomProps.PropArea
 "Humans" SET RandomProps.PropArea tags "human" collisionCheck True stickToGround True findTerrains False
 "Humans" SET RandomProps.PropArea numberOfProps 1
-"Humans" ADD Thermal.Spawners.ReplaceThermalProfiles
-"Humans" SET Thermal.Spawners.ReplaceThermalProfiles profile "ThermalBehaviour/Humans"
 "Humans" SET active true
 
 CREATE "BicycleHumans"
@@ -97,6 +97,7 @@ CREATE "Bicycles"
 "Bicycles" SET active true
 "BicycleHumans" SET active true
 
+
 CREATE "Cars"
 "Cars" SET Transform localPosition (0 0 0)
 "Cars" ADD Segmentation.Class Segmentation.Spawners.Entity
@@ -104,14 +105,22 @@ CREATE "Cars"
 "Cars" ADD RandomProps.Frustum
 "Cars" SET RandomProps.Frustum cam "Camera/Thermal"
 "Cars" SET RandomProps.Frustum fixedYAxis 0
-"Cars" SET RandomProps.Frustum fixedZAxis 0
 "Cars" SET RandomProps.Frustum fixedXAxis 0
+"Cars" SET RandomProps.Frustum fixedZAxis 5
 "Cars" ADD RandomProps.PropArea
-"Cars" SET RandomProps.PropArea tags "+car,+thermal" collisionCheck True stickToGround False findTerrains False
+"Cars" SET RandomProps.PropArea collisionCheck True stickToGround False findTerrains False
 "Cars" SET RandomProps.PropArea findTerrains False
 "Cars" SET RandomProps.PropArea numberOfProps 1
-"Cars" ADD Thermal.Spawners.ReplaceThermalProfiles
-"Cars" SET Thermal.Spawners.ReplaceThermalProfiles profile "ThermalBehaviour/Cars"
+
+//Restrict to specific cars
+
+"Cars" PUSH RandomProps.Spawners.PropArea assets "thermal-cars:Cars/AudiTTS/AudiTTS"
+"Cars" PUSH RandomProps.Spawners.PropArea assets "thermal-cars:Cars/BMW6_Series_650i/BMW6_Series_650i"
+"Cars" PUSH RandomProps.Spawners.PropArea assets "thermal-cars:Cars/Fiat500_New/Fiat500_New"
+"Cars" PUSH RandomProps.Spawners.PropArea assets "thermal-cars:Cars/MINI_CooperS/MINI_CooperS.prefab"
+"Cars" PUSH RandomProps.Spawners.PropArea assets "thermal-cars:Cars/RangeRover/RangeRover.prefab"
+
+
 "Cars" SET active true
 
 "Humans" SET Thermal.Spawners.ReplaceThermalProfiles enabled false

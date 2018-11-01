@@ -26,7 +26,7 @@ for /f "tokens=*" %%a in (
 if not x%pyv:Python 3.=%==x%pvy% (
 	REM this shouldn't fail, as python for windows comes with pip by default
 	echo Installing required modules...
-	python -m pip install -r requeriments.txt
+	python -m pip install -r requirements.txt
 	
 	if errorlevel 1 (
 		echo Failed
