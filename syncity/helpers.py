@@ -1820,7 +1820,7 @@ def cameraExportParametrize(cams, mode="image", options=None):
 			common.output("Unknown parametrization mode: {}".format(mode), 'ERROR')
 			return
 		
-		_options = { "format": streamFormat }
+		_options = { "format": streamFormat, "policy": "last" }
 		
 		if options != None:
 			try:
