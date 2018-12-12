@@ -76,13 +76,13 @@ CREATE "Humans"
 CREATE "BicycleHumans"
 "BicycleHumans" ADD Segmentation.Class Segmentation.Spawners.Entity
 "BicycleHumans" SET Segmentation.Class className "Person"
-"BicycleHumans" ADD Thermal.Spawners.ReplaceThermalProfiles
-"BicycleHumans" SET Thermal.Spawners.ReplaceThermalProfiles profile "ThermalBehaviour/Humans"
+"BicycleHumans" ADD RandomProps.Spawners.Spawner
 
 CREATE "Bicycles"
 "Bicycles" SET Transform localPosition (0 0 0)
 "Bicycles" ADD Segmentation.Class Segmentation.Spawners.Entity Humans.Spawners.RandomHumansVehiclePoser
 "Bicycles" SET Humans.Spawners.RandomHumansVehiclePoser humansContainer "BicycleHumans"
+"Bicycles" SET Humans.Spawners.RandomHumansVehiclePoser settings.additionalTags ",+fixed"
 "Bicycles" SET Segmentation.Class className "Bicycle"
 "Bicycles" ADD RandomProps.Frustum
 "Bicycles" SET RandomProps.Frustum cam "Camera/Thermal"
@@ -92,8 +92,6 @@ CREATE "Bicycles"
 "Bicycles" ADD RandomProps.PropArea
 "Bicycles" SET RandomProps.PropArea tags "bicycle" collisionCheck True stickToGround True findTerrains False
 "Bicycles" SET RandomProps.PropArea numberOfProps 1
-"Bicycles" ADD Thermal.Spawners.ReplaceThermalProfiles
-"Bicycles" SET Thermal.Spawners.ReplaceThermalProfiles profile "ThermalBehaviour/Bicycles"
 "Bicycles" SET active true
 "BicycleHumans" SET active true
 

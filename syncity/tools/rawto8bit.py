@@ -6,10 +6,6 @@ will make raw images human friendly.
 
 `python syncity.py -t rawto8bit -l path/to/exported/images`
 
-## Notes:
-
-WARNING: This function will override existing images matching `depth`
-
 """
 
 import numpy as np
@@ -40,6 +36,10 @@ def help():
 '''
 
 def run():
+	if settings.width == None or settings.height == None:
+		common.output('You must specify a height and width', 'ERROR')
+		return
+	
 	common.output('Scanning {}...'.format(settings.local_path))
 	fns = common.getAllFiles(settings.local_path, recursive=False)
 	fi = len(fns)
@@ -60,6 +60,7 @@ def run():
 		im = f.reshape((settings.height, settings.width, settings.channels))
 		cv2.imwrite(ofn, (256/im[:,:,settings.channel]).astype('uint8'))
 		fd.close()
+		common.output('Wrote: {}'.format(ofn), 'DEBUG')
 		converted += 1
 	
 	common.output('Completed, converted {} files.'.format(converted))

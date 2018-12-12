@@ -814,7 +814,7 @@ def loadJSONS(s):
 	return json.loads(s)
 
 def loadJSON(path):
-	output('Loading JSON object from: `{}` ...'.format(path))
+	# output('Loading JSON object from: `{}` ...'.format(path))
 	
 	with open(path, encoding='utf-8') as data:
 		r = json.loads(data.read())
@@ -1134,7 +1134,7 @@ def getAllFiles(base, ignore_path=['.git', '__pycache__'], ignore_ext=['.md', 'p
 	if not isinstance(base, list):
 		base = [ base ]
 	fns = []
-	
+	i = 0
 	for path in base:
 		if os.path.isfile(path):
 			if path not in fns:
@@ -1151,8 +1151,14 @@ def getAllFiles(base, ignore_path=['.git', '__pycache__'], ignore_ext=['.md', 'p
 						jp = os.path.join(folder, fn)
 						if recursive == True and jp not in fns:
 							fns.append(jp)
+							i += 1
+							if i % 10000 == 0:
+								output('Loaded {} files...'.format(i), 'DEBUG')
 						elif os.path.isfile(jp) and jp not in fns:
 							fns.append(jp)
+							i += 1
+							if i % 10000 == 0:
+								output('Loaded {} files...'.format(i), 'DEBUG')
 				
 				if recursive == True:
 					for subdir in subdirs:

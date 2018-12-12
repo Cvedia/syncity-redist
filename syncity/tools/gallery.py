@@ -12,7 +12,7 @@ This script generates a static gallery in html, that work locally straight from 
 - `--align`: Controls how the gallery aligns the images with bounding boxes in the file level, the possible options are:
 	- `time`: Based on the timestamp of the image gallery will try to find the nearest timestamp match json file
 	- `linear`: Assumes a simple relationship between the images and boundingbox json files: `image_abc.jpg` expects a `image_abc.json` with bounding box information.
-	- `sequential`: Assumes that the boundingbox filename counter will always match the image or images, this works with the aggregation system. For example: `123_rgb_camera.jpg`, `123_thermal_camera.jpg`, `123_segmentation_camera.png`, `123_depth_camera.tif` will all be aggregate to a `bbox_123.json` , since they match the same number, `123`.
+	- `sequential`: (default) Assumes that the boundingbox filename counter will always match the image or images, this works with the aggregation system. For example: `123_rgb_camera.jpg`, `123_thermal_camera.jpg`, `123_segmentation_camera.png`, `123_depth_camera.tif` will all be aggregate to a `bbox_123.json` , since they match the same number, `123`.
 
 ## Notes:
 
@@ -23,7 +23,11 @@ This script generates a static gallery in html, that work locally straight from 
 
 ## Notes in the new format:
 
-This script expects filenames to follow `<object name><divider><timestamp>.<ext>` where divider can be null or a non a-Z0-9 string.
+This script expects filenames to follow `<object name><divider><timestamp>.<ext>` where divider can be null or a non a-Z0-9 string. Although it will try to resolve a full timestamp using different techniques, it will succeed as long there's a single floating point number in the filename string.
+
+## Notes on graphs
+
+As of 181120 this script will also generate generic graphs based in json files available in the folder. If parsable, and known data structure, gallery will generate a graph across <timestamp> of how this data behaves; if the data is linear it will give you a clear idea how vectors move across time, allowing a first look on how data is organized.
 
 """
 import commentjson as json
@@ -31,6 +35,7 @@ import sys
 import os
 import time
 import re
+import copy
 
 from .. import common, helpers, settings_manager
 from datetime import datetime
@@ -41,8 +46,8 @@ settings = settings_manager.Singleton()
 
 tpl_path = 'syncity/tools/gallery/'
 static_assets = {
-	"css": [ "reset.css", "styles.css" ],
-	"js": [ "jquery-3.1.1.min.js", "gallery.js" ]
+	"css": [ "reset.css", "dygraph.css", "styles.css" ],
+	"js": [ "jquery-3.1.1.min.js", "dygraph.min.js", "dygraph.synchronizer.js", "randomColor.js", "gallery.js" ]
 }
 
 def args(parser):
@@ -69,13 +74,19 @@ def has_attribute(data, attribute):
 
 def run():
 	common.output('Generating gallery from {}...'.format(settings.local_path))
-	
+	iext = [ "jpg", "png", "tif", "tiff", "gif", "bmp" ]
 	rfn = '{}___gallery_{}.html'.format(settings.local_path, settings._start)
+	match_ts = r'(_|\s|\-)(\d+\.\d+|\d+)'
 	fh = open(rfn, 'wb+')
+	
+	common.output('Collecting files...')
 	fns = common.getAllFiles(settings.local_path, recursive=False)
-	features = [] # feature list
-	fc = {} # categorized filenames
-	fm = {} # meta data
+	
+	iFeatures = [] # image feature list
+	jFeatures = [] # json feature list
+	fc = {} # categorized image filenames
+	fm = {} # image meta data
+	jm = {} # json/other meta data
 	fmfn = {} # meta filenames
 	fi = len(fns)
 	
@@ -85,11 +96,21 @@ def run():
 	
 	common.output('Processing {} files...'.format(fi))
 	
-	os.stat_float_times(True)
+	try:
+		os.stat_float_times(True)
+	except:
+		pass
 	
 	for fn in tqdm(fns):
 		lnm = os.path.basename(fn).lower()
-		fty = None # feature type, eg: thermal, rgb, depth, etc
+		fty = None # image feature type, eg: thermal, rgb, depth, etc
+		
+		ext = lnm.split(".")[-1:][0]
+		isJSON = True if ext == 'json' else False
+		isImage = True if ext in iext else False
+		
+		if not isJSON and not isImage:
+			continue
 		
 		if settings.align == 'time':
 			fts = os.path.getmtime(fn)
@@ -97,29 +118,21 @@ def run():
 			fts = '.'.join(os.path.basename(fn).split('.')[:-1])
 		elif settings.align == 'sequential':
 			try:
-				fts = re.findall(r'\d+', lnm[::-1])[0][::-1]
+				fts = re.findall(match_ts, lnm)[-1][-1:][0]
 			except IndexError:
 				common.output('Unable to find number on {}, skipping'.format(fn), 'WARNING')
 				continue
 		
-		if settings.log:
+		if settings.debug:
 			common.output('Processing: {}'.format(lnm))
 		
-		if settings.flat_gallery == True:
-			fty = "default"
-		if fty == None and "rgb" in lnm:
-			fty = "rgb"
-		elif fty == None and "segmentation" in lnm and not lnm.endswith(".json"):
-			fty = "seg"
-		elif fty == None and "depth" in lnm:
-			fty = "depth"
-		elif fty == None and "thermal" in lnm:
-			fty = "thermal"
-		elif fty == None and "mono" in lnm:
-			fty = "mono"
-		elif lnm.endswith(".json"):
-			if "segmentation" in lnm or "bbox" in lnm:
+		fty = "default" if settings.flat_gallery == True else re.sub(match_ts, '', " ".join(lnm.split(".")[0:-1]))
+		
+		if isJSON:
+			if "seg" in lnm or "bbox" in lnm:
 				if settings.align == 'time':
+					
+					# HACK
 					while has_attribute(fm, fts):
 						fts += .000001
 				
@@ -129,41 +142,49 @@ def run():
 				except:
 					common.output('Invalid JSON data in {}'.format(fn), 'ERROR')
 			else:
-				common.output('Found JSON object in {} that\'s not linked to cameras, skipping'.format(fn), 'WARN')
-			
-			continue
-		elif lnm.startswith('camera'):
-			try:
-				fty = re.findall(r'camera[a-zA-Z0-9]+', lnm)[0].replace('camera', '')
-			except:
-				common.output('Unable to identify camera on string {}'.format(lnm), 'WARN')
-				fty = None
-		elif lnm.endswith(".debug") or lnm.endswith(".html") or lnm.endswith(".txt"):
+				
+				try:
+					obj = common.loadJSON(fn)
+				except:
+					common.output('Invalid JSON data in {}'.format(fn), 'ERROR')
+					continue
+				
+				# HACK: Skip multi value objects, they cannot be graphed
+				try:
+					if obj.get('value') != None and isinstance(obj.get('value'), str) and (obj.get('value')[0] == '[' or obj.get('value')[0] == '{'):
+						continue
+						# test = common.loadJSONS(obj['value'])
+						# obj['value'] = test
+				except:
+					pass
+				
+				if fty not in jFeatures:
+					jFeatures.append(fty)
+					jm[fty] = {}
+				
+				jm[fty][fts] = copy.deepcopy(obj)
+				
+				if settings.debug:
+					common.output('Found JSON object in {} that\'s not linked to cameras, skipping'.format(fn), 'WARN')
 			continue
 		
-		if fty == None:
-			common.output('Unknown file type: {}, skipping'.format(fn), 'WARN')
-			continue
-		
-		if fty not in features:
-			features.append(fty)
-		
+		if fty not in iFeatures:
+			iFeatures.append(fty)
 		if not has_attribute(fc, fty):
 			fc[fty] = {}
-		
 		if settings.align == 'time':
 			while has_attribute(fc[fty], fts):
 				fts += .000001
 			
 			fc[fty][os.path.getmtime(fn)] = os.path.basename(fn)
-		# elif settings.align == 'linear':
 		else:
 			fc[fty][fts] = os.path.basename(fn)
 	
 	if len(fm) > 0:
-		features.append('bbox')
+		iFeatures.append('bbox')
 	
 	total_images = 0
+	
 	for i in fc:
 		if total_images > 0:
 			total_images = min(total_images, len(fc[i]))
@@ -175,23 +196,25 @@ def run():
 	
 	js_static = ''
 	for i in static_assets['js']:
-		js_static += common.readAll('{}js/{}'.format(tpl_path, i))
+		js_static += '// {}\n\n{}\n'.format(i, common.readAll('{}js/{}'.format(tpl_path, i)))
 	
 	css_static = ''
 	for i in static_assets['css']:
-		css_static += common.readAll('{}css/{}'.format(tpl_path, i))
+		css_static += '// {}\n\n{}\n'.format(i, common.readAll('{}css/{}'.format(tpl_path, i)))
 	
 	fh.write(
 		html.render(
 			title='Gallery [{}]'.format(settings._start),
-			js_static=js_static, css_static=css_static, features=features,
+			js_static=js_static, css_static=css_static, iFeatures=iFeatures, jFeatures=jFeatures,
 			fc=json.dumps(fc, sort_keys=True),
 			fm=json.dumps(fm, sort_keys=True),
+			jm=json.dumps(jm),
 			fmfn=json.dumps(fmfn, sort_keys=True),
 			total_images=total_images,
 			invert_bboxx='false' if settings.no_invert_bboxx == True else 'true'
 		).encode('utf-8') + b""
 	)
+	
 	fh.close()
 	
 	common.output('Wrote {}'.format(rfn))

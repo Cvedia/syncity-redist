@@ -15,19 +15,15 @@
 			total_images = {{ total_images }},
 			meta = {{ fm }},
 			meta_fn = {{ fmfn }},
-			classColors = [
-				'#ffffff',
-				'#e6194b',
-				'#0906eb',
-				'#3cb44b'
-			];
+			meta_other = {{ jm }},
+			classColors = randomColor({seed:666,count:1000});
 	</script>
 </head>
 	<body>
 		<div class="galWrapper">
 			<div class="galTop">
 				<div class="galTopLeft">
-					{% for f in features %}
+					{% for f in iFeatures %}
 						{% if f != "bbox" %}
 							<button class="btn" data-type="{{ f }}">{{ f }}</button>
 						{% endif %}
@@ -36,11 +32,13 @@
 				<div class="galTopMid">
 					Image <input type="text" value="1" /> / {{ total_images }}
 				</div>
-				{% if "bbox" in features %}
 				<div class="galTopRight">
-					<button class="btn act">Bounding Boxes</button>
+					<button class="btn act" id="btnGraphs">Graphs</button>
+					{% if "bbox" in iFeatures %}
+						<button class="btn act" id="btnBBox">Bounding Boxes</button>
+					{% endif %}
 				</div>
-				{% endif %}
+				
 			</div>
 			<div class="galImage">
 				<div class="galBoxes">
@@ -48,6 +46,7 @@
 				</div>
 			</div>
 			<div class="galBottom">
+				<div class="graphContainer"></div>
 				<div class="galBotRight"></div>
 				<div class="galBotLeft"></div>
 				<div class="galBotMid">

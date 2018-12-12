@@ -1,5 +1,5 @@
 /*===============================
-* Images Gallery v 1.1.0
+* Images Gallery v 1.2.5
 * Copyright: Cvedia (C) 2018
 *================================*/
 
@@ -38,7 +38,8 @@ function ImagesGallery() {
 		curType = 'rgb',
 		showBox = false,
 		playing = false,
-		slideTime = 500;
+		spread = 100, // graph spread
+		slideTime = 33.34; // 30 fps
 	
 	if (typeof images[curType] == 'undefined') {
 		for (var i in images) {
@@ -55,12 +56,121 @@ function ImagesGallery() {
 	meta_name = $('.galBotRight', gal);
 	boxes = $('.galBoxes', gal);
 	viewButtons = $('.galTopLeft button', gal).on('click', onViewType);
-	boxButton = $('.galTopRight button', gal).on('click', onShowBoxes);
+	boxButton = $('.galTopRight #btnBBox', gal).on('click', onShowBoxes);
 	input = $('.galTopMid input', gal).on('change', onInputChange);
 	playButton = $('.iconPlay', gal).on('click', onPlayClick);
 	$('.iconLeft', gal).on('click', onLeftClick);
 	$('.iconRight', gal).on('click', onRightClick);
 	$(window).on('keydown', onKeyDown);
+	
+	$('#btnGraphs').on('click', function(){
+		graphsVisible = !graphsVisible;
+		
+		if (graphsVisible) {
+			$('#btnGraphs').addClass('act');
+			$('.graphContainer').removeClass('dct');
+		} else {
+			$('#btnGraphs').removeClass('act');
+			$('.graphContainer').addClass('dct');
+		}
+	});
+	
+	graphs = [];
+	graphHighlight = null;
+	graphsVisible = false;
+	initGraphs();
+	
+	function initGraphs() {
+		if (typeof meta_other == 'undefined')
+			return;
+		
+		var data = {},
+				t = 0, w = 0,
+				html = "";
+		
+		for (var k in meta_other) {
+			html += "<div id=\"" + k + "\"></div>";
+			data[k] = { graph: [], label: []};
+			t++;
+			for (var i in meta_other[k]) {
+				var bit = [ new Date(parseFloat(i)) ],
+						label = [ "Date" ];
+				
+				for (var j in meta_other[k][i]) {
+					if (j == "timestamp")
+						continue;
+					label.push(j);
+					bit.push(parseFloat(meta_other[k][i][j]))
+					
+					/*
+					if (meta_other[k][i][j].constructor == Array) {
+						for (var m in meta_other[k][i][j]) {
+							label.push(j + m);
+							bit.push(parseFloat(meta_other[k][i][j][m]))
+						}
+					} else {
+						label.push(j);
+						bit.push(parseFloat(meta_other[k][i][j]))
+					}
+					*/
+				}
+				
+				data[k]["graph"].push(bit);
+				if (data[k]["label"].length == 0)
+					for (var j = 0;j < label.length;j++)
+						data[k]["label"].push(label[j]);
+			}
+		}
+		
+		$('.graphContainer').html(html);
+		
+		for (var k in data) {
+			w++;
+			var series = {}, axes = {y: { independentTicks: true, drawGrid: true } };
+			
+			for (var j = 1, m = data[k]["label"].length;j < m;j++) {
+				series['Y' + j] = { axis: 'y'+ j };
+				axes['y'+j] = { drawGrid: false, independentTicks: true }
+			}
+			
+			//console.log("Series:", series, "axes:", axes);
+			
+			graphs.push(new Dygraph(
+				$(".graphContainer > #" + k)[0],
+				data[k]["graph"],
+				{
+					title: k,
+					labels: data[k]["label"],
+					legend: false,
+					height: 100,
+					showRangeSelector:false, // t == w,
+					series: series,
+					axes: axes,
+					underlayCallback: function(canvas, area, g) {
+						if (graphHighlight == null)
+							return;
+						
+						var bottom_left = g.toDomCoords(graphHighlight, -20),
+								top_right = g.toDomCoords(graphHighlight, +20),
+								left = Math.ceil(bottom_left[0]),
+								right = Math.ceil(top_right[0]);
+						
+						canvas.fillStyle = "rgba(255, 255, 102, 1.0)";
+						canvas.fillRect(left, area.y, Math.max(1, right - left), area.h);
+					}
+				}
+			));
+		}
+		
+		if (graphs.length > 0) {
+			Dygraph.synchronize(graphs, { selection: true, zoom: false, range: true });
+			$('#btnGraphs').show();
+			graphsVisible = true;
+		} else {
+			graphsVisible = false;
+			$('.graphContainer').addClass('dct');
+		}
+	}
 	
 	viewButtons.eq(0).trigger('click');
 
@@ -100,14 +210,40 @@ function ImagesGallery() {
 			fancy_url = url;
 		}
 		
-		try {
-			fancy_murl = murl.split(murl.indexOf('/') == -1 ? '\\' : '/').slice(-1)[0];
-		} catch (z) {
-			fancy_murl = murl;
+		if (meta2idx[curImage-1] != undefined) {
+			try {
+				fancy_murl = murl.split(murl.indexOf('/') == -1 ? '\\' : '/').slice(-1)[0];
+			} catch (z) {
+				fancy_murl = murl;
+			}
 		}
 		
+		try {
+			if (graphs.length > 0 && graphsVisible) {
+				var r = [ Math.max(0, curImage-spread-1), Math.min(curImage+spread,total_images-1)];
+				if (total_images-1 > (spread * 2) && Math.abs(r[0] - r[1]) < (spread * 2)) {
+					if (r[0] == 0)
+						r[1] += (spread * 2) - (r[0] + r[1]);
+					else if (r[1] >= total_images-1)
+						r[0] = Math.max(0, total_images -(spread*2)-1);
+					else
+						r[0] = Math.max(0, r[0] - (spread * 2) - (r[0] + r[1]));
+				}
+				graphHighlight = new Date(parseFloat(images2idx[curType][curImage-1]));
+				
+				for (var i = 0, j = graphs.length;i < j;i++)
+					graphs[i].updateOptions({
+						dateWindow: [
+							new Date(parseFloat(images2idx[curType][r[0]])),
+							new Date(parseFloat(images2idx[curType][r[1]]))
+						],
+						valueRange: null
+					});
+			}
+		} catch(z) {}
+		
 		name.html('<a href="'+url+'" target="_blank">'+fancy_url+'</a>');
-		meta_name.html('<a href="'+murl+'" target="_blank">'+fancy_murl+'</a>');
+		meta_name.html(meta2idx[curImage-1] == undefined ? '' : '<a href="'+murl+'" target="_blank">'+fancy_murl+'</a>');
 		image.attr('src', url);
 		drawBoxes();
 	}
@@ -155,11 +291,21 @@ function ImagesGallery() {
 	
 	function drawBoxes() {
 		var arr = meta[meta2idx[curImage-1]],
-			t, l, b, r, c, field;
+			t, l, b, r, c, j, field;
 		
 		boxes.find('.bbox').remove();
 		
-		for (var i = 0; i < arr.length; i++) {
+		// check if arr is valid
+		if (arr == undefined)
+			return;
+		
+		try {
+			j = arr.length;
+		} catch (z) {
+			return;
+		}
+		
+		for (var i = 0; i < j; i++) {
 			if (typeof arr[i]['boxMin'] != 'undefined') { // old school bbox_* types
 				if (typeof arr[i].boxMin == 'string')
 					arr[i].boxMin = arr[i].boxMin.split(',');

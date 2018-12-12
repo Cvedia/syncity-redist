@@ -6,10 +6,6 @@ will make depth images human friendly.
 
 `python syncity.py -t 8bitdepth -l path/to/exported/images`
 
-## Notes:
-
-WARNING: This function will override existing images matching `depth`
-
 """
 
 import json
@@ -44,7 +40,12 @@ def run():
 	for fn in tqdm(fns):
 		if not 'depth' in fn.lower():
 			continue
-		cv2.imwrite(fn, cv2.imread(fn).astype('uint8'))
+		
+		x = fn.split('.')
+		x[-1] = '-8bit.{}'.format(x[-1])
+		nfn = '.'.join(fn)
+		cv2.imwrite(nfn, cv2.imread(fn).astype('uint8'))
+		common.output('Wrote: {}'.format(nfn), 'DEBUG')
 		converted += 1
 	
 	common.output('Completed, converted {} files.'.format(converted))

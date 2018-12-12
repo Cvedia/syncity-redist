@@ -1,9 +1,13 @@
 #!/bin/bash
+# Copyright (c) 2016-2018 CVEDIA PVE Ltd - www.cvedia.com
+#
 
 if [ "$USER" != "root" ] ; then
 	echo "WARNING: You should run this script as root"
 fi
 
+_PWD=$(dirname $(realpath "$0"))
+cd "$_PWD"
 cd ../../..
 
 # check if python3 is install and contains pip module
@@ -12,7 +16,9 @@ RT=$?
 
 if [ "$RT" -ne "0" ] ; then
 	echo It looks like you don\'t have python3 and / or pip installed, running apt-get...
-	apt-get install python3 python3-pip -y
+	add-apt-repository universe && \
+		apt update && \
+		apt-get install python3 python3-pip -y
 fi
 
 echo Installing required modules...

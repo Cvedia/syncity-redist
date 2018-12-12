@@ -32,3 +32,9 @@ body {color: #222; font-size: 13px;}
 .tooltip.tooltip-left:before {left: -2px;}
 .tooltip.tooltip-bottom:before {top: auto; bottom: -30px;}
 .tooltip:hover:before {display: block;}
+.graphContainer { position:absolute;top:65px;right:0;width:500px; }
+.graphContainer.dct { display:none; }
+.dygraph-title { text-align: right;font-size:12px; }
+.dygraph-axis-label-x { font-size:10px; }
+.dygraph-legend { text-align:right;font-size:12px;margin-right:125px; }
+#btnGraphs { display:none; }

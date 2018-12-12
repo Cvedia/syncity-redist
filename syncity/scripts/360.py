@@ -24,7 +24,8 @@ def run():
 	mycams = [
 		'cameras/cameraRGB',
 		'cameras/segmentation',
-		'cameras/depth'
+		'cameras/depth',
+		'cameras/segmentationIID',
 	]
 	
 	obj = 'Cars/VW_Golf_V/VW_Golf_V'
@@ -43,6 +44,25 @@ def run():
 		# multiple RenderCameraLink components.
 		
 		helpers.addCameraDepth(label=mycams[2])
+		
+		# setup segmentation instance id exporter
+		common.sendData([
+			'CREATE "{}"'.format(mycams[3]),
+			'"{}" ADD Camera SegmentationCamera Segmentation.Output.BoundingBoxes Segmentation.Output.InstanceIds'.format(mycams[3]),
+			'CREATE RenderTexture 1024 768 24 "ARGBFloat" "Default" AS "segmentationIIDs"',
+			'"{}" SET Camera targetTexture "segmentationIIDs"'.format(mycams[3]),
+			'"{}" SET active true'.format(mycams[3]),
+			'[UI.Window] ShowFromRenderTexture "segmentationIIDs" AS "segmentationIIDs"'
+		])
+		
+		"""
+		common.sendData([
+			'CREATE "{}"'.format(mycams[3]),
+			'"{}" ADD Camera SegmentationCamera Segmentation.Output.BoundingBoxes Segmentation.Output.InstanceIds'.format(mycams[3]),
+			'"{}" SET active true'.format(mycams[3]),
+			'[UI.Window] ShowFromCamera "{}" AS "segmentationIIDs" WITH {} {} 24 "ARGBFloat" "Default"'.format(mycams[3], 1024, 768)
+		])
+		"""
 		
 		common.sendData([
 			# 'CREATE "{}" FROM "drones" AS "obj/subject"'.format(obj),
@@ -88,8 +108,13 @@ def run():
 		)
 		
 		"""
+		
+		_params = helpers.cameraExportParametrize(mycams, "image")
+		_params[2]['options']['format'] = 'raw'
+		_params[3]['options']['format'] = 'raw'
+		
 		helpers.addDataExport(
-			imageLinks=helpers.cameraExportParametrize(mycams, "image"),
+			imageLinks=_params,
 			fieldLinks=[
 				{
 					"target": "obj",
