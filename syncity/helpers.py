@@ -3493,7 +3493,7 @@ def spawner(
 		# of the simulation session instead of doing it at random points on the code
 		# you can do this by sending --seed_api parameter.
 		if seed != None:
-			common.sendData(['"RandomProps.Random.instance" SET seed {}'.format(seed)], read=False)
+			common.sendData(['"Syncity.Random.instance" SET seed {}'.format(seed)], read=False)
 		
 		if uglyFix == True:
 			try:

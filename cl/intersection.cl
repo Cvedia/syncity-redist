@@ -120,6 +120,7 @@ CREATE "Traffic"
 "Traffic" ADD TrafficLightsTick
 "Traffic" SET CarsTick entityCullingReference "Camera/Thermal"
 "Traffic" SET CarsTick entityCullingDistance 999999
+"Traffic" SET CarsTick randomizeObjectNames true
 "Traffic" SET CarsTick bikeRiderSegmentationClassName "Person"
 "Traffic" ADD SUMOController RandomProps.Spawners.Spawner RandomProps.Spawners.Vehicles.RandomLicensePlate RandomProps.Spawners.RandomColor
 "Traffic" SET SUMOController currentTime 150
@@ -166,7 +167,7 @@ CREATE Segmentation.LookUpTable AS "lookUpTable"
 "Camera/Segmentation" ADD Segmentation.Output.BoundingBoxes Segmentation.Output.FilteredBoundingBoxes
 "Camera/Segmentation" SET Segmentation.Output.BoundingBoxes minimumObjectVisibility 0 extensionAmount 0 minimumPixelsCount 1
 "Camera/Segmentation" EXECUTE Segmentation.Output.FilteredBoundingBoxes EnableClasses "Person" "Car" "Bicycle"
-"Camera/Segmentation" SET Camera targetTexture "cameraSegmentation1" nearClipPlane 1 far 400
+"Camera/Segmentation" SET Camera targetTexture "cameraSegmentation1" nearClipPlane 0.1 far 1000
 "Camera/Segmentation" SET active true
 [UI.Window] ShowFromRenderTexture "cameraSegmentation1" AS "cameraSegmentation1"
 
@@ -194,9 +195,6 @@ CREATE Segmentation.LookUpTable AS "lookUpTable"
 "Traffic" EXECUTE FilteredAssetsPool SetPoolSizeForType "Bike" 25
 "Traffic" EXECUTE FilteredAssetsPool SetPoolSizeForType "Car" 50
 
-"Traffic" SET SUMOController enabled true
-SLEEP 1
-"Traffic" SET SUMOController enabled false
 
 "EnviroSky" EXECUTE EnviroSky SetWeatherOverwrite 3
 REGEX "World Root/.*/Road Network/Road Objects/.*/Decal_Asphalt_Crossroad_Mask_02_ERDecal_Start" SET Thermal.ThermalRenderer enabled false

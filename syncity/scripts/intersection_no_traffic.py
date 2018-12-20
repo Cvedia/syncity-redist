@@ -1,3 +1,5 @@
+import random
+
 from .. import common, helpers, settings_manager
 
 settings = settings_manager.Singleton()
@@ -20,16 +22,16 @@ def minVersion():
 
 def run():
 	loop = 0
-	mycams = ['Camera/Thermal', 'Camera/Segmentation']
+	mycams = ['Camera/Thermal']
 
-	#activate traffic
-	common.sendData([
-		'"Traffic" SET SUMOController enabled true',
-		'SLEEP 1',
-		'"Traffic" SET SUMOController enabled false',
+	#deactivate traffic entities
+
+	common.sendData([  # work around for preventing the export of an "old" frame
+		'"Traffic" SET active false',
+		'"Bikes" SET active false',
+		'"Pedestrians" SET active false',
 	])
 
-	common.sendData('"Camera" EXECUTE JumpBetweenObjects Jump')
 
 	common.sendData([  # work around for preventing the export of an "old" frame
 		'CREATE "dummy"',
@@ -37,7 +39,6 @@ def run():
 	])
 
 	if settings.skip_setup == False:
-		common.sendData('"AssetBundles.GameobjectCache" SET AssetBundles.GameobjectCache cachedObjectsLimit {}'.format(settings.cache_limit))
 
 		helpers.addDataExport(
 			imageLinks=helpers.cameraExportParametrize(mycams, "image"),
@@ -52,23 +53,28 @@ def run():
 		)
 
 
-	# loop changing camera positions with random agc bounduaries
 	while loop < settings.loop_limit:
-		common.sendData([
-			'"Traffic" SET SUMOController enabled true',
-			'NOOP',
-			'"Traffic" SET SUMOController enabled false',
-			'REGEX "Traffic/.*/Reflection Probe" SET active true',
-			'REGEX "Traffic/.*/Reflection Probe" SET ReflectionProbe enabled true',
-			'REGEX "Traffic/.*/Reflection Probe" SET transform localEulerAngles (0 0~180 0) localPosition (0 0 0)'
-			])
 
-		common.sendData('"Camera" EXECUTE JumpBetweenObjects Jump')
+		y_rotation_max = 90
+		y_rotation_min = -90
 
-		common.sendData(['NOOP', 'NOOP'])
+		z_pos_max = 150
+		z_pos_min = -150
+
+		x_pos_max = 150
+		x_pos_min = -150
+
+		pick_x_or_z = random.choice([True, False])
+
+		if pick_x_or_z:
+			common.sendData('"Camera" SET transform position ({}~{} 2 1)'.format(x_pos_min,x_pos_max))
+		else:
+			common.sendData('"Camera" SET transform position (-1 2 {}~{})'.format(z_pos_min, z_pos_max))
+
+		common.sendData('"Camera" SET transform localEulerAngles (0 {}~{} 0)'.format(y_rotation_min, y_rotation_max))
+
 		# intentionally last as this will trigger data export
 		common.sendData('"dummy" SET Transform position (0~100 0~100 0~100)"')
-		common.sendData(['NOOP', 'NOOP'])
 
 		common.output('Loop {} ({}%)'.format(loop, round(100 * (loop / settings.loop_limit),2)))
 		

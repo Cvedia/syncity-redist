@@ -176,7 +176,7 @@ def initSequence():
 		loadLayout(settings.layout)
 
 def setAPISeed(seed):
-	sendData('"RandomProps.Random.instance" SET seed {}'.format(seed))
+	sendData('"Syncity.Random.instance" SET seed {}'.format(seed))
 
 def resetSimulator():
 	"""
