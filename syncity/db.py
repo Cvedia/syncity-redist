@@ -20,9 +20,14 @@ from . import common, settings_manager
 settings = settings_manager.Singleton()
 settings._conn = None
 settings._qCount = 0
+# sanitized fields
 settings._sFields = [ 'guid', 'parentGUID', 'timestamp', 'assetbundle', 'prefabPath', 'sizeX', 'sizeY', 'colliderSizeX', 'colliderSizeY' ]
+# relational fields
 settings._rFields = [ 'guid', 'rootID', 'parentID', 'timestamp' ]
+# property fields
 settings._pFields = [ 'guid', 'propertyID', 'value' ]
+# sanitized tables
+settings._sTables = [ 'objects', 'object_properties_numeric', 'object_properties_text', 'properties', 'root' ]
 
 """
 Initializes a database connections
@@ -88,17 +93,17 @@ Queries objects based on a bundle name
 
 ## Arguments
 
-bundle (string): Assetbundle name
+bundle (string): Assetbundle name, defaults to `None`, which lists all objects
 selection (string): What fields should be returned, defaults to `*`
 fields (list): What order of fields should be returned, defaults to `[0]`
 
 return (list)
 """
-def bundleObjects(bundle, selection="*", fields=[0]):
+def bundleObjects(bundle=None, selection="*", fields=[0]):
 	autoInit()
 	cur = settings._conn.cursor()
 	r = []
-	sql = 'SELECT {} FROM objects WHERE assetBundle="{}"'.format(selection, bundle)
+	sql = 'SELECT {} FROM objects WHERE assetBundle="{}"'.format(selection, bundle) if bundle != None else 'SELECT {} FROM objects'.format(selection)
 	logQuery(sql)
 	
 	for row in cur.execute(sql):
@@ -109,6 +114,28 @@ def bundleObjects(bundle, selection="*", fields=[0]):
 			for i in fields:
 				f.append(row[i])
 			r.append(f[0] if len(f) == 1 else f)
+	
+	cur.close()
+	return r
+
+"""
+Gets all columns from a table
+
+## Arguments
+
+table (string): Table to be queried
+
+return (list)
+"""
+def getTableFields(table):
+	autoInit()
+	cur = settings._conn.cursor()
+	r = []
+	sql = 'PRAGMA table_info({})'.format(table)
+	logQuery(sql)
+	
+	for row in cur.execute(sql):
+		r.append(row[1])
 	
 	cur.close()
 	return r
@@ -207,6 +234,34 @@ def getProperties(guid, type="numeric"):
 	
 	for row in cur.execute(sql):
 		r.append(list(row))
+	
+	cur.close()
+	return r
+
+def getPropertyDefinitions():
+	autoInit()
+	cur = settings._conn.cursor()
+	
+	r = {}
+	sql = 'SELECT * FROM properties'
+	logQuery(sql)
+	
+	for row in cur.execute(sql):
+		r[row[0]] = list(row)
+	
+	cur.close()
+	return r
+
+def getRootDefinitions():
+	autoInit()
+	cur = settings._conn.cursor()
+	
+	r = {}
+	sql = 'SELECT * FROM root'
+	logQuery(sql)
+	
+	for row in cur.execute(sql):
+		r[row[0]] = list(row)
 	
 	cur.close()
 	return r
