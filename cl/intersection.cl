@@ -130,11 +130,15 @@ CREATE "Traffic"
 "Traffic" PUSH RandomProps.Spawners.RandomColor availableColors "#46AE9DFF" "#57531DFF" "#BF7ADEFF" "#7ABD71FF" "#BC982DFF" "#B008DEFF" "#54ED6EFF" "#E03102FF" "#42405DFF" "#AA25BEFF" "#910998FF" "#AD4046FF" "#A4B1CEFF" "#D77B73FF" "#D02542FF" "#175918FF"
 "Traffic" PUSH RandomProps.Spawners.RandomColor colorsWeights 14
 
+//Restrict by tags
 "Traffic" SET FilteredAssetsPool carFilterTags "+car,+thermal,+fixed,-car.classification=\"Truck\",-car.classification=\"Bus\",-car.classification=\"Police\",-car.classification=\"Bike\",-car.classification=\"Special Purpose Vehicle\",-car.classification=\"Motorbike\""
 "Traffic" SET FilteredAssetsPool vanFilterTags "car.classification=\"Truck\",+thermal,+fixed"
 "Traffic" SET FilteredAssetsPool busFilterTags "car.classification=\"Bus\",+thermal,+fixed"
 "Traffic" SET FilteredAssetsPool ambulanceFilterTags "car.classification=\"Police\",+thermal,+fixed"
 "Traffic" SET FilteredAssetsPool bikeFilterTags "bicycle"
+
+//OR restrict by specific vehicles
+//"Traffic" PUSH FilteredAssetsPool carAssets "thermal-cars:Cars/BMW_X6/BMW_X6"
 
 CREATE "Bikes"
 "Bikes" SET active true
