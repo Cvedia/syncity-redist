@@ -130,6 +130,12 @@ CREATE "Traffic"
 "Traffic" PUSH RandomProps.Spawners.RandomColor availableColors "#46AE9DFF" "#57531DFF" "#BF7ADEFF" "#7ABD71FF" "#BC982DFF" "#B008DEFF" "#54ED6EFF" "#E03102FF" "#42405DFF" "#AA25BEFF" "#910998FF" "#AD4046FF" "#A4B1CEFF" "#D77B73FF" "#D02542FF" "#175918FF"
 "Traffic" PUSH RandomProps.Spawners.RandomColor colorsWeights 14
 
+"Traffic" SET FilteredAssetsPool carFilterTags "+car,+thermal,+fixed,-car.classification=\"Truck\",-car.classification=\"Bus\",-car.classification=\"Police\",-car.classification=\"Bike\",-car.classification=\"Special Purpose Vehicle\",-car.classification=\"Motorbike\""
+"Traffic" SET FilteredAssetsPool vanFilterTags "car.classification=\"Truck\",+thermal,+fixed"
+"Traffic" SET FilteredAssetsPool busFilterTags "car.classification=\"Bus\",+thermal,+fixed"
+"Traffic" SET FilteredAssetsPool ambulanceFilterTags "car.classification=\"Police\",+thermal,+fixed"
+"Traffic" SET FilteredAssetsPool bikeFilterTags "bicycle"
+
 CREATE "Bikes"
 "Bikes" SET active true
 
@@ -171,6 +177,14 @@ CREATE Segmentation.LookUpTable AS "lookUpTable"
 "Camera/Segmentation" SET active true
 [UI.Window] ShowFromRenderTexture "cameraSegmentation1" AS "cameraSegmentation1"
 
+
+//Uncomment the lines below if you want to hide entities that are too far from cameras (to prevent small objects from being rendered to the final frames altogether)
+//"Pedestrians" ADD Cameras.Spawners.HideByDistance
+//"Pedestrians" SET Cameras.Spawners.HideByDistance MaxDistance 20
+//"Traffic" ADD Cameras.Spawners.HideByDistance
+//"Traffic" SET Cameras.Spawners.HideByDistance MaxDistance 20
+//"Bikes" ADD Cameras.Spawners.HideByDistance
+//"Bikes" SET Cameras.Spawners.HideByDistance MaxDistance 20
 
 // ----------- ENTROPY - Jump from one car to another at random
 

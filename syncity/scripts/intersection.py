@@ -14,6 +14,10 @@ def args(parser):
 	try:
 		parser.add_argument('--loop_limit', type=int, default=500, help='Defines a limit of iterations for exporting')
 	except: pass
+	try:
+		parser.add_argument('--random_thermal_signatures', default=None,
+							help='Set this to activate random thermal signatures for pedestrians and cars')
+	except: pass
 
 def minVersion():
 	return '18.07.26.0000'
@@ -36,6 +40,10 @@ def run():
 		'"dummy" SET active true'
 	])
 
+	if settings.random_thermal_signatures:
+		common.sendData('"Traffic" ADD Thermal.ThermalProfileOverride')
+		common.sendData('"Pedestrians" ADD Thermal.ThermalProfileOverride')
+
 	if settings.skip_setup == False:
 		common.sendData('"AssetBundles.GameobjectCache" SET AssetBundles.GameobjectCache cachedObjectsLimit {}'.format(settings.cache_limit))
 
@@ -54,6 +62,11 @@ def run():
 
 	# loop changing camera positions with random agc bounduaries
 	while loop < settings.loop_limit:
+
+		if settings.random_thermal_signatures:
+			common.sendData('"Traffic" SET Thermal.ThermalProfileOverride temperatureMode "Absolute" temperature -20~50 temperatureMedianMode "Absolute" temperatureMedian -0.25~1 temperatureBandwidthMode "Absolute" temperatureBandwidth -2.5~15 heatinessMode "Absolute" heatiness 0~100 varianceMode "Absolute" variance 0~50 reflectivityMode "Absolute" reflectivity 0~0.8')
+			common.sendData('"Pedestrians" SET Thermal.ThermalProfileOverride temperatureMode "Absolute" temperature -20~50 temperatureMedianMode "Absolute" temperatureMedian -0.25~1 temperatureBandwidthMode "Absolute" temperatureBandwidth -2.5~15 heatinessMode "Absolute" heatiness 0~100 varianceMode "Absolute" variance 0~50 reflectivityMode "Absolute" reflectivity 0~0.8')
+
 		common.sendData([
 			'"Traffic" SET SUMOController enabled true',
 			'NOOP',

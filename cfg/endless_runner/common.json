@@ -131,7 +131,7 @@
 	
 	"pedestrians" : {
 		// number of pedestrians per tile segment
-		"amountPerTile": 8,
+		"amountPerTile": 64,
 		// minimum / maximum walking speed
 		"minSpeed" : 1,
 		"maxSpeed" : 1.5,
@@ -144,7 +144,7 @@
 		// when false disables all exports
 		"enabled": true,
 		// defines the format data should be exported, either video or image
-		"mode": "video",
+		"mode": "image",
 		
 		// video data export configuration parameters
 		"video": {

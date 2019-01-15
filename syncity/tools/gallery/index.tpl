@@ -16,6 +16,7 @@
 			meta = {{ fm }},
 			meta_fn = {{ fmfn }},
 			meta_other = {{ jm }},
+			meta_points = {{ spoints }},
 			classColors = randomColor({seed:666,count:1000});
 	</script>
 </head>
@@ -36,6 +37,9 @@
 					<button class="btn act" id="btnGraphs">Graphs</button>
 					{% if "bbox" in iFeatures %}
 						<button class="btn act" id="btnBBox">Bounding Boxes</button>
+					{% endif %}
+					{% if pFeatures|length > 0 %}
+						<button class="btn act" id="btnPoints">Points</button>
 					{% endif %}
 				</div>
 				

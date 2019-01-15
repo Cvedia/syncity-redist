@@ -1,12 +1,12 @@
 /*===============================
-* Images Gallery v 1.2.5
-* Copyright: Cvedia (C) 2018
+* Images Gallery v 1.3.0
+* Copyright: Cvedia (C) 2018-2019
 *================================*/
 
 var gallery,
-		ifocus = false,
-		images2idx = {},
-		meta2idx = [];
+	ifocus = false,
+	images2idx = {},
+	meta2idx = [];
 
 $(init);
 
@@ -34,10 +34,13 @@ function init() {
 
 function ImagesGallery() {
 	var gal, viewButtons, image, boxButton, input, name, meta_name, boxes, playButton, timer,
+		iwidth = 0,
+		iheight = 0,
 		curImage = 1,
 		curType = 'rgb',
 		showBox = false,
 		playing = false,
+		showPoints = true,
 		spread = 100, // graph spread
 		slideTime = 33.34; // 30 fps
 	
@@ -62,6 +65,7 @@ function ImagesGallery() {
 	$('.iconLeft', gal).on('click', onLeftClick);
 	$('.iconRight', gal).on('click', onRightClick);
 	$(window).on('keydown', onKeyDown);
+	$('.galTopRight #btnPoints', gal).on('click', onShowPoints);
 	
 	$('#btnGraphs').on('click', function(){
 		graphsVisible = !graphsVisible;
@@ -186,7 +190,17 @@ function ImagesGallery() {
 	function onShowBoxes(e) {
 		showBox = !showBox;
 		$(this).toggleClass('act');
-		boxes.toggle();
+		
+		if (showBox) drawBoxes();
+		else boxes.find('.bbox').remove();
+	}
+	
+	function onShowPoints(e) {
+		showPoints = !showPoints;
+		$(this).toggleClass('act');
+		
+		if (showPoints) drawPoints();
+		else boxes.find('.point').remove();
 	}
 	
 	function onInputChange(e) {
@@ -245,7 +259,9 @@ function ImagesGallery() {
 		name.html('<a href="'+url+'" target="_blank">'+fancy_url+'</a>');
 		meta_name.html(meta2idx[curImage-1] == undefined ? '' : '<a href="'+murl+'" target="_blank">'+fancy_murl+'</a>');
 		image.attr('src', url);
-		drawBoxes();
+		
+		if (showBox) drawBoxes();
+		if (showPoints) drawPoints();
 	}
 	
 	function onLeftClick() {
@@ -283,9 +299,18 @@ function ImagesGallery() {
 	}
 	
 	function onImageLoad() {
+		var redraw = false;
+		
+		if (iwidth != image[0].naturalWidth || iheight != image[0].naturalHeight)
+			redraw = true;
+		iwidth = image[0].naturalWidth;
+		iheight = image[0].naturalHeight;
+		
+		if (redraw && showPoints) drawPoints();
+		
 		boxes.css({
-			width: image[0].naturalWidth+'px',
-			height: image[0].naturalHeight+'px'
+			width: iwidth+'px',
+			height: iheight+'px'
 		});
 	}
 	
@@ -371,6 +396,46 @@ function ImagesGallery() {
 				console.log('WARNING: Unknown bounding box structure:', arr[i]);
 			}
 		}
+	}
+	
+	function drawPoints() {
+		var idx = images2idx[curType][curImage-1],
+			cnum = 0,
+			arr, x, y, j;
+		
+		boxes.find('.point').remove();
+		
+		for (var key in meta_points) {
+			arr = meta_points[key][idx];
+			if (arr == undefined) continue;
+			
+			try {
+				j = arr.length;
+			} catch (err) {
+				continue;
+			}
+			
+			for (var i = 0; i < j; i++) {
+				if (typeof arr[i]['x'] != 'undefined') {
+					unit = 'px';
+					x = arr[i].x;
+					y = arr[i].y;
+					
+					if (x < 0 || y < 0 || x > iwidth || y > iheight)
+						continue;
+					
+					c = classColors[cnum];
+					boxes.append(
+						'<div class="point tooltip" data-tooltip="x: ' + x + ' y: ' + y + ' type: '+ key +
+						'" style="'+ (invert_bboxx ? 'bottom: ' : 'top: ') + y + unit +'; left: '+ x + unit +'; background-color: '+ c +';"></div>'
+					);
+				} else {
+					console.log('WARNING: Unknown points structure:', arr[i]);
+				}
+			}
+			cnum++;
+		}
+		
 	}
 	
 	function onKeyDown(e) {

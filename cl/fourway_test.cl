@@ -109,15 +109,8 @@ CREATE "Cars"
 "Cars" SET RandomProps.PropArea collisionCheck True stickToGround False findTerrains False
 "Cars" SET RandomProps.PropArea findTerrains False
 "Cars" SET RandomProps.PropArea numberOfProps 1
-
-//Restrict to specific cars
-
-"Cars" PUSH RandomProps.Spawners.PropArea assets "thermal-cars:Cars/AudiTTS/AudiTTS"
-"Cars" PUSH RandomProps.Spawners.PropArea assets "thermal-cars:Cars/BMW6_Series_650i/BMW6_Series_650i"
-"Cars" PUSH RandomProps.Spawners.PropArea assets "thermal-cars:Cars/Fiat500_New/Fiat500_New"
-"Cars" PUSH RandomProps.Spawners.PropArea assets "thermal-cars:Cars/MINI_CooperS/MINI_CooperS.prefab"
-"Cars" PUSH RandomProps.Spawners.PropArea assets "thermal-cars:Cars/RangeRover/RangeRover.prefab"
-
+//Restrict to typical cars
+"Cars" SET RandomProps.PropArea tags "+car,+thermal,+fixed,-car.classification=\"Truck\",-car.classification=\"Bus\",-car.classification=\"Police\",-car.classification=\"Bike\",-car.classification=\"Special Purpose Vehicle\",-car.classification=\"Motorbike\""
 
 "Cars" SET active true
 

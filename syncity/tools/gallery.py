@@ -84,10 +84,12 @@ def run():
 	
 	iFeatures = [] # image feature list
 	jFeatures = [] # json feature list
+	pFeatures = [] # points feature list
 	fc = {} # categorized image filenames
 	fm = {} # image meta data
 	jm = {} # json/other meta data
 	fmfn = {} # meta filenames
+	spoints = {} # screenpoints meta data
 	fi = len(fns)
 	
 	if fi == 0:
@@ -141,8 +143,22 @@ def run():
 					fmfn[fts] = fn
 				except:
 					common.output('Invalid JSON data in {}'.format(fn), 'ERROR')
-			else:
+			
+			elif 'screenpoints' in lnm:
+				try:
+					point = common.loadJSON(fn)
+				except:
+					common.output('Invalid JSON data in {}'.format(fn), 'ERROR')
+					continue
 				
+				if fty not in pFeatures:
+					pFeatures.append(fty)
+					spoints[fty] = {}
+				
+				val = json.loads(point.get('value'))
+				spoints[fty][fts] = copy.deepcopy(val)
+			
+			else:
 				try:
 					obj = common.loadJSON(fn)
 				except:
@@ -205,13 +221,17 @@ def run():
 	fh.write(
 		html.render(
 			title='Gallery [{}]'.format(settings._start),
-			js_static=js_static, css_static=css_static, iFeatures=iFeatures, jFeatures=jFeatures,
+			js_static=js_static, css_static=css_static,
+			iFeatures=iFeatures,
+			jFeatures=jFeatures,
+			pFeatures = pFeatures,
 			fc=json.dumps(fc, sort_keys=True),
 			fm=json.dumps(fm, sort_keys=True),
 			jm=json.dumps(jm),
 			fmfn=json.dumps(fmfn, sort_keys=True),
 			total_images=total_images,
-			invert_bboxx='false' if settings.no_invert_bboxx == True else 'true'
+			invert_bboxx='false' if settings.no_invert_bboxx == True else 'true',
+			spoints = json.dumps(spoints)
 		).encode('utf-8') + b""
 	)
 	
