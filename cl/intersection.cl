@@ -35,66 +35,6 @@ CREATE "Cameras/Thermal/ThermalCamera" FROM "sensors" AS "Camera/Thermal"
 
 [UI.Window] ShowFromCamera "Camera/Thermal" AS "Thermal" WITH 1920 1080 24 "ARGB32" "Default"
 
-
-// ---------- THERMAL SETUP
-
-CREATE Thermal.ThermalObjectProfile AS "ThermalBehaviour/Buildings"
-"ThermalBehaviour/Buildings" SET Thermal.ThermalObjectProfile name "ThermalBehaviour/Buildings" temperature.value 17 temperature.bandwidth 20 temperature.median 0 ambientOffset.value -6.3 heatiness.value 0 reflectivity.value 0. variance.value 0
-
-REGEX "World Root/.*/Buildings" ADD Thermal.ThermalObjectBehaviour
-REGEX "World Root/.*/Buildings" SET Thermal.ThermalObjectBehaviour profile "ThermalBehaviour/Buildings"
-
-CREATE Thermal.ThermalObjectProfile AS "ThermalBehaviour/Trees"
-"ThermalBehaviour/Trees" SET Thermal.ThermalObjectProfile name "Trees" temperature.value -9 temperature.bandwidth 20 temperature.median 0 ambientOffset.value -25 heatiness.value 0 reflectivity.value 0 variance.value 29.9
-REGEX "World Root/.*/Trees" ADD Thermal.ThermalObjectBehaviour
-REGEX "World Root/.*/Trees" SET Thermal.ThermalObjectBehaviour profile "ThermalBehaviour/Trees"
-
-CREATE Thermal.ThermalObjectProfile AS "ThermalBehaviour/Props"
-"ThermalBehaviour/Props" SET Thermal.ThermalObjectProfile name "Props" temperature.value -20 temperature.bandwidth 8.9 temperature.median 0 ambientOffset.value -13.3 heatiness.value 0 reflectivity.value 0 variance.value 0
-REGEX "World Root/.*/Props" ADD Thermal.ThermalObjectBehaviour
-REGEX "World Root/.*/Props" SET Thermal.ThermalObjectBehaviour profile "ThermalBehaviour/Props"
-REGEX "World Root/.*/Powerlines" ADD Thermal.ThermalObjectBehaviour
-REGEX "World Root/.*/Powerlines" SET Thermal.ThermalObjectBehaviour profile "ThermalBehaviour/Props"
-
-CREATE Thermal.ThermalObjectProfile AS "ThermalBehaviour/Signs"
-"ThermalBehaviour/Signs" SET Thermal.ThermalObjectProfile name "Signs" temperature.value -20 temperature.bandwidth 13.8 temperature.median 0.163 ambientOffset.value -25 heatiness.value 0 reflectivity.value 0 variance.value 28.5
-REGEX "World Root/.*/Signs" ADD Thermal.ThermalObjectBehaviour
-REGEX "World Root/.*/Signs" SET Thermal.ThermalObjectBehaviour profile "ThermalBehaviour/Signs"
-
-CREATE Thermal.ThermalObjectProfile AS "ThermalBehaviour/Decals"
-"ThermalBehaviour/Decals" SET Thermal.ThermalObjectProfile name "Decals" temperature.value 9 temperature.bandwidth 0 temperature.median 0.379 ambientOffset.value -21.7 heatiness.value 0 reflectivity.value 0 variance.value 33.3
-REGEX "World Root/.*/Decals" ADD Thermal.ThermalObjectBehaviour
-REGEX "World Root/.*/Decals" SET Thermal.ThermalObjectBehaviour profile "ThermalBehaviour/Decals"
-
-CREATE Thermal.ThermalObjectProfile AS "ThermalBehaviour/Road"
-"ThermalBehaviour/Road" SET Thermal.ThermalObjectProfile name "Road" temperature.value -20 temperature.bandwidth 1.5 temperature.median 0.285 ambientOffset.value -18.9 heatiness.value 0 reflectivity.value 0.361 variance.value 40
-
-CREATE Thermal.ThermalObjectProfile AS "ThermalBehaviour/Road2"
-"ThermalBehaviour/Road2" SET Thermal.ThermalObjectProfile name "Road2" temperature.value -16 temperature.bandwidth 20 temperature.median 0.502 ambientOffset.value -22.5 heatiness.value 6 reflectivity.value 0 variance.value 3.1
-REGEX "World Root/.*/Road" ADD Thermal.ThermalObjectBehaviour
-REGEX "World Root/.*/Road" SET Thermal.ThermalObjectBehaviour profile "ThermalBehaviour/Road2"
-
-CREATE Thermal.ThermalObjectProfile AS "ThermalBehaviour/Ground"
-"ThermalBehaviour/Ground" SET Thermal.ThermalObjectProfile name "Ground" temperature.value -20 temperature.bandwidth 0 temperature.median 0 ambientOffset.value 0 heatiness.value 42 reflectivity.value 0 variance.value 16.7
-REGEX "World Root/.*/Terrain" ADD Thermal.ThermalObjectBehaviour
-REGEX "World Root/.*/Terrain" SET Thermal.ThermalObjectBehaviour profile "ThermalBehaviour/Ground"
-
-REGEX "World Root/.*/Terrains/.*/Terrain" ADD Thermal.ThermalTerrain
-REGEX "World Root/.*/Terrains/.*/Terrain" SET Thermal.ThermalTerrain ambientOffset -10.78 bandwidth 17.48 median 0 baseMapDistance 10000 enabled true
-
-CREATE Thermal.ThermalObjectProfile AS "ThermalBehaviour/Sidewalk"
-"ThermalBehaviour/Sidewalk" SET Thermal.ThermalObjectProfile name "Sidewalk" temperature.value -4 temperature.bandwidth 20 temperature.median 0 ambientOffset.value -9.9 heatiness.value 0 reflectivity.value 0.046 variance.value 0
-REGEX "World Root/.*/Others" ADD Thermal.ThermalObjectBehaviour
-REGEX "World Root/.*/Others" SET Thermal.ThermalObjectBehaviour profile "ThermalBehaviour/Sidewalk"
-
-//Deactivate problematic parts of the tile
-REGEX "World Root/.*/Road Network/Road Objects/.*/Road Fix 1" SET active false
-REGEX "World Root/.*/Road Network/Road Objects/.*/Road Fix 2" SET active false
-REGEX "World Root/.*/Road Network/Road Objects/.*/Decal_Asphalt_Crossroad_Mask_04_ERDecal_End" SET active false
-REGEX "World Root/.*/Road Network/Road Objects/.*/Decal_Asphalt_Crossroad_Mask_02_ERDecal_Start" SET active false
-REGEX "World Root/.*/Road Network/Road Objects/.*/Decal_Road_Border_left" SET active false
-
-
 // ---------- HUMANS INITIALIZATION
 
 CREATE "Humans/Male" FROM "humans" AS "human_male"
