@@ -22,8 +22,14 @@ CREATE "Camera"
 CREATE "Cameras/Thermal/ThermalCamera" FROM "sensors" AS "Camera/Thermal"
 "Camera/Thermal" SET Transform localPosition (0 0 0)
 "Camera/Thermal" SET Transform localEulerAngles (0 0 0)
+
+//ANTI-ALIASING
 //Add FXAA III
-"Camera/Thermal" ADD Syncity.ImageEffects.Antialiasing
+//"Camera/Thermal" ADD Syncity.ImageEffects.Antialiasing
+//OR USE MSAA
+"QualitySettings" SET antiAliasing 4
+"Camera/Thermal" SET Camera allowMSAA true
+
 "Camera/Thermal" SET active true
 "Camera" SET active true
 
@@ -109,6 +115,13 @@ REGEX "human_*" ADD Humans.Animation.RandomPose
 CREATE "Traffic"
 "Traffic" ADD SUMOProcess
 "Traffic" SET SUMOProcess sumoConfigName "traffic.pedestrians.15.min.sumocfg"
+
+//USE THE LINE BELOW INSTEAD IF YOU DON'T WANT PEDESTRIANS IN THE SIMULATION, WAY FASTER TO GENERATE DATASETS
+//"Traffic" SET SUMOProcess sumoConfigName "traffic._no_pedestrians.15.min.sumocfg"
+
+//OR THIS ONE IF YOU WANT A LOW DENSITY OF PEDESTRIANS, FASTER TO GENERATE DATASETS
+//"Traffic" SET SUMOProcess sumoConfigName "traffic.low_pedestrians.15.min.sumocfg"
+
 "Traffic" SET SUMOProcess sumoPath "sumo\"
 "Traffic" SET SUMOProcess sumoParams "-v --remote-port 4001 --start --step-length 0.016 --collision.check-junctions true --collision.mingap-factor 1 --collision.action teleport --lanechange.duration 2"
 
@@ -119,7 +132,7 @@ CREATE "Traffic"
 "Traffic" ADD PedestriansTick
 "Traffic" ADD TrafficLightsTick
 "Traffic" SET CarsTick entityCullingReference "Camera/Thermal"
-"Traffic" SET CarsTick entityCullingDistance 999999
+"Traffic" SET CarsTick entityCullingDistance 500
 "Traffic" SET CarsTick randomizeObjectNames true
 "Traffic" SET CarsTick bikeRiderSegmentationClassName "Person"
 "Traffic" ADD SUMOController RandomProps.Spawners.Spawner RandomProps.Spawners.Vehicles.RandomLicensePlate RandomProps.Spawners.RandomColor

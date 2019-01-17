@@ -63,13 +63,19 @@ def run():
 
 		if settings.use_segmentation_iid == True:
 			_params[2]['options']['format'] = 'raw'
-		
+
+
+		common.sendData([  # work around for preventing the export of an "old" frame
+	'CREATE "dummy"',
+	'"dummy" SET active true'
+		])
+
 		helpers.addDataExport(
 			imageLinks=_params,
 			fieldLinks=[
 				{
-					"target": "Camera",
-					"label": "cameraPosition",
+					"target": "dummy",
+					"label": "dummyPosition",
 					"componentName": "Transform",
 					"fieldName": "localPosition",
 					"onChange": True
@@ -121,7 +127,8 @@ def run():
 				])
 		
 		# intentionally last as this will trigger data export
-		common.sendData('"Camera" SET Transform localPosition (-3~3 0.5~2 -30~-15)')
+		common.sendData(['NOOP','NOOP'])
+		common.sendData('"dummy" SET Transform localPosition (-3~3 0.5~2 -30~-15)')
 		common.output('Loop {} ({}%)'.format(loop, round(100 * (loop / settings.loop_limit),2)))
 		
 		loop += 1

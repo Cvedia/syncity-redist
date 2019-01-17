@@ -1,4 +1,5 @@
 from .. import common, helpers, settings_manager
+import time
 
 settings = settings_manager.Singleton()
 
@@ -60,6 +61,8 @@ def run():
 		)
 
 
+	startMillis = int(round(time.time() * 1000))
+
 	# loop changing camera positions with random agc bounduaries
 	while loop < settings.loop_limit:
 
@@ -78,11 +81,15 @@ def run():
 
 		common.sendData('"Camera" EXECUTE JumpBetweenObjects Jump')
 
-		common.sendData(['NOOP', 'NOOP'])
+		common.sendData(['NOOP','NOOP'])
 		# intentionally last as this will trigger data export
 		common.sendData('"dummy" SET Transform position (0~100 0~100 0~100)"')
-		common.sendData(['NOOP', 'NOOP'])
+
+		elapsedMillis = int(round(time.time() * 1000)) - startMillis
+		elapsedMinutes = elapsedMillis / 60000.0
+		imagesPerMinute = loop/elapsedMinutes
 
 		common.output('Loop {} ({}%)'.format(loop, round(100 * (loop / settings.loop_limit),2)))
-		
+		common.output('Images per minute {} '.format(imagesPerMinute))
+
 		loop += 1
