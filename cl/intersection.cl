@@ -125,12 +125,23 @@ CREATE Segmentation.LookUpTable AS "lookUpTable"
 "Pedestrians" ADD Segmentation.Class Segmentation.Spawners.Entity
 "Pedestrians" SET Segmentation.Class className "Person"
 
+//Accurate visibility for cars
+//"Traffic" ADD Segmentation.Spawners.AccurateVisibility
+//Accurate visibility for pedestrians
+//"Pedestrians" ADD Segmentation.Spawners.AccurateVisibility
+//Accurate visibility for cyclists
+//"Bikes" ADD Segmentation.Spawners.AccurateVisibility
+
 [Segmentation.Camera] CreateWithClassColors "Camera/Segmentation" WITH lookUpTable "lookUpTable"
 [Cameras.RenderTexture] CreateNew "cameraSegmentation1" 1920 1080
 "Camera/Segmentation" ADD Segmentation.Output.BoundingBoxes Segmentation.Output.FilteredBoundingBoxes
 "Camera/Segmentation" SET Segmentation.Output.BoundingBoxes minimumObjectVisibility 0 extensionAmount 0 minimumPixelsCount 1
 "Camera/Segmentation" EXECUTE Segmentation.Output.FilteredBoundingBoxes EnableClasses "Person" "Car" "Bicycle"
 "Camera/Segmentation" SET Camera targetTexture "cameraSegmentation1" nearClipPlane 0.1 far 1000
+
+//Accurate visibility. This needs to be added globally if you want accurate visibility for any of the entities
+//"Camera/Segmentation" ADD Segmentation.Output.AccurateVisibilityModule
+
 "Camera/Segmentation" SET active true
 [UI.Window] ShowFromRenderTexture "cameraSegmentation1" AS "cameraSegmentation1"
 
@@ -148,7 +159,7 @@ CREATE Segmentation.LookUpTable AS "lookUpTable"
 "Camera" ADD JumpBetweenObjects
 "Camera" SET JumpBetweenObjects container "Traffic"
 "Camera" SET JumpBetweenObjects localPosition (0 2 2.3)
-"Camera" SET JumpBetweenObjects rotationMinY 0 rotationMaxY 0 ignoreObjectsNamed "Vehicle Pointer"
+"Camera" SET JumpBetweenObjects rotationMinY -20 rotationMaxY 20 ignoreObjectsNamed "Vehicle Pointer"
 
 
 // ----------- POST SETUP

@@ -70,20 +70,24 @@ def run():
 			common.sendData('"Traffic" SET Thermal.ThermalProfileOverride temperatureMode "Absolute" temperature -20~50 temperatureMedianMode "Absolute" temperatureMedian -0.25~1 temperatureBandwidthMode "Absolute" temperatureBandwidth -2.5~15 heatinessMode "Absolute" heatiness 0~100 varianceMode "Absolute" variance 0~50 reflectivityMode "Absolute" reflectivity 0~0.8')
 			common.sendData('"Pedestrians" SET Thermal.ThermalProfileOverride temperatureMode "Absolute" temperature -20~50 temperatureMedianMode "Absolute" temperatureMedian -0.25~1 temperatureBandwidthMode "Absolute" temperatureBandwidth -2.5~15 heatinessMode "Absolute" heatiness 0~100 varianceMode "Absolute" variance 0~50 reflectivityMode "Absolute" reflectivity 0~0.8')
 
-		common.sendData([
-			'"Traffic" SET SUMOController enabled true',
-			'NOOP',
-			'"Traffic" SET SUMOController enabled false',
-			'REGEX "Traffic/.*/Reflection Probe" SET active true',
-			'REGEX "Traffic/.*/Reflection Probe" SET ReflectionProbe enabled true',
-			'REGEX "Traffic/.*/Reflection Probe" SET transform localEulerAngles (0 0~180 0) localPosition (0 0 0)'
-			])
+		# advance traffic simulation every 15 frames
+
+		if loop == 0 or loop % 15 == 0:
+			common.sendData([
+				'"Traffic" SET SUMOController enabled true',
+				'NOOP',
+				'"Traffic" SET SUMOController enabled false',
+				'REGEX "Traffic/.*/Reflection Probe" SET active true',
+				'REGEX "Traffic/.*/Reflection Probe" SET ReflectionProbe enabled true',
+				'REGEX "Traffic/.*/Reflection Probe" SET transform localEulerAngles (0 0~180 0) localPosition (0 0 0)'
+				])
 
 		common.sendData('"Camera" EXECUTE JumpBetweenObjects Jump')
 
 		common.sendData(['NOOP','NOOP'])
 		# intentionally last as this will trigger data export
 		common.sendData('"dummy" SET Transform position (0~100 0~100 0~100)"')
+		common.sendData('NOOP')
 
 		elapsedMillis = int(round(time.time() * 1000)) - startMillis
 		elapsedMinutes = elapsedMillis / 60000.0
