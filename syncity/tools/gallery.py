@@ -90,6 +90,7 @@ def run():
 	jm = {} # json/other meta data
 	fmfn = {} # meta filenames
 	spoints = {} # screenpoints meta data
+	metadataCol = {} # metadata collection bags
 	fi = len(fns)
 	
 	if fi == 0:
@@ -131,9 +132,20 @@ def run():
 		fty = "default" if settings.flat_gallery == True else re.sub(match_ts, '', " ".join(lnm.split(".")[0:-1]))
 		
 		if isJSON:
-			if "seg" in lnm or "bbox" in lnm:
+			if 'lookup' in lnm:
+				# skip lookups
+				continue
+			elif 'metadata' in lnm:
+				# this is a collection of objects following a lookup key and misc data
+				try:
+					obj = common.loadJSON(fn)
+				except:
+					common.output('Invalid JSON data in {}'.format(fn), 'ERROR')
+					continue
+				
+				metadataCol[fts] = copy.deepcopy(obj)
+			elif "seg" in lnm or "bbox" in lnm:
 				if settings.align == 'time':
-					
 					# HACK
 					while has_attribute(fm, fts):
 						fts += .000001
@@ -224,7 +236,8 @@ def run():
 			js_static=js_static, css_static=css_static,
 			iFeatures=iFeatures,
 			jFeatures=jFeatures,
-			pFeatures = pFeatures,
+			pFeatures=pFeatures,
+			metadataCol=metadataCol,
 			fc=json.dumps(fc, sort_keys=True),
 			fm=json.dumps(fm, sort_keys=True),
 			jm=json.dumps(jm),

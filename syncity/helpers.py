@@ -1804,7 +1804,9 @@ def cameraExportParametrize(cams, mode="image", options=None):
 		cams = [ cams ]
 	
 	obj = []
-	
+
+	exportFormat = "ColorB:UInt8 ColorG:UInt8 ColorR:UInt8"
+
 	for c in cams:
 		if mode == "image":
 			streamFormat = "jpg"
@@ -1812,6 +1814,7 @@ def cameraExportParametrize(cams, mode="image", options=None):
 				streamFormat = "png"
 			elif "depth" in c.lower():
 				streamFormat = "tif"
+				exportFormat = "ColorR:UInt16 ColorR:UInt16 ColorR:UInt16" # save depth as 16-bit grayscale image by default
 		elif mode == "png_image":
 			streamFormat = "png"
 		elif mode == "video":
@@ -1819,8 +1822,8 @@ def cameraExportParametrize(cams, mode="image", options=None):
 		else:
 			common.output("Unknown parametrization mode: {}".format(mode), 'ERROR')
 			return
-		
-		_options = { "format": streamFormat, "policy": "last" }
+
+		_options = { "format": streamFormat, "export_format": exportFormat }
 		
 		if options != None:
 			try:

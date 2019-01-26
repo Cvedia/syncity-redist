@@ -1,5 +1,5 @@
 /*===============================
-* Images Gallery v 1.3.0
+* Images Gallery v 1.3.2
 * Copyright: Cvedia (C) 2018-2019
 *================================*/
 
@@ -34,6 +34,8 @@ function init() {
 
 function ImagesGallery() {
 	var gal, viewButtons, image, boxButton, input, name, meta_name, boxes, playButton, timer,
+		centerPoint, canvasCtx,
+		sortedPoints = {},
 		iwidth = 0,
 		iheight = 0,
 		curImage = 1,
@@ -58,6 +60,7 @@ function ImagesGallery() {
 	name = $('.galBotLeft', gal);
 	meta_name = $('.galBotRight', gal);
 	boxes = $('.galBoxes', gal);
+	canvasCtx = $('#galCanvas')[0].getContext('2d');
 	viewButtons = $('.galTopLeft button', gal).on('click', onViewType);
 	boxButton = $('.galTopRight #btnBBox', gal).on('click', onShowBoxes);
 	input = $('.galTopMid input', gal).on('change', onInputChange);
@@ -199,8 +202,12 @@ function ImagesGallery() {
 		showPoints = !showPoints;
 		$(this).toggleClass('act');
 		
-		if (showPoints) drawPoints();
-		else boxes.find('.point').remove();
+		if (showPoints) {
+			drawPoints();
+		} else {
+			boxes.find('.point').remove();
+			canvasCtx.clearRect(0, 0, iwidth, iheight);
+		}
 	}
 	
 	function onInputChange(e) {
@@ -211,6 +218,39 @@ function ImagesGallery() {
 		}
 		curImage = val;
 		updateImage();
+	}
+	
+	function updateMetaCol() {
+		if (typeof meta_col == 'undefined' || typeof meta_col[curImage] == 'undefined')
+			return;
+		
+		var pMeta = {}, bbs = {};
+		
+		for (var k in meta_col[curImage]) {
+			// analyze data against plotting tools
+			pMeta[k] = [];
+			for (var m in meta_col[curImage][k]) {
+				var hasMatch = false;
+				pMeta[k].push(m + ':' + meta_col[curImage][k][m])
+				
+				// 3d bounding box
+				try {
+					var x = meta_col[curImage][k][m].match(/(\(\d+.\d+,\d+.\d+\)){8}/g)[0];
+					hasMatch = true;
+					x = x.slice(1,-1).split(')(');
+					var bb = []
+					for (var l in x) {
+						var v2 = x[l].split(',');
+						bb.push({x: parseFloat(v2[0]), y: parseFloat(v2[1])});
+					}
+					
+					bbs[k] = bb;
+				} catch (z) {}
+			}
+		}
+		
+		drawPoints3DBB(bbs);
+		console.log('pMeta:', pMeta);
 	}
 	
 	function updateImage() {
@@ -262,6 +302,8 @@ function ImagesGallery() {
 		
 		if (showBox) drawBoxes();
 		if (showPoints) drawPoints();
+		
+		updateMetaCol();
 	}
 	
 	function onLeftClick() {
@@ -306,7 +348,11 @@ function ImagesGallery() {
 		iwidth = image[0].naturalWidth;
 		iheight = image[0].naturalHeight;
 		
-		if (redraw && showPoints) drawPoints();
+		if (redraw && showPoints) {
+			canvasCtx.canvas.width = iwidth;
+			canvasCtx.canvas.height = iheight;
+			drawPoints();
+		}
 		
 		boxes.css({
 			width: iwidth+'px',
@@ -398,12 +444,85 @@ function ImagesGallery() {
 		}
 	}
 	
+	function drawPoints3DBB(objs) {
+		var cnum = 0,
+			arr, x, y, j, x1, y1;
+		
+		canvasCtx.clearRect(0, 0, iwidth, iheight);
+		
+		for (var key in objs) {
+			arr = objs[key];
+			if (arr == undefined) continue;
+			
+			try {
+				j = arr.length;
+			} catch (err) {
+				continue;
+			}
+			
+			x = arr[j-1].x * iwidth;
+			y = arr[j-1].y * iheight;
+			c = classColors[cnum];
+			
+			canvasCtx.strokeStyle = c;
+			canvasCtx.beginPath();
+			//canvasCtx.moveTo(x, invert_bboxx ? iheight-y : y);
+						
+			for (var i = 0; i < j; i++) {
+				if (typeof arr[i]['x'] != 'undefined') {
+					unit = '%';
+					
+					if (i == 0 || i == 4) {
+						x = arr[i+4-1].x * iwidth;
+						y = arr[i+4-1].y * iheight;
+						canvasCtx.moveTo(x, invert_bboxx ? iheight-y : y);
+					}
+					
+					x = arr[i].x * iwidth;
+					y = arr[i].y * iheight;
+					canvasCtx.lineTo(x, invert_bboxx ? iheight-y : y);
+					
+					if (i < 4) {
+						x1 = arr[i+4].x * iwidth;
+						y1 = arr[i+4].y * iheight;
+						canvasCtx.lineTo(x1, invert_bboxx ? iheight-y1 : y1);
+						canvasCtx.moveTo(x, invert_bboxx ? iheight-y : y);
+					}
+										
+					x = arr[i].x * 100;
+					y = arr[i].y * 100;
+					
+					if (x < 0 || y < 0 || x > 100 || y > 100)
+						continue;
+					
+					var tData = [];
+					for (var k in meta_col[curImage][key])
+						tData.push(k + ':' + meta_col[curImage][key][k]);
+					
+					boxes.append(
+						'<div class="point tooltip" data-tooltip="x: ' + x + unit + ' y: ' + y + unit + ' data: ' + tData.join('\n') +
+						'" style="'+ (invert_bboxx ? 'bottom: ' : 'top: ') + y + unit +'; left: '+ x + unit +'; background-color: '+ c +';"></div>'
+					);
+				} else {
+					console.log('WARNING: Unknown points structure:', arr[i]);
+				}
+			}
+			
+			cnum++;
+			canvasCtx.closePath();
+			canvasCtx.stroke();
+		}
+	}
+	
 	function drawPoints() {
 		var idx = images2idx[curType][curImage-1],
 			cnum = 0,
+			prevAbsent = false,
+			nextAbsent = false,
 			arr, x, y, j;
 		
 		boxes.find('.point').remove();
+		canvasCtx.clearRect(0, 0, iwidth, iheight);
 		
 		for (var key in meta_points) {
 			arr = meta_points[key][idx];
@@ -415,16 +534,40 @@ function ImagesGallery() {
 				continue;
 			}
 			
+			// disabled sorting to avoid (-1, -1) points loosing their original position in array
+			// which results in drawing invalid connections between points
+			
+			/*if (!sortedPoints[key]) sortedPoints[key] = [];
+			if (!sortedPoints[key][idx]) {
+				sortedPoints[key][idx] = true;
+				sortPointsClockwise(arr);
+			}*/
+			
+			x = arr[j-1].x;
+			y = arr[j-1].y;
+			c = classColors[cnum];
+			canvasCtx.strokeStyle = c;
+			canvasCtx.beginPath();
+			canvasCtx.moveTo(x, invert_bboxx ? iheight-y : y);
+			prevAbsent = (x == -1 && y == -1);
+			
 			for (var i = 0; i < j; i++) {
 				if (typeof arr[i]['x'] != 'undefined') {
 					unit = 'px';
 					x = arr[i].x;
 					y = arr[i].y;
+					nextAbsent = (x == -1 && y == -1);
+					
+					if (prevAbsent || nextAbsent)
+						canvasCtx.moveTo(x, invert_bboxx ? iheight-y : y);
+					else
+						canvasCtx.lineTo(x, invert_bboxx ? iheight-y : y);
+					
+					prevAbsent = nextAbsent;
 					
 					if (x < 0 || y < 0 || x > iwidth || y > iheight)
 						continue;
 					
-					c = classColors[cnum];
 					boxes.append(
 						'<div class="point tooltip" data-tooltip="x: ' + x + ' y: ' + y + ' type: '+ key +
 						'" style="'+ (invert_bboxx ? 'bottom: ' : 'top: ') + y + unit +'; left: '+ x + unit +'; background-color: '+ c +';"></div>'
@@ -433,7 +576,10 @@ function ImagesGallery() {
 					console.log('WARNING: Unknown points structure:', arr[i]);
 				}
 			}
+			
 			cnum++;
+			canvasCtx.closePath();
+			canvasCtx.stroke();
 		}
 		
 	}
@@ -489,5 +635,30 @@ function ImagesGallery() {
 				try { $('.galTopRight button').click(); } catch (z) {}
 				break;
 		}
+	}
+	
+	function sortPointsClockwise(points) {
+		centerPoint = {x: 0, y: 0};
+		for (var i = 0; i < points.length; i++) {
+			centerPoint.x += points[i].x;
+			centerPoint.y += points[i].y;
+		}
+		centerPoint.x /= points.length;
+		centerPoint.y /= points.length;
+		
+		points.sort(pointsCompare);
+	}
+	
+	function pointsCompare(a, b) {
+		if (a.x >= 0 && b.x < 0) return 1;
+	    else if (a.x == 0 && b.x == 0) return a.y - b.y;
+
+	    var det = (a.x - centerPoint.x) * (b.y - centerPoint.y) - (b.x - centerPoint.x) * (a.y - centerPoint.y);
+	    if (det < 0) return 1;
+	    else if (det > 0) return -1;
+
+	    var d1 = (a.x - centerPoint.x) * (a.x - centerPoint.x) + (a.y - centerPoint.y) * (a.y - centerPoint.y);
+	    var d2 = (b.x - centerPoint.x) * (b.x - centerPoint.x) + (b.y - centerPoint.y) * (b.y - centerPoint.y);
+	    return d1 - d2;
 	}
 }

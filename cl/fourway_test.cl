@@ -26,7 +26,7 @@ CREATE "Cameras/Thermal/ThermalCamera" FROM "sensors" AS "Camera/Thermal"
 "Camera/Thermal" SET active true
 
 // Create Segmentation Camera
-"Segmentation.Profile.instance" PUSH classes "Void" "Person" "Bicycle" "Cars"
+"Segmentation.Profile.instance" PUSH classes "Person" "Bicycle" "Cars"
 CREATE Segmentation.LookUpTable AS "lookUpTable"
 "lookUpTable" EXECUTE Segmentation.LookUpTable SetClassColor "Person->Yellow" "Bicycle->#00FF00FF" "Cars->#FF000FFF"
 
@@ -52,10 +52,10 @@ CREATE "EnviroSky" AS "EnviroSky"
 "EnviroSky" SET active true
 
 // UI setup 
-[UI.Window] ShowFromCamera "Camera/RGB" AS "RGB" WITH 1024 768 24 "ARGB32" "Default"
+[UI.Window] ShowFromCamera "Camera/RGB" AS "RGB" WITH 1472 1472 24 "ARGB32" "Default"
 [UI.Window] ShowFromCamera "Camera/Segmentation" AS "segmentation" WITH 1472 1472 24 "ARGBFloat" "Default"
 [UI.Window] ShowFromCamera "Camera/Thermal" AS "thermal" WITH 1472 1472 24 "ARGB32" "Default"
-[UI.Window] ShowFromCamera "Camera/Depth" AS "depth" WITH 1024 768 32 "RFloat" "Default"
+[UI.Window] ShowFromCamera "Camera/Depth" AS "depth" WITH 1472 1472 32 "RFloat" "Default"
 
 CREATE "Humans"
 "Humans" SET Transform localPosition (0 0 0)
@@ -114,15 +114,10 @@ CREATE "Cars"
 
 "Cars" SET active true
 
-"Humans" SET Thermal.Spawners.ReplaceThermalProfiles enabled false
-"Humans" SET Thermal.Spawners.ReplaceThermalProfiles enabled true
-"Bicycles" SET Thermal.Spawners.ReplaceThermalProfiles enabled false
-"Bicycles" SET Thermal.Spawners.ReplaceThermalProfiles enabled true
-
 "Bicycles" SET active false
 "BicycleHumans" SET active false
 "Cars" SET active false
 "Humans" SET active false
 
 // reset UI
-'"UI.WindowController.instance" EXECUTE ResetLayout'
+"UI.WindowController.instance" EXECUTE ResetLayout

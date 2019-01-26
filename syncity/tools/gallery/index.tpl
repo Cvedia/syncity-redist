@@ -17,6 +17,7 @@
 			meta_fn = {{ fmfn }},
 			meta_other = {{ jm }},
 			meta_points = {{ spoints }},
+			meta_col = {{ metadataCol }},
 			classColors = randomColor({seed:666,count:1000});
 	</script>
 </head>
@@ -47,6 +48,7 @@
 			<div class="galImage">
 				<div class="galBoxes">
 					<img src="">
+					<canvas id="galCanvas" width="100" height="100"></canvas>
 				</div>
 			</div>
 			<div class="galBottom">

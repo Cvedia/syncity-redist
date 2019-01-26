@@ -1,0 +1,1 @@
+"UI.WindowController.instance" EXECUTE Init
