@@ -9,6 +9,7 @@ LOAD "Worlds/Intersection Loop/New York" FROM "worlds"
 //REGEX "World Root/.*" EXECUTE Tiler.TileVariantSet SwitchVariant "Florida Neighborhood"
 
 REGEX "World Root/.*/Cars" SET active false
+"World Root" Set transform localPosition (0 -0.03 0)
 
 CREATE "EnviroSky" AS "EnviroSky"
 "EnviroSky" SET EnviroSky GameTime.ProgressTime "None" weatherSettings.cloudTransitionSpeed 100 weatherSettings.effectTransitionSpeed 100 weatherSettings.fogTransitionSpeed 100
