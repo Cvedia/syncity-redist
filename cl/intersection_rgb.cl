@@ -1,11 +1,15 @@
-"QualitySettings" SET realtimeReflectionProbes true
+"QualitySettings" SET shadowDistance 100 shadowCascades 2 shadows 0 realtimeReflectionProbes false
 
 // ---------- WORLD LOADING
 
 LOAD "Worlds/Intersection Loop/New York" FROM "worlds"
-//LOAD "Worlds/Intersection Loop/Florida" FROM "worlds"
+
+//Switch variants
+//REGEX "World Root/.*" EXECUTE Tiler.TileVariantSet SwitchVariant "Italian City"
+//REGEX "World Root/.*" EXECUTE Tiler.TileVariantSet SwitchVariant "Florida Neighborhood"
 
 REGEX "World Root/.*/Cars" SET active false
+"World Root" Set transform localPosition (0 -0.03 0)
 
 CREATE "EnviroSky" AS "EnviroSky"
 "EnviroSky" SET EnviroSky GameTime.ProgressTime "None" weatherSettings.cloudTransitionSpeed 100 weatherSettings.effectTransitionSpeed 100 weatherSettings.fogTransitionSpeed 100
@@ -15,7 +19,7 @@ CREATE "EnviroSky" AS "EnviroSky"
 // ---------- CAMERA SETUP
 
 CREATE "Camera"
-"Camera" ADD FlyCamera
+"Camera" SET active true
 
 CREATE "Camera/cameraRGB"
 "Camera/cameraRGB" SET active false
@@ -25,9 +29,8 @@ CREATE "Camera/cameraRGB"
 "Camera/cameraRGB" SET UnityEngine.Rendering.PostProcessing.PostProcessVolume isGlobal false profile "Cold Profile"
 "Camera/cameraRGB" EXECUTE UnityEngine.Rendering.PostProcessing.PostProcessLayer Init "PostProcessResources"
 
-[UI.Window] ShowFromCamera "Camera/cameraRGB" AS "cameraRGB" WITH 1920 1080 24 "ARGB32" "Default"
+[UI.Window] ShowFromCamera "Camera/cameraRGB" AS "RGB" WITH 1920 1080 24 "ARGB32" "Default"
 "Camera/cameraRGB" SET active true
-"Camera" EXECUTE SetActive true
 
 // ---------- HUMANS INITIALIZATION
 
@@ -39,17 +42,25 @@ REGEX "human_*" SET Humans.Random.RandomHuman settings.async false settings.cont
 REGEX "human_*" ADD Humans.Locomotion.Character Humans.Locomotion.ExternalAgent
 REGEX "human_*" SET Humans.Locomotion.ExternalAgent stickToGround true
 REGEX "human_*" SET Humans.Locomotion.Character AnimatorForwardAmountMultiplier 1
-
-//Add the line below for animation stepping
-//REGEX "human_*" ADD Humans.Animation.AnimationStepper
+REGEX "human_*" ADD Humans.Animation.RandomPose
+"human_male" PUSH Humans.Animation.RandomPose clips ASSET "Humans/animations/Walk" FROM "humans" ASSET "Humans/animations/Run" FROM "humans"
+"human_female" PUSH Humans.Animation.RandomPose clips ASSET "Humans/animations/Walk" FROM "humans" ASSET "Humans/animations/Run" FROM "humans"
 
 
 // ---------- SUMO TRAFFIC
 
 CREATE "Traffic"
 "Traffic" ADD SUMOProcess
+"Traffic" SET SUMOProcess sumoConfigName "traffic.pedestrians.15.min.sumocfg"
+
+//USE THE LINE BELOW INSTEAD IF YOU DON'T WANT PEDESTRIANS IN THE SIMULATION, WAY FASTER TO GENERATE DATASETS
+//"Traffic" SET SUMOProcess sumoConfigName "traffic._no_pedestrians.15.min.sumocfg"
+
+//OR THIS ONE IF YOU WANT A LOW DENSITY OF PEDESTRIANS, FASTER TO GENERATE DATASETS
+//"Traffic" SET SUMOProcess sumoConfigName "traffic.low_pedestrians.15.min.sumocfg"
+
 "Traffic" SET SUMOProcess sumoPath "sumo\"
-"Traffic" SET SUMOProcess sumoParams "-v --remote-port 4001 --start --step-length 0.016 --collision.check-junctions true --collision.mingap-factor 0 --collision.action warn"
+"Traffic" SET SUMOProcess sumoParams "-v --remote-port 4001 --start --step-length 0.016 --collision.check-junctions true --collision.mingap-factor 1 --collision.action teleport --lanechange.duration 2"
 
 "Traffic" ADD FilteredAssetsPool
 "Traffic" SET FilteredAssetsPool usePlaceholders false
@@ -58,22 +69,33 @@ CREATE "Traffic"
 "Traffic" ADD PedestriansTick
 "Traffic" ADD TrafficLightsTick
 "Traffic" SET CarsTick entityCullingReference "Camera/cameraRGB"
-"Traffic" SET CarsTick entityCullingDistance 999999
+"Traffic" SET CarsTick entityCullingDistance 500
+"Traffic" SET CarsTick randomizeObjectNames true
 "Traffic" SET CarsTick bikeRiderSegmentationClassName "Person"
-"Traffic" ADD SUMOController RandomProps.Spawners.Spawner RandomProps.Spawners.Vehicles.RandomLicensePlate
+"Traffic" ADD SUMOController RandomProps.Spawners.Spawner RandomProps.Spawners.Vehicles.RandomLicensePlate RandomProps.Spawners.RandomColor
+"Traffic" SET SUMOController currentTime 150
+"Traffic" SET SUMOController restartTime 750
+"Traffic" SET SUMOController enabled false
+"Traffic" SET RandomProps.Spawners.RandomColor randomMethod "FromList"
+"Traffic" PUSH RandomProps.Spawners.RandomColor availableColors "#46AE9DFF" "#57531DFF" "#BF7ADEFF" "#7ABD71FF" "#BC982DFF" "#B008DEFF" "#54ED6EFF" "#E03102FF" "#42405DFF" "#AA25BEFF" "#910998FF" "#AD4046FF" "#A4B1CEFF" "#D77B73FF" "#D02542FF" "#175918FF"
+"Traffic" PUSH RandomProps.Spawners.RandomColor colorsWeights 14
 
-// CAR COLOR RANDOMIZER
-//"Traffic" ADD RandomProps.Spawners.RandomColor
-//"Traffic" SET RandomProps.Spawners.RandomColor randomMethod "FromList"
-//"Traffic" PUSH RandomProps.Spawners.RandomColor availableColors "#46AE9DFF" "#57531DFF" "#BF7ADEFF" "#7ABD71FF" "#BC982DFF" "#B008DEFF" "#54ED6EFF" "#E03102FF" "#42405DFF" "#AA25BEFF" "#910998FF" "#AD4046FF" "#A4B1CEFF" "#D77B73FF" "#D02542FF" "#175918FF"
-//"Traffic" PUSH RandomProps.Spawners.RandomColor colorsWeights 14
+//Restrict by tags
+"Traffic" SET FilteredAssetsPool carFilterTags "+car,+thermal,+fixed,-car.classification=\"Truck\",-car.classification=\"Bus\",-car.classification=\"Police\",-car.classification=\"Bike\",-car.classification=\"Special Purpose Vehicle\",-car.classification=\"Motorbike\""
+"Traffic" SET FilteredAssetsPool vanFilterTags "car.classification=\"Truck\",+thermal,+fixed"
+"Traffic" SET FilteredAssetsPool busFilterTags "car.classification=\"Bus\",+thermal,+fixed"
+"Traffic" SET FilteredAssetsPool ambulanceFilterTags "car.classification=\"Police\",+thermal,+fixed"
+"Traffic" SET FilteredAssetsPool bikeFilterTags "bicycle"
+
+//OR restrict by specific vehicles
+//"Traffic" PUSH FilteredAssetsPool carAssets "thermal-cars:Cars/BMW_X6/BMW_X6"
 
 CREATE "Bikes"
 "Bikes" SET active true
 
 CREATE "Pedestrians"
 "Pedestrians" SET active true
-"Traffic" SET PedestriansTick pedestrianContainer "Pedestrians"
+"Traffic" SET PedestriansTick pedestrianContainer "Pedestrians" smoothing false
 "Traffic" SET SUMOController scale 1
 
 //"Traffic" SET CarsTick entityCullingReference "Main Camera"
@@ -83,31 +105,6 @@ CREATE "Pedestrians"
 
 "Time.instance" SET captureFramerate 2
 "Traffic" SET SUMOController smoothing false
-
-
-// ---------- EXPORT SETUP
-
-CREATE "dataExport1"
-CREATE "dataExport1/exporter"
-CREATE "dataExport1/links"
-"dataExport1/exporter" ADD Sensors.DataExport
-"dataExport1/exporter" SET Sensors.DataExport streamOutput "E:\tmp\"
-"dataExport1/exporter" SET active true
-"dataExport1/links" SET active true
-
-
-// ----------- EXPORT RGB CAMERA
-
-CREATE "dataExport1/links/770fa81b-e3f0-48a0-858a-5b5360db4e02"
-"dataExport1/links/770fa81b-e3f0-48a0-858a-5b5360db4e02" ADD Sensors.ImageExportLink
-"dataExport1/links/770fa81b-e3f0-48a0-858a-5b5360db4e02" SET Sensors.ImageExportLink target "Camera/cameraRGB" exportBBoxes "false" label "rgb" enabled true
-"dataExport1/exporter" PUSH Sensors.DataExport imageLinks "dataExport1/links/770fa81b-e3f0-48a0-858a-5b5360db4e02"
-"dataExport1/links/770fa81b-e3f0-48a0-858a-5b5360db4e02" EXECUTE Sensors.ImageExportLink SetOptions "height->1080"
-"dataExport1/links/770fa81b-e3f0-48a0-858a-5b5360db4e02" EXECUTE Sensors.ImageExportLink SetOptions "width->1920"
-"dataExport1/links/770fa81b-e3f0-48a0-858a-5b5360db4e02" EXECUTE Sensors.ImageExportLink SetOptions "stream_max->1"
-"dataExport1/links/770fa81b-e3f0-48a0-858a-5b5360db4e02" EXECUTE Sensors.ImageExportLink SetOptions "format->jpg"
-"dataExport1/links/770fa81b-e3f0-48a0-858a-5b5360db4e02" SET active true
-
 
 // ----------- SEGMENTATION CAMERA SETUP
 
@@ -125,34 +122,41 @@ CREATE Segmentation.LookUpTable AS "lookUpTable"
 "Pedestrians" ADD Segmentation.Class Segmentation.Spawners.Entity
 "Pedestrians" SET Segmentation.Class className "Person"
 
+//Accurate visibility for cars
+//"Traffic" ADD Segmentation.Spawners.AccurateVisibility
+//Accurate visibility for pedestrians
+//"Pedestrians" ADD Segmentation.Spawners.AccurateVisibility
+//Accurate visibility for cyclists
+//"Bikes" ADD Segmentation.Spawners.AccurateVisibility
+
 [Segmentation.Camera] CreateWithClassColors "Camera/Segmentation" WITH lookUpTable "lookUpTable"
 [Cameras.RenderTexture] CreateNew "cameraSegmentation1" 1920 1080
 "Camera/Segmentation" ADD Segmentation.Output.BoundingBoxes Segmentation.Output.FilteredBoundingBoxes
 "Camera/Segmentation" SET Segmentation.Output.BoundingBoxes minimumObjectVisibility 0 extensionAmount 0 minimumPixelsCount 1
 "Camera/Segmentation" EXECUTE Segmentation.Output.FilteredBoundingBoxes EnableClasses "Person" "Car" "Bicycle"
-"Camera/Segmentation" SET Camera targetTexture "cameraSegmentation1" far 400
+"Camera/Segmentation" SET Camera targetTexture "cameraSegmentation1" nearClipPlane 0.1 far 1000
+
+//Accurate visibility. This needs to be added globally if you want accurate visibility for any of the entities
+//"Camera/Segmentation" ADD Segmentation.Output.AccurateVisibilityModule
+
 "Camera/Segmentation" SET active true
 [UI.Window] ShowFromRenderTexture "cameraSegmentation1" AS "cameraSegmentation1"
 
 
-// ----------- EXPORT SEGMENTATION CAMERA
-
-CREATE "dataExport1/links/022914b6-9cac-463c-940e-3712cf051084"
-"dataExport1/links/022914b6-9cac-463c-940e-3712cf051084" ADD Sensors.ImageExportLink
-"dataExport1/links/022914b6-9cac-463c-940e-3712cf051084" SET Sensors.ImageExportLink target "Camera/Segmentation" label "segmentation" exportBBoxes "true" enabled true
-"dataExport1/exporter" PUSH Sensors.DataExport imageLinks "dataExport1/links/022914b6-9cac-463c-940e-3712cf051084"
-"dataExport1/links/022914b6-9cac-463c-940e-3712cf051084" EXECUTE Sensors.ImageExportLink SetOptions "stream_max->1"
-"dataExport1/links/022914b6-9cac-463c-940e-3712cf051084" EXECUTE Sensors.ImageExportLink SetOptions "width->1920"
-"dataExport1/links/022914b6-9cac-463c-940e-3712cf051084" EXECUTE Sensors.ImageExportLink SetOptions "height->1080"
-"dataExport1/links/022914b6-9cac-463c-940e-3712cf051084" EXECUTE Sensors.ImageExportLink SetOptions "format->png"
-"dataExport1/links/022914b6-9cac-463c-940e-3712cf051084" SET active true
-
+//Uncomment the lines below if you want to hide entities that are too far from cameras (to prevent small objects from being rendered to the final frames altogether)
+//"Pedestrians" ADD Cameras.Spawners.HideByDistance
+//"Pedestrians" SET Cameras.Spawners.HideByDistance MaxDistance 20
+//"Traffic" ADD Cameras.Spawners.HideByDistance
+//"Traffic" SET Cameras.Spawners.HideByDistance MaxDistance 20
+//"Bikes" ADD Cameras.Spawners.HideByDistance
+//"Bikes" SET Cameras.Spawners.HideByDistance MaxDistance 20
 
 // ----------- ENTROPY - Jump from one car to another at random
 
 "Camera" ADD JumpBetweenObjects
 "Camera" SET JumpBetweenObjects container "Traffic"
-"Camera" SET JumpBetweenObjects localPosition (0 3 2)
+"Camera" SET JumpBetweenObjects localPosition (0 2 2.3)
+"Camera" SET JumpBetweenObjects rotationMinY -20 rotationMaxY 20 ignoreObjectsNamed "Vehicle Pointer"
 
 
 // ----------- POST SETUP
@@ -168,6 +172,5 @@ CREATE "dataExport1/links/022914b6-9cac-463c-940e-3712cf051084"
 "Traffic" EXECUTE FilteredAssetsPool SetPoolSizeForType "Bike" 25
 "Traffic" EXECUTE FilteredAssetsPool SetPoolSizeForType "Car" 50
 
+
 "EnviroSky" EXECUTE EnviroSky SetWeatherOverwrite 3
-SLEEP 10
-"dataExport1" SET active true
