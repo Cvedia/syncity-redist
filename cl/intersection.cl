@@ -130,8 +130,9 @@ CREATE Segmentation.LookUpTable AS "lookUpTable"
 //"Traffic" ADD Segmentation.Spawners.AccurateVisibility
 //Accurate visibility for pedestrians
 //"Pedestrians" ADD Segmentation.Spawners.AccurateVisibility
-//Accurate visibility for cyclists
+//Accurate visibility for cyclists (ensure you set autoCreateOnChildEntities to true to ensure bike <-> rider intersection is considered
 //"Bikes" ADD Segmentation.Spawners.AccurateVisibility
+//"Bikes" SET Segmentation.Spawners.AccurateVisibility autoCreateOnChildEntities true
 
 [Segmentation.Camera] CreateWithClassColors "Camera/Segmentation" WITH lookUpTable "lookUpTable"
 [Cameras.RenderTexture] CreateNew "cameraSegmentation1" 1920 1080

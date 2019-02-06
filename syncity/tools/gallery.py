@@ -151,7 +151,11 @@ def run():
 						fts += .000001
 				
 				try:
-					fm[fts] = common.loadJSON(fn)
+					jsonContents = common.loadJSON(fn)
+					if isinstance(jsonContents, list):
+						fm[fts] = jsonContents
+					else:
+						fm[fts] = jsonContents["boundingBoxes"]
 					fmfn[fts] = fn
 				except:
 					common.output('Invalid JSON data in {}'.format(fn), 'ERROR')

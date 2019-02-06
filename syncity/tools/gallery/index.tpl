@@ -32,7 +32,7 @@
 					{% endfor %}
 				</div>
 				<div class="galTopMid">
-					Image <input type="text" value="1" /> / {{ total_images }}
+					Image <input type="text" id="inputImg" value="1" /> / {{ total_images }}
 				</div>
 				<div class="galTopRight">
 					<button class="btn act" id="btnGraphs">Graphs</button>
@@ -59,6 +59,10 @@
 					<button class="icon iconLeft"></button>
 					<button class="icon iconPlay"></button>
 					<button class="icon iconRight"></button>
+					<div class="galCtrl">
+						FPS <input type="text" id="inputFPS" value="30" />
+						Meta offset <input type="text" id="inputOffset" value="0" />
+					</div>
 				</div>
 			</div>
 		</div>

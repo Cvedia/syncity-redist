@@ -65,8 +65,6 @@ def run():
 				'"Traffic" SET SUMOController enabled true',
 				'NOOP',
 				'"Traffic" SET SUMOController enabled false',
-				'REGEX "Traffic/.*/Reflection Probe" SET active true',
-				'REGEX "Traffic/.*/Reflection Probe" SET ReflectionProbe enabled true',
 				])
 
 		common.sendData('"Camera" EXECUTE JumpBetweenObjects Jump')

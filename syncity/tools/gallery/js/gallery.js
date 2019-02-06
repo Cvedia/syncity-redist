@@ -1,5 +1,5 @@
 /*===============================
-* Images Gallery v 1.3.2
+* Images Gallery v 1.3.3
 * Copyright: Cvedia (C) 2018-2019
 *================================*/
 
@@ -33,7 +33,7 @@ function init() {
 }
 
 function ImagesGallery() {
-	var gal, viewButtons, image, boxButton, input, name, meta_name, boxes, playButton, timer,
+	var gal, viewButtons, image, boxButton, input, inputOffset, inputFPS, name, meta_name, boxes, playButton, timer,
 		centerPoint, canvasCtx,
 		sortedPoints = {},
 		iwidth = 0,
@@ -43,8 +43,9 @@ function ImagesGallery() {
 		showBox = false,
 		playing = false,
 		showPoints = true,
-		spread = 100, // graph spread
-		slideTime = 33.34; // 30 fps
+		slideTime = 33.34, // playback fps , 1000 / fps, defaults to 30
+		metaOffset = 0, // metadata offset, can be either negative of positive
+		spread = 100; // graph spread
 	
 	if (typeof images[curType] == 'undefined') {
 		for (var i in images) {
@@ -63,7 +64,9 @@ function ImagesGallery() {
 	canvasCtx = $('#galCanvas')[0].getContext('2d');
 	viewButtons = $('.galTopLeft button', gal).on('click', onViewType);
 	boxButton = $('.galTopRight #btnBBox', gal).on('click', onShowBoxes);
-	input = $('.galTopMid input', gal).on('change', onInputChange);
+	input = $('.galTopMid #inputImg', gal).on('change', onImgInputChange);
+	inputFPS = $('.galBottom #inputFPS', gal).on('change', onFPSInputChange);
+	inputOffset = $('.galBottom #inputOffset', gal).on('change', onOffsetInputChange);
 	playButton = $('.iconPlay', gal).on('click', onPlayClick);
 	$('.iconLeft', gal).on('click', onLeftClick);
 	$('.iconRight', gal).on('click', onRightClick);
@@ -210,7 +213,7 @@ function ImagesGallery() {
 		}
 	}
 	
-	function onInputChange(e) {
+	function onImgInputChange(e) {
 		var val = parseInt(input.val());
 		if (isNaN(val) || val < 1 || val > total_images) {
 			input.val(curImage);
@@ -220,22 +223,45 @@ function ImagesGallery() {
 		updateImage();
 	}
 	
+	function onFPSInputChange(e) {
+		var val = parseInt(inputFPS.val());
+		if (isNaN(val)) {
+			input.val(slideTime);
+			return;
+		}
+		
+		slideTime = 1000 / val;
+		updateImage();
+	}
+	
+	function onOffsetInputChange(e) {
+		var val = parseInt(inputOffset.val());
+		if (isNaN(val)) {
+			input.val(metaOffset);
+			return;
+		}
+		
+		metaOffset = val;
+		updateImage();
+	}
+	
 	function updateMetaCol() {
-		if (typeof meta_col == 'undefined' || typeof meta_col[curImage] == 'undefined')
+		var _offset = curImage-1+metaOffset;
+		if (typeof meta_col == 'undefined' || typeof meta_col[_offset] == 'undefined')
 			return;
 		
 		var pMeta = {}, bbs = {};
 		
-		for (var k in meta_col[curImage]) {
+		for (var k in meta_col[_offset]) {
 			// analyze data against plotting tools
 			pMeta[k] = [];
-			for (var m in meta_col[curImage][k]) {
+			for (var m in meta_col[_offset][k]) {
 				var hasMatch = false;
-				pMeta[k].push(m + ':' + meta_col[curImage][k][m])
+				pMeta[k].push(m + ':' + meta_col[_offset][k][m])
 				
 				// 3d bounding box
 				try {
-					var x = meta_col[curImage][k][m].match(/(\(\d+.\d+,\d+.\d+\)){8}/g)[0];
+					var x = meta_col[_offset][k][m].match(/(\(\d+.\d+,\d+.\d+\)){8}/g)[0];
 					hasMatch = true;
 					x = x.slice(1,-1).split(')(');
 					var bb = []
@@ -249,13 +275,12 @@ function ImagesGallery() {
 			}
 		}
 		
-		drawPoints3DBB(bbs);
-		console.log('pMeta:', pMeta);
+		drawPoints3DBB(bbs, false);
 	}
 	
 	function updateImage() {
 		var url = images[curType][images2idx[curType][curImage-1]],
-				murl = meta_fn[meta2idx[curImage-1]],
+				murl = meta_fn[meta2idx[curImage-1+metaOffset]],
 				fancy_url, fancy_murl;
 		
 		try {
@@ -297,7 +322,7 @@ function ImagesGallery() {
 		} catch(z) {}
 		
 		name.html('<a href="'+url+'" target="_blank">'+fancy_url+'</a>');
-		meta_name.html(meta2idx[curImage-1] == undefined ? '' : '<a href="'+murl+'" target="_blank">'+fancy_murl+'</a>');
+		meta_name.html(meta2idx[curImage-1+metaOffset] == undefined ? '' : '<a href="'+murl+'" target="_blank">'+fancy_murl+'</a>');
 		image.attr('src', url);
 		
 		if (showBox) drawBoxes();
@@ -361,7 +386,7 @@ function ImagesGallery() {
 	}
 	
 	function drawBoxes() {
-		var arr = meta[meta2idx[curImage-1]],
+		var arr = meta[meta2idx[curImage-1+metaOffset]],
 			t, l, b, r, c, j, field;
 		
 		boxes.find('.bbox').remove();
@@ -418,10 +443,18 @@ function ImagesGallery() {
 					arr[i].ymax <= 1 &&
 					arr[i].ymin <= 1
 				) {
-					l = arr[i].xmin*100;
-					t = arr[i].ymin*100;
-					r = arr[i].xmax*100;
-					b = arr[i].ymax*100;
+					//Old approach - percentage based, might cause annoying 1-pixel alignment errors
+					//l = arr[i].xmin*100;
+					//t = arr[i].ymin*100;
+					//r = arr[i].xmax*100;
+					//b = arr[i].ymax*100;
+					
+					//New approach - screen-space pixel based, with proper floor/ceil rounding depending on which part of the box we are dealing with
+					l = Math.floor(arr[i].xmin*iwidth);
+					t = Math.floor(arr[i].ymin*iheight);
+					r = Math.ceil(arr[i].xmax*iwidth);
+					b = Math.ceil(arr[i].ymax*iheight);
+					unit = 'px';
 				} else {
 					unit = 'px';
 					l = arr[i].xmin;
@@ -432,10 +465,18 @@ function ImagesGallery() {
 				
 				c = classColors[arr[i].label];
 				
+				var key = arr[i].instanceid;
+				var tData = [];
+				
+				if (meta_col[curImage+metaOffset] && meta_col[curImage+metaOffset][key]) {
+					for (var k in meta_col[curImage+metaOffset][key])
+						tData.push(k + ':' + meta_col[curImage+metaOffset][key][k]);
+				}
+				
 				boxes.append(
 					'<div class="bbox tooltip" data-tooltip="x: ' + l + ',' + r + ' y: ' + t + ',' + b + ' w: ' + Math.abs(r-l) + ' h: ' + Math.abs(b-t) + ' id: '+arr[i].timestamp+', classId: '+
-					arr[i].label + (typeof arr[i].visibility != 'undefined' ? ', visibility: ' + arr[i].visibility : '') + (typeof arr[i].numPoints != 'undefined' ? ', numPoints: '+arr[i].numPoints : '') + (typeof arr[i].confidence != 'undefined' ? ', confidence: ' + arr[i].confidence : '' )+
-					'" style="' + (invert_bboxx ? 'bottom' : 'top') + ': '+t+unit+'; left: '+l+unit+'; width: '+(r-l)+
+					arr[i].label + (typeof arr[i].visibility != 'undefined' ? ', visibility: ' + arr[i].visibility : '') + (typeof arr[i].numPoints != 'undefined' ? ', numPoints: '+arr[i].numPoints : '') + (typeof arr[i].confidence != 'undefined' ? ', confidence: ' + arr[i].confidence : '' )
+					+ ', ' + tData.join(',\n') + '" style="' + (invert_bboxx ? 'bottom' : 'top') + ': '+t+unit+'; left: '+l+unit+'; width: '+(r-l)+
 					unit+'; height: '+(b-t)+unit+'; border-color: '+c+';"></div>'
 				);
 			} else {
@@ -444,9 +485,12 @@ function ImagesGallery() {
 		}
 	}
 	
-	function drawPoints3DBB(objs) {
+	function drawPoints3DBB(objs, inverted) {
 		var cnum = 0,
 			arr, x, y, j, x1, y1;
+		
+		if (typeof inverted == 'undefined')
+			inverted = invert_bboxx;
 		
 		canvasCtx.clearRect(0, 0, iwidth, iheight);
 		
@@ -466,8 +510,8 @@ function ImagesGallery() {
 			
 			canvasCtx.strokeStyle = c;
 			canvasCtx.beginPath();
-			//canvasCtx.moveTo(x, invert_bboxx ? iheight-y : y);
-						
+			//canvasCtx.moveTo(x, inverted ? iheight-y : y);
+			
 			for (var i = 0; i < j; i++) {
 				if (typeof arr[i]['x'] != 'undefined') {
 					unit = '%';
@@ -475,20 +519,20 @@ function ImagesGallery() {
 					if (i == 0 || i == 4) {
 						x = arr[i+4-1].x * iwidth;
 						y = arr[i+4-1].y * iheight;
-						canvasCtx.moveTo(x, invert_bboxx ? iheight-y : y);
+						canvasCtx.moveTo(x, inverted ? iheight-y : y);
 					}
 					
 					x = arr[i].x * iwidth;
 					y = arr[i].y * iheight;
-					canvasCtx.lineTo(x, invert_bboxx ? iheight-y : y);
+					canvasCtx.lineTo(x, inverted ? iheight-y : y);
 					
 					if (i < 4) {
 						x1 = arr[i+4].x * iwidth;
 						y1 = arr[i+4].y * iheight;
-						canvasCtx.lineTo(x1, invert_bboxx ? iheight-y1 : y1);
-						canvasCtx.moveTo(x, invert_bboxx ? iheight-y : y);
+						canvasCtx.lineTo(x1, inverted ? iheight-y1 : y1);
+						canvasCtx.moveTo(x, inverted ? iheight-y : y);
 					}
-										
+					
 					x = arr[i].x * 100;
 					y = arr[i].y * 100;
 					
@@ -501,7 +545,7 @@ function ImagesGallery() {
 					
 					boxes.append(
 						'<div class="point tooltip" data-tooltip="x: ' + x + unit + ' y: ' + y + unit + ' data: ' + tData.join('\n') +
-						'" style="'+ (invert_bboxx ? 'bottom: ' : 'top: ') + y + unit +'; left: '+ x + unit +'; background-color: '+ c +';"></div>'
+						'" style="'+ (inverted ? 'bottom: ' : 'top: ') + y + unit +'; left: '+ x + unit +'; background-color: '+ c +';"></div>'
 					);
 				} else {
 					console.log('WARNING: Unknown points structure:', arr[i]);
@@ -514,13 +558,16 @@ function ImagesGallery() {
 		}
 	}
 	
-	function drawPoints() {
-		var idx = images2idx[curType][curImage-1],
+	function drawPoints(unit) {
+		var idx = images2idx[curType][curImage-1+metaOffset],
 			cnum = 0,
 			prevAbsent = false,
 			nextAbsent = false,
 			arr, x, y, j;
 		
+		if (typeof unit == 'undefined')
+			unit = '%';
+			
 		boxes.find('.point').remove();
 		canvasCtx.clearRect(0, 0, iwidth, iheight);
 		
@@ -543,8 +590,13 @@ function ImagesGallery() {
 				sortPointsClockwise(arr);
 			}*/
 			
-			x = arr[j-1].x;
-			y = arr[j-1].y;
+			if (unit == '%') {
+				x = arr[j-1].x*iwidth;
+				y = arr[j-1].y*iheight;
+			} else {
+				x = arr[j-1].x;
+				y = arr[j-1].y;
+			}
 			c = classColors[cnum];
 			canvasCtx.strokeStyle = c;
 			canvasCtx.beginPath();
@@ -553,9 +605,13 @@ function ImagesGallery() {
 			
 			for (var i = 0; i < j; i++) {
 				if (typeof arr[i]['x'] != 'undefined') {
-					unit = 'px';
-					x = arr[i].x;
-					y = arr[i].y;
+					if (unit == '%') {
+						x = arr[i].x*iwidth;
+						y = arr[i].y*iheight;
+					} else {
+						x = arr[i].x;
+						y = arr[i].y;
+					}
 					nextAbsent = (x == -1 && y == -1);
 					
 					if (prevAbsent || nextAbsent)
@@ -569,8 +625,8 @@ function ImagesGallery() {
 						continue;
 					
 					boxes.append(
-						'<div class="point tooltip" data-tooltip="x: ' + x + ' y: ' + y + ' type: '+ key +
-						'" style="'+ (invert_bboxx ? 'bottom: ' : 'top: ') + y + unit +'; left: '+ x + unit +'; background-color: '+ c +';"></div>'
+						'<div class="point tooltip" data-tooltip="x: ' + x + 'px y: ' + y + 'px type: '+ key +
+						'" style="'+ (invert_bboxx ? 'bottom: ' : 'top: ') + y + 'px; left: '+ x +'px; background-color: '+ c +';"></div>'
 					);
 				} else {
 					console.log('WARNING: Unknown points structure:', arr[i]);
@@ -581,7 +637,6 @@ function ImagesGallery() {
 			canvasCtx.closePath();
 			canvasCtx.stroke();
 		}
-		
 	}
 	
 	function onKeyDown(e) {

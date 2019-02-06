@@ -1,8 +1,11 @@
-"QualitySettings" SET shadowDistance 100 shadowCascades 2 shadows 0 realtimeReflectionProbes false
+"QualitySettings" SET shadowDistance 200 shadowCascades 2 shadows 2 realtimeReflectionProbes true
 
 // ---------- WORLD LOADING
 
 LOAD "Worlds/Intersection Loop/New York" FROM "worlds"
+
+"RenderSettings" SET ambientMode "Trilight"
+"RenderSettings" SET ambientSkyColor (0.7830189 0.7830189 0.7830189)
 
 //Switch variants
 //REGEX "World Root/.*" EXECUTE Tiler.TileVariantSet SwitchVariant "Italian City"
@@ -11,22 +14,32 @@ LOAD "Worlds/Intersection Loop/New York" FROM "worlds"
 REGEX "World Root/.*/Cars" SET active false
 "World Root" Set transform localPosition (0 -0.03 0)
 
-CREATE "EnviroSky" AS "EnviroSky"
-"EnviroSky" SET EnviroSky GameTime.ProgressTime "None" weatherSettings.cloudTransitionSpeed 100 weatherSettings.effectTransitionSpeed 100 weatherSettings.fogTransitionSpeed 100
-"EnviroSky" SET EnviroSky GameTime.Hours 13
+CREATE "Direct Light"
+"Direct Light" ADD Light
+"Direct Light" SET Light type "Directional"
+"Direct Light" SET Light shadows "Soft"
+"Direct Light" SET Transform localPosition (-81.998 796.37 599.943)
+"Direct Light" SET Transform localEulerAngles (52.785 172.361 0)
+"Direct Light" SET Transform localScale (1000.003 1000.001 1000.002)
+"Direct Light" SET Light shadowResolution "VeryHigh"
+"Direct Light" SET Light color "#EAD2B9FF"
+"Direct Light" SET Light intensity 1.466
+"Direct Light" SET Light shadowBias 0
+"Direct Light" SET active true
 
 
 // ---------- CAMERA SETUP
 
 CREATE "Camera"
 "Camera" SET active true
-
 CREATE "Camera/cameraRGB"
 "Camera/cameraRGB" SET active false
-"Camera/cameraRGB" SET Camera near 0.3 far 100 fieldOfView 60 renderingPath "UsePlayerSettings" allowHDR true
+"Camera/cameraRGB" ADD Camera
+"Camera/cameraRGB" SET Camera tag "MainCamera" near 0.3 far 1000 fieldOfView 60 renderingPath "DeferredShading" allowHDR true
 "Camera/cameraRGB" ADD UnityEngine.Rendering.PostProcessing.PostProcessVolume UnityEngine.Rendering.PostProcessing.PostProcessLayer
-"Camera/cameraRGB" SET UnityEngine.Rendering.PostProcessing.PostProcessLayer volumeTrigger "Camera/cameraRGB" antialiasingMode "SubpixelMorphologicalAntialiasing" fog.enabled 0
-"Camera/cameraRGB" SET UnityEngine.Rendering.PostProcessing.PostProcessVolume isGlobal false profile "Cold Profile"
+"Camera/cameraRGB" SET UnityEngine.Rendering.PostProcessing.PostProcessLayer volumeLayer 1 volumeTrigger "Camera/cameraRGB" antialiasingMode "SubpixelMorphologicalAntialiasing" fog.enabled 1
+"Camera/cameraRGB" SET UnityEngine.Rendering.PostProcessing.PostProcessVolume isGlobal true
+"Camera/cameraRGB" SET UnityEngine.Rendering.PostProcessing.PostProcessVolume profile ASSET "PostProcessingProfiles/Intersection PostPro" FROM "sensors"
 "Camera/cameraRGB" EXECUTE UnityEngine.Rendering.PostProcessing.PostProcessLayer Init "PostProcessResources"
 
 [UI.Window] ShowFromCamera "Camera/cameraRGB" AS "RGB" WITH 1920 1080 24 "ARGB32" "Default"
@@ -77,8 +90,9 @@ CREATE "Traffic"
 "Traffic" SET SUMOController restartTime 750
 "Traffic" SET SUMOController enabled false
 "Traffic" SET RandomProps.Spawners.RandomColor randomMethod "FromList"
-"Traffic" PUSH RandomProps.Spawners.RandomColor availableColors "#46AE9DFF" "#57531DFF" "#BF7ADEFF" "#7ABD71FF" "#BC982DFF" "#B008DEFF" "#54ED6EFF" "#E03102FF" "#42405DFF" "#AA25BEFF" "#910998FF" "#AD4046FF" "#A4B1CEFF" "#D77B73FF" "#D02542FF" "#175918FF"
-"Traffic" PUSH RandomProps.Spawners.RandomColor colorsWeights 14
+"Traffic" SET RandomProps.Spawners.RandomColor useForMainColor false
+"Traffic" PUSH RandomProps.Spawners.RandomColor availableColors "#0A0A0A" "#8C8C8C" "#ABABAB" "#5A5A5A" "#162852" "#003400" "#A40000" "#76000C" "#60451E" "#312008" "#1E6376" "#2F1C33" "#9A8E67" "#B48F00" "#282D3E" "#B74A04"
+"Traffic" PUSH RandomProps.Spawners.RandomColor colorsWeights 179 170 154 123 106 79 74 21 21 20 15 15 6 5 4 1
 
 //Restrict by tags
 "Traffic" SET FilteredAssetsPool carFilterTags "+car,+thermal,+fixed,-car.classification=\"Truck\",-car.classification=\"Bus\",-car.classification=\"Police\",-car.classification=\"Bike\",-car.classification=\"Special Purpose Vehicle\",-car.classification=\"Motorbike\""
@@ -130,11 +144,12 @@ CREATE Segmentation.LookUpTable AS "lookUpTable"
 //"Bikes" ADD Segmentation.Spawners.AccurateVisibility
 
 [Segmentation.Camera] CreateWithClassColors "Camera/Segmentation" WITH lookUpTable "lookUpTable"
+"Camera/Segmentation" SET active false
 [Cameras.RenderTexture] CreateNew "cameraSegmentation1" 1920 1080
 "Camera/Segmentation" ADD Segmentation.Output.BoundingBoxes Segmentation.Output.FilteredBoundingBoxes
 "Camera/Segmentation" SET Segmentation.Output.BoundingBoxes minimumObjectVisibility 0 extensionAmount 0 minimumPixelsCount 1
 "Camera/Segmentation" EXECUTE Segmentation.Output.FilteredBoundingBoxes EnableClasses "Person" "Car" "Bicycle"
-"Camera/Segmentation" SET Camera targetTexture "cameraSegmentation1" nearClipPlane 0.1 far 1000
+"Camera/Segmentation" SET Camera targetTexture "cameraSegmentation1" nearClipPlane 0.1 far 1000 clearFlags "SolidColor"
 
 //Accurate visibility. This needs to be added globally if you want accurate visibility for any of the entities
 //"Camera/Segmentation" ADD Segmentation.Output.AccurateVisibilityModule
@@ -161,8 +176,6 @@ CREATE Segmentation.LookUpTable AS "lookUpTable"
 
 // ----------- POST SETUP
 
-"EnviroSky" EXECUTE EnviroSky AssignAndStart "Camera" "Camera/cameraRGB"
-"EnviroSky" SET active true
 "World Root" SET active true
 
 "Traffic" SET active true
@@ -171,6 +184,3 @@ CREATE Segmentation.LookUpTable AS "lookUpTable"
 "Traffic" EXECUTE FilteredAssetsPool SetContainerForType "Bike" "Bikes"
 "Traffic" EXECUTE FilteredAssetsPool SetPoolSizeForType "Bike" 25
 "Traffic" EXECUTE FilteredAssetsPool SetPoolSizeForType "Car" 50
-
-
-"EnviroSky" EXECUTE EnviroSky SetWeatherOverwrite 3
