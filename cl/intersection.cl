@@ -164,6 +164,25 @@ CREATE Segmentation.LookUpTable AS "lookUpTable"
 "Camera" SET JumpBetweenObjects rotationMinY -20 rotationMaxY 20 ignoreObjectsNamed "Vehicle Pointer"
 
 
+// ----------- Thermal Light (to reduce spikes in the histogram), note: this light only affects the thermal output
+
+CREATE "Thermal light"
+"Thermal light" SET Transform localEulerAngles (24.82 311.338 334.491)
+"Thermal light" ADD Thermal.ThermalLight
+//Increase the temperature to "warm up" the scene even more
+"Thermal light" SET Thermal.ThermalLight temperature 12
+"Thermal light" SET Thermal.ThermalLight lightType "Directional"
+"Thermal light" SET active true
+
+
+// ---------- Thermal Histogram improvements (to spread the histogram even more)
+
+//Increase skybox temperature to prevent spikes on the low end
+"Camera/Thermal" SET Thermal.ThermalCamera skyboxBackgroundTemperature -6
+//Reduce maximum temperature to "move the entire histogram to the upper end", commented by default
+//"Camera/Thermal" SET Thermal.ThermalCamera temperatureRange (-10 30)
+
+
 // ----------- POST SETUP
 
 "EnviroSky" EXECUTE EnviroSky AssignAndStart "Camera" "Camera/Thermal"

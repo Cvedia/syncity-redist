@@ -817,7 +817,9 @@ def loadJSON(path):
 	# output('Loading JSON object from: `{}` ...'.format(path))
 	
 	with open(path, encoding='utf-8') as data:
-		r = json.loads(data.read())
+		r = data.read()
+	
+	r = json.loads(r) if r != 'null' else {}
 	
 	return r
 

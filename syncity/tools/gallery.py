@@ -140,8 +140,8 @@ def run():
 				try:
 					obj = common.loadJSON(fn)
 				except:
-					common.output('Invalid JSON data in {}'.format(fn), 'ERROR')
-					continue
+					common.output('[0] Invalid JSON data in {}'.format(fn), 'ERROR')
+					obj = {}
 				
 				metadataCol[fts] = copy.deepcopy(obj)
 			elif "seg" in lnm or "bbox" in lnm:
@@ -152,19 +152,22 @@ def run():
 				
 				try:
 					jsonContents = common.loadJSON(fn)
+					fmfn[fts] = fn
+					
 					if isinstance(jsonContents, list):
 						fm[fts] = jsonContents
 					else:
 						fm[fts] = jsonContents["boundingBoxes"]
-					fmfn[fts] = fn
+				except KeyError:
+					fm[fts] = {}
 				except:
-					common.output('Invalid JSON data in {}'.format(fn), 'ERROR')
+					common.output('[1] Invalid JSON data in {}'.format(fn), 'ERROR')
 			
 			elif 'screenpoints' in lnm:
 				try:
 					point = common.loadJSON(fn)
 				except:
-					common.output('Invalid JSON data in {}'.format(fn), 'ERROR')
+					common.output('[2] Invalid JSON data in {}'.format(fn), 'ERROR')
 					continue
 				
 				if fty not in pFeatures:
@@ -178,7 +181,7 @@ def run():
 				try:
 					obj = common.loadJSON(fn)
 				except:
-					common.output('Invalid JSON data in {}'.format(fn), 'ERROR')
+					common.output('[3] Invalid JSON data in {}'.format(fn), 'ERROR')
 					continue
 				
 				# HACK: Skip multi value objects, they cannot be graphed
@@ -198,6 +201,7 @@ def run():
 				
 				if settings.debug:
 					common.output('Found JSON object in {} that\'s not linked to cameras, skipping'.format(fn), 'WARN')
+			
 			continue
 		
 		if fty not in iFeatures:
