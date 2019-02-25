@@ -1,4 +1,4 @@
-"QualitySettings" SET shadowDistance 100 shadowCascades 2 shadows 0 realtimeReflectionProbes false
+"QualitySettings" SET shadowDistance 100 shadowCascades 2 shadows 2 realtimeReflectionProbes false
 
 // ---------- WORLD LOADING
 
@@ -17,8 +17,23 @@ CREATE "EnviroSky" AS "EnviroSky"
 
 
 // ---------- CAMERA SETUP
-
 CREATE "Camera"
+
+// Create RGB camera
+CREATE "Camera/cameraRGB"
+"Camera/cameraRGB" SET active false
+"Camera/cameraRGB" ADD Camera
+"Camera/cameraRGB" SET Camera tag "MainCamera" near 0.3 far 1000 fieldOfView 60 renderingPath "DeferredShading" allowHDR true
+"Camera/cameraRGB" ADD UnityEngine.Rendering.PostProcessing.PostProcessVolume UnityEngine.Rendering.PostProcessing.PostProcessLayer
+"Camera/cameraRGB" SET UnityEngine.Rendering.PostProcessing.PostProcessLayer volumeLayer 1 volumeTrigger "Camera/cameraRGB" antialiasingMode "SubpixelMorphologicalAntialiasing" fog.enabled 1
+"Camera/cameraRGB" SET UnityEngine.Rendering.PostProcessing.PostProcessVolume isGlobal true
+"Camera/cameraRGB" SET UnityEngine.Rendering.PostProcessing.PostProcessVolume profile ASSET "PostProcessingProfiles/Intersection PostPro" FROM "sensors"
+"Camera/cameraRGB" EXECUTE UnityEngine.Rendering.PostProcessing.PostProcessLayer Init "PostProcessResources"
+"Camera/cameraRGB" ADD Syncity.ImageEffects.Antialiasing
+
+[UI.Window] ShowFromCamera "Camera/cameraRGB" AS "RGB" WITH 1920 1080 24 "ARGB32" "Default"
+"Camera/cameraRGB" SET active true
+
 // Create Thermal Camera
 CREATE "Cameras/Thermal/ThermalCamera" FROM "sensors" AS "Camera/Thermal"
 "Camera/Thermal" SET Transform localPosition (0 0 0)

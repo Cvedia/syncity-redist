@@ -24,10 +24,10 @@ def args(parser):
 		parser.add_argument('--channel', type=int, default=2, help='Channel to be exported from the raw image, defaults to 2')
 	except: pass
 	try:
-		parser.add_argument('--height', type=int, default=None, help='Exported image height')
+		parser.add_argument('--height', type=int, default=1080, help='Exported image height')
 	except: pass
 	try:
-		parser.add_argument('--width', type=int, default=None, help='Exported image width')
+		parser.add_argument('--width', type=int, default=1920, help='Exported image width')
 	except: pass
 
 def help():

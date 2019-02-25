@@ -1,3 +1,5 @@
+import random
+
 from .. import common, helpers, settings_manager
 import time
 
@@ -13,19 +15,45 @@ will setup the image exporter and start producing data.
 
 def args(parser):
 	try:
-		parser.add_argument('--loop_limit', type=int, default=500, help='Defines a limit of iterations for exporting')
+		parser.add_argument('--loop_limit', type=int, default=500,
+							help='Defines a limit of iterations for exporting')
 	except: pass
 	try:
-		parser.add_argument('--random_thermal_signatures', default=None,
-							help='Set this to activate random thermal signatures for pedestrians and cars')
+		parser.add_argument('--random_thermal_frames_frequency', type=int, default=1,
+							help='Defines a number of frames after which the thermal settings will be randomized')
 	except: pass
+	try:
+		parser.add_argument('--random_car_thermal_profiles', default=None,
+							help='Set this to activate random thermal signatures for cars')
+	except: pass
+	try:
+		parser.add_argument('--random_human_thermal_profiles', default=None,
+							help='Set this to activate random thermal signatures for humans')
+	except: pass
+	try:
+		parser.add_argument('--random_road_thermal_profiles', default=None,
+							help='Set this to activate random thermal signatures for roads')
+	except: pass
+	try:
+		parser.add_argument('--random_thermal_light', default=None,
+							help='Set this to activate random intensities and rotations for thermal light')
+	except: pass
+	try:
+		parser.add_argument('--random_sky_thermal_temperature', default=None,
+							help='Set this to activate random temperature for the sky')
+	except: pass
+	try:
+		parser.add_argument('--random_camera_thermal_range', default=None,
+							help='Set this to activate random temperature range for the thermal camera')
+	except: pass
+
 
 def minVersion():
 	return '18.07.26.0000'
 
 def run():
 	loop = 0
-	mycams = ['Camera/Thermal', 'Camera/Segmentation']
+	mycams = ['Camera/cameraRGB', 'Camera/Thermal', 'Camera/Segmentation']
 
 	#activate traffic
 	common.sendData([
@@ -41,9 +69,11 @@ def run():
 		'"dummy" SET active true'
 	])
 
-	if settings.random_thermal_signatures:
+	if settings.random_car_thermal_profiles:
 		common.sendData('"Traffic" ADD Thermal.ThermalProfileOverride')
+	if settings.random_human_thermal_profiles:
 		common.sendData('"Pedestrians" ADD Thermal.ThermalProfileOverride')
+
 
 	if settings.skip_setup == False:
 		common.sendData('"AssetBundles.GameobjectCache" SET AssetBundles.GameobjectCache cachedObjectsLimit {}'.format(settings.cache_limit))
@@ -65,10 +95,21 @@ def run():
 
 	# loop changing camera positions with random agc bounduaries
 	while loop < settings.loop_limit:
+		if loop % settings.random_thermal_frames_frequency == 0:
+			if settings.random_car_thermal_profiles:
+				common.sendData('"Traffic" SET Thermal.ThermalProfileOverride temperatureMode "Absolute" temperature -20~50 temperatureMedianMode "Absolute" temperatureMedian -0.25~1 temperatureBandwidthMode "Absolute" temperatureBandwidth -2.5~15 heatinessMode "Absolute" heatiness 0~100 varianceMode "Absolute" variance 0~50 reflectivityMode "Absolute" reflectivity 0~0.8')
+			if settings.random_human_thermal_profiles:
+				common.sendData('"Pedestrians" SET Thermal.ThermalProfileOverride temperatureMode "Absolute" temperature -20~50 temperatureMedianMode "Absolute" temperatureMedian -0.25~1 temperatureBandwidthMode "Absolute" temperatureBandwidth -2.5~15 heatinessMode "Absolute" heatiness 0~100 varianceMode "Absolute" variance 0~50 reflectivityMode "Absolute" reflectivity 0~0.8')
+			if settings.random_road_thermal_profiles:
+				common.sendData('REGEX "World Root/.*/Road Network/Road Objects/.*" SET Thermal.ThermalObjectBehaviour profile.temperature.value -20~50 profile.temperature.median -0.25~1 profile.temperature.bandwidth -2.5~15 profile.heatiness.value 0~100 profile.variance.value 0~50 profile.reflectivity.value 0~0.8')
+			if settings.random_camera_thermal_range:
+				common.sendData('"Camera/Thermal" SET Thermal.ThermalCamera temperatureRange (-10~0 8~30)')
+			if settings.random_sky_thermal_temperature:
+				common.sendData('"Camera/Thermal" SET Thermal.ThermalCamera skyboxBackgroundTemperature -50~50')
+			if settings.random_thermal_light:
+				common.sendData('"Thermal light" SET Transform localEulerAngles (0~360 0~360 0~360)')
+				common.sendData('"Thermal light" SET Thermal.ThermalLight temperature 5~12')
 
-		if settings.random_thermal_signatures:
-			common.sendData('"Traffic" SET Thermal.ThermalProfileOverride temperatureMode "Absolute" temperature -20~50 temperatureMedianMode "Absolute" temperatureMedian -0.25~1 temperatureBandwidthMode "Absolute" temperatureBandwidth -2.5~15 heatinessMode "Absolute" heatiness 0~100 varianceMode "Absolute" variance 0~50 reflectivityMode "Absolute" reflectivity 0~0.8')
-			common.sendData('"Pedestrians" SET Thermal.ThermalProfileOverride temperatureMode "Absolute" temperature -20~50 temperatureMedianMode "Absolute" temperatureMedian -0.25~1 temperatureBandwidthMode "Absolute" temperatureBandwidth -2.5~15 heatinessMode "Absolute" heatiness 0~100 varianceMode "Absolute" variance 0~50 reflectivityMode "Absolute" reflectivity 0~0.8')
 
 		# advance traffic simulation every 15 frames
 

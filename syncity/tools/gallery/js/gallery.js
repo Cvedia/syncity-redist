@@ -468,9 +468,9 @@ function ImagesGallery() {
 				var key = arr[i].instanceid;
 				var tData = [];
 				
-				if (meta_col[curImage+metaOffset] && meta_col[curImage+metaOffset][key]) {
-					for (var k in meta_col[curImage+metaOffset][key])
-						tData.push(k + ':' + meta_col[curImage+metaOffset][key][k]);
+				if (meta_col[curImage-1+metaOffset] && meta_col[curImage-1+metaOffset][key]) {
+					for (var k in meta_col[curImage-1+metaOffset][key])
+						tData.push(k + ':' + meta_col[curImage-1+metaOffset][key][k]);
 				}
 				
 				boxes.append(
