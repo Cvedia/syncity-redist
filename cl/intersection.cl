@@ -2,13 +2,16 @@
 
 // ---------- WORLD LOADING
 
-LOAD "Worlds/Intersection Loop/New York" FROM "worlds"
+LOAD "Worlds/Intersection Loop/Intersection Loop" FROM "worlds"
 
 //Switch variants
 //REGEX "World Root/.*" EXECUTE Tiler.TileVariantSet SwitchVariant "Italian City"
 //REGEX "World Root/.*" EXECUTE Tiler.TileVariantSet SwitchVariant "Florida Neighborhood"
+//REGEX "World Root/.*" EXECUTE Tiler.TileVariantSet SwitchVariant "European Town"
+//REGEX "World Root/.*" EXECUTE Tiler.TileVariantSet SwitchVariant "NY City"
 
-REGEX "World Root/.*/Cars" SET active false
+//Disable parked cars to improve performance
+//REGEX "World Root/.*/Cars" SET active false
 "World Root" Set transform localPosition (0 -0.03 0)
 
 CREATE "EnviroSky" AS "EnviroSky"
@@ -119,7 +122,6 @@ CREATE "Pedestrians"
 
 //"Traffic" SET CarsTick entityCullingReference "Main Camera"
 
-
 // ----------- FAST FORWARD FRAMES
 
 "Time.instance" SET captureFramerate 2
@@ -189,6 +191,12 @@ CREATE "Thermal light"
 "Thermal light" SET Thermal.ThermalLight lightType "Directional"
 "Thermal light" SET active true
 
+// workaround for thermal lights having to much impact on the center part of intersection - use only if 'Thermal light' is enabled
+"World Root/tile_(0, 0)/Road Network/Connection Objects/Asphalt_NoLines_ER_X" SET active false
+"World Root/tile_(0, 0)/Road Network/Connection Objects/Asphalt_NoLines_ER_X" ADD Thermal.ThermalObjectOverride
+"World Root/tile_(0, 0)/Road Network/Connection Objects/Asphalt_NoLines_ER_X" SET Thermal.ThermalObjectOverride ambientOffsetMode "Relative" overridedAmbientOffset.value -6.3
+"World Root/tile_(0, 0)/Road Network/Connection Objects/Asphalt_NoLines_ER_X" SET active true
+
 
 // ---------- Thermal Histogram improvements (to spread the histogram even more)
 
@@ -198,13 +206,16 @@ CREATE "Thermal light"
 //"Camera/Thermal" SET Thermal.ThermalCamera temperatureRange (-10 30)
 
 
+
 // ----------- POST SETUP
 
 "EnviroSky" EXECUTE EnviroSky AssignAndStart "Camera" "Camera/Thermal"
 "EnviroSky" SET active true
-"World Root" SET active true
 
 "Thermal.ProbeUpdateScheduler.instance" SET Thermal.ProbeUpdateScheduler drawThermalOnly true disableProbesRendering false
+
+"Traffic" ADD TemporarySolution.WheelsTemperatureOverride
+"Traffic" SET TemporarySolution.WheelsTemperatureOverride  ambientOffsetMode "Absolute" overridedAmbientOffset.value -3 heatinessMode "Absolute" overridedHeatiness.value 0
 
 "Traffic" SET active true
 "Traffic" EXECUTE FilteredAssetsPool SetContainerForType "Human" "Pedestrians"
@@ -214,5 +225,5 @@ CREATE "Thermal light"
 "Traffic" EXECUTE FilteredAssetsPool SetPoolSizeForType "Car" 50
 
 
+"EnviroSky" SET EnviroSky cloudsMode "Flat"
 "EnviroSky" EXECUTE EnviroSky SetWeatherOverwrite 3
-REGEX "World Root/.*/Road Network/Road Objects/.*/Decal_Asphalt_Crossroad_Mask_02_ERDecal_Start" SET Thermal.ThermalRenderer enabled false
