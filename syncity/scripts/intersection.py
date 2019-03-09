@@ -143,7 +143,7 @@ def run():
 				heatinessValue = random.uniform(0, 0.01)
 				reflectivityValue = random.uniform(0.05, 0.07)
 				varianceValue = random.uniform(0, 0.01)
-				common.sendData('REGEX "World Root/.*/Trees" SET Thermal.ThermalProfileOverride temperatureMode "Absolute" temperature {} temperatureMedianMode "Absolute" {} temperatureBandwidthMode "Absolute" temperatureBandwidth {} heatinessMode "Absolute" heatiness {} varianceMode "Absolute" variance {} reflectivityMode "Absolute" reflectivity {}'.
+				common.sendData('REGEX "World Root/.*/Trees" SET Thermal.ThermalProfileOverride temperatureMode "Absolute" temperature {} temperatureMedianMode "Absolute" temperatureMedian {} temperatureBandwidthMode "Absolute" temperatureBandwidth {} heatinessMode "Absolute" heatiness {} varianceMode "Absolute" variance {} reflectivityMode "Absolute" reflectivity {}'.
 								format(temperatureValue, temperatureMedian, temperatureBandwidth, heatinessValue, varianceValue, reflectivityValue))
 			if settings.random_building_thermal_profiles:
 				temperatureValue = random.uniform(-7, -5)
@@ -152,7 +152,7 @@ def run():
 				heatinessValue = random.uniform(0, 0.01)
 				reflectivityValue = random.uniform(0.1, 0.14)
 				varianceValue = random.uniform(0, 0.01)
-				common.sendData('REGEX "World Root/.*/Buildings" SET Thermal.ThermalProfileOverride temperatureMode "Absolute" temperature {} temperatureMedianMode "Absolute" {} temperatureBandwidthMode "Absolute" temperatureBandwidth {} heatinessMode "Absolute" heatiness {} varianceMode "Absolute" variance {} reflectivityMode "Absolute" reflectivity {}'.
+				common.sendData('REGEX "World Root/.*/Buildings" SET Thermal.ThermalProfileOverride temperatureMode "Absolute" temperature {} temperatureMedianMode "Absolute" temperatureMedian {} temperatureBandwidthMode "Absolute" temperatureBandwidth {} heatinessMode "Absolute" heatiness {} varianceMode "Absolute" variance {} reflectivityMode "Absolute" reflectivity {}'.
 								format(temperatureValue, temperatureMedian, temperatureBandwidth, heatinessValue, varianceValue, reflectivityValue))
 			if settings.random_road_thermal_profiles:
 				temperatureValue = random.uniform(-23, -17)
