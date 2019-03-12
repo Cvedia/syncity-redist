@@ -56,7 +56,7 @@ def args(parser):
 	except: pass
 	try:
 		parser.add_argument('--random_rotation_frames_frequency', type=int, default=40,
-							help='Defines a number of frames after which the thermal settings will be randomized')
+							help='Defines a number of frames after which the object rotations will be randomized')
 	except:
 		pass
 	try:
@@ -137,32 +137,11 @@ def run():
 			if settings.random_human_thermal_profiles:
 				common.sendData('"Pedestrians" SET Thermal.ThermalProfileOverride temperatureMode "Absolute" temperature -23~-17 temperatureMedianMode "Absolute" temperatureMedian 0~0.01 temperatureBandwidthMode "Absolute" temperatureBandwidth 1.7~2.3 heatinessMode "Absolute" heatiness 25~35 varianceMode "Absolute" variance 1.7~2.3 reflectivityMode "Absolute" reflectivity 0~0.01')
 			if settings.random_tree_thermal_profiles:
-				temperatureValue = random.uniform(-8, 6)
-				temperatureBandwidth = random.uniform(5, 7)
-				temperatureMedian = random.uniform(0.3, 0.5)
-				heatinessValue = random.uniform(0, 0.01)
-				reflectivityValue = random.uniform(0.05, 0.07)
-				varianceValue = random.uniform(0, 0.01)
-				common.sendData('REGEX "World Root/.*/Trees" SET Thermal.ThermalProfileOverride temperatureMode "Absolute" temperature {} temperatureMedianMode "Absolute" temperatureMedian {} temperatureBandwidthMode "Absolute" temperatureBandwidth {} heatinessMode "Absolute" heatiness {} varianceMode "Absolute" variance {} reflectivityMode "Absolute" reflectivity {}'.
-								format(temperatureValue, temperatureMedian, temperatureBandwidth, heatinessValue, varianceValue, reflectivityValue))
+				common.sendData('REGEX "World Root/.*/Trees" SET Thermal.ThermalProfileOverride temperatureMode "Relative" temperature -10~10 temperatureBandwidthMode "Relative" temperatureBandwidth -20~20')
 			if settings.random_building_thermal_profiles:
-				temperatureValue = random.uniform(-7, -5)
-				temperatureBandwidth = random.uniform(5.5, 7.5)
-				temperatureMedian = random.uniform(0, 0.01)
-				heatinessValue = random.uniform(0, 0.01)
-				reflectivityValue = random.uniform(0.1, 0.14)
-				varianceValue = random.uniform(0, 0.01)
-				common.sendData('REGEX "World Root/.*/Buildings" SET Thermal.ThermalProfileOverride temperatureMode "Absolute" temperature {} temperatureMedianMode "Absolute" temperatureMedian {} temperatureBandwidthMode "Absolute" temperatureBandwidth {} heatinessMode "Absolute" heatiness {} varianceMode "Absolute" variance {} reflectivityMode "Absolute" reflectivity {}'.
-								format(temperatureValue, temperatureMedian, temperatureBandwidth, heatinessValue, varianceValue, reflectivityValue))
+				common.sendData('REGEX "World Root/.*/Buildings" SET Thermal.ThermalProfileOverride ambientOffsetMode "Relative" ambientOffset -10~10 temperatureBandwidthMode "Relative" temperatureBandwidth -20~20')
 			if settings.random_road_thermal_profiles:
-				temperatureValue = random.uniform(-23, -17)
-				temperatureBandwidth = random.uniform(0, 0.01)
-				temperatureMedian = random.uniform(0.45, 0.6)
-				heatinessValue = random.uniform(37, 50)
-				reflectivityValue = random.uniform(0.03, 0.03)
-				varianceValue = random.uniform(22, 30)
-				common.sendData('REGEX "World Root/.*/Road Network/Road Objects/.*" SET Thermal.ThermalObjectBehaviour profile.temperature.value {} profile.temperature.median {} profile.temperature.bandwidth {} profile.heatiness.value {} profile.variance.value {} profile.reflectivity.value {}'.
-								format(temperatureValue, temperatureMedian, temperatureBandwidth, heatinessValue, varianceValue, reflectivityValue))
+				common.sendData('REGEX "World Root/.*/Road Network/Road Objects/.*" SET Thermal.ThermalObjectBehaviour profile.temperature.value -23~17 profile.temperature.median 0.45~0.6 profile.temperature.bandwidth 0~0.1 profile.heatiness.value 37~50 profile.variance.value 22~30 profile.reflectivity.value 0.03~0.03')
 			if settings.random_camera_thermal_range:
 				common.sendData('"Camera/Thermal" SET Thermal.ThermalCamera temperatureRange (-10~0 8~30)')
 			if settings.random_sky_thermal_temperature:

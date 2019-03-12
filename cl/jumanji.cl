@@ -63,7 +63,7 @@ CREATE RenderTexture 1280 1024 24 "ARGB32" "Default" AS "thermal_rt"
 CREATE "Grounds"
 "Grounds" SET Transform localPosition (0 0.01 0)
 "Grounds" ADD RandomProps.FillGrid
-"Grounds" SET RandomProps.FillGrid tags "ground"
+"Grounds" SET RandomProps.FillGrid tags "ground_old"
 "Grounds" SET RandomProps.FillGrid size (100 100)
 "Grounds" SET RandomProps.FillGrid cellSize (10 10)
 "Grounds" ADD Segmentation.Class Segmentation.Spawners.Entity
